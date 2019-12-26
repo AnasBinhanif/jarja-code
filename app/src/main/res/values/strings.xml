@@ -1,0 +1,23 @@
+<resources>
+
+    <string name="app_name">JarJa MediaApp</string>
+    <string name="retrofit_failure">Unable to connect</string>
+
+    <!-- Login Screen -->
+    <string name="footer_text">JarjaMedia 2019 , All Rights Reserved.</string>
+    <string name="header_text">Marketing at the speed of Today</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="forgot_password">FORGOT YOUR PASSWORD?</string>
+
+    <!-- Forgot Password -->
+    <string name="btn_submit">Forgot Password</string>
+
+    <!-- Navigation Drawer Dashboard Screen -->
+
+
+    <!-- Generic Strings -->
+    <string name="no_img">No Image Found</string>
+
+</resources>
