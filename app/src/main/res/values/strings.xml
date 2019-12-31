@@ -5,7 +5,7 @@
 
 
     <!--- Dashboard -->
-        <!--- Appointment Fragment -->
+    <!--- Appointment Fragment -->
     <string name="appointment">Appointments</string>
     <string name="follow_up">Follow Ups</string>
     <string name="tasks">Tasks</string>
@@ -14,7 +14,7 @@
     <string name="previous">Previous</string>
     <string name="search">Search</string>
 
-        <!--- Add Appointment Activity -->
+    <!--- Add Appointment Activity -->
     <string name="add_appointment">Add Appointment</string>
     <string name="name_of_contact">Name Of Contact</string>
     <string name="agent">Agent</string>
@@ -30,7 +30,7 @@
     <string name="select_begin">Select and Begin Typing</string>
     <string name="nothing_selected">Nothing Selected</string>
 
-        <!--- Add Task Activity -->
+    <!--- Add Task Activity -->
     <string name="add_task">Add Task</string>
     <string name="name_of_task">Name The Task</string>
     <string name="type">Type</string>
@@ -39,19 +39,28 @@
     <string name="call">Call</string>
     <string name="one_time">One Time</string>
 
-        <!--- Followup Fragment -->
+    <!--- Followup Fragment -->
     <string name="due">Due</string>
     <string name="Overdue">Overdue</string>
 
-        <!--- Tasks Fragment -->
+    <!--- Tasks Fragment -->
     <string name="future_tasks">Future Tasks</string>
 
 
     <!--- Leads -->
-        <!--- Find Leads Fragment -->
+    <!--- Find Leads Fragment -->
     <string name="filters">FILTERS</string>
 
-        <!--- Lead Detail Activity -->
+    <!--- Add Filters Activity -->
+    <string name="add_filters">Add Filters</string>
+    <string name="tags">Tags</string>
+    <string name="price_range">Price Range</string>
+    <string name="notes">Notes</string>
+    <string name="drip_compaigns">Drip Compaigns</string>
+    <string name="save_and_search">Save &amp; Search</string>
+    <string name="clear">Clear</string>
+
+    <!--- Lead Detail Activity -->
     <string name="lead_details">Lead Details</string>
     <string name="actions">Actions</string>
     <string name="details">Details</string>

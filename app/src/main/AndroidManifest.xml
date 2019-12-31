@@ -22,6 +22,7 @@
         <activity android:name=".Activities.add_appointment.AddAppointmentActivity"></activity>
         <activity android:name=".Activities.add_task.AddTaskActivity"></activity>
         <activity android:name=".Activities.lead_detail.LeadDetailActivity"></activity>
+        <activity android:name=".Activities.add_filters.AddFiltersActivity"></activity>
         <activity android:name=".Activities.login.LoginActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>

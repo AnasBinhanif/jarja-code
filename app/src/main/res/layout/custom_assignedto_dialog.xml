@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvAssignedTo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/assign_to"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGrey_light"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/edtAgent"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="@string/nothing_selected"
+            android:paddingLeft="12dp"
+            android:layout_marginTop="15dp"
+            android:textSize="14dp"
+            android:background="@drawable/bg_search" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginBottom="10dp">
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:text="@string/save"
+                android:layout_marginRight="5dp"
+                android:textAllCaps="false"
+                android:background="@color/colorGreen"
+                android:textColor="@color/colorWhite" />
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:text="@string/cancel"
+                android:layout_marginLeft="5dp"
+                android:textAllCaps="false"
+                android:background="@color/colorRed"
+                android:textColor="@color/colorWhite" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>
+
