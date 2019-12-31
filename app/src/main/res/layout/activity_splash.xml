@@ -23,7 +23,7 @@
             android:layout_height="@dimen/_130sdp"
             android:layout_centerInParent="true"
             android:contentDescription="@string/no_img"
-            android:src="@mipmap/ic_launcher_round" />
+            android:src="@drawable/logo_round" />
 
         <TextView
             android:layout_width="match_parent"

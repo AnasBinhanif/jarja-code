@@ -1,17 +1,16 @@
 package com.project.jarjamediaapp.Activities.login;
 
-import com.project.jarjamediaapp.Activities.splash.MainContract;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
 
 import retrofit2.Call;
 
-public class LoginPresenter extends BasePresenter<MainContract.View> implements MainContract.Actions {
+public class LoginPresenter extends BasePresenter<LoginContract.View> implements LoginContract.Actions {
 
     Call<BaseResponse> _call;
 
 
-    public LoginPresenter(MainContract.View view) {
+    public LoginPresenter(LoginContract.View view) {
         super(view);
     }
 

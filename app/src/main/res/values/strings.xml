@@ -3,6 +3,85 @@
     <string name="app_name">JarJa MediaApp</string>
     <string name="retrofit_failure">Unable to connect</string>
 
+
+    <!--- Dashboard -->
+        <!--- Appointment Fragment -->
+    <string name="appointment">Appointments</string>
+    <string name="follow_up">Follow Ups</string>
+    <string name="tasks">Tasks</string>
+    <string name="Today_Agenda">TODAY AGENDA</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="previous">Previous</string>
+    <string name="search">Search</string>
+
+        <!--- Add Appointment Activity -->
+    <string name="add_appointment">Add Appointment</string>
+    <string name="name_of_contact">Name Of Contact</string>
+    <string name="agent">Agent</string>
+    <string name="event_title">Event Title</string>
+    <string name="location">Location</string>
+    <string name="description">Description</string>
+    <string name="start_date">Start Date</string>
+    <string name="reminder">Reminder</string>
+    <string name="via">Via</string>
+    <string name="all_day">All Day</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_begin">Select and Begin Typing</string>
+    <string name="nothing_selected">Nothing Selected</string>
+
+        <!--- Add Task Activity -->
+    <string name="add_task">Add Task</string>
+    <string name="name_of_task">Name The Task</string>
+    <string name="type">Type</string>
+    <string name="assign_to">Assign To</string>
+    <string name="recur">Recur</string>
+    <string name="call">Call</string>
+    <string name="one_time">One Time</string>
+
+        <!--- Followup Fragment -->
+    <string name="due">Due</string>
+    <string name="Overdue">Overdue</string>
+
+        <!--- Tasks Fragment -->
+    <string name="future_tasks">Future Tasks</string>
+
+
+    <!--- Leads -->
+        <!--- Find Leads Fragment -->
+    <string name="filters">FILTERS</string>
+
+        <!--- Lead Detail Activity -->
+    <string name="lead_details">Lead Details</string>
+    <string name="actions">Actions</string>
+    <string name="details">Details</string>
+    <string name="message">Message</string>
+    <string name="edit_lead">Edit Lead</string>
+    <string name="lead_score">Lead Score :</string>
+    <string name="last_touch">Last Touch : </string>
+    <string name="na">N/A</string>
+    <string name="assigned_to">Assigned To</string>
+    <string name="primary">Primary</string>
+    <string name="transaction1">Transaction 1</string>
+    <string name="transaction2">Transaction 2</string>
+    <string name="current">Current Step 1</string>
+    <string name="potential_prospect">Potential Prospect</string>
+
+    <!--- Navigation -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">John Smith</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <!--- Side Menu Items -->
+    <string name="dashboard">Dashboard</string>
+    <string name="leads">Leads</string>
+    <string name="calendar">Calendar</string>
+    <string name="openHouses">Open Houses</string>
+    <string name="task">Task</string>
+    <string name="logout">Logout</string>
+
     <!-- Login Screen -->
     <string name="footer_text">JarjaMedia 2019 , All Rights Reserved.</string>
     <string name="header_text">Marketing at the speed of Today</string>

@@ -10,9 +10,11 @@
         android:paddingEnd="@dimen/_25sdp"
         tools:context=".Activities.login.LoginActivity">
 
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/tvBottom"
             android:fillViewport="true">
 
             <LinearLayout
@@ -26,7 +28,7 @@
                     android:layout_height="@dimen/_130sdp"
                     android:layout_marginTop="@dimen/_50sdp"
                     android:contentDescription="@string/no_img"
-                    android:src="@mipmap/ic_launcher_round" />
+                    android:src="@drawable/logo_round" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -36,7 +38,7 @@
                     android:text="@string/header_text"
                     android:textAlignment="center"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/_16sdp" />
+                    android:textSize="16dp" />
 
                 <AutoCompleteTextView
                     android:id="@+id/atvEmail"
@@ -53,7 +55,7 @@
                     android:paddingEnd="@dimen/_20sdp"
                     android:paddingBottom="@dimen/_10sdp"
                     android:singleLine="true"
-                    android:textSize="@dimen/_15sdp" />
+                    android:textSize="14dp" />
 
                 <AutoCompleteTextView
                     android:id="@+id/atvPassword"
@@ -70,7 +72,7 @@
                     android:paddingEnd="@dimen/_20sdp"
                     android:paddingBottom="@dimen/_10sdp"
                     android:singleLine="true"
-                    android:textSize="@dimen/_15sdp" />
+                    android:textSize="14dp" />
 
                 <Button
                     android:id="@+id/btnLogin"
@@ -81,7 +83,7 @@
                     android:padding="@dimen/_10sdp"
                     android:text="@string/login"
                     android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_18sdp" />
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/tvForgotPassword"
@@ -91,17 +93,19 @@
                     android:text="@string/forgot_password"
                     android:textAlignment="center"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/_14sdp" />
+                    android:textSize="14dp" />
 
             </LinearLayout>
+
 
         </ScrollView>
 
         <TextView
+            android:id="@+id/tvBottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:padding="@dimen/_10sdp"
+            android:padding="10dp"
             android:text="@string/footer_text"
             android:textAlignment="center"
             android:textColor="@color/colorWhite"

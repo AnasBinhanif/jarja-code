@@ -7,17 +7,19 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
-import com.project.jarjamediaapp.databinding.ActivityMainBinding;
+
+import com.project.jarjamediaapp.databinding.ActivitySplashBinding;
 
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, MainContract.View {
+public class MainActivity extends BaseActivity implements View.OnClickListener, MainContract.View {
 
-    ActivityMainBinding bi;
+    ActivitySplashBinding bi;
     Context context = MainActivity.this;
     MainPresenter presenter;
 
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         bi = DataBindingUtil.setContentView(this, R.layout.activity_splash);
         presenter = new MainPresenter(this);
-        presenter.addData();
+        presenter.initScreen();
 
     }
 

@@ -4,48 +4,68 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import com.project.jarjamediaapp.Activities.splash.MainContract;
-import com.project.jarjamediaapp.Activities.splash.MainPresenter;
+import com.project.jarjamediaapp.Activities.HomeActivity;
+import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordActivity;
+import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
-import com.project.jarjamediaapp.databinding.ActivityMainBinding;
+import com.project.jarjamediaapp.databinding.ActivityLoginBinding;
 
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener, MainContract.View {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, LoginContract.View {
 
-    ActivityMainBinding bi;
+    ActivityLoginBinding bi;
     Context context = LoginActivity.this;
-    MainPresenter presenter;
+    LoginPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bi = DataBindingUtil.setContentView(this, R.layout.activity_splash);
-        presenter = new MainPresenter(this);
-        presenter.addData();
+        bi = DataBindingUtil.setContentView(this, R.layout.activity_login);
+        presenter = new LoginPresenter(this);
+        presenter.initScreen();
 
     }
 
     @Override
     public void onClick(View v) {
 
+        switch (v.getId()) {
+
+            case R.id.tvForgotPassword:
+
+                switchActivity(ForgotPasswordActivity.class);
+
+                break;
+            case R.id.btnLogin:
+
+                switchActivity(HomeActivity.class);
+
+                break;
+        }
+    }
+
+    @Override
+    public void setupUI(View view) {
+        super.setupUI(view);
+
+
     }
 
     @Override
     public void initViews() {
-
+        bi.tvForgotPassword.setOnClickListener(this);
+        bi.btnLogin.setOnClickListener(this);
     }
 
     @Override
     public void updateUI(Response<BaseResponse> response) {
-
 
 
     }

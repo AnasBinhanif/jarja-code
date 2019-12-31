@@ -14,12 +14,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.splash.MainActivity">
+
+
+        <activity android:name=".Activities.splash.MainActivity"></activity>
+        <activity android:name=".Activities.HomeActivity"></activity>
+        <activity android:name=".Activities.forgot_password.ForgotPasswordActivity"></activity>
+        <activity android:name=".Activities.add_appointment.AddAppointmentActivity"></activity>
+        <activity android:name=".Activities.add_task.AddTaskActivity"></activity>
+        <activity android:name=".Activities.lead_detail.LeadDetailActivity"></activity>
+        <activity android:name=".Activities.login.LoginActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

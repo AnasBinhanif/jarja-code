@@ -4,7 +4,7 @@ public interface ApiMethods {
 
     /*@FormUrlEncoded
     @POST("login")
-    Call<LoginModel> loginTransporter(@Field("email") String email,
+    Call<ForgotPasswordModel> loginTransporter(@Field("email") String email,
                                       @Field("password") String password,
                                       @Field("device_token") String deviceToken,
                                       @Field("network_protocol") String networkProtocol,
