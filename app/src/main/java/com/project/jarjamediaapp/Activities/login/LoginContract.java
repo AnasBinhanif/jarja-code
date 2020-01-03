@@ -15,7 +15,7 @@ public interface LoginContract {
     interface Actions extends BaseContract.Actions {
 
         void addData();
-
+        void initScreen();
     }
 
 }

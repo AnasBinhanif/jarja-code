@@ -2,25 +2,24 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/login_background"
         android:paddingStart="@dimen/_25sdp"
         android:paddingEnd="@dimen/_25sdp"
+        android:fillViewport="true"
         tools:context=".Activities.login.LoginActivity">
 
 
-        <ScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/tvBottom"
-            android:fillViewport="true">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <ImageView
@@ -97,20 +96,20 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tvBottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:padding="10dp"
+                android:text="@string/footer_text"
+                android:textAlignment="center"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold" />
 
-        </ScrollView>
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tvBottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:padding="10dp"
-            android:text="@string/footer_text"
-            android:textAlignment="center"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold" />
 
-    </RelativeLayout>
+    </ScrollView>
 
 </layout>

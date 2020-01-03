@@ -16,6 +16,8 @@ public interface ForgotPasswordContract {
 
         void addData();
 
+        void initScreen();
+
     }
 
 }

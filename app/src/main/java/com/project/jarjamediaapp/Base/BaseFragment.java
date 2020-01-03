@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.project.jarjamediaapp.Interfaces.UpdateTitle;
 import com.project.jarjamediaapp.Utilities.EasyPreference;
 
 import java.lang.reflect.Field;
@@ -52,7 +53,7 @@ public class BaseFragment extends Fragment {
     public void onResume() {
         //((HomeActivity) mActivity).toolbar.setTitle(title);
         try {
-            //           ((UpdateTitle) mActivity).updateToolBarTitle(title);
+            ((UpdateTitle) mActivity).updateToolBarTitle(title);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,6 +64,7 @@ public class BaseFragment extends Fragment {
         super.onResume();
     }
 
+
     public boolean onFragmentBackPressed() {
         return false;
     }
@@ -71,15 +73,6 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-
-        try {
-            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
-            childFragmentManager.setAccessible(true);
-            childFragmentManager.set(this, null);
-
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     protected void setupParent(View view) {

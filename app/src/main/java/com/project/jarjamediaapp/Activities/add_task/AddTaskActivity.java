@@ -15,7 +15,7 @@ import com.project.jarjamediaapp.databinding.ActivityAddTaskBinding;
 
 import retrofit2.Response;
 
-public class AddTaskActivity extends BaseActivity implements View.OnClickListener, AddTaskContract.View {
+public class AddTaskActivity extends BaseActivity implements AddTaskContract.View {
 
     ActivityAddTaskBinding bi;
     Context context = AddTaskActivity.this;
@@ -28,13 +28,11 @@ public class AddTaskActivity extends BaseActivity implements View.OnClickListene
         bi = DataBindingUtil.setContentView(this, R.layout.activity_add_task);
         presenter = new AddTaskPresenter(this);
         presenter.initScreen();
+        setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_task), true);
 
     }
 
-    @Override
-    public void onClick(View v) {
 
-    }
 
     @Override
     public void initViews() {

@@ -2,6 +2,8 @@ package com.project.jarjamediaapp.Activities.login;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
@@ -13,6 +15,7 @@ import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
+import com.project.jarjamediaapp.Utilities.Validator;
 import com.project.jarjamediaapp.databinding.ActivityLoginBinding;
 
 import retrofit2.Response;
@@ -62,6 +65,30 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void initViews() {
         bi.tvForgotPassword.setOnClickListener(this);
         bi.btnLogin.setOnClickListener(this);
+        bi.atvEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                String email = bi.atvEmail.getText().toString();
+                if (!Validator.isEmailValid(email)){
+
+                    bi.atvEmail.setError("Invalid  Email");
+
+                }
+
+            }
+        });
+
     }
 
     @Override

@@ -16,6 +16,8 @@ public interface AddAppointmentContract {
 
         void addData();
 
+        void initScreen();
+
     }
 
 }

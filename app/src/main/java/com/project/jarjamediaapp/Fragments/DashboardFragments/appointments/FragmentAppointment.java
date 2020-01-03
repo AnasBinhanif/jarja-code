@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.paris.Paris;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Base.BaseFragment;
 import com.project.jarjamediaapp.CustomAdapter.SwipeAppointPreviousRecyclerAdapter;
@@ -60,8 +61,17 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     @Override
     public void setupViews() {
 
+        initViews();
         populateDataPrevious();
+
+    }
+
+    private void initViews() {
+
+        bi.btnUpcoming.setOnClickListener(this);
+        bi.btnPrevious.setOnClickListener(this);
         bi.fbAddAppoint.setOnClickListener(this);
+
     }
 
 
@@ -97,6 +107,20 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
             case R.id.fbAddAppoint:
                 switchActivity(context, AddAppointmentActivity.class);
+                break;
+
+            case R.id.btnUpcoming:
+
+                Paris.style(bi.btnPrevious).apply(R.style.TabButtonTranparentRight);
+                Paris.style(bi.btnUpcoming).apply(R.style.TabButtonYellowLeft);
+
+                break;
+
+            case R.id.btnPrevious:
+
+                Paris.style(bi.btnPrevious).apply(R.style.TabButtonYellowRight);
+                Paris.style(bi.btnUpcoming).apply(R.style.TabButtonTranparentLeft);
+
                 break;
 
         }

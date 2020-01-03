@@ -15,7 +15,7 @@ import com.project.jarjamediaapp.databinding.ActivityAddAppointmentBinding;
 
 import retrofit2.Response;
 
-public class AddAppointmentActivity extends BaseActivity implements View.OnClickListener, AddAppointmentContract.View {
+public class AddAppointmentActivity extends BaseActivity implements AddAppointmentContract.View {
 
     ActivityAddAppointmentBinding bi;
     Context context = AddAppointmentActivity.this;
@@ -28,12 +28,13 @@ public class AddAppointmentActivity extends BaseActivity implements View.OnClick
         bi = DataBindingUtil.setContentView(this, R.layout.activity_add_appointment);
         presenter = new AddAppointmentPresenter(this);
         presenter.initScreen();
+        setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_appointment), true);
 
     }
 
     @Override
-    public void onClick(View v) {
-
+    public void setupUI(View view) {
+        super.setupUI(view);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.project.jarjamediaapp.CustomAdapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.project.jarjamediaapp.Models.GetDueFollowUps;
-import com.project.jarjamediaapp.Models.GetDueTasks;
 import com.project.jarjamediaapp.R;
 
 import java.util.List;
@@ -98,6 +98,14 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
         return mData.size();
     }
 
+    public void showViewFollowUpDialog(Context context) {
+
+        final Dialog dialog = new Dialog(context,R.style.Dialog);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.custom_viewfollowup_dialog);
+        dialog.show();
+    }
+
     public void saveStates(Bundle outState) {
         binderHelper.saveStates(outState);
     }
@@ -136,10 +144,11 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     pos = getAdapterPosition();
-
+                    showViewFollowUpDialog(context);
                 }
             });
 
         }
     }
+
 }

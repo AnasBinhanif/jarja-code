@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/ep_toolbar"
+            layout="@layout/base_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:layout_below="@+id/ep_toolbar"
+            android:padding="@dimen/_15sdp"
+            tools:context=".Activities.login.LoginActivity">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/assigned_to"
+                        android:textSize="14dp"
+                        android:textColor="@color/colorGreyText"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtAssignedTo"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:hint="@string/nothing_selected"
+                        android:paddingLeft="12dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/colorTitle"
+                        android:textColorHint="@color/colorTitle"
+                        android:textSize="14dp"
+                        android:inputType="textPersonName"
+                        android:background="@drawable/bg_edt_dark" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/type"
+                        android:textSize="14dp"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@color/colorGreyText"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtType"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:hint="@string/nothing_selected"
+                        android:paddingLeft="12dp"
+                        android:textColor="@color/colorTitle"
+                        android:textColorHint="@color/colorTitle"
+                        android:layout_marginTop="5dp"
+                        android:textSize="14dp"
+                        android:background="@drawable/bg_edt_dark" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lead_score"
+                        android:textSize="14dp"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@color/colorGreyText"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtLeadScore"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:hint="@string/nothing_selected"
+                        android:paddingLeft="12dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/colorTitle"
+                        android:textColorHint="@color/colorTitle"
+                        android:textSize="14dp"
+                        android:background="@drawable/bg_edt_dark" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tags"
+                        android:textSize="14dp"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@color/colorGreyText"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtTags"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:hint="@string/nothing_selected"
+                        android:paddingLeft="12dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/colorTitle"
+                        android:textColorHint="@color/colorTitle"
+                        android:textSize="14dp"
+                        android:background="@drawable/bg_edt_dark" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/price_range"
+                        android:textSize="14dp"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@color/colorGreyText"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:textColor="@color/colorTitle"
+                        android:textColorHint="@color/colorTitle"
+                        android:paddingLeft="12dp"
+                        android:layout_marginTop="5dp"
+                        android:textSize="14dp"
+                        android:inputType="textPostalAddress"
+                        android:background="@drawable/bg_edt_dark" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/notes"
+                        android:textSize="14dp"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@color/colorGreyText"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtNotes"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:hint="@string/notes"
+                        android:paddingLeft="12dp"
+                        android:textColor="@color/colorTitle"
+                        android:textColorHint="@color/colorTitle"
+                        android:layout_marginTop="5dp"
+                        android:textSize="14dp"
+                        android:paddingRight="12dp"
+                        android:background="@drawable/bg_edt_dark" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/drip_compaigns"
+                        android:textSize="14dp"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@color/colorGreyText"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtDripCompaigns"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:hint="@string/nothing_selected"
+                        android:paddingLeft="12dp"
+                        android:textColor="@color/colorTitle"
+                        android:textColorHint="@color/colorTitle"
+                        android:layout_marginTop="5dp"
+                        android:textSize="14dp"
+                        android:background="@drawable/bg_edt_dark" />
+
+                    <Button
+                        android:id="@+id/btnSaveAndSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/save_and_search"
+                        android:gravity="center"
+                        android:textAllCaps="false"
+                        android:background="@color/colorGreen"
+                        android:textColor="@color/colorWhite" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        android:layout_marginBottom="10dp">
+
+                        <Button
+                            android:id="@+id/btnSearch"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="@string/search"
+                            android:layout_marginRight="5dp"
+                            android:textAllCaps="false"
+                            android:background="@color/colorGreen"
+                            android:textColor="@color/colorWhite" />
+
+                        <Button
+                            android:id="@+id/btnClear"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="@string/clear"
+                            android:layout_marginLeft="5dp"
+                            android:textAllCaps="false"
+                            android:background="@color/colorRed"
+                            android:textColor="@color/colorWhite" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</layout>

@@ -61,8 +61,8 @@ public class TabsFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         initViews(view);
-        this.view = view;
     }
 
     @Override
@@ -77,8 +77,6 @@ public class TabsFragment extends BaseFragment {
         setupViewPager(viewPager);
         tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
-
-
     }
 
     private void setupViewPager(ViewPager viewPager) {

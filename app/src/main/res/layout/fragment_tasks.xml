@@ -60,18 +60,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_leftstroke_yellow"
                         android:orientation="vertical">
 
                         <Button
                             android:id="@+id/btnTaskDue"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/colorTransparent"
                             android:text="@string/due"
-                            android:textAllCaps="false"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:textSize="16dp" />
+                            style="@style/TabButtonYellowLeft" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -83,13 +77,8 @@
 
                         <Button
                             android:id="@+id/btnTaskOverDue"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/colorTransparent"
                             android:text="@string/Overdue"
-                            android:textAllCaps="false"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:textSize="16dp" />
+                            style="@style/TabButtonTranparentMiddle" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -101,32 +90,13 @@
 
                         <Button
                             android:id="@+id/btnTaskFutureTask"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/colorTransparent"
                             android:text="@string/future_tasks"
-                            android:textAllCaps="false"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:textSize="16dp" />
+                            style="@style/TabButtonTranparentRight" />
 
                     </LinearLayout>
 
 
                 </LinearLayout>
-
-                <EditText
-                    android:id="@+id/tvSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="@dimen/_15sdp"
-                    android:layout_marginRight="@dimen/_15sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:background="@drawable/bg_search"
-                    android:paddingStart="12dp"
-                    android:gravity="center|left"
-                    android:drawablePadding="10dp"
-                    android:drawableLeft="@drawable/ic_search"
-                    android:hint="@string/search" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerTaskViewDue"

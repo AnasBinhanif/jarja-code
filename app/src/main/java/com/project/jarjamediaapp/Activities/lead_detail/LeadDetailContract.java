@@ -16,6 +16,8 @@ public interface LeadDetailContract {
 
         void addData();
 
+        void initScreen();
+
     }
 
 }

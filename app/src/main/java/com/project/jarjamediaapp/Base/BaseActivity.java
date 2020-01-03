@@ -18,12 +18,13 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.project.jarjamediaapp.Utilities.EasyPreference;
 
 import java.util.HashMap;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
 
     protected IntentFilter intentFilter;
     protected EasyPreference.Builder easyPreference;
@@ -34,6 +35,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         easyPreference = EasyPreference.with(this);
 
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+
+        }
     }
 
     @Override
@@ -51,6 +60,25 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    protected void setToolBarTitle(Toolbar toolbar, String title, boolean forActivity) {
+        //toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(title);
+        if (forActivity) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(false);
+            getSupportActionBar().setDisplayUseLogoEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //do something you want
+                    onBackPressed();
+                }
+            });
+        }
     }
 
     public void setupUI(View view) {

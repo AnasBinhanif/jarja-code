@@ -1,10 +1,15 @@
 package com.project.jarjamediaapp.Activities;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -14,15 +19,17 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
+import com.project.jarjamediaapp.Activities.add_filters.AddFiltersActivity;
+import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Fragments.DashboardFragments.TabsFragment;
 import com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads.FindLeadsFragment;
+import com.project.jarjamediaapp.Interfaces.UpdateTitle;
 import com.project.jarjamediaapp.R;
 
 import java.util.ArrayList;
 
-
-public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, UpdateTitle {
 
     DrawerLayout drawer;
     public Toolbar toolbar;
@@ -35,6 +42,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     String title = "";
     boolean addToStack = false;
     boolean shouldAnimate = false;
+    Menu _menu;
 
 
     @Override
@@ -50,6 +58,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         title = getString(R.string.app_name);
         toolbar = findViewById(R.id.toolbar);
+        setToolBarTitle(toolbar, getString(R.string.dashboard), false);
         drawer = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -112,6 +121,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 fragment = FindLeadsFragment.newInstance(title, R.id.nav_lead);
                 addToStack = false;
                 shouldAnimate = true;
+                _menu.findItem(R.id.action_search).setVisible(false);
                 break;
             case R.id.nav_calendar:
                 title = getResources().getString(R.string.calendar);
@@ -153,4 +163,39 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         ft.commitAllowingStateLoss();
     }
 
+    @Override
+    public void updateToolBarTitle(String title) {
+        toolbar.setTitle(title);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        _menu=menu;
+
+        getMenuInflater().inflate(R.menu.home, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        item.setVisible(true);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setVisibility(View.VISIBLE);
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_add) {
+            switchActivity(AddLeadActivity.class);
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
 }

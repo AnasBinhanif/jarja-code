@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.paris.Paris;
 import com.project.jarjamediaapp.Base.BaseFragment;
 import com.project.jarjamediaapp.CustomAdapter.SwipeFollowUpsDueRecyclerAdapter;
 import com.project.jarjamediaapp.Fragments.FragmentLifeCycle;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle, FollowUpContract.View {
+public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle, FollowUpContract.View, View.OnClickListener {
 
     FragmentFollowupBinding bi;
     Context context;
@@ -61,7 +62,16 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
     @Override
     public void setupViews() {
+
+        initViews();
         populateDataDue();
+    }
+
+    private void initViews() {
+
+        bi.btnFollowDue.setOnClickListener(this);
+        bi.btnFollowOverDue.setOnClickListener(this);
+
     }
 
     private void populateDataDue() {
@@ -85,8 +95,6 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
         bi.recyclerViewFollowDue.setItemAnimator(new DefaultItemAnimator());
         // bi.recyclerViewPrevious.addItemDecoration(dividerItemDecoration);
         bi.recyclerViewFollowDue.setAdapter(swipeFollowUpsDueRecyclerAdapter);
-
-
     }
 
     @Override
@@ -99,5 +107,28 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
     }
 
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+
+            case R.id.btnFollowDue:
+
+                Paris.style(bi.btnFollowDue).apply(R.style.TabButtonYellowLeft);
+                Paris.style(bi.btnFollowOverDue).apply(R.style.TabButtonTranparentRight);
+
+                break;
+
+            case R.id.btnFollowOverDue:
+
+                Paris.style(bi.btnFollowOverDue).apply(R.style.TabButtonYellowRight);
+                Paris.style(bi.btnFollowDue).apply(R.style.TabButtonTranparentLeft);
+
+
+                break;
+
+        }
+    }
 
 }

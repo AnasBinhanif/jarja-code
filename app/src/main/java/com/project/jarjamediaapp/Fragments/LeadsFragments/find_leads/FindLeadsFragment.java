@@ -4,6 +4,8 @@ package com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -16,8 +18,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.project.jarjamediaapp.Activities.add_filters.AddFiltersActivity;
+import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
+import com.project.jarjamediaapp.Activities.all_leads.AllLeadsActivity;
 import com.project.jarjamediaapp.Base.BaseFragment;
-import com.project.jarjamediaapp.Fragments.LeadsFragments.all_leads.AllLeadsFragment;
 import com.project.jarjamediaapp.Models.GetFindLeads;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.databinding.FragmentFindleadsBinding;
@@ -65,8 +69,14 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     @Override
     public void setupViews() {
 
+        initViews();
         populateListData();
 
+    }
+
+    private void initViews() {
+
+        bi.tvFilter.setOnClickListener(this);
     }
 
     private void populateListData() {
@@ -103,8 +113,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetFindLeads, Integer, Unit>) (viewComplainList, integer) -> {
 
-            Fragment fragment = AllLeadsFragment.newInstance(title, R.id.nav_lead);
-            ReplaceFragment(fragment, title, true, true);
+            switchActivity(getActivity(), AllLeadsActivity.class);
 
             return Unit.INSTANCE;
         });
@@ -132,12 +141,29 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+        setHasOptionsMenu(true);
+    }
+
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        getActivity().getMenuInflater().inflate(R.menu.home, menu);
+        menu.findItem(R.id.action_search).setVisible(false);
+        menu.findItem(R.id.action_add).setVisible(true);
     }
 
     @Override
     public void onClick(View view) {
 
         switch (view.getId()) {
+
+            case R.id.tvFilter:
+
+                switchActivity(getActivity(), AddFiltersActivity.class);
+
+                break;
 
         }
     }

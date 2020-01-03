@@ -1,11 +1,10 @@
-package com.project.jarjamediaapp.Fragments.LeadsFragments.all_leads;
+package com.project.jarjamediaapp.Activities.all_leads;
 
-
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.databinding.DataBindingUtil;
@@ -14,10 +13,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.project.jarjamediaapp.Activities.lead_detail.LeadDetailActivity;
-import com.project.jarjamediaapp.Base.BaseFragment;
+import com.project.jarjamediaapp.Base.BaseActivity;
+import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAllLeads;
 import com.project.jarjamediaapp.R;
-import com.project.jarjamediaapp.databinding.FragmentAllleadsBinding;
+import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.ToastUtils;
+import com.project.jarjamediaapp.databinding.ActivityAllleadsBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
 import java.util.ArrayList;
@@ -27,43 +29,41 @@ import java.util.Map;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.functions.Function4;
+import retrofit2.Response;
 
+public class AllLeadsActivity extends BaseActivity implements View.OnClickListener, AllLeadsContract.View {
 
-public class AllLeadsFragment extends BaseFragment implements AllLeadsContract.View, View.OnClickListener {
-
-    FragmentAllleadsBinding bi;
-    Context context;
+    ActivityAllleadsBinding bi;
+    Context context = AllLeadsActivity.this;
     AllLeadsPresenter presenter;
 
-    public AllLeadsFragment() {
-        // Required empty public constructor
-    }
-
-    public static AllLeadsFragment newInstance(String fragment_title, int position) {
-        AllLeadsFragment findLeadsFragment = new AllLeadsFragment();
-        Bundle args = new Bundle();
-        args.putString("title", fragment_title);
-        args.putInt("position", position);
-        findLeadsFragment.setArguments(args);
-        return findLeadsFragment;
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        bi = DataBindingUtil.setContentView(this, R.layout.activity_allleads);
         presenter = new AllLeadsPresenter(this);
-        bi = DataBindingUtil.inflate(inflater, R.layout.fragment_allleads, container, false);
         presenter.initScreen();
-
-        return bi.getRoot();
+        setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.leads), true);
+        handleIntent(getIntent());
 
     }
 
     @Override
-    public void setupViews() {
+    public void onClick(View v) {
 
+    }
+
+    @Override
+    public void setupUI(View view) {
+        super.setupUI(view);
+
+
+    }
+
+    @Override
+    public void initViews() {
         populateListData();
-
     }
 
     private void populateListData() {
@@ -78,10 +78,10 @@ public class AllLeadsFragment extends BaseFragment implements AllLeadsContract.V
         leadsList.add(new GetAllLeads("Brendon", "(123) 456-1234", "Brendon@gmail.com"));
         leadsList.add(new GetAllLeads("Brendon", "(123) 456-1234", "Brendon@gmail.com"));
 
-        bi.recyclerViewAllLeads.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        bi.recyclerViewAllLeads.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
         bi.recyclerViewAllLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewAllLeads.getContext(), 1));
-        RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(getContext(), leadsList, R.layout.custom_all_leads_layout);
+        RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
         recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail);
 
         recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetAllLeads, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
@@ -102,7 +102,7 @@ public class AllLeadsFragment extends BaseFragment implements AllLeadsContract.V
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetAllLeads, Integer, Unit>) (viewComplainList, integer) -> {
 
-            switchActivity(context, LeadDetailActivity.class);
+            switchActivity(LeadDetailActivity.class);
 
             return Unit.INSTANCE;
         });
@@ -111,16 +111,55 @@ public class AllLeadsFragment extends BaseFragment implements AllLeadsContract.V
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.context = context;
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+        populateListData();
+    }
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            //use the query to search
+        }
     }
 
     @Override
-    public void onClick(View view) {
+    public void updateUI(Response<BaseResponse> response) {
 
-        switch (view.getId()) {
 
-        }
     }
+
+    @Override
+    public void updateUIonFalse(String message) {
+
+        ToastUtils.showToastLong(context, message);
+
+    }
+
+    @Override
+    public void updateUIonError(String error) {
+
+        ToastUtils.showToastLong(context, error);
+    }
+
+    @Override
+    public void updateUIonFailure() {
+
+        ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+    }
+
+    @Override
+    public void showProgressBar() {
+
+        GH.getInstance().ShowProgressDialog(context);
+    }
+
+    @Override
+    public void hideProgressBar() {
+
+        GH.getInstance().HideProgressDialog(context);
+    }
+
 }

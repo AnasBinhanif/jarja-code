@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.paris.Paris;
 import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
 import com.project.jarjamediaapp.Base.BaseFragment;
 import com.project.jarjamediaapp.CustomAdapter.SwipeTasksDueRecyclerAdapter;
@@ -57,7 +58,17 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     @Override
     public void setupViews() {
 
+        initViews();
         populateDataDue();
+        bi.fbAddTask.setOnClickListener(this);
+
+    }
+
+    private void initViews() {
+
+        bi.btnTaskDue.setOnClickListener(this);
+        bi.btnTaskOverDue.setOnClickListener(this);
+        bi.btnTaskFutureTask.setOnClickListener(this);
         bi.fbAddTask.setOnClickListener(this);
 
     }
@@ -111,6 +122,29 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 switchActivity(context, AddTaskActivity.class);
                 break;
 
+            case R.id.btnTaskDue:
+
+                Paris.style(bi.btnTaskDue).apply(R.style.TabButtonYellowLeft);
+                Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonTranparentMiddle);
+                Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonTranparentRight);
+
+                break;
+
+            case R.id.btnTaskOverDue:
+
+                Paris.style(bi.btnTaskDue).apply(R.style.TabButtonTranparentLeft);
+                Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonYellowMiddle);
+                Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonTranparentRight);
+
+                break;
+
+            case R.id.btnTaskFutureTask:
+
+                Paris.style(bi.btnTaskDue).apply(R.style.TabButtonTranparentLeft);
+                Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonTranparentMiddle);
+                Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonYellowRight);
+
+                break;
         }
     }
 }

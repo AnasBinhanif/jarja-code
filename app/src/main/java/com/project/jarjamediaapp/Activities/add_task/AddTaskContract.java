@@ -15,6 +15,7 @@ public interface AddTaskContract {
     interface Actions extends BaseContract.Actions {
 
         void addData();
+        void initScreen();
 
     }
 

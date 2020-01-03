@@ -6,39 +6,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/lntoolbar"
+        <include
+            android:id="@+id/ep_toolbar"
+            layout="@layout/base_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:gravity="left|center"
-            android:background="@drawable/top_background"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imgBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:src="@drawable/ic_back" />
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_appointment"
-                android:textSize="18dp"
-                android:textColor="@color/colorWhite"
-                android:textStyle="bold"
-                android:layout_marginLeft="12dp" />
-
-
-        </LinearLayout>
+            android:layout_height="wrap_content" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorGrey_light"
-            android:layout_below="@+id/lntoolbar"
+            android:layout_below="@+id/ep_toolbar"
             android:padding="@dimen/_15sdp"
             tools:context=".Activities.login.LoginActivity">
 
@@ -65,7 +43,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/name_of_contact"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:layout_marginTop="25dp"
                         android:textColor="@color/colorBlack"
                         android:textStyle="bold" />
@@ -85,7 +63,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/agent"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
                         android:textColor="@color/colorBlack"
                         android:textStyle="bold" />
@@ -104,7 +82,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/event_title"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
                         android:textColor="@color/colorBlack"
                         android:textStyle="bold" />
@@ -123,7 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/location"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
                         android:textColor="@color/colorBlack"
                         android:textStyle="bold" />
@@ -143,7 +121,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/description"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
                         android:textColor="@color/colorBlack"
                         android:textStyle="bold" />
@@ -165,7 +143,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/start_date"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
                         android:textColor="@color/colorBlack"
                         android:textStyle="bold" />
@@ -187,7 +165,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/reminder"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
                         android:textColor="@color/colorBlack"
                         android:textStyle="bold" />
@@ -206,7 +184,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/via"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
                         android:textColor="@color/colorBlack"
                         android:textStyle="bold" />
@@ -260,7 +238,6 @@
                             android:textColor="@color/colorWhite" />
 
                     </LinearLayout>
-
 
                 </LinearLayout>
 

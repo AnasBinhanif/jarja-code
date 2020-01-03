@@ -15,6 +15,7 @@ public interface MainContract {
     interface Actions extends BaseContract.Actions {
 
         void addData();
+        void initScreen();
 
     }
 

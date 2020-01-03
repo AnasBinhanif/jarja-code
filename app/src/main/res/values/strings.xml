@@ -3,7 +3,6 @@
     <string name="app_name">JarJa MediaApp</string>
     <string name="retrofit_failure">Unable to connect</string>
 
-
     <!--- Dashboard -->
     <!--- Appointment Fragment -->
     <string name="appointment">Appointments</string>
@@ -50,6 +49,21 @@
     <!--- Leads -->
     <!--- Find Leads Fragment -->
     <string name="filters">FILTERS</string>
+
+    <!--- Add Leads Activity -->
+    <string name="add_lead">Add Lead</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="spouse_name">Spouse Name</string>
+    <string name="cell_phone">Cell Phone</string>
+    <string name="birthday">Birthday</string>
+    <string name="anniversary">Anniversary</string>
+    <string name="company">Company</string>
+    <string name="street_address_1">Street Address 1</string>
+    <string name="street_address_2">Street Address 2</string>
+    <string name="city_1">City 1</string>
+    <string name="city_2">City 2</string>
+
 
     <!--- Add Filters Activity -->
     <string name="add_filters">Add Filters</string>
@@ -104,6 +118,9 @@
 
     <!-- Navigation Drawer Dashboard Screen -->
 
+
+    <!-- Search Result -->
+    <string name="search_hint">Search Leads</string>
 
     <!-- Generic Strings -->
     <string name="no_img">No Image Found</string>
