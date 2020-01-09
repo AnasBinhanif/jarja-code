@@ -75,7 +75,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/lead_score"
+                        android:text="@string/lead_score_without_colon"
                         android:textSize="14dp"
                         android:layout_marginTop="15dp"
                         android:textColor="@color/colorGreyText"

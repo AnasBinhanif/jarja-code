@@ -22,13 +22,17 @@
                 android:name="android.app.default_searchable"
                 android:value=".Activities.all_leads.AllLeadsActivity" />
         </activity>
-        <activity android:name=".Activities.forgot_password.ForgotPasswordActivity"
+        <activity
+            android:name=".Activities.forgot_password.ForgotPasswordActivity"
             android:windowSoftInputMode="adjustResize"></activity>
         <activity android:name=".Activities.add_appointment.AddAppointmentActivity"></activity>
         <activity android:name=".Activities.add_task.AddTaskActivity"></activity>
         <activity android:name=".Activities.lead_detail.LeadDetailActivity"></activity>
         <activity android:name=".Activities.add_filters.AddFiltersActivity"></activity>
         <activity android:name=".Activities.add_lead.AddLeadActivity"></activity>
+        <activity android:name=".Activities.transactions.TransactionActivity"></activity>
+        <activity android:name=".Activities.followups.FollowupsActivity"></activity>
+        <activity android:name=".Activities.listing_info.ListingInfoActivity"></activity>
         <activity android:name=".Activities.all_leads.AllLeadsActivity">
 
             <intent-filter>
@@ -45,7 +49,8 @@
 
         </activity>
 
-        <activity android:name=".Activities.login.LoginActivity"
+        <activity
+            android:name=".Activities.login.LoginActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

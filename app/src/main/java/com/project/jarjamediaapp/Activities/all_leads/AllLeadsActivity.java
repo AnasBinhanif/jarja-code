@@ -82,7 +82,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
         bi.recyclerViewAllLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewAllLeads.getContext(), 1));
         RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
-        recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail);
+        recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail, R.id.tvInitial);
 
         recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetAllLeads, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
 
@@ -94,6 +94,9 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
             TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
             tvEmail.setText(allLeadsList.getEmail());
+
+            TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
+            tvInitial.setText(allLeadsList.getName().substring(0, 1));
 
             return Unit.INSTANCE;
         });

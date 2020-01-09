@@ -68,6 +68,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
     private void initViews() {
 
+        bi.btnToday.setOnClickListener(this);
         bi.btnUpcoming.setOnClickListener(this);
         bi.btnPrevious.setOnClickListener(this);
         bi.fbAddAppoint.setOnClickListener(this);
@@ -109,17 +110,27 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                 switchActivity(context, AddAppointmentActivity.class);
                 break;
 
+            case R.id.btnToday:
+
+                Paris.style(bi.btnToday).apply(R.style.TabButtonYellowLeft);
+                Paris.style(bi.btnUpcoming).apply(R.style.TabButtonTranparentMiddle);
+                Paris.style(bi.btnPrevious).apply(R.style.TabButtonTranparentRight);
+
+                break;
+
             case R.id.btnUpcoming:
 
+                Paris.style(bi.btnToday).apply(R.style.TabButtonTranparentLeft);
+                Paris.style(bi.btnUpcoming).apply(R.style.TabButtonYellowMiddle);
                 Paris.style(bi.btnPrevious).apply(R.style.TabButtonTranparentRight);
-                Paris.style(bi.btnUpcoming).apply(R.style.TabButtonYellowLeft);
 
                 break;
 
             case R.id.btnPrevious:
 
+                Paris.style(bi.btnToday).apply(R.style.TabButtonTranparentLeft);
+                Paris.style(bi.btnUpcoming).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnPrevious).apply(R.style.TabButtonYellowRight);
-                Paris.style(bi.btnUpcoming).apply(R.style.TabButtonTranparentLeft);
 
                 break;
 

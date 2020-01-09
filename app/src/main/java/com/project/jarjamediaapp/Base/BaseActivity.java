@@ -126,6 +126,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         startActivity(intent);
     }
 
+    public void switchActivityWithIntentString(Class<? extends BaseActivity> activity, HashMap<String, String> map) {
+        Intent intent = new Intent(this, activity);
+        for (HashMap.Entry<String, String> entry : map.entrySet())
+            intent.putExtra(entry.getKey(), entry.getValue());
+        startActivity(intent);
+    }
+
     public class DoneOnEditorActionListener implements TextView.OnEditorActionListener {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

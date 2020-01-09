@@ -80,12 +80,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             public void afterTextChanged(Editable editable) {
 
                 String email = bi.atvEmail.getText().toString();
-                if (!Validator.isEmailValid(email)){
+                if (!Validator.isEmailValid(email)) {
 
                     bi.atvEmail.setError("Invalid  Email");
 
                 }
-
             }
         });
 

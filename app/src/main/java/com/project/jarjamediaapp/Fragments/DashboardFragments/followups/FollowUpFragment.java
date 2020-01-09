@@ -30,15 +30,17 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
     Context context;
     FollowUpPresenter presenter;
     SwipeFollowUpsDueRecyclerAdapter swipeFollowUpsDueRecyclerAdapter;
+    boolean isFromActivity;
 
     public FollowUpFragment() {
         // Required empty public constructor
     }
 
-    public static FollowUpFragment newInstance(String fragment_title) {
+    public static FollowUpFragment newInstance(String fragment_title, boolean fromActivity) {
         FollowUpFragment followUpFragment = new FollowUpFragment();
         Bundle args = new Bundle();
         args.putString("title", fragment_title);
+        args.putBoolean("isFromActivity", fromActivity);
         followUpFragment.setArguments(args);
         return followUpFragment;
     }
@@ -49,6 +51,7 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
         bi = DataBindingUtil.inflate(inflater, R.layout.fragment_followup, container, false);
         presenter = new FollowUpPresenter(this);
         presenter.initScreen();
+
 
         return bi.getRoot();
 
@@ -68,6 +71,12 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
     }
 
     private void initViews() {
+
+        isFromActivity = this.getArguments().getBoolean("isFromActivity");
+        if (isFromActivity) {
+            bi.tvTitle.setVisibility(View.GONE);
+        }
+
 
         bi.btnFollowDue.setOnClickListener(this);
         bi.btnFollowOverDue.setOnClickListener(this);
