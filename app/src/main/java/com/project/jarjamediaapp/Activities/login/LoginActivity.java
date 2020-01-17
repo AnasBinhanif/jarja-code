@@ -63,6 +63,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void initViews() {
+
+        bi.tvBottom.setText("@"+getString(R.string.footer_text));
+
         bi.tvForgotPassword.setOnClickListener(this);
         bi.btnLogin.setOnClickListener(this);
         bi.atvEmail.addTextChangedListener(new TextWatcher() {

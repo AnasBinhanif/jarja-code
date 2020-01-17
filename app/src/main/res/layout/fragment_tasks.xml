@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/colorGrey_light"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorGrey_light">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -20,13 +20,13 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_15sdp"
                     android:gravity="center|left"
                     android:orientation="horizontal"
-                    android:padding="@dimen/_15sdp"
                     android:weightSum="3">
 
                     <TextView
-                        android:id="@+id/tvAppointment"
+                        android:id="@+id/tvTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="2.9"
@@ -41,8 +41,11 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
                         android:backgroundTint="@color/colorPrimaryDark"
-                        android:src="@drawable/ic_add"
-                        app:elevation="0dp" />
+                        app:backgroundTint="@color/colorPrimaryDark"
+                        app:elevation="0dp"
+                        app:fabCustomSize="45dp"
+                        app:hoveredFocusedTranslationZ="0dp"
+                        app:srcCompat="@drawable/ic_add" />
 
                 </LinearLayout>
 
@@ -50,8 +53,8 @@
                     android:id="@+id/linearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:baselineAligned="false"
+                    android:orientation="horizontal"
                     android:paddingStart="@dimen/_15sdp"
                     android:paddingEnd="@dimen/_15sdp"
                     android:weightSum="3">
@@ -64,8 +67,8 @@
 
                         <Button
                             android:id="@+id/btnTaskDue"
-                            android:text="@string/due"
-                            style="@style/TabButtonYellowLeft" />
+                            style="@style/TabButtonYellowLeft"
+                            android:text="@string/due" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -77,8 +80,8 @@
 
                         <Button
                             android:id="@+id/btnTaskOverDue"
-                            android:text="@string/Overdue"
-                            style="@style/TabButtonTranparentMiddle" />
+                            style="@style/TabButtonTranparentMiddle"
+                            android:text="@string/Overdue" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -90,8 +93,8 @@
 
                         <Button
                             android:id="@+id/btnTaskFutureTask"
-                            android:text="@string/future_tasks"
-                            style="@style/TabButtonTranparentRight" />
+                            style="@style/TabButtonTranparentRight"
+                            android:text="@string/future_tasks" />
 
                     </LinearLayout>
 

@@ -44,7 +44,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     boolean shouldAnimate = false;
     Menu _menu;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

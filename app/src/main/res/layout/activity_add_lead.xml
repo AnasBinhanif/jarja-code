@@ -15,8 +15,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorGrey_light"
             android:layout_below="@+id/ep_toolbar"
+            android:background="@color/colorGrey_light"
             android:padding="@dimen/_15sdp"
             tools:context=".Activities.login.LoginActivity">
 
@@ -34,202 +34,285 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/first_name"
-                        android:textSize="14dp"
                         android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edtName"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:paddingLeft="12dp"
                         android:layout_marginTop="5dp"
-                        android:textSize="14dp"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/first_name"
                         android:inputType="textPersonName"
-                        android:background="@drawable/bg_search" />
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/last_name"
-                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
+                        android:text="@string/last_name"
                         android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edtAgent"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:paddingLeft="12dp"
                         android:layout_marginTop="5dp"
-                        android:textSize="14dp"
-                        android:background="@drawable/bg_search" />
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/last_name"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/spouse_name"
-                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
+                        android:text="@string/spouse_name"
                         android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edtEventTitle"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:paddingLeft="12dp"
                         android:layout_marginTop="5dp"
-                        android:textSize="14dp"
-                        android:background="@drawable/bg_search" />
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/spouse_name"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/cell_phone"
-                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
+                        android:text="@string/cell_phone"
                         android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edtLocation"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:paddingLeft="12dp"
                         android:layout_marginTop="5dp"
-                        android:textSize="14dp"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/cell_phone"
                         android:inputType="textPostalAddress"
-                        android:background="@drawable/bg_search" />
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/birthday"
-                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
+                        android:text="@string/birthday"
                         android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edtStartDate"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:paddingLeft="12dp"
                         android:layout_marginTop="5dp"
-                        android:textSize="14dp"
-                        android:inputType="date"
+                        android:background="@drawable/bg_search"
                         android:drawableRight="@drawable/ic_calendar"
+                        android:hint="@string/birthday"
+                        android:inputType="date"
+                        android:paddingLeft="12dp"
                         android:paddingRight="12dp"
-                        android:background="@drawable/bg_search" />
+                        android:textSize="14dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/anniversary"
-                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
+                        android:text="@string/anniversary"
                         android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edtAnniversary"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:paddingLeft="12dp"
                         android:layout_marginTop="5dp"
-                        android:textSize="14dp"
-                        android:inputType="date"
+                        android:background="@drawable/bg_search"
                         android:drawableRight="@drawable/ic_calendar"
+                        android:hint="@string/anniversary"
+                        android:inputType="date"
+                        android:paddingLeft="12dp"
                         android:paddingRight="12dp"
-                        android:background="@drawable/bg_search" />
+                        android:textSize="14dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/company"
-                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
+                        android:text="@string/company"
                         android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edtReminder"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:paddingLeft="12dp"
                         android:layout_marginTop="5dp"
-                        android:textSize="14dp"
-                        android:background="@drawable/bg_search" />
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/company"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
                         android:text="@string/street_address_1"
-                        android:textSize="14dp"
-                        android:layout_marginTop="15dp"
                         android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:paddingLeft="12dp"
                         android:layout_marginTop="5dp"
-                        android:textSize="14dp"
-                        android:background="@drawable/bg_search" />
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/street_address_1"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
                         android:text="@string/street_address_2"
-                        android:textSize="14dp"
-                        android:layout_marginTop="15dp"
                         android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:paddingLeft="12dp"
                         android:layout_marginTop="5dp"
-                        android:textSize="14dp"
-                        android:background="@drawable/bg_search" />
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/street_address_2"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
                         android:text="@string/city_1"
-                        android:textSize="14dp"
-                        android:layout_marginTop="15dp"
                         android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:paddingLeft="12dp"
                         android:layout_marginTop="5dp"
-                        android:textSize="14dp"
-                        android:background="@drawable/bg_search" />
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/city_1"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/city_2"
-                        android:textSize="14dp"
                         android:layout_marginTop="15dp"
+                        android:text="@string/city_2"
                         android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:paddingLeft="12dp"
                         android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/city_2"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/state_1"
+                        android:textColor="@color/colorBlack"
                         android:textSize="14dp"
-                        android:background="@drawable/bg_search" />
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/state_1"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/state_2"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/state_2"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/postal_code_1"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/postal_code_1"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/postal_code_2"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/postal_code_2"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
 
 
                     <Button
@@ -237,10 +320,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:text="@string/save"
-                        android:gravity="center"
-                        android:textAllCaps="false"
                         android:background="@color/colorGreen"
+                        android:gravity="center"
+                        android:text="@string/save"
+                        android:textAllCaps="false"
                         android:textColor="@color/colorWhite" />
 
 

@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.airbnb.paris.Paris;
+import com.project.jarjamediaapp.Activities.appointments.AppointmentActivity;
 import com.project.jarjamediaapp.Activities.followups.FollowupsActivity;
 import com.project.jarjamediaapp.Activities.listing_info.ListingInfoActivity;
+import com.project.jarjamediaapp.Activities.tasks.TasksActivity;
 import com.project.jarjamediaapp.Activities.transactions.TransactionActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
@@ -85,7 +87,6 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetLeadDetails, Integer, Unit>) (viewComplainList, position) -> {
 
-
             switch (position) {
 
                 case 0:
@@ -96,13 +97,26 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
                 case 2:
 
-                    switchActivity(ListingInfoActivity.class);
+                    Map<String, String> map = new HashMap<>();
+                    map.put("title", getString(R.string.listing_info));
+                    switchActivityWithIntentString(ListingInfoActivity.class, (HashMap<String, String>) map);
 
                     break;
 
                 case 3:
+                    Map<String, String> map1 = new HashMap<>();
+                    map1.put("title", getString(R.string.buying_info));
+                    switchActivityWithIntentString(ListingInfoActivity.class, (HashMap<String, String>) map1);
 
-                    switchActivity(ListingInfoActivity.class);
+                    break;
+                case 5:
+
+                    switchActivity(AppointmentActivity.class);
+
+                    break;
+                case 7:
+
+                    switchActivity(TasksActivity.class);
 
                     break;
 
@@ -110,7 +124,6 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
             return Unit.INSTANCE;
         });
-
 
     }
 

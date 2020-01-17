@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">JarJa MediaApp</string>
+    <string name="app_name">Jarja Media</string>
     <string name="retrofit_failure">Unable to connect</string>
 
     <!--- Dashboard -->
@@ -64,6 +64,10 @@
     <string name="street_address_2">Street Address 2</string>
     <string name="city_1">City 1</string>
     <string name="city_2">City 2</string>
+    <string name="state_1">State 1</string>
+    <string name="state_2">State 2</string>
+    <string name="postal_code_1">Postal Code 1</string>
+    <string name="postal_code_2">Postal Code 2</string>
 
 
     <!--- Add Filters Activity -->
@@ -97,6 +101,7 @@
 
     <!--- ListingInfo Activity -->
     <string name="listing_info">Listing Info</string>
+    <string name="buying_info">Buying Info</string>
 
     <!--- Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -114,7 +119,7 @@
     <string name="logout">Logout</string>
 
     <!-- Login Screen -->
-    <string name="footer_text">JarjaMedia 2019 , All Rights Reserved.</string>
+    <string name="footer_text">Jarja Media 2020 , All Rights Reserved.</string>
     <string name="header_text">Marketing at the speed of Today</string>
     <string name="email">Email</string>
     <string name="password">Password</string>

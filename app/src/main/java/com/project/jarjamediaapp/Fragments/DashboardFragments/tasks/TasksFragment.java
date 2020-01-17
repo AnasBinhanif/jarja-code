@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.Fragments.DashboardFragments.tasks;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,16 +32,18 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     Context context;
     TasksPresenter presenter;
     SwipeTasksDueRecyclerAdapter swipeTasksDueRecyclerAdapter;
+    boolean isFromActivity;
 
     public TasksFragment() {
         // Required empty public constructor
     }
 
-    public static TasksFragment newInstance(String fragment_title) {
+    public static TasksFragment newInstance(String fragment_title, boolean fromActivity) {
         TasksFragment followUpFragment = new TasksFragment();
         Bundle args = new Bundle();
         args.putString("title", fragment_title);
         followUpFragment.setArguments(args);
+        args.putBoolean("isFromActivity", fromActivity);
         return followUpFragment;
     }
 
@@ -64,7 +67,14 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
 
     }
 
+    @SuppressLint("RestrictedApi")
     private void initViews() {
+
+        isFromActivity = this.getArguments().getBoolean("isFromActivity");
+        if (isFromActivity) {
+            bi.tvTitle.setVisibility(View.GONE);
+            bi.fbAddTask.setVisibility(View.GONE);
+        }
 
         bi.btnTaskDue.setOnClickListener(this);
         bi.btnTaskOverDue.setOnClickListener(this);

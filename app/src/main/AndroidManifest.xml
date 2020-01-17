@@ -32,6 +32,8 @@
         <activity android:name=".Activities.add_lead.AddLeadActivity"></activity>
         <activity android:name=".Activities.transactions.TransactionActivity"></activity>
         <activity android:name=".Activities.followups.FollowupsActivity"></activity>
+        <activity android:name=".Activities.appointments.AppointmentActivity"></activity>
+        <activity android:name=".Activities.tasks.TasksActivity"></activity>
         <activity android:name=".Activities.listing_info.ListingInfoActivity"></activity>
         <activity android:name=".Activities.all_leads.AllLeadsActivity">
 

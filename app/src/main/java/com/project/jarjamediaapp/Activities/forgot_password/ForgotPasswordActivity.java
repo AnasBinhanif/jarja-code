@@ -44,6 +44,8 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void initViews() {
+        bi.tvBottom.setText("@"+getString(R.string.footer_text));
+
         bi.atvEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

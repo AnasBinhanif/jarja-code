@@ -1,5 +1,6 @@
 package com.project.jarjamediaapp.Fragments.DashboardFragments.appointments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,15 +31,17 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     FragmentAppointmentBinding bi;
     AppointmentPresenter presenter;
     SwipeAppointPreviousRecyclerAdapter swipeAppointPreviousRecyclerAdapter;
+    boolean isFromActivity;
 
     public FragmentAppointment() {
         // Required empty public constructor
     }
 
-    public static FragmentAppointment newInstance(String fragment_title) {
+    public static FragmentAppointment newInstance(String fragment_title, boolean fromActivity) {
         FragmentAppointment fragmentAppointment = new FragmentAppointment();
         Bundle args = new Bundle();
         args.putString("title", fragment_title);
+        args.putBoolean("isFromActivity", fromActivity);
         fragmentAppointment.setArguments(args);
         return fragmentAppointment;
     }
@@ -66,7 +69,15 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
     }
 
+    @SuppressLint("RestrictedApi")
     private void initViews() {
+
+
+        isFromActivity = this.getArguments().getBoolean("isFromActivity");
+        if (isFromActivity) {
+            bi.tvTitle.setVisibility(View.GONE);
+            bi.fbAddAppoint.setVisibility(View.GONE);
+        }
 
         bi.btnToday.setOnClickListener(this);
         bi.btnUpcoming.setOnClickListener(this);
