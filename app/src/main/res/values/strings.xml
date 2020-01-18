@@ -103,6 +103,30 @@
     <string name="listing_info">Listing Info</string>
     <string name="buying_info">Buying Info</string>
 
+    <!--- SocailProfile Activity -->
+    <string name="social_profiles">Social Profiles</string>
+    <string name="add">Add</string>
+    <string name="upgrade_social_profile">Upgrade Social Profile</string>
+    <string name="view_profile">View Profile</string>
+    <string name="add_profile">Add Profile</string>
+    <string name="name">Name</string>
+    <string name="profile_link">Profile Link</string>
+    <string name="site">Site</string>
+    <string name="http">https://</string>
+
+
+    <!--- Open Houses Activity -->
+    <string name="open_houses">Open Houses</string>
+    <string name="add_open_house">Add Open House</string>
+    <string name="select_picture">Select Picture</string>
+    <string name="listing_price">Listing Price</string>
+    <string name="state_province">State/Province</string>
+    <string name="city">City</string>
+    <string name="address">Address</string>
+    <string name="zip_postal">Zip/Postal Code</string>
+    <string name="start_date_time">Start Date Time</string>
+    <string name="end_date_time">End Date Time</string>
+
     <!--- Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

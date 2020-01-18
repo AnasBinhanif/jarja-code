@@ -17,6 +17,7 @@ import com.airbnb.paris.Paris;
 import com.project.jarjamediaapp.Activities.appointments.AppointmentActivity;
 import com.project.jarjamediaapp.Activities.followups.FollowupsActivity;
 import com.project.jarjamediaapp.Activities.listing_info.ListingInfoActivity;
+import com.project.jarjamediaapp.Activities.social_profiles.Social_ProfilesActivity;
 import com.project.jarjamediaapp.Activities.tasks.TasksActivity;
 import com.project.jarjamediaapp.Activities.transactions.TransactionActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
@@ -92,6 +93,12 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 case 0:
 
                     switchActivity(FollowupsActivity.class);
+
+                    break;
+
+                case 1:
+
+                    switchActivity(Social_ProfilesActivity.class);
 
                     break;
 

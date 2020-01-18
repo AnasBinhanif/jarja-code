@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorGrey_light">
+
+        <include
+            android:id="@+id/ep_toolbar"
+            layout="@layout/base_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewOpenHouse"
+            android:layout_width="match_parent"
+            android:layout_below="@id/ep_toolbar"
+            android:padding="15dp"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+
+    </RelativeLayout>
+
+</layout>
