@@ -16,5 +16,6 @@
     <color name="colorGreyCount">#d7d7d7</color>
     <color name="colorRed">#f44336</color>
     <color name="colorTitle">#1A273F</color>
+    <color name="colorCRMYellow">#b39617</color>
     <color name="colorMateGreen">#218f82</color>
 </resources>

@@ -21,6 +21,7 @@ import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
 import com.project.jarjamediaapp.Activities.add_filters.AddFiltersActivity;
 import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
+import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
 import com.project.jarjamediaapp.Activities.open_houses.Open_HousesActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Fragments.DashboardFragments.TabsFragment;
@@ -126,6 +127,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_calendar:
                 fragment=null;
                 title = getResources().getString(R.string.calendar);
+                switchActivity(CalendarActivity.class);
                 break;
             case R.id.nav_open_house:
                 title = getResources().getString(R.string.openHouses);
