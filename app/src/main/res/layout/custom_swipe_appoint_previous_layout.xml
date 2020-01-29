@@ -18,11 +18,11 @@
             android:layout_width="80dp"
             android:layout_height="match_parent"
             android:background="@color/colorBlue"
+            android:drawableTop="@drawable/ic_edit"
+            android:drawablePadding="-20dp"
             android:gravity="center"
             android:paddingTop="20dp"
-            android:drawablePadding="-20dp"
             android:text="Edit"
-            android:drawableTop="@drawable/ic_edit"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -30,10 +30,10 @@
             android:layout_width="80dp"
             android:layout_height="match_parent"
             android:background="@color/colorGreen"
+            android:drawableTop="@drawable/ic_done"
+            android:drawablePadding="-20dp"
             android:gravity="center"
             android:paddingTop="20dp"
-            android:drawablePadding="-20dp"
-            android:drawableTop="@drawable/ic_done"
             android:text="Done"
             android:textColor="@android:color/white" />
 
@@ -43,24 +43,30 @@
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/colorWhite"
-        android:visibility="visible"
-        android:layout_height="match_parent">
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"
-            android:orientation="horizontal">
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <TextView
+                android:id="@+id/tvInitial"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/avataer_male"
+                android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
-                app:civ_border_color="@color/colorPrimaryDark"
-                app:civ_border_width="1dp" />
+                android:background="@drawable/round_initials_lead"
+                android:gravity="center"
+                android:text="BR"
+                android:textAllCaps="true"
+                android:textColor="@color/colorAccent"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,8 +79,8 @@
                     android:id="@+id/tvName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimaryDark"
                     android:text="NAME NAME NAME NAME NAME NAME"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="16dp"
                     android:textStyle="bold" />
 
@@ -82,9 +88,9 @@
                     android:id="@+id/tvAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorGreyText"
-                    android:text="Address Address Address Address"
                     android:layout_marginTop="5dp"
+                    android:text="Address Address Address Address"
+                    android:textColor="@color/colorGreyText"
                     android:textSize="14dp"
                     android:textStyle="bold" />
 

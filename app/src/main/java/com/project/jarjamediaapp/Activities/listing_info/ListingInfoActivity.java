@@ -55,7 +55,6 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
         leadsList.add(new GetListingInfo("Property Type :", "N/A"));
         leadsList.add(new GetListingInfo("Location :", "N/A"));
         leadsList.add(new GetListingInfo("Bedrooms :", "N/A"));
-        leadsList.add(new GetListingInfo("Bedrooms :", "N/A"));
         leadsList.add(new GetListingInfo("Baths :", "N/A"));
         leadsList.add(new GetListingInfo("Year Built :", "N/A"));
         leadsList.add(new GetListingInfo("Square Feet :", "N/A"));

@@ -17,7 +17,9 @@ import com.airbnb.paris.Paris;
 import com.project.jarjamediaapp.Activities.appointments.AppointmentActivity;
 import com.project.jarjamediaapp.Activities.followups.FollowupsActivity;
 import com.project.jarjamediaapp.Activities.listing_info.ListingInfoActivity;
+import com.project.jarjamediaapp.Activities.notes.NotesActivity;
 import com.project.jarjamediaapp.Activities.social_profiles.Social_ProfilesActivity;
+import com.project.jarjamediaapp.Activities.tags.TagsActivity;
 import com.project.jarjamediaapp.Activities.tasks.TasksActivity;
 import com.project.jarjamediaapp.Activities.transactions.TransactionActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
@@ -61,11 +63,11 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
         List<GetLeadDetails> leadsList = new ArrayList<>();
 
-        leadsList.add(new GetLeadDetails("Followups"));
+        leadsList.add(new GetLeadDetails("Follow Ups"));
         leadsList.add(new GetLeadDetails("Social Profiles"));
         leadsList.add(new GetLeadDetails("Listing Info"));
         leadsList.add(new GetLeadDetails("Buying Info"));
-        leadsList.add(new GetLeadDetails("Apply Tags"));
+        leadsList.add(new GetLeadDetails("Tags"));
         leadsList.add(new GetLeadDetails("Appointments"));
         leadsList.add(new GetLeadDetails("Notes"));
         leadsList.add(new GetLeadDetails("Tasks"));
@@ -116,9 +118,20 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     switchActivityWithIntentString(ListingInfoActivity.class, (HashMap<String, String>) map1);
 
                     break;
+
+                case 4:
+                    switchActivity(TagsActivity.class);
+
+                    break;
                 case 5:
 
                     switchActivity(AppointmentActivity.class);
+
+                    break;
+
+                case 6:
+
+                    switchActivity(NotesActivity.class);
 
                     break;
                 case 7:

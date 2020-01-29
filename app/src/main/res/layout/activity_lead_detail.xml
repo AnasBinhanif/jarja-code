@@ -60,7 +60,7 @@
                             <Button
                                 android:id="@+id/btnDetails"
                                 style="@style/TabButtonTranparentRight"
-                                android:text="@string/details" />
+                                android:text="@string/info" />
 
                         </LinearLayout>
 
@@ -74,387 +74,390 @@
                         android:layout_below="@+id/linearLayout"
                         android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/lnNameDetail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/linearLayout"
-                        android:background="@color/colorWhite"
-                        android:gravity="left|center"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/_15sdp"
-                        android:weightSum="5">
-
                         <LinearLayout
+                            android:id="@+id/lnNameDetail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/tvName"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Abdul Rafay"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16dp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/tvID"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="1dp"
-                                android:text="54353"
-                                android:textColor="@color/colorGreyTextDark"
-                                android:textSize="14dp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:text="@string/lead_score"
-                            android:textColor="@color/colorGreyTextDark"
-                            android:textSize="13dp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvScore"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:text="452"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:textSize="16dp"
-                            android:textStyle="bold" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/lnContactDetail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/lnNameDetail"
-                        android:background="@color/colorGrey_light"
-                        android:orientation="vertical"
-                        android:padding="@dimen/_15sdp">
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="4">
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    android:id="@+id/imgCall"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_call_2" />
-
-                                <TextView
-                                    android:id="@+id/tvCall"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:text="@string/call"
-                                    android:textColor="@color/colorPrimaryDark"
-                                    android:textSize="14dp"
-                                    android:textStyle="bold" />
-
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    android:id="@+id/imgEmail"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_email" />
-
-                                <TextView
-                                    android:id="@+id/tvEmail"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:text="@string/email"
-                                    android:textColor="@color/colorPrimaryDark"
-                                    android:textSize="14dp"
-                                    android:textStyle="bold" />
-
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    android:id="@+id/imgMessage"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_message" />
-
-                                <TextView
-                                    android:id="@+id/tvMessage"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:text="@string/message"
-                                    android:textColor="@color/colorPrimaryDark"
-                                    android:textSize="14dp"
-                                    android:textStyle="bold" />
-
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    android:id="@+id/imgEditLead"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_edit_1" />
-
-                                <TextView
-                                    android:id="@+id/tvEditLead"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:text="@string/edit_lead"
-                                    android:textColor="@color/colorPrimaryDark"
-                                    android:textSize="14dp"
-                                    android:textStyle="bold" />
-
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/last_touch"
-                                android:textColor="@color/colorGreyTextDark"
-                                android:textSize="14dp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/tvLastTouch"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/na"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16dp"
-                                android:textStyle="bold" />
-
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/lnAssignedTo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/lnContactDetail"
-                        android:background="@color/colorWhite"
-                        android:gravity="center|left"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/_5sdp"
-                        android:weightSum="3">
-
-                        <TextView
-                            android:id="@+id/tvAssignedTo"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:layout_weight="2.9"
-                            android:text="@string/assigned_to"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:textSize="20dp"
-                            android:textStyle="bold" />
-
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/fbAssignedTo"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:layout_weight="0.1"
-                            android:backgroundTint="@color/colorPrimaryDark"
-                            android:src="@drawable/ic_add"
-                            app:elevation="0dp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/lnProfile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/lnAssignedTo"
-                        android:background="@color/colorWhite"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/primary"
-                            android:textColor="@color/colorGreyTextDark"
-                            android:textSize="16dp" />
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/imgAssignedTo"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:layout_marginTop="5dp"
-                            android:src="@drawable/avataer_male"
-                            app:civ_border_color="@color/colorYellow"
-                            app:civ_border_width="1dp" />
-
-                        <TextView
-                            android:id="@+id/tvAssignedToName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="Humza Shahid"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:textSize="16dp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/lnTransaction"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/lnProfile"
-                        android:layout_marginBottom="15dp"
-                        android:background="@color/colorGrey_light"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/colorGrey_light"
-                            android:baselineAligned="false"
+                            android:layout_below="@+id/linearLayout"
+                            android:background="@color/colorWhite"
+                            android:gravity="left|center"
                             android:orientation="horizontal"
                             android:padding="@dimen/_15sdp"
-                            android:weightSum="2">
+                            android:weightSum="5">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
 
-                                <Button
-                                    android:id="@+id/btnTransaction1"
-                                    style="@style/TabButtonYellowLeft"
-                                    android:text="@string/transaction1" />
+                                <TextView
+                                    android:id="@+id/tvName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Abdul Rafay"
+                                    android:textColor="@color/colorPrimaryDark"
+                                    android:textSize="18dp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvID"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="1dp"
+                                    android:text="54353"
+                                    android:textColor="@color/colorGreyTextDark"
+                                    android:textSize="16dp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/lead_score"
+                                android:textColor="@color/colorGreyTextDark"
+                                android:textSize="13dp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvScore"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="452"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="18dp"
+                                android:textStyle="bold" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lnContactDetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/lnNameDetail"
+                            android:background="@color/colorGrey_light"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_15sdp">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="4">
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <ImageView
+                                        android:id="@+id/imgCall"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_call_2" />
+
+                                    <TextView
+                                        android:id="@+id/tvCall"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:text="@string/call"
+                                        android:textColor="@color/colorPrimaryDark"
+                                        android:textSize="14dp"
+                                        android:textStyle="bold" />
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <ImageView
+                                        android:id="@+id/imgEmail"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_email" />
+
+                                    <TextView
+                                        android:id="@+id/tvEmail"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:text="@string/email"
+                                        android:textColor="@color/colorPrimaryDark"
+                                        android:textSize="14dp"
+                                        android:textStyle="bold" />
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <ImageView
+                                        android:id="@+id/imgMessage"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_message" />
+
+                                    <TextView
+                                        android:id="@+id/tvMessage"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:text="@string/message"
+                                        android:textColor="@color/colorPrimaryDark"
+                                        android:textSize="14dp"
+                                        android:textStyle="bold" />
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <ImageView
+                                        android:id="@+id/imgEditLead"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_edit_1" />
+
+                                    <TextView
+                                        android:id="@+id/tvEditLead"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:text="@string/edit_lead"
+                                        android:textColor="@color/colorPrimaryDark"
+                                        android:textSize="14dp"
+                                        android:textStyle="bold" />
+
+
+                                </LinearLayout>
+
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:gravity="center"
+                                android:orientation="horizontal">
 
-                                <Button
-                                    android:id="@+id/btnTransaction2"
-                                    style="@style/TabButtonTranparentRight"
-                                    android:text="@string/transaction2" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/last_touch"
+                                    android:textColor="@color/colorGreyTextDark"
+                                    android:textSize="14dp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvLastTouch"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/na"
+                                    android:textColor="@color/colorPrimaryDark"
+                                    android:textSize="16dp"
+                                    android:textStyle="bold" />
+
 
                             </LinearLayout>
-
 
                         </LinearLayout>
 
                         <RelativeLayout
-                            android:id="@+id/rlTransaction"
+                            android:id="@+id/lnAssignedTo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="@dimen/_15sdp">
+                            android:layout_below="@+id/lnContactDetail"
+                            android:background="@color/colorWhite"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:id="@+id/tvAssignedTo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="@dimen/_15sdp"
+                                android:layout_marginRight="10dp"
+                                android:text="@string/assigned_to"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:id="@+id/fbAssignedTo"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="10dp"
+                                android:backgroundTint="@color/colorPrimaryDark"
+                                android:elevation="0dp"
+                                android:src="@drawable/ic_add"
+                                app:backgroundTint="@color/colorPrimaryDark"
+                                app:elevation="0dp"
+                                app:fabCustomSize="40dp" />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lnProfile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/lnAssignedTo"
+                            android:background="@color/colorWhite"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/primary"
+                                android:textColor="@color/colorGreyTextDark"
+                                android:textSize="16dp" />
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/imgAssignedTo"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:layout_marginTop="5dp"
+                                android:src="@drawable/avataer_male"
+                                app:civ_border_color="@color/colorYellow"
+                                app:civ_border_width="1dp" />
+
+                            <TextView
+                                android:id="@+id/tvAssignedToName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="Humza Shahid"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lnTransaction"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/lnProfile"
+                            android:layout_marginBottom="15dp"
+                            android:background="@color/colorGrey_light"
+                            android:orientation="vertical">
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center|left"
-                                android:orientation="vertical">
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorGrey_light"
+                                android:baselineAligned="false"
+                                android:orientation="horizontal"
+                                android:padding="@dimen/_15sdp"
+                                android:weightSum="2">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/current"
-                                    android:textColor="@color/colorPrimaryDark"
-                                    android:textSize="14dp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/tvStep"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:text="@string/potential_prospect"
-                                    android:textColor="@color/colorMateGreen"
-                                    android:textSize="16dp" />
-
-                                <TextView
-                                    android:id="@+id/tvDate"
+                                <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="1dp"
-                                    android:text="12/31/2019"
-                                    android:textColor="@color/colorGreyTextDark"
-                                    android:textSize="14dp" />
+                                    android:layout_height="50dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <Button
+                                        android:id="@+id/btnTransaction1"
+                                        style="@style/TabButtonYellowLeft"
+                                        android:text="@string/transaction1" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <Button
+                                        android:id="@+id/btnTransaction2"
+                                        style="@style/TabButtonTranparentRight"
+                                        android:text="@string/transaction2" />
+
+                                </LinearLayout>
 
 
                             </LinearLayout>
 
-                            <ImageView
-                                android:layout_width="wrap_content"
+                            <RelativeLayout
+                                android:id="@+id/rlTransaction"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerInParent="true"
-                                android:layout_marginRight="15dp"
-                                android:src="@drawable/ic_next" />
+                                android:paddingLeft="@dimen/_15sdp">
 
-                        </RelativeLayout>
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center|left"
+                                    android:orientation="vertical">
 
-                    </LinearLayout>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/current"
+                                        android:textColor="@color/colorPrimaryDark"
+                                        android:textSize="14dp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvStep"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:text="@string/potential_prospect"
+                                        android:textColor="@color/colorMateGreen"
+                                        android:textSize="16dp" />
+
+                                    <TextView
+                                        android:id="@+id/tvDate"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="1dp"
+                                        android:text="12/31/2019"
+                                        android:textColor="@color/colorGreyTextDark"
+                                        android:textSize="14dp" />
+
+
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginRight="15dp"
+                                    android:src="@drawable/ic_next" />
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -462,8 +465,8 @@
                         android:id="@+id/recyclerLeadDetails"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/colorWhite"
                         android:layout_below="@+id/linearLayout"
+                        android:background="@color/colorWhite"
                         android:visibility="gone" />
 
                 </RelativeLayout>
@@ -471,8 +474,6 @@
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         </ScrollView>
-
-
 
 
     </RelativeLayout>

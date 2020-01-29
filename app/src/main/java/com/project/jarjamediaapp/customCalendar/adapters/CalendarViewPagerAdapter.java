@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-
 import com.project.jarjamediaapp.customCalendar.interfaces.OnDateSelectedListener;
 import com.project.jarjamediaapp.customCalendar.interfaces.OnDayViewClickListener;
 import com.project.jarjamediaapp.customCalendar.objects.CalendarDate;

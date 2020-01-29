@@ -38,6 +38,9 @@
         <activity android:name=".Activities.social_profiles.Social_ProfilesActivity"></activity>
         <activity android:name=".Activities.open_houses.Open_HousesActivity"></activity>
         <activity android:name=".Activities.calendar.CalendarActivity"></activity>
+        <activity android:name=".Activities.tags.TagsActivity"></activity>
+        <activity android:name=".Activities.notes.NotesActivity"></activity>
+        <activity android:name=".Activities.notes.AddNotesActivity"></activity>
         <activity android:name=".Activities.all_leads.AllLeadsActivity">
 
             <intent-filter>

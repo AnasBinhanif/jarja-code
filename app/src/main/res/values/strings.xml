@@ -86,6 +86,7 @@
     <string name="lead_details">Lead Details</string>
     <string name="actions">Actions</string>
     <string name="details">Details</string>
+    <string name="info">Info</string>
     <string name="message">Message</string>
     <string name="edit_lead">Edit Lead</string>
     <string name="lead_score">Lead Score : </string>
@@ -115,6 +116,11 @@
     <string name="profile_link">Profile Link</string>
     <string name="site">Site</string>
     <string name="http">https://</string>
+
+    <!--- Notes Activity -->
+    <string name="documents">Documents</string>
+    <string name="add_documents">Add Documents</string>
+    <string name="add_notes">Add Notes</string>
 
 
     <!--- Open Houses Activity -->
