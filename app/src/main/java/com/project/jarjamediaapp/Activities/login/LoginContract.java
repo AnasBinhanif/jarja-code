@@ -1,11 +1,30 @@
 package com.project.jarjamediaapp.Activities.login;
 
 import com.project.jarjamediaapp.Base.BaseContract;
+import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Networking.ApiError;
+
+import retrofit2.Response;
 
 public interface LoginContract {
 
-    interface View extends BaseContract.View{
+    interface View {
 
+        void setupViews();
+
+        void updateUI(Response<LoginModel> response);
+
+        void updateUIList(Response<LoginModel> response);
+
+        void updateUIonFalse(String message);
+
+        void updateUIonError(ApiError error);
+
+        void updateUIonFailure();
+
+        void showProgressBar();
+
+        void hideProgressBar();
     }
 
     /*
@@ -14,8 +33,8 @@ public interface LoginContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void addData();
         void initScreen();
+        //void loginUser();
     }
 
 }

@@ -16,7 +16,14 @@
         android:usesCleartextTraffic="true">
 
 
-        <activity android:name=".Activities.splash.MainActivity"></activity>
+        <activity android:name=".Activities.splash.MainActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity android:name=".Activities.HomeActivity">
             <meta-data
                 android:name="android.app.default_searchable"
@@ -60,10 +67,9 @@
         <activity
             android:name=".Activities.login.LoginActivity"
             android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
+
+
         </activity>
 
 

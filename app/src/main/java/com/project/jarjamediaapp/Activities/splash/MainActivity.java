@@ -2,17 +2,19 @@ package com.project.jarjamediaapp.Activities.splash;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.project.jarjamediaapp.Activities.HomeActivity;
+import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
-import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Networking.ApiError;
+import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
-
 import com.project.jarjamediaapp.databinding.ActivitySplashBinding;
 
 import retrofit2.Response;
@@ -22,6 +24,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     ActivitySplashBinding bi;
     Context context = MainActivity.this;
     MainPresenter presenter;
+    long BASE_TIME_OUT = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,20 +36,42 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
+    public void splash(long baseTimeout) {
+
+        BASE_TIME_OUT = baseTimeout * 1000;
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                if (GH.getInstance().getAuthorization()==null || GH.getInstance().getAuthorization().equals(""))
+                {
+                    switchActivity(LoginActivity.class);
+                }else{
+                    switchActivity(HomeActivity.class);
+                }
+
+                finish();
+            }
+        };
+        handler.postDelayed(runnable, BASE_TIME_OUT);
+    }
+
     @Override
     public void onClick(View v) {
 
     }
 
     @Override
-    public void initViews() {
+    public void setupViews() {
+
+        splash(3);
+
 
     }
 
     @Override
-    public void updateUI(Response<BaseResponse> response) {
-
-
+    public void updateUI(Response<AccessCode> response) {
 
     }
 
@@ -58,9 +83,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
-    public void updateUIonError(String error) {
+    public void updateUIonError(ApiError error) {
 
-        ToastUtils.showToastLong(context, error);
     }
 
     @Override

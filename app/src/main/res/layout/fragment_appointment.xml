@@ -67,7 +67,7 @@
 
                         <Button
                             android:id="@+id/btnToday"
-                            style="@style/TabButtonTranparentLeft"
+                            style="@style/TabButtonYellowLeft"
                             android:text="@string/today" />
 
                     </LinearLayout>
@@ -93,13 +93,35 @@
 
                         <Button
                             android:id="@+id/btnPrevious"
-                            style="@style/TabButtonYellowRight"
+                            style="@style/TabButtonTranparentRight"
                             android:text="@string/previous" />
 
                     </LinearLayout>
 
 
                 </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/tvNoRecordFound"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorWhite"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:layout_centerInParent="true"
+                    android:text="No Record Found"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewToday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="visible" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewUpcoming"
@@ -115,7 +137,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:nestedScrollingEnabled="false"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
             </LinearLayout>
 

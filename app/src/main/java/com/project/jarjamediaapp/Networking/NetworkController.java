@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.project.jarjamediaapp.Utilities.AppConstants;
 
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkController {
 
-    private String BASE_URL = "http://transmasito.clientdemos.me/api/v1/";
+
     private static NetworkController singleTonInstance = null;
     private Retrofit mRetrofit;
     private ApiMethods mApiMethods;
@@ -37,7 +38,7 @@ public class NetworkController {
                 .setLenient()
                 .create();
         mRetrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(AppConstants.HTTP.BASE_URL)
                 .client(getHttpClient())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();

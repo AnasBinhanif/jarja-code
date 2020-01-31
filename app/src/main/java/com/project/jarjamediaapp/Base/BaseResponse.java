@@ -5,18 +5,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by Administrator on 12/8/2017.
- */
-
 public class BaseResponse<T> implements Serializable {
 
     @SerializedName("status")
     @Expose
-    private String status;
+    public String status;
     @SerializedName("message")
     @Expose
-    private String message;
+    public String message;
 
     public T getData() {
         return data;

@@ -1,16 +1,20 @@
-package com.project.jarjamediaapp.Activities.login;
+package com.project.jarjamediaapp.Models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.project.jarjamediaapp.Activities.login.LoginModel;
 
-public class LoginModel {
+public class GetUserProfile {
 
     @SerializedName("status")
     @Expose
     public String status;
+    @SerializedName("message")
+    @Expose
+    public String message;
     @SerializedName("data")
     @Expose
-    public Data data;
+    public LoginModel.Data data;
 
     public class Data {
 
@@ -22,7 +26,7 @@ public class LoginModel {
         public String status;
         @SerializedName("userProfile")
         @Expose
-        public UserProfile userProfile;
+        public LoginModel.UserProfile userProfile;
 
     }
 

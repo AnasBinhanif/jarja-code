@@ -17,12 +17,12 @@ import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivi
 import com.project.jarjamediaapp.Base.BaseFragment;
 import com.project.jarjamediaapp.CustomAdapter.SwipeAppointPreviousRecyclerAdapter;
 import com.project.jarjamediaapp.Fragments.FragmentLifeCycle;
-import com.project.jarjamediaapp.Models.GetPreviousAppointments;
+import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.databinding.FragmentAppointmentBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class FragmentAppointment extends BaseFragment implements FragmentLifeCycle, AppointmentContract.View, View.OnClickListener {
@@ -32,6 +32,8 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     AppointmentPresenter presenter;
     SwipeAppointPreviousRecyclerAdapter swipeAppointPreviousRecyclerAdapter;
     boolean isFromActivity;
+
+    ArrayList<GetAppointmentsModel.Data> appointmentList = new ArrayList<>();
 
     public FragmentAppointment() {
         // Required empty public constructor
@@ -65,8 +67,89 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     public void setupViews() {
 
         initViews();
-        populateDataPrevious();
 
+    }
+
+    @Override
+    public void updateUI(GetAppointmentsModel response, String whichAppoint) {
+
+        appointmentList = response.data;
+
+        RecyclerView.LayoutManager mLayoutManager;
+
+        switch (whichAppoint) {
+
+            case "today":
+
+                if (appointmentList.size()==0){
+
+                    bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+                    bi.recyclerViewToday.setVisibility(View.GONE);
+
+                }else {
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList);
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    bi.recyclerViewToday.setLayoutManager(mLayoutManager);
+                    bi.recyclerViewToday.setItemAnimator(new DefaultItemAnimator());
+                    bi.recyclerViewToday.setAdapter(swipeAppointPreviousRecyclerAdapter);
+                }
+                break;
+            case "upcoming":
+                if (appointmentList.size()==0){
+
+                    bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+                    bi.recyclerViewUpcoming.setVisibility(View.GONE);
+
+                }else {
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList);
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    bi.recyclerViewUpcoming.setLayoutManager(mLayoutManager);
+                    bi.recyclerViewUpcoming.setItemAnimator(new DefaultItemAnimator());
+                    bi.recyclerViewUpcoming.setAdapter(swipeAppointPreviousRecyclerAdapter);
+                }
+                break;
+            case "previous":
+                if (appointmentList.size()==0){
+
+                    bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+                    bi.recyclerViewPrevious.setVisibility(View.GONE);
+
+                }else {
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList);
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    bi.recyclerViewPrevious.setLayoutManager(mLayoutManager);
+                    bi.recyclerViewPrevious.setItemAnimator(new DefaultItemAnimator());
+                    bi.recyclerViewPrevious.setAdapter(swipeAppointPreviousRecyclerAdapter);
+                }
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void updateUIonFalse(String message) {
+
+    }
+
+    @Override
+    public void updateUIonError(String error) {
+
+    }
+
+    @Override
+    public void updateUIonFailure() {
+
+    }
+
+    @Override
+    public void showProgressBar() {
+        GH.getInstance().ShowProgressDialog(context);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        GH.getInstance().HideProgressDialog(context);
     }
 
     @SuppressLint("RestrictedApi")
@@ -84,10 +167,12 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         bi.btnPrevious.setOnClickListener(this);
         bi.fbAddAppoint.setOnClickListener(this);
 
+        presenter.getTodayAppointments();
+
     }
 
 
-    private void populateDataPrevious() {
+    /*private void populateDataPrevious() {
 
         List<GetPreviousAppointments> appointmentList = new ArrayList<>();
 
@@ -110,7 +195,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         bi.recyclerViewPrevious.setAdapter(swipeAppointPreviousRecyclerAdapter);
 
 
-    }
+    }*/
 
     @Override
     public void onClick(View view) {
@@ -123,25 +208,46 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
             case R.id.btnToday:
 
+                presenter.getTodayAppointments();
+
                 Paris.style(bi.btnToday).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnUpcoming).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnPrevious).apply(R.style.TabButtonTranparentRight);
+
+                bi.tvNoRecordFound.setVisibility(View.GONE);
+                bi.recyclerViewToday.setVisibility(View.VISIBLE);
+                bi.recyclerViewUpcoming.setVisibility(View.GONE);
+                bi.recyclerViewPrevious.setVisibility(View.GONE);
 
                 break;
 
             case R.id.btnUpcoming:
 
+                presenter.getUpcomingAppointments();
+
                 Paris.style(bi.btnToday).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnUpcoming).apply(R.style.TabButtonYellowMiddle);
                 Paris.style(bi.btnPrevious).apply(R.style.TabButtonTranparentRight);
+
+                bi.tvNoRecordFound.setVisibility(View.GONE);
+                bi.recyclerViewToday.setVisibility(View.GONE);
+                bi.recyclerViewPrevious.setVisibility(View.GONE);
+                bi.recyclerViewUpcoming.setVisibility(View.VISIBLE);
 
                 break;
 
             case R.id.btnPrevious:
 
+                presenter.getPreviousAppointments();
+
                 Paris.style(bi.btnToday).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnUpcoming).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnPrevious).apply(R.style.TabButtonYellowRight);
+
+                bi.tvNoRecordFound.setVisibility(View.GONE);
+                bi.recyclerViewToday.setVisibility(View.GONE);
+                bi.recyclerViewUpcoming.setVisibility(View.GONE);
+                bi.recyclerViewPrevious.setVisibility(View.VISIBLE);
 
                 break;
 

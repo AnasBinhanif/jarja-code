@@ -12,10 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
-import com.project.jarjamediaapp.Models.GetPreviousAppointments;
+import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetAppointmentsModel;
+import com.project.jarjamediaapp.Networking.ApiError;
+import com.project.jarjamediaapp.Networking.ApiMethods;
+import com.project.jarjamediaapp.Networking.ErrorUtils;
+import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
@@ -25,10 +36,10 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
     public Context context;
     int pos;
     String status = "";
-    List<GetPreviousAppointments> mData;
+    List<GetAppointmentsModel.Data> mData;
 
 
-    public SwipeAppointPreviousRecyclerAdapter(Context context, List<GetPreviousAppointments> data) {
+    public SwipeAppointPreviousRecyclerAdapter(Context context, List<GetAppointmentsModel.Data> data) {
 
         mData = data;
         this.context = context;
@@ -49,17 +60,26 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
         pos = position;
         if (mData != null && 0 <= position && position < mData.size()) {
 
-            GetPreviousAppointments modelData = mData.get(position);
+            GetAppointmentsModel.Data modelData = mData.get(position);
 
-            holder.tvName.setText(modelData.getName() + "");
-            holder.tvAddress.setText(modelData.getAddress() + "");
+            String firstName = modelData.leadsData.firstName + "";
+            String lastName = modelData.leadsData.lastName + "";
+            String address = modelData.leadsData.address + "";
 
-            holder.frameLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });
+            if (firstName.equals("null") || firstName.equals("")) {
+                firstName = "-";
+            }
+            if (lastName.equals("null") || lastName.equals("")) {
+                lastName = "-";
+            }
+            if (address.equals("null") || address.equals("")) {
+                address = "-";
+            }
 
+            holder.tvName.setText(firstName + " " + lastName);
+            holder.tvAddress.setText(address);
+
+            holder.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
 
             holder.swipeLayout.setSwipeListener(new SwipeRevealLayout.SwipeListener() {
                 @Override
@@ -107,7 +127,7 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
 
     private class ViewHolder extends RecyclerView.ViewHolder {
         private SwipeRevealLayout swipeLayout;
-        TextView tvName, tvAddress, tvEdit, tvDone;
+        TextView tvName, tvAddress, tvEdit, tvDone, tvInitial;
         FrameLayout frameLayout;
 
         public ViewHolder(View itemView) {
@@ -120,6 +140,7 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
             tvEdit = itemView.findViewById(R.id.tvEdit);
             tvDone = itemView.findViewById(R.id.tvDone);
             tvAddress = itemView.findViewById(R.id.tvAddress);
+            tvInitial = itemView.findViewById(R.id.tvInitial);
         }
 
         public void bind() {
@@ -128,6 +149,8 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     pos = getAdapterPosition();
+                    String leadID = mData.get(pos).leadsData.leadID;
+                    markAsRead(leadID);
                 }
             });
 
@@ -140,5 +163,40 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
             });
 
         }
+    }
+
+    private void markAsRead(String leadID) {
+        GH.getInstance().ShowProgressDialog(context);
+        Call<BaseResponse> _callToday;
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).MarkComplete(GH.getInstance().getAuthorization(), leadID);
+        _callToday.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                GH.getInstance().HideProgressDialog(context);
+                if (response.isSuccessful()) {
+
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        ToastUtils.showToast(context, "Successfully Done");
+
+                    } else {
+
+                        ToastUtils.showToast(context, getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    ToastUtils.showToast(context, error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                GH.getInstance().HideProgressDialog(context);
+                ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
+            }
+        });
     }
 }

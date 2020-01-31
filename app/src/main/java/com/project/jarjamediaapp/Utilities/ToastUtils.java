@@ -45,18 +45,22 @@ public class ToastUtils {
 
     public static void showErrorToast(Activity activity, String message, String Message) {
 
-            if (message == null && Message != null) {
+        if (message.equals("") && !Message.equals("")) {
 
-                Toast.makeText(activity, Message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, Message, Toast.LENGTH_SHORT).show();
 
-            } else if (Message == null && message != null) {
+        } else if (Message.equals("") && !message.equals("")) {
 
-                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
 
-            } else {
-                // Message Need to be changed
-                Toast.makeText(activity, "Unable to connect .Please try again", Toast.LENGTH_SHORT).show();
-            }
+        } else if (!Message.equals("") && !message.equals("")) {
+
+            Toast.makeText(activity, message + "! " + Message, Toast.LENGTH_LONG).show();
+
+        } else {
+            // Message Need to be changed
+            Toast.makeText(activity, "Unable to connect .Please try again", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /*

@@ -1,6 +1,64 @@
 package com.project.jarjamediaapp.Networking;
 
+import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
+import com.project.jarjamediaapp.Activities.login.LoginModel;
+import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetAppointmentsModel;
+import com.project.jarjamediaapp.Models.GetUserProfile;
+import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
+
+import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
+
 public interface ApiMethods {
+
+
+
+    @FormUrlEncoded
+    @POST("token")
+    Call<AccessCode> getToken(
+            @Field("UserName") String username,
+            @Field("Password") String password,
+            @Field("grant_type") String grantType
+    );
+
+    @FormUrlEncoded
+    @POST("User/ForgetPassword")
+    Call<ForgotPasswordModel> fogetPassword(
+            @Field("email") String email
+    );
+
+    @GET("User/GetUserProfileData")
+    Call<GetUserProfile> getUserProfileData(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("Appointment/GetTodayAppointment")
+    Call<GetAppointmentsModel> GetTodayAppointment(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("Appointment/GetPreviousAppointment")
+    Call<GetAppointmentsModel> GetPreviousAppointment(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("Appointment/GetUpcomingAppointment")
+    Call<GetAppointmentsModel> GetUpcomingAppointment(
+            @Header("Authorization") String authorization
+    );
+
+    @FormUrlEncoded
+    @POST("Appointment/MarkComplete")
+    Call<BaseResponse> MarkComplete(
+            @Header("Authorization") String authorization,
+            @Field("leadAppoinmentID") String leadAppoinmentID
+    );
+
 
     /*@FormUrlEncoded
     @POST("login")

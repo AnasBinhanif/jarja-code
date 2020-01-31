@@ -5,13 +5,6 @@ import android.content.Context;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.project.jarjamediaapp.ProjectApplication;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class GH {
 
     private static final GH ourInstance = new GH();
@@ -28,8 +21,16 @@ public class GH {
 
         SOCKET_TOKEN,
         IS_LOGGED_IN,
-        USER_ID
+        USER_ID,
+        USER_FIRSTNAME,
+        USER_LASTNAME,
+        ACCESS_TOKEN,
+        AUTHORIZATION
 
+
+    }
+    public String getAuthorization() {
+        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.AUTHORIZATION.name(), null);
     }
 
     public boolean isLoggedIn() {

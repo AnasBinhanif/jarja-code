@@ -6,11 +6,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import com.project.jarjamediaapp.Activities.splash.MainContract;
-import com.project.jarjamediaapp.Activities.splash.MainPresenter;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.R;
@@ -40,11 +37,32 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
 
+        switch (v.getId()) {
+            case R.id.btnForgot:
+
+
+                String email = bi.atvEmail.getText().toString();
+
+                if (email.equals("")) {
+                    ToastUtils.showToast(context, "Please Enter Email");
+                } else if (!Validator.isEmailValid(email)) {
+
+                    ToastUtils.showToast(context, "Please Enter Valid Email");
+
+                } else {
+                    presenter.forgetPassword(email);
+                }
+
+                break;
+        }
+
     }
 
     @Override
     public void initViews() {
-        bi.tvBottom.setText("@"+getString(R.string.footer_text));
+
+        bi.btnForgot.setOnClickListener(this);
+        bi.tvBottom.setText("@" + getString(R.string.footer_text));
 
         bi.atvEmail.addTextChangedListener(new TextWatcher() {
             @Override
@@ -61,7 +79,7 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
             public void afterTextChanged(Editable editable) {
 
                 String email = bi.atvEmail.getText().toString();
-                if (!Validator.isEmailValid(email)){
+                if (!Validator.isEmailValid(email)) {
 
                     bi.atvEmail.setError("Invalid  Email");
 
@@ -74,7 +92,12 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
     @Override
     public void updateUI(Response<BaseResponse> response) {
 
+    }
 
+    @Override
+    public void updateUI(ForgotPasswordModel response) {
+
+        ToastUtils.showToastLong(context, response.data.toString());
     }
 
     @Override

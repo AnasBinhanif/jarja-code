@@ -1,13 +1,19 @@
 package com.project.jarjamediaapp.Activities.splash;
 
 import com.project.jarjamediaapp.Base.BasePresenter;
-import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Networking.ApiError;
+import com.project.jarjamediaapp.Networking.ApiMethods;
+import com.project.jarjamediaapp.Networking.ErrorUtils;
+import com.project.jarjamediaapp.Networking.NetworkController;
+import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainPresenter extends BasePresenter<MainContract.View> implements MainContract.Actions {
 
-    Call<BaseResponse> _call;
+    Call<AccessCode> _call;
 
 
     public MainPresenter(MainContract.View view) {
@@ -15,44 +21,39 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
     }
 
     public void initScreen() {
-        _view.initViews();
+        _view.setupViews();
     }
 
-   /* @Override
-    public void updateCardDetailStatus(String cardId, boolean status) {
-
+    @Override
+    public void getToken(String username, String password, String grantType) {
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class). ();
-        _call.enqueue(new Callback<BaseResponse>() {
+        Call<AccessCode> call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getToken(username,
+                password, grantType);
+        call.enqueue(new Callback<AccessCode>() {
             @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+            public void onResponse(Call<AccessCode> call, Response<AccessCode> response) {
 
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
-                    BaseResponse baseResponse = response.body();
-                    if (baseResponse.getStatus()) {
-                        _view.updateUI(response);
+                    _view.updateUI(response);
 
-                    } else {
-
-                        _view.updateUIonFalse(baseResponse.getError());
-
-                    }
                 } else {
 
-                    _view.updateUIonError(response.errorBody().toString());
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error);
                 }
             }
 
             @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
+            public void onFailure(Call<AccessCode> call, Throwable t) {
+
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
-        });
 
-    }*/
+        });
+    }
 
     @Override
     public void detachView() {
@@ -62,11 +63,6 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
             _call.cancel();
         }
         super.detachView();
-    }
-
-    @Override
-    public void addData() {
-
     }
 
 }

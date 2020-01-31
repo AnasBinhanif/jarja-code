@@ -45,38 +45,30 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     @Override
     public void updateUI(Response<BaseResponse> response) {
 
-
     }
 
     @Override
     public void updateUIonFalse(String message) {
-
         ToastUtils.showToastLong(context, message);
-
     }
 
     @Override
     public void updateUIonError(String error) {
-
         ToastUtils.showToastLong(context, error);
     }
 
     @Override
     public void updateUIonFailure() {
-
         ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
     }
 
     @Override
     public void showProgressBar() {
-
         GH.getInstance().ShowProgressDialog(context);
     }
 
     @Override
     public void hideProgressBar() {
-
         GH.getInstance().HideProgressDialog(context);
     }
-
 }

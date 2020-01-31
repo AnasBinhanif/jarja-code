@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
@@ -11,7 +12,12 @@ import androidx.databinding.DataBindingUtil;
 import com.project.jarjamediaapp.Activities.HomeActivity;
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
-import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Networking.ApiError;
+import com.project.jarjamediaapp.Utilities.AppConstants;
+import com.project.jarjamediaapp.Networking.CallbackInterface;
+import com.project.jarjamediaapp.Networking.NetworkController;
+import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
+import com.project.jarjamediaapp.Networking.RetrofitCallback;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -37,34 +43,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     @Override
-    public void onClick(View v) {
+    public void setupViews() {
 
-        switch (v.getId()) {
-
-            case R.id.tvForgotPassword:
-
-                switchActivity(ForgotPasswordActivity.class);
-
-                break;
-            case R.id.btnLogin:
-
-                switchActivity(HomeActivity.class);
-
-                break;
-        }
-    }
-
-    @Override
-    public void setupUI(View view) {
-        super.setupUI(view);
-
-
-    }
-
-    @Override
-    public void initViews() {
-
-        bi.tvBottom.setText("@"+getString(R.string.footer_text));
+        bi.atvEmail.setText("bunny@outlook.com");
+        bi.atvPassword.setText("admin");
 
         bi.tvForgotPassword.setOnClickListener(this);
         bi.btnLogin.setOnClickListener(this);
@@ -83,19 +65,70 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             public void afterTextChanged(Editable editable) {
 
                 String email = bi.atvEmail.getText().toString();
-                if (!Validator.isEmailValid(email)) {
+                if (!Validator.isEmailValid(email)){
 
                     bi.atvEmail.setError("Invalid  Email");
 
                 }
+
             }
         });
 
     }
 
-    @Override
-    public void updateUI(Response<BaseResponse> response) {
+    private void createNetWorkCallRequest(String userName,String password) {
+        GH.getInstance().ShowProgressDialog(context);
+        NetworkController.getInstance().NetworkCall(NetworkController.getInstance().getApiMethods().getToken(userName,password,AppConstants.HTTP.GRANT_TYPE),
+                new RetrofitCallback<>(new CallbackInterface<AccessCode>() {
+            @Override
+            public void onSuccess(AccessCode response) {
+                GH.getInstance().HideProgressDialog(context);
+                //MyLog.d("Response", "onSuccess: " + response.toString());
+                Log.d("token", response.accessToken + "");
 
+                easyPreference.addString(GH.KEYS.AUTHORIZATION.name(),"bearer" + " " + response.accessToken).save();
+                switchActivity(HomeActivity.class);
+                finish();
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                //Log.d("Response", "onError: " + throwable.toString());
+                GH.getInstance().HideProgressDialog(context);
+                ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+            }
+        }));
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+
+            case R.id.tvForgotPassword:
+
+                switchActivity(ForgotPasswordActivity.class);
+
+                break;
+            case R.id.btnLogin:
+
+                String userName = bi.atvEmail.getText().toString();
+                String password = bi.atvPassword.getText().toString();
+                createNetWorkCallRequest(userName,password);
+
+                //presenter.loginUser();
+
+
+                break;
+        }
+    }
+
+    @Override
+    public void updateUI(Response<LoginModel> response) {
+    }
+
+    @Override
+    public void updateUIList(Response<LoginModel> response) {
 
     }
 
@@ -107,9 +140,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     @Override
-    public void updateUIonError(String error) {
+    public void updateUIonError(ApiError error) {
 
-        ToastUtils.showToastLong(context, error);
     }
 
     @Override
@@ -129,5 +161,4 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         GH.getInstance().HideProgressDialog(context);
     }
-
 }
