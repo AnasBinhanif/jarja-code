@@ -2,6 +2,9 @@
 package com.project.jarjamediaapp.Fragments.DashboardFragments.followups;
 
 
+import com.project.jarjamediaapp.Models.GetAppointmentsModel;
+import com.project.jarjamediaapp.Models.GetFollowUpsModel;
+
 public interface FollowUpContract {
 
     /*
@@ -9,6 +12,17 @@ public interface FollowUpContract {
     */
      interface View {
          void setupViews();
+        void updateUI(GetFollowUpsModel response, String whichFollowUp);
+
+        void updateUIonFalse(String message);
+
+        void updateUIonError(String error);
+
+        void updateUIonFailure();
+
+        void showProgressBar();
+
+        void hideProgressBar();
     }
 
     /*
@@ -17,6 +31,8 @@ public interface FollowUpContract {
     */
      interface Actions {
          void initScreen();
+        void getDueFollowUps();
+        void getOverDueFollowUps();
     }
 
     /*

@@ -20,6 +20,7 @@ import com.project.jarjamediaapp.Fragments.FragmentLifeCycle;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.FragmentAppointmentBinding;
 
 import java.util.ArrayList;
@@ -130,6 +131,8 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     @Override
     public void updateUIonFalse(String message) {
 
+        ToastUtils.showToastLong(context, message);
+
     }
 
     @Override
@@ -139,6 +142,8 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
     @Override
     public void updateUIonFailure() {
+
+        ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
 
     }
 

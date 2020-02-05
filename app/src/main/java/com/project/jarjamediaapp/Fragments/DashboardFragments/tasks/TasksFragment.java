@@ -18,12 +18,13 @@ import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
 import com.project.jarjamediaapp.Base.BaseFragment;
 import com.project.jarjamediaapp.CustomAdapter.SwipeTasksDueRecyclerAdapter;
 import com.project.jarjamediaapp.Fragments.FragmentLifeCycle;
-import com.project.jarjamediaapp.Models.GetDueTasks;
+import com.project.jarjamediaapp.Models.GetTasksModel;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.FragmentTasksBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class TasksFragment extends BaseFragment implements FragmentLifeCycle, TasksContract.View, View.OnClickListener {
@@ -33,6 +34,8 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     TasksPresenter presenter;
     SwipeTasksDueRecyclerAdapter swipeTasksDueRecyclerAdapter;
     boolean isFromActivity;
+
+    ArrayList<GetTasksModel.Data> tasksList = new ArrayList<>();
 
     public TasksFragment() {
         // Required empty public constructor
@@ -62,9 +65,116 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     public void setupViews() {
 
         initViews();
-        populateDataDue();
+        presenter.getDueTasks();
         bi.fbAddTask.setOnClickListener(this);
 
+    }
+
+    @Override
+    public void updateUI(GetTasksModel response, String whichTask) {
+
+        tasksList = response.data;
+
+        RecyclerView.LayoutManager mLayoutManager;
+
+        switch (whichTask) {
+
+            case "due":
+                if (tasksList.size() == 0) {
+
+                    bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+                    bi.recyclerTaskViewDue.setVisibility(View.GONE);
+                    bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
+                    bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
+
+                } else {
+
+                    bi.tvNoRecordFound.setVisibility(View.GONE);
+                    bi.recyclerTaskViewDue.setVisibility(View.VISIBLE);
+                    bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
+                    bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
+
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList);
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    bi.recyclerTaskViewDue.setLayoutManager(mLayoutManager);
+                    bi.recyclerTaskViewDue.setItemAnimator(new DefaultItemAnimator());
+                    bi.recyclerTaskViewDue.setAdapter(swipeTasksDueRecyclerAdapter);
+                }
+                break;
+
+            case "overdue":
+                if (tasksList.size() == 0) {
+
+                    bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+                    bi.recyclerTaskViewDue.setVisibility(View.GONE);
+                    bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
+                    bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
+
+                } else {
+
+                    bi.tvNoRecordFound.setVisibility(View.GONE);
+                    bi.recyclerTaskViewDue.setVisibility(View.GONE);
+                    bi.recyclerViewTaskOverDue.setVisibility(View.VISIBLE);
+                    bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
+
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList);
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    bi.recyclerViewTaskOverDue.setLayoutManager(mLayoutManager);
+                    bi.recyclerViewTaskOverDue.setItemAnimator(new DefaultItemAnimator());
+                    bi.recyclerViewTaskOverDue.setAdapter(swipeTasksDueRecyclerAdapter);
+                }
+                break;
+
+            case "future":
+                if (tasksList.size() == 0) {
+
+                    bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+                    bi.recyclerTaskViewDue.setVisibility(View.GONE);
+                    bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
+                    bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
+
+                } else {
+                    bi.tvNoRecordFound.setVisibility(View.GONE);
+                    bi.recyclerTaskViewDue.setVisibility(View.GONE);
+                    bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
+                    bi.recyclerViewTaskFutureTask.setVisibility(View.VISIBLE);
+
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList);
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    bi.recyclerViewTaskFutureTask.setLayoutManager(mLayoutManager);
+                    bi.recyclerViewTaskFutureTask.setItemAnimator(new DefaultItemAnimator());
+                    bi.recyclerViewTaskFutureTask.setAdapter(swipeTasksDueRecyclerAdapter);
+                }
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void updateUIonFalse(String message) {
+        ToastUtils.showToastLong(context, message);
+    }
+
+
+    @Override
+    public void updateUIonError(String error) {
+
+    }
+
+    @Override
+    public void updateUIonFailure() {
+        ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+    }
+
+    @Override
+    public void showProgressBar() {
+        GH.getInstance().ShowProgressDialog(context);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        GH.getInstance().HideProgressDialog(context);
     }
 
     @SuppressLint("RestrictedApi")
@@ -85,23 +195,23 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
 
     private void populateDataDue() {
 
-        List<GetDueTasks> appointmentList = new ArrayList<>();
+      /*  List<GetTasksModel> appointmentList = new ArrayList<>();
 
-        appointmentList.add(new GetDueTasks("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetDueTasks("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetDueTasks("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetDueTasks("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetDueTasks("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetDueTasks("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetDueTasks("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetDueTasks("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetDueTasks("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
+        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
+        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
+        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
+        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
+        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
+        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
+        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
+        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
+        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
 
         swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, appointmentList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         bi.recyclerTaskViewDue.setLayoutManager(mLayoutManager);
         bi.recyclerTaskViewDue.setItemAnimator(new DefaultItemAnimator());
-        bi.recyclerTaskViewDue.setAdapter(swipeTasksDueRecyclerAdapter);
+        bi.recyclerTaskViewDue.setAdapter(swipeTasksDueRecyclerAdapter);*/
 
 
     }
@@ -133,10 +243,11 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 break;
 
             case R.id.btnTaskDue:
-
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonTranparentRight);
+
+                presenter.getDueTasks();
 
                 break;
 
@@ -145,6 +256,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonYellowMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonTranparentRight);
+                presenter.getOverDueTasks();
 
                 break;
 
@@ -153,7 +265,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonYellowRight);
-
+                presenter.getFutureTasks();
                 break;
         }
     }

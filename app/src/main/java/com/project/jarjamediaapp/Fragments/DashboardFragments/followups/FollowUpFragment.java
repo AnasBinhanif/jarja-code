@@ -16,12 +16,13 @@ import com.airbnb.paris.Paris;
 import com.project.jarjamediaapp.Base.BaseFragment;
 import com.project.jarjamediaapp.CustomAdapter.SwipeFollowUpsDueRecyclerAdapter;
 import com.project.jarjamediaapp.Fragments.FragmentLifeCycle;
-import com.project.jarjamediaapp.Models.GetDueFollowUps;
+import com.project.jarjamediaapp.Models.GetFollowUpsModel;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.FragmentFollowupBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle, FollowUpContract.View, View.OnClickListener {
@@ -31,6 +32,7 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
     FollowUpPresenter presenter;
     SwipeFollowUpsDueRecyclerAdapter swipeFollowUpsDueRecyclerAdapter;
     boolean isFromActivity;
+    ArrayList<GetFollowUpsModel.Data> followUpsList = new ArrayList<>();
 
     public FollowUpFragment() {
         // Required empty public constructor
@@ -67,7 +69,76 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
     public void setupViews() {
 
         initViews();
-        populateDataDue();
+        presenter.getDueFollowUps();
+    }
+
+    @Override
+    public void updateUI(GetFollowUpsModel response, String whichFollowUp) {
+
+        followUpsList = response.data;
+
+        RecyclerView.LayoutManager mLayoutManager;
+
+        switch (whichFollowUp) {
+
+            case "due":
+
+                if (followUpsList.size() == 0) {
+
+                    bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+                    bi.recyclerViewFollowDue.setVisibility(View.GONE);
+                    bi.recyclerViewFollowOverDue.setVisibility(View.GONE);
+
+                } else {
+
+                    bi.tvNoRecordFound.setVisibility(View.GONE);
+                    bi.recyclerViewFollowOverDue.setVisibility(View.GONE);
+                    bi.recyclerViewFollowDue.setVisibility(View.VISIBLE);
+
+                    swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context, followUpsList);
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    bi.recyclerViewFollowDue.setLayoutManager(mLayoutManager);
+                    bi.recyclerViewFollowDue.setItemAnimator(new DefaultItemAnimator());
+                    bi.recyclerViewFollowDue.setAdapter(swipeFollowUpsDueRecyclerAdapter);
+                }
+                break;
+            case "overdue":
+                if (followUpsList.size() == 0) {
+
+                    bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+                    bi.recyclerViewFollowDue.setVisibility(View.GONE);
+                    bi.recyclerViewFollowOverDue.setVisibility(View.GONE);
+
+                } else {
+
+                    bi.tvNoRecordFound.setVisibility(View.GONE);
+                    bi.recyclerViewFollowDue.setVisibility(View.GONE);
+                    bi.recyclerViewFollowOverDue.setVisibility(View.VISIBLE);
+
+                    swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context, followUpsList);
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    bi.recyclerViewFollowOverDue.setLayoutManager(mLayoutManager);
+                    bi.recyclerViewFollowOverDue.setItemAnimator(new DefaultItemAnimator());
+                    bi.recyclerViewFollowOverDue.setAdapter(swipeFollowUpsDueRecyclerAdapter);
+                }
+                break;
+        }
+
+    }
+
+    @Override
+    public void updateUIonFalse(String message) {
+        ToastUtils.showToastLong(context, message);
+    }
+
+    @Override
+    public void updateUIonError(String error) {
+
+    }
+
+    @Override
+    public void updateUIonFailure() {
+        ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
     }
 
     private void initViews() {
@@ -85,17 +156,17 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
     private void populateDataDue() {
 
-        List<GetDueFollowUps> appointmentList = new ArrayList<>();
+       /* List<GetFollowUpsModel> appointmentList = new ArrayList<>();
 
-        appointmentList.add(new GetDueFollowUps("NAME NAME ", "Address Address Address Address"));
-        appointmentList.add(new GetDueFollowUps("NAME NAME NAME ", "Address Address Address Address"));
-        appointmentList.add(new GetDueFollowUps("NAME NAME ", "Address Address Address Address"));
-        appointmentList.add(new GetDueFollowUps("NAME NAME ", "Address Address Address Address"));
-        appointmentList.add(new GetDueFollowUps("NAME NAME ", "Address Address Address Address"));
-        appointmentList.add(new GetDueFollowUps("NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetDueFollowUps("NAME NAME NAME ", "Address Address Address Address"));
-        appointmentList.add(new GetDueFollowUps("NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetDueFollowUps("NAME NAME ", "Address Address Address Address"));
+        appointmentList.add(new GetFollowUpsModel("NAME NAME ", "Address Address Address Address"));
+        appointmentList.add(new GetFollowUpsModel("NAME NAME NAME ", "Address Address Address Address"));
+        appointmentList.add(new GetFollowUpsModel("NAME NAME ", "Address Address Address Address"));
+        appointmentList.add(new GetFollowUpsModel("NAME NAME ", "Address Address Address Address"));
+        appointmentList.add(new GetFollowUpsModel("NAME NAME ", "Address Address Address Address"));
+        appointmentList.add(new GetFollowUpsModel("NAME NAME", "Address Address Address Address"));
+        appointmentList.add(new GetFollowUpsModel("NAME NAME NAME ", "Address Address Address Address"));
+        appointmentList.add(new GetFollowUpsModel("NAME NAME", "Address Address Address Address"));
+        appointmentList.add(new GetFollowUpsModel("NAME NAME ", "Address Address Address Address"));
 
         swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context, appointmentList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
@@ -103,7 +174,7 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
         bi.recyclerViewFollowDue.setLayoutManager(mLayoutManager);
         bi.recyclerViewFollowDue.setItemAnimator(new DefaultItemAnimator());
         // bi.recyclerViewPrevious.addItemDecoration(dividerItemDecoration);
-        bi.recyclerViewFollowDue.setAdapter(swipeFollowUpsDueRecyclerAdapter);
+        bi.recyclerViewFollowDue.setAdapter(swipeFollowUpsDueRecyclerAdapter);*/
     }
 
     @Override
@@ -124,12 +195,16 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
             case R.id.btnFollowDue:
 
+                presenter.getDueFollowUps();
+
                 Paris.style(bi.btnFollowDue).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnFollowOverDue).apply(R.style.TabButtonTranparentRight);
 
                 break;
 
             case R.id.btnFollowOverDue:
+
+                presenter.getOverDueFollowUps();
 
                 Paris.style(bi.btnFollowOverDue).apply(R.style.TabButtonYellowRight);
                 Paris.style(bi.btnFollowDue).apply(R.style.TabButtonTranparentLeft);
@@ -138,6 +213,16 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
                 break;
 
         }
+    }
+
+    @Override
+    public void showProgressBar() {
+        GH.getInstance().ShowProgressDialog(context);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        GH.getInstance().HideProgressDialog(context);
     }
 
 }

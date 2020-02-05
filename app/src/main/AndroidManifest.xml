@@ -15,22 +15,18 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
 
-
         <activity android:name=".Activities.splash.MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".Activities.HomeActivity">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".Activities.all_leads.AllLeadsActivity" />
         </activity>
-        <activity
-            android:name=".Activities.forgot_password.ForgotPasswordActivity"
+        <activity android:name=".Activities.forgot_password.ForgotPasswordActivity"
             android:windowSoftInputMode="adjustResize"></activity>
         <activity android:name=".Activities.add_appointment.AddAppointmentActivity"></activity>
         <activity android:name=".Activities.add_task.AddTaskActivity"></activity>
@@ -57,25 +53,17 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
-
         </activity>
 
-        <activity android:name=".Activities.search_activity.SearchResultsActivity">
-
-        </activity>
+        <activity android:name=".Activities.search_activity.SearchResultsActivity"></activity>
 
         <activity
             android:name=".Activities.login.LoginActivity"
             android:windowSoftInputMode="adjustResize">
-
-
-
         </activity>
-
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
-
 </manifest>

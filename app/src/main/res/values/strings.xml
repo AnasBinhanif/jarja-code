@@ -24,6 +24,9 @@
     <string name="location">Location</string>
     <string name="description">Description</string>
     <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
     <string name="reminder">Reminder</string>
     <string name="via">Via</string>
     <string name="all_day">All Day</string>
@@ -228,5 +231,25 @@
         <item>2025</item>
     </string-array>
 
+    <string-array name="arrTaskType">
+        <item>Call</item>
+        <item>Email</item>
+        <item>Video</item>
+        <item>Text</item>
+        <item>Follow Up</item>
+    </string-array>
+
+    <string-array name="arrTaskRecur">
+        <item>One Time</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+        <item>Bi Weekly</item>
+    </string-array>
+
+    <string-array name="arrVia">
+        <item>Text Message</item>
+        <item>E-mail</item>
+    </string-array>
 
 </resources>

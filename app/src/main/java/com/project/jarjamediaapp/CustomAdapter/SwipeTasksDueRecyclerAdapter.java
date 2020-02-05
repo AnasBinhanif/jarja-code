@@ -12,11 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
-import com.project.jarjamediaapp.Models.GetDueTasks;
-import com.project.jarjamediaapp.Models.GetPreviousAppointments;
+import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetTasksModel;
+import com.project.jarjamediaapp.Networking.ApiError;
+import com.project.jarjamediaapp.Networking.ApiMethods;
+import com.project.jarjamediaapp.Networking.ErrorUtils;
+import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
@@ -26,10 +36,10 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
     public Context context;
     int pos;
     String status = "";
-    List<GetDueTasks> mData;
+    List<GetTasksModel.Data> mData;
 
 
-    public SwipeTasksDueRecyclerAdapter(Context context, List<GetDueTasks> data) {
+    public SwipeTasksDueRecyclerAdapter(Context context, List<GetTasksModel.Data> data) {
 
         mData = data;
         this.context = context;
@@ -50,10 +60,12 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
         pos = position;
         if (mData != null && 0 <= position && position < mData.size()) {
 
-            GetDueTasks modelData = mData.get(position);
+            GetTasksModel.Data modelData = mData.get(position);
 
-            holder.tvName.setText(modelData.getName() + "");
-            holder.tvAddress.setText(modelData.getAddress() + "");
+            holder.tvName.setText(modelData.taskName + " for " + modelData.agentName);
+            holder.tvAddress.setText(modelData.firstName + " " + modelData.lastName);
+
+            holder.tvInitial.setText(modelData.taskName.substring(0, 1));
 
             holder.frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -65,18 +77,20 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
             holder.swipeLayout.setSwipeListener(new SwipeRevealLayout.SwipeListener() {
                 @Override
                 public void onClosed(SwipeRevealLayout view) {
-
+                    pos = position;
                     view.getParent().requestDisallowInterceptTouchEvent(false);
 
                 }
 
                 @Override
                 public void onOpened(SwipeRevealLayout view) {
+                    pos = position;
                     view.getParent().requestDisallowInterceptTouchEvent(true);
                 }
 
                 @Override
                 public void onSlide(SwipeRevealLayout view, float slideOffset) {
+                    pos = position;
                     view.getParent().requestDisallowInterceptTouchEvent(true);
                 }
             });
@@ -98,6 +112,45 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
         return mData.size();
     }
 
+    private void markAsRead(String taskID) {
+        GH.getInstance().ShowProgressDialog(context);
+
+        Call<BaseResponse> _callToday;
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).MarkTaskComplete(GH.getInstance().getAuthorization(), taskID + ",", "true");
+        _callToday.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                GH.getInstance().HideProgressDialog(context);
+                if (response.isSuccessful()) {
+
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        binderHelper.closeLayout(String.valueOf(pos));
+                        ToastUtils.showToast(context, "Successfully Done");
+                        mData.remove(pos);
+                        notifyDataSetChanged();
+
+                    } else {
+
+                        ToastUtils.showToast(context, getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    ToastUtils.showToast(context, error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                GH.getInstance().HideProgressDialog(context);
+                ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
+            }
+        });
+    }
+
     public void saveStates(Bundle outState) {
         binderHelper.saveStates(outState);
     }
@@ -108,7 +161,7 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
 
     private class ViewHolder extends RecyclerView.ViewHolder {
         private SwipeRevealLayout swipeLayout;
-        TextView tvName, tvAddress, tvEdit, tvDone;
+        TextView tvName, tvAddress, tvEdit, tvDone, tvInitial;
         FrameLayout frameLayout;
 
         public ViewHolder(View itemView) {
@@ -121,22 +174,20 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
             tvEdit = itemView.findViewById(R.id.tvEdit);
             tvDone = itemView.findViewById(R.id.tvDone);
             tvAddress = itemView.findViewById(R.id.tvAddress);
+            tvInitial = itemView.findViewById(R.id.tvInitial);
         }
 
         public void bind() {
 
-            tvDone.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    pos = getAdapterPosition();
-                }
+            tvDone.setOnClickListener(v -> {
+                pos = getAdapterPosition();
+                markAsRead(mData.get(pos).taskID);
             });
 
             tvEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     pos = getAdapterPosition();
-
                 }
             });
 

@@ -1,10 +1,26 @@
 package com.project.jarjamediaapp.Activities.add_appointment;
 
 import com.project.jarjamediaapp.Base.BaseContract;
+import com.project.jarjamediaapp.Models.GetAgentsModel;
 
 public interface AddAppointmentContract {
 
-    interface View extends BaseContract.View{
+    interface View extends BaseContract.View {
+
+
+        void initViews();
+
+        void updateUI(GetAgentsModel response);
+
+        void updateUIonFalse(String message);
+
+        void updateUIonError(String error);
+
+        void updateUIonFailure();
+
+        void showProgressBar();
+
+        void hideProgressBar();
 
     }
 
@@ -14,9 +30,14 @@ public interface AddAppointmentContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void addData();
+        void addAppointment(String leadStringID, String agentsStringIDs, String leadAppoinmentID, String eventTitle, String location,
+                            String desc, String isAppointmentFixed, String isAppointmentAttend, String appointmentDate, String datedFrom,
+                            String datedTo, String isAllDay, String interval, String isSend, String viaReminder, String agentIds, String orderBy,
+                            String startTime, String endTime, String isCompleted);
 
         void initScreen();
+
+        void getAgentNames();
 
     }
 

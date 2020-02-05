@@ -1,5 +1,8 @@
 package com.project.jarjamediaapp.Utilities;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AppConstants {
 
     public static class HTTP {
@@ -18,5 +21,4 @@ public class AppConstants {
         public static final String UserName = "";
 
     }
-
 }

@@ -2,13 +2,22 @@ package com.project.jarjamediaapp.Fragments.DashboardFragments.tasks;
 
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetAppointmentsModel;
+import com.project.jarjamediaapp.Models.GetTasksModel;
+import com.project.jarjamediaapp.Networking.ApiError;
+import com.project.jarjamediaapp.Networking.ApiMethods;
+import com.project.jarjamediaapp.Networking.ErrorUtils;
+import com.project.jarjamediaapp.Networking.NetworkController;
+import com.project.jarjamediaapp.Utilities.GH;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class TasksPresenter extends BasePresenter<TasksContract.View> implements TasksContract.Actions {
 
-    Call<BaseResponse> _call;
+    Call<GetTasksModel> _call;
 
     public TasksPresenter(TasksContract.View view) {
         super(view);
@@ -25,6 +34,120 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
     @Override
     public void initScreen() {
         _view.setupViews();
+
+    }
+
+    @Override
+    public void getDueTasks() {
+        _view.showProgressBar();
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetDueTasks(GH.getInstance().getAuthorization());
+        _call.enqueue(new Callback<GetTasksModel>() {
+            @Override
+            public void onResponse(Call<GetTasksModel> call, Response<GetTasksModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetTasksModel getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel,"due");
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTasksModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void getOverDueTasks() {
+
+        _view.showProgressBar();
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetOverDueTasks(GH.getInstance().getAuthorization());
+        _call.enqueue(new Callback<GetTasksModel>() {
+            @Override
+            public void onResponse(Call<GetTasksModel> call, Response<GetTasksModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetTasksModel getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel,"overdue");
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTasksModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+
+    }
+
+    @Override
+    public void getFutureTasks() {
+        _view.showProgressBar();
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFutureTasks(GH.getInstance().getAuthorization());
+        _call.enqueue(new Callback<GetTasksModel>() {
+            @Override
+            public void onResponse(Call<GetTasksModel> call, Response<GetTasksModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetTasksModel getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel,"future");
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTasksModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
 
     }
 }

@@ -3,8 +3,14 @@ package com.project.jarjamediaapp.Networking;
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
 import com.project.jarjamediaapp.Activities.login.LoginModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetAgentsModel;
+import com.project.jarjamediaapp.Models.GetAllLeads;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
+import com.project.jarjamediaapp.Models.GetFollowUpsModel;
+import com.project.jarjamediaapp.Models.GetLeadTitlesModel;
+import com.project.jarjamediaapp.Models.GetTasksModel;
 import com.project.jarjamediaapp.Models.GetUserProfile;
+import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 
 import retrofit2.Call;
@@ -13,6 +19,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface ApiMethods {
 
@@ -58,6 +65,92 @@ public interface ApiMethods {
             @Header("Authorization") String authorization,
             @Field("leadAppoinmentID") String leadAppoinmentID
     );
+
+    @GET("FollowUp/GetDueFollowUps")
+    Call<GetFollowUpsModel> GetFollowUpsDue(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("FollowUp/GetOverDueFollowUps")
+    Call<GetFollowUpsModel> GetFollowUpsOverDue(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("FollowUp/GetFollowUpDetails")
+    Call<ViewFollowUpModel> GetFollowUpDetails(
+            @Header("Authorization") String authorization,
+            @Query("id") String leadID
+    );
+
+    @FormUrlEncoded
+    @POST("FollowUp/MarkComplete")
+    Call<BaseResponse> MarkFollowUpComplete(
+            @Header("Authorization") String authorization,
+            @Field("encrypted_ReminderId") String reminderDI,
+            @Field("state") String state
+    );
+
+    @GET("Tasks/GetDueTasks")
+    Call<GetTasksModel> GetDueTasks(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("Tasks/GetOverDueTasks")
+    Call<GetTasksModel> GetOverDueTasks(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("Tasks/GetFutureTasks")
+    Call<GetTasksModel> GetFutureTasks(
+            @Header("Authorization") String authorization
+    );
+
+    @FormUrlEncoded
+    @POST("Tasks/MarkComplete")
+    Call<BaseResponse> MarkTaskComplete(
+            @Header("Authorization") String authorization,
+            @Field("encrypted_TaskID") String reminderDI,
+            @Field("state") String state
+    );
+
+    @GET("Dashboard/GetLeadTitles")
+    Call<GetLeadTitlesModel> GetLeadTitlesModel(
+            @Header("Authorization") String authorization,
+            @Query("Name") String name
+    );
+
+    @GET("Dashboard/GetAgents")
+    Call<GetAgentsModel> GetAgents(
+            @Header("Authorization") String authorization
+    );
+
+    @FormUrlEncoded
+    @POST("Appointment/AddNew")
+    Call<BaseResponse> AddAppointment(
+            @Header("Authorization") String authorization,
+            @Field("leadStringID") String leadStringID,
+            @Field("agentsStringIDs") String agentsStringIDs,
+            @Field("leadAppoinmentID") String leadAppoinmentID,
+            @Field("eventTitle") String eventTitle,
+            @Field("location") String location,
+            @Field("desc") String desc,
+            @Field("isAppointmentFixed") String isAppointmentFixed,
+            @Field("isAppointmentAttend") String isAppointmentAttend,
+            @Field("appointmentDate") String appointmentDate,
+            @Field("datedFrom") String datedFrom,
+            @Field("datedTo") String datedTo,
+            @Field("isAllDay") String isAllDay,
+            @Field("interval") String interval,
+            @Field("isSend") String isSend,
+            @Field("viaReminder") String viaReminder,
+            @Field("agentIds") String agentIds,
+            @Field("orderBy") String orderBy,
+            @Field("startTime") String startTime,
+            @Field("endTime") String endTime,
+            @Field("isCompleted") String isCompleted
+    );
+
+
 
 
     /*@FormUrlEncoded

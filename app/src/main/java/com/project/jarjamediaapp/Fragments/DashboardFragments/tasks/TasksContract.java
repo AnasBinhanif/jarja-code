@@ -2,6 +2,8 @@
 package com.project.jarjamediaapp.Fragments.DashboardFragments.tasks;
 
 
+import com.project.jarjamediaapp.Models.GetTasksModel;
+
 public interface TasksContract {
 
     /*
@@ -9,6 +11,17 @@ public interface TasksContract {
     */
      interface View {
          void setupViews();
+        void updateUI(GetTasksModel response, String whichTask);
+
+        void updateUIonFalse(String message);
+
+        void updateUIonError(String error);
+
+        void updateUIonFailure();
+
+        void showProgressBar();
+
+        void hideProgressBar();
     }
 
     /*
@@ -17,6 +30,9 @@ public interface TasksContract {
     */
      interface Actions {
          void initScreen();
+        void getDueTasks();
+        void getOverDueTasks();
+        void getFutureTasks();
     }
 
     /*
