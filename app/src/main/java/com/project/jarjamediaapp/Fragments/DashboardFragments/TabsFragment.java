@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,5 +110,14 @@ public class TabsFragment extends BaseFragment {
             }
         });
     }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        getActivity().getMenuInflater().inflate(R.menu.home, menu);
+        menu.findItem(R.id.action_notify).setVisible(true);
+    }
+
 
 }

@@ -29,6 +29,7 @@
     <string name="end_time">End Time</string>
     <string name="reminder">Reminder</string>
     <string name="via">Via</string>
+    <string name="property_address">Property Address</string>
     <string name="all_day">All Day</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
@@ -61,10 +62,17 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="spouse_name">Spouse Name</string>
+    <string name="spouse_bday">Spouse Birthday</string>
     <string name="cell_phone">Cell Phone</string>
     <string name="birthday">Birthday</string>
+    <string name="bday_notify">Turn On Birthday Notification</string>
+    <string name="anniversary_notify">Turn On Anniversary Notification</string>
     <string name="anniversary">Anniversary</string>
     <string name="company">Company</string>
+    <string name="country">Country</string>
+    <string name="source">Source</string>
+    <string name="time_fram">Time Frame</string>
+    <string name="pre_approved">Pre-Approved</string>
     <string name="street_address_1">Street Address 1</string>
     <string name="street_address_2">Street Address 2</string>
     <string name="city_1">City 1</string>
@@ -196,6 +204,10 @@
     <string name="thursday">Thursday</string>
     <string name="friday">Friday</string>
     <string name="saturday">Saturday</string>
+
+
+    <string name="errSinglePiece">Single piece of information is required.</string>
+    <string name="errSelectAgent">Agent(s) is required.</string>
 
     <string-array name="days_sunday_array">
         <item>S</item>

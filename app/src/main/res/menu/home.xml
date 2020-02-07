@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_notify"
+        android:title="Notification"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_white"
         android:title="Search Leads"
@@ -16,10 +22,5 @@
         android:visible="false"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_notify"
-        android:icon="@drawable/ic_add"
-        android:title="Notification"
-        android:visible="false"
-        app:showAsAction="always" />
+
 </menu>

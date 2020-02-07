@@ -1,8 +1,11 @@
 package com.project.jarjamediaapp.Activities;
 
-import android.app.SearchManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -25,6 +27,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
 import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
 import com.project.jarjamediaapp.Activities.login.LoginActivity;
+import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
 import com.project.jarjamediaapp.Activities.open_houses.Open_HousesActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Fragments.DashboardFragments.TabsFragment;
@@ -33,10 +36,10 @@ import com.project.jarjamediaapp.Interfaces.UpdateTitle;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
-import com.project.jarjamediaapp.Utilities.AppConstants;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.AppConstants;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
@@ -133,12 +136,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 } else {
                     ApiError error = ErrorUtils.parseError(response);
 
-                    if (error.message().contains("Authorization has been denied for this request"))
-                    {
-                        ToastUtils.showErrorToast(HomeActivity.this,"Session Expired","Please Login Again");
+                    if (error.message().contains("Authorization has been denied for this request")) {
+                        ToastUtils.showErrorToast(HomeActivity.this, "Session Expired", "Please Login Again");
                         easyPreference.clearAll();
                         switchActivity(LoginActivity.class);
-                    }else{
+                    } else {
                         ToastUtils.showToastLong(context, error.message());
                     }
                 }
@@ -259,17 +261,20 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
+        getMenuInflater().inflate(R.menu.home, menu);
         _menu = menu;
 
-        getMenuInflater().inflate(R.menu.home, menu);
+        MenuItem item = menu.findItem(R.id.action_notify);
+        item.setIcon(buildCounterDrawable(8, R.drawable.ic_notification));
+
+        /*getMenuInflater().inflate(R.menu.home, menu);
         MenuItem item = menu.findItem(R.id.action_search);
         item.setVisible(true);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setVisibility(View.VISIBLE);
         searchView.setMaxWidth(Integer.MAX_VALUE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));*/
 
         return true;
     }
@@ -279,6 +284,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
+        if (id == R.id.action_notify) {
+            switchActivity(NotificationActivity.class);
+
+            return true;
+        }
+
         if (id == R.id.action_add) {
             switchActivity(AddLeadActivity.class);
 
@@ -286,5 +297,33 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    private Drawable buildCounterDrawable(int count, int backgroundImageId) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.custom_notification_badge, null);
+        view.setBackgroundResource(backgroundImageId);
+        TextView textView = (TextView) view.findViewById(R.id.count);
+        if (count == 0) {
+            View counterTextPanel = view.findViewById(R.id.counterValuePanel);
+            counterTextPanel.setVisibility(View.GONE);
+        } else if (count < 10 && count > 0) {
+
+            textView.setText("0" + count);
+        } else {
+            textView.setText("" + count);
+        }
+
+        view.measure(
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+
+        view.setDrawingCacheEnabled(true);
+        view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
+
+        return new BitmapDrawable(getResources(), bitmap);
     }
 }

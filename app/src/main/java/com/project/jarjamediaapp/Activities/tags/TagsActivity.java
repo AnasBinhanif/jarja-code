@@ -138,6 +138,7 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.home, menu);
+        menu.findItem(R.id.action_notify).setVisible(false);
         MenuItem item = menu.findItem(R.id.action_add);
         item.setVisible(true);
 

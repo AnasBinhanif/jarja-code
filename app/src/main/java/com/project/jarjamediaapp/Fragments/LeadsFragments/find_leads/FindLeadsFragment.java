@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,7 +18,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.project.jarjamediaapp.Activities.add_filters.AddFiltersActivity;
-import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
 import com.project.jarjamediaapp.Activities.all_leads.AllLeadsActivity;
 import com.project.jarjamediaapp.Base.BaseFragment;
 import com.project.jarjamediaapp.Models.GetFindLeads;
@@ -151,6 +149,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
         getActivity().getMenuInflater().inflate(R.menu.home, menu);
         menu.findItem(R.id.action_search).setVisible(false);
+        menu.findItem(R.id.action_notify).setVisible(false);
         menu.findItem(R.id.action_add).setVisible(true);
     }
 

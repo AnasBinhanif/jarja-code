@@ -1,20 +1,38 @@
 package com.project.jarjamediaapp.Activities.add_lead;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.TextView;
 
 import androidx.databinding.DataBindingUtil;
 
-import com.project.jarjamediaapp.Activities.add_filters.AddFiltersContract;
-import com.project.jarjamediaapp.Activities.add_filters.AddFiltersPresenter;
+import com.abdeveloper.library.MultiSelectDialog;
+import com.abdeveloper.library.MultiSelectModel;
+import com.project.jarjamediaapp.BabushkaText;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetAgentsModel;
+import com.project.jarjamediaapp.Models.GetLeadDripCampaignList;
+import com.project.jarjamediaapp.Models.GetLeadSource;
+import com.project.jarjamediaapp.Models.GetLeadTagList;
+import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
+import com.project.jarjamediaapp.Models.GetLeadTypeList;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
-import com.project.jarjamediaapp.databinding.ActivityAddFiltersBinding;
 import com.project.jarjamediaapp.databinding.ActivityAddLeadBinding;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 import retrofit2.Response;
 
@@ -23,6 +41,30 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     ActivityAddLeadBinding bi;
     Context context = AddLeadActivity.this;
     AddLeadPresenter presenter;
+
+    ArrayList<GetAgentsModel.Data> agentList;
+    ArrayList<MultiSelectModel> searchListItems;
+    ArrayList<Integer> selectedIdsList = new ArrayList<>();
+
+    ArrayList<GetLeadSource.Data> getLeadSourceList;
+    ArrayList<String> getLeadSourceNameList;
+
+    ArrayList<GetLeadTagList.Data> getLeadTagList;
+    ArrayList<String> getLeadTagNameList;
+
+    ArrayList<GetLeadTypeList.Data> getLeadTypeList;
+    ArrayList<String> getLeadTypeNameList;
+
+    ArrayList<GetLeadTimeFrame.Data> getLeadTimeFrameList;
+    ArrayList<String> getLeadTimeFrameNames;
+
+    ArrayList<GetLeadDripCampaignList.Data> getLeadDripCampaignList;
+    ArrayList<MultiSelectModel> getLeadDripCampaignModelList;
+    ArrayList<Integer> selectedDripIdsList = new ArrayList<>();
+
+    MultiSelectModel agentModel, dripModel;
+
+    String bday, sBday, anniversary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,43 +84,380 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     @Override
     public void initViews() {
 
+        initSpinners();
+        initListeners();
+        initCallsData();
+    }
+
+    private void initCallsData() {
+        presenter.getAgentNames();
+        presenter.GetLeadSource();
+        presenter.GetLeadTagList();
+        presenter.GetLeadTypeList();
+        presenter.GetLeadTimeFrame();
+        presenter.GetLeadDripCampaignList();
+    }
+
+    private void initListeners() {
+
+        bi.btnSave.setOnClickListener(this);
+        bi.edtBday.setOnClickListener(this);
+        bi.edtAgent.setOnClickListener(this);
+        bi.edtSpouseBday.setOnClickListener(this);
+        bi.edtAnniversary.setOnClickListener(this);
+        bi.edtDripCompaign.setOnClickListener(this);
+    }
+
+    private void initSpinners() {
+
+        bi.spnSource.setBackground(getDrawable(R.drawable.bg_search));
+        bi.spnType.setBackground(getDrawable(R.drawable.bg_search));
+        bi.spnTags.setBackground(getDrawable(R.drawable.bg_search));
+        bi.spnTimeFrame.setBackground(getDrawable(R.drawable.bg_search));
+        bi.spnPreApprove.setBackground(getDrawable(R.drawable.bg_search));
+
+        ArrayList<String> preAprrovedList = new ArrayList<>();
+        preAprrovedList.add("Yes");
+        preAprrovedList.add("No");
+
+        bi.spnPreApprove.setItems(preAprrovedList);
+
+    }
+
+    private void showAgentDialog() {
+
+        MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
+                .title("Select Agents") //setting title for dialog
+                .titleSize(25)
+                .positiveText("Done")
+                .negativeText("Cancel")
+                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
+                        //will return list of selected IDS
+                        selectedIdsList = new ArrayList<>();
+                        selectedIdsList = selectedIds;
+                        if (bi.edtAgent.getAllPieceCount() != 0) {
+                            bi.edtAgent.reset();
+                            bi.edtAgent.setPadding(12, 0, 0, 0);
+                        }
+
+                        for (String name : selectedNames) {
+
+                            BabushkaText.Piece piece = new BabushkaText.Piece.Builder("- " + name + "\n")
+                                    .textColor(getResources().getColor(R.color.colorPrimaryDark))
+                                    .textSize(40)
+                                    .build();
+                            bi.edtAgent.addPiece(piece);
+                        }
+
+                        agentModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
+                        Log.e("DataString", dataString);
+                        bi.edtAgent.setPadding(12, 20, 0, 0);
+                        bi.edtAgent.display();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                    }
+                });
+
+        if (selectedIdsList.size() != 0) {
+            multiSelectDialog.preSelectIDsList(selectedIdsList);
+            multiSelectDialog.multiSelectList(searchListItems);
+        } else {
+            multiSelectDialog.multiSelectList(searchListItems);
+        }
+        multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
+    }
+
+    private void showDripDialog() {
+
+        MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
+                .title("Select Drip Compaigns") //setting title for dialog
+                .titleSize(25)
+                .positiveText("Done")
+                .negativeText("Cancel")
+                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
+                        //will return list of selected IDS
+                        selectedDripIdsList = new ArrayList<>();
+                        selectedDripIdsList = selectedIds;
+                        if (bi.edtDripCompaign.getAllPieceCount() != 0) {
+                            bi.edtDripCompaign.reset();
+                            bi.edtDripCompaign.setPadding(12, 0, 0, 0);
+                        }
+
+                        for (String name : selectedNames) {
+
+                            BabushkaText.Piece piece = new BabushkaText.Piece.Builder("- " + name + "\n")
+                                    .textColor(getResources().getColor(R.color.colorPrimaryDark))
+                                    .textSize(40)
+                                    .build();
+                            bi.edtDripCompaign.addPiece(piece);
+                        }
+
+                        dripModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
+                        Log.e("DataString", dataString);
+                        bi.edtDripCompaign.setPadding(12, 20, 0, 0);
+                        bi.edtDripCompaign.display();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                    }
+                });
+
+        if (selectedDripIdsList.size() != 0) {
+            multiSelectDialog.preSelectIDsList(selectedDripIdsList);
+            multiSelectDialog.multiSelectList(getLeadDripCampaignModelList);
+        } else {
+            multiSelectDialog.multiSelectList(getLeadDripCampaignModelList);
+        }
+
+        multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
+
+    }
+
+    private void callAddNewLead() {
+
+        String firstName = bi.edtFName.getText().toString();
+        String lastName = bi.edtLName.getText().toString();
+        String spousname = bi.edtSName.getText().toString();
+        String company = bi.edtCompany.getText().toString();
+        String cellPhone = bi.edtPhone.getText().toString();
+        String primaryPhone = bi.edtPhone.getText().toString();
+        String primaryEmail = bi.edtEmail.getText().toString();
+        String dateOfBirth = bday;
+        String isBirthDayNotify = bi.chkBdayNotify.isChecked() ? "true" : "false";
+        String dateOfMarriage = anniversary;
+        String isAnniversaryNotify = bi.chkAnnivNotify.isChecked() ? "true" : "false";
+        String leadAgentIDs = agentModel == null ? "" : String.valueOf(agentModel.getId());
+        String allAgentIds = agentModel == null ? "" : String.valueOf(agentModel.getId());
+        String alldripcampaignids = "";
+        String notes = bi.edtNotes.getText().toString();
+        String b_PreQual = "";
+        String address = bi.edtAddress1.getText().toString();
+        String street = bi.edtAddress1.getText().toString();
+        String zipcode = bi.edtPostalCode1.getText().toString();
+        String city = bi.edtCity1.getText().toString();
+        String state = bi.edtState1.getText().toString();
+        String description = "";
+        String source = "";
+        String county = bi.edtCountry.getText().toString();
+        String timeFrameId = "";
+        String state2 = bi.edtState2.getText().toString();
+        String city2 = bi.edtCity2.getText().toString();
+        String zipcode2 = bi.edtPostalCode2.getText().toString();
+        String leadTypeID = "";
+        String labelsID = "";
+        String leadStringID = "";
+        String leadID = "0";
+        String countryid = "";
+
+        JSONObject emailObject = new JSONObject();
+        try {
+            emailObject.put("email", primaryEmail);
+            emailObject.put("isNotify", "true");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        JSONArray emailArray = new JSONArray();
+        emailArray.put(emailObject);
+
+        JSONObject phoneObject = new JSONObject();
+        try {
+            phoneObject.put("phone", cellPhone);
+            phoneObject.put("isNotify", "true");
+            phoneObject.put("phoneType", "phoneType");
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        JSONArray phoneArray = new JSONArray();
+        phoneArray.put(emailObject);
+
+        String emailList = emailArray.toString();
+        String phoneList = phoneArray.toString();
+
+        if (firstName.equals("") || lastName.equals("") || spousname.equals("") || company.equals("") || cellPhone.equals("")) {
+            ToastUtils.showToast(context, getString(R.string.errSinglePiece));
+        } else if (selectedIdsList.size() == 0) {
+            ToastUtils.showToast(context, getString(R.string.errSelectAgent));
+        } else {
+            presenter.addLead(firstName, lastName, spousname, company, cellPhone, primaryPhone, primaryEmail, dateOfBirth, isBirthDayNotify, dateOfMarriage,
+                    isAnniversaryNotify, leadAgentIDs, allAgentIds, alldripcampaignids, notes, b_PreQual, address, street, zipcode, city, state, description,
+                    source, county, timeFrameId, state2, city2, zipcode2, leadTypeID, emailList, phoneList, labelsID, leadStringID, leadID, countryid);
+        }
+    }
+
+    private void showDateDialog(TextView textView, String whichBday) {
+
+        final Calendar newCalendar = Calendar.getInstance();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
+        DatePickerDialog StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+
+                if (whichBday.equals("bday")) {
+                    bday = dateFormatter.format(newDate.getTime());
+                } else if (whichBday.equals("sBday")) {
+                    sBday = dateFormatter.format(newDate.getTime());
+                } else if (whichBday.equals("anniv")) {
+                    anniversary = dateFormatter.format(newDate.getTime());
+                }
+                textView.setText(dateFormatter2.format(newDate.getTime()));
+            }
+
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+        StartTime.show();
+    }
+
+    @Override
+    public void updateUI(GetAgentsModel response) {
+
+        agentList = new ArrayList<>();
+        searchListItems = new ArrayList<>();
+        agentList = response.data;
+        for (GetAgentsModel.Data model : agentList) {
+            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName));
+        }
+
+    }
+
+    @Override
+    public void updateUI(GetLeadSource response) {
+
+        getLeadSourceList = new ArrayList<>();
+        getLeadSourceNameList = new ArrayList<>();
+        getLeadSourceList = response.data;
+
+        for (GetLeadSource.Data model : getLeadSourceList) {
+            getLeadSourceNameList.add(model.sourceName);
+        }
+
+        bi.spnSource.setItems(getLeadSourceNameList);
+    }
+
+    @Override
+    public void updateUI(GetLeadTagList response) {
+
+        getLeadTagList = new ArrayList<>();
+        getLeadTagNameList = new ArrayList<>();
+        getLeadTagList = response.data;
+
+        for (GetLeadTagList.Data model : getLeadTagList) {
+            getLeadTagNameList.add(model.label);
+        }
+
+        bi.spnTags.setItems(getLeadTagNameList);
+
+    }
+
+    @Override
+    public void updateUI(GetLeadTypeList response) {
+
+        getLeadTypeList = new ArrayList<>();
+        getLeadTypeNameList = new ArrayList<>();
+        getLeadTypeList = response.data;
+
+        for (GetLeadTypeList.Data model : getLeadTypeList) {
+            getLeadTypeNameList.add(model.leadType);
+        }
+
+        bi.spnType.setItems(getLeadTypeNameList);
+    }
+
+    @Override
+    public void updateUI(GetLeadTimeFrame response) {
+
+        getLeadTimeFrameList = new ArrayList<>();
+        getLeadTimeFrameNames = new ArrayList<>();
+        getLeadTimeFrameList = response.data;
+
+        for (GetLeadTimeFrame.Data model : getLeadTimeFrameList) {
+            getLeadTimeFrameNames.add(model.timeFrame);
+        }
+
+        bi.spnTimeFrame.setItems(getLeadTimeFrameNames);
+    }
+
+    @Override
+    public void updateUI(GetLeadDripCampaignList response) {
+
+        getLeadDripCampaignList = new ArrayList<>();
+        getLeadDripCampaignModelList = new ArrayList<>();
+        getLeadDripCampaignList = response.data;
+        for (GetLeadDripCampaignList.Data model : getLeadDripCampaignList) {
+            getLeadDripCampaignModelList.add(new MultiSelectModel(model.dripCompaignID, model.name));
+        }
     }
 
     @Override
     public void updateUI(Response<BaseResponse> response) {
-
-
+        if (response.body().getStatus().equals("Success")) {
+            ToastUtils.showToast(context, "Added Successfully");
+            finish();
+        }
     }
 
     @Override
     public void updateUIonFalse(String message) {
-
         ToastUtils.showToastLong(context, message);
-
     }
 
     @Override
     public void updateUIonError(String error) {
-
         ToastUtils.showToastLong(context, error);
     }
 
     @Override
     public void updateUIonFailure() {
-
         ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
     }
 
     @Override
     public void showProgressBar() {
-
         GH.getInstance().ShowProgressDialog(context);
     }
 
     @Override
     public void hideProgressBar() {
-
         GH.getInstance().HideProgressDialog(context);
     }
 
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        switch (view.getId()) {
+
+            case R.id.edtAgent:
+                showAgentDialog();
+                break;
+            case R.id.edtBday:
+                showDateDialog(bi.edtBday, "bday");
+                break;
+            case R.id.edtSpouseBday:
+                showDateDialog(bi.edtSpouseBday, "sBday");
+                break;
+            case R.id.edtAnniversary:
+                showDateDialog(bi.edtAnniversary, "anniv");
+                break;
+            case R.id.edtDripCompaign:
+                showDripDialog();
+                break;
+            case R.id.btnSave:
+                callAddNewLead();
+                break;
+        }
+    }
 }

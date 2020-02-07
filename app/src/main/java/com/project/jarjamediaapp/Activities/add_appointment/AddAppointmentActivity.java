@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
@@ -21,8 +22,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ajithvgiri.searchdialog.SearchListItem;
-import com.ajithvgiri.searchdialog.SearchableDialog;
+import com.abdeveloper.library.MultiSelectDialog;
+import com.abdeveloper.library.MultiSelectModel;
+import com.project.jarjamediaapp.BabushkaText;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -58,12 +60,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     RecyclerAdapterUtil recyclerAdapterUtil;
     RecyclerView recyclerSearch;
     ArrayList<String> reminderList = new ArrayList<>();
-    ArrayList<GetAgentsModel.Data> agentList = new ArrayList<>();
-    ArrayList<SearchListItem> searchListItems = new ArrayList<>();
+    ArrayList<GetAgentsModel.Data> agentList;
+    ArrayList<MultiSelectModel> searchListItems;
+    ArrayList<Integer> selectedIdsList = new ArrayList<>();
     ArrayList<GetLeadTitlesModel.Data> nameList = new ArrayList<>();
 
     String startDate, endDate, startTime, endTime, via, reminder, leadId, isAllDay = "false";
-    SearchListItem agentModel;
+    MultiSelectModel agentModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +88,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     public void initViews() {
 
         initAllDay();
-        setSpinnerData();
         presenter.getAgentNames();
         bi.btnSave.setOnClickListener(this);
         bi.edtName.setOnClickListener(this);
@@ -94,6 +96,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.edtEndDate.setOnClickListener(this);
         bi.edtStartTime.setOnClickListener(this);
         bi.edtEndTime.setOnClickListener(this);
+        bi.spnReminder.setOnClickListener(this);
     }
 
     @Override
@@ -119,6 +122,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             case R.id.edtEndTime:
                 showTimeDiaolog(bi.edtEndTime, false);
                 break;
+            case R.id.spnReminder:
+                setSpinnerData();
+                break;
             case R.id.btnSave:
                 callAddAppointment();
                 break;
@@ -136,9 +142,11 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     @Override
     public void updateUI(GetAgentsModel response) {
+        agentList = new ArrayList<>();
+        searchListItems = new ArrayList<>();
         agentList = response.data;
         for (GetAgentsModel.Data model : agentList) {
-            searchListItems.add(new SearchListItem(model.agentID, model.agentName));
+            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName));
         }
     }
 
@@ -179,11 +187,15 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     private void setSpinnerData() {
         bi.spnVia.setBackground(getDrawable(R.drawable.bg_search));
         bi.spnReminder.setBackground(getDrawable(R.drawable.bg_search));
+
         for (String name : GH.getInstance().getArrayReminder().keySet()) {
             reminderList.add(name);
         }
         bi.spnVia.setItems(getResources().getStringArray(R.array.arrVia));
         bi.spnReminder.setItems(reminderList);
+        bi.spnReminder.expand();
+
+        via = bi.spnVia.getItems().get(bi.spnVia.getSelectedIndex()).toString();
 
         bi.spnVia.setOnItemSelectedListener((view, position, id, item) -> {
 
@@ -197,20 +209,61 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
 
         });
+        bi.spnReminder.setHint("Select Reminder");
+        reminder = String.valueOf(GH.getInstance().getArrayReminder().get(bi.spnReminder.getItems().get(bi.spnReminder.getSelectedIndex())));
         bi.spnReminder.setOnItemSelectedListener((view, position, id, item) ->
                 reminder = String.valueOf(GH.getInstance().getArrayReminder().get(item.toString())));
 
     }
 
     private void showAgentDialog() {
-        SearchableDialog searchableDialog = new SearchableDialog(AddAppointmentActivity.this, searchListItems,
-                "Agent Name");
-        searchableDialog.setOnItemSelected((i, searchListItem) -> {
-            agentModel = searchListItem;
-            bi.edtAgent.setText(searchListItem.getTitle());
-            searchableDialog.dismiss();
-        });
-        searchableDialog.show();
+
+        MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
+                .title("Select Agents") //setting title for dialog
+                .titleSize(25)
+                .positiveText("Done")
+                .negativeText("Cancel")
+                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
+                        //will return list of selected IDS
+                        selectedIdsList = new ArrayList<>();
+                        selectedIdsList = selectedIds;
+                        if (bi.edtAgent.getAllPieceCount() != 0) {
+                            bi.edtAgent.reset();
+                            bi.edtAgent.setPadding(12,0,0,0);
+                        }
+
+                        for (String name : selectedNames) {
+
+                            BabushkaText.Piece piece = new BabushkaText.Piece.Builder("- " + name + "\n")
+                                    .textColor(getResources().getColor(R.color.colorPrimaryDark))
+                                    .textSize(40)
+                                    .build();
+                            bi.edtAgent.addPiece(piece);
+                        }
+
+                        agentModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
+                        Log.e("DataString", dataString);
+                        bi.edtAgent.setPadding(12,20,0,0);
+                        bi.edtAgent.display();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                    }
+                });
+
+        if (selectedIdsList.size() != 0) {
+            multiSelectDialog.preSelectIDsList(selectedIdsList);
+            multiSelectDialog.multiSelectList(searchListItems);
+        }else{
+            multiSelectDialog.multiSelectList(searchListItems);
+        }
+
+        multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
+
     }
 
     private void showDateDialog(TextView textView, boolean isStart) {
@@ -262,7 +315,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     private void callAddAppointment() {
 
         String leadStringID = leadId + "";
-        String agentsID = String.valueOf(agentModel.getId()) + "";
+        String agentsID = agentModel.getId() + "";
         String leadAppoinmentID = "0";
         String eventTitle = bi.edtEventTitle.getText().toString() + "";
         String location = bi.edtLocation.getText().toString() + "";

@@ -39,10 +39,11 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/edtName"
+                        android:id="@+id/edtFName"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
+                        android:textColor="@color/colorPrimaryDark"
                         android:background="@drawable/bg_search"
                         android:hint="@string/first_name"
                         android:inputType="textPersonName"
@@ -59,10 +60,11 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/edtAgent"
+                        android:id="@+id/edtLName"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
+                        android:textColor="@color/colorPrimaryDark"
                         android:background="@drawable/bg_search"
                         android:hint="@string/last_name"
                         android:paddingLeft="12dp"
@@ -78,77 +80,14 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/edtEventTitle"
+                        android:id="@+id/edtSName"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/bg_search"
+                        android:textColor="@color/colorPrimaryDark"
                         android:hint="@string/spouse_name"
                         android:paddingLeft="12dp"
-                        android:textSize="14dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="@string/cell_phone"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/edtLocation"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/bg_search"
-                        android:hint="@string/cell_phone"
-                        android:inputType="textPostalAddress"
-                        android:paddingLeft="12dp"
-                        android:textSize="14dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="@string/birthday"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/edtStartDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/bg_search"
-                        android:drawableRight="@drawable/ic_calendar"
-                        android:hint="@string/birthday"
-                        android:inputType="date"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:textSize="14dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="@string/anniversary"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/edtAnniversary"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/bg_search"
-                        android:drawableRight="@drawable/ic_calendar"
-                        android:hint="@string/anniversary"
-                        android:inputType="date"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
                         android:textSize="14dp" />
 
                     <TextView
@@ -161,14 +100,147 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/edtReminder"
+                        android:id="@+id/edtCompany"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/bg_search"
                         android:hint="@string/company"
                         android:paddingLeft="12dp"
+                        android:textColor="@color/colorPrimaryDark"
                         android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/cell_phone"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/cell_phone"
+                        android:inputType="number"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/email"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/email"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/spouse_bday"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/edtSpouseBday"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center|left"
+                        android:background="@drawable/bg_search"
+                        android:drawableRight="@drawable/ic_calendar"
+                        android:hint="@string/spouse_bday"
+                        android:inputType="date"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/birthday"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/edtBday"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:drawableRight="@drawable/ic_calendar"
+                        android:hint="@string/birthday"
+                        android:inputType="date"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:gravity="center|left"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:textSize="14dp" />
+
+                    <CheckBox
+                        android:id="@+id/chkBdayNotify"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/bday_notify"
+                        android:textColor="@color/colorPrimaryDark" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/anniversary"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/edtAnniversary"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:drawableRight="@drawable/ic_calendar"
+                        android:hint="@string/anniversary"
+                        android:inputType="date"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:gravity="center|left"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:textSize="14dp" />
+
+                    <CheckBox
+                        android:id="@+id/chkAnnivNotify"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="@string/anniversary_notify" />
+
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -180,29 +252,13 @@
                         android:textStyle="bold" />
 
                     <EditText
+                        android:id="@+id/edtAddress1"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
+                        android:textColor="@color/colorPrimaryDark"
                         android:background="@drawable/bg_search"
                         android:hint="@string/street_address_1"
-                        android:paddingLeft="12dp"
-                        android:textSize="14dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="@string/street_address_2"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/bg_search"
-                        android:hint="@string/street_address_2"
                         android:paddingLeft="12dp"
                         android:textSize="14dp" />
 
@@ -216,11 +272,75 @@
                         android:textStyle="bold" />
 
                     <EditText
+                        android:id="@+id/edtCity1"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
+                        android:textColor="@color/colorPrimaryDark"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/bg_search"
                         android:hint="@string/city_1"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/state_1"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtState1"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/state_1"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/postal_code_1"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtPostalCode1"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/postal_code_1"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/street_address_2"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtAddress2"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/street_address_2"
                         android:paddingLeft="12dp"
                         android:textSize="14dp" />
 
@@ -234,29 +354,13 @@
                         android:textStyle="bold" />
 
                     <EditText
+                        android:id="@+id/edtCity2"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
+                        android:textColor="@color/colorPrimaryDark"
                         android:background="@drawable/bg_search"
                         android:hint="@string/city_2"
-                        android:paddingLeft="12dp"
-                        android:textSize="14dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="@string/state_1"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/bg_search"
-                        android:hint="@string/state_1"
                         android:paddingLeft="12dp"
                         android:textSize="14dp" />
 
@@ -270,29 +374,13 @@
                         android:textStyle="bold" />
 
                     <EditText
+                        android:id="@+id/edtState2"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
+                        android:textColor="@color/colorPrimaryDark"
                         android:background="@drawable/bg_search"
                         android:hint="@string/state_2"
-                        android:paddingLeft="12dp"
-                        android:textSize="14dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="@string/postal_code_1"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14dp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/bg_search"
-                        android:hint="@string/postal_code_1"
                         android:paddingLeft="12dp"
                         android:textSize="14dp" />
 
@@ -306,17 +394,206 @@
                         android:textStyle="bold" />
 
                     <EditText
+                        android:id="@+id/edtPostalCode2"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
+                        android:textColor="@color/colorPrimaryDark"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/bg_search"
                         android:hint="@string/postal_code_2"
                         android:paddingLeft="12dp"
                         android:textSize="14dp" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/country"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtCountry"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/country"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/source"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        android:id="@+id/spnSource"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/source"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/type"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        android:id="@+id/spnType"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/call"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/agent"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <com.project.jarjamediaapp.BabushkaText
+                        android:id="@+id/edtAgent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="45dp"
+                        android:gravity="left|center"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/nothing_selected"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/tags"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        android:id="@+id/spnTags"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/tags"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/drip_compaigns"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <com.project.jarjamediaapp.BabushkaText
+                        android:id="@+id/edtDripCompaign"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="45dp"
+                        android:layout_marginTop="5dp"
+                        android:lineSpacingExtra="2dp"
+                        android:gravity="left|center"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/drip_compaigns"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/time_fram"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        android:id="@+id/spnTimeFrame"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/time_fram"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/pre_approved"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        android:id="@+id/spnPreApprove"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:background="@drawable/bg_search"
+                        android:hint="@string/pre_approved"
+                        android:paddingLeft="12dp"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/notes"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtNotes"
+                        android:layout_width="match_parent"
+                        android:layout_height="95dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_search"
+                        android:gravity="top"
+                        android:hint="@string/add_notes"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:inputType="textLongMessage"
+                        android:paddingLeft="12dp"
+                        android:paddingTop="12dp"
+                        android:textSize="14dp" />
 
                     <Button
-                        android:id="@+id/btnSaveAndSearch"
+                        android:id="@+id/btnSave"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
@@ -325,7 +602,6 @@
                         android:text="@string/save"
                         android:textAllCaps="false"
                         android:textColor="@color/colorWhite" />
-
 
                 </LinearLayout>
 
