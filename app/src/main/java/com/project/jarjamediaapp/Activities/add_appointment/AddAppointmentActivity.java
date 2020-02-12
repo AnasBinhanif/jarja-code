@@ -230,28 +230,26 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                         //will return list of selected IDS
                         selectedIdsList = new ArrayList<>();
                         selectedIdsList = selectedIds;
-                        if (bi.edtAgent.getAllPieceCount() != 0) {
-                            bi.edtAgent.reset();
-                            bi.edtAgent.setPadding(12,0,0,0);
+                        if(bi.lnAgent.getChildCount() > 0) {
+                            bi.lnAgent.removeAllViews();
                         }
 
                         for (String name : selectedNames) {
 
-                            BabushkaText.Piece piece = new BabushkaText.Piece.Builder("- " + name + "\n")
-                                    .textColor(getResources().getColor(R.color.colorPrimaryDark))
-                                    .textSize(40)
-                                    .build();
-                            bi.edtAgent.addPiece(piece);
+                            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                            TextView textView = child.findViewById(R.id.txtDynamic);
+                            textView.setText(name);
+                            bi.lnAgent.addView(child);
+
                         }
 
                         agentModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
-                        bi.edtAgent.setPadding(12,20,0,0);
-                        bi.edtAgent.display();
                     }
 
                     @Override
                     public void onCancel() {
+
                     }
                 });
 
@@ -413,7 +411,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     @Override
     public void updateUIonError(String error) {
-        ToastUtils.showToastLong(context, error);
+
+        if (error.contains("Authorization has been denied for this request")) {
+            ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+            logout();
+        } else {
+            ToastUtils.showToastLong(context, error);
+        }
     }
 
     @Override

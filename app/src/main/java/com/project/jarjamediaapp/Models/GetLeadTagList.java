@@ -21,7 +21,7 @@ public class GetLeadTagList {
 
         @SerializedName("id")
         @Expose
-        public String id;
+        public Integer id;
         @SerializedName("label")
         @Expose
         public String label;

@@ -1,11 +1,39 @@
 package com.project.jarjamediaapp.Activities.add_filters;
 
 import com.project.jarjamediaapp.Base.BaseContract;
+import com.project.jarjamediaapp.Models.GetAgentsModel;
+import com.project.jarjamediaapp.Models.GetLeadDripCampaignList;
+import com.project.jarjamediaapp.Models.GetLeadSource;
+import com.project.jarjamediaapp.Models.GetLeadTagList;
+import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
+import com.project.jarjamediaapp.Models.GetLeadTypeList;
 
 public interface AddFiltersContract {
 
     interface View extends BaseContract.View{
+        void initViews();
 
+        void updateUI(GetAgentsModel response);
+
+        void updateUI(GetLeadSource response);
+
+        void updateUI(GetLeadTagList response);
+
+        void updateUI(GetLeadTypeList response);
+
+        void updateUI(GetLeadTimeFrame response);
+
+        void updateUI(GetLeadDripCampaignList response);
+
+        void updateUIonFalse(String message);
+
+        void updateUIonError(String error);
+
+        void updateUIonFailure();
+
+        void showProgressBar();
+
+        void hideProgressBar();
     }
 
     /*
@@ -14,9 +42,13 @@ public interface AddFiltersContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void addData();
-
         void initScreen();
+        void getAgentNames();
+        void GetLeadSource();
+        void GetLeadTagList();
+        void GetLeadTypeList();
+        void GetLeadTimeFrame();
+        void GetLeadDripCampaignList();
 
     }
 

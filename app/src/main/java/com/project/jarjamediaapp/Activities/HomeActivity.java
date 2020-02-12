@@ -137,9 +137,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     ApiError error = ErrorUtils.parseError(response);
 
                     if (error.message().contains("Authorization has been denied for this request")) {
-                        ToastUtils.showErrorToast(HomeActivity.this, "Session Expired", "Please Login Again");
-                        easyPreference.clearAll();
-                        switchActivity(LoginActivity.class);
+                        ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+                       logout();
                     } else {
                         ToastUtils.showToastLong(context, error.message());
                     }

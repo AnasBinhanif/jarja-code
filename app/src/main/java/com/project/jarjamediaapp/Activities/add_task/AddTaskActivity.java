@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
-import com.project.jarjamediaapp.BabushkaText;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -162,7 +161,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     private void setSpinnerData() {
 
-
         bi.spnType.setBackground(getDrawable(R.drawable.bg_search));
         bi.spnRecur.setBackground(getDrawable(R.drawable.bg_search));
         bi.spnReminder.setBackground(getDrawable(R.drawable.bg_search));
@@ -196,24 +194,18 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                         //will return list of selected IDS
                         selectedIdsList = new ArrayList<>();
                         selectedIdsList = selectedIds;
-                        if (bi.edtAssignTo.getAllPieceCount() != 0) {
-                            bi.edtAssignTo.reset();
-                            bi.edtAssignTo.setPadding(12,0,0,0);
+                        if (bi.lnAgent.getChildCount() > 0) {
+                            bi.lnAgent.removeAllViews();
                         }
-
                         for (String name : selectedNames) {
 
-                            BabushkaText.Piece piece = new BabushkaText.Piece.Builder("- " + name + "\n")
-                                    .textColor(getResources().getColor(R.color.colorPrimaryDark))
-                                    .textSize(40)
-                                    .build();
-                            bi.edtAssignTo.addPiece(piece);
+                            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                            TextView textView = child.findViewById(R.id.txtDynamic);
+                            textView.setText(name);
+                            bi.lnAgent.addView(child);
                         }
-
                         agentModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
-                        bi.edtAssignTo.setPadding(12,20,0,0);
-                        bi.edtAssignTo.display();
                     }
 
                     @Override
@@ -224,7 +216,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         if (selectedIdsList.size() != 0) {
             multiSelectDialog.preSelectIDsList(selectedIdsList);
             multiSelectDialog.multiSelectList(searchListItems);
-        }else{
+        } else {
             multiSelectDialog.multiSelectList(searchListItems);
         }
 
@@ -342,7 +334,12 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     @Override
     public void updateUIonError(String error) {
 
-        ToastUtils.showToastLong(context, error);
+        if (error.contains("Authorization has been denied for this request")) {
+            ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+            logout();
+        } else {
+            ToastUtils.showToastLong(context, error);
+        }
     }
 
     @Override

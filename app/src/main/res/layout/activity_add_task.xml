@@ -120,6 +120,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
+                        app:ms_hint="@string/type"
+                        app:ms_hint_color="@color/colorGreyTextDark"
                         android:background="@drawable/bg_search"
                         android:hint="@string/call"
                         android:textColor="@color/colorPrimaryDark"
@@ -135,7 +137,7 @@
                         android:textSize="14dp"
                         android:textStyle="bold" />
 
-                    <com.project.jarjamediaapp.BabushkaText
+                    <TextView
                         android:id="@+id/edtAssignTo"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
@@ -143,10 +145,20 @@
                         android:gravity="center|left"
                         android:background="@drawable/bg_search"
                         android:hint="@string/assign_to"
-                        app:smsp_isSearchable="true"
                         android:textColor="@color/colorPrimaryDark"
                         android:paddingLeft="12dp"
                         android:textSize="14dp" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fillViewport="true">
+                        <LinearLayout
+                            android:id="@+id/lnAgent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
+                    </HorizontalScrollView>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -164,6 +176,8 @@
                         android:layout_marginTop="5dp"
                         android:background="@drawable/bg_search"
                         android:hint="@string/one_time"
+                        app:ms_hint="@string/recur"
+                        app:ms_hint_color="@color/colorGreyTextDark"
                         android:textColor="@color/colorPrimaryDark"
                         android:inputType="textPostalAddress"
                         android:paddingLeft="12dp"
@@ -210,6 +224,8 @@
                         android:layout_marginTop="5dp"
                         android:background="@drawable/bg_search"
                         android:hint="@string/reminder"
+                        app:ms_hint="@string/reminder"
+                        app:ms_hint_color="@color/colorGreyTextDark"
                         android:textColor="@color/colorPrimaryDark"
                         android:paddingLeft="12dp"
                         android:textSize="14dp" />
@@ -232,6 +248,8 @@
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:hint="@string/via"
+                        app:ms_hint="@string/via"
+                        app:ms_hint_color="@color/colorGreyTextDark"
                         android:gravity="left|center"
                         android:textColor="@color/colorPrimaryDark"
                         android:paddingLeft="12dp"

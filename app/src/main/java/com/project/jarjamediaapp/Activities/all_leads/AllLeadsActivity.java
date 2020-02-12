@@ -96,7 +96,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             tvEmail.setText(allLeadsList.getEmail());
 
             TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
-            tvInitial.setText(allLeadsList.getName().substring(0, 1));
+            tvInitial.setText(allLeadsList.getName().substring(0, 2));
 
             return Unit.INSTANCE;
         });
@@ -144,7 +144,12 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void updateUIonError(String error) {
 
-        ToastUtils.showToastLong(context, error);
+        if (error.contains("Authorization has been denied for this request")) {
+            ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+            logout();
+        } else {
+            ToastUtils.showToastLong(context, error);
+        }
     }
 
     @Override

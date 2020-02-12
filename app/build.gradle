@@ -28,17 +28,17 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(":library")
+
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     implementation 'com.github.arcadefire:nice-spinner:1.4.4'
 
-    implementation 'com.github.chivorns:smartmaterialspinner:1.1.6'
+    //implementation 'com.github.abumoallim:Android-Multi-Select-Dialog:v1.9'
 
-    implementation 'com.github.abumoallim:Android-Multi-Select-Dialog:v1.9'
-
-    implementation 'com.github.ajithvgiri:search-dialog:v1.3'
     implementation 'com.jaredrummler:material-spinner:1.3.1'
     implementation 'com.airbnb.android:paris:1.3.1'
 
@@ -56,7 +56,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     // Multi-dex-ing
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'androidx.multidex:multidex:2.0.0'
     // Fire-base
     //implementation 'com.google.firebase:firebase-core:17.2.1'
     // LiteUtils for RecyclerView

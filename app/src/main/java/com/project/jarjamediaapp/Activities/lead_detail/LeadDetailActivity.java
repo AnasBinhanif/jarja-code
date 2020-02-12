@@ -257,7 +257,12 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     @Override
     public void updateUIonError(String error) {
-        ToastUtils.showToastLong(context, error);
+        if (error.contains("Authorization has been denied for this request")) {
+            ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+            logout();
+        } else {
+            ToastUtils.showToastLong(context, error);
+        }
     }
 
     @Override

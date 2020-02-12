@@ -21,7 +21,7 @@ public class GetLeadSource {
 
         @SerializedName("sourceid")
         @Expose
-        public String sourceid;
+        public Integer sourceid;
         @SerializedName("sourceName")
         @Expose
         public String sourceName;

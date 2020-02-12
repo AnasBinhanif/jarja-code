@@ -20,7 +20,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.project.jarjamediaapp.Activities.HomeActivity;
+import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Utilities.EasyPreference;
+import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import java.util.HashMap;
 
@@ -151,6 +154,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 .remove(GH.KEYS.IS_LOGGED_IN.name())
                 .save();*/
 
+
+        //ToastUtils.showErrorToast(HomeActivity.this, "Session Expired", "Please Login Again");
+        easyPreference.clearAll().save();
+        switchActivity(LoginActivity.class);
         finishAffinity();
         //  startActivity(new Intent(this, LandingPageActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 

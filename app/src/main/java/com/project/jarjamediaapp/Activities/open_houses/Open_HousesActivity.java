@@ -7,13 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.project.jarjamediaapp.Base.BaseActivity;
@@ -108,14 +106,12 @@ public class Open_HousesActivity extends BaseActivity implements View.OnClickLis
             ImageView imgHouse = (ImageView) integerMap.get(R.id.imgHouse);
             imgHouse.setImageDrawable(allOpenHouses.getImage());
 
-
             return Unit.INSTANCE;
         });
 
         bi.recyclerViewOpenHouse.setAdapter(recyclerAdapterUtil);
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetOpenHouses, Integer, Unit>) (allOpenHouses, integer) -> {
-
 
             return Unit.INSTANCE;
         });

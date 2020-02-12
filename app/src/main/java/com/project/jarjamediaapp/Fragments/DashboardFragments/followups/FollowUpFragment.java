@@ -133,7 +133,12 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
     @Override
     public void updateUIonError(String error) {
-
+        if (error.contains("Authorization has been denied for this request")) {
+            ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+            logout();
+        } else {
+            ToastUtils.showToastLong(context, error);
+        }
     }
 
     @Override

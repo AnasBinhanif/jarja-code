@@ -43,7 +43,7 @@ public class ToastUtils {
         ShowToast(context, text, duration);
     }
 
-    public static void showErrorToast(Activity activity, String message, String Message) {
+    public static void showErrorToast(Context activity, String message, String Message) {
 
         if (message.equals("") && !Message.equals("")) {
 

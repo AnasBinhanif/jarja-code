@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -438,9 +439,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
+                        app:ms_hint="@string/source"
+                        app:ms_hint_color="@color/colorGreyTextDark"
                         android:textColor="@color/colorPrimaryDark"
                         android:background="@drawable/bg_search"
-                        android:hint="@string/source"
                         android:paddingLeft="12dp"
                         android:textSize="14dp" />
 
@@ -458,8 +460,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
+                        app:ms_hint="@string/type"
+                        app:ms_hint_color="@color/colorGreyTextDark"
                         android:background="@drawable/bg_search"
-                        android:hint="@string/call"
                         android:textColor="@color/colorPrimaryDark"
                         android:paddingLeft="12dp"
                         android:textSize="14dp" />
@@ -473,7 +476,7 @@
                         android:textSize="14dp"
                         android:textStyle="bold" />
 
-                    <com.project.jarjamediaapp.BabushkaText
+                    <TextView
                         android:id="@+id/edtAgent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -486,6 +489,19 @@
                         android:paddingLeft="12dp"
                         android:textSize="14dp" />
 
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fillViewport="true">
+
+                        <LinearLayout
+                            android:id="@+id/lnAgent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
+
+                    </HorizontalScrollView>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -495,16 +511,30 @@
                         android:textSize="14dp"
                         android:textStyle="bold" />
 
-                    <com.jaredrummler.materialspinner.MaterialSpinner
-                        android:id="@+id/spnTags"
+                    <TextView
+                        android:id="@+id/edtTags"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
+                        android:gravity="center|left"
                         android:background="@drawable/bg_search"
                         android:hint="@string/tags"
                         android:textColor="@color/colorPrimaryDark"
                         android:paddingLeft="12dp"
                         android:textSize="14dp" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fillViewport="true">
+
+                        <LinearLayout
+                            android:id="@+id/lnTags"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
+
+                    </HorizontalScrollView>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -515,7 +545,7 @@
                         android:textSize="14dp"
                         android:textStyle="bold" />
 
-                    <com.project.jarjamediaapp.BabushkaText
+                    <TextView
                         android:id="@+id/edtDripCompaign"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -528,6 +558,19 @@
                         android:hint="@string/drip_compaigns"
                         android:paddingLeft="12dp"
                         android:textSize="14dp" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fillViewport="true">
+
+                        <LinearLayout
+                            android:id="@+id/lnDrip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
+
+                    </HorizontalScrollView>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -543,6 +586,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
+                        app:ms_hint="@string/time_fram"
+                        app:ms_hint_color="@color/colorGreyTextDark"
                         android:textColor="@color/colorPrimaryDark"
                         android:background="@drawable/bg_search"
                         android:hint="@string/time_fram"
@@ -563,6 +608,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
+                        app:ms_hint="@string/pre_approved"
+                        app:ms_hint_color="@color/colorGreyTextDark"
                         android:textColor="@color/colorPrimaryDark"
                         android:background="@drawable/bg_search"
                         android:hint="@string/pre_approved"

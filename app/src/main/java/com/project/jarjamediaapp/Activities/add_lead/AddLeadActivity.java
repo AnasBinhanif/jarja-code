@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.databinding.DataBindingUtil;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
-import com.project.jarjamediaapp.BabushkaText;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -50,7 +50,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     ArrayList<String> getLeadSourceNameList;
 
     ArrayList<GetLeadTagList.Data> getLeadTagList;
-    ArrayList<String> getLeadTagNameList;
+    ArrayList<MultiSelectModel> getLeadTagModelList;
+    ArrayList<Integer> selectedTagIdsList = new ArrayList<>();
 
     ArrayList<GetLeadTypeList.Data> getLeadTypeList;
     ArrayList<String> getLeadTypeNameList;
@@ -62,7 +63,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     ArrayList<MultiSelectModel> getLeadDripCampaignModelList;
     ArrayList<Integer> selectedDripIdsList = new ArrayList<>();
 
-    MultiSelectModel agentModel, dripModel;
+    MultiSelectModel tagModel, agentModel, dripModel;
 
     String bday, sBday, anniversary;
 
@@ -100,6 +101,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
     private void initListeners() {
 
+        bi.edtTags.setOnClickListener(this);
         bi.btnSave.setOnClickListener(this);
         bi.edtBday.setOnClickListener(this);
         bi.edtAgent.setOnClickListener(this);
@@ -112,7 +114,6 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
         bi.spnSource.setBackground(getDrawable(R.drawable.bg_search));
         bi.spnType.setBackground(getDrawable(R.drawable.bg_search));
-        bi.spnTags.setBackground(getDrawable(R.drawable.bg_search));
         bi.spnTimeFrame.setBackground(getDrawable(R.drawable.bg_search));
         bi.spnPreApprove.setBackground(getDrawable(R.drawable.bg_search));
 
@@ -121,7 +122,48 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         preAprrovedList.add("No");
 
         bi.spnPreApprove.setItems(preAprrovedList);
+    }
 
+    private void showTagsDialog() {
+
+        MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
+                .title("Select Tags") //setting title for dialog
+                .titleSize(25)
+                .positiveText("Done")
+                .negativeText("Cancel")
+                .setMinSelectionLimit(1)
+                .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
+                        //will return list of selected IDS
+                        selectedTagIdsList = new ArrayList<>();
+                        selectedTagIdsList = selectedIds;
+
+                        if(bi.lnTags.getChildCount() > 0) {
+                            bi.lnTags.removeAllViews();
+                        }
+
+                        for (String name : selectedNames) {
+                            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                            TextView textView = child.findViewById(R.id.txtDynamic);
+                            textView.setText(name);
+                            bi.lnTags.addView(child);
+                        }
+                        tagModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
+                        Log.e("DataString", dataString);
+                    }
+                    @Override
+                    public void onCancel() {
+                    }
+                });
+
+        if (selectedTagIdsList.size() != 0) {
+            multiSelectDialog.preSelectIDsList(selectedTagIdsList);
+            multiSelectDialog.multiSelectList(getLeadTagModelList);
+        } else {
+            multiSelectDialog.multiSelectList(getLeadTagModelList);
+        }
+        multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
 
     private void showAgentDialog() {
@@ -138,31 +180,24 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                         //will return list of selected IDS
                         selectedIdsList = new ArrayList<>();
                         selectedIdsList = selectedIds;
-                        if (bi.edtAgent.getAllPieceCount() != 0) {
-                            bi.edtAgent.reset();
-                            bi.edtAgent.setPadding(12, 0, 0, 0);
+                        if(bi.lnAgent.getChildCount() > 0) {
+                            bi.lnAgent.removeAllViews();
                         }
 
                         for (String name : selectedNames) {
 
-                            BabushkaText.Piece piece = new BabushkaText.Piece.Builder("- " + name + "\n")
-                                    .textColor(getResources().getColor(R.color.colorPrimaryDark))
-                                    .textSize(40)
-                                    .build();
-                            bi.edtAgent.addPiece(piece);
+                            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                            TextView textView = child.findViewById(R.id.txtDynamic);
+                            textView.setText(name);
+                            bi.lnAgent.addView(child);
                         }
-
                         agentModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
-                        bi.edtAgent.setPadding(12, 20, 0, 0);
-                        bi.edtAgent.display();
                     }
-
                     @Override
                     public void onCancel() {
                     }
                 });
-
         if (selectedIdsList.size() != 0) {
             multiSelectDialog.preSelectIDsList(selectedIdsList);
             multiSelectDialog.multiSelectList(searchListItems);
@@ -186,26 +221,20 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                         //will return list of selected IDS
                         selectedDripIdsList = new ArrayList<>();
                         selectedDripIdsList = selectedIds;
-                        if (bi.edtDripCompaign.getAllPieceCount() != 0) {
-                            bi.edtDripCompaign.reset();
-                            bi.edtDripCompaign.setPadding(12, 0, 0, 0);
+
+                        if(bi.lnDrip.getChildCount() > 0) {
+                            bi.lnDrip.removeAllViews();
                         }
 
                         for (String name : selectedNames) {
-
-                            BabushkaText.Piece piece = new BabushkaText.Piece.Builder("- " + name + "\n")
-                                    .textColor(getResources().getColor(R.color.colorPrimaryDark))
-                                    .textSize(40)
-                                    .build();
-                            bi.edtDripCompaign.addPiece(piece);
+                            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                            TextView textView = child.findViewById(R.id.txtDynamic);
+                            textView.setText(name);
+                            bi.lnDrip.addView(child);
                         }
-
                         dripModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
-                        bi.edtDripCompaign.setPadding(12, 20, 0, 0);
-                        bi.edtDripCompaign.display();
                     }
-
                     @Override
                     public void onCancel() {
                     }
@@ -217,9 +246,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         } else {
             multiSelectDialog.multiSelectList(getLeadDripCampaignModelList);
         }
-
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
-
     }
 
     private void callAddNewLead() {
@@ -281,7 +308,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         }
 
         JSONArray phoneArray = new JSONArray();
-        phoneArray.put(emailObject);
+        phoneArray.put(phoneObject);
 
         String emailList = emailArray.toString();
         String phoneList = phoneArray.toString();
@@ -352,15 +379,12 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     public void updateUI(GetLeadTagList response) {
 
         getLeadTagList = new ArrayList<>();
-        getLeadTagNameList = new ArrayList<>();
+        getLeadTagModelList = new ArrayList<>();
         getLeadTagList = response.data;
 
         for (GetLeadTagList.Data model : getLeadTagList) {
-            getLeadTagNameList.add(model.label);
+            getLeadTagModelList.add(new MultiSelectModel(model.id, model.label));
         }
-
-        bi.spnTags.setItems(getLeadTagNameList);
-
     }
 
     @Override
@@ -417,7 +441,12 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
     @Override
     public void updateUIonError(String error) {
-        ToastUtils.showToastLong(context, error);
+        if (error.contains("Authorization has been denied for this request")) {
+            ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+            logout();
+        } else {
+            ToastUtils.showToastLong(context, error);
+        }
     }
 
     @Override
@@ -442,6 +471,9 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
             case R.id.edtAgent:
                 showAgentDialog();
+                break;
+            case R.id.edtTags:
+                showTagsDialog();
                 break;
             case R.id.edtBday:
                 showDateDialog(bi.edtBday, "bday");

@@ -335,5 +335,4 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
         }
         super.detachView();
     }
-
 }

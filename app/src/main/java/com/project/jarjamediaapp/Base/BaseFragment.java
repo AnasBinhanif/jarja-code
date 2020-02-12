@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Interfaces.UpdateTitle;
 import com.project.jarjamediaapp.Utilities.EasyPreference;
 
@@ -125,6 +126,21 @@ public class BaseFragment extends Fragment {
     public void switchActivity(Context context, Class<? extends BaseActivity> activity) {
         Intent intent = new Intent(context, activity);
         startActivity(intent);
+    }
+
+    public void logout() {
+
+     /*   easyPreference.remove(GH.KEYS.USER_ID.name())
+                .remove(GH.KEYS.IS_LOGGED_IN.name())
+                .save();*/
+
+
+        //ToastUtils.showErrorToast(HomeActivity.this, "Session Expired", "Please Login Again");
+        easyPreference.clearAll().save();
+        switchActivity(getActivity(),LoginActivity.class);
+        getActivity().finishAffinity();
+        //  startActivity(new Intent(this, LandingPageActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+
     }
 
 

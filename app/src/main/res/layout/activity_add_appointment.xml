@@ -71,7 +71,7 @@
                         android:textSize="14dp"
                         android:textStyle="bold" />
 
-                    <com.project.jarjamediaapp.BabushkaText
+                    <TextView
                         android:id="@+id/edtAgent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -83,6 +83,17 @@
                         android:hint="@string/nothing_selected"
                         android:paddingLeft="12dp"
                         android:textSize="14dp" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fillViewport="true">
+                        <LinearLayout
+                            android:id="@+id/lnAgent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
+                    </HorizontalScrollView>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -258,6 +269,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="5dp"
+                        app:ms_hint="@string/reminder"
+                        app:ms_hint_color="@color/colorGreyTextDark"
                         android:background="@drawable/bg_search"
                         android:hint="@string/reminder"
                         android:gravity="left|center"
@@ -281,6 +294,8 @@
                         android:layout_marginTop="5dp"
                         android:background="@drawable/bg_search"
                         android:focusable="false"
+                        app:ms_hint="@string/via"
+                        app:ms_hint_color="@color/colorGreyTextDark"
                         android:focusableInTouchMode="false"
                         android:hint="@string/via"
                         android:gravity="left|center"
