@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
-import com.project.jarjamediaapp.BabushkaText;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -40,9 +39,11 @@ import com.project.jarjamediaapp.databinding.ActivityAddAppointmentBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import kotlin.Unit;
@@ -230,7 +231,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                         //will return list of selected IDS
                         selectedIdsList = new ArrayList<>();
                         selectedIdsList = selectedIds;
-                        if(bi.lnAgent.getChildCount() > 0) {
+                        if (bi.lnAgent.getChildCount() > 0) {
                             bi.lnAgent.removeAllViews();
                         }
 
@@ -256,7 +257,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         if (selectedIdsList.size() != 0) {
             multiSelectDialog.preSelectIDsList(selectedIdsList);
             multiSelectDialog.multiSelectList(searchListItems);
-        }else{
+        } else {
             multiSelectDialog.multiSelectList(searchListItems);
         }
 
@@ -295,14 +296,33 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         TimePickerDialog mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-
+                String time = "";
+                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:m:ss");
                 if (isStart) {
                     startTime = selectedHour + ":" + selectedMinute + ":00";
+
+                    Date d = null;
+                    try {
+                        d = dateFormat.parse(startTime);
+                        time = DateFormat.getTimeInstance(DateFormat.SHORT).format(d);
+                    } catch (ParseException e) {
+
+                        e.printStackTrace();
+                    }
+
+
                 } else {
                     endTime = selectedHour + ":" + selectedMinute + ":00";
+                    Date d = null;
+                    try {
+                        d = dateFormat.parse(endTime);
+                        time = DateFormat.getTimeInstance(DateFormat.SHORT).format(d);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
 
-                String time = DateFormat.getTimeInstance(DateFormat.SHORT).format(mcurrentTime.getTime());
+
                 textView.setText(time);
             }
         }, hour, minute, false);//Yes 24 hour time

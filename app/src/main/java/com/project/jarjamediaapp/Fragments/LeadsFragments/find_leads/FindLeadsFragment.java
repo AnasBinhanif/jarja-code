@@ -10,9 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,11 +18,15 @@ import com.project.jarjamediaapp.Activities.add_filters.AddFiltersActivity;
 import com.project.jarjamediaapp.Activities.all_leads.AllLeadsActivity;
 import com.project.jarjamediaapp.Base.BaseFragment;
 import com.project.jarjamediaapp.Models.GetFindLeads;
+import com.project.jarjamediaapp.Models.GetLeadCounts;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.FragmentFindleadsBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     FragmentFindleadsBinding bi;
     Context context;
     FindLeadsPresenter presenter;
+    ArrayList<GetLeadCounts.LeadsCount> getLeadCountList;
 
     public FindLeadsFragment() {
         // Required empty public constructor
@@ -68,8 +70,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     public void setupViews() {
 
         initViews();
-        populateListData();
-
+        callGetLeadCounts();
     }
 
     private void initViews() {
@@ -77,17 +78,80 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         bi.tvFilter.setOnClickListener(this);
     }
 
+    private void callGetLeadCounts() {
+
+        String leadID = "";
+        String spouseName = "";
+        String email = "";
+        String company = "";
+        String phone = "";
+        String address = "";
+        String city = "";
+        String state = "";
+        String county = "";
+        String zip = "";
+        String countryID = "";
+        String propertyType = "";
+        String timeFrameID = "";
+        String preApproval = "";
+        String houseToSell = "";
+        String agentID = "";
+        String leadTypeID = "";
+        String leadScoreMin = "";
+        String leadScoreMax = "";
+        String tagsID = "";
+        String priceMin = "";
+        String priceMax = "";
+        String notes = "";
+        String dripCompaignID = "";
+        String lastTouch = "";
+        String lastLogin = "";
+        String pipelineID = "";
+        String sourceID = "";
+        String fromDate = "";
+        String toDate = "";
+        String searchBy = "";
+        String firstNameAsc = "";
+        String lastNameAsc = "";
+        String emailAddressAsc = "";
+        String registeredDateAsc = "";
+        String lastLoginedInAsc = "";
+        String lastLoginedCountAsc = "";
+        String lastTouchedInAsc = "";
+        String conversationCellAsc = "";
+        String conversationEmailAsc = "";
+        String conversationMsgAsc = "";
+        String priceAsc = "";
+        String cityAsc = "";
+        String timeFrameAsc = "";
+        String activitiesSavedSearchAsc = "";
+        String activitiesViewAsc = "";
+        String activitiesFavoriteAsc = "";
+        String isSaveSearch = "false";
+        String isFilterClear = "false";
+        String resultSetType = "All";
+        String pageNo = "0";
+        String pageSize = "25";
+
+        presenter.getLeadCounts(leadID, spouseName, email, company, phone, address, city, state, county, zip, countryID, propertyType, timeFrameID, preApproval,
+                houseToSell, agentID, leadTypeID, leadScoreMin, leadScoreMax, tagsID, priceMin, priceMax, notes, dripCompaignID, lastTouch, lastLogin, pipelineID,
+                sourceID, fromDate, toDate, searchBy, firstNameAsc, lastNameAsc, emailAddressAsc, registeredDateAsc, lastLoginedInAsc, lastLoginedCountAsc,
+                lastTouchedInAsc, conversationCellAsc, conversationEmailAsc, conversationMsgAsc, priceAsc, cityAsc, timeFrameAsc, activitiesSavedSearchAsc,
+                activitiesViewAsc, activitiesFavoriteAsc, isSaveSearch, isFilterClear, resultSetType, pageNo, pageSize);
+
+    }
+
     private void populateListData() {
 
 
         List<GetFindLeads> leadsList = new ArrayList<>();
 
-        leadsList.add(new GetFindLeads("All Leads", "482"));
-        leadsList.add(new GetFindLeads("New Leads", "482"));
-        leadsList.add(new GetFindLeads("Hot Leads", "48"));
-        leadsList.add(new GetFindLeads("Active Clients", "4"));
-        leadsList.add(new GetFindLeads("Under Contract", "4802"));
-        leadsList.add(new GetFindLeads("Closed", "48"));
+        leadsList.add(new GetFindLeads("All Leads", getLeadCountList.get(0).allLeadsCount));
+        leadsList.add(new GetFindLeads("New Leads", getLeadCountList.get(0).newLeadsCount));
+        leadsList.add(new GetFindLeads("Hot Leads", getLeadCountList.get(0).hotLeadsCount));
+        leadsList.add(new GetFindLeads("Active Clients", getLeadCountList.get(0).activeLeadsCount));
+        leadsList.add(new GetFindLeads("Under Contract", getLeadCountList.get(0).underContractLeadsCount));
+        leadsList.add(new GetFindLeads("Closed", getLeadCountList.get(0).closeLeadsCount));
 
         bi.recyclerViewFindLeads.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         bi.recyclerViewFindLeads.setItemAnimator(new DefaultItemAnimator());
@@ -111,7 +175,29 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetFindLeads, Integer, Unit>) (viewComplainList, integer) -> {
 
-            switchActivity(getActivity(), AllLeadsActivity.class);
+            Map<String,String> map= new HashMap<>();
+            switch (integer){
+                case 0:
+                    map.put("resultType","All");
+                    break;
+                case 1:
+                    map.put("resultType","New Leads");
+                    break;
+                case 2:
+                    map.put("resultType","Hot Leads");
+                    break;
+                case 3:
+                    map.put("resultType","Active Clients");
+                    break;
+                case 4:
+                    map.put("resultType","Under Contract");
+                    break;
+                case 5:
+                    map.put("resultType","Closed Leads");
+                    break;
+            }
+
+            switchActivityWithIntentString(getActivity(), AllLeadsActivity.class,(HashMap<String, String>) map);
 
             return Unit.INSTANCE;
         });
@@ -119,20 +205,41 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
     }
 
-    public void ReplaceFragment(Fragment fragment, String title, boolean shouldAnimate, boolean addToStack) {
+    @Override
+    public void updateUI(GetLeadCounts response) {
+        getLeadCountList = new ArrayList<>();
+        getLeadCountList = response.data.leadsCount;
+        populateListData();
+    }
 
-        FragmentManager manager = getActivity().getSupportFragmentManager();
-        FragmentTransaction ft = manager.beginTransaction();
-        if (shouldAnimate) {
-            ft.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out, android.R.anim.fade_in,
-                    android.R.anim.fade_out);
+    @Override
+    public void updateUIonFalse(String message) {
+        ToastUtils.showToastLong(context, message);
+    }
+
+    @Override
+    public void updateUIonError(String error) {
+        if (error.contains("Authorization has been denied for this request")) {
+            ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+            logout();
+        } else {
+            ToastUtils.showToastLong(context, error);
         }
-        ft.replace(R.id.fragment_replacer, fragment, title);
-        if (addToStack) {
-            ft.addToBackStack(title);
-        }
-        ft.commitAllowingStateLoss();
+    }
+
+    @Override
+    public void updateUIonFailure() {
+        ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+    }
+
+    @Override
+    public void showProgressBar() {
+        GH.getInstance().ShowProgressDialog(context);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        GH.getInstance().HideProgressDialog(context);
     }
 
     @Override
