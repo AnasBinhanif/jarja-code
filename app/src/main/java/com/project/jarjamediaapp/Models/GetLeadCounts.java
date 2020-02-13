@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class GetAllLeads {
+public class GetLeadCounts {
 
     @SerializedName("status")
     @Expose
@@ -19,36 +19,38 @@ public class GetAllLeads {
 
 
     public class Data {
+
         @SerializedName("message")
         @Expose
         public Object message;
         @SerializedName("status")
         @Expose
         public Boolean status;
-        @SerializedName("leadsList")
+        @SerializedName("leadsCount")
         @Expose
-        public ArrayList<LeadsList> leadsList = null;
+        public ArrayList<LeadsCount> leadsCount = null;
+
     }
 
-    public class LeadsList {
+    public class LeadsCount {
 
-        @SerializedName("id")
+        @SerializedName("allLeadsCount")
         @Expose
-        public String id;
-        @SerializedName("resultSetType")
+        public String allLeadsCount;
+        @SerializedName("newLeadsCount")
         @Expose
-        public String resultSetType;
-        @SerializedName("firstName")
+        public String newLeadsCount;
+        @SerializedName("hotLeadsCount")
         @Expose
-        public String firstName;
-        @SerializedName("lastName")
+        public String hotLeadsCount;
+        @SerializedName("activeLeadsCount")
         @Expose
-        public String lastName;
-        @SerializedName("primaryPhone")
+        public String activeLeadsCount;
+        @SerializedName("underContractLeadsCount")
         @Expose
-        public String primaryPhone;
-        @SerializedName("primaryEmail")
+        public String underContractLeadsCount;
+        @SerializedName("closeLeadsCount")
         @Expose
-        public String primaryEmail;
+        public String closeLeadsCount;
     }
 }

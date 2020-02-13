@@ -6,8 +6,10 @@ import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
 import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
+import com.project.jarjamediaapp.Models.GetAllLeads;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
+import com.project.jarjamediaapp.Models.GetLeadCounts;
 import com.project.jarjamediaapp.Models.GetLeadDripCampaignList;
 import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
@@ -254,36 +256,4 @@ public interface ApiMethods {
             @Field("leadID") String leadID,
             @Field("countryid") String countryid
     );
-
-    @GET("Lead/GetAllOpenHouse")
-    Call<GetAllOpenHousesModel> getAllOpenHouses(@Header("Authorization") String authorization,
-                                                 @Query("type") String type);
-
-    @GET("Notification/GetTaskNotification")
-    Call<NotificationModel> getNotificationByTasks(@Header("Authorization") String authorization);
-
-    @GET("Notification/GetAppointmentNotification")
-    Call<NotificationModel> getNotificationByAppointments(@Header("Authorization") String authorization);
-
-    @GET("Notification/GetFollowUpNotification")
-    Call<NotificationModel> getNotificationByFollowUps(@Header("Authorization") String authorization);
-
-    @FormUrlEncoded
-    @POST("Lead/AddOpenHouse")
-    Call<BaseResponse> addOpenHouse(@Header("Authorization") String authorization,
-                                    @Field("listPrice") String listPrice,
-                                    @Field("city") String city,
-                                    @Field("address") String address,
-                                    @Field("state") String state,
-                                    @Field("zip") String zip,
-                                    @Field("image") String image,
-                                    @Field("openHouseDate") String openHouseDate,
-                                    @Field("openHouseEndDate") String openHouseEndDate);
-
-    @Multipart
-    @POST("Lead/UploadDocs")
-    Call<UploadImageModel> uploadFileToServer(@Header("Authorization") String authorization,
-                                              @Part MultipartBody.Part file);
-
-
 }

@@ -1,12 +1,11 @@
 package com.project.jarjamediaapp.Activities.all_leads;
 
-import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -23,7 +22,6 @@ import com.project.jarjamediaapp.databinding.ActivityAllleadsBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import kotlin.Unit;
@@ -36,6 +34,9 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     ActivityAllleadsBinding bi;
     Context context = AllLeadsActivity.this;
     AllLeadsPresenter presenter;
+    ArrayList<GetAllLeads.LeadsList> leadsList;
+    String mSearchQuery = "";
+    String resultSetType = "All";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,38 +46,100 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         presenter = new AllLeadsPresenter(this);
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.leads), true);
-        handleIntent(getIntent());
+
 
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
-
-    @Override
-    public void setupUI(View view) {
-        super.setupUI(view);
-
-
+    private void handleIntent() {
+        resultSetType = getIntent().getStringExtra("resultType");
     }
 
     @Override
     public void initViews() {
-        populateListData();
+        handleIntent();
+        callGetAllLeads();
+        bi.edtSearch.onActionViewExpanded();
+        bi.edtSearch.clearFocus();
+        bi.edtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mSearchQuery = newText;
+                ArrayList<GetAllLeads.LeadsList> filteredlist = filter(leadsList, newText);
+                populateListData(filteredlist);
+                return false;
+            }
+        });
     }
 
-    private void populateListData() {
+    private void callGetAllLeads() {
 
+        String leadID = "";
+        String spouseName = "";
+        String email = "";
+        String company = "";
+        String phone = "";
+        String address = "";
+        String city = "";
+        String state = "";
+        String county = "";
+        String zip = "";
+        String countryID = "";
+        String propertyType = "";
+        String timeFrameID = "";
+        String preApproval = "";
+        String houseToSell = "";
+        String agentID = "";
+        String leadTypeID = "";
+        String leadScoreMin = "";
+        String leadScoreMax = "";
+        String tagsID = "";
+        String priceMin = "";
+        String priceMax = "";
+        String notes = "";
+        String dripCompaignID = "";
+        String lastTouch = "";
+        String lastLogin = "";
+        String pipelineID = "";
+        String sourceID = "";
+        String fromDate = "";
+        String toDate = "";
+        String searchBy = "";
+        String firstNameAsc = "";
+        String lastNameAsc = "";
+        String emailAddressAsc = "";
+        String registeredDateAsc = "";
+        String lastLoginedInAsc = "";
+        String lastLoginedCountAsc = "";
+        String lastTouchedInAsc = "";
+        String conversationCellAsc = "";
+        String conversationEmailAsc = "";
+        String conversationMsgAsc = "";
+        String priceAsc = "";
+        String cityAsc = "";
+        String timeFrameAsc = "";
+        String activitiesSavedSearchAsc = "";
+        String activitiesViewAsc = "";
+        String activitiesFavoriteAsc = "";
+        String isSaveSearch = "false";
+        String isFilterClear = "false";
+        String pageNo = "0";
+        String resultType = resultSetType;
+        String pageSize = "25";
 
-        List<GetAllLeads> leadsList = new ArrayList<>();
+        presenter.getAllLeads(leadID, spouseName, email, company, phone, address, city, state, county, zip, countryID, propertyType, timeFrameID, preApproval,
+                houseToSell, agentID, leadTypeID, leadScoreMin, leadScoreMax, tagsID, priceMin, priceMax, notes, dripCompaignID, lastTouch, lastLogin, pipelineID,
+                sourceID, fromDate, toDate, searchBy, firstNameAsc, lastNameAsc, emailAddressAsc, registeredDateAsc, lastLoginedInAsc, lastLoginedCountAsc,
+                lastTouchedInAsc, conversationCellAsc, conversationEmailAsc, conversationMsgAsc, priceAsc, cityAsc, timeFrameAsc, activitiesSavedSearchAsc,
+                activitiesViewAsc, activitiesFavoriteAsc, isSaveSearch, isFilterClear, resultType, pageNo, pageSize);
 
-        leadsList.add(new GetAllLeads("Brendon", "(123) 456-1234", "Brendon@gmail.com"));
-        leadsList.add(new GetAllLeads("Brendon", "(123) 456-1234", "Brendon@gmail.com"));
-        leadsList.add(new GetAllLeads("Brendon", "(123) 456-1234", "Brendon@gmail.com"));
-        leadsList.add(new GetAllLeads("Brendon", "(123) 456-1234", "Brendon@gmail.com"));
-        leadsList.add(new GetAllLeads("Brendon", "(123) 456-1234", "Brendon@gmail.com"));
-        leadsList.add(new GetAllLeads("Brendon", "(123) 456-1234", "Brendon@gmail.com"));
+    }
+
+    private void populateListData(ArrayList<GetAllLeads.LeadsList> leadsList) {
 
         bi.recyclerViewAllLeads.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
@@ -84,26 +147,25 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
         recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail, R.id.tvInitial);
 
-        recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetAllLeads, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
+        recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetAllLeads.LeadsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
 
             TextView tvName = (TextView) integerMap.get(R.id.tvName);
-            tvName.setText(allLeadsList.getName());
-
             TextView tvPhone = (TextView) integerMap.get(R.id.tvPhone);
-            tvPhone.setText(allLeadsList.getPhone());
-
             TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
-            tvEmail.setText(allLeadsList.getEmail());
-
             TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
-            tvInitial.setText(allLeadsList.getName().substring(0, 2));
+
+            tvName.setText(allLeadsList.firstName + " " + allLeadsList.lastName);
+            tvPhone.setText(allLeadsList.primaryPhone);
+            tvEmail.setText(allLeadsList.primaryEmail);
+
+            tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1));
 
             return Unit.INSTANCE;
         });
 
         bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
 
-        recyclerAdapterUtil.addOnClickListener((Function2<GetAllLeads, Integer, Unit>) (viewComplainList, integer) -> {
+        recyclerAdapterUtil.addOnClickListener((Function2<GetAllLeads.LeadsList, Integer, Unit>) (viewComplainList, integer) -> {
 
             switchActivity(LeadDetailActivity.class);
 
@@ -113,32 +175,50 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        handleIntent(intent);
-        populateListData();
+    private ArrayList<GetAllLeads.LeadsList> filter(ArrayList<GetAllLeads.LeadsList> models, String query) {
+        query = query.toLowerCase();
+        final ArrayList<GetAllLeads.LeadsList> filteredModelList = new ArrayList<>();
+        if (query.equals("") | query.isEmpty()) {
+            filteredModelList.addAll(models);
+            return filteredModelList;
+        }
+
+        for (GetAllLeads.LeadsList model : models) {
+            final String name = model.firstName.toLowerCase() + " " + model.lastName.toLowerCase();
+            final String email = model.primaryEmail.toLowerCase();
+            final String phone = model.primaryPhone.toLowerCase();
+            if (name.contains(query) || email.contains(query) || phone.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+
+
+        return filteredModelList;
     }
 
-    private void handleIntent(Intent intent) {
+    @Override
+    public void updateUI(GetAllLeads response) {
 
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //use the query to search
+        leadsList = new ArrayList<>();
+        leadsList = response.data.leadsList;
+
+        if (leadsList.size() == 0) {
+            bi.lnAllLeads.setVisibility(View.GONE);
+            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+        } else {
+            bi.lnAllLeads.setVisibility(View.VISIBLE);
+            bi.tvNoRecordFound.setVisibility(View.GONE);
+            populateListData(leadsList);
         }
     }
 
     @Override
     public void updateUI(Response<BaseResponse> response) {
-
-
     }
 
     @Override
     public void updateUIonFalse(String message) {
-
         ToastUtils.showToastLong(context, message);
-
     }
 
     @Override
@@ -170,4 +250,8 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         GH.getInstance().HideProgressDialog(context);
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
 }

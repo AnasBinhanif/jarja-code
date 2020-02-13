@@ -179,6 +179,8 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
                     if (getAppointmentsModel.getStatus().equals("Success")) {
 
                         ToastUtils.showToast(context, "Successfully Done");
+                        mData.remove(pos);
+                        notifyDataSetChanged();
 
                     } else {
 

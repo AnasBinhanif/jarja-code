@@ -12,13 +12,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+
+        <TextView
+            android:id="@+id/tvNoRecordFound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Record Found"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_centerInParent="true"/>
+
         <LinearLayout
+            android:id="@+id/lnAllLeads"
             android:layout_width="match_parent"
+            android:visibility="visible"
             android:layout_height="match_parent"
             android:layout_below="@id/ep_toolbar"
             android:orientation="vertical">
 
-            <EditText
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/edtSearch"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -28,7 +42,7 @@
                 android:gravity="center|left"
                 android:drawablePadding="10dp"
                 android:drawableLeft="@drawable/ic_search"
-                android:hint="@string/search" />
+                android:queryHint="@string/search" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewAllLeads"
@@ -38,6 +52,8 @@
                 android:layout_marginTop="2dp"
                 android:nestedScrollingEnabled="false"
                 android:visibility="visible" />
+
+
 
 
         </LinearLayout>

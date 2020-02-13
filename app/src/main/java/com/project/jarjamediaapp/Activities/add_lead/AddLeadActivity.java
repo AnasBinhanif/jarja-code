@@ -312,7 +312,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String emailList = emailArray.toString();
         String phoneList = phoneArray.toString();
 
-        if (firstName.equals("") || lastName.equals("") || spousname.equals("") || company.equals("") || cellPhone.equals("")) {
+        if (firstName.equals("") && lastName.equals("") && spousname.equals("") && company.equals("") && cellPhone.equals("")) {
             ToastUtils.showToast(context, getString(R.string.errSinglePiece));
         } else if (selectedIdsList.size() == 0) {
             ToastUtils.showToast(context, getString(R.string.errSelectAgent));

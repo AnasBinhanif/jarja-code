@@ -23,6 +23,8 @@ import com.project.jarjamediaapp.Interfaces.UpdateTitle;
 import com.project.jarjamediaapp.Utilities.EasyPreference;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BaseFragment extends Fragment {
 
@@ -125,6 +127,13 @@ public class BaseFragment extends Fragment {
 
     public void switchActivity(Context context, Class<? extends BaseActivity> activity) {
         Intent intent = new Intent(context, activity);
+        startActivity(intent);
+    }
+
+    public void switchActivityWithIntentString(Context context,Class<? extends BaseActivity> activity, HashMap<String, String> map) {
+        Intent intent = new Intent(context, activity);
+        for (HashMap.Entry<String, String> entry : map.entrySet())
+            intent.putExtra(entry.getKey(), entry.getValue());
         startActivity(intent);
     }
 
