@@ -176,7 +176,7 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
-                    if (getAppointmentsModel.status.equals("Success")) {
+                    if (getAppointmentsModel.getStatus().equals("Success")) {
 
                         ToastUtils.showToast(context, "Successfully Done");
 

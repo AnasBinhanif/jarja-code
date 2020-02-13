@@ -1,12 +1,20 @@
 package com.project.jarjamediaapp.Utilities;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.net.Uri;
+import android.webkit.MimeTypeMap;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.project.jarjamediaapp.ProjectApplication;
 
+import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class GH {
@@ -60,6 +68,38 @@ public class GH {
             hud.dismiss();
         }
 
+    }
+
+    public String formatDate(String dateString) {
+
+        Date date;
+        String formattedDate = "";
+        try {
+
+            // 2020-02-12T11:31:00
+            date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(dateString);
+            formattedDate = new SimpleDateFormat("dd/MM/YYYY h:mm a", Locale.getDefault()).format(date);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return formattedDate;
+    }
+
+    public String getMimeType(Context context, Uri uri) {
+        String extension;
+        //Check uri format to avoid null
+        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            //If scheme is a content
+            final MimeTypeMap mime = MimeTypeMap.getSingleton();
+            extension = mime.getExtensionFromMimeType(context.getContentResolver().getType(uri));
+        } else {
+            //If scheme is a File
+            //This will replace white spaces with %20 and also other special characters. This will avoid returning null values on file name with spaces and special characters.
+            extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(new File(uri.getPath())).toString());
+        }
+        return extension;
     }
 
     public Map<String,Integer> getArrayReminder(){

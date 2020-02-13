@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".ProjectApplication"
@@ -27,7 +30,8 @@
                 android:name="android.app.default_searchable"
                 android:value=".Activities.all_leads.AllLeadsActivity" />
         </activity>
-        <activity android:name=".Activities.forgot_password.ForgotPasswordActivity"
+        <activity
+            android:name=".Activities.forgot_password.ForgotPasswordActivity"
             android:windowSoftInputMode="adjustResize"></activity>
         <activity android:name=".Activities.add_appointment.AddAppointmentActivity"></activity>
         <activity android:name=".Activities.add_task.AddTaskActivity"></activity>
@@ -40,7 +44,7 @@
         <activity android:name=".Activities.tasks.TasksActivity"></activity>
         <activity android:name=".Activities.listing_info.ListingInfoActivity"></activity>
         <activity android:name=".Activities.social_profiles.Social_ProfilesActivity"></activity>
-        <activity android:name=".Activities.open_houses.Open_HousesActivity"></activity>
+        <activity android:name=".Activities.open_houses.OpenHousesActivity"></activity>
         <activity android:name=".Activities.calendar.CalendarActivity"></activity>
         <activity android:name=".Activities.tags.TagsActivity"></activity>
         <activity android:name=".Activities.notes.NotesActivity"></activity>
@@ -61,8 +65,7 @@
 
         <activity
             android:name=".Activities.login.LoginActivity"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
+            android:windowSoftInputMode="adjustResize"></activity>
 
         <meta-data
             android:name="preloaded_fonts"

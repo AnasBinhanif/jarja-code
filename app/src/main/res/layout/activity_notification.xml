@@ -78,11 +78,12 @@
 
 
                 <TextView
-                    android:id="@+id/tvNoRecordFound"
+                    android:id="@+id/tvMessage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/colorWhite"
                     android:gravity="center"
+                    android:layout_margin="@dimen/_15sdp"
                     android:visibility="gone"
                     android:layout_centerInParent="true"
                     android:text="No Record Found"
@@ -90,26 +91,10 @@
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerTasks"
+                    android:id="@+id/rvNotifications"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:nestedScrollingEnabled="false"
-                    android:visibility="visible" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewAppointments"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:nestedScrollingEnabled="false"
-                    android:visibility="gone" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewFollowUps"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_margin="@dimen/_15sdp"
                     android:nestedScrollingEnabled="false"
                     android:visibility="gone" />
 

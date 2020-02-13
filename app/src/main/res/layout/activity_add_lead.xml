@@ -120,6 +120,7 @@
                         android:textSize="14dp"
                         android:textStyle="bold" />
 
+
                     <EditText
                         android:id="@+id/edtPhone"
                         android:layout_width="match_parent"
@@ -128,10 +129,9 @@
                         android:background="@drawable/bg_search"
                         android:hint="@string/cell_phone"
                         android:inputType="number"
-                        android:textColor="@color/colorPrimaryDark"
                         android:paddingLeft="12dp"
+                        android:textColor="@color/colorPrimaryDark"
                         android:textSize="14dp" />
-
 
                     <TextView
                         android:layout_width="wrap_content"

@@ -1,6 +1,5 @@
 package com.project.jarjamediaapp.Activities.calendar;
 
-import com.project.jarjamediaapp.Activities.open_houses.Open_HousesContract;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
 

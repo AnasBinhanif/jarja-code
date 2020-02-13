@@ -1,6 +1,9 @@
 package com.project.jarjamediaapp.Networking;
 
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
+import com.project.jarjamediaapp.Activities.notification.NotificationModel;
+import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
+import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
@@ -16,12 +19,15 @@ import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface ApiMethods {
@@ -248,4 +254,36 @@ public interface ApiMethods {
             @Field("leadID") String leadID,
             @Field("countryid") String countryid
     );
+
+    @GET("Lead/GetAllOpenHouse")
+    Call<GetAllOpenHousesModel> getAllOpenHouses(@Header("Authorization") String authorization,
+                                                 @Query("type") String type);
+
+    @GET("Notification/GetTaskNotification")
+    Call<NotificationModel> getNotificationByTasks(@Header("Authorization") String authorization);
+
+    @GET("Notification/GetAppointmentNotification")
+    Call<NotificationModel> getNotificationByAppointments(@Header("Authorization") String authorization);
+
+    @GET("Notification/GetFollowUpNotification")
+    Call<NotificationModel> getNotificationByFollowUps(@Header("Authorization") String authorization);
+
+    @FormUrlEncoded
+    @POST("Lead/AddOpenHouse")
+    Call<BaseResponse> addOpenHouse(@Header("Authorization") String authorization,
+                                    @Field("listPrice") String listPrice,
+                                    @Field("city") String city,
+                                    @Field("address") String address,
+                                    @Field("state") String state,
+                                    @Field("zip") String zip,
+                                    @Field("image") String image,
+                                    @Field("openHouseDate") String openHouseDate,
+                                    @Field("openHouseEndDate") String openHouseEndDate);
+
+    @Multipart
+    @POST("Lead/UploadDocs")
+    Call<UploadImageModel> uploadFileToServer(@Header("Authorization") String authorization,
+                                              @Part MultipartBody.Part file);
+
+
 }

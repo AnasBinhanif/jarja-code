@@ -1,10 +1,8 @@
 package com.project.jarjamediaapp.Activities.add_appointment;
 
-import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordContract;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
-import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
@@ -84,7 +82,7 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
-                    if (getAppointmentsModel.status.equals("Success")) {
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
 
                         _view.updateUI(response);
 

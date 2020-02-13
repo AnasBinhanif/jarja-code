@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
-import com.project.jarjamediaapp.BabushkaText;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -134,7 +133,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     @Override
     public void updateUI(Response<BaseResponse> response) {
 
-        if (response.body().getStatus().equals("Success")) {
+        if (response.body().getStatus().equalsIgnoreCase("Success")) {
             ToastUtils.showToast(context, "Added Successfully");
             finish();
         }

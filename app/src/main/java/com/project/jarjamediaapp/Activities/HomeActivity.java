@@ -28,7 +28,7 @@ import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
 import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
 import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
-import com.project.jarjamediaapp.Activities.open_houses.Open_HousesActivity;
+import com.project.jarjamediaapp.Activities.open_houses.OpenHousesActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Fragments.DashboardFragments.TabsFragment;
 import com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads.FindLeadsFragment;
@@ -212,7 +212,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_open_house:
                 title = getResources().getString(R.string.openHouses);
                 fragment = null;
-                switchActivity(Open_HousesActivity.class);
+                switchActivity(OpenHousesActivity.class);
                 break;
             case R.id.nav_tasks:
                 fragment = null;

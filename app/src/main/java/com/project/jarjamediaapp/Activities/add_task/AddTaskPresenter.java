@@ -84,7 +84,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
-                    if (getAppointmentsModel.status.equals("Success")) {
+                    if (response.body().getStatus().equals("Success")) {
 
                         _view.updateUI(response);
 

@@ -104,4 +104,9 @@
         <item name="android:windowMinWidthMinor">85%</item>
     </style>
 
+    <style name="ClickableImageView">
+        <item name="android:clickable">true</item>
+        <item name="android:background">?android:selectableItemBackground</item>
+    </style>
+
 </resources>

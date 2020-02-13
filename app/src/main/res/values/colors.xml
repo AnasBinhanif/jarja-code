@@ -18,4 +18,8 @@
     <color name="colorTitle">#1A273F</color>
     <color name="colorCRMYellow">#b39617</color>
     <color name="colorMateGreen">#218f82</color>
+    <color name="grayIconTint">#727272</color>
+    <color name="galleryCurrentItemOverlay">@android:color/transparent</color>
+    <color name="galleryItemOverlay">#cc000000</color>
+    <color name="colorDivider">#737373</color>
 </resources>
