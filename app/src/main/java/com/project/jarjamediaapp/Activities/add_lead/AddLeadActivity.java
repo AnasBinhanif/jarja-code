@@ -65,6 +65,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
     MultiSelectModel tagModel, agentModel, dripModel;
 
+    String agentIdsString="",tagsIdsString="",dripIdsString="";
+
     String bday, sBday, anniversary;
 
     @Override
@@ -149,9 +151,25 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                             textView.setText(name);
                             bi.lnTags.addView(child);
                         }
+
+                        for (Integer i : selectedIds){
+                            if (tagsIdsString.equals(""))
+                            {
+                                tagsIdsString= String.valueOf(i);
+                            }else{
+                                tagsIdsString =tagsIdsString+ "," + i;
+                            }
+                        }
+
                         tagModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
                     }
+
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+
+                    }
+
                     @Override
                     public void onCancel() {
                     }
@@ -185,15 +203,33 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                         }
 
                         for (String name : selectedNames) {
-
                             View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
                             TextView textView = child.findViewById(R.id.txtDynamic);
                             textView.setText(name);
                             bi.lnAgent.addView(child);
                         }
+
                         agentModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
                     }
+
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+
+                        if (selectedEncyrptedIds!=null || selectedEncyrptedIds.size()!=0) {
+                            for (String i : selectedEncyrptedIds) {
+
+                                if (agentIdsString.equals("")) {
+                                    agentIdsString = i;
+                                } else {
+                                    agentIdsString = agentIdsString + "," + i;
+                                }
+                            }
+                        }else{
+                            ToastUtils.showToast(context,"No EncryptedID Found");
+                        }
+                    }
+
                     @Override
                     public void onCancel() {
                     }
@@ -232,9 +268,24 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                             textView.setText(name);
                             bi.lnDrip.addView(child);
                         }
+                        for (Integer i : selectedIds){
+                            if (dripIdsString.equals(""))
+                            {
+                                dripIdsString= String.valueOf(i);
+                            }else{
+                                dripIdsString =dripIdsString+ "," + i;
+                            }
+                        }
+
                         dripModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
                     }
+
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+
+                    }
+
                     @Override
                     public void onCancel() {
                     }
@@ -262,9 +313,9 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String isBirthDayNotify = bi.chkBdayNotify.isChecked() ? "true" : "false";
         String dateOfMarriage = anniversary;
         String isAnniversaryNotify = bi.chkAnnivNotify.isChecked() ? "true" : "false";
-        String leadAgentIDs = agentModel == null ? "" : String.valueOf(agentModel.getId());
-        String allAgentIds = agentModel == null ? "" : String.valueOf(agentModel.getId());
-        String alldripcampaignids = "";
+        String leadAgentIDs = agentIdsString;//selectedIdsList.size() == 0 ? "" : agentIdsString ;
+        String allAgentIds = agentIdsString;//agentModel == null ? "" : String.valueOf(agentModel.getId());
+        String alldripcampaignids = dripIdsString;
         String notes = bi.edtNotes.getText().toString();
         String b_PreQual = "";
         String address = bi.edtAddress1.getText().toString();
@@ -273,14 +324,14 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String city = bi.edtCity1.getText().toString();
         String state = bi.edtState1.getText().toString();
         String description = "";
-        String source = "";
+        String source = bi.spnSource.isSelected() ? String.valueOf(getLeadSourceList.get(bi.spnSource.getSelectedIndex()).sourceid) :"";
         String county = bi.edtCountry.getText().toString();
-        String timeFrameId = "";
+        String timeFrameId = bi.spnTimeFrame.isSelected() ? getLeadTimeFrameList.get(bi.spnTimeFrame.getSelectedIndex()).timeFrameId : "";
         String state2 = bi.edtState2.getText().toString();
         String city2 = bi.edtCity2.getText().toString();
         String zipcode2 = bi.edtPostalCode2.getText().toString();
-        String leadTypeID = "";
-        String labelsID = "";
+        String leadTypeID = bi.spnType.isSelected() ? getLeadTypeList.get(bi.spnType.getSelectedIndex()).id : "";
+        String labelsID = tagsIdsString;
         String leadStringID = "";
         String leadID = "0";
         String countryid = "";
@@ -356,9 +407,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         searchListItems = new ArrayList<>();
         agentList = response.data;
         for (GetAgentsModel.Data model : agentList) {
-            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName));
+            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName,model.encryptedAgentID));
         }
-
     }
 
     @Override

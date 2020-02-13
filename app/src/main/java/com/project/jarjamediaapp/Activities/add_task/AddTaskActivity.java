@@ -63,7 +63,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
     ArrayList<MultiSelectModel> searchListItems;
     String startDate, endDate, reminder, leadId, agentId;
-
+    String agentIdsString="";
     MultiSelectModel agentModel;
 
     @Override
@@ -99,9 +99,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         searchListItems = new ArrayList<>();
         agentList = response.data;
         for (GetAgentsModel.Data model : agentList) {
-            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName));
+            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName,model.encryptedAgentID));
         }
-
     }
 
     @Override
@@ -206,6 +205,24 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                         }
                         agentModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
+                    }
+
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+
+
+                        if (selectedEncyrptedIds!=null || selectedEncyrptedIds.size()!=0) {
+                            for (String i : selectedEncyrptedIds) {
+
+                                if (agentIdsString.equals("")) {
+                                    agentIdsString = i;
+                                } else {
+                                    agentIdsString = agentIdsString + "," + i;
+                                }
+                            }
+                        }else{
+                            ToastUtils.showToast(context,"No EncryptedID Found");
+                        }
                     }
 
                     @Override

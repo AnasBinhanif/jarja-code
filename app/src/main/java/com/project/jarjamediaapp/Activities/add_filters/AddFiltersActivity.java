@@ -58,6 +58,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
     MultiSelectModel tagModel, agentModel, dripModel, sourceModel;
 
+    String agentIdsString="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +130,11 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                     }
 
                     @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+
+                    }
+
+                    @Override
                     public void onCancel() {
                     }
                 });
@@ -166,8 +173,25 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                             textView.setText(name);
                             bi.lnAgents.addView(child);
                         }
+
                         agentModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
+                    }
+
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+
+                        for (String i : selectedEncyrptedIds){
+
+                            if (agentIdsString.equals(""))
+                            {
+                                agentIdsString= String.valueOf(i);
+                            }else{
+                                agentIdsString= agentIdsString+","+i;
+                            }
+
+                        }
+
                     }
 
                     @Override
@@ -213,6 +237,11 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                     }
 
                     @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+
+                    }
+
+                    @Override
                     public void onCancel() {
                     }
                 });
@@ -253,6 +282,11 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                         }
                         sourceModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
+                    }
+
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+
                     }
 
                     @Override

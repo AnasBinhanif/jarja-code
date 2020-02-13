@@ -67,6 +67,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     ArrayList<GetLeadTitlesModel.Data> nameList = new ArrayList<>();
 
     String startDate, endDate, startTime, endTime, via, reminder, leadId, isAllDay = "false";
+    String agentIdsString="";
     MultiSelectModel agentModel;
 
     @Override
@@ -147,7 +148,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         searchListItems = new ArrayList<>();
         agentList = response.data;
         for (GetAgentsModel.Data model : agentList) {
-            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName));
+            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName,model.encryptedAgentID));
         }
     }
 
@@ -244,8 +245,26 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
                         }
 
-                        agentModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
+
+                       // agentModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
+                    }
+
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+
+                        if (selectedEncyrptedIds!=null || selectedEncyrptedIds.size()!=0) {
+                            for (String i : selectedEncyrptedIds) {
+
+                                if (agentIdsString.equals("")) {
+                                    agentIdsString = i;
+                                } else {
+                                    agentIdsString = agentIdsString + "," + i;
+                                }
+                            }
+                        }else{
+                            ToastUtils.showToast(context,"No EncryptedID Found");
+                        }
                     }
 
                     @Override
@@ -333,7 +352,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     private void callAddAppointment() {
 
         String leadStringID = leadId + "";
-        String agentsID = agentModel.getId() + "";
+        String agentsID = agentIdsString;
         String leadAppoinmentID = "0";
         String eventTitle = bi.edtEventTitle.getText().toString() + "";
         String location = bi.edtLocation.getText().toString() + "";

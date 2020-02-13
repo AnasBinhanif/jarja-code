@@ -231,6 +231,7 @@ public class MultiSelectDialog extends AppCompatDialogFragment implements Search
 
                     if(submitCallbackListener !=null) {
                         submitCallbackListener.onSelected(callBackListOfIds, getSelectNameList(), getSelectedDataString());
+                        submitCallbackListener.onSelected(callBackListOfIds, getSelectNameList(),getSelectedEncrypted(), getSelectedDataString());
                     }
                     dismiss();
                 } else {
@@ -303,6 +304,16 @@ public class MultiSelectDialog extends AppCompatDialogFragment implements Search
         return names;
     }
 
+    private ArrayList<String> getSelectedEncrypted() {
+        ArrayList<String> names = new ArrayList<>();
+        for(int i=0;i<tempMainListOfAdapter.size();i++){
+            if(checkForSelection(tempMainListOfAdapter.get(i).getId())){
+                names.add(tempMainListOfAdapter.get(i).getEncyptedIDs());
+            }
+        }
+        return names;
+    }
+
     private boolean checkForSelection(Integer id) {
         for (int i = 0; i < MultiSelectDialog.selectedIdsForCallback.size(); i++) {
             if (id.equals(MultiSelectDialog.selectedIdsForCallback.get(i))) {
@@ -318,6 +329,7 @@ public class MultiSelectDialog extends AppCompatDialogFragment implements Search
 
     public interface SubmitCallbackListener {
         void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String commonSeperatedData);
+        void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames,ArrayList<String> selectedEncyrptedIds, String commonSeperatedData);
         void onCancel();
     }
 
