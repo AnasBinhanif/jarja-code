@@ -1,15 +1,12 @@
 package com.project.jarjamediaapp.Networking;
 
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
-import com.project.jarjamediaapp.Activities.notification.NotificationModel;
 import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
 import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
-import com.project.jarjamediaapp.Models.GetAllLeads;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
-import com.project.jarjamediaapp.Models.GetLeadCounts;
 import com.project.jarjamediaapp.Models.GetLeadDripCampaignList;
 import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
@@ -256,4 +253,24 @@ public interface ApiMethods {
             @Field("leadID") String leadID,
             @Field("countryid") String countryid
     );
+
+    @GET("Lead/GetAllOpenHouse")
+    Call<GetAllOpenHousesModel> getAllOpenHouses(@Header("Authorization") String authorization, @Query("type") String type);
+
+    @Multipart
+    @POST("Lead/UploadDoc")
+    Call<UploadImageModel> uploadFileToServer(@Header("Authorization") String authorization, @Part MultipartBody.Part file);
+
+    @FormUrlEncoded
+    @POST("Lead/AddOpenHouse")
+    Call<BaseResponse> addOpenHouse(@Header("Authorization") String authorization,
+                                    @Field("listPrice") String listPrice,
+                                    @Field("city") String city,
+                                    @Field("address") String address,
+                                    @Field("state") String state,
+                                    @Field("zip") String zip,
+                                    @Field("image") String image,
+                                    @Field("openHouseDate") String openHouseDate,
+                                    @Field("openHouseEndDate") String openHouseEndDate);
+
 }
