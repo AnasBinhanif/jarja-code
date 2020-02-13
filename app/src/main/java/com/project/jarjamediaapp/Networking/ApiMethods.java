@@ -1,12 +1,12 @@
 package com.project.jarjamediaapp.Networking;
 
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
+import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
+import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
-import com.project.jarjamediaapp.Models.GetAllLeads;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
-import com.project.jarjamediaapp.Models.GetLeadCounts;
 import com.project.jarjamediaapp.Models.GetLeadDripCampaignList;
 import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
@@ -18,12 +18,15 @@ import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface ApiMethods {
@@ -67,7 +70,7 @@ public interface ApiMethods {
     @POST("Appointment/MarkComplete")
     Call<BaseResponse> MarkComplete(
             @Header("Authorization") String authorization,
-            @Field("encryptedLeadAppoinmentID") String leadAppoinmentID
+            @Field("leadAppoinmentID") String leadAppoinmentID
     );
 
     @GET("FollowUp/GetDueFollowUps")
@@ -251,119 +254,23 @@ public interface ApiMethods {
             @Field("countryid") String countryid
     );
 
-    @FormUrlEncoded
-    @POST("Lead/GetLeadCounts")
-    Call<GetLeadCounts> GetLeadCounts(
-            @Header("Authorization") String authorization,
-            @Field("leadID") String leadID,
-            @Field("spouseName") String spouseName,
-            @Field("email") String email,
-            @Field("company") String company,
-            @Field("phone") String phone,
-            @Field("address") String address,
-            @Field("city") String city,
-            @Field("state") String state,
-            @Field("county") String county,
-            @Field("zip") String zip,
-            @Field("countryID") String countryID,
-            @Field("propertyType") String propertyType,
-            @Field("timeFrameID") String timeFrameID,
-            @Field("preApproval") String preApproval,
-            @Field("houseToSell") String houseToSell,
-            @Field("agentID") String agentID,
-            @Field("leadTypeID") String leadTypeID,
-            @Field("leadScoreMin") String leadScoreMin,
-            @Field("leadScoreMax") String leadScoreMax,
-            @Field("tagsID") String tagsID,
-            @Field("priceMin") String priceMin,
-            @Field("priceMax") String priceMax,
-            @Field("notes") String notes,
-            @Field("dripCompaignID") String dripCompaignID,
-            @Field("lastTouch") String lastTouch,
-            @Field("lastLogin") String lastLogin,
-            @Field("pipelineID") String pipelineID,
-            @Field("sourceID") String sourceID,
-            @Field("fromDate") String fromDate,
-            @Field("toDate") String toDate,
-            @Field("searchBy") String searchBy,
-            @Field("firstNameAsc") String firstNameAsc,
-            @Field("lastNameAsc") String lastNameAsc,
-            @Field("emailAddressAsc") String emailAddressAsc,
-            @Field("registeredDateAsc") String registeredDateAsc,
-            @Field("lastLoginedInAsc") String lastLoginedInAsc,
-            @Field("lastLoginedCountAsc") String lastLoginedCountAsc,
-            @Field("lastTouchedInAsc") String lastTouchedInAsc,
-            @Field("conversationCellAsc") String conversationCellAsc,
-            @Field("conversationEmailAsc") String conversationEmailAsc,
-            @Field("conversationMsgAsc") String conversationMsgAsc,
-            @Field("priceAsc") String priceAsc,
-            @Field("cityAsc") String cityAsc,
-            @Field("timeFrameAsc") String timeFrameAsc,
-            @Field("activitiesSavedSearchAsc") String activitiesSavedSearchAsc,
-            @Field("activitiesViewAsc") String activitiesViewAsc,
-            @Field("activitiesFavoriteAsc") String activitiesFavoriteAsc,
-            @Field("isSaveSearch") String isSaveSearch,
-            @Field("isFilterClear") String isFilterClear,
-            @Field("resultSetType") String resultSetType,
-            @Field("pageNo") String pageNo,
-            @Field("pageSize") String pageSize
-    );
+    @GET("Lead/GetAllOpenHouse")
+    Call<GetAllOpenHousesModel> getAllOpenHouses(@Header("Authorization") String authorization, @Query("type") String type);
+
+    @Multipart
+    @POST("Lead/UploadDoc")
+    Call<UploadImageModel> uploadFileToServer(@Header("Authorization") String authorization, @Part MultipartBody.Part file);
 
     @FormUrlEncoded
-    @POST("Lead/GetAllLead")
-    Call<GetAllLeads> GetAllLead(
-            @Header("Authorization") String authorization,
-            @Field("leadID") String leadID,
-            @Field("spouseName") String spouseName,
-            @Field("email") String email,
-            @Field("company") String company,
-            @Field("phone") String phone,
-            @Field("address") String address,
-            @Field("city") String city,
-            @Field("state") String state,
-            @Field("county") String county,
-            @Field("zip") String zip,
-            @Field("countryID") String countryID,
-            @Field("propertyType") String propertyType,
-            @Field("timeFrameID") String timeFrameID,
-            @Field("preApproval") String preApproval,
-            @Field("houseToSell") String houseToSell,
-            @Field("agentID") String agentID,
-            @Field("leadTypeID") String leadTypeID,
-            @Field("leadScoreMin") String leadScoreMin,
-            @Field("leadScoreMax") String leadScoreMax,
-            @Field("tagsID") String tagsID,
-            @Field("priceMin") String priceMin,
-            @Field("priceMax") String priceMax,
-            @Field("notes") String notes,
-            @Field("dripCompaignID") String dripCompaignID,
-            @Field("lastTouch") String lastTouch,
-            @Field("lastLogin") String lastLogin,
-            @Field("pipelineID") String pipelineID,
-            @Field("sourceID") String sourceID,
-            @Field("fromDate") String fromDate,
-            @Field("toDate") String toDate,
-            @Field("searchBy") String searchBy,
-            @Field("firstNameAsc") String firstNameAsc,
-            @Field("lastNameAsc") String lastNameAsc,
-            @Field("emailAddressAsc") String emailAddressAsc,
-            @Field("registeredDateAsc") String registeredDateAsc,
-            @Field("lastLoginedInAsc") String lastLoginedInAsc,
-            @Field("lastLoginedCountAsc") String lastLoginedCountAsc,
-            @Field("lastTouchedInAsc") String lastTouchedInAsc,
-            @Field("conversationCellAsc") String conversationCellAsc,
-            @Field("conversationEmailAsc") String conversationEmailAsc,
-            @Field("conversationMsgAsc") String conversationMsgAsc,
-            @Field("priceAsc") String priceAsc,
-            @Field("cityAsc") String cityAsc,
-            @Field("timeFrameAsc") String timeFrameAsc,
-            @Field("activitiesSavedSearchAsc") String activitiesSavedSearchAsc,
-            @Field("activitiesViewAsc") String activitiesViewAsc,
-            @Field("activitiesFavoriteAsc") String activitiesFavoriteAsc,
-            @Field("isSaveSearch") String isSaveSearch,
-            @Field("isFilterClear") String isFilterClear,
-            @Field("resultSetType") String resultSetType,
-            @Field("pageNo") String pageNo,
-            @Field("pageSize") String pageSize
-    );
+    @POST("Lead/AddOpenHouse")
+    Call<BaseResponse> addOpenHouse(@Header("Authorization") String authorization,
+                                    @Field("listPrice") String listPrice,
+                                    @Field("city") String city,
+                                    @Field("address") String address,
+                                    @Field("state") String state,
+                                    @Field("zip") String zip,
+                                    @Field("image") String image,
+                                    @Field("openHouseDate") String openHouseDate,
+                                    @Field("openHouseEndDate") String openHouseEndDate);
+
 }

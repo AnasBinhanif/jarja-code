@@ -286,7 +286,7 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
-                    if (getAppointmentsModel.status.equals("Success")) {
+                    if (getAppointmentsModel.getStatus().equals("Success")) {
 
                         _view.updateUI(response);
 

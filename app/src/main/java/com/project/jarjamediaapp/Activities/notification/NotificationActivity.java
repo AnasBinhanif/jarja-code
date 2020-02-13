@@ -11,11 +11,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.airbnb.paris.Paris;
-import com.project.jarjamediaapp.Activities.listing_info.ListingInfoContract;
-import com.project.jarjamediaapp.Activities.listing_info.ListingInfoPresenter;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
-import com.project.jarjamediaapp.Models.GetNotifications;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -30,61 +27,50 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function4;
 import retrofit2.Response;
 
-public class NotificationActivity extends BaseActivity implements ListingInfoContract.View {
+public class NotificationActivity extends BaseActivity implements NotificationContract.View {
 
     ActivityNotificationBinding bi;
     Context context = NotificationActivity.this;
-    ListingInfoPresenter presenter;
-    public static List<GetNotifications> leadsList;
+    NotificationPresenter presenter;
+    List<NotificationModel.Data> notificationList;
+    RecyclerAdapterUtil recyclerAdapterUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         bi = DataBindingUtil.setContentView(this, R.layout.activity_notification);
-        presenter = new ListingInfoPresenter(this);
+        presenter = new NotificationPresenter(this);
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, "Notifications", true);
     }
 
     private void populateListData() {
 
-        List<GetNotifications> leadsList = new ArrayList<>();
-
-        leadsList.add(new GetNotifications("Ariana Call today for ", "LeadName: Jared", "Contact : (123)456-1234", "Email : abc@xyz.com"));
-        leadsList.add(new GetNotifications("Ariana Call today for ", "LeadName: Jared", "Contact : (123)456-1234", "Email : abc@xyz.com"));
-        leadsList.add(new GetNotifications("Ariana Call today for ", "LeadName: Jared", "Contact : (123)456-1234", "Email : abc@xyz.com"));
-        leadsList.add(new GetNotifications("Ariana Call today for ", "LeadName: Jared", "Contact : (123)456-1234", "Email : abc@xyz.com"));
-        leadsList.add(new GetNotifications("Ariana Call today for ", "LeadName: Jared", "Contact : (123)456-1234", "Email : abc@xyz.com"));
-        leadsList.add(new GetNotifications("Ariana Call today for ", "LeadName: Jared", "Contact : (123)456-1234", "Email : abc@xyz.com"));
-        leadsList.add(new GetNotifications("Ariana Call today for ", "LeadName: Jared", "Contact : (123)456-1234", "Email : abc@xyz.com"));
-        leadsList.add(new GetNotifications("Ariana Call today for ", "LeadName: Jared", "Contact : (123)456-1234", "Email : abc@xyz.com"));
-
-        bi.recyclerTasks.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        bi.recyclerTasks.setItemAnimator(new DefaultItemAnimator());
-        bi.recyclerTasks.addItemDecoration(new DividerItemDecoration(bi.recyclerTasks.getContext(), 1));
-        RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_notifications_layout);
+        bi.rvNotifications.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
+        bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
+        recyclerAdapterUtil = new RecyclerAdapterUtil(context, notificationList, R.layout.custom_notifications_layout);
         recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail);
 
-        recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetNotifications, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
+        recyclerAdapterUtil.addOnDataBindListener((Function4<View, NotificationModel.Data, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
 
             TextView tvName = (TextView) integerMap.get(R.id.tvName);
-            tvName.setText(allLeadsList.getName());
+            tvName.setText(data.getMessage());
 
             TextView tvDesc = (TextView) integerMap.get(R.id.tvLeadName);
-            tvDesc.setText(allLeadsList.getLeadName());
+            tvDesc.setText(data.getLeadName());
 
             TextView tvContact = (TextView) integerMap.get(R.id.tvContact);
-            tvContact.setText(allLeadsList.getContact());
+            tvContact.setText(data.getContact());
 
             TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
-            tvEmail.setText(allLeadsList.getEmail());
+            tvEmail.setText(data.getEmail());
 
             return Unit.INSTANCE;
         });
 
-        bi.recyclerTasks.setAdapter(recyclerAdapterUtil);
-
+        bi.rvNotifications.setAdapter(recyclerAdapterUtil);
 
     }
 
@@ -95,10 +81,11 @@ public class NotificationActivity extends BaseActivity implements ListingInfoCon
         switch (v.getId()) {
 
             case R.id.btnTasks:
+
                 Paris.style(bi.btnTasks).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnAppointments).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnFollowUps).apply(R.style.TabButtonTranparentRight);
-
+                presenter.getNotificationByTasks();
 
                 break;
 
@@ -107,7 +94,7 @@ public class NotificationActivity extends BaseActivity implements ListingInfoCon
                 Paris.style(bi.btnTasks).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnAppointments).apply(R.style.TabButtonYellowMiddle);
                 Paris.style(bi.btnFollowUps).apply(R.style.TabButtonTranparentRight);
-
+                presenter.getNotificationByAppointments();
 
                 break;
 
@@ -116,6 +103,7 @@ public class NotificationActivity extends BaseActivity implements ListingInfoCon
                 Paris.style(bi.btnTasks).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnAppointments).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnFollowUps).apply(R.style.TabButtonYellowRight);
+                presenter.getNotificationByFollowUps();
 
                 break;
 
@@ -123,39 +111,51 @@ public class NotificationActivity extends BaseActivity implements ListingInfoCon
 
     }
 
-
-    @Override
-    public void setupUI(View view) {
-        super.setupUI(view);
-    }
-
     @Override
     public void initViews() {
 
-        populateListData();
+        notificationList = new ArrayList<>();
         bi.btnTasks.setOnClickListener(this);
         bi.btnAppointments.setOnClickListener(this);
         bi.btnFollowUps.setOnClickListener(this);
+        populateListData();
+        presenter.getNotificationByTasks();
+
     }
 
     @Override
     public void updateUI(Response<BaseResponse> response) {
 
+
     }
 
     @Override
     public void updateUIonFalse(String message) {
-        ToastUtils.showToastLong(context, message);
+
+        bi.rvNotifications.setVisibility(View.GONE);
+        bi.tvMessage.setVisibility(View.VISIBLE);
+
     }
 
     @Override
     public void updateUIonError(String error) {
-        ToastUtils.showToastLong(context, error);
+
+        if (error.contains("Authorization has been denied for this request")) {
+            ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+            logout();
+        } else {
+            bi.rvNotifications.setVisibility(View.GONE);
+            bi.tvMessage.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
     public void updateUIonFailure() {
-        ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+
+        bi.rvNotifications.setVisibility(View.GONE);
+        bi.tvMessage.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -166,6 +166,23 @@ public class NotificationActivity extends BaseActivity implements ListingInfoCon
     @Override
     public void hideProgressBar() {
         GH.getInstance().HideProgressDialog(context);
+    }
+
+    @Override
+    public void updateUIList(Response<NotificationModel> response) {
+
+        notificationList.clear();
+        if (response.body().getData().size() > 0) {
+            notificationList.addAll(response.body().getData());
+            recyclerAdapterUtil.notifyDataSetChanged();
+            bi.rvNotifications.setVisibility(View.VISIBLE);
+            bi.tvMessage.setVisibility(View.GONE);
+        } else {
+            bi.rvNotifications.setVisibility(View.GONE);
+            bi.tvMessage.setVisibility(View.VISIBLE);
+        }
+
+
     }
 
 }

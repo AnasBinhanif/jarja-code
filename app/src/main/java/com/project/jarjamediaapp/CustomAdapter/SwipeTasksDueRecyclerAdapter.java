@@ -124,7 +124,7 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
-                    if (getAppointmentsModel.status.equals("Success")) {
+                    if (getAppointmentsModel.getStatus().equals("Success")) {
 
                         binderHelper.closeLayout(String.valueOf(pos));
                         ToastUtils.showToast(context, "Successfully Done");

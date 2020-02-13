@@ -1,17 +1,21 @@
 package com.project.jarjamediaapp.Activities.notification;
 
-import com.project.jarjamediaapp.Activities.listing_info.ListingInfoContract;
 import com.project.jarjamediaapp.Base.BasePresenter;
-import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Networking.ApiError;
+import com.project.jarjamediaapp.Networking.ApiMethods;
+import com.project.jarjamediaapp.Networking.ErrorUtils;
+import com.project.jarjamediaapp.Networking.NetworkController;
+import com.project.jarjamediaapp.Utilities.GH;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class NotificationPresenter extends BasePresenter<ListingInfoContract.View> implements ListingInfoContract.Actions {
+public class NotificationPresenter extends BasePresenter<NotificationContract.View> implements NotificationContract.Actions {
 
-    Call<BaseResponse> _call;
+    Call<NotificationModel> call;
 
-
-    public NotificationPresenter(ListingInfoContract.View view) {
+    public NotificationPresenter(NotificationContract.View view) {
         super(view);
     }
 
@@ -19,55 +23,121 @@ public class NotificationPresenter extends BasePresenter<ListingInfoContract.Vie
         _view.initViews();
     }
 
-   /* @Override
-    public void updateCardDetailStatus(String cardId, boolean status) {
+    @Override
+    public void getNotificationByTasks() {
 
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class). ();
-        _call.enqueue(new Callback<BaseResponse>() {
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByTasks(GH.getInstance().getAuthorization());
+        call.enqueue(new Callback<NotificationModel>() {
             @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+            public void onResponse(Call<NotificationModel> call, Response<NotificationModel> response) {
 
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
-                    BaseResponse baseResponse = response.body();
-                    if (baseResponse.getStatus()) {
-                        _view.updateUI(response);
+                    NotificationModel notificationModel = response.body();
+                    if (notificationModel.getStatus().equals("Success")) {
+                        _view.updateUIList(response);
 
                     } else {
-
-                        _view.updateUIonFalse(baseResponse.getError());
-
+                        _view.updateUIonFalse(notificationModel.getMessage());
                     }
                 } else {
 
-                    _view.updateUIonError(response.errorBody().toString());
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
                 }
             }
 
             @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
+            public void onFailure(Call<NotificationModel> call, Throwable t) {
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
         });
 
-    }*/
+    }
+
+    @Override
+    public void getNotificationByAppointments() {
+
+        _view.showProgressBar();
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByAppointments(GH.getInstance().getAuthorization());
+        call.enqueue(new Callback<NotificationModel>() {
+            @Override
+            public void onResponse(Call<NotificationModel> call, Response<NotificationModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    NotificationModel notificationModel = response.body();
+                    if (notificationModel.getStatus().equals("Success")) {
+                        _view.updateUIList(response);
+
+                    } else {
+                        _view.updateUIonFalse(notificationModel.getMessage());
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NotificationModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void getNotificationByFollowUps() {
+
+        _view.showProgressBar();
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByFollowUps(GH.getInstance().getAuthorization());
+        call.enqueue(new Callback<NotificationModel>() {
+            @Override
+            public void onResponse(Call<NotificationModel> call, Response<NotificationModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    NotificationModel notificationModel = response.body();
+                    if (notificationModel.getStatus().equals("Success")) {
+                        _view.updateUIList(response);
+
+                    } else {
+                        _view.updateUIonFalse(notificationModel.getMessage());
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NotificationModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+
+    }
 
     @Override
     public void detachView() {
 
-        if (_call != null) {
+        if (call != null) {
 
-            _call.cancel();
+            call.cancel();
         }
         super.detachView();
     }
 
-    @Override
-    public void addData() {
-
-    }
 
 }

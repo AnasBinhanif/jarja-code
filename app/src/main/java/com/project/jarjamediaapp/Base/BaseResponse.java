@@ -9,22 +9,10 @@ public class BaseResponse<T> implements Serializable {
 
     @SerializedName("status")
     @Expose
-    public String status;
+    private String status;
     @SerializedName("message")
     @Expose
     public String message;
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    @Expose
-    @SerializedName("data")
-    private T data;
 
     public String getStatus() {
         return status;

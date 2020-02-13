@@ -24,9 +24,6 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
 
 import retrofit2.Call;
@@ -143,7 +140,7 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
-                    if (getAppointmentsModel.status.equals("Success")) {
+                    if (getAppointmentsModel.getStatus().equals("Success")) {
 
                         binderHelper.closeLayout(String.valueOf(pos));
                         ToastUtils.showToast(context, "Successfully Done");

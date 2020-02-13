@@ -133,11 +133,11 @@
     <string name="add_documents">Add Documents</string>
     <string name="add_notes">Add Notes</string>
 
-
     <!--- Open Houses Activity -->
     <string name="open_houses">Open Houses</string>
     <string name="add_open_house">Add Open House</string>
     <string name="select_picture">Select Picture</string>
+    <string name="file_name">File name</string>
     <string name="listing_price">Listing Price</string>
     <string name="state_province">State/Province</string>
     <string name="city">City</string>
@@ -263,5 +263,25 @@
         <item>Text Message</item>
         <item>E-mail</item>
     </string-array>
+
+    <!-- Open House -->
+    <string name="view">View</string>
+    <string name="no_records">No Records Found</string>
+    <string name="upcoming_open_house">Upcoming</string>
+    <string name="past_open_house">Past</string>
+
+    <string name="pref_key_transition_time" translatable="false">pref_key_transition_time</string>
+    <string name="dialog_seekbar_transition_time">Item transition time in millis</string>
+
+    <string name="gallery">Gallery</string>
+    <string name="close">Close</string>
+    <string name="camera">Camera</string>
+    <string name="permission_message">Please provide required permission</string>
+    <string name="error_address">Please enter address</string>
+    <string name="error_city">Please enter city</string>
+    <string name="error_state">Please enter state/province</string>
+    <string name="error_zip">Please enter zip/postal code</string>
+    <string name="error_start_time">Please enter start date</string>
+    <string name="error_end_time">Please enter end date</string>
 
 </resources>

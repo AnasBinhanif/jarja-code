@@ -136,7 +136,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     @Override
     public void updateUI(Response<BaseResponse> response) {
 
-        if (response.body().getStatus().equals("Success")) {
+        if (response.body().getStatus().equalsIgnoreCase("Success")) {
             ToastUtils.showToast(context, "Added Successfully");
             finish();
         }

@@ -34,32 +34,52 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="20dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="20dp">
+                android:layout_gravity="center"
+                android:paddingTop="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_10sdp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginTop="2dp"
+                    android:layout_alignParentStart="true"
                     android:gravity="center"
+                    android:padding="@dimen/_5sdp"
                     android:text="@string/select_picture"
                     android:textColor="@color/colorBlack"
                     android:textSize="14dp"
                     android:textStyle="bold" />
 
+
                 <TextView
+                    android:id="@+id/tvRemovePicture"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:drawableLeft="@drawable/ic_select_image"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/aa_edit_border_black"
+                    android:drawableEnd="@drawable/ic_close"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/file_name"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSelectPicture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:drawableStart="@drawable/ic_select_image"
                     android:drawablePadding="5dp"
                     android:gravity="center"
                     android:text="@string/select_picture"
+                    android:padding="@dimen/_5sdp"
                     android:textColor="@color/colorBlack"
                     android:textSize="14dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
             </RelativeLayout>
 
@@ -75,11 +95,13 @@
             <EditText
                 android:id="@+id/edtListingPrice"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search"
                 android:hint="@string/listing_price"
-                android:paddingLeft="12dp"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:padding="@dimen/_10sdp"
                 android:singleLine="true"
                 android:textSize="14dp" />
 
@@ -95,11 +117,12 @@
             <EditText
                 android:id="@+id/edtAddress"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search"
                 android:hint="@string/address"
-                android:paddingLeft="12dp"
+                android:imeOptions="actionNext"
+                android:padding="@dimen/_10sdp"
                 android:singleLine="true"
                 android:textSize="14dp" />
 
@@ -115,11 +138,12 @@
             <EditText
                 android:id="@+id/edtCity"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search"
                 android:hint="@string/city"
-                android:paddingLeft="12dp"
+                android:imeOptions="actionNext"
+                android:padding="@dimen/_10sdp"
                 android:singleLine="true"
                 android:textSize="14dp" />
 
@@ -135,11 +159,12 @@
             <EditText
                 android:id="@+id/edtState"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search"
                 android:hint="@string/state_province"
-                android:paddingLeft="12dp"
+                android:imeOptions="actionNext"
+                android:padding="@dimen/_10sdp"
                 android:singleLine="true"
                 android:textSize="14dp" />
 
@@ -155,11 +180,13 @@
             <EditText
                 android:id="@+id/edtPostalCode"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search"
                 android:hint="@string/zip_postal"
-                android:paddingLeft="12dp"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:padding="@dimen/_10sdp"
                 android:singleLine="true"
                 android:textSize="14dp" />
 
@@ -175,11 +202,14 @@
             <EditText
                 android:id="@+id/edtStartDateTime"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search"
+                android:drawableEnd="@drawable/ic_calendar"
+                android:focusable="false"
+                android:layout_gravity="center"
                 android:hint="@string/start_date_time"
-                android:paddingLeft="12dp"
+                android:padding="@dimen/_10sdp"
                 android:singleLine="true"
                 android:textSize="14dp" />
 
@@ -195,11 +225,13 @@
             <EditText
                 android:id="@+id/edtEndDateTime"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search"
+                android:drawableEnd="@drawable/ic_calendar"
+                android:focusable="false"
                 android:hint="@string/end_date_time"
-                android:paddingLeft="12dp"
+                android:padding="@dimen/_10sdp"
                 android:singleLine="true"
                 android:textSize="14dp" />
 
