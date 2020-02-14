@@ -12,27 +12,29 @@ import android.widget.RadioGroup;
 import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
 
+import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.customCalendar.interfaces.OnCalendarScrolledListener;
-import com.project.jarjamediaapp.customCalendar.interfaces.OnDateSelectedListener;
-import com.project.jarjamediaapp.customCalendar.objects.CalendarDate;
 import com.project.jarjamediaapp.databinding.ActivityCalendarBinding;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Calendar;
 
 import retrofit2.Response;
 
-public class CalendarActivity extends BaseActivity implements View.OnClickListener, CalendarContract.View, OnDateSelectedListener, OnCalendarScrolledListener {
+public class CalendarActivity extends BaseActivity implements View.OnClickListener, CalendarContract.View, OnCalendarScrolledListener {
 
     ActivityCalendarBinding bi;
     Context context = CalendarActivity.this;
     CalendarPresenter presenter;
+    MonthYearPickerDialogFragment dialogFragment;
+    Calendar calendar;
+    int yearSelected;
+    int monthSelected;
+    String previewMonth = "", previewYear = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,35 +48,51 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View view) {
 
-        switch (v.getId()) {
+        int id = view.getId();
+        switch (id) {
+
+            case R.id.tvMonthYear: {
+                dialogFragment.show(getSupportFragmentManager(), null);
+            }
+            break;
 
         }
+
+    }
+
+    private void showMonthYearPicker() {
+
+        //Set default values
+        calendar = Calendar.getInstance();
+        yearSelected = calendar.get(Calendar.YEAR);
+        monthSelected = calendar.get(Calendar.MONTH);
+        getMonth(monthSelected);
+        bi.tvMonthYear.setText(previewMonth + " " + yearSelected);
+
+        dialogFragment = MonthYearPickerDialogFragment.getInstance(monthSelected, yearSelected);
+
+        dialogFragment.setOnDateSetListener((year, monthOfYear) -> {
+            // do something
+            monthSelected = monthOfYear;
+            yearSelected = year;
+            getMonth(monthOfYear);
+            bi.tvMonthYear.setText(previewMonth + " " + year);
+            bi.activityMainViewCustomCalendar.updateCalendarView(year, monthOfYear, 1);
+
+        });
 
     }
 
     @Override
     public void initViews() {
 
-        populateSpinnerData();
-        bi.activityMainViewCustomCalendar.setOnDateSelectedListener(this);
+        bi.tvMonthYear.setOnClickListener(this);
         bi.activityMainViewCustomCalendar.setOnPageScrolled(this);
+        showMonthYearPicker();
+
     }
-
-
-    private void populateSpinnerData() {
-
-
-        List<String> dataset = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.months_array)));
-        bi.spinnerMonth.attachDataSource(dataset);
-        bi.spinnerMonth.setBackground(getResources().getDrawable(R.drawable.bg_search));
-
-        List<String> dataset2 = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.years_array)));
-        bi.spinnerYear.attachDataSource(dataset2);
-        bi.spinnerYear.setBackground(getResources().getDrawable(R.drawable.bg_search));
-    }
-
 
     public void showAddAppointDialog(Context context) {
 
@@ -178,19 +196,67 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void onDateSelected(CalendarDate date) {
-
-        //bi.activityMainTextDayOfMonth.setText(date.dayToString());
-        //bi.activityMainTextDayOfWeek.setText(date.dayOfWeekToStringName());
-
-        bi.txtMonth.setText(date.monthToStringName() + " " + date.yearToString());
-
-    }
-
-    @Override
     public void OnPageScrolled(ViewPager viewPager, int pos, String month) {
 
-        bi.txtMonth.setText(month);
+        bi.tvMonthYear.setText(month);
 
     }
+
+    private void getMonth(int month) {
+
+        switch (month) {
+            case 0: {
+                previewMonth = "January";
+            }
+            break;
+            case 1: {
+                previewMonth = "February";
+            }
+            break;
+            case 2: {
+                previewMonth = "March";
+            }
+            break;
+            case 3: {
+                previewMonth = "April";
+            }
+            break;
+            case 4: {
+                previewMonth = "May";
+            }
+            break;
+            case 5: {
+                previewMonth = "June";
+            }
+            break;
+            case 6: {
+                previewMonth = "July";
+            }
+            break;
+            case 7: {
+                previewMonth = "August";
+            }
+            break;
+            case 8: {
+                previewMonth = "September";
+            }
+            break;
+            case 9: {
+                previewMonth = "October";
+            }
+            break;
+            case 10: {
+                previewMonth = "November";
+            }
+            break;
+            case 11: {
+                previewMonth = "December";
+            }
+            break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + month);
+
+        }
+    }
+
 }

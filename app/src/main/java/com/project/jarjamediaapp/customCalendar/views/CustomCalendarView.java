@@ -54,14 +54,14 @@ public class CustomCalendarView extends FrameLayout implements View.OnClickListe
     }
 
     public void setOnPageScrolled(OnCalendarScrolledListener listener) {
-        mPageListener=listener;
+        mPageListener = listener;
     }
 
     @Override
     public void onClick(View view) {
     }
 
-    private void buildCalendarView() {
+    public void buildCalendarView() {
         List<CalendarMonth> list = new ArrayList<>();
         CalendarMonth today = new CalendarMonth(Calendar.getInstance());
 
@@ -78,6 +78,30 @@ public class CustomCalendarView extends FrameLayout implements View.OnClickListe
         mViewPager.setCurrentItem(2);
         //mPagerTextMonth.setText(mViewPagerAdapter.getItemPageHeader(2));
     }
+
+    public void updateCalendarView(int year, int month, int day) {
+
+        List<CalendarMonth> list = new ArrayList<>();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+
+        CalendarMonth today = new CalendarMonth(calendar);
+
+        list.add(new CalendarMonth(today, -2));
+        list.add(new CalendarMonth(today, -1));
+        list.add(today);
+        list.add(new CalendarMonth(today, 1));
+        list.add(new CalendarMonth(today, 2));
+
+        mViewPagerAdapter = new CalendarViewPagerAdapter(list, mViewPager);
+        mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.addOnPageChangeListener(mPageChangeListener);
+        mViewPager.setOffscreenPageLimit(1);
+        mViewPager.setCurrentItem(2);
+        //mPagerTextMonth.setText(mViewPagerAdapter.getItemPageHeader(2));
+    }
+
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override

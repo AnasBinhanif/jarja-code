@@ -139,5 +139,4 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
         super.detachView();
     }
 
-
 }

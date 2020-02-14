@@ -320,6 +320,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
 
         hideProgressBar();
         tvRemovePictures.setVisibility(View.VISIBLE);
+        tvRemovePictures.setText("Image uploaded");
         tvSelectPictures.setVisibility(View.GONE);
         ToastUtils.showToast(context, "Image uploaded");
         image = response.body().getResponse().getFileUrl();
