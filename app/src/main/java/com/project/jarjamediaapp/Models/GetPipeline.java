@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class GetLeadSource {
+public class GetPipeline {
 
     @SerializedName("status")
     @Expose
@@ -19,11 +19,11 @@ public class GetLeadSource {
 
     public class Data {
 
-        @SerializedName("sourceID")
+        @SerializedName("id")
         @Expose
-        public Integer sourceID;
-        @SerializedName("sourceName")
+        public Integer id;
+        @SerializedName("name")
         @Expose
-        public String sourceName;
+        public String name;
     }
 }

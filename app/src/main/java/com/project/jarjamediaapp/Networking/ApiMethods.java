@@ -9,13 +9,18 @@ import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetAllLeads;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
+import com.project.jarjamediaapp.Models.GetLastLogin;
+import com.project.jarjamediaapp.Models.GetLastTouch;
+import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadCounts;
 import com.project.jarjamediaapp.Models.GetLeadDripCampaignList;
+import com.project.jarjamediaapp.Models.GetLeadScore;
 import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
 import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
 import com.project.jarjamediaapp.Models.GetLeadTitlesModel;
 import com.project.jarjamediaapp.Models.GetLeadTypeList;
+import com.project.jarjamediaapp.Models.GetPipeline;
 import com.project.jarjamediaapp.Models.GetTasksModel;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
@@ -139,9 +144,35 @@ public interface ApiMethods {
             @Header("Authorization") String authorization
     );
 
-    @GET("Dashboard/GetLeadSource")
+    @GET("Lead/GetSources")
     Call<GetLeadSource> GetLeadSource(
             @Header("Authorization") String authorization
+    );
+
+    @GET("Lead/GetLeadScore")
+    Call<GetLeadScore> GetLeadScore(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("Lead/GetLastTouch")
+    Call<GetLastTouch> GetLastTouch(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("Lead/GetLastLogin")
+    Call<GetLastLogin> GetLastLogin(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("Lead/GetPipeline")
+    Call<GetPipeline> GetPipeline(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("Lead/GetLead")
+    Call<GetLead> GetLead(
+            @Header("Authorization") String authorization,
+            @Query("LeadID") String leadID
     );
 
     @GET("Dashboard/GetLeadDripCampaignList")
@@ -257,6 +288,7 @@ public interface ApiMethods {
             @Field("countryid") String countryid
     );
 
+    @FormUrlEncoded
     @POST("Lead/GetLeadCounts")
     Call<GetLeadCounts> GetLeadCounts(
             @Header("Authorization") String authorization,
@@ -399,6 +431,5 @@ public interface ApiMethods {
 
     @GET("Notification/GetFollowUpNotification")
     Call<NotificationModel> getNotificationByFollowUps(@Header("Authorization") String authorization);
-
 
 }

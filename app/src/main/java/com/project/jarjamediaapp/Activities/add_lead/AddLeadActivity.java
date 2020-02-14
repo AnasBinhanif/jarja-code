@@ -200,7 +200,6 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                         if(bi.lnAgent.getChildCount() > 0) {
                             bi.lnAgent.removeAllViews();
                         }
-
                         for (String name : selectedNames) {
                             View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
                             TextView textView = child.findViewById(R.id.txtDynamic);
@@ -228,7 +227,6 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                             ToastUtils.showToast(context,"No EncryptedID Found");
                         }
                     }
-
                     @Override
                     public void onCancel() {
                     }
@@ -323,13 +321,13 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String city = bi.edtCity1.getText().toString();
         String state = bi.edtState1.getText().toString();
         String description = "";
-        String source = bi.spnSource.isSelected() ? String.valueOf(getLeadSourceList.get(bi.spnSource.getSelectedIndex()).sourceid) :"";
+        String source = bi.spnSource.isSelected() ? String.valueOf(getLeadSourceList.get(bi.spnSource.getSelectedIndex()).sourceID) :"";
         String county = bi.edtCountry.getText().toString();
         String timeFrameId = bi.spnTimeFrame.isSelected() ? getLeadTimeFrameList.get(bi.spnTimeFrame.getSelectedIndex()).timeFrameId : "";
         String state2 = bi.edtState2.getText().toString();
         String city2 = bi.edtCity2.getText().toString();
         String zipcode2 = bi.edtPostalCode2.getText().toString();
-        String leadTypeID = bi.spnType.isSelected() ? getLeadTypeList.get(bi.spnType.getSelectedIndex()).id : "";
+        String leadTypeID = bi.spnType.isSelected() ? String.valueOf(getLeadTypeList.get(bi.spnType.getSelectedIndex()).id): "";
         String labelsID = tagsIdsString;
         String leadStringID = "";
         String leadID = "0";

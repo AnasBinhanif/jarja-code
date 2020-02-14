@@ -1,11 +1,24 @@
 package com.project.jarjamediaapp.Activities.lead_detail;
 
 import com.project.jarjamediaapp.Base.BaseContract;
+import com.project.jarjamediaapp.Models.GetLead;
 
 public interface LeadDetailContract {
 
     interface View extends BaseContract.View{
+        void initViews();
 
+        void updateUI(GetLead response);
+
+        void updateUIonFalse(String message);
+
+        void updateUIonError(String error);
+
+        void updateUIonFailure();
+
+        void showProgressBar();
+
+        void hideProgressBar();
     }
 
     /*
@@ -14,7 +27,7 @@ public interface LeadDetailContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void addData();
+        void getLead(String leadID);
 
         void initScreen();
 

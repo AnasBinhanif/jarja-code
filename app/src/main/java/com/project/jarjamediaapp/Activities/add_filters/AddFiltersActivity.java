@@ -13,11 +13,15 @@ import com.abdeveloper.library.MultiSelectModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
+import com.project.jarjamediaapp.Models.GetLastLogin;
+import com.project.jarjamediaapp.Models.GetLastTouch;
 import com.project.jarjamediaapp.Models.GetLeadDripCampaignList;
+import com.project.jarjamediaapp.Models.GetLeadScore;
 import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
 import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
 import com.project.jarjamediaapp.Models.GetLeadTypeList;
+import com.project.jarjamediaapp.Models.GetPipeline;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -33,7 +37,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     Context context = AddFiltersActivity.this;
     AddFiltersPresenter presenter;
 
-
     ArrayList<GetAgentsModel.Data> agentList;
     ArrayList<MultiSelectModel> searchListItems;
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
@@ -47,18 +50,28 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     ArrayList<Integer> selectedTagIdsList = new ArrayList<>();
 
     ArrayList<GetLeadTypeList.Data> getLeadTypeList;
-    ArrayList<String> getLeadTypeNameList;
-
-    ArrayList<GetLeadTimeFrame.Data> getLeadTimeFrameList;
-    ArrayList<String> getLeadTimeFrameNames;
+    ArrayList<MultiSelectModel> getLeadTypeModelList;
+    ArrayList<Integer> getSelectedTypeIdsList = new ArrayList<>();
 
     ArrayList<GetLeadDripCampaignList.Data> getLeadDripCampaignList;
     ArrayList<MultiSelectModel> getLeadDripCampaignModelList;
     ArrayList<Integer> selectedDripIdsList = new ArrayList<>();
 
+    ArrayList<GetLeadScore.Data> getGetLeadScoreList;
+    ArrayList<String> getGetLeadScoreNames;
+
+    ArrayList<GetLastTouch.Data> getGetLastTouchList;
+    ArrayList<String> getGetLastTouchNames;
+
+    ArrayList<GetLastLogin.Data> getGetLastLoginList;
+    ArrayList<String> getGetLastLoginNames;
+
+    ArrayList<GetPipeline.Data> getGetPipelineList;
+    ArrayList<String> getGetPipelineNames;
+
     MultiSelectModel tagModel, agentModel, dripModel, sourceModel;
 
-    String agentIdsString="";
+    String agentIdsString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,23 +90,34 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
     @Override
     public void initViews() {
-        initCallsData();
-        initListeners();
-        bi.spnType.setBackground(getDrawable(R.drawable.bg_edt_dark));
 
+        initSpinners();
+        initListeners();
+        initCallsData();
+    }
+
+    private void initSpinners(){
+        bi.spnPipeline.setBackground(getDrawable(R.drawable.bg_edt_dark));
+        bi.spnLastLogin.setBackground(getDrawable(R.drawable.bg_edt_dark));
+        bi.spnLastTouch.setBackground(getDrawable(R.drawable.bg_edt_dark));
+        bi.spnLeadScore.setBackground(getDrawable(R.drawable.bg_edt_dark));
     }
 
     private void initCallsData() {
         presenter.getAgentNames();
+        presenter.GetLastLogin();
+        presenter.GetLastTouch();
+        presenter.GetLeadScore();
         presenter.GetLeadSource();
         presenter.GetLeadTagList();
         presenter.GetLeadTypeList();
-        presenter.GetLeadTimeFrame();
+        presenter.GetLeadPipeline();
         presenter.GetLeadDripCampaignList();
     }
 
     private void initListeners() {
         bi.edtTags.setOnClickListener(this);
+        bi.edtType.setOnClickListener(this);
         bi.edtAssignedTo.setOnClickListener(this);
         bi.edtLeadScore.setOnClickListener(this);
         bi.edtDripCompaigns.setOnClickListener(this);
@@ -181,13 +205,12 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
 
-                        for (String i : selectedEncyrptedIds){
+                        for (String i : selectedEncyrptedIds) {
 
-                            if (agentIdsString.equals(""))
-                            {
-                                agentIdsString= String.valueOf(i);
-                            }else{
-                                agentIdsString= agentIdsString+","+i;
+                            if (agentIdsString.equals("")) {
+                                agentIdsString = String.valueOf(i);
+                            } else {
+                                agentIdsString = agentIdsString + "," + i;
                             }
 
                         }
@@ -303,6 +326,54 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
 
+    private void showTypeDialog() {
+
+        MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
+                .title("Select Lead Sources") //setting title for dialog
+                .titleSize(25)
+                .positiveText("Done")
+                .negativeText("Cancel")
+                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
+                        //will return list of selected IDS
+                        getSelectedTypeIdsList = new ArrayList<>();
+                        getSelectedTypeIdsList = selectedIds;
+
+                        if (bi.lnType.getChildCount() > 0) {
+                            bi.lnType.removeAllViews();
+                        }
+
+                        for (String name : selectedNames) {
+                            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                            TextView textView = child.findViewById(R.id.txtDynamic);
+                            textView.setText(name);
+                            bi.lnType.addView(child);
+                        }
+
+                        Log.e("DataString", dataString);
+                    }
+
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+                    }
+                });
+
+        if (selectedSourceNameIdsList.size() != 0) {
+            multiSelectDialog.preSelectIDsList(getSelectedTypeIdsList);
+            multiSelectDialog.multiSelectList(getLeadTypeModelList);
+        } else {
+            multiSelectDialog.multiSelectList(getLeadTypeModelList);
+        }
+        multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
+    }
+
     @Override
     public void updateUI(GetAgentsModel response) {
 
@@ -321,8 +392,58 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         getLeadSourceNameList = new ArrayList<>();
         getLeadSourceList = response.data;
         for (GetLeadSource.Data model : getLeadSourceList) {
-            getLeadSourceNameList.add(new MultiSelectModel(model.sourceid, model.sourceName));
+            getLeadSourceNameList.add(new MultiSelectModel(model.sourceID, model.sourceName));
         }
+    }
+
+    @Override
+    public void updateUI(GetLeadScore response) {
+
+        getGetLeadScoreList = new ArrayList<>();
+        getGetLeadScoreNames = new ArrayList<>();
+        getGetLeadScoreList = response.data;
+        for (GetLeadScore.Data model : getGetLeadScoreList) {
+            getGetLeadScoreNames.add(model.text);
+        }
+        bi.spnLeadScore.setItems(getGetLeadScoreNames);
+
+    }
+
+    @Override
+    public void updateUI(GetLastLogin response) {
+
+        getGetLastLoginList = new ArrayList<>();
+        getGetLastLoginNames = new ArrayList<>();
+        getGetLastLoginList = response.data;
+        for (GetLastLogin.Data model : getGetLastLoginList) {
+            getGetLastLoginNames.add(model.text);
+        }
+        bi.spnLastLogin.setItems(getGetLastLoginNames);
+    }
+
+    @Override
+    public void updateUI(GetLastTouch response) {
+
+        getGetLastTouchList = new ArrayList<>();
+        getGetLastTouchNames = new ArrayList<>();
+        getGetLastTouchList = response.data;
+        for (GetLastTouch.Data model : getGetLastTouchList) {
+            getGetLastTouchNames.add(model.text);
+        }
+        bi.spnLastTouch.setItems(getGetLastTouchNames);
+
+    }
+
+    @Override
+    public void updateUI(GetPipeline response) {
+
+        getGetPipelineList = new ArrayList<>();
+        getGetPipelineNames = new ArrayList<>();
+        getGetPipelineList = response.data;
+        for (GetPipeline.Data model : getGetPipelineList) {
+            getGetPipelineNames.add(model.name);
+        }
+        bi.spnPipeline.setItems(getGetPipelineNames);
     }
 
     @Override
@@ -341,23 +462,12 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     public void updateUI(GetLeadTypeList response) {
 
         getLeadTypeList = new ArrayList<>();
-        getLeadTypeNameList = new ArrayList<>();
+        getLeadTypeModelList = new ArrayList<>();
         getLeadTypeList = response.data;
         for (GetLeadTypeList.Data model : getLeadTypeList) {
-            getLeadTypeNameList.add(model.leadType);
+            getLeadTypeModelList.add(new MultiSelectModel(model.id, model.leadType));
         }
-        bi.spnType.setItems(getLeadTypeNameList);
-    }
-
-    @Override
-    public void updateUI(GetLeadTimeFrame response) {
-
-        getLeadTimeFrameList = new ArrayList<>();
-        getLeadTimeFrameNames = new ArrayList<>();
-        getLeadTimeFrameList = response.data;
-        for (GetLeadTimeFrame.Data model : getLeadTimeFrameList) {
-            getLeadTimeFrameNames.add(model.timeFrame);
-        }
+        //bi.spnType.setItems(getLeadTypeNameList);
     }
 
     @Override
@@ -421,6 +531,9 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                 break;
             case R.id.edtLeadScore:
                 showSourceDialog();
+                break;
+            case R.id.edtType:
+                showTypeDialog();
                 break;
         }
     }

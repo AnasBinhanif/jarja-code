@@ -1,13 +1,18 @@
 package com.project.jarjamediaapp.Activities.lead_detail;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -24,10 +29,12 @@ import com.project.jarjamediaapp.Activities.tasks.TasksActivity;
 import com.project.jarjamediaapp.Activities.transactions.TransactionActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadDetails;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
+import com.project.jarjamediaapp.Utilities.UserPermissions;
 import com.project.jarjamediaapp.databinding.ActivityLeadDetailBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
@@ -48,6 +55,11 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     LeadDetailPresenter presenter;
     String title = "";
 
+    GetLead.LeadList getLeadListData;
+    ArrayList<GetLead.AgentsList> getAssignedAgentList;
+
+    String leadID = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +69,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         presenter = new LeadDetailPresenter(this);
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.lead_details), true);
+
     }
 
     private void populateListData() {
@@ -147,10 +160,60 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     }
 
+    private void openEmailComposer(String[] recipients) {
+
+        if (recipients.length == 0 || recipients[0].equals("")) {
+            ToastUtils.showToast(context, "No Primary Phone Found");
+        } else {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+            intent.setType("text/html");
+            startActivity(Intent.createChooser(intent, "Send mail"));
+        }
+    }
+
+    private void openMessageComposer(String phoneNo, String message) {
+
+        if (phoneNo.equals("") || phoneNo.equals("null") || phoneNo == null) {
+            ToastUtils.showToast(context, "No Primary Phone Found");
+        } else {
+            Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+            smsIntent.setType("vnd.android-dir/mms-sms");
+            smsIntent.putExtra("address", phoneNo);
+            smsIntent.putExtra("sms_body", message);
+            startActivity(smsIntent);
+        }
+    }
+
+    private void callDialer(String phoneNo) {
+        if (phoneNo.equals("") || phoneNo.equals("null") || phoneNo == null) {
+            ToastUtils.showToast(context, "No Primary Phone Found");
+        } else {
+            if (UserPermissions.isPhonePermissionGranted(LeadDetailActivity.this)) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                    startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNo)));
+                }
+            }
+        }
+    }
+
     @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
+
+            case R.id.imgEmail:
+                String[] recipients = {getLeadListData.primaryEmail + ""};
+                openEmailComposer(recipients);
+                break;
+
+            case R.id.imgMessage:
+                openMessageComposer(getLeadListData.primaryPhone + "", "");
+                break;
+
+            case R.id.imgCall:
+                callDialer(getLeadListData.primaryPhone + "");
+                break;
 
             case R.id.fbAssignedTo:
                 showCallDialog(context);
@@ -207,15 +270,85 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     @Override
     public void initViews() {
+        leadID = getIntent().getStringExtra("leadID");
 
+        bi.scLeadDetail.setVisibility(View.GONE);
+        bi.tvNoRecordFound.setVisibility(View.GONE);
+
+        initListeners();
+        populateListData();
+        presenter.getLead(leadID);
+    }
+
+    private void initListeners() {
         bi.btnActions.setOnClickListener(this);
         bi.btnDetails.setOnClickListener(this);
         bi.rlTransaction.setOnClickListener(this);
         bi.btnTransaction1.setOnClickListener(this);
         bi.btnTransaction2.setOnClickListener(this);
         bi.fbAssignedTo.setOnClickListener(this);
+        bi.imgCall.setOnClickListener(this);
+        bi.imgEmail.setOnClickListener(this);
+        bi.imgMessage.setOnClickListener(this);
+        bi.imgEditLead.setOnClickListener(this);
+    }
 
-        populateListData();
+    private void populateListData(ArrayList<GetLead.AgentsList> leadsList) {
+
+        bi.recyclerLeadAgent.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        bi.recyclerLeadAgent.setItemAnimator(new DefaultItemAnimator());
+        RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_lead_details_agents_layout);
+        recyclerAdapterUtil.addViewsList(R.id.tvAssignedToName, R.id.imgAssignedTo);
+
+        recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetLead.AgentsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
+
+            TextView tvName = (TextView) integerMap.get(R.id.tvAssignedToName);
+            tvName.setText(String.valueOf(allLeadsList.agentID));
+
+
+            return Unit.INSTANCE;
+        });
+
+        bi.recyclerLeadAgent.setAdapter(recyclerAdapterUtil);
+
+        recyclerAdapterUtil.addOnClickListener((Function2<GetLead.AgentsList, Integer, Unit>) (viewComplainList, integer) -> {
+
+
+            return Unit.INSTANCE;
+        });
+
+
+    }
+
+    @Override
+    public void updateUI(GetLead response) {
+
+        getAssignedAgentList = new ArrayList<>();
+        getLeadListData = response.data.leadList;
+        getAssignedAgentList = response.data.leadList.agentsList;
+
+        if (getLeadListData != null) {
+
+            bi.scLeadDetail.setVisibility(View.VISIBLE);
+            bi.tvNoRecordFound.setVisibility(View.GONE);
+
+            bi.tvID.setText(getLeadListData.leadStringID);
+            bi.tvName.setText(getLeadListData.firstName + " " + getLeadListData.lastName);
+            bi.tvScore.setText(getLeadListData.leadScore);
+            //bi.tvScore.setText(getLeadListData.);
+        } else {
+            bi.scLeadDetail.setVisibility(View.GONE);
+            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+        }
+
+        if (getAssignedAgentList.size() == 0 || getAssignedAgentList == null) {
+            bi.tvNoAgentAssigned.setVisibility(View.VISIBLE);
+            bi.recyclerLeadAgent.setVisibility(View.GONE);
+        } else {
+            bi.tvNoAgentAssigned.setVisibility(View.GONE);
+            bi.recyclerLeadAgent.setVisibility(View.VISIBLE);
+            populateListData(getAssignedAgentList);
+        }
     }
 
     public void showCallDialog(Context context) {

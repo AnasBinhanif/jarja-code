@@ -22,6 +22,7 @@ import com.project.jarjamediaapp.databinding.ActivityAllleadsBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import kotlin.Unit;
@@ -46,7 +47,6 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         presenter = new AllLeadsPresenter(this);
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.leads), true);
-
 
     }
 
@@ -167,7 +167,9 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetAllLeads.LeadsList, Integer, Unit>) (viewComplainList, integer) -> {
 
-            switchActivity(LeadDetailActivity.class);
+            Map<String,String> map = new HashMap<>();
+            map.put("leadID",viewComplainList.id);
+            switchActivityWithIntentString(LeadDetailActivity.class,(HashMap<String, String>) map);
 
             return Unit.INSTANCE;
         });

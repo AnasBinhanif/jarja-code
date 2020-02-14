@@ -3,11 +3,15 @@ package com.project.jarjamediaapp.Activities.add_filters;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
+import com.project.jarjamediaapp.Models.GetLastLogin;
+import com.project.jarjamediaapp.Models.GetLastTouch;
 import com.project.jarjamediaapp.Models.GetLeadDripCampaignList;
+import com.project.jarjamediaapp.Models.GetLeadScore;
 import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
 import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
 import com.project.jarjamediaapp.Models.GetLeadTypeList;
+import com.project.jarjamediaapp.Models.GetPipeline;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
@@ -22,10 +26,13 @@ public class AddFiltersPresenter extends BasePresenter<AddFiltersContract.View> 
 
     Call<BaseResponse> _call;
     Call<GetAgentsModel> _callGetAgentsModel;
+    Call<GetLeadScore> _callGetLeadScore;
+    Call<GetLastTouch> _callGetLastTouch;
+    Call<GetLastLogin> _callGetLastLogin;
+    Call<GetPipeline> _callGetLeadPipeline;
     Call<GetLeadSource> _callGetLeadSource;
     Call<GetLeadTagList> _callGetLeadTagList;
     Call<GetLeadTypeList> _callGetLeadTypeList;
-    Call<GetLeadTimeFrame> _callGetLeadTimeFrame;
     Call<GetLeadDripCampaignList> _callGetLeadDripCampaignList;
 
 
@@ -112,6 +119,159 @@ public class AddFiltersPresenter extends BasePresenter<AddFiltersContract.View> 
     }
 
     @Override
+    public void GetLeadScore() {
+
+        _view.showProgressBar();
+        _callGetLeadScore = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadScore(GH.getInstance().getAuthorization());
+        _callGetLeadScore.enqueue(new Callback<GetLeadScore>() {
+            @Override
+            public void onResponse(Call<GetLeadScore> call, Response<GetLeadScore> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetLeadScore getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetLeadScore> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+
+    }
+
+    @Override
+    public void GetLastTouch() {
+
+        _view.showProgressBar();
+        _callGetLastTouch = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLastTouch(GH.getInstance().getAuthorization());
+        _callGetLastTouch.enqueue(new Callback<GetLastTouch>() {
+            @Override
+            public void onResponse(Call<GetLastTouch> call, Response<GetLastTouch> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetLastTouch getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetLastTouch> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void GetLastLogin() {
+
+        _view.showProgressBar();
+        _callGetLastLogin = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLastLogin(GH.getInstance().getAuthorization());
+        _callGetLastLogin.enqueue(new Callback<GetLastLogin>() {
+            @Override
+            public void onResponse(Call<GetLastLogin> call, Response<GetLastLogin> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetLastLogin getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetLastLogin> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void GetLeadPipeline() {
+
+        _view.showProgressBar();
+        _callGetLeadPipeline = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetPipeline(GH.getInstance().getAuthorization());
+        _callGetLeadPipeline.enqueue(new Callback<GetPipeline>() {
+            @Override
+            public void onResponse(Call<GetPipeline> call, Response<GetPipeline> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetPipeline getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetPipeline> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
     public void GetLeadTagList() {
 
         _view.showProgressBar();
@@ -180,44 +340,6 @@ public class AddFiltersPresenter extends BasePresenter<AddFiltersContract.View> 
 
             @Override
             public void onFailure(Call<GetLeadTypeList> call, Throwable t) {
-                _view.hideProgressBar();
-                _view.updateUIonFailure();
-            }
-        });
-
-    }
-
-    @Override
-    public void GetLeadTimeFrame() {
-
-        _view.showProgressBar();
-        _callGetLeadTimeFrame = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadTimeFrame(GH.getInstance().getAuthorization());
-        _callGetLeadTimeFrame.enqueue(new Callback<GetLeadTimeFrame>() {
-            @Override
-            public void onResponse(Call<GetLeadTimeFrame> call, Response<GetLeadTimeFrame> response) {
-
-                _view.hideProgressBar();
-                if (response.isSuccessful()) {
-
-                    GetLeadTimeFrame getAppointmentsModel = response.body();
-                    if (getAppointmentsModel.status.equals("Success")) {
-
-                        _view.updateUI(getAppointmentsModel);
-
-                    } else {
-
-                        _view.updateUIonFalse(getAppointmentsModel.message);
-
-                    }
-                } else {
-
-                    ApiError error = ErrorUtils.parseError(response);
-                    _view.updateUIonError(error.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetLeadTimeFrame> call, Throwable t) {
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }

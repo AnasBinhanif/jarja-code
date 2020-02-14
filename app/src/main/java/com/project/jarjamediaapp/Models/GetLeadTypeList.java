@@ -21,7 +21,7 @@ public class GetLeadTypeList {
 
         @SerializedName("id")
         @Expose
-        public String id;
+        public Integer id;
         @SerializedName("leadType")
         @Expose
         public String leadType;
