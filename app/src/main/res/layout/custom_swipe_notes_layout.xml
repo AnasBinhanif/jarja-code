@@ -88,17 +88,21 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/tvName"
+                        android:id="@+id/tvSticky"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:drawableRight="@drawable/ic_check"
-                        android:drawablePadding="10dp"
                         android:gravity="center"
                         android:text="Sticky"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="16dp"
                         android:textStyle="bold" />
+
+                    <CheckBox
+                        android:id="@+id/cbNoteSticky"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/tvSticky" />
 
                     <TextView
                         android:id="@+id/tvDateTime"
@@ -116,15 +120,16 @@
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/tvAgentNames"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Not For : Hamza, Owais"
+                    android:text="Note For : Hamza, Owais"
                     android:textColor="@color/colorGreyText"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvCallNote"
+                    android:id="@+id/tvNoteType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -135,6 +140,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -142,6 +148,7 @@
                     android:textColor="@color/colorGreyText" />
 
                 <TextView
+                    android:id="@+id/tvTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"

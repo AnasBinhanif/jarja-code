@@ -7,6 +7,7 @@ import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetAllLeads;
+import com.project.jarjamediaapp.Models.GetAllSocialProfiles;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
 import com.project.jarjamediaapp.Models.GetLastLogin;
@@ -14,13 +15,16 @@ import com.project.jarjamediaapp.Models.GetLastTouch;
 import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadCounts;
 import com.project.jarjamediaapp.Models.GetLeadDripCampaignList;
+import com.project.jarjamediaapp.Models.GetLeadNotes;
 import com.project.jarjamediaapp.Models.GetLeadScore;
 import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
 import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
 import com.project.jarjamediaapp.Models.GetLeadTitlesModel;
 import com.project.jarjamediaapp.Models.GetLeadTypeList;
+import com.project.jarjamediaapp.Models.GetNoteDropDown;
 import com.project.jarjamediaapp.Models.GetPipeline;
+import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
 import com.project.jarjamediaapp.Models.GetTasksModel;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
@@ -174,6 +178,61 @@ public interface ApiMethods {
             @Header("Authorization") String authorization,
             @Query("LeadID") String leadID
     );
+
+    @GET("Lead/GetSocialProfileDropdown")
+    Call<GetSocialProfileDropdown> GetSocialProfileDropdown(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("Lead/GetAllSocialProfiles")
+    Call<GetAllSocialProfiles> GetAllSocialProfiles(
+            @Header("Authorization") String authorization,
+            @Query("Encrypted_LeadID") String leadID
+    );
+
+    @FormUrlEncoded
+    @POST("Lead/AddSocialProfile")
+    Call<BaseResponse> AddSocialProfile(
+            @Header("Authorization") String authorization,
+            @Field("leadID") String leadID,
+            @Field("name") String name,
+            @Field("siteName") String siteName,
+            @Field("profilelink") String profilelink
+    );
+
+    @GET("Lead/GetNoteDropDown")
+    Call<GetNoteDropDown> GetNoteDropDown(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("Lead/GetLeadNotes")
+    Call<GetLeadNotes> GetLeadNotes(
+            @Header("Authorization") String authorization,
+            @Query("EncryptedLeadID") String leadID
+    );
+
+    @FormUrlEncoded
+    @POST("Lead/DeleteNote")
+    Call<BaseResponse> DeleteNote(
+            @Header("Authorization") String authorization,
+            @Field("noteID") String leadAppoinmentID
+    );
+
+    @FormUrlEncoded
+    @POST("Lead/AddNote")
+    Call<BaseResponse> AddNote(
+            @Header("Authorization") String authorization,
+            @Field("noteID") String noteID,
+            @Field("leadID") String leadID,
+            @Field("noteType") String noteType,
+            @Field("desc") String desc,
+            @Field("isSticky") String isSticky,
+            @Field("dated") String dated,
+            @Field("agentIDs") String agentIDs,
+            @Field("leadStringID") String leadStringID
+    );
+
+
 
     @GET("Dashboard/GetLeadDripCampaignList")
     Call<GetLeadDripCampaignList> GetLeadDripCampaignList(

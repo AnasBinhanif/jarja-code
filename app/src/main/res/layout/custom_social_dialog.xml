@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -73,8 +74,8 @@
             android:textSize="14dp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/edtSite"
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/spnSite"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"

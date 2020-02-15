@@ -15,6 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center|top"
             android:layout_below="@+id/ep_toolbar"
             android:orientation="vertical">
 
@@ -51,6 +52,7 @@
                     android:drawableLeft="@drawable/ic_add_black"
                     android:drawablePadding="10dp"
                     android:paddingLeft="20dp"
+                    android:visibility="gone"
                     android:paddingRight="20dp"
                     android:text="@string/upgrade_social_profile"
                     android:textAllCaps="false"
@@ -60,12 +62,23 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tvNoRecordFound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Record Found"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_centerInParent="true"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewSocialProfiles"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorWhite"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
         </LinearLayout>
 

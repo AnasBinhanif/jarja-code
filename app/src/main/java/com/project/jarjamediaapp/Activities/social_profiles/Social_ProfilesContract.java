@@ -1,11 +1,28 @@
 package com.project.jarjamediaapp.Activities.social_profiles;
 
 import com.project.jarjamediaapp.Base.BaseContract;
+import com.project.jarjamediaapp.Models.GetAllSocialProfiles;
+import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
 
 public interface Social_ProfilesContract {
 
-    interface View extends BaseContract.View{
+    interface View extends BaseContract.View {
 
+        void initViews();
+
+        void updateUI(GetAllSocialProfiles response);
+
+        void updateUI(GetSocialProfileDropdown response);
+
+        void updateUIonFalse(String message);
+
+        void updateUIonError(String error);
+
+        void updateUIonFailure();
+
+        void showProgressBar();
+
+        void hideProgressBar();
     }
 
     /*
@@ -14,7 +31,11 @@ public interface Social_ProfilesContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void addData();
+        void getSocialProfileDropdown();
+
+        void getAllSocialProfiles(String leadId);
+
+        void addSocialProfile(String leadId, String name, String siteName, String profilelink);
 
         void initScreen();
 

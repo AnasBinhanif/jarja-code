@@ -1,13 +1,10 @@
 package com.project.jarjamediaapp.Activities.notes;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -18,16 +15,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.CustomAdapter.SwipeNotesRecyclerAdapter;
-import com.project.jarjamediaapp.CustomAdapter.SwipeTagsRecyclerAdapter;
-import com.project.jarjamediaapp.Models.GetTags;
+import com.project.jarjamediaapp.Models.GetAgentsModel;
+import com.project.jarjamediaapp.Models.GetLeadNotes;
+import com.project.jarjamediaapp.Models.GetNoteDropDown;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityNotesBinding;
-import com.project.jarjamediaapp.databinding.ActivityTagsBinding;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Response;
 
@@ -38,12 +36,17 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
     NotesPresenter presenter;
     SwipeNotesRecyclerAdapter swipeNotesRecyclerAdapter;
 
+    ArrayList<GetLeadNotes.NotesList> getLeadNotes;
+
+    String leadID = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         bi = DataBindingUtil.setContentView(this, R.layout.activity_notes);
         presenter = new NotesPresenter(this);
+        leadID = getIntent().getStringExtra("leadID");
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.notes), true);
     }
@@ -63,7 +66,36 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
     @Override
     public void initViews() {
 
-        populateDataDue();
+        presenter.getLeadNotes(leadID);
+
+    }
+
+    @Override
+    public void updateUI(GetNoteDropDown response) {
+
+    }
+
+    @Override
+    public void updateUI(GetLeadNotes response) {
+
+        getLeadNotes = new ArrayList<>();
+        getLeadNotes = response.data.notesList;
+
+        if (getLeadNotes.size() == 0) {
+
+            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+            bi.recyclerViewNotes.setVisibility(View.GONE);
+
+        } else {
+            bi.tvNoRecordFound.setVisibility(View.GONE);
+            bi.recyclerViewNotes.setVisibility(View.VISIBLE);
+            populateDataDue();
+        }
+
+    }
+
+    @Override
+    public void updateUI(GetAgentsModel response) {
 
     }
 
@@ -79,7 +111,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
         tagsList.add(new GetTags("Gold Five"));
         tagsList.add(new GetTags("Gold Five"));*/
 
-        swipeNotesRecyclerAdapter = new SwipeNotesRecyclerAdapter(context);
+        swipeNotesRecyclerAdapter = new SwipeNotesRecyclerAdapter(context, getLeadNotes);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewNotes.getContext(), 1);
         bi.recyclerViewNotes.setLayoutManager(mLayoutManager);
@@ -88,33 +120,6 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
         bi.recyclerViewNotes.setAdapter(swipeNotesRecyclerAdapter);
     }
 
-    public void showCallDialog(Context context) {
-
-        final Dialog dialog = new Dialog(context, R.style.Dialog);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.custom_assignedto_dialog);
-
-        TextView txtTitle = dialog.findViewById(R.id.tvAssignedTo);
-        txtTitle.setText("Assign Tags");
-
-        Button btnSave = dialog.findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        Button btnCancel = dialog.findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
 
     @Override
     public void updateUI(Response<BaseResponse> response) {
@@ -156,7 +161,9 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
 
             //showCallDialog(context);
 
-            switchActivity(AddNotesActivity.class);
+            Map<String, String> noteMap = new HashMap<>();
+            noteMap.put("leadID", leadID);
+            switchActivityWithIntentString(AddNotesActivity.class, (HashMap) noteMap);
 
             return true;
         }

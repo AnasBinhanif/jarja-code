@@ -113,7 +113,9 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
                 case 1:
 
-                    switchActivity(Social_ProfilesActivity.class);
+                    Map<String, String> socialMap = new HashMap<>();
+                    socialMap.put("leadID", leadID);
+                    switchActivityWithIntentString(Social_ProfilesActivity.class,(HashMap<String, String>) socialMap);
 
                     break;
 
@@ -134,7 +136,6 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
                 case 4:
                     switchActivity(TagsActivity.class);
-
                     break;
                 case 5:
 
@@ -143,8 +144,9 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     break;
 
                 case 6:
-
-                    switchActivity(NotesActivity.class);
+                    Map<String, String> noteMap = new HashMap<>();
+                    noteMap.put("leadID", leadID);
+                    switchActivityWithIntentString(NotesActivity.class,(HashMap) noteMap);
 
                     break;
                 case 7:
@@ -271,8 +273,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     @Override
     public void initViews() {
         leadID = getIntent().getStringExtra("leadID");
-
-        bi.scLeadDetail.setVisibility(View.GONE);
+         bi.scLeadDetail.setVisibility(View.GONE);
         bi.tvNoRecordFound.setVisibility(View.GONE);
 
         initListeners();

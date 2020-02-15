@@ -381,7 +381,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         searchListItems = new ArrayList<>();
         agentList = response.data;
         for (GetAgentsModel.Data model : agentList) {
-            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName));
+            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName,model.encryptedAgentID));
         }
     }
 
