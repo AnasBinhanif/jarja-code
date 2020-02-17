@@ -1,4 +1,4 @@
-package com.project.jarjamediaapp.Activities.add_appointment;
+package com.project.jarjamediaapp.Activities.add_calendar_task;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,11 +7,11 @@ import com.project.jarjamediaapp.Models.GetTasksModel;
 
 import java.util.ArrayList;
 
-public class AddAppointmentModel extends BaseResponse {
+public class AddCalendarTaskModel extends BaseResponse {
 
     @SerializedName("data")
     @Expose
-    public ArrayList<Data> data = null;
+    public ArrayList<GetTasksModel.Data> data = null;
 
     public class Data {
 
@@ -31,11 +31,9 @@ public class AddAppointmentModel extends BaseResponse {
             return value;
         }
 
-
-
     }
 
-    public ArrayList<Data> getData() {
+    public ArrayList<GetTasksModel.Data> getData() {
         return data;
     }
 }

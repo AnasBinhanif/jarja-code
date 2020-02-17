@@ -37,7 +37,7 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
 
                     NotificationModel notificationModel = response.body();
                     if (notificationModel.getStatus().equals("Success")) {
-                        _view.updateUIList(response);
+                        _view.updateUIList(notificationModel.getData());
 
                     } else {
                         _view.updateUIonFalse(notificationModel.getMessage());
@@ -72,7 +72,7 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
 
                     NotificationModel notificationModel = response.body();
                     if (notificationModel.getStatus().equals("Success")) {
-                        _view.updateUIList(response);
+                        _view.updateUIList(notificationModel.getData());
 
                     } else {
                         _view.updateUIonFalse(notificationModel.getMessage());
@@ -107,7 +107,7 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
 
                     NotificationModel notificationModel = response.body();
                     if (notificationModel.getStatus().equals("Success")) {
-                        _view.updateUIList(response);
+                        _view.updateUIList(notificationModel.getData());
 
                     } else {
                         _view.updateUIonFalse(notificationModel.getMessage());

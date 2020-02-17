@@ -7,10 +7,13 @@ public interface AddAppointmentContract {
 
     interface View extends BaseContract.View {
 
-
-        void initViews();
-
         void updateUI(GetAgentsModel response);
+
+        void updateUIListForReminders(AddAppointmentModel response);
+
+        void updateUIListForVia(AddAppointmentModel response);
+
+        void updateUIListForLocation(GetLocationModel.Data response);
 
         void updateUIonFalse(String message);
 
@@ -38,6 +41,12 @@ public interface AddAppointmentContract {
         void initScreen();
 
         void getAgentNames();
+
+        void getDropDownLocation(String prefix);
+
+        void getReminder();
+
+        void getVia();
 
     }
 

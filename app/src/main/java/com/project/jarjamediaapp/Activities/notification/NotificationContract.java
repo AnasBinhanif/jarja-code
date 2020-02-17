@@ -2,13 +2,15 @@ package com.project.jarjamediaapp.Activities.notification;
 
 import com.project.jarjamediaapp.Base.BaseContract;
 
+import java.util.List;
+
 import retrofit2.Response;
 
 public interface NotificationContract {
 
     interface View extends BaseContract.View {
 
-        void updateUIList(Response<NotificationModel> response);
+        void updateUIList(NotificationModel.Data response);
 
     }
 

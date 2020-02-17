@@ -12,7 +12,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorWhite"
-            android:gravity="center|left"
             android:orientation="vertical"
             android:padding="@dimen/_10sdp">
 
@@ -22,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/add_open_house"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="18dp"
+                android:textSize="@dimen/_15sdp"
                 android:textStyle="bold" />
 
             <View
@@ -46,7 +45,7 @@
                     android:padding="@dimen/_5sdp"
                     android:text="@string/select_picture"
                     android:textColor="@color/colorBlack"
-                    android:textSize="14dp"
+                    android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
 
 
@@ -59,12 +58,12 @@
                     android:drawableEnd="@drawable/ic_close"
                     android:drawablePadding="5dp"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:padding="@dimen/_5sdp"
                     android:text="@string/file_name"
                     android:textColor="@color/colorBlack"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tvSelectPicture"
@@ -74,10 +73,10 @@
                     android:drawableStart="@drawable/ic_select_image"
                     android:drawablePadding="5dp"
                     android:gravity="center"
-                    android:text="@string/select_picture"
                     android:padding="@dimen/_5sdp"
+                    android:text="@string/select_picture"
                     android:textColor="@color/colorBlack"
-                    android:textSize="14dp"
+                    android:textSize="@dimen/_12sdp"
                     android:textStyle="bold"
                     android:visibility="visible" />
 
@@ -89,11 +88,11 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/listing_price"
                 android:textColor="@color/colorBlack"
-                android:textSize="14dp"
+                android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/edtListingPrice"
+            <AutoCompleteTextView
+                android:id="@+id/atvListingPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -103,7 +102,7 @@
                 android:inputType="number"
                 android:padding="@dimen/_10sdp"
                 android:singleLine="true"
-                android:textSize="14dp" />
+                android:textSize="@dimen/_11sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -111,11 +110,11 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/address"
                 android:textColor="@color/colorBlack"
-                android:textSize="14dp"
+                android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/edtAddress"
+            <AutoCompleteTextView
+                android:id="@+id/atvAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -124,7 +123,7 @@
                 android:imeOptions="actionNext"
                 android:padding="@dimen/_10sdp"
                 android:singleLine="true"
-                android:textSize="14dp" />
+                android:textSize="@dimen/_11sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -132,11 +131,11 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/city"
                 android:textColor="@color/colorBlack"
-                android:textSize="14dp"
+                android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/edtCity"
+            <AutoCompleteTextView
+                android:id="@+id/atvCity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -145,7 +144,7 @@
                 android:imeOptions="actionNext"
                 android:padding="@dimen/_10sdp"
                 android:singleLine="true"
-                android:textSize="14dp" />
+                android:textSize="@dimen/_11sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -153,11 +152,11 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/state_province"
                 android:textColor="@color/colorBlack"
-                android:textSize="14dp"
+                android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/edtState"
+            <AutoCompleteTextView
+                android:id="@+id/atvState"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -166,7 +165,7 @@
                 android:imeOptions="actionNext"
                 android:padding="@dimen/_10sdp"
                 android:singleLine="true"
-                android:textSize="14dp" />
+                android:textSize="@dimen/_11sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -174,11 +173,11 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/zip_postal"
                 android:textColor="@color/colorBlack"
-                android:textSize="14dp"
+                android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/edtPostalCode"
+            <AutoCompleteTextView
+                android:id="@+id/atvPostalCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -188,7 +187,7 @@
                 android:inputType="number"
                 android:padding="@dimen/_10sdp"
                 android:singleLine="true"
-                android:textSize="14dp" />
+                android:textSize="@dimen/_11sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -196,22 +195,22 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/start_date_time"
                 android:textColor="@color/colorBlack"
-                android:textSize="14dp"
+                android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/edtStartDateTime"
+            <AutoCompleteTextView
+                android:id="@+id/atvStartDateTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search"
                 android:drawableEnd="@drawable/ic_calendar"
                 android:focusable="false"
-                android:layout_gravity="center"
                 android:hint="@string/start_date_time"
                 android:padding="@dimen/_10sdp"
                 android:singleLine="true"
-                android:textSize="14dp" />
+                android:textSize="@dimen/_11sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -219,11 +218,11 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/end_date_time"
                 android:textColor="@color/colorBlack"
-                android:textSize="14dp"
+                android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/edtEndDateTime"
+            <AutoCompleteTextView
+                android:id="@+id/atvEndDateTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -233,7 +232,7 @@
                 android:hint="@string/end_date_time"
                 android:padding="@dimen/_10sdp"
                 android:singleLine="true"
-                android:textSize="14dp" />
+                android:textSize="@dimen/_11sdp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -247,7 +246,7 @@
                     android:id="@+id/btnSave"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:layout_weight="1"
                     android:background="@color/colorGreen"
                     android:text="@string/save"
@@ -258,7 +257,7 @@
                     android:id="@+id/btnCancel"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:layout_weight="1"
                     android:background="@color/colorRed"
                     android:text="@string/cancel"

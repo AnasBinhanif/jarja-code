@@ -32,7 +32,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     ActivityNotificationBinding bi;
     Context context = NotificationActivity.this;
     NotificationPresenter presenter;
-    List<NotificationModel.Data> notificationList;
+    List<NotificationModel.Data.TaskList> notificationList;
     RecyclerAdapterUtil recyclerAdapterUtil;
 
     @Override
@@ -53,19 +53,28 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         recyclerAdapterUtil = new RecyclerAdapterUtil(context, notificationList, R.layout.custom_notifications_layout);
         recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail);
 
-        recyclerAdapterUtil.addOnDataBindListener((Function4<View, NotificationModel.Data, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
+        recyclerAdapterUtil.addOnDataBindListener((Function4<View, NotificationModel.Data.TaskList, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
 
-            TextView tvName = (TextView) integerMap.get(R.id.tvName);
-            tvName.setText(data.getMessage());
+            try {
 
-            TextView tvDesc = (TextView) integerMap.get(R.id.tvLeadName);
-            tvDesc.setText(data.getLeadName());
+                TextView tvName = (TextView) integerMap.get(R.id.tvName);
+                tvName.setText(data.getTaskName() != null ? data.getTaskName() : "");
 
-            TextView tvContact = (TextView) integerMap.get(R.id.tvContact);
-            tvContact.setText(data.getContact());
 
-            TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
-            tvEmail.setText(data.getEmail());
+                TextView tvDesc = (TextView) integerMap.get(R.id.tvLeadName);
+                tvDesc.setText(data.getVtCRMLeadCustom().getFirstName() != null && data.getVtCRMLeadCustom().getLastName() != null ? data.getVtCRMLeadCustom().getFirstName() + " " + data.getVtCRMLeadCustom().getLastName() : "");
+
+
+                TextView tvContact = (TextView) integerMap.get(R.id.tvContact);
+                tvContact.setText(data.getVtCRMLeadCustom().getPrimaryPhone() != null ? data.getVtCRMLeadCustom().getPrimaryPhone() : "");
+
+
+                TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
+                tvEmail.setText(data.getVtCRMLeadCustom().getPrimaryEmail() != null ? data.getVtCRMLeadCustom().getPrimaryEmail() : "");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             return Unit.INSTANCE;
         });
@@ -169,11 +178,11 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     }
 
     @Override
-    public void updateUIList(Response<NotificationModel> response) {
+    public void updateUIList(NotificationModel.Data response) {
 
         notificationList.clear();
-        if (response.body().getData().size() > 0) {
-            notificationList.addAll(response.body().getData());
+        if (response.taskList.size() > 0) {
+            notificationList.addAll(response.taskList);
             recyclerAdapterUtil.notifyDataSetChanged();
             bi.rvNotifications.setVisibility(View.VISIBLE);
             bi.tvMessage.setVisibility(View.GONE);

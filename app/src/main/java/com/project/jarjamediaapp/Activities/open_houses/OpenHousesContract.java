@@ -13,6 +13,8 @@ public interface OpenHousesContract {
 
         void updateAfterUploadFile(Response<UploadImageModel> response);
 
+        void updateUIListForAddressDetail(AddressDetailModel.Data response);
+
         void _updateUIonFalse(String message);
 
         void _updateUIonError(String error);
@@ -30,11 +32,13 @@ public interface OpenHousesContract {
 
         void initScreen();
 
+        void getAddressDetailByPrefix(String prefix, String type);
+
         void getAllOpenHouses(String openHouseType);
 
         void addOpenHouse(String listPrice, String city, String address, String state, String zip, String image, String openHouseDate, String openHouseEndDate);
 
-        void uploadImage (MultipartBody.Part file);
+        void uploadImage(MultipartBody.Part file);
     }
 
 }

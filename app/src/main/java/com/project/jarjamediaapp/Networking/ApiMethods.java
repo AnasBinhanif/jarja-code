@@ -1,7 +1,10 @@
 package com.project.jarjamediaapp.Networking;
 
+import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
+import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
 import com.project.jarjamediaapp.Activities.notification.NotificationModel;
+import com.project.jarjamediaapp.Activities.open_houses.AddressDetailModel;
 import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
 import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
@@ -490,5 +493,20 @@ public interface ApiMethods {
 
     @GET("Notification/GetFollowUpNotification")
     Call<NotificationModel> getNotificationByFollowUps(@Header("Authorization") String authorization);
+
+    @POST("Appointment/GetReminder")
+    Call<AddAppointmentModel> getReminder(@Header("Authorization") String authorization);
+
+    @POST("Appointment/GetSendVia")
+    Call<AddAppointmentModel> getVia(@Header("Authorization") String authorization);
+
+    @GET("Lead/GetLocationAutoCompleteDropdown")
+    Call<GetLocationModel> getLocationByPrefix(@Header("Authorization") String authorization,
+                                               @Query("Prefix") String prefix);
+
+    @GET("Lead/GetOpenHouseSearchDropdown")
+    Call<AddressDetailModel> getAddressDetailByPrefix(@Header("Authorization") String authorization,
+                                                      @Query("Prefix") String prefix,
+                                                      @Query("Type") String type);
 
 }

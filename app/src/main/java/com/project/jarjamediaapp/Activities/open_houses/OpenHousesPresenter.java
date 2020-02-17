@@ -1,5 +1,6 @@
 package com.project.jarjamediaapp.Activities.open_houses;
 
+import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -18,6 +19,7 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
     Call<GetAllOpenHousesModel> call;
     Call<BaseResponse> _call;
     Call<UploadImageModel> _cCall;
+    Call<AddressDetailModel> callAddressDetail;
 
 
     public OpenHousesPresenter(OpenHousesContract.View view) {
@@ -26,6 +28,46 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
 
     public void initScreen() {
         _view.initViews();
+    }
+
+    @Override
+    public void getAddressDetailByPrefix(String prefix, String type) {
+
+        _view.showProgressBar();
+        callAddressDetail = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getAddressDetailByPrefix(GH.getInstance().getAuthorization(), prefix,type);
+        callAddressDetail.enqueue(new Callback<AddressDetailModel>() {
+            @Override
+            public void onResponse(Call<AddressDetailModel> call, Response<AddressDetailModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    AddressDetailModel getAppointmentsModel = response.body();
+
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateUIListForAddressDetail(getAppointmentsModel.getData());
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddressDetailModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+
     }
 
     @Override

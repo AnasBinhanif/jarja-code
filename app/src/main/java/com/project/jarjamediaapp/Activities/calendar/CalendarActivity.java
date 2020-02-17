@@ -13,6 +13,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
 
 import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment;
+import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
+import com.project.jarjamediaapp.Activities.add_calendar_task.AddCalendarTaskActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.R;
@@ -94,45 +96,6 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
     }
 
-    public void showAddAppointDialog(Context context) {
-
-        final Dialog dialog = new Dialog(context, R.style.Dialog);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.custom_calendar_add_appoint_dialog);
-
-
-        Button btnSave = dialog.findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        Button btnCancel = dialog.findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-
-        RadioGroup radioGroup = dialog.findViewById(R.id.radioGroup);
-
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // find which radio button is selected
-
-            }
-
-        });
-
-        dialog.show();
-    }
-
     @Override
     public void updateUI(Response<BaseResponse> response) {
 
@@ -187,7 +150,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
 
-            showAddAppointDialog(context);
+            showDialogForAppointment(context);
 
             return true;
         }
@@ -257,6 +220,34 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                 throw new IllegalStateException("Unexpected value: " + month);
 
         }
+    }
+
+    private void showDialogForAppointment(Context context) {
+
+        final Dialog dialog = new Dialog(context, R.style.Dialog);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.custom_select_type_dialog);
+
+        Button btnEvent = dialog.findViewById(R.id.btnEvent);
+        btnEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                switchActivity(AddAppointmentActivity.class);
+            }
+        });
+
+        Button btnTask = dialog.findViewById(R.id.btnTask);
+        btnTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                switchActivity(AddCalendarTaskActivity.class);
+            }
+        });
+
+        dialog.show();
+
     }
 
 }

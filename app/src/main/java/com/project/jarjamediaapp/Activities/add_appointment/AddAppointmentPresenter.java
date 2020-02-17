@@ -19,6 +19,9 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
 
     Call<BaseResponse> _callAddAppointment;
 
+    Call<AddAppointmentModel> call;
+
+    Call<GetLocationModel> callLocation;
 
     public AddAppointmentPresenter(AddAppointmentContract.View view) {
         super(view);
@@ -65,6 +68,123 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
     }
 
     @Override
+    public void getDropDownLocation(String prefix) {
+
+        _view.showProgressBar();
+        callLocation = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getLocationByPrefix(GH.getInstance().getAuthorization(), prefix);
+        callLocation.enqueue(new Callback<GetLocationModel>() {
+            @Override
+            public void onResponse(Call<GetLocationModel> call, Response<GetLocationModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetLocationModel getAppointmentsModel = response.body();
+
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateUIListForLocation(getAppointmentsModel.getData());
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetLocationModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void getReminder() {
+
+        _view.showProgressBar();
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getReminder(GH.getInstance().getAuthorization());
+        call.enqueue(new Callback<AddAppointmentModel>() {
+            @Override
+            public void onResponse(Call<AddAppointmentModel> call, Response<AddAppointmentModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    AddAppointmentModel getAppointmentsModel = response.body();
+
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateUIListForReminders(getAppointmentsModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddAppointmentModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void getVia() {
+
+        _view.showProgressBar();
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getVia(GH.getInstance().getAuthorization());
+        call.enqueue(new Callback<AddAppointmentModel>() {
+            @Override
+            public void onResponse(Call<AddAppointmentModel> call, Response<AddAppointmentModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    AddAppointmentModel getAppointmentsModel = response.body();
+
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateUIListForVia(getAppointmentsModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddAppointmentModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
     public void addAppointment(String leadStringID, String agentsStringIDs, String leadAppoinmentID, String eventTitle, String location,
                                String desc, String isAppointmentFixed, String isAppointmentAttend, String appointmentDate, String datedFrom,
                                String datedTo, String isAllDay, String interval, String isSend, String viaReminder, String agentIds, String orderBy,
@@ -72,8 +192,8 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
 
         _view.showProgressBar();
         _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddAppointment(GH.getInstance().getAuthorization(),
-                leadStringID, agentsStringIDs, leadAppoinmentID,eventTitle,location, desc,isAppointmentFixed,isAppointmentAttend,appointmentDate,datedFrom,
-                datedTo,isAllDay,interval,isSend,viaReminder,agentIds,orderBy, startTime,endTime,isCompleted);
+                leadStringID, agentsStringIDs, leadAppoinmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
+                datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted);
         _callAddAppointment.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
@@ -106,42 +226,6 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
         });
     }
 
-   /* @Override
-    public void updateCardDetailStatus(String cardId, boolean status) {
-
-        _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class). ();
-        _call.enqueue(new Callback<BaseResponse>() {
-            @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-
-                _view.hideProgressBar();
-                if (response.isSuccessful()) {
-
-                    BaseResponse baseResponse = response.body();
-                    if (baseResponse.getStatus()) {
-                        _view.updateUI(response);
-
-                    } else {
-
-                        _view.updateUIonFalse(baseResponse.getError());
-
-                    }
-                } else {
-
-                    _view.updateUIonError(response.errorBody().toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                _view.hideProgressBar();
-                _view.updateUIonFailure();
-            }
-        });
-
-    }*/
-
     @Override
     public void detachView() {
 
@@ -151,7 +235,6 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
         }
         super.detachView();
     }
-
 
 
 }

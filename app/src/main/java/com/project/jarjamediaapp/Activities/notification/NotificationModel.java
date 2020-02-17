@@ -4,52 +4,96 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.project.jarjamediaapp.Base.BaseResponse;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class NotificationModel extends BaseResponse {
 
     @SerializedName("data")
     @Expose
-    private ArrayList<Data> data = null;
+    public Data data;
 
     public class Data {
 
+        @SerializedName("taskList")
+        @Expose
+        public List<TaskList> taskList = null;
         @SerializedName("message")
         @Expose
-        private String message;
-        @SerializedName("lead_name")
+        public Object message;
+        @SerializedName("status")
         @Expose
-        private String lead_name;
-        @SerializedName("contact")
-        @Expose
-        private String contact;
-        @SerializedName("email")
-        @Expose
-        private String email;
+        public Boolean status;
 
-        public String getMessage() {
-            return message;
+        public class TaskList {
+
+            @SerializedName("vt_CRM_Lead_Custom")
+            @Expose
+            public VtCRMLeadCustom vtCRMLeadCustom;
+            @SerializedName("taskID")
+            @Expose
+            public Integer taskID;
+            @SerializedName("taskName")
+            @Expose
+            public String taskName;
+            @SerializedName("leadID")
+            @Expose
+            public Integer leadID;
+
+            public class VtCRMLeadCustom {
+
+                @SerializedName("leadID")
+                @Expose
+                public String leadID;
+                @SerializedName("firstName")
+                @Expose
+                public String firstName;
+                @SerializedName("lastName")
+                @Expose
+                public String lastName;
+                @SerializedName("primaryEmail")
+                @Expose
+                public String primaryEmail;
+                @SerializedName("primaryPhone")
+                @Expose
+                public String primaryPhone;
+
+                public String getFirstName() {
+                    return firstName;
+                }
+
+                public String getLastName() {
+                    return lastName;
+                }
+
+                public String getPrimaryEmail() {
+                    return primaryEmail;
+                }
+
+                public String getPrimaryPhone() {
+                    return primaryPhone;
+                }
+            }
+
+            public VtCRMLeadCustom getVtCRMLeadCustom() {
+                return vtCRMLeadCustom;
+            }
+
+            public Integer getTaskID() {
+                return taskID;
+            }
+
+            public String getTaskName() {
+                return taskName;
+            }
+
+            public Integer getLeadID() {
+                return leadID;
+            }
         }
 
-        public String getLeadName() {
-            return lead_name;
-        }
-
-        public String getContact() {
-            return contact;
-        }
-
-        public String getEmail() {
-            return email;
-        }
     }
 
-    public ArrayList<Data> getData() {
+    public Data getData() {
         return data;
     }
-
-    public void setData(ArrayList<Data> data) {
-        this.data = data;
-    }
-
 }

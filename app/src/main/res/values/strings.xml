@@ -31,10 +31,19 @@
     <string name="via">Via</string>
     <string name="property_address">Property Address</string>
     <string name="all_day">All Day</string>
+    <string name="mark_complete">Mark Complete</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="select_begin">Select and Begin Typing</string>
     <string name="nothing_selected">Nothing Selected</string>
+    <string name="error_name">Please enter Name of Contact</string>
+    <string name="error_agent">Please enter Agent</string>
+    <string name="error_title">Please enter Event title</string>
+    <string name="error_description">Please enter Description</string>
+    <string name="error_start_date">Please select Start date</string>
+    <string name="error_end_date">Please select End date</string>
+    <string name="error_reminder">Please select Reminder</string>
+    <string name="error_via">Please select Via</string>
 
     <!--- Add Task Activity -->
     <string name="add_task">Add Task</string>

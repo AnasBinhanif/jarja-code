@@ -13,10 +13,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -77,11 +81,10 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     private final int RC_CAMERA_ONLY = 101;
     File actualImage;
     File compressedImage;
-    public static final int RC_FILE_PICKER_PERM = 321;
-    private ArrayList<String> photoPaths = new ArrayList<>();
     TextView tvSelectPictures, tvRemovePictures;
     Button btnSave, btnCancel;
-    EditText edtPrice, edtAddress, edtCity, edtState, edtZip, edtOpenHouseStartDate, edtOpenHouseEndDate;
+    AutoCompleteTextView atvPrice, atvAddress, atvCity, atvState, atvZip, atvOpenHouseStartDate, atvOpenHouseEndDate;
+    int viewId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,28 +139,139 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.custom_open_house_dialog);
 
-        edtAddress = dialog.findViewById(R.id.edtAddress);
-        edtCity = dialog.findViewById(R.id.edtCity);
-        edtPrice = dialog.findViewById(R.id.edtListingPrice);
-        edtState = dialog.findViewById(R.id.edtState);
-        edtOpenHouseStartDate = dialog.findViewById(R.id.edtStartDateTime);
-        edtOpenHouseEndDate = dialog.findViewById(R.id.edtEndDateTime);
-        edtZip = dialog.findViewById(R.id.edtPostalCode);
+        atvPrice = dialog.findViewById(R.id.atvListingPrice);
+        atvAddress = dialog.findViewById(R.id.atvAddress);
+        atvCity = dialog.findViewById(R.id.atvCity);
+        atvState = dialog.findViewById(R.id.atvState);
+        atvZip = dialog.findViewById(R.id.atvPostalCode);
+        atvOpenHouseStartDate = dialog.findViewById(R.id.atvStartDateTime);
+        atvOpenHouseEndDate = dialog.findViewById(R.id.atvEndDateTime);
 
         tvSelectPictures = dialog.findViewById(R.id.tvSelectPicture);
         tvRemovePictures = dialog.findViewById(R.id.tvRemovePicture);
 
-        edtOpenHouseStartDate.setOnClickListener(new View.OnClickListener() {
+        atvAddress.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                DateDialog(context, edtOpenHouseStartDate, true, "1");
+            public void onClick(View view) {
+
+                viewId = view.getId();
+
             }
         });
 
-        edtOpenHouseEndDate.setOnClickListener(new View.OnClickListener() {
+        atvAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                presenter.getAddressDetailByPrefix(atvAddress.getText().toString(), "street");
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        atvCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                viewId = view.getId();
+
+            }
+        });
+
+        atvCity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                presenter.getAddressDetailByPrefix(atvCity.getText().toString(), "city");
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        atvState.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                viewId = view.getId();
+
+            }
+        });
+
+        atvState.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                presenter.getAddressDetailByPrefix(atvState.getText().toString(), "state");
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        atvZip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                viewId = view.getId();
+
+            }
+        });
+
+        atvZip.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                presenter.getAddressDetailByPrefix(atvZip.getText().toString(), "zip");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        atvOpenHouseStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateDialog(context, edtOpenHouseEndDate, true, "2");
+                DateDialog(context, atvOpenHouseStartDate, true, "1");
+            }
+        });
+
+        atvOpenHouseEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DateDialog(context, atvOpenHouseEndDate, true, "2");
             }
         });
 
@@ -188,12 +302,11 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             public void onClick(View v) {
                 // dismiss dialogue on api integration
 
-                address = edtAddress.getText().toString();
-                listPrice = edtPrice.getText().toString();
-                city = edtCity.getText().toString();
-                state = edtState.getText().toString();
-                zip = edtZip.getText().toString();
-                // dates from picker , formatted as per api request
+                address = atvAddress.getText().toString();
+                listPrice = atvPrice.getText().toString();
+                city = atvCity.getText().toString();
+                state = atvState.getText().toString();
+                zip = atvZip.getText().toString();
 
                 if (isValidate()) {
                     presenter.addOpenHouse(listPrice, city, address, state, zip, image, openHouseStartDate, openHouseEndDate);
@@ -216,34 +329,34 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
 
     private boolean isValidate() {
 
-        if (Methods.isEmpty(edtAddress)) {
+        if (Methods.isEmpty(atvAddress)) {
             ToastUtils.showToast(context, R.string.error_address);
-            edtAddress.requestFocus();
+            atvAddress.requestFocus();
             return false;
         }
-        if (Methods.isEmpty(edtCity)) {
+        if (Methods.isEmpty(atvCity)) {
             ToastUtils.showToast(context, R.string.error_city);
-            edtCity.requestFocus();
+            atvCity.requestFocus();
             return false;
         }
-        if (Methods.isEmpty(edtState)) {
+        if (Methods.isEmpty(atvState)) {
             ToastUtils.showToast(context, R.string.error_state);
-            edtState.requestFocus();
+            atvState.requestFocus();
             return false;
         }
-        if (Methods.isEmpty(edtZip)) {
+        if (Methods.isEmpty(atvZip)) {
             ToastUtils.showToast(context, R.string.error_zip);
-            edtZip.requestFocus();
+            atvZip.requestFocus();
             return false;
         }
-        if (Methods.isEmpty(edtOpenHouseStartDate)) {
+        if (Methods.isEmpty(atvOpenHouseStartDate)) {
             ToastUtils.showToast(context, R.string.error_start_time);
-            edtOpenHouseStartDate.requestFocus();
+            atvOpenHouseStartDate.requestFocus();
             return false;
         }
-        if (Methods.isEmpty(edtOpenHouseEndDate)) {
+        if (Methods.isEmpty(atvOpenHouseEndDate)) {
             ToastUtils.showToast(context, R.string.error_end_time);
-            edtOpenHouseEndDate.requestFocus();
+            atvOpenHouseEndDate.requestFocus();
             return false;
         }
 
@@ -324,6 +437,58 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         tvSelectPictures.setVisibility(View.GONE);
         ToastUtils.showToast(context, "Image uploaded");
         image = response.body().getResponse().getFileUrl();
+
+    }
+
+    @Override
+    public void updateUIListForAddressDetail(AddressDetailModel.Data response) {
+
+        try {
+
+            ArrayList<String> arrayList = new ArrayList<>();
+            for (int i = 0; i < response.getCityFilter().size(); i++) {
+                arrayList.add(response.getCityFilter().get(i).getN());
+            }
+            ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
+
+            switch (viewId) {
+
+                case R.id.atvAddress: {
+
+                    atvAddress.setAdapter(arrayAdapter);
+                    atvAddress.showDropDown();
+                    atvAddress.setThreshold(1);
+                }
+                break;
+                case R.id.atvCity: {
+
+                    atvCity.setAdapter(arrayAdapter);
+                    atvCity.showDropDown();
+                    atvCity.setThreshold(1);
+
+                }
+                break;
+                case R.id.atvState: {
+
+                    atvState.setAdapter(arrayAdapter);
+                    atvState.showDropDown();
+                    atvState.setThreshold(1);
+
+                }
+                break;
+                case R.id.atvPostalCode: {
+
+                    atvZip.setAdapter(arrayAdapter);
+                    atvZip.showDropDown();
+                    atvZip.setThreshold(1);
+
+                }
+                break;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
