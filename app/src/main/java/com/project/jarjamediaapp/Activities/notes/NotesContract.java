@@ -34,6 +34,8 @@ public interface NotesContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
+        void editNote(String leadID,String noteID,String Desc);
+
         void getNoteDropDown();
 
         void getAgentNames();

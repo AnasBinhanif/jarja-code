@@ -61,8 +61,6 @@ public class Social_ProfilesPresenter extends BasePresenter<Social_ProfilesContr
                 _view.updateUIonFailure();
             }
         });
-
-
     }
 
     @Override

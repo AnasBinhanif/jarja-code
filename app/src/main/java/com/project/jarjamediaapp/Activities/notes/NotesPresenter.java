@@ -28,6 +28,44 @@ public class NotesPresenter extends BasePresenter<NotesContract.View> implements
     }
 
     @Override
+    public void editNote(String leadID, String noteID, String Desc) {
+        _view.showProgressBar();
+        _callAddNote = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).EditNote(GH.getInstance().getAuthorization(),
+                noteID,leadID, Desc);
+        _callAddNote.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateUI(response);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
     public void getNoteDropDown() {
 
         _view.showProgressBar();

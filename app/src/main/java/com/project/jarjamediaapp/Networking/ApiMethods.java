@@ -28,6 +28,7 @@ import com.project.jarjamediaapp.Models.GetLeadTypeList;
 import com.project.jarjamediaapp.Models.GetNoteDropDown;
 import com.project.jarjamediaapp.Models.GetPipeline;
 import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
+import com.project.jarjamediaapp.Models.GetTagListByLeadID;
 import com.project.jarjamediaapp.Models.GetTasksModel;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
@@ -214,11 +215,47 @@ public interface ApiMethods {
             @Query("EncryptedLeadID") String leadID
     );
 
+    @POST("Lead/EditNote")
+    Call<BaseResponse> EditNote(
+            @Header("Authorization") String authorization,
+            @Query("Encrypted_NoteID") String NoteID,
+            @Query("Encrypted_LeadStringID") String LeadID,
+            @Query("Description") String Description
+    );
+
+    @POST("Lead/Make_Lead_Note_Sticky")
+    Call<BaseResponse> Make_Lead_Note_Sticky(
+            @Header("Authorization") String authorization,
+            @Query("Encrypted_NoteID") String NoteID,
+            @Query("Encrypted_LeadStringID") String LeadID,
+            @Query("IsSticky") Boolean isSticky
+    );
+
     @FormUrlEncoded
     @POST("Lead/DeleteNote")
     Call<BaseResponse> DeleteNote(
             @Header("Authorization") String authorization,
             @Field("noteID") String leadAppoinmentID
+    );
+
+    @GET("Lead/GetTagListByLeadID")
+    Call<GetTagListByLeadID> GetTagListByLeadID(
+            @Header("Authorization") String authorization,
+            @Query("Encrypted_LeadID") String leadID
+    );
+
+    @POST("Lead/AssignTagsToLeads")
+    Call<BaseResponse> AssignTagsToLeads(
+            @Header("Authorization") String authorization,
+            @Query("Encrypted_LeadStringID") String leadID,
+            @Query("TagIds") String tagsId
+    );
+
+    @POST("Lead/DeleteLeadTag")
+    Call<BaseResponse> DeleteLeadTag(
+            @Header("Authorization") String authorization,
+            @Query("LeadId") String leadID,
+            @Query("LabelId") String tagsId
     );
 
     @FormUrlEncoded

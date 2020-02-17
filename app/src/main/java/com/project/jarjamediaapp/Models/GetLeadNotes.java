@@ -18,7 +18,7 @@ public class GetLeadNotes  implements Serializable {
     @Expose
     public String message;
 
-    public class Data {
+    public class Data implements Serializable {
 
         @SerializedName("msg")
         @Expose
@@ -33,15 +33,9 @@ public class GetLeadNotes  implements Serializable {
 
     public class NotesList implements Serializable {
 
-        @SerializedName("agentID")
+        @SerializedName("agentList")
         @Expose
-        public Integer agentID;
-        @SerializedName("agentName")
-        @Expose
-        public String agentName;
-        @SerializedName("encryptedAgentID")
-        @Expose
-        public String encryptedAgentID;
+        public ArrayList<AgentList> agentList = null;
         @SerializedName("noteID")
         @Expose
         public String noteID;
@@ -51,6 +45,9 @@ public class GetLeadNotes  implements Serializable {
         @SerializedName("leadID")
         @Expose
         public String leadID;
+        @SerializedName("encrypted_LeadID")
+        @Expose
+        public String encrypted_LeadID;
         @SerializedName("noteType")
         @Expose
         public String noteType;
@@ -69,5 +66,18 @@ public class GetLeadNotes  implements Serializable {
         @SerializedName("crmid")
         @Expose
         public String crmid;
+    }
+
+    public class AgentList implements Serializable  {
+
+        @SerializedName("agentID")
+        @Expose
+        public Integer agentID;
+        @SerializedName("agentName")
+        @Expose
+        public String agentName;
+        @SerializedName("encryptedAgentID")
+        @Expose
+        public String encryptedAgentID;
     }
 }

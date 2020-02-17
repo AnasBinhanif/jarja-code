@@ -135,7 +135,10 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     break;
 
                 case 4:
-                    switchActivity(TagsActivity.class);
+                    Map<String, String> tagMap = new HashMap<>();
+                    tagMap.put("leadID", leadID);
+                    switchActivityWithIntentString(TagsActivity.class, (HashMap<String, String>) tagMap);
+
                     break;
                 case 5:
 

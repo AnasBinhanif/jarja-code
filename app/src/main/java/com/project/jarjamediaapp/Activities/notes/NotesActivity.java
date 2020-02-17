@@ -1,6 +1,8 @@
 package com.project.jarjamediaapp.Activities.notes;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,7 +57,20 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
     @Override
     public void onClick(View v) {
 
+        switch (v.getId()) {
+            case R.id.btnNotes:
+                presenter.getLeadNotes(leadID);
+                break;
+        }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode== Activity.RESULT_OK)
+        {
+            presenter.getLeadNotes(leadID);
+        }
     }
 
     @Override
@@ -67,6 +82,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
     public void initViews() {
 
         presenter.getLeadNotes(leadID);
+        bi.btnNotes.setOnClickListener(this);
 
     }
 
@@ -110,14 +126,18 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
         tagsList.add(new GetTags("Gold Five"));
         tagsList.add(new GetTags("Gold Five"));
         tagsList.add(new GetTags("Gold Five"));*/
-
-        swipeNotesRecyclerAdapter = new SwipeNotesRecyclerAdapter(context, getLeadNotes);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewNotes.getContext(), 1);
-        bi.recyclerViewNotes.setLayoutManager(mLayoutManager);
-        bi.recyclerViewNotes.setItemAnimator(new DefaultItemAnimator());
-        bi.recyclerViewNotes.addItemDecoration(dividerItemDecoration);
-        bi.recyclerViewNotes.setAdapter(swipeNotesRecyclerAdapter);
+        if (swipeNotesRecyclerAdapter != null) {
+            swipeNotesRecyclerAdapter = new SwipeNotesRecyclerAdapter(context, getLeadNotes);
+            bi.recyclerViewNotes.setAdapter(swipeNotesRecyclerAdapter);
+        } else {
+            swipeNotesRecyclerAdapter = new SwipeNotesRecyclerAdapter(context, getLeadNotes);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewNotes.getContext(), 1);
+            bi.recyclerViewNotes.setLayoutManager(mLayoutManager);
+            bi.recyclerViewNotes.setItemAnimator(new DefaultItemAnimator());
+            bi.recyclerViewNotes.addItemDecoration(dividerItemDecoration);
+            bi.recyclerViewNotes.setAdapter(swipeNotesRecyclerAdapter);
+        }
     }
 
 

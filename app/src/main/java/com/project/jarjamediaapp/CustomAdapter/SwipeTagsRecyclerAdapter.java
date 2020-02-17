@@ -12,10 +12,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetTagListByLeadID;
 import com.project.jarjamediaapp.Models.GetTags;
+import com.project.jarjamediaapp.Networking.ApiError;
+import com.project.jarjamediaapp.Networking.ApiMethods;
+import com.project.jarjamediaapp.Networking.ErrorUtils;
+import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.ToastUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
@@ -24,13 +37,14 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
     public Context context;
     int pos;
-    String status = "";
-    List<GetTags> mData;
+    String leadID = "";
+    ArrayList<GetTagListByLeadID.Data> mData;
 
 
-    public SwipeTagsRecyclerAdapter(Context context, List<GetTags> data) {
+    public SwipeTagsRecyclerAdapter(Context context, ArrayList<GetTagListByLeadID.Data> data,String leadID) {
 
         mData = data;
+        this.leadID=leadID;
         this.context = context;
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
@@ -49,14 +63,13 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
         pos = position;
         if (mData != null && 0 <= position && position < mData.size()) {
 
-            GetTags modelData = mData.get(position);
+            GetTagListByLeadID.Data modelData = mData.get(position);
 
-            holder.tvName.setText(modelData.getName() + "");
+            if (modelData.added!=null) {
+                holder.tvName.setText(modelData.label + "");
+            }
 
-            holder.frameLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
+            holder.frameLayout.setOnClickListener(v -> {
             });
 
 
@@ -125,10 +138,48 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     pos = getAdapterPosition();
+                    String noteID = mData.get(pos).encryptedTagID;
+                    callDeleteTag(noteID,leadID);
                 }
             });
-
-
         }
+    }
+
+    private void callDeleteTag(String encryptedNoteID,String leadID) {
+        GH.getInstance().ShowProgressDialog(context);
+        Call<BaseResponse> _callToday;
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).DeleteLeadTag(GH.getInstance().getAuthorization(),
+               leadID, encryptedNoteID);
+        _callToday.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                GH.getInstance().HideProgressDialog(context);
+                if (response.isSuccessful()) {
+
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.getStatus().equals("Success")) {
+
+                        ToastUtils.showToast(context, "Successfully Done");
+                        mData.remove(pos);
+                        notifyDataSetChanged();
+
+                    } else {
+
+                        ToastUtils.showToast(context, getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    ToastUtils.showToast(context, error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                GH.getInstance().HideProgressDialog(context);
+                ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
+            }
+        });
     }
 }
