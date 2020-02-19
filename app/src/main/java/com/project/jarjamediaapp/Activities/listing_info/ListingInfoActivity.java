@@ -127,6 +127,9 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
 
         String title = intent.getStringExtra("title");
         setToolBarTitle(bi.epToolbar.toolbar, title, true);
+        if(title.equalsIgnoreCase(getString(R.string.buying_info))){
+
+        }
     }
 
     @Override
@@ -144,6 +147,8 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
 
     @Override
     public void updateUI(Response<BaseResponse> response) {
+
+
 
     }
 
@@ -172,4 +177,10 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
         GH.getInstance().HideProgressDialog(context);
     }
 
+    @Override
+    public void updateUIList(ListingInfoModel response) {
+
+
+
+    }
 }

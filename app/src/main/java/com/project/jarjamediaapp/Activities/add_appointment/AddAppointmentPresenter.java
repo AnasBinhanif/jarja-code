@@ -185,14 +185,14 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
     }
 
     @Override
-    public void addAppointment(String leadStringID, String agentsStringIDs, String leadAppoinmentID, String eventTitle, String location,
+    public void addAppointment(String leadStringID, String agentsStringIDs, String leadAppointmentID, String eventTitle, String location,
                                String desc, String isAppointmentFixed, String isAppointmentAttend, String appointmentDate, String datedFrom,
                                String datedTo, String isAllDay, String interval, String isSend, String viaReminder, String agentIds, String orderBy,
                                String startTime, String endTime, String isCompleted) {
 
         _view.showProgressBar();
         _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddAppointment(GH.getInstance().getAuthorization(),
-                leadStringID, agentsStringIDs, leadAppoinmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
+                leadStringID, agentsStringIDs, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
                 datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted);
         _callAddAppointment.enqueue(new Callback<BaseResponse>() {
             @Override

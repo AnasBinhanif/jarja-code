@@ -15,9 +15,7 @@ import retrofit2.Response;
 
 public class AddCalendarTaskPresenter extends BasePresenter<AddCalendarTaskContract.View> implements AddCalendarTaskContract.Actions {
 
-
     Call<BaseResponse> call;
-
 
     public AddCalendarTaskPresenter(AddCalendarTaskContract.View view) {
         super(view);
@@ -30,41 +28,9 @@ public class AddCalendarTaskPresenter extends BasePresenter<AddCalendarTaskContr
     @Override
     public void addCalendarTask(String title, String description, String startDate, String startTime, String allDay, String markComplete) {
 
-    /*    _view.showProgressBar();
-        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddAppointment();
-        call.enqueue(new Callback<BaseResponse>() {
-            @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
 
-                _view.hideProgressBar();
-                if (response.isSuccessful()) {
 
-                    BaseResponse getAppointmentsModel = response.body();
-                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
-
-                        _view.updateUI(response);
-
-                    } else {
-
-                        _view.updateUIonFalse(getAppointmentsModel.message);
-
-                    }
-                } else {
-
-                    ApiError error = ErrorUtils.parseError(response);
-                    _view.updateUIonError(error.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                _view.hideProgressBar();
-                _view.updateUIonFailure();
-            }
-        });*/
     }
-
-
 
     @Override
     public void detachView() {

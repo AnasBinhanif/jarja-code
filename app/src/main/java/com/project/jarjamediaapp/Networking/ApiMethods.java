@@ -281,7 +281,6 @@ public interface ApiMethods {
     );
 
 
-
     @GET("Dashboard/GetLeadDripCampaignList")
     Call<GetLeadDripCampaignList> GetLeadDripCampaignList(
             @Header("Authorization") String authorization
@@ -553,5 +552,7 @@ public interface ApiMethods {
     Call<AddressDetailModel> getAddressDetailByPrefix(@Header("Authorization") String authorization,
                                                       @Query("Prefix") String prefix,
                                                       @Query("Type") String type);
+
+
 
 }

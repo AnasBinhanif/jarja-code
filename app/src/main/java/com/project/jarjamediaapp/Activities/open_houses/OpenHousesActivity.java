@@ -168,7 +168,13 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                presenter.getAddressDetailByPrefix(atvAddress.getText().toString(), "street");
+                try {
+                    if (s.length() > 3)
+                        presenter.getAddressDetailByPrefix(atvAddress.getText().toString(), "street");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -196,7 +202,12 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                presenter.getAddressDetailByPrefix(atvCity.getText().toString(), "city");
+                try {
+                    if (s.length() > 3)
+                        presenter.getAddressDetailByPrefix(atvCity.getText().toString(), "city");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -224,7 +235,12 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                presenter.getAddressDetailByPrefix(atvState.getText().toString(), "state");
+                try {
+                    if (s.length() > 3)
+                        presenter.getAddressDetailByPrefix(atvState.getText().toString(), "state");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -252,7 +268,13 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                presenter.getAddressDetailByPrefix(atvZip.getText().toString(), "zip");
+                try {
+                    if (s.length() > 3)
+                        presenter.getAddressDetailByPrefix(atvZip.getText().toString(), "zip");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
 
             @Override
@@ -445,16 +467,15 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
 
         try {
 
-            ArrayList<String> arrayList = new ArrayList<>();
-            for (int i = 0; i < response.getCityFilter().size(); i++) {
-                arrayList.add(response.getCityFilter().get(i).getN());
-            }
-            ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
-
             switch (viewId) {
 
                 case R.id.atvAddress: {
 
+                    ArrayList<String> arrayList = new ArrayList<>();
+                    for (int i = 0; i < response.getStreetFilter().size(); i++) {
+                        arrayList.add(response.getStreetFilter().get(i).getN());
+                    }
+                    ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
                     atvAddress.setAdapter(arrayAdapter);
                     atvAddress.showDropDown();
                     atvAddress.setThreshold(1);
@@ -462,6 +483,11 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
                 break;
                 case R.id.atvCity: {
 
+                    ArrayList<String> arrayList = new ArrayList<>();
+                    for (int i = 0; i < response.getCityFilter().size(); i++) {
+                        arrayList.add(response.getCityFilter().get(i).getN());
+                    }
+                    ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
                     atvCity.setAdapter(arrayAdapter);
                     atvCity.showDropDown();
                     atvCity.setThreshold(1);
@@ -470,6 +496,11 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
                 break;
                 case R.id.atvState: {
 
+                    ArrayList<String> arrayList = new ArrayList<>();
+                    for (int i = 0; i < response.getStateFilter().size(); i++) {
+                        arrayList.add(response.getStateFilter().get(i).getN());
+                    }
+                    ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
                     atvState.setAdapter(arrayAdapter);
                     atvState.showDropDown();
                     atvState.setThreshold(1);
@@ -478,6 +509,11 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
                 break;
                 case R.id.atvPostalCode: {
 
+                    ArrayList<String> arrayList = new ArrayList<>();
+                    for (int i = 0; i < response.getZipCode().size(); i++) {
+                        arrayList.add(response.getZipCode().get(i).getN());
+                    }
+                    ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
                     atvZip.setAdapter(arrayAdapter);
                     atvZip.showDropDown();
                     atvZip.setThreshold(1);

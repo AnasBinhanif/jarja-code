@@ -71,6 +71,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     String via = "", reminder = "", leadId = "", location = "", agentIdsString = "";
     MultiSelectModel agentModel;
     boolean isReminderClicked = false, isViaClicked = false;
+    String agentIds = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +110,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
 
                 try {
-                    presenter.getDropDownLocation(charSequence.toString());
+                    if (charSequence.length() > 3)
+                        presenter.getDropDownLocation(charSequence.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -325,14 +327,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                             bi.lnAgent.addView(child);
 
                         }
-
-
-                        // agentModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
                     }
 
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+
                         agentIdsString="";
                         if (selectedEncyrptedIds != null || selectedEncyrptedIds.size() != 0) {
                             for (String i : selectedEncyrptedIds) {
@@ -446,13 +446,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         String timedTo = endTime + "";
         String interval = reminder + "";
 
-        String agentIds = "";
-        if (agentModel != null) {
-            agentIds = String.valueOf(agentModel.getId());
-        } else {
-            agentIds = "";
-        }
-
         String isCompleted = "false";
         String leadAppointmentID = "0";
         String isAppointmentFixed = "false";
@@ -462,7 +455,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         if (isValidate())
             presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate,
-                    datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, timedFrom, timedTo, isCompleted);
+                    datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo, isCompleted);
 
     }
 
@@ -473,7 +466,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             bi.tvName.requestFocus();
             return false;
         }
-        if (Methods.isEmpty(bi.tvAgent)) {
+        if (agentIdsString.equalsIgnoreCase("")) {
             ToastUtils.showToast(context, R.string.error_agent);
             bi.tvAgent.requestFocus();
             return false;

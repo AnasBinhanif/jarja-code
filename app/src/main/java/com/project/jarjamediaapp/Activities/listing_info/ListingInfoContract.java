@@ -4,7 +4,9 @@ import com.project.jarjamediaapp.Base.BaseContract;
 
 public interface ListingInfoContract {
 
-    interface View extends BaseContract.View{
+    interface View extends BaseContract.View {
+
+        void updateUIList(ListingInfoModel response);
 
     }
 
@@ -14,9 +16,9 @@ public interface ListingInfoContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void addData();
+        void getBuyingInfoDetails();
 
-        void initScreen();
+        void getListingInfoDetails();
 
     }
 

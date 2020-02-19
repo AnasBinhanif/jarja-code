@@ -4,7 +4,9 @@ import com.project.jarjamediaapp.Base.BaseContract;
 
 public interface CalendarContract {
 
-    interface View extends BaseContract.View{
+    interface View extends BaseContract.View {
+
+        void updateUIList();
 
     }
 
@@ -14,7 +16,7 @@ public interface CalendarContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void addData();
+        void getCalendarEvents();
 
         void initScreen();
 

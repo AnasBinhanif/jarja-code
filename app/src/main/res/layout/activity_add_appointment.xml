@@ -102,6 +102,8 @@
                     android:background="@drawable/bg_search"
                     android:hint="@string/event_title"
                     android:padding="@dimen/_10sdp"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_11sdp" />
 
@@ -123,6 +125,8 @@
                     android:hint="@string/location"
                     android:inputType="textPostalAddress"
                     android:padding="@dimen/_10sdp"
+                    android:imeOptions="actionNext"
+                    android:imeActionLabel="@string/search"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_11sdp" />
 
@@ -265,10 +269,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:text="@string/via"
-                    android:visibility="gone"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <AutoCompleteTextView
                     android:id="@+id/atvVia"
