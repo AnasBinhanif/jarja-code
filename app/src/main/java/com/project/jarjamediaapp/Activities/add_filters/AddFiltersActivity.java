@@ -19,7 +19,6 @@ import com.project.jarjamediaapp.Models.GetLeadDripCampaignList;
 import com.project.jarjamediaapp.Models.GetLeadScore;
 import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
-import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
 import com.project.jarjamediaapp.Models.GetLeadTypeList;
 import com.project.jarjamediaapp.Models.GetPipeline;
 import com.project.jarjamediaapp.R;
@@ -39,22 +38,27 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
     ArrayList<GetAgentsModel.Data> agentList;
     ArrayList<MultiSelectModel> searchListItems;
+    ArrayList<MultiSelectModel> searchListItemsselected=new ArrayList<>();
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
 
     ArrayList<GetLeadSource.Data> getLeadSourceList;
     ArrayList<MultiSelectModel> getLeadSourceNameList;
+    ArrayList<MultiSelectModel> getLeadSourceNameListselected=new ArrayList<>();
     ArrayList<Integer> selectedSourceNameIdsList = new ArrayList<>();
 
     ArrayList<GetLeadTagList.Data> getLeadTagList;
     ArrayList<MultiSelectModel> getLeadTagModelList;
+    ArrayList<MultiSelectModel> getLeadTagModelListselected=new ArrayList<>();
     ArrayList<Integer> selectedTagIdsList = new ArrayList<>();
 
     ArrayList<GetLeadTypeList.Data> getLeadTypeList;
     ArrayList<MultiSelectModel> getLeadTypeModelList;
+    ArrayList<MultiSelectModel> getLeadTypeModelListselected=new ArrayList<>();
     ArrayList<Integer> getSelectedTypeIdsList = new ArrayList<>();
 
     ArrayList<GetLeadDripCampaignList.Data> getLeadDripCampaignList;
     ArrayList<MultiSelectModel> getLeadDripCampaignModelList;
+    ArrayList<MultiSelectModel> getLeadDripCampaignModelListselected=new ArrayList<>();
     ArrayList<Integer> selectedDripIdsList = new ArrayList<>();
 
     ArrayList<GetLeadScore.Data> getGetLeadScoreList;
@@ -71,7 +75,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
     MultiSelectModel tagModel, agentModel, dripModel, sourceModel;
 
-    String agentIdsString = "",tagsIdsString="";
+    String agentIdsString = "", tagsIdsString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,9 +98,11 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         initSpinners();
         initListeners();
         initCallsData();
+
+        retrieveFilters();
     }
 
-    private void initSpinners(){
+    private void initSpinners() {
         bi.spnPipeline.setBackground(getDrawable(R.drawable.bg_edt_dark));
         bi.spnLastLogin.setBackground(getDrawable(R.drawable.bg_edt_dark));
         bi.spnLastTouch.setBackground(getDrawable(R.drawable.bg_edt_dark));
@@ -118,10 +124,87 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     private void initListeners() {
         bi.edtTags.setOnClickListener(this);
         bi.edtType.setOnClickListener(this);
-        bi.edtAssignedTo.setOnClickListener(this);
         bi.edtLeadScore.setOnClickListener(this);
-        bi.edtDripCompaigns.setOnClickListener(this);
+        bi.edtAssignedTo.setOnClickListener(this);
         bi.edtPriceRange.setOnClickListener(this);
+        bi.edtDripCompaigns.setOnClickListener(this);
+        bi.btnSaveAndSearch.setOnClickListener(this);
+    }
+
+    private void saveFilters() {
+
+        easyPreference.addObject("agentIDs", selectedIdsList).save();
+        easyPreference.addObject("typeIDs", getSelectedTypeIdsList).save();
+        easyPreference.addObject("sourceIDs", selectedSourceNameIdsList).save();
+        easyPreference.addObject("tagIDs", selectedTagIdsList).save();
+        easyPreference.addObject("dripIDs", selectedDripIdsList).save();
+        easyPreference.addInt("leadScoreID", bi.spnLeadScore.getSelectedIndex()).save();
+        easyPreference.addInt("lastTouchID", bi.spnLastTouch.getSelectedIndex()).save();
+        easyPreference.addInt("lastLoginID", bi.spnLastLogin.getSelectedIndex()).save();
+        easyPreference.addInt("pipelineID", bi.spnPipeline.getSelectedIndex()).save();
+        easyPreference.addString("notes", bi.edtNotes.getText().toString()).save();
+        easyPreference.addString("leadID", bi.edtLeadID.getText().toString()).save();
+
+    }
+
+    private void retrieveFilters() {
+
+        ArrayList<Double> agentIDs = easyPreference.getObject("agentIDs", ArrayList.class);
+
+        if (agentIDs!=null)
+        {
+            for (Double d : agentIDs){
+                selectedIdsList.add(Integer.valueOf(d.intValue()));
+            }
+        }
+       //selectedIdsList = agentIDs != null ? agentIDs : selectedIdsList;
+        ArrayList<Double> typeIDs = easyPreference.getObject("typeIDs", ArrayList.class);
+        if (typeIDs!=null)
+        {
+            for (Double d : typeIDs){
+                getSelectedTypeIdsList.add(Integer.valueOf(d.intValue()));
+            }
+        }
+       // getSelectedTypeIdsList = typeIDs != null ? typeIDs : getSelectedTypeIdsList;
+        ArrayList<Double> sourceIDs = easyPreference.getObject("sourceIDs", ArrayList.class);
+        if (sourceIDs!=null)
+        {
+            for (Double d : sourceIDs){
+                selectedSourceNameIdsList.add(Integer.valueOf(d.intValue()));
+            }
+            for (GetAgentsModel.Data name : agentList) {
+
+                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                TextView textView = child.findViewById(R.id.txtDynamic);
+                textView.setText(name.agentName);
+                bi.lnAgents.addView(child);
+                selectedIdsList.add(name.agentID);
+            }
+        }
+        //selectedSourceNameIdsList = sourceIDs != null ? sourceIDs : selectedSourceNameIdsList;
+        ArrayList<Double> tagIDs = easyPreference.getObject("tagIDs", ArrayList.class);
+        if (tagIDs!=null)
+        {
+            for (Double d : tagIDs){
+                selectedTagIdsList.add(Integer.valueOf(d.intValue()));
+            }
+        }
+        //selectedTagIdsList = tagIDs != null ? tagIDs : selectedTagIdsList;
+        ArrayList<Double> dripIDs = easyPreference.getObject("dripIDs", ArrayList.class);
+        if (dripIDs!=null)
+        {
+            for (Double d : dripIDs){
+                selectedDripIdsList.add(Integer.valueOf(d.intValue()));
+            }
+        }
+        //selectedDripIdsList = dripIDs != null ? dripIDs : selectedDripIdsList;
+        int leadScoreID = easyPreference.getInt("leadScoreID", 0);
+        int lastTouchID = easyPreference.getInt("lastTouchID", 0);
+        int lastLoginID = easyPreference.getInt("lastLoginID", 0);
+        int pipelineID = easyPreference.getInt("pipelineID", 0);
+        String notes = easyPreference.getString("notes", "");
+        String leadID = easyPreference.getString("leadID", "");
+
     }
 
     private void showTagsDialog() {
@@ -155,8 +238,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
-                        tagsIdsString="";
-                        if (selectedEncyrptedIds!=null || selectedEncyrptedIds.size()!=0) {
+                        tagsIdsString = "";
+                        if (selectedEncyrptedIds != null || selectedEncyrptedIds.size() != 0) {
                             for (String i : selectedEncyrptedIds) {
 
                                 if (tagsIdsString.equals("")) {
@@ -165,8 +248,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                                     tagsIdsString = tagsIdsString + "," + i;
                                 }
                             }
-                        }else{
-                            ToastUtils.showToast(context,"No EncryptedID Found");
+                        } else {
+                            ToastUtils.showToast(context, "No EncryptedID Found");
                         }
                     }
 
@@ -216,7 +299,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
-                        agentIdsString="";
+                        agentIdsString = "";
                         for (String i : selectedEncyrptedIds) {
 
                             if (agentIdsString.equals("")) {
@@ -224,6 +307,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                             } else {
                                 agentIdsString = agentIdsString + "," + i;
                             }
+
 
                         }
 
@@ -315,7 +399,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                             textView.setText(name);
                             bi.lnSuurce.addView(child);
                         }
-                        sourceModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
                     }
 
@@ -393,7 +476,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         searchListItems = new ArrayList<>();
         agentList = response.data;
         for (GetAgentsModel.Data model : agentList) {
-            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName,model.encryptedAgentID));
+            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName, model.encryptedAgentID));
         }
     }
 
@@ -466,7 +549,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         getLeadTagList = response.data;
 
         for (GetLeadTagList.Data model : getLeadTagList) {
-            getLeadTagModelList.add(new MultiSelectModel(model.tagID, model.label,model.encryptedTagID));
+            getLeadTagModelList.add(new MultiSelectModel(model.tagID, model.label, model.encryptedTagID));
         }
     }
 
@@ -546,6 +629,9 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                 break;
             case R.id.edtType:
                 showTypeDialog();
+                break;
+            case R.id.btnSaveAndSearch:
+                saveFilters();
                 break;
         }
     }

@@ -150,4 +150,118 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
 
 
     }
+
+    @Override
+    public void getLeadDueTasks(String leadID) {
+        _view.showProgressBar();
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadDueTasksNew(GH.getInstance().getAuthorization(),
+                leadID);
+        _call.enqueue(new Callback<GetTasksModel>() {
+            @Override
+            public void onResponse(Call<GetTasksModel> call, Response<GetTasksModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetTasksModel getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel,"due");
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTasksModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void getLeadOverDueTasks(String leadID) {
+
+        _view.showProgressBar();
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadOverDueTasks(GH.getInstance().getAuthorization(),
+                leadID);
+        _call.enqueue(new Callback<GetTasksModel>() {
+            @Override
+            public void onResponse(Call<GetTasksModel> call, Response<GetTasksModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetTasksModel getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel,"overdue");
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTasksModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void getLeadFutureTasks(String leadID) {
+        _view.showProgressBar();
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadFutureTasksNew(GH.getInstance().getAuthorization(),
+                leadID);
+        _call.enqueue(new Callback<GetTasksModel>() {
+            @Override
+            public void onResponse(Call<GetTasksModel> call, Response<GetTasksModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetTasksModel getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel,"future");
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTasksModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+    }
 }

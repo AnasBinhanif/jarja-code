@@ -34,6 +34,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     TasksPresenter presenter;
     SwipeTasksDueRecyclerAdapter swipeTasksDueRecyclerAdapter;
     boolean isFromActivity;
+    String leadID ="";
 
     ArrayList<GetTasksModel.Data> tasksList = new ArrayList<>();
 
@@ -41,10 +42,11 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
         // Required empty public constructor
     }
 
-    public static TasksFragment newInstance(String fragment_title, boolean fromActivity) {
+    public static TasksFragment newInstance(String fragment_title,String leadID, boolean fromActivity) {
         TasksFragment followUpFragment = new TasksFragment();
         Bundle args = new Bundle();
         args.putString("title", fragment_title);
+        args.putString("leadID", leadID);
         followUpFragment.setArguments(args);
         args.putBoolean("isFromActivity", fromActivity);
         return followUpFragment;
@@ -65,7 +67,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     public void setupViews() {
 
         initViews();
-        presenter.getDueTasks();
+
         bi.fbAddTask.setOnClickListener(this);
 
     }
@@ -187,6 +189,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
 
         isFromActivity = this.getArguments().getBoolean("isFromActivity");
         if (isFromActivity) {
+            leadID = this.getArguments().getString("leadID");
             bi.tvTitle.setVisibility(View.GONE);
             bi.fbAddTask.setVisibility(View.GONE);
         }
@@ -196,28 +199,11 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
         bi.btnTaskFutureTask.setOnClickListener(this);
         bi.fbAddTask.setOnClickListener(this);
 
-    }
-
-    private void populateDataDue() {
-
-      /*  List<GetTasksModel> appointmentList = new ArrayList<>();
-
-        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetTasksModel("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-
-        swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, appointmentList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        bi.recyclerTaskViewDue.setLayoutManager(mLayoutManager);
-        bi.recyclerTaskViewDue.setItemAnimator(new DefaultItemAnimator());
-        bi.recyclerTaskViewDue.setAdapter(swipeTasksDueRecyclerAdapter);*/
-
+        if (isFromActivity){
+            presenter.getLeadDueTasks(leadID);
+        }else{
+            presenter.getDueTasks();
+        }
 
     }
 
@@ -252,7 +238,11 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonTranparentRight);
 
-                presenter.getDueTasks();
+                if (isFromActivity){
+                    presenter.getLeadDueTasks(leadID);
+                }else{
+                    presenter.getDueTasks();
+                }
 
                 break;
 
@@ -261,7 +251,12 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonYellowMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonTranparentRight);
-                presenter.getOverDueTasks();
+
+                if (isFromActivity){
+                    presenter.getLeadOverDueTasks(leadID);
+                }else{
+                    presenter.getOverDueTasks();
+                }
 
                 break;
 
@@ -270,7 +265,11 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonYellowRight);
-                presenter.getFutureTasks();
+                if (isFromActivity){
+                    presenter.getLeadFutureTasks(leadID);
+                }else{
+                    presenter.getFutureTasks();
+                }
                 break;
         }
     }

@@ -85,7 +85,7 @@ public class TabsFragment extends BaseFragment {
         final ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(FragmentAppointment.newInstance(getResources().getString(R.string.dashboard),"",false), getResources().getString(R.string.appointment));
         adapter.addFragment(FollowUpFragment.newInstance(getResources().getString(R.string.dashboard),"",false), getResources().getString(R.string.follow_up));
-        adapter.addFragment(TasksFragment.newInstance(getResources().getString(R.string.dashboard),false), getResources().getString(R.string.tasks));
+        adapter.addFragment(TasksFragment.newInstance(getResources().getString(R.string.dashboard),"",false), getResources().getString(R.string.tasks));
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

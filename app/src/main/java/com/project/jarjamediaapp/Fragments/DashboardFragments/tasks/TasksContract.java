@@ -33,6 +33,9 @@ public interface TasksContract {
         void getDueTasks();
         void getOverDueTasks();
         void getFutureTasks();
+        void getLeadDueTasks(String leadID);
+        void getLeadOverDueTasks(String leadID);
+        void getLeadFutureTasks(String leadID);
     }
 
     /*

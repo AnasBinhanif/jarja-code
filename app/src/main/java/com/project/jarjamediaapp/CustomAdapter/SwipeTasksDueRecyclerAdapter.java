@@ -62,10 +62,10 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
 
             GetTasksModel.Data modelData = mData.get(position);
 
-            holder.tvName.setText(modelData.taskName + " for " + modelData.agentName);
+            holder.tvName.setText(modelData.name + " for " + modelData.agentName);
             holder.tvAddress.setText(modelData.firstName + " " + modelData.lastName);
 
-            holder.tvInitial.setText(modelData.taskName.substring(0, 1));
+            holder.tvInitial.setText(modelData.name.substring(0, 1));
 
             holder.frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -116,7 +116,8 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
         GH.getInstance().ShowProgressDialog(context);
 
         Call<BaseResponse> _callToday;
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).MarkTaskComplete(GH.getInstance().getAuthorization(), taskID + ",", "true");
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).MarkTaskComplete(GH.getInstance().getAuthorization(),
+                taskID + ",", "true");
         _callToday.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
@@ -181,7 +182,8 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
 
             tvDone.setOnClickListener(v -> {
                 pos = getAdapterPosition();
-                markAsRead(mData.get(pos).taskID);
+                String taskID = mData.get(pos).taskID;
+                markAsRead(taskID);
             });
 
             tvEdit.setOnClickListener(new View.OnClickListener() {

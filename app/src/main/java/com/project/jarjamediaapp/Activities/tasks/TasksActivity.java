@@ -28,13 +28,14 @@ public class TasksActivity extends BaseActivity implements View.OnClickListener,
     ActivityTasksBinding bi;
     Context context = TasksActivity.this;
     TasksPresenter presenter;
-
+    String leadID="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         bi = DataBindingUtil.setContentView(this, R.layout.activity_tasks);
         presenter = new TasksPresenter(this);
+        leadID = getIntent().getStringExtra("leadID");
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.tasks), true);
 
@@ -48,7 +49,7 @@ public class TasksActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void initViews() {
 
-        Fragment fragment = TasksFragment.newInstance("Tasks",true);
+        Fragment fragment = TasksFragment.newInstance("Tasks",leadID,true);
         ReplaceFragment(fragment, "Tasks", true, false);
     }
 

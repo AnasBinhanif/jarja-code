@@ -116,17 +116,17 @@ public interface ApiMethods {
             @Field("state") String state
     );
 
-    @GET("Tasks/GetDueTasks")
+    @GET("Tasks/GetDueTasksNew")
     Call<GetTasksModel> GetDueTasks(
             @Header("Authorization") String authorization
     );
 
-    @GET("Tasks/GetOverDueTasks")
+    @GET("Tasks/GetOverDueTasksNew")
     Call<GetTasksModel> GetOverDueTasks(
             @Header("Authorization") String authorization
     );
 
-    @GET("Tasks/GetFutureTasks")
+    @GET("Tasks/GetFutureTasksNew")
     Call<GetTasksModel> GetFutureTasks(
             @Header("Authorization") String authorization
     );
@@ -202,6 +202,24 @@ public interface ApiMethods {
     Call<GetAppointmentsModel> GetUpcomingAppointmentByLeadID(
             @Header("Authorization") String authorization,
             @Query("Encrypted_LeadID") String leadID
+    );
+
+    @GET("Lead/GetLeadDueTasksNew")
+    Call<GetTasksModel> GetLeadDueTasksNew(
+            @Header("Authorization") String authorization,
+            @Query("LeadID") String leadID
+    );
+
+    @GET("Lead/GetLeadOverDueTasks")
+    Call<GetTasksModel> GetLeadOverDueTasks(
+            @Header("Authorization") String authorization,
+            @Query("LeadID") String leadID
+    );
+
+    @GET("Lead/GetLeadFutureTasksNew")
+    Call<GetTasksModel> GetLeadFutureTasksNew(
+            @Header("Authorization") String authorization,
+            @Query("LeadID") String leadID
     );
 
     @GET("Lead/GetPreviousAppointmentByLeadID")
