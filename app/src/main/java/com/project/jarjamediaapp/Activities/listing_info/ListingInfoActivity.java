@@ -59,6 +59,21 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
         leadsList.add(new GetListingInfo("Year Built :", "N/A"));
         leadsList.add(new GetListingInfo("Square Feet :", "N/A"));
         leadsList.add(new GetListingInfo("Time Frame :", "N/A"));
+        leadsList.add(new GetListingInfo("FTHB :", "N/A"));
+        leadsList.add(new GetListingInfo("House To Sell :", "N/A"));
+        leadsList.add(new GetListingInfo("With Agent :", "N/A"));
+        leadsList.add(new GetListingInfo("Acres :", "N/A"));
+        leadsList.add(new GetListingInfo("Garage :", "N/A"));
+        leadsList.add(new GetListingInfo("Referred By :", "N/A"));
+        leadsList.add(new GetListingInfo("Referred To :", "N/A"));
+        leadsList.add(new GetListingInfo("Referral Amt :", "N/A"));
+        leadsList.add(new GetListingInfo("MLS :", "N/A"));
+        leadsList.add(new GetListingInfo("Title :", "N/A"));
+        leadsList.add(new GetListingInfo("Escrow :", "N/A"));
+        leadsList.add(new GetListingInfo("Viewed Properties :", "N/A"));
+        leadsList.add(new GetListingInfo("Inquiries :", "N/A"));
+        leadsList.add(new GetListingInfo("Favorited Properties :", "N/A"));
+        leadsList.add(new GetListingInfo("Uploaded Attachments :", "N/A"));
 
         bi.recyclerViewListingInfo.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.recyclerViewListingInfo.setItemAnimator(new DefaultItemAnimator());

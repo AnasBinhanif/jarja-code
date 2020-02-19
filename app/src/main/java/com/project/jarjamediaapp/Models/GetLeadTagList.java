@@ -19,12 +19,18 @@ public class GetLeadTagList {
 
     public class Data {
 
-        @SerializedName("id")
+        @SerializedName("tagID")
         @Expose
-        public Integer id;
+        public Integer tagID;
+        @SerializedName("encrypted_TagID")
+        @Expose
+        public String encryptedTagID;
         @SerializedName("label")
         @Expose
         public String label;
+        @SerializedName("added")
+        @Expose
+        public Object added;
     }
 
 }

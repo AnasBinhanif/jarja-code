@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.airbnb.paris.Paris;
+import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
 import com.project.jarjamediaapp.Activities.appointments.AppointmentActivity;
 import com.project.jarjamediaapp.Activities.followups.FollowupsActivity;
 import com.project.jarjamediaapp.Activities.listing_info.ListingInfoActivity;
@@ -31,6 +32,7 @@ import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadDetails;
+import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -59,6 +61,12 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     ArrayList<GetLead.AgentsList> getAssignedAgentList;
 
     String leadID = "";
+
+    ArrayList<GetLeadTransactionStage.PipeLine> transactionPipeline;
+    ArrayList<GetLeadTransactionStage.LeadTransactionOne> transactionOneListModel;
+    ArrayList<GetLeadTransactionStage.LeadTransactionTwo> transactionTwoListModel;
+
+    String currentStage1="",currentStage2="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +123,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
                     Map<String, String> socialMap = new HashMap<>();
                     socialMap.put("leadID", leadID);
-                    switchActivityWithIntentString(Social_ProfilesActivity.class,(HashMap<String, String>) socialMap);
+                    switchActivityWithIntentString(Social_ProfilesActivity.class, (HashMap<String, String>) socialMap);
 
                     break;
 
@@ -149,7 +157,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 case 6:
                     Map<String, String> noteMap = new HashMap<>();
                     noteMap.put("leadID", leadID);
-                    switchActivityWithIntentString(NotesActivity.class,(HashMap) noteMap);
+                    switchActivityWithIntentString(NotesActivity.class, (HashMap) noteMap);
 
                     break;
                 case 7:
@@ -220,15 +228,33 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 callDialer(getLeadListData.primaryPhone + "");
                 break;
 
+            case R.id.imgEditLead:
+                Intent intent = new Intent(context, AddLeadActivity.class);
+                intent.putExtra("Lead", getLeadListData);
+                context.startActivity(intent);
+                break;
+
             case R.id.fbAssignedTo:
                 showCallDialog(context);
                 break;
 
-            case R.id.rlTransaction:
+            case R.id.rlTransaction1:
 
-                Map<String, String> map = new HashMap<>();
-                map.put("title", title);
-                switchActivityWithIntentString(TransactionActivity.class, (HashMap<String, String>) map);
+                Intent intentT1 = new Intent(context, TransactionActivity.class);
+                intentT1.putExtra("title", title);
+                intentT1.putExtra("currentStage", currentStage1);
+                intentT1.putExtra("Pipeline", transactionPipeline);
+                startActivity(intentT1);
+
+                break;
+
+            case R.id.rlTransaction2:
+
+                Intent intentT2 = new Intent(context, TransactionActivity.class);
+                intentT2.putExtra("title", title);
+                intentT2.putExtra("currentStage", currentStage2);
+                intentT2.putExtra("Pipeline", transactionPipeline);
+                startActivity(intentT2);
 
                 break;
 
@@ -256,6 +282,22 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 Paris.style(bi.btnTransaction1).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnTransaction2).apply(R.style.TabButtonTranparentRight);
 
+                if (transactionOneListModel != null) {
+                    if (transactionOneListModel.size() != 0) {
+                        bi.rlTransaction1.setVisibility(View.VISIBLE);
+                        bi.rlTransaction2.setVisibility(View.GONE);
+                        bi.tvNoRecord.setVisibility(View.GONE);
+                    } else {
+                        bi.tvNoRecord.setVisibility(View.VISIBLE);
+                        bi.rlTransaction1.setVisibility(View.GONE);
+                        bi.rlTransaction2.setVisibility(View.GONE);
+                    }
+                } else {
+                    bi.tvNoRecord.setVisibility(View.VISIBLE);
+                    bi.rlTransaction1.setVisibility(View.GONE);
+                    bi.rlTransaction2.setVisibility(View.GONE);
+                }
+
                 break;
 
             case R.id.btnTransaction2:
@@ -263,6 +305,22 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 title = getString(R.string.transaction2);
                 Paris.style(bi.btnTransaction2).apply(R.style.TabButtonYellowRight);
                 Paris.style(bi.btnTransaction1).apply(R.style.TabButtonTranparentLeft);
+
+                if (transactionTwoListModel != null) {
+                    if (transactionTwoListModel.size() != 0) {
+                        bi.rlTransaction2.setVisibility(View.VISIBLE);
+                        bi.rlTransaction1.setVisibility(View.GONE);
+                        bi.tvNoRecord.setVisibility(View.GONE);
+                    } else {
+                        bi.tvNoRecord.setVisibility(View.VISIBLE);
+                        bi.rlTransaction1.setVisibility(View.GONE);
+                        bi.rlTransaction2.setVisibility(View.GONE);
+                    }
+                } else {
+                    bi.tvNoRecord.setVisibility(View.VISIBLE);
+                    bi.rlTransaction1.setVisibility(View.GONE);
+                    bi.rlTransaction2.setVisibility(View.GONE);
+                }
 
                 break;
         }
@@ -276,18 +334,20 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     @Override
     public void initViews() {
         leadID = getIntent().getStringExtra("leadID");
-         bi.scLeadDetail.setVisibility(View.GONE);
+        bi.scLeadDetail.setVisibility(View.GONE);
         bi.tvNoRecordFound.setVisibility(View.GONE);
 
         initListeners();
         populateListData();
         presenter.getLead(leadID);
+        presenter.getTransaction(leadID);
     }
 
     private void initListeners() {
         bi.btnActions.setOnClickListener(this);
         bi.btnDetails.setOnClickListener(this);
-        bi.rlTransaction.setOnClickListener(this);
+        bi.rlTransaction1.setOnClickListener(this);
+        bi.rlTransaction2.setOnClickListener(this);
         bi.btnTransaction1.setOnClickListener(this);
         bi.btnTransaction2.setOnClickListener(this);
         bi.fbAssignedTo.setOnClickListener(this);
@@ -353,6 +413,41 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             bi.recyclerLeadAgent.setVisibility(View.VISIBLE);
             populateListData(getAssignedAgentList);
         }
+    }
+
+    @Override
+    public void updateUI(GetLeadTransactionStage response) {
+
+        transactionPipeline = new ArrayList<>();
+        transactionOneListModel = new ArrayList<>();
+        transactionTwoListModel = new ArrayList<>();
+
+        transactionPipeline = response.data.pipeLines;
+        transactionOneListModel = response.data.leadTransactionOne;
+        transactionTwoListModel = response.data.leadTransactionTwo;
+
+        if (transactionOneListModel.size() != 0) {
+
+            bi.tvNoRecord.setVisibility(View.GONE);
+            bi.rlTransaction2.setVisibility(View.GONE);
+            bi.rlTransaction1.setVisibility(View.VISIBLE);
+
+            bi.tvStep1.setText(transactionOneListModel.get(0).currentStage);
+            bi.tvDate1.setText(transactionOneListModel.get(0).date);
+
+            currentStage1 = transactionOneListModel.get(0).currentStage;
+
+        } else {
+            bi.tvNoRecord.setVisibility(View.VISIBLE);
+            bi.rlTransaction1.setVisibility(View.GONE);
+            bi.rlTransaction2.setVisibility(View.GONE);
+        }
+
+        if (transactionTwoListModel!=null)
+        {
+            currentStage2 = transactionTwoListModel.get(0).currentStage;
+        }
+
     }
 
     public void showCallDialog(Context context) {

@@ -24,6 +24,7 @@ import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
 import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
 import com.project.jarjamediaapp.Models.GetLeadTitlesModel;
+import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 import com.project.jarjamediaapp.Models.GetLeadTypeList;
 import com.project.jarjamediaapp.Models.GetNoteDropDown;
 import com.project.jarjamediaapp.Models.GetPipeline;
@@ -182,6 +183,13 @@ public interface ApiMethods {
             @Header("Authorization") String authorization,
             @Query("LeadID") String leadID
     );
+
+    @GET("Lead/GetLeadTransactionStage")
+    Call<GetLeadTransactionStage> GetLeadTransactionStage(
+            @Header("Authorization") String authorization,
+            @Query("LeadId") String leadID
+    );
+
 
     @GET("Lead/GetSocialProfileDropdown")
     Call<GetSocialProfileDropdown> GetSocialProfileDropdown(
@@ -362,7 +370,7 @@ public interface ApiMethods {
             @Field("dateOfMarriage") String dateOfMarriage,
             @Field("isAnniversaryNotify") String isAnniversaryNotify,
             @Field("leadAgentIDs") String leadAgentIDs,
-            @Field("allAgentIds") String allAgentIds,
+            @Field("allagentids") String allAgentIds,
             @Field("alldripcampaignids") String alldripcampaignids,
             @Field("notes") String notes,
             @Field("b_PreQual") String b_PreQual,

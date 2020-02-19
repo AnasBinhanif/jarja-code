@@ -107,7 +107,6 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
             bi.recyclerViewNotes.setVisibility(View.VISIBLE);
             populateDataDue();
         }
-
     }
 
     @Override
@@ -117,15 +116,6 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
 
     private void populateDataDue() {
 
-        /*List<GetTags> tagsList = new ArrayList<>();
-
-        tagsList.add(new GetTags("Gold Five"));
-        tagsList.add(new GetTags("Gold Five"));
-        tagsList.add(new GetTags("Gold Five"));
-        tagsList.add(new GetTags("Gold Five"));
-        tagsList.add(new GetTags("Gold Five"));
-        tagsList.add(new GetTags("Gold Five"));
-        tagsList.add(new GetTags("Gold Five"));*/
         if (swipeNotesRecyclerAdapter != null) {
             swipeNotesRecyclerAdapter = new SwipeNotesRecyclerAdapter(context, getLeadNotes);
             bi.recyclerViewNotes.setAdapter(swipeNotesRecyclerAdapter);
@@ -139,7 +129,6 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
             bi.recyclerViewNotes.setAdapter(swipeNotesRecyclerAdapter);
         }
     }
-
 
     @Override
     public void updateUI(Response<BaseResponse> response) {
@@ -201,5 +190,4 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
     public void hideProgressBar() {
         GH.getInstance().HideProgressDialog(context);
     }
-
 }

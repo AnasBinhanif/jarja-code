@@ -116,7 +116,6 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
                     selectedIdsList.add(name.agentID);
                 }
             }*/
-
             bi.btnAdd.setText("Update");
         }
     }

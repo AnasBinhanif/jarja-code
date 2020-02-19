@@ -22,7 +22,7 @@ public class GetLeadTimeFrame {
 
         @SerializedName("timeFrameId")
         @Expose
-        public String timeFrameId;
+        public Integer timeFrameId;
         @SerializedName("timeFrame")
         @Expose
         public String timeFrame;

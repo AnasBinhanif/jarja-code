@@ -418,14 +418,15 @@
                             </LinearLayout>
 
                             <RelativeLayout
-                                android:id="@+id/rlTransaction"
+                                android:id="@+id/rlTransaction1"
                                 android:layout_width="match_parent"
+                                android:visibility="gone"
                                 android:layout_height="wrap_content"
                                 android:paddingLeft="@dimen/_15sdp">
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="wrap_content"
                                     android:gravity="center|left"
                                     android:orientation="vertical">
 
@@ -438,7 +439,7 @@
                                         android:textStyle="bold" />
 
                                     <TextView
-                                        android:id="@+id/tvStep"
+                                        android:id="@+id/tvStep1"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="2dp"
@@ -447,8 +448,8 @@
                                         android:textSize="16dp" />
 
                                     <TextView
-                                        android:id="@+id/tvDate"
-                                        android:layout_width="match_parent"
+                                        android:id="@+id/tvDate1"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="1dp"
                                         android:text="12/31/2019"
@@ -467,6 +468,68 @@
                                     android:src="@drawable/ic_next" />
 
                             </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/rlTransaction2"
+                                android:layout_width="match_parent"
+                                android:visibility="gone"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="@dimen/_15sdp">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|left"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/current"
+                                        android:textColor="@color/colorPrimaryDark"
+                                        android:textSize="14dp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvStep2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:text="@string/potential_prospect"
+                                        android:textColor="@color/colorMateGreen"
+                                        android:textSize="16dp" />
+
+                                    <TextView
+                                        android:id="@+id/tvDate2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="1dp"
+                                        android:text="12/31/2019"
+                                        android:textColor="@color/colorGreyTextDark"
+                                        android:textSize="14dp" />
+
+
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginRight="15dp"
+                                    android:src="@drawable/ic_next" />
+
+                            </RelativeLayout>
+
+                            <TextView
+                                android:id="@+id/tvNoRecord"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="No Record Found"
+                                android:gravity="center"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textStyle="bold"
+                                android:textSize="18dp"/>
 
                         </LinearLayout>
 

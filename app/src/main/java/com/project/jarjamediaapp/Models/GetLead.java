@@ -3,9 +3,10 @@ package com.project.jarjamediaapp.Models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GetLead {
+public class GetLead implements Serializable {
 
     @SerializedName("status")
     @Expose
@@ -18,7 +19,7 @@ public class GetLead {
     public String message;
 
 
-    public class Data {
+    public class Data implements Serializable{
 
         @SerializedName("message")
         @Expose
@@ -31,7 +32,7 @@ public class GetLead {
         public LeadList leadList;
     }
 
-    public class AgentsList {
+    public class AgentsList implements Serializable{
 
         @SerializedName("assignAgentsID")
         @Expose
@@ -39,6 +40,9 @@ public class GetLead {
         @SerializedName("agentID")
         @Expose
         public Integer agentID;
+        @SerializedName("agentName")
+        @Expose
+        public String agentName;
         @SerializedName("picGuid")
         @Expose
         public String picGuid;
@@ -47,7 +51,7 @@ public class GetLead {
         public Boolean isPrimaryAgent;
     }
 
-    public class LeadList {
+    public class LeadList implements Serializable{
 
         @SerializedName("leadID")
         @Expose
@@ -129,7 +133,7 @@ public class GetLead {
         public String leadScoreId;
         @SerializedName("timeFrameId")
         @Expose
-        public String timeFrameId;
+        public Integer timeFrameId;
         @SerializedName("sourceId")
         @Expose
         public String sourceId;
@@ -219,13 +223,13 @@ public class GetLead {
         public String isTransTwoClose;
         @SerializedName("isBirthDayNotify")
         @Expose
-        public String isBirthDayNotify;
+        public Boolean isBirthDayNotify;
         @SerializedName("isAnniversaryNotify")
         @Expose
-        public String isAnniversaryNotify;
+        public Boolean isAnniversaryNotify;
         @SerializedName("leadTypeID")
         @Expose
-        public String leadTypeID;
+        public Integer leadTypeID;
         @SerializedName("leadAgentIDs")
         @Expose
         public String leadAgentIDs;

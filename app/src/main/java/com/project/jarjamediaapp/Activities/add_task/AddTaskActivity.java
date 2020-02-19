@@ -63,7 +63,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
     ArrayList<MultiSelectModel> searchListItems;
     String startDate, endDate, reminder, leadId, agentId;
-    String agentIdsString="";
+    String agentIdsString = "";
     MultiSelectModel agentModel;
 
     @Override
@@ -99,7 +99,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         searchListItems = new ArrayList<>();
         agentList = response.data;
         for (GetAgentsModel.Data model : agentList) {
-            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName,model.encryptedAgentID));
+            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName, model.encryptedAgentID));
         }
     }
 
@@ -210,8 +210,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
 
-
-                        if (selectedEncyrptedIds!=null || selectedEncyrptedIds.size()!=0) {
+                        agentIdsString = "";
+                        if (selectedEncyrptedIds != null || selectedEncyrptedIds.size() != 0) {
                             for (String i : selectedEncyrptedIds) {
 
                                 if (agentIdsString.equals("")) {
@@ -220,8 +220,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                                     agentIdsString = agentIdsString + "," + i;
                                 }
                             }
-                        }else{
-                            ToastUtils.showToast(context,"No EncryptedID Found");
+                        } else {
+                            ToastUtils.showToast(context, "No EncryptedID Found");
                         }
                     }
 

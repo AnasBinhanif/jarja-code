@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Activities.add_lead;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.abdeveloper.library.MultiSelectModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
+import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadDripCampaignList;
 import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
@@ -91,6 +93,123 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         initCallsData();
     }
 
+    private void initData() {
+
+        if (getIntent().getExtras() != null) {
+
+            GetLead.LeadList  leadModel = (GetLead.LeadList) getIntent().getExtras().getSerializable("Lead");
+
+            bi.edtFName.setText(leadModel.firstName);
+            bi.edtLName.setText(leadModel.lastName);
+            bi.edtSName.setText(leadModel.spousname);
+            bi.edtCompany.setText(leadModel.company);
+            bi.edtPhone.setText(leadModel.primaryPhone);
+            bi.edtEmail.setText(leadModel.primaryEmail);
+            bi.edtBday.setText(leadModel.dateOfBirth);
+            bi.edtAnniversary.setText(leadModel.dateOfMarriage);
+            bi.edtAddress1.setText(leadModel.street);
+            bi.edtCity1.setText(leadModel.city);
+            bi.edtState1.setText(leadModel.state);
+            bi.edtPostalCode1.setText(leadModel.zipcode);
+            bi.edtAddress2.setText(leadModel.state2);
+            bi.edtCity2.setText(leadModel.city2);
+            bi.edtState2.setText(leadModel.state2);
+            bi.edtPostalCode2.setText(leadModel.zipcode2);
+            bi.edtCountry.setText(leadModel.county);
+            bi.edtNotes.setText(leadModel.description);
+
+            if (leadModel.isBirthDayNotify) {
+                bi.chkBdayNotify.setChecked(true);
+            }else{
+                bi.chkBdayNotify.setChecked(false);
+            }
+
+            if (leadModel.isAnniversaryNotify) {
+                bi.chkAnnivNotify.setChecked(true);
+            }else{
+                bi.chkAnnivNotify.setChecked(false);
+            }
+
+            if (leadModel.source != null) {
+                int pos = getLeadSourceNameList.indexOf(leadModel.source);
+                bi.spnSource.setSelectedIndex(pos);
+            }
+
+            if (leadModel.leadTypeID != null) {
+                for (int i =0;i<getLeadTypeList.size();i++)
+                {
+                    GetLeadTypeList.Data typemodel = getLeadTypeList.get(i);
+                    Integer id = typemodel.id;
+                    if (id==leadModel.leadTypeID)
+                    {
+                        bi.spnSource.setSelectedIndex(i);
+                    }
+                }
+            }
+
+            if (leadModel.timeFrameId != null) {
+                for (int i =0;i<getLeadTimeFrameList.size();i++)
+                {
+                    GetLeadTimeFrame.Data typemodel = getLeadTimeFrameList.get(i);
+                    Integer id = typemodel.timeFrameId;
+                    if (id==leadModel.timeFrameId)
+                    {
+                        bi.spnTimeFrame.setSelectedIndex(i);
+                    }
+                }
+            }
+
+            if (leadModel.agentsList.size() != 0) {
+
+                if (bi.lnAgent.getChildCount() > 0) {
+                    bi.lnAgent.removeAllViews();
+                }
+                selectedIdsList = new ArrayList<>();
+
+                for (GetLead.AgentsList name : leadModel.agentsList) {
+
+                    View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                    TextView textView = child.findViewById(R.id.txtDynamic);
+                    textView.setText(String.valueOf(name.agentName));
+                    bi.lnAgent.addView(child);
+                    selectedIdsList.add(name.agentID);
+                }
+            }
+
+
+           /* if (notesListModel.noteType != null) {
+                if (notesListModel.noteType.contains("Call")) {
+                    bi.spnNoteType.setSelectedIndex(1);
+                } else {
+                    bi.spnNoteType.setSelectedIndex(0);
+                }
+            }
+            if (notesListModel.isSticky) {
+                bi.cbNoteSticky.setChecked(true);
+            } else {
+                bi.cbNoteSticky.setChecked(true);
+            }
+
+            if (notesListModel.agentList.size() != 0) {
+
+                if (bi.lnAgents.getChildCount() > 0) {
+                    bi.lnAgents.removeAllViews();
+                }
+                selectedIdsList = new ArrayList<>();
+
+                for (GetLeadNotes.AgentList name : notesListModel.agentList) {
+
+                    View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                    TextView textView = child.findViewById(R.id.txtDynamic);
+                    textView.setText(name.agentName);
+                    bi.lnAgents.addView(child);
+                    selectedIdsList.add(name.agentID);
+                }
+            }*/
+
+        }
+    }
+
     private void initCallsData() {
         presenter.getAgentNames();
         presenter.GetLeadSource();
@@ -151,21 +270,24 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                             bi.lnTags.addView(child);
                         }
 
-                        for (Integer i : selectedIds){
-                            if (tagsIdsString.equals(""))
-                            {
-                                tagsIdsString= String.valueOf(i);
-                            }else{
-                                tagsIdsString =tagsIdsString+ "," + i;
-                            }
-                        }
-
-                        tagModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
                     }
 
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+                        tagsIdsString="";
+                        if (selectedEncyrptedIds!=null || selectedEncyrptedIds.size()!=0) {
+                            for (String i : selectedEncyrptedIds) {
+
+                                if (tagsIdsString.equals("")) {
+                                    tagsIdsString = i;
+                                } else {
+                                    tagsIdsString = tagsIdsString + "," + i;
+                                }
+                            }
+                        }else{
+                            ToastUtils.showToast(context,"No EncryptedID Found");
+                        }
 
                     }
 
@@ -213,7 +335,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
-
+                        agentIdsString="";
                         if (selectedEncyrptedIds!=null || selectedEncyrptedIds.size()!=0) {
                             for (String i : selectedEncyrptedIds) {
 
@@ -265,6 +387,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                             textView.setText(name);
                             bi.lnDrip.addView(child);
                         }
+                        dripIdsString="";
                         for (Integer i : selectedIds){
                             if (dripIdsString.equals(""))
                             {
@@ -320,10 +443,10 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String zipcode = bi.edtPostalCode1.getText().toString();
         String city = bi.edtCity1.getText().toString();
         String state = bi.edtState1.getText().toString();
-        String description = "";
-        String source = bi.spnSource.isSelected() ? String.valueOf(getLeadSourceList.get(bi.spnSource.getSelectedIndex()).sourceID) :"";
+        String description = bi.edtNotes.getText().toString();
+        String source = bi.spnSource.isSelected() ? String.valueOf(getLeadSourceList.get(bi.spnSource.getSelectedIndex()).sourceName) :"";
         String county = bi.edtCountry.getText().toString();
-        String timeFrameId = bi.spnTimeFrame.isSelected() ? getLeadTimeFrameList.get(bi.spnTimeFrame.getSelectedIndex()).timeFrameId : "";
+        String timeFrameId = bi.spnTimeFrame.isSelected() ? String.valueOf(getLeadTimeFrameList.get(bi.spnTimeFrame.getSelectedIndex()).timeFrameId) : "";
         String state2 = bi.edtState2.getText().toString();
         String city2 = bi.edtCity2.getText().toString();
         String zipcode2 = bi.edtPostalCode2.getText().toString();
@@ -430,7 +553,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         getLeadTagList = response.data;
 
         for (GetLeadTagList.Data model : getLeadTagList) {
-            getLeadTagModelList.add(new MultiSelectModel(model.id, model.label));
+            getLeadTagModelList.add(new MultiSelectModel(model.tagID, model.label,model.encryptedTagID));
         }
     }
 
@@ -471,6 +594,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         for (GetLeadDripCampaignList.Data model : getLeadDripCampaignList) {
             getLeadDripCampaignModelList.add(new MultiSelectModel(model.dripCompaignID, model.name));
         }
+
+        initData();
     }
 
     @Override

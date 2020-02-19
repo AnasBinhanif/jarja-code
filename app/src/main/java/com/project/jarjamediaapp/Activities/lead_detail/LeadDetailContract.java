@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Activities.lead_detail;
 
 import com.project.jarjamediaapp.Base.BaseContract;
 import com.project.jarjamediaapp.Models.GetLead;
+import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 
 public interface LeadDetailContract {
 
@@ -9,6 +10,8 @@ public interface LeadDetailContract {
         void initViews();
 
         void updateUI(GetLead response);
+
+        void updateUI(GetLeadTransactionStage response);
 
         void updateUIonFalse(String message);
 
@@ -28,6 +31,8 @@ public interface LeadDetailContract {
     interface Actions extends BaseContract.Actions {
 
         void getLead(String leadID);
+
+        void getTransaction(String leadID);
 
         void initScreen();
 

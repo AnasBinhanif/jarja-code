@@ -71,7 +71,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
     MultiSelectModel tagModel, agentModel, dripModel, sourceModel;
 
-    String agentIdsString = "";
+    String agentIdsString = "",tagsIdsString="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +155,19 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+                        tagsIdsString="";
+                        if (selectedEncyrptedIds!=null || selectedEncyrptedIds.size()!=0) {
+                            for (String i : selectedEncyrptedIds) {
 
+                                if (tagsIdsString.equals("")) {
+                                    tagsIdsString = i;
+                                } else {
+                                    tagsIdsString = tagsIdsString + "," + i;
+                                }
+                            }
+                        }else{
+                            ToastUtils.showToast(context,"No EncryptedID Found");
+                        }
                     }
 
                     @Override
@@ -204,7 +216,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
-
+                        agentIdsString="";
                         for (String i : selectedEncyrptedIds) {
 
                             if (agentIdsString.equals("")) {
@@ -454,7 +466,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         getLeadTagList = response.data;
 
         for (GetLeadTagList.Data model : getLeadTagList) {
-            getLeadTagModelList.add(new MultiSelectModel(model.id, model.label));
+            getLeadTagModelList.add(new MultiSelectModel(model.tagID, model.label,model.encryptedTagID));
         }
     }
 

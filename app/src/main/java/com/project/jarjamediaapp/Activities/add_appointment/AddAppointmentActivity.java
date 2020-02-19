@@ -333,7 +333,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
-
+                        agentIdsString="";
                         if (selectedEncyrptedIds != null || selectedEncyrptedIds.size() != 0) {
                             for (String i : selectedEncyrptedIds) {
 

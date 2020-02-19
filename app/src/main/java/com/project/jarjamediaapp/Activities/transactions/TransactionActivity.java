@@ -12,11 +12,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.project.jarjamediaapp.Activities.lead_detail.LeadDetailActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
-import com.project.jarjamediaapp.Models.GetAllLeads;
-import com.project.jarjamediaapp.Models.GetTransaction;
+import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -24,7 +22,6 @@ import com.project.jarjamediaapp.databinding.ActivityTransactionsBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import kotlin.Unit;
@@ -38,15 +35,17 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     Context context = TransactionActivity.this;
     TransactionPresenter presenter;
 
+    ArrayList<GetLeadTransactionStage.PipeLine> transactionPipeline = new ArrayList<>();
+    String currentPipeline = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         bi = DataBindingUtil.setContentView(this, R.layout.activity_transactions);
         presenter = new TransactionPresenter(this);
-        presenter.initScreen();
         handleIntent(getIntent());
-
+        presenter.initScreen();
     }
 
     @Override
@@ -68,32 +67,18 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
     private void populateListData() {
 
-        List<GetTransaction> leadsList = new ArrayList<>();
-
-        leadsList.add(new GetTransaction("1", "Protential Prospect", "12/31/2020", true));
-        leadsList.add(new GetTransaction("2", "Attempted Contact", "12/31/2020", false));
-        leadsList.add(new GetTransaction("3", "Made Contact", "12/31/2020", false));
-        leadsList.add(new GetTransaction("4", "Appointment Set", "12/31/2020", false));
-        leadsList.add(new GetTransaction("5", "Appointment Kept", "12/31/2020", false));
-        leadsList.add(new GetTransaction("6", "Appointment Not Kept", "12/31/2020", false));
-        leadsList.add(new GetTransaction("7", "Undecided Lead", "12/31/2020", false));
-        leadsList.add(new GetTransaction("8", "Lost", "12/31/2020", false));
-        leadsList.add(new GetTransaction("9", "Active Client", "12/31/2020", false));
-        leadsList.add(new GetTransaction("10", "Under Contract", "12/31/2020", false));
-
         bi.recyclerViewTransaction.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.recyclerViewTransaction.setItemAnimator(new DefaultItemAnimator());
         bi.recyclerViewTransaction.addItemDecoration(new DividerItemDecoration(bi.recyclerViewTransaction.getContext(), 1));
-        RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_transaction_layout);
+        RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, transactionPipeline, R.layout.custom_transaction_layout);
         recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvDate, R.id.imgInitial, R.id.tvInitial);
 
-        recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetTransaction, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
+        recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetLeadTransactionStage.PipeLine, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
 
             TextView tvName = (TextView) integerMap.get(R.id.tvName);
-            tvName.setText(allLeadsList.getName());
+            tvName.setText(allLeadsList.pipeline);
 
             TextView tvDate = (TextView) integerMap.get(R.id.tvDate);
-            tvDate.setText(allLeadsList.getDate());
 
             TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
             int initails = integer + 1;
@@ -101,11 +86,12 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
             ImageView imgInitial = (ImageView) integerMap.get(R.id.imgInitial);
 
-            if (allLeadsList.getIsDone()) {
+
+            while (allLeadsList.pipeline.equals(currentPipeline)) {
                 tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
-                tvDate.setVisibility(View.VISIBLE);
                 imgInitial.setVisibility(View.VISIBLE);
                 tvInitial.setVisibility(View.GONE);
+                break;
             }
 
             return Unit.INSTANCE;
@@ -113,6 +99,11 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
         bi.recyclerViewTransaction.setAdapter(recyclerAdapterUtil);
 
+        recyclerAdapterUtil.addOnClickListener((Function2<GetLeadTransactionStage.PipeLine, Integer, Unit>) (viewComplainList, integer) -> {
+
+
+            return Unit.INSTANCE;
+        });
 
     }
 
@@ -120,6 +111,9 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
         String title = intent.getStringExtra("title");
         setToolBarTitle(bi.epToolbar.toolbar, title, true);
+        currentPipeline = intent.getStringExtra("currentStage");
+        transactionPipeline = (ArrayList<GetLeadTransactionStage.PipeLine>) intent.getExtras().getSerializable("Pipeline");
+
     }
 
     @Override
