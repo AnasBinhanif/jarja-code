@@ -13,12 +13,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -159,30 +159,27 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        atvAddress.addTextChangedListener(new TextWatcher() {
+        atvAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-            }
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    int length = atvAddress.getText().length();
+                    try {
+                        if (length > 0)
+                            presenter.getAddressDetailByPrefix(atvAddress.getText().toString(), "street");
 
-                try {
-                    if (s.length() > 3)
-                        presenter.getAddressDetailByPrefix(atvAddress.getText().toString(), "street");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    return true;
                 }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
+                return false;
             }
         });
+
 
         atvCity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,27 +190,24 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        atvCity.addTextChangedListener(new TextWatcher() {
+        atvCity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-            }
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    int length = atvCity.getText().length();
+                    try {
+                        if (length > 0)
+                            presenter.getAddressDetailByPrefix(atvCity.getText().toString(), "city");
 
-                try {
-                    if (s.length() > 3)
-                        presenter.getAddressDetailByPrefix(atvCity.getText().toString(), "city");
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return true;
                 }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
+                return false;
             }
         });
 
@@ -226,27 +220,24 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        atvState.addTextChangedListener(new TextWatcher() {
+        atvState.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-            }
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    int length = atvState.getText().length();
+                    try {
+                        if (length > 0)
+                            presenter.getAddressDetailByPrefix(atvState.getText().toString(), "state");
 
-                try {
-                    if (s.length() > 3)
-                        presenter.getAddressDetailByPrefix(atvState.getText().toString(), "state");
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return true;
                 }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
+                return false;
             }
         });
 
@@ -259,27 +250,24 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        atvZip.addTextChangedListener(new TextWatcher() {
+        atvZip.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-            }
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    int length = atvZip.getText().length();
+                    try {
+                        if (length > 0)
+                            presenter.getAddressDetailByPrefix(atvZip.getText().toString(), "zip");
 
-                try {
-                    if (s.length() > 3)
-                        presenter.getAddressDetailByPrefix(atvZip.getText().toString(), "zip");
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return true;
                 }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
+                return false;
             }
         });
 

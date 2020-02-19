@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -100,26 +102,24 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.tvName.setOnClickListener(this);
         bi.cbAllDay.setOnClickListener(this);
 
-        bi.atvLocation.addTextChangedListener(new TextWatcher() {
+        bi.atvLocation.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-            }
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                    int length = bi.atvLocation.getText().length();
+                    try {
+                        if (length > 0)
+                            presenter.getDropDownLocation(bi.atvLocation.getText().toString());
 
-                try {
-                    if (charSequence.length() > 3)
-                        presenter.getDropDownLocation(charSequence.toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return true;
                 }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
+                return false;
             }
         });
 
@@ -249,6 +249,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 presenter.getVia();
                 reminder = arrayListReminderValue.get(position);
+                if (via.contains("None")) {
+                    bi.atvVia.setVisibility(View.GONE);
+                    bi.lblVia.setVisibility(View.GONE);
+                } else {
+                    bi.atvVia.setVisibility(View.VISIBLE);
+                    bi.lblVia.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -267,9 +274,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListViaText);
         bi.atvVia.setAdapter(arrayAdapter);
-
-        bi.atvVia.setVisibility(View.VISIBLE);
-        bi.lblVia.setVisibility(View.VISIBLE);
 
         bi.atvVia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -333,7 +337,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
 
-                        agentIdsString="";
+                        agentIdsString = "";
                         if (selectedEncyrptedIds != null || selectedEncyrptedIds.size() != 0) {
                             for (String i : selectedEncyrptedIds) {
 
@@ -497,10 +501,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             bi.atvReminder.requestFocus();
             return false;
         }
-        if (Methods.isEmpty(bi.atvVia)) {
-            ToastUtils.showToast(context, R.string.error_via);
-            bi.atvVia.requestFocus();
-            return false;
+        if (!reminder.equalsIgnoreCase("None")) {
+            if (Methods.isEmpty(bi.atvVia)) {
+                ToastUtils.showToast(context, R.string.error_via);
+                bi.atvVia.requestFocus();
+                return false;
+            }
         }
         if (!bi.cbAllDay.isChecked()) {
             if (Methods.isEmpty(bi.tvStartTime)) {

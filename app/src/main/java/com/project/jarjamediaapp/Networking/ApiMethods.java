@@ -302,7 +302,7 @@ public interface ApiMethods {
             @Header("Authorization") String authorization,
             @Field("leadStringID") String leadStringID,
             @Field("agentsStringIDs") String agentsStringIDs,
-            @Field("leadAppoinmentID") String leadAppoinmentID,
+            @Field("leadAppoinmentID") String leadAppointmentID,
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
             @Field("desc") String desc,
