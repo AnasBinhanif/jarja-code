@@ -28,6 +28,7 @@ public class AppointmentActivity extends BaseActivity implements View.OnClickLis
     ActivityAppointmentsBinding bi;
     Context context = AppointmentActivity.this;
     AppointmentPresenter presenter;
+    String leadID ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class AppointmentActivity extends BaseActivity implements View.OnClickLis
 
         bi = DataBindingUtil.setContentView(this, R.layout.activity_appointments);
         presenter = new AppointmentPresenter(this);
+        leadID = getIntent().getStringExtra("leadID");
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.appointment), true);
 
@@ -48,7 +50,7 @@ public class AppointmentActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void initViews() {
 
-        Fragment fragment = FragmentAppointment.newInstance("Appointments",true);
+        Fragment fragment = FragmentAppointment.newInstance("Appointments",leadID,true);
         ReplaceFragment(fragment, "Appointments", true, false);
     }
 

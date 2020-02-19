@@ -33,17 +33,18 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     AppointmentPresenter presenter;
     SwipeAppointPreviousRecyclerAdapter swipeAppointPreviousRecyclerAdapter;
     boolean isFromActivity;
-
+    String leadID ="";
     ArrayList<GetAppointmentsModel.Data> appointmentList = new ArrayList<>();
 
     public FragmentAppointment() {
         // Required empty public constructor
     }
 
-    public static FragmentAppointment newInstance(String fragment_title, boolean fromActivity) {
+    public static FragmentAppointment newInstance(String fragment_title,String leadID, boolean fromActivity) {
         FragmentAppointment fragmentAppointment = new FragmentAppointment();
         Bundle args = new Bundle();
         args.putString("title", fragment_title);
+        args.putString("leadID", leadID);
         args.putBoolean("isFromActivity", fromActivity);
         fragmentAppointment.setArguments(args);
         return fragmentAppointment;
@@ -82,12 +83,12 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
             case "today":
 
-                if (appointmentList.size()==0){
+                if (appointmentList.size() == 0) {
 
                     bi.tvNoRecordFound.setVisibility(View.VISIBLE);
                     bi.recyclerViewToday.setVisibility(View.GONE);
 
-                }else {
+                } else {
                     swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewToday.setLayoutManager(mLayoutManager);
@@ -96,12 +97,12 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                 }
                 break;
             case "upcoming":
-                if (appointmentList.size()==0){
+                if (appointmentList.size() == 0) {
 
                     bi.tvNoRecordFound.setVisibility(View.VISIBLE);
                     bi.recyclerViewUpcoming.setVisibility(View.GONE);
 
-                }else {
+                } else {
                     swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewUpcoming.setLayoutManager(mLayoutManager);
@@ -110,12 +111,12 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                 }
                 break;
             case "previous":
-                if (appointmentList.size()==0){
+                if (appointmentList.size() == 0) {
 
                     bi.tvNoRecordFound.setVisibility(View.VISIBLE);
                     bi.recyclerViewPrevious.setVisibility(View.GONE);
 
-                }else {
+                } else {
                     swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewPrevious.setLayoutManager(mLayoutManager);
@@ -169,6 +170,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
         isFromActivity = this.getArguments().getBoolean("isFromActivity");
         if (isFromActivity) {
+            leadID = this.getArguments().getString("leadID");
             bi.tvTitle.setVisibility(View.GONE);
             bi.fbAddAppoint.setVisibility(View.GONE);
         }
@@ -178,7 +180,11 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         bi.btnPrevious.setOnClickListener(this);
         bi.fbAddAppoint.setOnClickListener(this);
 
-        presenter.getTodayAppointments();
+        if (isFromActivity) {
+            presenter.getLeadTodayAppointments(leadID);
+        } else {
+            presenter.getTodayAppointments();
+        }
 
     }
 
@@ -219,7 +225,11 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
             case R.id.btnToday:
 
-                presenter.getTodayAppointments();
+                if (isFromActivity) {
+                    presenter.getLeadTodayAppointments(leadID);
+                } else {
+                    presenter.getTodayAppointments();
+                }
 
                 Paris.style(bi.btnToday).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnUpcoming).apply(R.style.TabButtonTranparentMiddle);
@@ -234,7 +244,11 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
             case R.id.btnUpcoming:
 
-                presenter.getUpcomingAppointments();
+                if (isFromActivity) {
+                    presenter.getLeadUpcomingAppointments(leadID);
+                } else {
+                    presenter.getUpcomingAppointments();
+                }
 
                 Paris.style(bi.btnToday).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnUpcoming).apply(R.style.TabButtonYellowMiddle);
@@ -249,7 +263,11 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
             case R.id.btnPrevious:
 
-                presenter.getPreviousAppointments();
+                if (isFromActivity) {
+                    presenter.getLeadPreviousAppointments(leadID);
+                } else {
+                    presenter.getPreviousAppointments();
+                }
 
                 Paris.style(bi.btnToday).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnUpcoming).apply(R.style.TabButtonTranparentMiddle);

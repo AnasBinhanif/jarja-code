@@ -145,13 +145,10 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
 
         public void bind() {
 
-            tvDone.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    pos = getAdapterPosition();
-                    String leadID = mData.get(pos).leadsData.leadID;
-                    markAsRead(leadID);
-                }
+            tvDone.setOnClickListener(v -> {
+                pos = getAdapterPosition();
+                String leadID = mData.get(pos).leadsData.leadID;
+                markAsRead(leadID+",","true");
             });
 
             tvEdit.setOnClickListener(new View.OnClickListener() {
@@ -165,10 +162,11 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void markAsRead(String leadID) {
+    private void markAsRead(String leadID,String state) {
         GH.getInstance().ShowProgressDialog(context);
         Call<BaseResponse> _callToday;
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).MarkComplete(GH.getInstance().getAuthorization(), leadID);
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).MarkComplete(GH.getInstance().getAuthorization(),
+                leadID,state);
         _callToday.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {

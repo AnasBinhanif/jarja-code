@@ -25,12 +25,15 @@ public class FollowupsActivity extends BaseActivity implements View.OnClickListe
     Context context = FollowupsActivity.this;
     FollowupsPresenter presenter;
 
+    String leadID = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         bi = DataBindingUtil.setContentView(this, R.layout.activity_followups);
         presenter = new FollowupsPresenter(this);
+        leadID = getIntent().getStringExtra("leadID");
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.follow_up), true);
 
@@ -44,7 +47,7 @@ public class FollowupsActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void initViews() {
 
-        Fragment fragment = FollowUpFragment.newInstance("Follow Ups",true);
+        Fragment fragment = FollowUpFragment.newInstance("Follow Ups",leadID,true);
         ReplaceFragment(fragment, "Follow Ups", true, false);
     }
 

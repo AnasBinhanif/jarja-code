@@ -34,6 +34,9 @@ public interface AppointmentContract {
         void getTodayAppointments();
         void getUpcomingAppointments();
         void getPreviousAppointments();
+        void getLeadTodayAppointments(String leadID);
+        void getLeadUpcomingAppointments(String leadID);
+        void getLeadPreviousAppointments(String leadID);
     }
 
     /*

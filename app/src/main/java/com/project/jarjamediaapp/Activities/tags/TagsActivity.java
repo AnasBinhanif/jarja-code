@@ -131,7 +131,7 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
 
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
-
+                        tagsIdsString="";
                         if (selectedEncyrptedIds != null || selectedEncyrptedIds.size() != 0) {
                             for (String i : selectedEncyrptedIds) {
 

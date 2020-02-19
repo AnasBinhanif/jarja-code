@@ -36,7 +36,7 @@ public class GetLead implements Serializable {
 
         @SerializedName("assignAgentsID")
         @Expose
-        public Integer assignAgentsID;
+        public String assignAgentsID;
         @SerializedName("agentID")
         @Expose
         public Integer agentID;

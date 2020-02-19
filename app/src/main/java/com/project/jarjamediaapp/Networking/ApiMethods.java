@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Networking;
 
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
+import com.project.jarjamediaapp.Activities.followups.FollowupsModel;
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
 import com.project.jarjamediaapp.Activities.notification.NotificationModel;
 import com.project.jarjamediaapp.Activities.open_houses.AddressDetailModel;
@@ -87,7 +88,8 @@ public interface ApiMethods {
     @POST("Appointment/MarkComplete")
     Call<BaseResponse> MarkComplete(
             @Header("Authorization") String authorization,
-            @Field("leadAppoinmentID") String leadAppoinmentID
+            @Field("encryptedLeadAppoinmentID") String leadAppoinmentID,
+            @Field("state") String state
     );
 
     @GET("FollowUp/GetDueFollowUps")
@@ -178,10 +180,49 @@ public interface ApiMethods {
             @Header("Authorization") String authorization
     );
 
+    @GET("Lead/GetDueFollowUps")
+    Call<GetFollowUpsModel> GetDueFollowUps(
+            @Header("Authorization") String authorization,
+            @Query("Encrypted_LeadID") String leadID
+    );
+
+    @GET("Lead/GetOverDueFollowUps")
+    Call<GetFollowUpsModel> GetOverDueFollowUps(
+            @Header("Authorization") String authorization,
+            @Query("Encrypted_LeadID") String leadID
+    );
+
+    @GET("Lead/GetTodayAppointmentByLeadID")
+    Call<GetAppointmentsModel> GetTodayAppointmentByLeadID(
+            @Header("Authorization") String authorization,
+            @Query("Encrypted_LeadID") String leadID
+    );
+
+    @GET("Lead/GetUpcomingAppointmentByLeadID")
+    Call<GetAppointmentsModel> GetUpcomingAppointmentByLeadID(
+            @Header("Authorization") String authorization,
+            @Query("Encrypted_LeadID") String leadID
+    );
+
+    @GET("Lead/GetPreviousAppointmentByLeadID")
+    Call<GetAppointmentsModel> GetPreviousAppointmentByLeadID(
+            @Header("Authorization") String authorization,
+            @Query("Encrypted_LeadID") String leadID
+    );
+
     @GET("Lead/GetLead")
     Call<GetLead> GetLead(
             @Header("Authorization") String authorization,
             @Query("LeadID") String leadID
+    );
+
+    @FormUrlEncoded
+    @POST("Lead/AssignAgentToLead")
+    Call<BaseResponse> AssignAgentToLead(
+            @Header("Authorization") String authorization,
+            @Field("agentIds") String agentIds,
+            @Field("leadStringID") String leadStringID,
+            @Field("typeIndex") String typeIndex
     );
 
     @GET("Lead/GetLeadTransactionStage")

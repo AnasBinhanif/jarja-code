@@ -34,14 +34,17 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
     boolean isFromActivity;
     ArrayList<GetFollowUpsModel.Data> followUpsList = new ArrayList<>();
 
+    String leadID = "";
+
     public FollowUpFragment() {
         // Required empty public constructor
     }
 
-    public static FollowUpFragment newInstance(String fragment_title, boolean fromActivity) {
+    public static FollowUpFragment newInstance(String fragment_title, String leadID, boolean fromActivity) {
         FollowUpFragment followUpFragment = new FollowUpFragment();
         Bundle args = new Bundle();
         args.putString("title", fragment_title);
+        args.putString("leadID", leadID);
         args.putBoolean("isFromActivity", fromActivity);
         followUpFragment.setArguments(args);
         return followUpFragment;
@@ -52,6 +55,7 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
         // Inflate the layout for this fragment
         bi = DataBindingUtil.inflate(inflater, R.layout.fragment_followup, container, false);
         presenter = new FollowUpPresenter(this);
+
         presenter.initScreen();
 
 
@@ -69,7 +73,7 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
     public void setupViews() {
 
         initViews();
-        presenter.getDueFollowUps();
+
     }
 
     @Override
@@ -150,12 +154,17 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
         isFromActivity = this.getArguments().getBoolean("isFromActivity");
         if (isFromActivity) {
+            leadID = this.getArguments().getString("leadID");
             bi.tvTitle.setVisibility(View.GONE);
         }
-
-
         bi.btnFollowDue.setOnClickListener(this);
         bi.btnFollowOverDue.setOnClickListener(this);
+
+        if (isFromActivity) {
+            presenter.getLeadFollowupsDue(leadID);
+        } else {
+            presenter.getDueFollowUps();
+        }
 
     }
 
@@ -200,7 +209,11 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
             case R.id.btnFollowDue:
 
-                presenter.getDueFollowUps();
+                if (isFromActivity) {
+                    presenter.getLeadFollowupsDue(leadID);
+                } else {
+                    presenter.getDueFollowUps();
+                }
 
                 Paris.style(bi.btnFollowDue).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnFollowOverDue).apply(R.style.TabButtonTranparentRight);
@@ -209,7 +222,11 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
             case R.id.btnFollowOverDue:
 
-                presenter.getOverDueFollowUps();
+                if (isFromActivity) {
+                    presenter.getLeadFollowupsOverDue(leadID);
+                } else {
+                    presenter.getOverDueFollowUps();
+                }
 
                 Paris.style(bi.btnFollowOverDue).apply(R.style.TabButtonYellowRight);
                 Paris.style(bi.btnFollowDue).apply(R.style.TabButtonTranparentLeft);

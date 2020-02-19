@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.Activities.lead_detail;
 
 import com.project.jarjamediaapp.Base.BasePresenter;
+import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
@@ -17,11 +18,87 @@ import retrofit2.Response;
 public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> implements LeadDetailContract.Actions {
 
     Call<GetLead> _call;
+    Call<BaseResponse> _callAssignAgents;
+    Call<GetAgentsModel> _callGetAgentsModel;
     Call<GetLeadTransactionStage> _callGetLeadTransactionStage;
 
 
     public LeadDetailPresenter(LeadDetailContract.View view) {
         super(view);
+    }
+
+    @Override
+    public void assignAgents(String agentsIDs, String leadID, String typeIndex) {
+        _view.showProgressBar();
+        _callAssignAgents = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AssignAgentToLead(GH.getInstance().getAuthorization(),
+                agentsIDs, leadID,typeIndex);
+        _callAssignAgents.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.getStatus().equals("Success")) {
+
+                        _view.updateUI(response);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+    }
+
+    @Override
+    public void getAgentNames() {
+
+        _view.showProgressBar();
+        _callGetAgentsModel = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetAgents(GH.getInstance().getAuthorization());
+        _callGetAgentsModel.enqueue(new Callback<GetAgentsModel>() {
+            @Override
+            public void onResponse(Call<GetAgentsModel> call, Response<GetAgentsModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetAgentsModel getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetAgentsModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
     }
 
     @Override

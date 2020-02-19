@@ -33,6 +33,8 @@ public interface FollowUpContract {
          void initScreen();
         void getDueFollowUps();
         void getOverDueFollowUps();
+        void getLeadFollowupsDue(String leadID);
+        void getLeadFollowupsOverDue(String leadID);
     }
 
     /*

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.abdeveloper.library.MultiSelectDialog;
+import com.abdeveloper.library.MultiSelectModel;
 import com.airbnb.paris.Paris;
 import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
 import com.project.jarjamediaapp.Activities.appointments.AppointmentActivity;
@@ -30,6 +33,7 @@ import com.project.jarjamediaapp.Activities.tasks.TasksActivity;
 import com.project.jarjamediaapp.Activities.transactions.TransactionActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadDetails;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
@@ -57,6 +61,10 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     LeadDetailPresenter presenter;
     String title = "";
 
+    ArrayList<GetAgentsModel.Data> agentList;
+    ArrayList<MultiSelectModel> searchListItems;
+    ArrayList<Integer> selectedIdsList = new ArrayList<>();
+
     GetLead.LeadList getLeadListData;
     ArrayList<GetLead.AgentsList> getAssignedAgentList;
 
@@ -66,7 +74,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     ArrayList<GetLeadTransactionStage.LeadTransactionOne> transactionOneListModel;
     ArrayList<GetLeadTransactionStage.LeadTransactionTwo> transactionTwoListModel;
 
-    String currentStage1="",currentStage2="";
+    String currentStage1 = "", currentStage2 = "";
+    String agentIdsString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +123,9 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             switch (position) {
 
                 case 0:
-
-                    switchActivity(FollowupsActivity.class);
+                    Map<String, String> followMap = new HashMap<>();
+                    followMap.put("leadID", leadID);
+                    switchActivityWithIntentString(FollowupsActivity.class, (HashMap<String, String>) followMap);
 
                     break;
 
@@ -150,7 +160,10 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     break;
                 case 5:
 
-                    switchActivity(AppointmentActivity.class);
+                    Map<String, String> appointMap = new HashMap<>();
+                    appointMap.put("leadID", leadID);
+                    switchActivityWithIntentString(AppointmentActivity.class, (HashMap<String, String>) appointMap);
+
 
                     break;
 
@@ -171,6 +184,56 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             return Unit.INSTANCE;
         });
 
+    }
+
+    private void showAgentDialog() {
+
+        MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
+                .title("Select Agents") //setting title for dialog
+                .titleSize(25)
+                .positiveText("Done")
+                .negativeText("Cancel")
+                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
+                        //will return list of selected IDS
+                        selectedIdsList = new ArrayList<>();
+                        selectedIdsList = selectedIds;
+
+                        Log.e("DataString", dataString);
+                    }
+
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+                        agentIdsString = "";
+                        if (selectedEncyrptedIds != null || selectedEncyrptedIds.size() != 0) {
+                            for (String i : selectedEncyrptedIds) {
+
+                                if (agentIdsString.equals("")) {
+                                    agentIdsString = i;
+                                } else {
+                                    agentIdsString = agentIdsString + "," + i;
+                                }
+                            }
+                        } else {
+                            ToastUtils.showToast(context, "No EncryptedID Found");
+                        }
+
+                        presenter.assignAgents(agentIdsString, leadID, "true");
+                    }
+
+                    @Override
+                    public void onCancel() {
+                    }
+                });
+        if (selectedIdsList.size() != 0) {
+            multiSelectDialog.preSelectIDsList(selectedIdsList);
+            multiSelectDialog.multiSelectList(searchListItems);
+        } else {
+            multiSelectDialog.multiSelectList(searchListItems);
+        }
+        multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
 
     private void openEmailComposer(String[] recipients) {
@@ -235,7 +298,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 break;
 
             case R.id.fbAssignedTo:
-                showCallDialog(context);
+                showAgentDialog();
                 break;
 
             case R.id.rlTransaction1:
@@ -339,6 +402,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
         initListeners();
         populateListData();
+        presenter.getAgentNames();
         presenter.getLead(leadID);
         presenter.getTransaction(leadID);
     }
@@ -367,7 +431,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetLead.AgentsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
 
             TextView tvName = (TextView) integerMap.get(R.id.tvAssignedToName);
-            tvName.setText(String.valueOf(allLeadsList.agentID));
+            tvName.setText(String.valueOf(allLeadsList.agentName));
 
 
             return Unit.INSTANCE;
@@ -385,6 +449,17 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     }
 
     @Override
+    public void updateUI(GetAgentsModel response) {
+
+        agentList = new ArrayList<>();
+        searchListItems = new ArrayList<>();
+        agentList = response.data;
+        for (GetAgentsModel.Data model : agentList) {
+            searchListItems.add(new MultiSelectModel(model.agentID, model.agentName, model.encryptedAgentID));
+        }
+    }
+
+    @Override
     public void updateUI(GetLead response) {
 
         getAssignedAgentList = new ArrayList<>();
@@ -392,6 +467,13 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         getAssignedAgentList = response.data.leadList.agentsList;
 
         if (getLeadListData != null) {
+
+            if (getAssignedAgentList.size() != 0) {
+                for (GetLead.AgentsList model : getAssignedAgentList) {
+                    selectedIdsList.add(model.agentID);
+                }
+            }
+
 
             bi.scLeadDetail.setVisibility(View.VISIBLE);
             bi.tvNoRecordFound.setVisibility(View.GONE);
@@ -443,8 +525,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             bi.rlTransaction2.setVisibility(View.GONE);
         }
 
-        if (transactionTwoListModel!=null)
-        {
+        if (transactionTwoListModel != null) {
             currentStage2 = transactionTwoListModel.get(0).currentStage;
         }
 
@@ -479,6 +560,13 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     @Override
     public void updateUI(Response<BaseResponse> response) {
+
+        if (response.body().getStatus().equals("Success")) {
+            ToastUtils.showToast(context, "Assigned Successfully");
+            presenter.getAgentNames();
+            presenter.getLead(leadID);
+            presenter.getTransaction(leadID);
+        }
 
     }
 

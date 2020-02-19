@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.Activities.lead_detail;
 
 import com.project.jarjamediaapp.Base.BaseContract;
+import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 
@@ -8,6 +9,8 @@ public interface LeadDetailContract {
 
     interface View extends BaseContract.View{
         void initViews();
+
+        void updateUI(GetAgentsModel response);
 
         void updateUI(GetLead response);
 
@@ -29,6 +32,10 @@ public interface LeadDetailContract {
 	this is where the app logic is defined.
  	*/
     interface Actions extends BaseContract.Actions {
+
+        void assignAgents(String agentsIDs,String leadID,String typeIndex);
+
+        void getAgentNames();
 
         void getLead(String leadID);
 

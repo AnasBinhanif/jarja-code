@@ -109,4 +109,78 @@ public class FollowUpPresenter extends BasePresenter<FollowUpContract.View> impl
         });
 
     }
+
+    @Override
+    public void getLeadFollowupsDue(String leadID) {
+        _view.showProgressBar();
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetDueFollowUps(GH.getInstance().getAuthorization(),
+                leadID);
+        _call.enqueue(new Callback<GetFollowUpsModel>() {
+            @Override
+            public void onResponse(Call<GetFollowUpsModel> call, Response<GetFollowUpsModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetFollowUpsModel getFollowUpsModel = response.body();
+                    if (getFollowUpsModel.status.equals("Success")) {
+
+                        _view.updateUI(getFollowUpsModel,"due");
+
+                    } else {
+
+                        _view.updateUIonFalse(getFollowUpsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetFollowUpsModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+    }
+
+    @Override
+    public void getLeadFollowupsOverDue(String leadID) {
+        _view.showProgressBar();
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetOverDueFollowUps(GH.getInstance().getAuthorization(),
+                leadID);
+        _call.enqueue(new Callback<GetFollowUpsModel>() {
+            @Override
+            public void onResponse(Call<GetFollowUpsModel> call, Response<GetFollowUpsModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetFollowUpsModel getFollowUpsModel = response.body();
+                    if (getFollowUpsModel.status.equals("Success")) {
+
+                        _view.updateUI(getFollowUpsModel,"due");
+
+                    } else {
+
+                        _view.updateUIonFalse(getFollowUpsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetFollowUpsModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+    }
 }
