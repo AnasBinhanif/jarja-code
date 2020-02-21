@@ -28,23 +28,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
 
     private LayoutInflater mInflater;
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
     public Context context;
     int pos;
-    String status = "";
+    boolean isEditByLead;
     List<GetTasksModel.Data> mData;
 
-
-    public SwipeTasksDueRecyclerAdapter(Context context, List<GetTasksModel.Data> data) {
+    public SwipeTasksDueRecyclerAdapter(Context context, List<GetTasksModel.Data> data, boolean isEditByLead) {
 
         mData = data;
         this.context = context;
+        this.isEditByLead = isEditByLead;
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
+
     }
 
     @Override
@@ -113,6 +113,7 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     private void markAsRead(String taskID) {
+
         GH.getInstance().ShowProgressDialog(context);
 
         Call<BaseResponse> _callToday;
@@ -161,6 +162,7 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {
+
         private SwipeRevealLayout swipeLayout;
         TextView tvName, tvAddress, tvEdit, tvDone, tvInitial;
         FrameLayout frameLayout;
@@ -190,9 +192,26 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     pos = getAdapterPosition();
+                    String leadID = mData.get(pos).leadID;
+                    if (isEditByLead) {
+
+                        swipeLayout.close(true);
+                      /*  context.startActivity(new Intent(context, AddTaskActivity.class)
+                                .putExtra("leadID", leadID)
+                                .putExtra("from", "2")
+                                .putExtra("model", mData));*/
+                    } else {
+
+                        swipeLayout.close(true);
+                       /* context.startActivity(new Intent(context, AddTaskActivity.class)
+                                .putExtra("leadID", leadID)
+                                .putExtra("from", "3")
+                                .putExtra("model", mData));*/
+                    }
                 }
             });
 
         }
     }
+
 }

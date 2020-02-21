@@ -33,13 +33,13 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
 
     @Override
     public void getAgentNames() {
+
         _view.showProgressBar();
         _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetAgents(GH.getInstance().getAuthorization());
         _call.enqueue(new Callback<GetAgentsModel>() {
             @Override
             public void onResponse(Call<GetAgentsModel> call, Response<GetAgentsModel> response) {
 
-                _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetAgentsModel getAppointmentsModel = response.body();
@@ -49,11 +49,13 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
 
                     } else {
 
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -109,7 +111,6 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
     @Override
     public void getReminder() {
 
-        _view.showProgressBar();
         call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getReminder(GH.getInstance().getAuthorization());
         call.enqueue(new Callback<AddAppointmentModel>() {
             @Override

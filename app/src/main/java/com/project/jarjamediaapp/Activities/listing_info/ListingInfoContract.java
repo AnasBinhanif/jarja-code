@@ -1,12 +1,15 @@
 package com.project.jarjamediaapp.Activities.listing_info;
 
+import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BaseContract;
+
+import retrofit2.Response;
 
 public interface ListingInfoContract {
 
     interface View extends BaseContract.View {
 
-        void updateUIList(ListingInfoModel response);
+        void updateUIList(ListingInfoModel.Data response);
 
     }
 
@@ -16,9 +19,9 @@ public interface ListingInfoContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void getBuyingInfoDetails();
+        void getLeadBuyingInfoDetails(String leadId);
 
-        void getListingInfoDetails();
+        void getLeadListingInfoDetails(String leadId);
 
     }
 

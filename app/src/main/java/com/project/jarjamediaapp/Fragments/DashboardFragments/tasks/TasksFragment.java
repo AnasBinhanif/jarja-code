@@ -25,6 +25,8 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.FragmentTasksBinding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class TasksFragment extends BaseFragment implements FragmentLifeCycle, TasksContract.View, View.OnClickListener {
@@ -34,7 +36,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     TasksPresenter presenter;
     SwipeTasksDueRecyclerAdapter swipeTasksDueRecyclerAdapter;
     boolean isFromActivity;
-    String leadID ="";
+    String leadID = "";
 
     ArrayList<GetTasksModel.Data> tasksList = new ArrayList<>();
 
@@ -42,7 +44,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
         // Required empty public constructor
     }
 
-    public static TasksFragment newInstance(String fragment_title,String leadID, boolean fromActivity) {
+    public static TasksFragment newInstance(String fragment_title, String leadID, boolean fromActivity) {
         TasksFragment followUpFragment = new TasksFragment();
         Bundle args = new Bundle();
         args.putString("title", fragment_title);
@@ -96,7 +98,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList);
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList, isFromActivity);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerTaskViewDue.setLayoutManager(mLayoutManager);
                     bi.recyclerTaskViewDue.setItemAnimator(new DefaultItemAnimator());
@@ -119,7 +121,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskOverDue.setVisibility(View.VISIBLE);
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList);
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList, isFromActivity);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewTaskOverDue.setLayoutManager(mLayoutManager);
                     bi.recyclerViewTaskOverDue.setItemAnimator(new DefaultItemAnimator());
@@ -141,7 +143,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
                     bi.recyclerViewTaskFutureTask.setVisibility(View.VISIBLE);
 
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList);
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList, isFromActivity);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewTaskFutureTask.setLayoutManager(mLayoutManager);
                     bi.recyclerViewTaskFutureTask.setItemAnimator(new DefaultItemAnimator());
@@ -199,9 +201,9 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
         bi.btnTaskFutureTask.setOnClickListener(this);
         bi.fbAddTask.setOnClickListener(this);
 
-        if (isFromActivity){
+        if (isFromActivity) {
             presenter.getLeadDueTasks(leadID);
-        }else{
+        } else {
             presenter.getDueTasks();
         }
 
@@ -230,7 +232,10 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
         switch (view.getId()) {
 
             case R.id.fbAddTask:
-                switchActivity(context, AddTaskActivity.class);
+
+                Map<String, String> map = new HashMap<>();
+                map.put("from", "4");
+                switchActivityWithIntentString(context, AddTaskActivity.class, (HashMap<String, String>) map);
                 break;
 
             case R.id.btnTaskDue:
@@ -238,9 +243,9 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonTranparentRight);
 
-                if (isFromActivity){
+                if (isFromActivity) {
                     presenter.getLeadDueTasks(leadID);
-                }else{
+                } else {
                     presenter.getDueTasks();
                 }
 
@@ -252,9 +257,9 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonYellowMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonTranparentRight);
 
-                if (isFromActivity){
+                if (isFromActivity) {
                     presenter.getLeadOverDueTasks(leadID);
-                }else{
+                } else {
                     presenter.getOverDueTasks();
                 }
 
@@ -265,9 +270,9 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonYellowRight);
-                if (isFromActivity){
+                if (isFromActivity) {
                     presenter.getLeadFutureTasks(leadID);
-                }else{
+                } else {
                     presenter.getFutureTasks();
                 }
                 break;

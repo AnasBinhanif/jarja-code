@@ -9,6 +9,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,9 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
+import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
+import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetLeadTitlesModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -37,7 +41,6 @@ import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -57,14 +60,15 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     RecyclerAdapterUtil recyclerAdapterUtil;
     RecyclerView recyclerSearch;
 
-    ArrayList<String> reminderList;
     ArrayList<GetAgentsModel.Data> agentList;
     ArrayList<GetLeadTitlesModel.Data> nameList;
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
     ArrayList<MultiSelectModel> searchListItems;
-    String startDate, endDate, reminder, leadId, agentId;
-    String agentIdsString = "";
+    String startDate = "", endDate = "", reminder = "", via = "", leadId = "", type = "", reoccur = "", agentId = "";
+    String agentIdsString = "", leadName = "";
     MultiSelectModel agentModel;
+    boolean isEdit;
+    boolean isReminderClicked = false, isViaClicked = false, isTypeClicked = false, isRecurClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +88,59 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         presenter.getAgentNames();
 
         bi.btnSave.setOnClickListener(this);
-        bi.edtName.setOnClickListener(this);
-        bi.edtAssignTo.setOnClickListener(this);
-        bi.edtStartDate.setOnClickListener(this);
+        bi.tvName.setOnClickListener(this);
+        bi.tvAssignTo.setOnClickListener(this);
+        bi.tvStartDate.setOnClickListener(this);
+        bi.atvType.setOnClickListener(this);
+        bi.atvRecur.setOnClickListener(this);
+        bi.atvReminder.setOnClickListener(this);
+        bi.atvVia.setOnClickListener(this);
 
-        setSpinnerData();
+        // 1 from Add Task by Lead Id
+        // 2 from Update Task Lead Id
+        // 3 from Update Task
+        // 4 from Add Task
+        String id = getIntent().getStringExtra("from");
+        switch (id) {
+            case "1": {
+                leadId = getIntent().getStringExtra("leadID");
+                leadName = getIntent().getStringExtra("leadName");
+                bi.tvName.setText(leadName);
+                bi.tvName.setEnabled(false);
+            }
+            break;
+            case "2": {
+                leadId = getIntent().getStringExtra("leadID");
+                leadName = getIntent().getStringExtra("leadName");
+                bi.tvName.setText(leadName);
+                bi.tvName.setEnabled(false);
+                isEdit = true;
+
+                /*GetAppointmentsModel.LeadsData modelData = getIntent().getParcelableExtra("model");
+                prePopulateData(modelData);*/
+
+            }
+            break;
+            case "3":
+            case "5": {
+                bi.tvName.setEnabled(true);
+            }
+            break;
+            case "4": {
+
+                bi.tvName.setEnabled(true);
+                leadId = "";
+                isEdit = true;
+              /*  GetAppointmentsModel.LeadsData modelData = getIntent().getParcelableExtra("model");
+                prePopulateData(modelData);*/
+
+            }
+            break;
+        }
+
+    }
+
+    private void prePopulateData(GetAppointmentsModel modelData) {
 
     }
 
@@ -101,23 +153,198 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         for (GetAgentsModel.Data model : agentList) {
             searchListItems.add(new MultiSelectModel(model.agentID, model.agentName, model.encryptedAgentID));
         }
+        presenter.getType();
     }
 
     @Override
+    public void updateUIListForReminders(AddAppointmentModel response) {
+
+        ArrayList<String> arrayListReminderText = new ArrayList<>();
+        ArrayList<String> arrayListReminderValue = new ArrayList<>();
+
+        for (int i = 0; i < response.getData().size(); i++) {
+
+            arrayListReminderText.add(response.getData().get(i).getText());
+            arrayListReminderValue.add(response.getData().get(i).getValue());
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListReminderText);
+        bi.atvReminder.setAdapter(arrayAdapter);
+
+        bi.atvReminder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                presenter.getVia();
+                reminder = arrayListReminderValue.get(position);
+                if (via.contains("None")) {
+                    bi.atvVia.setVisibility(View.GONE);
+                    bi.lblVia.setVisibility(View.GONE);
+                } else {
+                    bi.atvVia.setVisibility(View.VISIBLE);
+                    bi.lblVia.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void updateUIListForVia(AddAppointmentModel response) {
+
+        ArrayList<String> arrayListViaText = new ArrayList<>();
+        ArrayList<String> arrayListViaValue = new ArrayList<>();
+
+        for (int i = 0; i < response.getData().size(); i++) {
+
+            arrayListViaText.add(response.getData().get(i).getText());
+            arrayListViaValue.add(response.getData().get(i).getValue());
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListViaText);
+        bi.atvVia.setAdapter(arrayAdapter);
+
+        bi.atvVia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                via = arrayListViaValue.get(position);
+            }
+        });
+
+    }
+
+    @Override
+    public void updateUIListForType(AddAppointmentModel response) {
+
+        ArrayList<String> arrayListViaText = new ArrayList<>();
+        ArrayList<String> arrayListViaValue = new ArrayList<>();
+
+        for (int i = 0; i < response.getData().size(); i++) {
+
+            arrayListViaText.add(response.getData().get(i).getText());
+            arrayListViaValue.add(response.getData().get(i).getValue());
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListViaText);
+        bi.atvType.setAdapter(arrayAdapter);
+
+        bi.atvType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                type = arrayListViaValue.get(position);
+            }
+        });
+
+        presenter.getRecur();
+
+    }
+
+    @Override
+    public void updateUIListForReoccur(AddAppointmentModel response) {
+
+        ArrayList<String> arrayListViaText = new ArrayList<>();
+        ArrayList<String> arrayListViaValue = new ArrayList<>();
+
+        for (int i = 0; i < response.getData().size(); i++) {
+
+            arrayListViaText.add(response.getData().get(i).getId());
+            arrayListViaValue.add(response.getData().get(i).getType());
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListViaValue);
+        bi.atvRecur.setAdapter(arrayAdapter);
+
+        bi.atvRecur.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                reoccur = arrayListViaText.get(position);
+            }
+        });
+        presenter.getReminder();
+
+    }
+
+
+    private void type() {
+
+        if (!isTypeClicked) {
+            bi.atvType.showDropDown();
+            isTypeClicked = true;
+        } else {
+            isTypeClicked = false;
+            bi.atvType.dismissDropDown();
+        }
+
+    }
+
+
+    private void recur() {
+
+        if (!isRecurClicked) {
+            bi.atvRecur.showDropDown();
+            isRecurClicked = true;
+        } else {
+            isRecurClicked = false;
+            bi.atvRecur.dismissDropDown();
+        }
+
+    }
+
+    private void reminder() {
+
+        if (!isReminderClicked) {
+            bi.atvReminder.showDropDown();
+            isReminderClicked = true;
+        } else {
+            isReminderClicked = false;
+            bi.atvReminder.dismissDropDown();
+        }
+
+    }
+
+    private void via() {
+
+        if (!isViaClicked) {
+            bi.atvVia.showDropDown();
+            isViaClicked = true;
+        } else {
+            isViaClicked = false;
+            bi.atvVia.dismissDropDown();
+        }
+
+    }
+
+
+    @Override
     public void onClick(View view) {
+
         super.onClick(view);
         switch (view.getId()) {
-            case R.id.edtName:
+            case R.id.tvName:
                 showSearchDialog(context);
                 break;
             case R.id.edtStartDate:
-                showDateDialog(bi.edtStartDate, true);
+                showDateDialog(bi.tvStartDate, true);
                 break;
-            case R.id.edtAssignTo:
+            case R.id.tvAssignedTo:
                 showAgentDialog();
                 break;
             case R.id.btnSave:
                 callAddTask();
+                break;
+            case R.id.atvReminder:
+                reminder();
+                break;
+            case R.id.atvVia:
+                via();
+                break;
+            case R.id.atvType:
+                type();
+                break;
+            case R.id.atvRecur:
+                recur();
                 break;
         }
     }
@@ -127,13 +354,13 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String id = "1";
         String agentIds = String.valueOf(agentModel.getId());
         String leadStringID = leadId + "";
-        String isAssignNow = bi.edtName.getText().toString().equals("") ? "true" : "false";
+        String isAssignNow = bi.tvName.getText().toString().equals("") ? "true" : "false";
         String monthType = "";
         String scheduleID = "0";
-        String name = bi.edtName.getText().toString() + "";
-        String desc = bi.edtDescription.getText().toString() + "";
-        String scheduleRecurID = String.valueOf(bi.spnRecur.getSelectedIndex());
-        String type = Arrays.asList(getResources().getStringArray(R.array.arrTaskType)).get(bi.spnType.getSelectedIndex());
+        String name = bi.tvName.getText().toString() + "";
+        String desc = bi.atvDescription.getText().toString() + "";
+        String reoccur = this.reoccur;
+        String type = this.type;
         String datedFrom = startDate;
         String datedto = startDate;
         String recurDay = "";
@@ -148,34 +375,13 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String reminderDate = "";
         String interval = reminder;
         String isSend = "";
-        String viaReminder = bi.spnVia.getSelectedIndex() == 0 ? "Text" : "Email";
+        String viaReminder = via;
         String propertyId = "";
-        String propertyAddress = bi.edtPropertyAdd.getText().toString() + "";
+        String propertyAddress = bi.atvAddProperty.getText().toString() + "";
 
 
         presenter.addTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
                 dayOfWeek, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);
-
-    }
-
-    private void setSpinnerData() {
-
-        bi.spnType.setBackground(getDrawable(R.drawable.bg_search));
-        bi.spnRecur.setBackground(getDrawable(R.drawable.bg_search));
-        bi.spnReminder.setBackground(getDrawable(R.drawable.bg_search));
-
-        bi.spnType.setItems(getResources().getStringArray(R.array.arrTaskType));
-        bi.spnVia.setItems(getResources().getStringArray(R.array.arrVia));
-        bi.spnRecur.setItems(getResources().getStringArray(R.array.arrTaskRecur));
-
-        reminderList = new ArrayList<>();
-        for (String name : GH.getInstance().getArrayReminder().keySet()) {
-            reminderList.add(name);
-        }
-        bi.spnReminder.setItems(reminderList);
-        bi.spnReminder.setOnItemSelectedListener((view, position, id, item) ->
-                reminder = String.valueOf(GH.getInstance().getArrayReminder().get(item.toString())));
-
 
     }
 
@@ -323,7 +529,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetLeadTitlesModel.Data, Integer, Unit>) (list, integer) -> {
 
-            bi.edtName.setText(nameList.get(integer).name);
+            bi.tvName.setText(nameList.get(integer).name);
             leadId = nameList.get(integer).leadID;
             dialog.dismiss();
 

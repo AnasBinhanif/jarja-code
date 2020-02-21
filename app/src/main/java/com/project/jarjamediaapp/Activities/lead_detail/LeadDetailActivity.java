@@ -141,6 +141,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
                     Map<String, String> map = new HashMap<>();
                     map.put("title", getString(R.string.listing_info));
+                    map.put("leadID", leadID);
                     switchActivityWithIntentString(ListingInfoActivity.class, (HashMap<String, String>) map);
 
                     break;
@@ -148,6 +149,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 case 3:
                     Map<String, String> map1 = new HashMap<>();
                     map1.put("title", getString(R.string.buying_info));
+                    map1.put("leadID", leadID);
                     switchActivityWithIntentString(ListingInfoActivity.class, (HashMap<String, String>) map1);
 
                     break;
@@ -162,6 +164,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
                     Map<String, String> appointMap = new HashMap<>();
                     appointMap.put("leadID", leadID);
+                    appointMap.put("leadName", getLeadListData.firstName + " " + getLeadListData.lastName);
                     switchActivityWithIntentString(AppointmentActivity.class, (HashMap<String, String>) appointMap);
 
 
@@ -176,6 +179,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 case 7:
                     Map<String, String> taskMap = new HashMap<>();
                     taskMap.put("leadID", leadID);
+                    taskMap.put("leadName", getLeadListData.firstName + " " + getLeadListData.lastName);
                     switchActivityWithIntentString(TasksActivity.class, (HashMap<String, String>) taskMap);
 
                     break;
@@ -397,6 +401,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     @Override
     public void initViews() {
+
         leadID = getIntent().getStringExtra("leadID");
         bi.scLeadDetail.setVisibility(View.GONE);
         bi.tvNoRecordFound.setVisibility(View.GONE);
@@ -475,14 +480,26 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 }
             }
 
-
             bi.scLeadDetail.setVisibility(View.VISIBLE);
             bi.tvNoRecordFound.setVisibility(View.GONE);
 
             bi.tvID.setText(getLeadListData.leadStringID);
-            bi.tvName.setText(getLeadListData.firstName + " " + getLeadListData.lastName);
+            String firstName = getLeadListData.firstName;
+            String lastName = getLeadListData.lastName;
+            if (firstName != null && lastName != null) {
+                bi.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
+                bi.tvName.setText(firstName + " " + lastName);
+            } else if (firstName == null && lastName != null) {
+                bi.tvInitial.setText("-" + lastName.substring(0, 1));
+                bi.tvName.setText(lastName);
+            } else if (firstName != null && lastName == null) {
+                bi.tvInitial.setText(firstName.substring(0, 1)+"-");
+                bi.tvName.setText(firstName);
+            } else if (firstName == null && lastName == null) {
+                bi.tvInitial.setText("-" + "-");
+                bi.tvName.setText("");
+            }
             bi.tvScore.setText(getLeadListData.leadScore);
-            //bi.tvScore.setText(getLeadListData.);
         } else {
             bi.scLeadDetail.setVisibility(View.GONE);
             bi.tvNoRecordFound.setVisibility(View.VISIBLE);

@@ -8,32 +8,10 @@ public class UploadImageModel extends BaseResponse {
 
     @SerializedName("data")
     @Expose
-    private Response data;
+    private String data;
 
-    public Response getResponse() {
+    public String getData() {
         return data;
-    }
-
-    public void setResponse(Response response) {
-        this.data = response;
-    }
-
-    public class Response {
-
-        @SerializedName("file_url")
-        @Expose
-        private String fileUrl;
-
-        public String getFileUrl() {
-            return fileUrl;
-        }
-
-        public void setFileUrl(String fileUrl) {
-            this.fileUrl = fileUrl;
-        }
     }
 }
 
-/*
-
- */

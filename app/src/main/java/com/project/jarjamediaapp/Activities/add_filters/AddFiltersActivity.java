@@ -129,6 +129,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         bi.edtPriceRange.setOnClickListener(this);
         bi.edtDripCompaigns.setOnClickListener(this);
         bi.btnSaveAndSearch.setOnClickListener(this);
+        bi.btnSearch.setOnClickListener(this);
+        bi.btnClear.setOnClickListener(this);
     }
 
     private void saveFilters() {

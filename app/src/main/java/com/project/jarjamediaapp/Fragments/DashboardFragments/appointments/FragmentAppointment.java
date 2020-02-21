@@ -24,6 +24,8 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.FragmentAppointmentBinding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class FragmentAppointment extends BaseFragment implements FragmentLifeCycle, AppointmentContract.View, View.OnClickListener {
@@ -89,7 +91,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     bi.recyclerViewToday.setVisibility(View.GONE);
 
                 } else {
-                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList);
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList,isFromActivity);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewToday.setLayoutManager(mLayoutManager);
                     bi.recyclerViewToday.setItemAnimator(new DefaultItemAnimator());
@@ -103,7 +105,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     bi.recyclerViewUpcoming.setVisibility(View.GONE);
 
                 } else {
-                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList);
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList,isFromActivity);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewUpcoming.setLayoutManager(mLayoutManager);
                     bi.recyclerViewUpcoming.setItemAnimator(new DefaultItemAnimator());
@@ -117,7 +119,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     bi.recyclerViewPrevious.setVisibility(View.GONE);
 
                 } else {
-                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList);
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList,isFromActivity);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewPrevious.setLayoutManager(mLayoutManager);
                     bi.recyclerViewPrevious.setItemAnimator(new DefaultItemAnimator());
@@ -188,39 +190,17 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
     }
 
-
-    /*private void populateDataPrevious() {
-
-        List<GetPreviousAppointments> appointmentList = new ArrayList<>();
-
-        appointmentList.add(new GetPreviousAppointments("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetPreviousAppointments("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetPreviousAppointments("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetPreviousAppointments("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetPreviousAppointments("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetPreviousAppointments("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetPreviousAppointments("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetPreviousAppointments("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetPreviousAppointments("NAME NAME NAME NAME NAME NAME", "Address Address Address Address"));
-
-        swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        // DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewPrevious.getContext(), 1);
-        bi.recyclerViewPrevious.setLayoutManager(mLayoutManager);
-        bi.recyclerViewPrevious.setItemAnimator(new DefaultItemAnimator());
-        // bi.recyclerViewPrevious.addItemDecoration(dividerItemDecoration);
-        bi.recyclerViewPrevious.setAdapter(swipeAppointPreviousRecyclerAdapter);
-
-
-    }*/
-
     @Override
     public void onClick(View view) {
 
         switch (view.getId()) {
 
             case R.id.fbAddAppoint:
-                switchActivity(context, AddAppointmentActivity.class);
+
+                Map<String, String> map = new HashMap<>();
+                map.put("from","5");
+                switchActivityWithIntentString(context,AddAppointmentActivity.class, (HashMap<String, String>) map);
+
                 break;
 
             case R.id.btnToday:

@@ -110,7 +110,7 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
     public void uploadImage(MultipartBody.Part file) {
 
         _view.showProgressBar();
-        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).uploadFileToServer(GH.getInstance().getAuthorization(),file);
+        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).uploadFileToServer(GH.getInstance().getAuthorization(),file,"image");
 
         _cCall.enqueue(new Callback<UploadImageModel>() {
             @Override

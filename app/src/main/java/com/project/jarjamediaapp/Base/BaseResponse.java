@@ -9,7 +9,7 @@ public class BaseResponse<T> implements Serializable {
 
     @SerializedName("status")
     @Expose
-    private String status;
+    public String status;
     @SerializedName("message")
     @Expose
     public String message;

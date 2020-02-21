@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.CustomAdapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -35,14 +37,15 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
     public Context context;
     int pos;
-    String status = "";
+    boolean isEditByLead;
     List<GetAppointmentsModel.Data> mData;
 
 
-    public SwipeAppointPreviousRecyclerAdapter(Context context, List<GetAppointmentsModel.Data> data) {
+    public SwipeAppointPreviousRecyclerAdapter(Context context, List<GetAppointmentsModel.Data> data, boolean isEditByLead) {
 
         mData = data;
         this.context = context;
+        this.isEditByLead = isEditByLead;
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
     }
@@ -148,7 +151,7 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
             tvDone.setOnClickListener(v -> {
                 pos = getAdapterPosition();
                 String leadID = mData.get(pos).leadsData.leadID;
-                markAsRead(leadID+",","true");
+                markAsRead(leadID + ",", "true");
             });
 
             tvEdit.setOnClickListener(new View.OnClickListener() {
@@ -156,17 +159,35 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     pos = getAdapterPosition();
 
+                    String leadID = mData.get(pos).leadsData.leadID;
+                    GetAppointmentsModel.Data modelData = mData.get(pos);
+                    if (isEditByLead) {
+
+                        swipeLayout.close(true);
+                        context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                                .putExtra("leadID", leadID)
+                                .putExtra("from", "2")
+                                .putExtra("model", modelData));
+                    } else {
+
+                        swipeLayout.close(true);
+                        context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                                .putExtra("leadID", leadID)
+                                .putExtra("from", "4")
+                                .putExtra("model", modelData));
+                    }
+
                 }
             });
 
         }
     }
 
-    private void markAsRead(String leadID,String state) {
+    private void markAsRead(String leadID, String state) {
         GH.getInstance().ShowProgressDialog(context);
         Call<BaseResponse> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).MarkComplete(GH.getInstance().getAuthorization(),
-                leadID,state);
+                leadID, state);
         _callToday.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
@@ -199,4 +220,5 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
             }
         });
     }
+
 }

@@ -446,7 +446,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         tvRemovePictures.setText("Image uploaded");
         tvSelectPictures.setVisibility(View.GONE);
         ToastUtils.showToast(context, "Image uploaded");
-        image = response.body().getResponse().getFileUrl();
+        image = response.body().getData();
 
     }
 

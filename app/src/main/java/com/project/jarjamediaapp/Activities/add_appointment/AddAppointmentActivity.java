@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -30,6 +31,7 @@ import com.abdeveloper.library.MultiSelectModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
+import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetLeadTitlesModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -71,9 +73,11 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     ArrayList<GetLeadTitlesModel.Data> nameList = new ArrayList<>();
     String startDate = "", endDate = "", startTime = "", endTime = "";
     String via = "", reminder = "", leadId = "", location = "", agentIdsString = "";
-    MultiSelectModel agentModel;
     boolean isReminderClicked = false, isViaClicked = false;
-    String agentIds = "";
+    String leadName = "";
+    boolean isEdit;
+    String fromId = "";
+    ArrayList<String> arrayListReminderValue, arrayListReminderText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +86,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi = DataBindingUtil.setContentView(this, R.layout.activity_add_appointment);
         presenter = new AddAppointmentPresenter(this);
         presenter.initScreen();
-        setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_appointment), true);
 
     }
 
@@ -123,6 +126,100 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
         });
 
+
+    }
+
+    private void getUpdatedData() {
+
+        // 1 from Add Appointment by Lead Id
+        // 2 from Update Appointment Lead Id
+        // 3 from Add Calendar Appointment
+        // 4 from Update Appointment
+        // 5 from Add Appointment
+
+        fromId = getIntent().getStringExtra("from");
+        switch (fromId) {
+            case "1": {
+                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_appointment), true);
+                bi.lblAppointment.setText(getString(R.string.add_appointment));
+                leadId = getIntent().getStringExtra("leadID");
+                leadName = getIntent().getStringExtra("leadName");
+                bi.tvName.setText(leadName);
+                bi.tvName.setEnabled(false);
+            }
+            break;
+            case "2": {
+                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
+                bi.lblAppointment.setText(getString(R.string.edit_appointment));
+                leadId = getIntent().getStringExtra("leadID");
+                leadName = getIntent().getStringExtra("leadName");
+                bi.tvName.setText(leadName);
+                bi.tvName.setEnabled(false);
+                isEdit = true;
+
+                GetAppointmentsModel.Data modelData = getIntent().getParcelableExtra("model");
+                prePopulateData(modelData);
+
+            }
+            break;
+            case "3":
+            case "5": {
+                bi.tvName.setEnabled(true);
+                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_appointment), true);
+                bi.lblAppointment.setText(getString(R.string.add_appointment));
+            }
+            break;
+            case "4": {
+
+                bi.tvName.setEnabled(true);
+                isEdit = true;
+                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
+                bi.lblAppointment.setText(getString(R.string.edit_appointment));
+                GetAppointmentsModel.Data modelData = getIntent().getParcelableExtra("model");
+                prePopulateData(modelData);
+
+            }
+            break;
+
+
+        }
+
+    }
+
+    private void prePopulateData(GetAppointmentsModel.Data modelData) {
+
+        bi.tvName.setText((modelData.getLeadsData().getFirstName() != null ? modelData.getLeadsData().getFirstName() : "") + " " + (modelData.getLeadsData().getLastName() != null ? modelData.getLeadsData().getLastName() : ""));
+        bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
+        bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
+        bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
+        bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(modelData.getDatedFrom()) : "");
+        bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(modelData.getDatedFrom()) : "");
+        bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(modelData.getDatedTo()) : "");
+        bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(modelData.getDatedTo()) : "");
+        if (arrayListReminderValue != null && arrayListReminderValue.size() > 0) {
+            reminder = String.valueOf(modelData.getInterval());
+            for (int position = 0; position < arrayListReminderValue.size(); position++) {
+                if (arrayListReminderValue.get(position).equalsIgnoreCase(reminder)) {
+                    bi.atvReminder.setText(arrayListReminderText.get(position));
+                }
+            }
+        }
+        bi.atvVia.setText(modelData.getViaReminder() != null ? modelData.getViaReminder() : "");
+        bi.cbAllDay.setChecked(modelData.isAllDay);
+
+        if (modelData.getVtCRMLeadAppoinmentDetailCustom() != null && modelData.getVtCRMLeadAppoinmentDetailCustom().size() > 0) {
+            ArrayList<String> arrayList = new ArrayList<>();
+            for (int i = 0; i < modelData.getVtCRMLeadAppoinmentDetailCustom().size(); i++) {
+                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                TextView textView = child.findViewById(R.id.txtDynamic);
+                textView.setText(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getAgentName());
+                arrayList.add(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getAgentID());
+                bi.lnAgent.addView(child);
+                bi.lnAgent.setVisibility(View.VISIBLE);
+            }
+            agentIdsString = TextUtils.join(",", arrayList);
+        }
+
     }
 
     @Override
@@ -155,7 +252,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 via();
                 break;
             case R.id.btnSave:
-                callAddAppointment();
+                callAddAppointment(fromId);
                 break;
             case R.id.btnCancel:
                 finish();
@@ -169,6 +266,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     private void reminder() {
 
         if (!isReminderClicked) {
+
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListReminderText);
+            bi.atvReminder.setAdapter(arrayAdapter);
             bi.atvReminder.showDropDown();
             isReminderClicked = true;
         } else {
@@ -232,17 +332,14 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     @Override
     public void updateUIListForReminders(AddAppointmentModel response) {
 
-        ArrayList<String> arrayListReminderText = new ArrayList<>();
-        ArrayList<String> arrayListReminderValue = new ArrayList<>();
+        arrayListReminderText = new ArrayList<>();
+        arrayListReminderValue = new ArrayList<>();
 
         for (int i = 0; i < response.getData().size(); i++) {
 
             arrayListReminderText.add(response.getData().get(i).getText());
             arrayListReminderValue.add(response.getData().get(i).getValue());
         }
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListReminderText);
-        bi.atvReminder.setAdapter(arrayAdapter);
 
         bi.atvReminder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -258,6 +355,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 }
             }
         });
+
+        getUpdatedData();
     }
 
     @Override
@@ -434,7 +533,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         mTimePicker.show();
     }
 
-    private void callAddAppointment() {
+    private void callAddAppointment(String from) {
 
         String leadStringID = leadId + "";
         String agentsID = agentIdsString;
@@ -445,11 +544,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         String datedTo = endDate + "";
         String isAllDay = bi.cbAllDay.isChecked() ? "true" : "false";
         String viaReminder = via + "";
-        String orderBy = "0";
+
         String timedFrom = startTime + "";
         String timedTo = endTime + "";
         String interval = reminder + "";
 
+        String orderBy = "0";
         String isCompleted = "false";
         String leadAppointmentID = "0";
         String isAppointmentFixed = "false";
@@ -457,10 +557,16 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         String appointmentDate = "";
         String isSend = "false";
 
-        if (isValidate())
-            presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate,
-                    datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo, isCompleted);
+        if (isValidate()) {
 
+            if (fromId.equalsIgnoreCase("4")) {
+                // Api integration
+            } else {
+                presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate,
+                        datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo, isCompleted);
+            }
+
+        }
     }
 
     private boolean isValidate() {

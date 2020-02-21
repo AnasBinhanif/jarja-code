@@ -1,5 +1,6 @@
 package com.project.jarjamediaapp.Activities.add_task;
 
+import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Base.BaseContract;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 
@@ -11,6 +12,14 @@ public interface AddTaskContract {
 
         void updateUI(GetAgentsModel response);
 
+        void updateUIListForReminders(AddAppointmentModel response);
+
+        void updateUIListForVia(AddAppointmentModel response);
+
+        void updateUIListForType(AddAppointmentModel response);
+
+        void updateUIListForReoccur(AddAppointmentModel response);
+
         void updateUIonFalse(String message);
 
         void updateUIonError(String error);
@@ -20,6 +29,7 @@ public interface AddTaskContract {
         void showProgressBar();
 
         void hideProgressBar();
+
     }
 
     /*
@@ -31,6 +41,14 @@ public interface AddTaskContract {
         void initScreen();
 
         void getAgentNames();
+
+        void getType();
+
+        void getRecur();
+
+        void getReminder();
+
+        void getVia();
 
         void addTask(String id, String agentIds, String leadIds, String isAssignNow, String monthType, String scheduleID, String name, String desc,
                      String type, String startDate, String endDate, String recurDay, String recureWeek, String noOfWeek, String dayOfWeek, String weekNo,

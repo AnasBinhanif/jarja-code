@@ -1,5 +1,6 @@
 package com.project.jarjamediaapp.Activities.add_task;
 
+import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -17,6 +18,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
     Call<GetAgentsModel> _call;
     Call<BaseResponse> callAddTask;
+    Call<AddAppointmentModel> call;
 
     public AddTaskPresenter(AddTaskContract.View view) {
         super(view);
@@ -34,13 +36,130 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
             @Override
             public void onResponse(Call<GetAgentsModel> call, Response<GetAgentsModel> response) {
 
-                _view.hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     GetAgentsModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         _view.updateUI(getAppointmentsModel);
+
+                    } else {
+
+                        _view.hideProgressBar();
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    _view.hideProgressBar();
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetAgentsModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+    }
+
+    @Override
+    public void getType() {
+
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getTypes(GH.getInstance().getAuthorization());
+        call.enqueue(new Callback<AddAppointmentModel>() {
+            @Override
+            public void onResponse(Call<AddAppointmentModel> call, Response<AddAppointmentModel> response) {
+
+
+                if (response.isSuccessful()) {
+
+                    AddAppointmentModel getAppointmentsModel = response.body();
+
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateUIListForType(getAppointmentsModel);
+
+                    } else {
+                        _view.hideProgressBar();
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+                    _view.hideProgressBar();
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddAppointmentModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void getRecur() {
+
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getRecur(GH.getInstance().getAuthorization());
+        call.enqueue(new Callback<AddAppointmentModel>() {
+            @Override
+            public void onResponse(Call<AddAppointmentModel> call, Response<AddAppointmentModel> response) {
+
+
+                if (response.isSuccessful()) {
+
+                    AddAppointmentModel getAppointmentsModel = response.body();
+
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateUIListForReoccur(getAppointmentsModel);
+
+                    } else {
+
+                        _view.hideProgressBar();
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    _view.hideProgressBar();
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddAppointmentModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void getReminder() {
+
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getReminder(GH.getInstance().getAuthorization());
+        call.enqueue(new Callback<AddAppointmentModel>() {
+            @Override
+            public void onResponse(Call<AddAppointmentModel> call, Response<AddAppointmentModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    AddAppointmentModel getAppointmentsModel = response.body();
+
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateUIListForReminders(getAppointmentsModel);
 
                     } else {
 
@@ -55,12 +174,53 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
             }
 
             @Override
-            public void onFailure(Call<GetAgentsModel> call, Throwable t) {
+            public void onFailure(Call<AddAppointmentModel> call, Throwable t) {
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
         });
+
     }
+
+    @Override
+    public void getVia() {
+
+        _view.showProgressBar();
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getVia(GH.getInstance().getAuthorization());
+        call.enqueue(new Callback<AddAppointmentModel>() {
+            @Override
+            public void onResponse(Call<AddAppointmentModel> call, Response<AddAppointmentModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    AddAppointmentModel getAppointmentsModel = response.body();
+
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateUIListForVia(getAppointmentsModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddAppointmentModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
 
     @Override
     public void addTask(String id, String agentIds, String leadIds, String isAssignNow, String monthType, String scheduleID, String name, String desc,

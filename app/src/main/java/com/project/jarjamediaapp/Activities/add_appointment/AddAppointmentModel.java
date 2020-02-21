@@ -3,7 +3,6 @@ package com.project.jarjamediaapp.Activities.add_appointment;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.project.jarjamediaapp.Base.BaseResponse;
-import com.project.jarjamediaapp.Models.GetTasksModel;
 
 import java.util.ArrayList;
 
@@ -22,6 +21,13 @@ public class AddAppointmentModel extends BaseResponse {
         @SerializedName("value")
         @Expose
         public String value;
+        @SerializedName("id")
+        @Expose
+        public String id;
+
+        @SerializedName("type")
+        @Expose
+        public String type;
 
         public String getText() {
             return text;
@@ -31,8 +37,13 @@ public class AddAppointmentModel extends BaseResponse {
             return value;
         }
 
+        public String getId() {
+            return id;
+        }
 
-
+        public String getType() {
+            return type;
+        }
     }
 
     public ArrayList<Data> getData() {

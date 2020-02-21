@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.airbnb.paris.Paris;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
-import com.project.jarjamediaapp.Models.GetListingInfo;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -34,66 +33,46 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
     ActivityListingInfoBinding bi;
     Context context = ListingInfoActivity.this;
     ListingInfoPresenter presenter;
-    String title = "";
+    String buttonTitle = "", leadId = "", title = "";
+    List<ListingInfoModel.Data.ListingInfo> leadsList;
+    RecyclerAdapterUtil recyclerAdapterUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        title = getString(R.string.transaction1);
+
+        buttonTitle = getString(R.string.transaction1);
 
         bi = DataBindingUtil.setContentView(this, R.layout.activity_listing_info);
         presenter = new ListingInfoPresenter(this);
         presenter.initScreen();
-        handleIntent(getIntent());
     }
 
     private void populateListData() {
 
-        List<GetListingInfo> leadsList = new ArrayList<>();
-
-        leadsList.add(new GetListingInfo("Price Range :", "0 to 0"));
-        leadsList.add(new GetListingInfo("Property Type :", "N/A"));
-        leadsList.add(new GetListingInfo("Location :", "N/A"));
-        leadsList.add(new GetListingInfo("Bedrooms :", "N/A"));
-        leadsList.add(new GetListingInfo("Baths :", "N/A"));
-        leadsList.add(new GetListingInfo("Year Built :", "N/A"));
-        leadsList.add(new GetListingInfo("Square Feet :", "N/A"));
-        leadsList.add(new GetListingInfo("Time Frame :", "N/A"));
-        leadsList.add(new GetListingInfo("FTHB :", "N/A"));
-        leadsList.add(new GetListingInfo("House To Sell :", "N/A"));
-        leadsList.add(new GetListingInfo("With Agent :", "N/A"));
-        leadsList.add(new GetListingInfo("Acres :", "N/A"));
-        leadsList.add(new GetListingInfo("Garage :", "N/A"));
-        leadsList.add(new GetListingInfo("Referred By :", "N/A"));
-        leadsList.add(new GetListingInfo("Referred To :", "N/A"));
-        leadsList.add(new GetListingInfo("Referral Amt :", "N/A"));
-        leadsList.add(new GetListingInfo("MLS :", "N/A"));
-        leadsList.add(new GetListingInfo("Title :", "N/A"));
-        leadsList.add(new GetListingInfo("Escrow :", "N/A"));
-        leadsList.add(new GetListingInfo("Viewed Properties :", "N/A"));
-        leadsList.add(new GetListingInfo("Inquiries :", "N/A"));
-        leadsList.add(new GetListingInfo("Favorited Properties :", "N/A"));
-        leadsList.add(new GetListingInfo("Uploaded Attachments :", "N/A"));
+        leadsList = new ArrayList<ListingInfoModel.Data.ListingInfo>();
 
         bi.recyclerViewListingInfo.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.recyclerViewListingInfo.setItemAnimator(new DefaultItemAnimator());
         bi.recyclerViewListingInfo.addItemDecoration(new DividerItemDecoration(bi.recyclerViewListingInfo.getContext(), 1));
-        RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_listing_info_layout);
+        recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_listing_info_layout);
         recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvDesc);
 
-        recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetListingInfo, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
+        recyclerAdapterUtil.addOnDataBindListener((Function4<View, ListingInfoModel.Data.ListingInfo, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, position, integerMap) -> {
 
             TextView tvName = (TextView) integerMap.get(R.id.tvName);
-            tvName.setText(allLeadsList.getName());
-
             TextView tvDesc = (TextView) integerMap.get(R.id.tvDesc);
-            tvDesc.setText(allLeadsList.getDescription());
+
+            tvName.setText(allLeadsList.getKey());
+            tvDesc.setText(allLeadsList.getValue());
+
+            // hide uploaded attachments field
+
 
             return Unit.INSTANCE;
         });
 
         bi.recyclerViewListingInfo.setAdapter(recyclerAdapterUtil);
-
 
     }
 
@@ -105,17 +84,29 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
 
             case R.id.btnTransaction1:
 
-                title = getString(R.string.transaction1);
+                bi.recyclerViewListingInfo.setVisibility(View.GONE);
+                buttonTitle = getString(R.string.transaction1);
                 Paris.style(bi.btnTransaction1).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnTransaction2).apply(R.style.TabButtonTranparentRight);
+                if (title.equalsIgnoreCase(getString(R.string.buying_info))) {
+                    presenter.getLeadBuyingInfoDetails(leadId);
+                } else {
+                    presenter.getLeadListingInfoDetails(leadId);
+                }
 
                 break;
 
             case R.id.btnTransaction2:
 
-                title = getString(R.string.transaction2);
+                bi.recyclerViewListingInfo.setVisibility(View.GONE);
+                buttonTitle = getString(R.string.transaction2);
                 Paris.style(bi.btnTransaction2).apply(R.style.TabButtonYellowRight);
                 Paris.style(bi.btnTransaction1).apply(R.style.TabButtonTranparentLeft);
+                if (title.equalsIgnoreCase(getString(R.string.buying_info))) {
+                    presenter.getLeadBuyingInfoDetails(leadId);
+                } else {
+                    presenter.getLeadListingInfoDetails(leadId);
+                }
 
                 break;
 
@@ -125,10 +116,13 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
 
     private void handleIntent(Intent intent) {
 
-        String title = intent.getStringExtra("title");
+        title = intent.getStringExtra("title");
+        leadId = intent.getStringExtra("leadID");
         setToolBarTitle(bi.epToolbar.toolbar, title, true);
-        if(title.equalsIgnoreCase(getString(R.string.buying_info))){
-
+        if (title.equalsIgnoreCase(getString(R.string.buying_info))) {
+            presenter.getLeadBuyingInfoDetails(leadId);
+        } else {
+            presenter.getLeadListingInfoDetails(leadId);
         }
     }
 
@@ -141,6 +135,7 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
     public void initViews() {
 
         populateListData();
+        handleIntent(getIntent());
         bi.btnTransaction1.setOnClickListener(this);
         bi.btnTransaction2.setOnClickListener(this);
     }
@@ -149,22 +144,35 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
     public void updateUI(Response<BaseResponse> response) {
 
 
-
     }
 
     @Override
     public void updateUIonFalse(String message) {
+
+        bi.recyclerViewListingInfo.setVisibility(View.GONE);
         ToastUtils.showToastLong(context, message);
+
     }
 
     @Override
     public void updateUIonError(String error) {
-        ToastUtils.showToastLong(context, error);
+
+        if (error.contains("Authorization has been denied for this request")) {
+            ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+            logout();
+        } else {
+            bi.recyclerViewListingInfo.setVisibility(View.GONE);
+            ToastUtils.showToastLong(context, error);
+        }
+
     }
 
     @Override
     public void updateUIonFailure() {
+
+        bi.recyclerViewListingInfo.setVisibility(View.GONE);
         ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+
     }
 
     @Override
@@ -178,9 +186,56 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
     }
 
     @Override
-    public void updateUIList(ListingInfoModel response) {
+    public void updateUIList(ListingInfoModel.Data response) {
 
+
+        if (title.equalsIgnoreCase(getString(R.string.buying_info))) {
+
+            if (buttonTitle.equalsIgnoreCase(getString(R.string.transaction1))) {
+
+                if (response.getBuyingInfoTransactionOne() != null && response.getBuyingInfoTransactionOne().size() > 0) {
+                    leadsList.addAll(response.getBuyingInfoTransactionOne());
+                    bi.recyclerViewListingInfo.setVisibility(View.VISIBLE);
+                } else {
+                    bi.recyclerViewListingInfo.setVisibility(View.GONE);
+                }
+
+            } else {
+
+                if (response.getBuyingInfoTransactionTwo() != null && response.getBuyingInfoTransactionTwo().size() > 0) {
+                    leadsList.addAll(response.getBuyingInfoTransactionTwo());
+                    bi.recyclerViewListingInfo.setVisibility(View.VISIBLE);
+                } else {
+                    bi.recyclerViewListingInfo.setVisibility(View.GONE);
+                }
+
+            }
+
+        } else {
+
+            if (buttonTitle.equalsIgnoreCase(getString(R.string.transaction1))) {
+
+                if (response.getListingInfoTransactionOne() != null && response.getListingInfoTransactionOne().size() > 0) {
+                    leadsList.addAll(response.getListingInfoTransactionOne());
+                    bi.recyclerViewListingInfo.setVisibility(View.VISIBLE);
+                } else {
+                    bi.recyclerViewListingInfo.setVisibility(View.GONE);
+                }
+
+            } else {
+
+                if (response.getListingInfoTransactionTwo() != null && response.getListingInfoTransactionTwo().size() > 0) {
+                    leadsList.addAll(response.getListingInfoTransactionTwo());
+                    bi.recyclerViewListingInfo.setVisibility(View.VISIBLE);
+                } else {
+                    bi.recyclerViewListingInfo.setVisibility(View.GONE);
+                }
+            }
+
+        }
+        recyclerAdapterUtil.notifyDataSetChanged();
 
 
     }
+
 }

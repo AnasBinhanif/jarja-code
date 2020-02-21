@@ -2,6 +2,8 @@ package com.project.jarjamediaapp.Activities.tasks;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
@@ -9,17 +11,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.project.jarjamediaapp.Activities.appointments.AppointmentContract;
-import com.project.jarjamediaapp.Activities.appointments.AppointmentPresenter;
+import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
-import com.project.jarjamediaapp.Fragments.DashboardFragments.followups.FollowUpFragment;
 import com.project.jarjamediaapp.Fragments.DashboardFragments.tasks.TasksFragment;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
-import com.project.jarjamediaapp.databinding.ActivityAppointmentsBinding;
 import com.project.jarjamediaapp.databinding.ActivityTasksBinding;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Response;
 
@@ -28,7 +30,8 @@ public class TasksActivity extends BaseActivity implements View.OnClickListener,
     ActivityTasksBinding bi;
     Context context = TasksActivity.this;
     TasksPresenter presenter;
-    String leadID="";
+    String leadID = "", leadName = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,7 @@ public class TasksActivity extends BaseActivity implements View.OnClickListener,
         bi = DataBindingUtil.setContentView(this, R.layout.activity_tasks);
         presenter = new TasksPresenter(this);
         leadID = getIntent().getStringExtra("leadID");
+        leadName = getIntent().getStringExtra("leadName");
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.tasks), true);
 
@@ -49,7 +53,7 @@ public class TasksActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void initViews() {
 
-        Fragment fragment = TasksFragment.newInstance("Tasks",leadID,true);
+        Fragment fragment = TasksFragment.newInstance("Tasks", leadID, true);
         ReplaceFragment(fragment, "Tasks", true, false);
     }
 
@@ -104,6 +108,36 @@ public class TasksActivity extends BaseActivity implements View.OnClickListener,
     public void hideProgressBar() {
 
         GH.getInstance().HideProgressDialog(context);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.home, menu);
+        MenuItem item = menu.findItem(R.id.action_add);
+        item.setVisible(true);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_add) {
+
+            leadID = getIntent().getStringExtra("leadID");
+            Map<String, String> appointMap = new HashMap<>();
+            appointMap.put("leadID", leadID);
+            appointMap.put("leadName", leadName);
+            appointMap.put("from", "1");
+            switchActivityWithIntentString(AddTaskActivity.class, (HashMap<String, String>) appointMap);
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 
 }

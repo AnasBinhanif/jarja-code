@@ -74,6 +74,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             getSupportActionBar().setHomeButtonEnabled(false);
             getSupportActionBar().setDisplayUseLogoEnabled(false);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
+            toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

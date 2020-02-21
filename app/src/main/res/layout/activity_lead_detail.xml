@@ -4,8 +4,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/ef_white"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/ef_white">
 
         <include
             android:id="@+id/ep_toolbar"
@@ -17,20 +17,20 @@
             android:id="@+id/tvNoRecordFound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="No Record Found"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="25dp"
             android:textStyle="bold"
-            android:visibility="gone"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_centerInParent="true" />
+            android:visibility="gone" />
 
         <ScrollView
             android:id="@+id/scLeadDetail"
             android:layout_width="match_parent"
-            android:layout_below="@id/ep_toolbar"
-            android:visibility="visible"
             android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_below="@id/ep_toolbar"
+            android:fillViewport="true"
+            android:visibility="visible">
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
@@ -96,14 +96,26 @@
                             android:background="@color/colorWhite"
                             android:gravity="left|center"
                             android:orientation="horizontal"
-                            android:padding="@dimen/_15sdp"
+                            android:padding="@dimen/_10sdp"
                             android:weightSum="5">
+
+                            <TextView
+                                android:id="@+id/tvInitial"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:background="@drawable/round_initials_lead"
+                                android:gravity="center"
+                                android:textAllCaps="true"
+                                android:textColor="@color/colorAccent"
+                                android:textSize="20dp"
+                                android:textStyle="bold" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:padding="@dimen/_10sdp">
 
                                 <TextView
                                     android:id="@+id/tvName"
@@ -119,7 +131,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="1dp"
-                                    android:text="54353"
                                     android:textColor="@color/colorGreyTextDark"
                                     android:textSize="16dp"
                                     android:textStyle="bold" />
@@ -356,18 +367,18 @@
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/recyclerLeadAgent"
                                 android:layout_width="wrap_content"
-                                android:visibility="gone"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:visibility="gone" />
 
                             <TextView
                                 android:id="@+id/tvNoAgentAssigned"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="20dp"
-                                android:visibility="gone"
                                 android:text="No Agent(s) Assinged"
+                                android:textColor="@color/colorPrimaryDark"
                                 android:textStyle="bold"
-                                android:textColor="@color/colorPrimaryDark"/>
+                                android:visibility="gone" />
 
                         </LinearLayout>
 
@@ -420,9 +431,9 @@
                             <RelativeLayout
                                 android:id="@+id/rlTransaction1"
                                 android:layout_width="match_parent"
-                                android:visibility="gone"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="@dimen/_15sdp">
+                                android:paddingLeft="@dimen/_15sdp"
+                                android:visibility="gone">
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -472,9 +483,9 @@
                             <RelativeLayout
                                 android:id="@+id/rlTransaction2"
                                 android:layout_width="match_parent"
-                                android:visibility="gone"
                                 android:layout_height="wrap_content"
-                                android:paddingLeft="@dimen/_15sdp">
+                                android:paddingLeft="@dimen/_15sdp"
+                                android:visibility="gone">
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -525,11 +536,11 @@
                                 android:id="@+id/tvNoRecord"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="No Record Found"
                                 android:gravity="center"
+                                android:text="No Record Found"
                                 android:textColor="@color/colorPrimaryDark"
-                                android:textStyle="bold"
-                                android:textSize="18dp"/>
+                                android:textSize="18dp"
+                                android:textStyle="bold" />
 
                         </LinearLayout>
 

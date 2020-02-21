@@ -2,8 +2,8 @@ package com.project.jarjamediaapp.Networking;
 
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
-import com.project.jarjamediaapp.Activities.followups.FollowupsModel;
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
+import com.project.jarjamediaapp.Activities.listing_info.ListingInfoModel;
 import com.project.jarjamediaapp.Activities.notification.NotificationModel;
 import com.project.jarjamediaapp.Activities.open_houses.AddressDetailModel;
 import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
@@ -570,11 +570,14 @@ public interface ApiMethods {
     );
 
     @GET("Lead/GetAllOpenHouse")
-    Call<GetAllOpenHousesModel> getAllOpenHouses(@Header("Authorization") String authorization, @Query("type") String type);
+    Call<GetAllOpenHousesModel> getAllOpenHouses(@Header("Authorization") String authorization,
+                                                 @Query("type") String type);
 
     @Multipart
     @POST("Lead/UploadImage")
-    Call<UploadImageModel> uploadFileToServer(@Header("Authorization") String authorization, @Part MultipartBody.Part file);
+    Call<UploadImageModel> uploadFileToServer(@Header("Authorization") String authorization,
+                                              @Part MultipartBody.Part file,
+                                              @Query("image") String image);
 
     @FormUrlEncoded
     @POST("Lead/AddOpenHouse")
@@ -603,6 +606,12 @@ public interface ApiMethods {
     @POST("Appointment/GetSendVia")
     Call<AddAppointmentModel> getVia(@Header("Authorization") String authorization);
 
+    @POST("Tasks/GetTypes")
+    Call<AddAppointmentModel> getTypes(@Header("Authorization") String authorization);
+
+    @POST("Tasks/GetRecur")
+    Call<AddAppointmentModel> getRecur(@Header("Authorization") String authorization);
+
     @GET("Lead/GetLocationAutoCompleteDropdown")
     Call<GetLocationModel> getLocationByPrefix(@Header("Authorization") String authorization,
                                                @Query("Prefix") String prefix);
@@ -612,6 +621,13 @@ public interface ApiMethods {
                                                       @Query("Prefix") String prefix,
                                                       @Query("Type") String type);
 
+    @GET("Lead/GetLeadListingInfo")
+    Call<ListingInfoModel> getLeadListingInfo(@Header("Authorization") String authorization,
+                                              @Query("LeadId") String leadId);
+
+    @GET("Lead/GetLeadBuyingInfo")
+    Call<ListingInfoModel> getLeadBuyingInfo(@Header("Authorization") String authorization,
+                                             @Query("LeadId") String leadId);
 
 
 }

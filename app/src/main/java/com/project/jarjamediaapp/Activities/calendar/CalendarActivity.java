@@ -24,6 +24,8 @@ import com.project.jarjamediaapp.customCalendar.interfaces.OnCalendarScrolledLis
 import com.project.jarjamediaapp.databinding.ActivityCalendarBinding;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Response;
 
@@ -232,8 +234,12 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         btnEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 dialog.dismiss();
-                switchActivity(AddAppointmentActivity.class);
+                Map<String, String> map = new HashMap<>();
+                map.put("from","3");
+                switchActivityWithIntentString(AddAppointmentActivity.class, (HashMap<String, String>) map);
+
             }
         });
 
