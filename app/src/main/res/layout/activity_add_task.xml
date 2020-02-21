@@ -143,6 +143,7 @@
                     android:background="@drawable/bg_search"
                     android:gravity="center|start"
                     android:hint="@string/assign_to"
+                    android:focusable="false"
                     android:padding="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColor="@color/colorPrimaryDark"

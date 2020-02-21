@@ -72,7 +72,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
     ArrayList<GetLeadTitlesModel.Data> nameList = new ArrayList<>();
     String startDate = "", endDate = "", startTime = "", endTime = "";
-    String via = "", reminder = "", leadId = "", location = "", agentIdsString = "";
+    String via = "", reminder = "", leadId = "", location = "", agentIdsString = "", leadAppointmentId = "";
     boolean isReminderClicked = false, isViaClicked = false;
     String leadName = "";
     boolean isEdit;
@@ -188,16 +188,25 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     private void prePopulateData(GetAppointmentsModel.Data modelData) {
 
+        leadAppointmentId = modelData.getLeadAppoinmentID();
+        leadId = modelData.getLeadID();
         bi.tvName.setText((modelData.getLeadsData().getFirstName() != null ? modelData.getLeadsData().getFirstName() : "") + " " + (modelData.getLeadsData().getLastName() != null ? modelData.getLeadsData().getLastName() : ""));
         bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
+        //
+        startDate = GH.getInstance().formatApiDateTime(modelData.getDatedFrom());
+        endDate = GH.getInstance().formatApiDateTime(modelData.getDatedTo());
+        startTime = GH.getInstance().formatTime(modelData.getDatedFrom());
+        endTime = GH.getInstance().formatTime(modelData.getDatedTo());
+
         bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(modelData.getDatedFrom()) : "");
         bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(modelData.getDatedFrom()) : "");
         bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(modelData.getDatedTo()) : "");
         bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(modelData.getDatedTo()) : "");
         if (arrayListReminderValue != null && arrayListReminderValue.size() > 0) {
             reminder = String.valueOf(modelData.getInterval());
+            via = modelData.getViaReminder();
             for (int position = 0; position < arrayListReminderValue.size(); position++) {
                 if (arrayListReminderValue.get(position).equalsIgnoreCase(reminder)) {
                     bi.atvReminder.setText(arrayListReminderText.get(position));
@@ -493,6 +502,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     }
 
     private void showTimeDialog(TextView textView, boolean isStart) {
+
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
@@ -551,21 +561,16 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         String orderBy = "0";
         String isCompleted = "false";
-        String leadAppointmentID = "0";
+        String leadAppointmentID = leadAppointmentId;
         String isAppointmentFixed = "false";
         String isAppointmentAttend = "false";
         String appointmentDate = "";
         String isSend = "false";
 
         if (isValidate()) {
-
-            if (fromId.equalsIgnoreCase("4")) {
-                // Api integration
-            } else {
-                presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate,
-                        datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo, isCompleted);
-            }
-
+            // Methods for Add Update are different in presenter
+            presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate,
+                    datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo, isCompleted, fromId);
         }
     }
 

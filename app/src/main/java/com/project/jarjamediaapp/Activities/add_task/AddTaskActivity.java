@@ -325,10 +325,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             case R.id.tvName:
                 showSearchDialog(context);
                 break;
-            case R.id.edtStartDate:
+            case R.id.tvStartDate:
                 showDateDialog(bi.tvStartDate, true);
                 break;
-            case R.id.tvAssignedTo:
+            case R.id.tvAssignTo:
                 showAgentDialog();
                 break;
             case R.id.btnSave:

@@ -382,6 +382,32 @@ public interface ApiMethods {
     );
 
     @FormUrlEncoded
+    @POST("Appointment/Update")
+    Call<BaseResponse> UpdateAppointment(
+            @Header("Authorization") String authorization,
+            @Field("leadStringID") String leadStringID,
+            @Field("agentsStringIDs") String agentsStringIDs,
+            @Field("leadAppoinmentID") String leadAppointmentID,
+            @Field("eventTitle") String eventTitle,
+            @Field("location") String location,
+            @Field("desc") String desc,
+            @Field("isAppointmentFixed") String isAppointmentFixed,
+            @Field("isAppointmentAttend") String isAppointmentAttend,
+            @Field("appointmentDate") String appointmentDate,
+            @Field("datedFrom") String datedFrom,
+            @Field("datedTo") String datedTo,
+            @Field("isAllDay") String isAllDay,
+            @Field("interval") String interval,
+            @Field("isSend") String isSend,
+            @Field("viaReminder") String viaReminder,
+            @Field("agentIds") String agentIds,
+            @Field("orderBy") String orderBy,
+            @Field("startTime") String startTime,
+            @Field("endTime") String endTime,
+            @Field("isCompleted") String isCompleted
+    );
+
+    @FormUrlEncoded
     @POST("Tasks/AddNew")
     Call<BaseResponse> AddTask(
             @Header("Authorization") String authorization,
