@@ -299,4 +299,16 @@
     <string name="error_start_time">Please enter start date</string>
     <string name="error_end_time">Please enter end date</string>
 
+    <!-- Compose Email -->
+    <string name="compose">Compose Email</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="cc">CC:</string>
+    <string name="bcc">BCC:</string>
+    <string name="subject">Subject:</string>
+    <string name="body">Body:</string>
+    <string name="choose">Choose File</string>
+    <string name="send">Send</string>
+    <string name="body_text">Call the lead and dont leave a message if they dont pick up</string>
+
 </resources>

@@ -22,7 +22,6 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
     Call<GetAgentsModel> _callGetAgentsModel;
     Call<GetLeadTransactionStage> _callGetLeadTransactionStage;
 
-
     public LeadDetailPresenter(LeadDetailContract.View view) {
         super(view);
     }
@@ -31,7 +30,7 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
     public void assignAgents(String agentsIDs, String leadID, String typeIndex) {
         _view.showProgressBar();
         _callAssignAgents = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AssignAgentToLead(GH.getInstance().getAuthorization(),
-                agentsIDs, leadID,typeIndex);
+                agentsIDs, leadID, typeIndex);
         _callAssignAgents.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
@@ -105,7 +104,7 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
     public void getLead(String leadID) {
 
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLead(GH.getInstance().getAuthorization(),leadID);
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLead(GH.getInstance().getAuthorization(), leadID);
         _call.enqueue(new Callback<GetLead>() {
             @Override
             public void onResponse(Call<GetLead> call, Response<GetLead> response) {
@@ -144,7 +143,7 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
 
 
         _view.showProgressBar();
-        _callGetLeadTransactionStage = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadTransactionStage(GH.getInstance().getAuthorization(),leadID);
+        _callGetLeadTransactionStage = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadTransactionStage(GH.getInstance().getAuthorization(), leadID);
         _callGetLeadTransactionStage.enqueue(new Callback<GetLeadTransactionStage>() {
             @Override
             public void onResponse(Call<GetLeadTransactionStage> call, Response<GetLeadTransactionStage> response) {
@@ -183,6 +182,17 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
     }
 
     @Override
+    public void getLeadRecipient(String leadId) {
+
+
+    }
+
+    @Override
+    public void sendEmailContent() {
+
+    }
+
+    @Override
     public void detachView() {
 
         if (_call != null) {
@@ -191,6 +201,5 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
         }
         super.detachView();
     }
-
 
 }

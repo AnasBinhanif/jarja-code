@@ -9,8 +9,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
@@ -241,16 +243,31 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
 
-    private void openEmailComposer(String[] recipients) {
+    private void openEmailComposer(Context context) {
 
-        if (recipients.length == 0 || recipients[0].equals("")) {
+        final Dialog dialog = new Dialog(context, R.style.Dialog);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_compose_email);
+
+        AutoCompleteTextView tvTo = dialog.findViewById(R.id.atvFrom);
+        TextView tvFrom = dialog.findViewById(R.id.tvToAgent);
+        AutoCompleteTextView atvCC = dialog.findViewById(R.id.atvCC);
+        AutoCompleteTextView atvBCC = dialog.findViewById(R.id.atvBCC);
+        AutoCompleteTextView atvSubject = dialog.findViewById(R.id.atvSubject);
+        MultiAutoCompleteTextView mAtvBody = dialog.findViewById(R.id.atvBody);
+        Button choosePicture = dialog.findViewById(R.id.btnChooseFile);
+        Button btnSendEmail = dialog.findViewById(R.id.btnSendEmail);
+
+        dialog.show();
+
+       /* if (recipients.length == 0 || recipients[0].equals("")) {
             ToastUtils.showToast(context, "No Primary Phone Found");
         } else {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_EMAIL, recipients);
             intent.setType("text/html");
             startActivity(Intent.createChooser(intent, "Send mail"));
-        }
+        }*/
     }
 
     private void openMessageComposer(String phoneNo, String message) {
@@ -284,8 +301,9 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         switch (v.getId()) {
 
             case R.id.imgEmail:
-                String[] recipients = {getLeadListData.primaryEmail + ""};
-                openEmailComposer(recipients);
+
+                // String[] recipients = {getLeadListData.primaryEmail + ""};
+                openEmailComposer(context);
                 break;
 
             case R.id.imgMessage:
@@ -411,6 +429,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         presenter.getAgentNames();
         presenter.getLead(leadID);
         presenter.getTransaction(leadID);
+
     }
 
     private void initListeners() {
@@ -493,7 +512,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 bi.tvInitial.setText("-" + lastName.substring(0, 1));
                 bi.tvName.setText(lastName);
             } else if (firstName != null && lastName == null) {
-                bi.tvInitial.setText(firstName.substring(0, 1)+"-");
+                bi.tvInitial.setText(firstName.substring(0, 1) + "-");
                 bi.tvName.setText(firstName);
             } else if (firstName == null && lastName == null) {
                 bi.tvInitial.setText("-" + "-");
@@ -546,6 +565,20 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         if (transactionTwoListModel != null) {
             currentStage2 = transactionTwoListModel.get(0).currentStage;
         }
+
+    }
+
+    @Override
+    public void updateUIListForRecipient(LeadDetailModel.Data response) {
+
+
+
+    }
+
+    @Override
+    public void updateUIEmailSent(Response<BaseResponse> response) {
+
+
 
     }
 

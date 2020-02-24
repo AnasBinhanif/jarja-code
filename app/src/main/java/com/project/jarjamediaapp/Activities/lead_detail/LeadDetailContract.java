@@ -1,13 +1,17 @@
 package com.project.jarjamediaapp.Activities.lead_detail;
 
 import com.project.jarjamediaapp.Base.BaseContract;
+import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 
+import retrofit2.Response;
+
 public interface LeadDetailContract {
 
-    interface View extends BaseContract.View{
+    interface View extends BaseContract.View {
+
         void initViews();
 
         void updateUI(GetAgentsModel response);
@@ -15,6 +19,10 @@ public interface LeadDetailContract {
         void updateUI(GetLead response);
 
         void updateUI(GetLeadTransactionStage response);
+
+        void updateUIListForRecipient(LeadDetailModel.Data response);
+
+        void updateUIEmailSent(Response<BaseResponse> response);
 
         void updateUIonFalse(String message);
 
@@ -33,7 +41,7 @@ public interface LeadDetailContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void assignAgents(String agentsIDs,String leadID,String typeIndex);
+        void assignAgents(String agentsIDs, String leadID, String typeIndex);
 
         void getAgentNames();
 
@@ -42,6 +50,10 @@ public interface LeadDetailContract {
         void getTransaction(String leadID);
 
         void initScreen();
+
+        void getLeadRecipient(String leadId);
+
+        void sendEmailContent();
 
     }
 
