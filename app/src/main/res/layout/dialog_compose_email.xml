@@ -16,14 +16,38 @@
             android:orientation="vertical"
             android:padding="@dimen/_10sdp">
 
-            <TextView
-                android:id="@+id/tvAssignedTo"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/compose"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/_22sdp"
-                android:textStyle="bold" />
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <TextView
+                    android:id="@+id/tvAssignedTo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/compose"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/_22sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvClose"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:drawableEnd="@drawable/ic_close_dg"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="@dimen/_10sdp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/_22sdp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"
@@ -46,8 +70,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/bg_search"
-                android:hint="@string/email"
                 android:focusable="false"
+                android:hint="@string/email"
                 android:padding="@dimen/_10sdp"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/_11sdp" />
@@ -100,8 +124,8 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/bg_search"
                 android:imeOptions="actionNext"
+                android:singleLine="true"
                 android:padding="@dimen/_10sdp"
-                android:lines="1"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/_11sdp" />
 
@@ -121,8 +145,8 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/bg_search"
                 android:imeOptions="actionNext"
+               android:singleLine="true"
                 android:padding="@dimen/_10sdp"
-                android:lines="1"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/_11sdp" />
 
@@ -142,7 +166,7 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/bg_search"
                 android:imeOptions="actionNext"
-                android:lines="1"
+                android:singleLine="true"
                 android:padding="@dimen/_10sdp"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/_11sdp" />
@@ -175,7 +199,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:gravity="start|center"
                 android:orientation="horizontal">
 
@@ -185,6 +209,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:background="@drawable/button_border"
+                    android:drawableStart="@drawable/ic_choose_file"
+                    android:drawablePadding="@dimen/_10sdp"
                     android:paddingStart="@dimen/_20sdp"
                     android:paddingTop="@dimen/_5sdp"
                     android:paddingEnd="@dimen/_20sdp"
@@ -198,9 +224,9 @@
                     android:id="@+id/filePreviewName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_15sdp"
-                    android:text="@string/file_name"
+                    android:layout_marginStart="@dimen/_5sdp"
                     android:padding="@dimen/_5sdp"
+                    android:text="@string/file_name"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
 
@@ -212,11 +238,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:background="@color/colorGreen"
+                android:drawableStart="@drawable/ic_send"
+                android:drawablePadding="@dimen/_10sdp"
                 android:paddingStart="@dimen/_25sdp"
                 android:paddingTop="@dimen/_5sdp"
                 android:paddingEnd="@dimen/_25sdp"
                 android:paddingBottom="@dimen/_5sdp"
                 android:text="@string/send"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/_12sdp" />

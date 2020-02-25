@@ -2,10 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-    </data>
-
     <LinearLayout
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
@@ -41,7 +37,7 @@
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/ic_close" />
+                    android:src="@drawable/ic_gallery" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -71,7 +67,7 @@
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/ic_close" />
+                    android:src="@drawable/ic_camera" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -101,7 +97,7 @@
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/ic_close" />
+                    android:src="@drawable/ic_document" />
 
                 <TextView
                     android:layout_width="wrap_content"
