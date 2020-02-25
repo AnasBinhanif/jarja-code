@@ -91,7 +91,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     GetLead.LeadList getLeadListData;
     ArrayList<GetLead.AgentsList> getAssignedAgentList;
 
-    String leadID = "";
+    String leadID = "", primaryPhoneNumber = "";
 
     ArrayList<GetLeadTransactionStage.PipeLine> transactionPipeline;
     ArrayList<GetLeadTransactionStage.LeadTransactionOne> transactionOneListModel;
@@ -114,9 +114,13 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     ArrayList<String> agentLeadList;
     ArrayList<MultiSelectModel> searchLeadListItems;
-    Dialog dialog;
+    Dialog dialog, mDialog;
     String fileUrl = "";
     MultipartBody.Part multipartFile = null;
+    AutoCompleteTextView atvPhone;
+    TextView _close;
+    MultiAutoCompleteTextView mAtvMessage;
+    Button btnSend, btnCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -345,16 +349,48 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     }
 
-    private void openMessageComposer(String phoneNo, String message) {
+    private void openMessageComposer(String phoneNo) {
 
         if (phoneNo.equals("") || phoneNo.equals("null") || phoneNo == null) {
             ToastUtils.showToast(context, "No Primary Phone Found");
         } else {
-            Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-            smsIntent.setType("vnd.android-dir/mms-sms");
-            smsIntent.putExtra("address", phoneNo);
-            smsIntent.putExtra("sms_body", message);
-            startActivity(smsIntent);
+
+            mDialog = new Dialog(context, R.style.Dialog);
+            mDialog.setCancelable(true);
+            mDialog.setContentView(R.layout.dialog_compose_message);
+
+            atvPhone = dialog.findViewById(R.id.atvPhoneNumber);
+            atvPhone.setText(phoneNo + "");
+            mAtvMessage = dialog.findViewById(R.id.atvMessage);
+            _close = dialog.findViewById(R.id.tvClose);
+            btnSend = dialog.findViewById(R.id.btnClose);
+            btnCancel = dialog.findViewById(R.id.btnCancel);
+
+            btnSendEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                }
+            });
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            tvClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            mDialog.show();
+
+
         }
     }
 
@@ -380,7 +416,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 break;
 
             case R.id.imgMessage:
-                openMessageComposer(getLeadListData.primaryPhone + "", "");
+                openMessageComposer(primaryPhoneNumber);
                 break;
 
             case R.id.imgCall:
@@ -522,17 +558,25 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         bi.imgEditLead.setOnClickListener(this);
     }
 
-    private void populateListData(ArrayList<GetLead.AgentsList> leadsList) {
+    private void populateListData(ArrayList<GetLead.AgentsList> leadsList, String primaryPhone) {
 
         bi.recyclerLeadAgent.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         bi.recyclerLeadAgent.setItemAnimator(new DefaultItemAnimator());
         RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_lead_details_agents_layout);
-        recyclerAdapterUtil.addViewsList(R.id.tvAssignedToName, R.id.imgAssignedTo);
+        recyclerAdapterUtil.addViewsList(R.id.tvAssignedToName, R.id.imgAssignedTo, R.id.tvPrimary);
 
         recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetLead.AgentsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
 
             TextView tvName = (TextView) integerMap.get(R.id.tvAssignedToName);
             tvName.setText(String.valueOf(allLeadsList.agentName));
+
+            TextView tvIsPrimary = (TextView) integerMap.get(R.id.tvPrimary);
+            if (allLeadsList.isPrimaryAgent) {
+                tvIsPrimary.setVisibility(View.VISIBLE);
+                primaryPhoneNumber = primaryPhone;
+            } else {
+                tvIsPrimary.setVisibility(View.INVISIBLE);
+            }
 
 
             return Unit.INSTANCE;
@@ -606,7 +650,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         } else {
             bi.tvNoAgentAssigned.setVisibility(View.GONE);
             bi.recyclerLeadAgent.setVisibility(View.VISIBLE);
-            populateListData(getAssignedAgentList);
+            populateListData(getAssignedAgentList, getLeadListData.primaryPhone);
         }
     }
 
