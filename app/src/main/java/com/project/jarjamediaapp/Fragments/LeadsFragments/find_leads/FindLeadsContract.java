@@ -31,7 +31,6 @@ public interface FindLeadsContract {
     */
     interface Actions {
         void initScreen();
-
         void getLeadCounts(String leadID, String spouseName, String email, String company, String phone, String address, String city, String state,
                            String county, String zip, String countryID, String propertyType, String timeFrameID, String preApproval, String houseToSell,
                            String agentID, String leadTypeID, String leadScoreMin, String leadScoreMax, String tagsID, String priceMin, String priceMax,

@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -70,7 +72,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     public void setupViews() {
 
         initViews();
-        callGetLeadCounts();
+        callGetLeadCounts(null);
     }
 
     private void initViews() {
@@ -78,10 +80,10 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         bi.tvFilter.setOnClickListener(this);
     }
 
-    private void callGetLeadCounts() {
+    private void callGetLeadCounts(Intent bundle) {
 
-        String leadID = "";
-        String spouseName = "";
+        String leadID = bundle!=null ? bundle.getStringExtra("leadID") : "";
+        String spouseName =  "";
         String email = "";
         String company = "";
         String phone = "";
@@ -267,10 +269,25 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
             case R.id.tvFilter:
 
-                switchActivity(getActivity(), AddFiltersActivity.class);
+                Intent i = new Intent(getActivity(),AddFiltersActivity.class);
+                startActivityForResult(i,05);
+                //switchActivity(getActivity(), AddFiltersActivity.class);
 
                 break;
 
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode ==05)
+        {
+
+
+
+        }
+
     }
 }
