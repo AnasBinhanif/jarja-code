@@ -261,7 +261,7 @@ public class MultiSelectDialog extends AppCompatDialogFragment implements Search
                     message = minSelectionMessage;
                 }
                 else {
-                    if (minSelectionLimit > 1)
+                    if (minSelectionLimit >= 1)
                         message = pleaseSelect + " " + minSelectionLimit + " " + options;
                     else
                         message = pleaseSelect + " " + minSelectionLimit + " " + option;
