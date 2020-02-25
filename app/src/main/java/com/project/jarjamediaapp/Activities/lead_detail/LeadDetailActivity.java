@@ -107,13 +107,14 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     File compressedImage;
 
     AutoCompleteTextView atvCC, atvBCC, atvSubject, atvFrom;
-    TextView tvTo;
+    TextView tvTo,tvClose;
     MultiAutoCompleteTextView mAtvBody;
     Button choosePicture, btnSendEmail;
     LinearLayout lnAgent;
 
     ArrayList<String> agentLeadList;
     ArrayList<MultiSelectModel> searchLeadListItems;
+    ArrayList<Integer> selectedLeadIdsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -287,6 +288,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
         atvFrom = dialog.findViewById(R.id.atvFrom);
         tvTo = dialog.findViewById(R.id.tvToAgent);
+        tvClose = dialog.findViewById(R.id.tvClose);
         atvCC = dialog.findViewById(R.id.atvCC);
         atvBCC = dialog.findViewById(R.id.atvBCC);
         atvSubject = dialog.findViewById(R.id.atvSubject);
@@ -331,6 +333,13 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             @Override
             public void onClick(View v) {
                 // HIT API
+            }
+        });
+
+        tvClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
