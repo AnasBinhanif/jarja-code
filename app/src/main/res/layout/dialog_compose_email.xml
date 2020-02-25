@@ -47,6 +47,7 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/bg_search"
                 android:hint="@string/email"
+                android:focusable="false"
                 android:padding="@dimen/_10sdp"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/_11sdp" />
@@ -86,7 +87,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/cc"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/_12sdp"
@@ -100,6 +101,7 @@
                 android:background="@drawable/bg_search"
                 android:imeOptions="actionNext"
                 android:padding="@dimen/_10sdp"
+                android:lines="1"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/_11sdp" />
 
@@ -120,6 +122,7 @@
                 android:background="@drawable/bg_search"
                 android:imeOptions="actionNext"
                 android:padding="@dimen/_10sdp"
+                android:lines="1"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/_11sdp" />
 
@@ -139,6 +142,7 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/bg_search"
                 android:imeOptions="actionNext"
+                android:lines="1"
                 android:padding="@dimen/_10sdp"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/_11sdp" />
@@ -168,33 +172,49 @@
                 android:textSize="@dimen/_11sdp" />
 
 
-            <Button
-                android:id="@+id/btnChooseFile"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
                 android:layout_margin="@dimen/_10sdp"
-                android:background="@drawable/button_border"
-                android:paddingStart="@dimen/_20sdp"
-                android:paddingTop="@dimen/_5sdp"
-                android:paddingEnd="@dimen/_20sdp"
-                android:paddingBottom="@dimen/_5sdp"
-                android:text="@string/choose"
-                android:textAllCaps="false"
-                android:textColor="@color/colorWhite"
-                android:textSize="@dimen/_12sdp" />
+                android:gravity="start|center"
+                android:orientation="horizontal">
 
+                <Button
+                    android:id="@+id/btnChooseFile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:background="@drawable/button_border"
+                    android:paddingStart="@dimen/_20sdp"
+                    android:paddingTop="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_20sdp"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:text="@string/choose"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_12sdp" />
+
+                <TextView
+                    android:id="@+id/filePreviewName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:text="@string/file_name"
+                    android:padding="@dimen/_5sdp"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btnSendEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_margin="@dimen/_10sdp"
                 android:background="@color/colorGreen"
-                android:paddingStart="@dimen/_15sdp"
+                android:paddingStart="@dimen/_25sdp"
                 android:paddingTop="@dimen/_5sdp"
-                android:paddingEnd="@dimen/_15sdp"
+                android:paddingEnd="@dimen/_25sdp"
                 android:paddingBottom="@dimen/_5sdp"
                 android:text="@string/send"
                 android:textAllCaps="false"

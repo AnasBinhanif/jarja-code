@@ -6,15 +6,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -29,6 +34,7 @@ import com.project.jarjamediaapp.Activities.appointments.AppointmentActivity;
 import com.project.jarjamediaapp.Activities.followups.FollowupsActivity;
 import com.project.jarjamediaapp.Activities.listing_info.ListingInfoActivity;
 import com.project.jarjamediaapp.Activities.notes.NotesActivity;
+import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Activities.social_profiles.Social_ProfilesActivity;
 import com.project.jarjamediaapp.Activities.tags.TagsActivity;
 import com.project.jarjamediaapp.Activities.tasks.TasksActivity;
@@ -45,18 +51,32 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.Utilities.UserPermissions;
 import com.project.jarjamediaapp.databinding.ActivityLeadDetailBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
+import com.vincent.filepicker.Constant;
+import com.vincent.filepicker.activity.ImagePickActivity;
+import com.vincent.filepicker.activity.NormalFilePickActivity;
+import com.vincent.filepicker.filter.entity.ImageFile;
+import com.vincent.filepicker.filter.entity.NormalFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import id.zelory.compressor.Compressor;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.functions.Function4;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Response;
 
-public class LeadDetailActivity extends BaseActivity implements LeadDetailContract.View {
+import static com.vincent.filepicker.activity.VideoPickActivity.IS_NEED_CAMERA;
+
+public class LeadDetailActivity extends BaseActivity implements LeadDetailContract.View, EasyPermissions.PermissionCallbacks, HandleMultipleClickEvents {
 
     ActivityLeadDetailBinding bi;
     Context context = LeadDetailActivity.this;
@@ -78,6 +98,21 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     String currentStage1 = "", currentStage2 = "";
     String agentIdsString = "";
+
+    BottomDialog bottomDialog;
+    private final int RC_CAMERA_AND_STORAGE = 100;
+    private final int RC_CAMERA_ONLY = 101;
+    File actualImage;
+    File compressedImage;
+
+    AutoCompleteTextView atvCC, atvBCC, atvSubject, atvFrom;
+    TextView tvTo;
+    MultiAutoCompleteTextView mAtvBody;
+    Button choosePicture, btnSendEmail;
+    LinearLayout lnAgent;
+
+    ArrayList<String> agentLeadList;
+    ArrayList<MultiSelectModel> searchLeadListItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -249,25 +284,57 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.dialog_compose_email);
 
-        AutoCompleteTextView tvTo = dialog.findViewById(R.id.atvFrom);
-        TextView tvFrom = dialog.findViewById(R.id.tvToAgent);
-        AutoCompleteTextView atvCC = dialog.findViewById(R.id.atvCC);
-        AutoCompleteTextView atvBCC = dialog.findViewById(R.id.atvBCC);
-        AutoCompleteTextView atvSubject = dialog.findViewById(R.id.atvSubject);
-        MultiAutoCompleteTextView mAtvBody = dialog.findViewById(R.id.atvBody);
-        Button choosePicture = dialog.findViewById(R.id.btnChooseFile);
-        Button btnSendEmail = dialog.findViewById(R.id.btnSendEmail);
+        atvFrom = dialog.findViewById(R.id.atvFrom);
+        tvTo = dialog.findViewById(R.id.tvToAgent);
+        atvCC = dialog.findViewById(R.id.atvCC);
+        atvBCC = dialog.findViewById(R.id.atvBCC);
+        atvSubject = dialog.findViewById(R.id.atvSubject);
+        mAtvBody = dialog.findViewById(R.id.atvBody);
+        choosePicture = dialog.findViewById(R.id.btnChooseFile);
+        btnSendEmail = dialog.findViewById(R.id.btnSendEmail);
+        lnAgent = dialog.findViewById(R.id.lnAgent);
+
+        choosePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                bottomDialog = BottomDialog.getInstance();
+                bottomDialog.setClickHandleEvents(LeadDetailActivity.this);
+                bottomDialog.show(getSupportFragmentManager(), "Select File");
+
+            }
+        });
+
+        tvTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLeadsAgentDialog();
+            }
+        });
+
+        atvFrom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
+        atvFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                atvFrom.showDropDown();
+            }
+        });
+
+        btnSendEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // HIT API
+            }
+        });
 
         dialog.show();
 
-       /* if (recipients.length == 0 || recipients[0].equals("")) {
-            ToastUtils.showToast(context, "No Primary Phone Found");
-        } else {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.putExtra(Intent.EXTRA_EMAIL, recipients);
-            intent.setType("text/html");
-            startActivity(Intent.createChooser(intent, "Send mail"));
-        }*/
     }
 
     private void openMessageComposer(String phoneNo, String message) {
@@ -301,9 +368,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         switch (v.getId()) {
 
             case R.id.imgEmail:
-
-                // String[] recipients = {getLeadListData.primaryEmail + ""};
-                openEmailComposer(context);
+                presenter.getLeadRecipient(leadID);
                 break;
 
             case R.id.imgMessage:
@@ -571,7 +636,20 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     @Override
     public void updateUIListForRecipient(LeadDetailModel.Data response) {
 
+        openEmailComposer(context);
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.addAll(response.fromEmailList);
 
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, arrayList);
+        atvFrom.setAdapter(arrayAdapter);
+
+        agentLeadList = new ArrayList<>();
+        searchLeadListItems = new ArrayList<>();
+
+        for (int i = 0; i < response.toEmailList.size(); i++) {
+            agentLeadList.add(response.toEmailList.get(i));
+            searchLeadListItems.add(new MultiSelectModel((i + 1), response.toEmailList.get(i)));
+        }
 
     }
 
@@ -579,6 +657,10 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     public void updateUIEmailSent(Response<BaseResponse> response) {
 
 
+    }
+
+    @Override
+    public void updateUIAfterFileUpload(Response<UploadImageModel> response) {
 
     }
 
@@ -649,6 +731,229 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     @Override
     public void hideProgressBar() {
         GH.getInstance().HideProgressDialog(context);
+    }
+
+    @Override
+    public void onGalleryClick() {
+
+        bottomDialog.dismiss();
+        oPenGallery();
+    }
+
+    @Override
+    public void onCameraClick() {
+
+        bottomDialog.dismiss();
+        accessCamera();
+    }
+
+    @Override
+    public void onDocumentClick() {
+
+        bottomDialog.dismiss();
+        accessDocuments();
+
+    }
+
+    @AfterPermissionGranted(RC_CAMERA_AND_STORAGE)
+    private void oPenGallery() {
+
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(context, perms)) {
+            // Already have permission, do the thing
+            Intent imageIntent = new Intent(context, ImagePickActivity.class);
+            imageIntent.putExtra(IS_NEED_CAMERA, false);
+            imageIntent.putExtra(Constant.MAX_NUMBER, 1);
+            startActivityForResult(imageIntent, Constant.REQUEST_CODE_PICK_IMAGE);
+
+
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, getString(R.string.permission_message),
+                    RC_CAMERA_AND_STORAGE, perms);
+        }
+    }
+
+    @AfterPermissionGranted(RC_CAMERA_ONLY)
+    private void accessCamera() {
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(context, perms)) {
+            // Already have permission, do the thing
+            Intent imageIntent = new Intent(context, ImagePickActivity.class);
+            imageIntent.putExtra(IS_NEED_CAMERA, true);
+            imageIntent.putExtra(Constant.MAX_NUMBER, 1);
+            startActivityForResult(imageIntent, Constant.REQUEST_CODE_TAKE_IMAGE);
+
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, getString(R.string.permission_message),
+                    RC_CAMERA_ONLY, perms);
+        }
+    }
+
+    @AfterPermissionGranted(RC_CAMERA_AND_STORAGE)
+    private void accessDocuments() {
+
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(context, perms)) {
+            // Already have permission, do the thing
+            Intent documentIntent = new Intent(context, NormalFilePickActivity.class);
+            documentIntent.putExtra(Constant.MAX_NUMBER, 1);
+            documentIntent.putExtra(NormalFilePickActivity.SUFFIX, new String[]{"xlsx", "xls", "doc", "docx", "ppt", "pptx", "pdf"});
+            startActivityForResult(documentIntent, Constant.REQUEST_CODE_PICK_FILE);
+
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, getString(R.string.permission_message),
+                    RC_CAMERA_ONLY, perms);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case Constant.REQUEST_CODE_PICK_IMAGE:
+                if (resultCode == RESULT_OK) {
+                    ArrayList<ImageFile> arrayListData = data.getParcelableArrayListExtra(Constant.RESULT_PICK_IMAGE);
+                    new ImageCompression().execute(arrayListData.get(0).getPath());
+
+                }
+                break;
+            case Constant.REQUEST_CODE_PICK_FILE:
+                if (resultCode == RESULT_OK) {
+                    ArrayList<NormalFile> arrayListData = data.getParcelableArrayListExtra(Constant.RESULT_PICK_FILE);
+                    sendDocument(arrayListData.get(0).getPath());
+                }
+                break;
+        }
+    }
+
+    private void sendDocument(String result) {
+
+        File file = new File(result);
+        Uri uri = Uri.fromFile(file);
+        String type1 = GH.getInstance().getMimeType(LeadDetailActivity.this, uri);
+        MediaType mediaType = MediaType.parse(type1);
+        MultipartBody.Part multipartFile = null;
+        RequestBody requestFile = RequestBody.create(mediaType, file);
+        multipartFile = MultipartBody.Part.createFormData("", file.getName(), requestFile);
+
+        //  presenter.uploadFileService(multipartFile, caseId);
+
+    }
+
+    private File ImageCompression(String filePath) {
+
+        actualImage = new File(filePath);
+        Log.i("imageCompresser", "Original image file size: " + actualImage.length());
+        try {
+            String compressedFileName = System.currentTimeMillis() + ".jpg";
+            compressedImage = new Compressor(this).compressToFile(actualImage, compressedFileName);
+            Log.i("imageCompresser", "Compressed image file size: " + compressedImage.length());
+        } catch (Exception e) {
+            e.printStackTrace();
+            compressedImage = null;
+        }
+        return compressedImage;
+    }
+
+    public class ImageCompression extends AsyncTask<String, Void, File> {
+
+        // only retain a weak reference to the activity
+        ImageCompression() {
+
+        }
+
+        @Override
+        protected File doInBackground(String... params) {
+            return ImageCompression(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(File result) {
+
+            Uri uri = Uri.fromFile(result);
+            String type1 = GH.getInstance().getMimeType(LeadDetailActivity.this, uri);
+            MediaType mediaType = MediaType.parse(type1);
+            MultipartBody.Part file = null;
+            if (result != null && actualImage != null) {
+                RequestBody requestFile = RequestBody.create(mediaType, result);
+                file = MultipartBody.Part.createFormData("", result.getName(), requestFile);
+
+                //   presenter.uploadFileService(file, caseId);
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            Log.d("Test", "onPreExecute: " + "");
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+    }
+
+    private void showLeadsAgentDialog() {
+
+        MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
+                .title("Select Agents") //setting title for dialog
+                .titleSize(25)
+                .positiveText("Done")
+                .negativeText("Cancel")
+                .setMinSelectionLimit(0)
+                .setMaxSelectionLimit(0)//you can set minimum checkbox selection limit (Optional)
+                .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
+                        //will return list of selected IDS
+                        selectedIdsList = new ArrayList<>();
+                        selectedIdsList = selectedIds;
+
+                        if (lnAgent.getChildCount() > 0) {
+                            lnAgent.removeAllViews();
+                        }
+
+                        for (String name : selectedNames) {
+
+                            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                            TextView textView = child.findViewById(R.id.txtDynamic);
+                            textView.setText(name);
+                            lnAgent.addView(child);
+
+                        }
+
+                        Log.e("DataString", dataString);
+                    }
+
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+                        agentIdsString = "";
+                    }
+
+                    @Override
+                    public void onCancel() {
+                    }
+                });
+        if (selectedIdsList.size() != 0) {
+            multiSelectDialog.preSelectIDsList(selectedIdsList);
+            multiSelectDialog.multiSelectList(searchLeadListItems);
+        } else {
+            multiSelectDialog.multiSelectList(searchLeadListItems);
+        }
+        multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
 
 }

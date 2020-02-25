@@ -3,6 +3,7 @@ package com.project.jarjamediaapp.Networking;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
+import com.project.jarjamediaapp.Activities.lead_detail.LeadDetailModel;
 import com.project.jarjamediaapp.Activities.listing_info.ListingInfoModel;
 import com.project.jarjamediaapp.Activities.notification.NotificationModel;
 import com.project.jarjamediaapp.Activities.open_houses.AddressDetailModel;
@@ -654,6 +655,12 @@ public interface ApiMethods {
     @GET("Lead/GetLeadBuyingInfo")
     Call<ListingInfoModel> getLeadBuyingInfo(@Header("Authorization") String authorization,
                                              @Query("LeadId") String leadId);
+
+    @GET("Lead/GetLeadEmailPopUpDetail")
+    Call<LeadDetailModel> getLeadRecipient(@Header("Authorization") String authorization,
+                                           @Query("LeadId") String leadId);
+
+
 
 
 }

@@ -2,54 +2,28 @@ package com.project.jarjamediaapp.Activities.lead_detail;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.project.jarjamediaapp.Activities.composeEmail.ComposeEmailModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class LeadDetailModel extends BaseResponse {
 
-
     @SerializedName("data")
     @Expose
-    public ArrayList<ComposeEmailModel.Data> data = null;
+    public Data data;
 
     public class Data {
 
-        @SerializedName("text")
+        @SerializedName("fromEmailList")
         @Expose
-        public String text;
-
-        @SerializedName("value")
+        public List<String> fromEmailList = null;
+        @SerializedName("toEmailList")
         @Expose
-        public String value;
-        @SerializedName("id")
-        @Expose
-        public String id;
+        public List<String> toEmailList = null;
 
-        @SerializedName("type")
-        @Expose
-        public String type;
-
-        public String getText() {
-            return text;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getType() {
-            return type;
-        }
     }
 
-    public ArrayList<ComposeEmailModel.Data> getData() {
+    public Data getData() {
         return data;
     }
-
 }

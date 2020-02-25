@@ -6,10 +6,10 @@ public class MultiSelectModel {
     private String name;
     private Boolean isSelected;
 
-    public MultiSelectModel(Integer id, String name,String encyptedIDs) {
+    public MultiSelectModel(Integer id, String name, String encyptedIDs) {
         this.id = id;
         this.name = name;
-        this.encyptedIDs=encyptedIDs;
+        this.encyptedIDs = encyptedIDs;
     }
 
     public MultiSelectModel(Integer id, String name) {

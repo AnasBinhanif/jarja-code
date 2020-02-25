@@ -1,11 +1,13 @@
 package com.project.jarjamediaapp.Activities.lead_detail;
 
+import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BaseContract;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 
+import okhttp3.MultipartBody;
 import retrofit2.Response;
 
 public interface LeadDetailContract {
@@ -23,6 +25,8 @@ public interface LeadDetailContract {
         void updateUIListForRecipient(LeadDetailModel.Data response);
 
         void updateUIEmailSent(Response<BaseResponse> response);
+
+        void updateUIAfterFileUpload(Response<UploadImageModel> response);
 
         void updateUIonFalse(String message);
 
@@ -54,6 +58,8 @@ public interface LeadDetailContract {
         void getLeadRecipient(String leadId);
 
         void sendEmailContent();
+
+        void uploadFile(MultipartBody.Part file);
 
     }
 

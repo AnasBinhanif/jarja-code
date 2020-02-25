@@ -11,6 +11,7 @@ import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.Utilities.GH;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,6 +22,7 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
     Call<BaseResponse> _callAssignAgents;
     Call<GetAgentsModel> _callGetAgentsModel;
     Call<GetLeadTransactionStage> _callGetLeadTransactionStage;
+    Call<LeadDetailModel> _callLead;
 
     public LeadDetailPresenter(LeadDetailContract.View view) {
         super(view);
@@ -184,11 +186,50 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
     @Override
     public void getLeadRecipient(String leadId) {
 
+        _view.showProgressBar();
+        _callLead = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getLeadRecipient(GH.getInstance().getAuthorization(), leadId);
+        _callLead.enqueue(new Callback<LeadDetailModel>() {
+            @Override
+            public void onResponse(Call<LeadDetailModel> call, Response<LeadDetailModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    LeadDetailModel leadDetailModel = response.body();
+                    if (leadDetailModel.status.equals("Success")) {
+
+                        _view.updateUIListForRecipient(leadDetailModel.getData());
+
+                    } else {
+
+                        _view.updateUIonFalse(leadDetailModel.message);
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LeadDetailModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
 
     }
 
     @Override
     public void sendEmailContent() {
+
+
+
+    }
+
+    @Override
+    public void uploadFile(MultipartBody.Part file) {
 
     }
 
