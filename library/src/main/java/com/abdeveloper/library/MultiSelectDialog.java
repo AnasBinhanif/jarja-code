@@ -41,7 +41,7 @@ public class MultiSelectDialog extends AppCompatDialogFragment implements Search
 
     private SubmitCallbackListener submitCallbackListener;
 
-    private int minSelectionLimit = 1;
+    private int minSelectionLimit = 0;
     private String minSelectionMessage = null;
     private int maxSelectionLimit = 0;
     private String maxSelectionMessage = null;
@@ -244,7 +244,7 @@ public class MultiSelectDialog extends AppCompatDialogFragment implements Search
                         message = maxSelectionMessage;
                     }
                     else {
-                        if (maxSelectionLimit > 1)
+                        if (maxSelectionLimit >= 1)
                             message = youCan + " " + maxSelectionLimit + " " + options;
                         else
                             message = youCan + " " + maxSelectionLimit + " " + option;

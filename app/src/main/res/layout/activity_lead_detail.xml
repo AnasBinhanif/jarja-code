@@ -357,13 +357,6 @@
                             android:orientation="vertical"
                             android:paddingBottom="10dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/primary"
-                                android:textColor="@color/colorGreyTextDark"
-                                android:textSize="16dp" />
-
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/recyclerLeadAgent"
                                 android:layout_width="wrap_content"

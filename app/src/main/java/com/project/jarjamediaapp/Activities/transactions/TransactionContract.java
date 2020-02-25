@@ -1,10 +1,27 @@
 package com.project.jarjamediaapp.Activities.transactions;
 
 import com.project.jarjamediaapp.Base.BaseContract;
+import com.project.jarjamediaapp.Base.BaseResponse;
+
+import retrofit2.Response;
 
 public interface TransactionContract {
 
     interface View extends BaseContract.View{
+
+        void initViews();
+
+        void updateUI(Response<BaseResponse> response);
+
+        void updateUIonFalse(String message);
+
+        void updateUIonError(String error);
+
+        void updateUIonFailure();
+
+        void showProgressBar();
+
+        void hideProgressBar();
 
     }
 
@@ -14,7 +31,8 @@ public interface TransactionContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void addData();
+        void addPipelineMark(String pipelineID, String encrypted_LeadDetailID,
+                             String presentationID);
 
         void initScreen();
 

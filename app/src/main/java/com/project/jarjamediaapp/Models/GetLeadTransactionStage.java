@@ -57,6 +57,9 @@ public class GetLeadTransactionStage implements Serializable {
         @SerializedName("currentStage")
         @Expose
         public String currentStage;
+        @SerializedName("encrypted_LeadDetailID")
+        @Expose
+        public String encrypted_LeadDetailID;
     }
 
     public class LeadTransactionTwo implements Serializable{
@@ -67,6 +70,9 @@ public class GetLeadTransactionStage implements Serializable {
         @SerializedName("currentStage")
         @Expose
         public String currentStage;
+        @SerializedName("encrypted_LeadDetailID")
+        @Expose
+        public String encrypted_LeadDetailID;
 
     }
 }

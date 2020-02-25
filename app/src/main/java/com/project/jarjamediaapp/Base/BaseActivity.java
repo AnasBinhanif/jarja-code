@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.project.jarjamediaapp.Activities.HomeActivity;
 import com.project.jarjamediaapp.Activities.login.LoginActivity;
+import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
@@ -66,9 +67,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     protected void setToolBarTitle(Toolbar toolbar, String title, boolean forActivity) {
-        //toolbar.setTitle(title);
+        //getSupportActionBar().setTitle(title);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(title);
+        toolbar.setTitle(title);
+
+
         if (forActivity) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(false);
@@ -88,11 +91,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public void setupUI(View view) {
         // Set up touch listener for non-text box views to hide keyboard.
         if (!(view instanceof EditText)) {
-            view.setOnTouchListener(new View.OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard();
-                    return false;
-                }
+            view.setOnTouchListener((v, event) -> {
+                hideSoftKeyboard();
+                return false;
             });
         }
 

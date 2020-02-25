@@ -569,8 +569,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         if (isValidate()) {
             // Methods for Add Update are different in presenter
-            presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate,
-                    datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo, isCompleted, fromId);
+            presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend,
+                    appointmentDate, datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo,
+                    isCompleted, fromId);
         }
     }
 

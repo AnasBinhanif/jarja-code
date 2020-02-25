@@ -52,8 +52,6 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
     @Override
     public void initViews() {
-
-
     }
 
     @Override

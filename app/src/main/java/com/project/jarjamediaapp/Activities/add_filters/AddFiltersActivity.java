@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
+import com.google.gson.internal.LinkedTreeMap;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -38,27 +39,27 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
     ArrayList<GetAgentsModel.Data> agentList;
     ArrayList<MultiSelectModel> searchListItems;
-    ArrayList<MultiSelectModel> searchListItemsselected=new ArrayList<>();
+    ArrayList<MultiSelectModel> searchListItemsselected = new ArrayList<>();
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
 
     ArrayList<GetLeadSource.Data> getLeadSourceList;
     ArrayList<MultiSelectModel> getLeadSourceNameList;
-    ArrayList<MultiSelectModel> getLeadSourceNameListselected=new ArrayList<>();
+    ArrayList<MultiSelectModel> getLeadSourceNameListselected = new ArrayList<>();
     ArrayList<Integer> selectedSourceNameIdsList = new ArrayList<>();
 
     ArrayList<GetLeadTagList.Data> getLeadTagList;
     ArrayList<MultiSelectModel> getLeadTagModelList;
-    ArrayList<MultiSelectModel> getLeadTagModelListselected=new ArrayList<>();
+    ArrayList<MultiSelectModel> getLeadTagModelListselected = new ArrayList<>();
     ArrayList<Integer> selectedTagIdsList = new ArrayList<>();
 
     ArrayList<GetLeadTypeList.Data> getLeadTypeList;
     ArrayList<MultiSelectModel> getLeadTypeModelList;
-    ArrayList<MultiSelectModel> getLeadTypeModelListselected=new ArrayList<>();
+    ArrayList<MultiSelectModel> getLeadTypeModelListselected = new ArrayList<>();
     ArrayList<Integer> getSelectedTypeIdsList = new ArrayList<>();
 
     ArrayList<GetLeadDripCampaignList.Data> getLeadDripCampaignList;
     ArrayList<MultiSelectModel> getLeadDripCampaignModelList;
-    ArrayList<MultiSelectModel> getLeadDripCampaignModelListselected=new ArrayList<>();
+    ArrayList<MultiSelectModel> getLeadDripCampaignModelListselected = new ArrayList<>();
     ArrayList<Integer> selectedDripIdsList = new ArrayList<>();
 
     ArrayList<GetLeadScore.Data> getGetLeadScoreList;
@@ -134,69 +135,94 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     }
 
     private void saveFilters() {
-
-        easyPreference.addObject("agentIDs", selectedIdsList).save();
-        easyPreference.addObject("typeIDs", getSelectedTypeIdsList).save();
-        easyPreference.addObject("sourceIDs", selectedSourceNameIdsList).save();
-        easyPreference.addObject("tagIDs", selectedTagIdsList).save();
-        easyPreference.addObject("dripIDs", selectedDripIdsList).save();
+        easyPreference.addObject("agentIDs", searchListItemsselected).save();
+        easyPreference.addObject("typeIDs", getLeadTypeModelListselected).save();
+        easyPreference.addObject("sourceIDs", getLeadSourceNameListselected).save();
+        easyPreference.addObject("tagIDs", getLeadTagModelListselected).save();
+        easyPreference.addObject("dripIDs", getLeadDripCampaignModelListselected).save();
         easyPreference.addInt("leadScoreID", bi.spnLeadScore.getSelectedIndex()).save();
         easyPreference.addInt("lastTouchID", bi.spnLastTouch.getSelectedIndex()).save();
         easyPreference.addInt("lastLoginID", bi.spnLastLogin.getSelectedIndex()).save();
         easyPreference.addInt("pipelineID", bi.spnPipeline.getSelectedIndex()).save();
         easyPreference.addString("notes", bi.edtNotes.getText().toString()).save();
         easyPreference.addString("leadID", bi.edtLeadID.getText().toString()).save();
-
     }
 
     private void retrieveFilters() {
 
-        ArrayList<Double> agentIDs = easyPreference.getObject("agentIDs", ArrayList.class);
+        ArrayList<LinkedTreeMap> agentIDs = easyPreference.getObject("agentIDs", ArrayList.class);
 
-        if (agentIDs!=null)
-        {
-            for (Double d : agentIDs){
-                selectedIdsList.add(Integer.valueOf(d.intValue()));
-            }
-        }
-       //selectedIdsList = agentIDs != null ? agentIDs : selectedIdsList;
-        ArrayList<Double> typeIDs = easyPreference.getObject("typeIDs", ArrayList.class);
-        if (typeIDs!=null)
-        {
-            for (Double d : typeIDs){
-                getSelectedTypeIdsList.add(Integer.valueOf(d.intValue()));
-            }
-        }
-       // getSelectedTypeIdsList = typeIDs != null ? typeIDs : getSelectedTypeIdsList;
-        ArrayList<Double> sourceIDs = easyPreference.getObject("sourceIDs", ArrayList.class);
-        if (sourceIDs!=null)
-        {
-            for (Double d : sourceIDs){
-                selectedSourceNameIdsList.add(Integer.valueOf(d.intValue()));
-            }
-            for (GetAgentsModel.Data name : agentList) {
+        if (agentIDs != null) {
+            for (LinkedTreeMap d : agentIDs) {
+                selectedIdsList.add(Integer.valueOf(Double.valueOf(d.get("id").toString()).intValue()));
 
                 View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
                 TextView textView = child.findViewById(R.id.txtDynamic);
-                textView.setText(name.agentName);
+                textView.setText(d.get("name").toString());
                 bi.lnAgents.addView(child);
-                selectedIdsList.add(name.agentID);
+                searchListItemsselected.add(new MultiSelectModel(Integer.valueOf(Double.valueOf(d.get("id").toString()).intValue()),
+                        d.get("name").toString(), d.get("encyptedIDs").toString()));
             }
         }
+        //selectedIdsList = agentIDs != null ? agentIDs : selectedIdsList;
+        ArrayList<LinkedTreeMap> typeIDs = easyPreference.getObject("typeIDs", ArrayList.class);
+        if (typeIDs != null) {
+            for (LinkedTreeMap d : typeIDs) {
+                getSelectedTypeIdsList.add(Integer.valueOf(Double.valueOf(d.get("id").toString()).intValue()));
+
+                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                TextView textView = child.findViewById(R.id.txtDynamic);
+                textView.setText(d.get("name").toString());
+                bi.lnType.addView(child);
+
+                getLeadTypeModelListselected.add(new MultiSelectModel(Integer.valueOf(Double.valueOf(d.get("id").toString()).intValue()),
+                        d.get("name").toString()));
+            }
+        }
+        // getSelectedTypeIdsList = typeIDs != null ? typeIDs : getSelectedTypeIdsList;
+        ArrayList<LinkedTreeMap> sourceIDs = easyPreference.getObject("sourceIDs", ArrayList.class);
+        if (sourceIDs != null) {
+            for (LinkedTreeMap d : sourceIDs) {
+                selectedSourceNameIdsList.add(Integer.valueOf(Double.valueOf(d.get("id").toString()).intValue()));
+
+                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                TextView textView = child.findViewById(R.id.txtDynamic);
+                textView.setText(d.get("name").toString());
+                bi.lnSuurce.addView(child);
+
+                getLeadSourceNameListselected.add(new MultiSelectModel(Integer.valueOf(Double.valueOf(d.get("id").toString()).intValue()),
+                        d.get("name").toString()));
+            }
+
+        }
         //selectedSourceNameIdsList = sourceIDs != null ? sourceIDs : selectedSourceNameIdsList;
-        ArrayList<Double> tagIDs = easyPreference.getObject("tagIDs", ArrayList.class);
-        if (tagIDs!=null)
-        {
-            for (Double d : tagIDs){
-                selectedTagIdsList.add(Integer.valueOf(d.intValue()));
+        ArrayList<LinkedTreeMap> tagIDs = easyPreference.getObject("tagIDs", ArrayList.class);
+        if (tagIDs != null) {
+            for (LinkedTreeMap d : tagIDs) {
+                selectedTagIdsList.add(Integer.valueOf(Double.valueOf(d.get("id").toString()).intValue()));
+
+                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                TextView textView = child.findViewById(R.id.txtDynamic);
+                textView.setText(d.get("name").toString());
+                bi.lnTags.addView(child);
+
+                getLeadTagModelListselected.add(new MultiSelectModel(Integer.valueOf(Double.valueOf(d.get("id").toString()).intValue()),
+                        d.get("name").toString(), d.get("encyptedIDs").toString()));
             }
         }
         //selectedTagIdsList = tagIDs != null ? tagIDs : selectedTagIdsList;
-        ArrayList<Double> dripIDs = easyPreference.getObject("dripIDs", ArrayList.class);
-        if (dripIDs!=null)
-        {
-            for (Double d : dripIDs){
-                selectedDripIdsList.add(Integer.valueOf(d.intValue()));
+        ArrayList<LinkedTreeMap> dripIDs = easyPreference.getObject("dripIDs", ArrayList.class);
+        if (dripIDs != null) {
+            for (LinkedTreeMap d : dripIDs) {
+                selectedDripIdsList.add(Integer.valueOf(Double.valueOf(d.get("id").toString()).intValue()));
+
+                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                TextView textView = child.findViewById(R.id.txtDynamic);
+                textView.setText(d.get("name").toString());
+                bi.lnDrip.addView(child);
+
+                getLeadDripCampaignModelListselected.add(new MultiSelectModel(Integer.valueOf(Double.valueOf(d.get("id").toString()).intValue()),
+                        d.get("name").toString()));
             }
         }
         //selectedDripIdsList = dripIDs != null ? dripIDs : selectedDripIdsList;
@@ -206,6 +232,13 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         int pipelineID = easyPreference.getInt("pipelineID", 0);
         String notes = easyPreference.getString("notes", "");
         String leadID = easyPreference.getString("leadID", "");
+
+        bi.spnPipeline.setSelectedIndex(pipelineID);
+        bi.spnLeadScore.setSelectedIndex(leadScoreID);
+        bi.spnLastTouch.setSelectedIndex(lastTouchID);
+        bi.spnLastLogin.setSelectedIndex(lastLoginID);
+        bi.edtLeadID.setText(leadID);
+        bi.edtNotes.setText(notes);
 
     }
 
@@ -241,11 +274,15 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
                         tagsIdsString = "";
+                        getLeadTagModelListselected = new ArrayList<>();
                         if (selectedEncyrptedIds != null || selectedEncyrptedIds.size() != 0) {
-                            for (String i : selectedEncyrptedIds) {
+                            for (int i = 0; i < selectedEncyrptedIds.size(); i++) {
+
+                                getLeadTagModelListselected.add(new MultiSelectModel(selectedIds.get(i), selectedNames.get(i),
+                                        selectedEncyrptedIds.get(i)));
 
                                 if (tagsIdsString.equals("")) {
-                                    tagsIdsString = i;
+                                    tagsIdsString = selectedEncyrptedIds.get(i);
                                 } else {
                                     tagsIdsString = tagsIdsString + "," + i;
                                 }
@@ -288,7 +325,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                         }
 
                         for (String name : selectedNames) {
-
                             View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
                             TextView textView = child.findViewById(R.id.txtDynamic);
                             textView.setText(name);
@@ -300,19 +336,20 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                     }
 
                     @Override
-                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames,
+                                           ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
                         agentIdsString = "";
-                        for (String i : selectedEncyrptedIds) {
+                        searchListItemsselected = new ArrayList<>();
+                        for (int i = 0; i < selectedEncyrptedIds.size(); i++) {
 
                             if (agentIdsString.equals("")) {
-                                agentIdsString = String.valueOf(i);
+                                agentIdsString = String.valueOf(selectedEncyrptedIds.get(i));
                             } else {
                                 agentIdsString = agentIdsString + "," + i;
                             }
-
-
+                            searchListItemsselected.add(new MultiSelectModel(selectedIds.get(i),
+                                    selectedNames.get(i), selectedEncyrptedIds.get(i)));
                         }
-
                     }
 
                     @Override
@@ -347,10 +384,14 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                             bi.lnDrip.removeAllViews();
                         }
 
-                        for (String name : selectedNames) {
+                        getLeadDripCampaignModelListselected = new ArrayList<>();
+                        for (int i = 0; i < selectedNames.size(); i++) {
+
+                            getLeadDripCampaignModelListselected.add(new MultiSelectModel(selectedIds.get(i), selectedNames.get(i)));
+
                             View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
                             TextView textView = child.findViewById(R.id.txtDynamic);
-                            textView.setText(name);
+                            textView.setText(selectedNames.get(i));
                             bi.lnDrip.addView(child);
                         }
                         dripModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
@@ -358,7 +399,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                     }
 
                     @Override
-                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames,
+                                           ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
 
                     }
 
@@ -389,23 +431,28 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
                         //will return list of selected IDS
                         selectedSourceNameIdsList = new ArrayList<>();
+                        getLeadSourceNameListselected = new ArrayList<>();
                         selectedSourceNameIdsList = selectedIds;
 
                         if (bi.lnSuurce.getChildCount() > 0) {
                             bi.lnSuurce.removeAllViews();
                         }
 
-                        for (String name : selectedNames) {
+                        for (int i = 0; i < selectedNames.size(); i++) {
+
+                            getLeadSourceNameListselected.add(new MultiSelectModel(selectedIds.get(i), selectedNames.get(i)));
+
                             View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
                             TextView textView = child.findViewById(R.id.txtDynamic);
-                            textView.setText(name);
+                            textView.setText(selectedNames.get(i));
                             bi.lnSuurce.addView(child);
                         }
                         Log.e("DataString", dataString);
                     }
 
                     @Override
-                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds,
+                                           String commonSeperatedData) {
 
                     }
 
@@ -442,10 +489,14 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                             bi.lnType.removeAllViews();
                         }
 
-                        for (String name : selectedNames) {
+                        getLeadTypeModelListselected = new ArrayList<>();
+                        for (int i = 0; i < selectedNames.size(); i++) {
+
+                            getLeadTypeModelListselected.add(new MultiSelectModel(selectedIds.get(i), selectedNames.get(i)));
+
                             View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
                             TextView textView = child.findViewById(R.id.txtDynamic);
-                            textView.setText(name);
+                            textView.setText(selectedNames.get(i));
                             bi.lnType.addView(child);
                         }
 

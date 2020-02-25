@@ -244,6 +244,15 @@ public interface ApiMethods {
             @Field("typeIndex") String typeIndex
     );
 
+    @FormUrlEncoded
+    @POST("Lead/AddPipeLineMark")
+    Call<BaseResponse> AddPipeLineMark(
+            @Header("Authorization") String authorization,
+            @Field("pipelineID") String pipelineID,
+            @Field("encrypted_LeadDetailID") String encrypted_LeadDetailID,
+            @Field("presentationID") String presentationID
+    );
+
     @GET("Lead/GetLeadTransactionStage")
     Call<GetLeadTransactionStage> GetLeadTransactionStage(
             @Header("Authorization") String authorization,

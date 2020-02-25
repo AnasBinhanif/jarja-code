@@ -37,6 +37,8 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
     ArrayList<GetLeadTransactionStage.PipeLine> transactionPipeline = new ArrayList<>();
     String currentPipeline = "";
+    boolean bf = true;
+    String leadID = "", title = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +58,6 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void setupUI(View view) {
         super.setupUI(view);
-
-
     }
 
     @Override
@@ -73,53 +73,68 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, transactionPipeline, R.layout.custom_transaction_layout);
         recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvDate, R.id.imgInitial, R.id.tvInitial);
 
-        recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetLeadTransactionStage.PipeLine, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
+        recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetLeadTransactionStage.PipeLine, Integer, Map<Integer, ? extends View>, Unit>)
+                (view, allLeadsList, integer, integerMap) -> {
 
-            TextView tvName = (TextView) integerMap.get(R.id.tvName);
-            tvName.setText(allLeadsList.pipeline);
+                    TextView tvName = (TextView) integerMap.get(R.id.tvName);
+                    tvName.setText(allLeadsList.pipeline);
 
-            TextView tvDate = (TextView) integerMap.get(R.id.tvDate);
+                    TextView tvDate = (TextView) integerMap.get(R.id.tvDate);
 
-            TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
-            int initails = integer + 1;
-            tvInitial.setText(String.valueOf(initails));
+                    TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
+                    int initails = integer + 1;
+                    tvInitial.setText(String.valueOf(initails));
 
-            ImageView imgInitial = (ImageView) integerMap.get(R.id.imgInitial);
+                    ImageView imgInitial = (ImageView) integerMap.get(R.id.imgInitial);
 
+                    if (bf) {
+                        tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
+                        imgInitial.setVisibility(View.VISIBLE);
+                        tvInitial.setVisibility(View.GONE);
+                    }
 
-            while (allLeadsList.pipeline.equals(currentPipeline)) {
-                tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
-                imgInitial.setVisibility(View.VISIBLE);
-                tvInitial.setVisibility(View.GONE);
-                break;
-            }
-
-            return Unit.INSTANCE;
-        });
+                    if (allLeadsList.pipeline.contains(currentPipeline)) {
+                        tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
+                        imgInitial.setVisibility(View.VISIBLE);
+                        tvInitial.setVisibility(View.GONE);
+                        bf = false;
+                    }
+                    return Unit.INSTANCE;
+                });
 
         bi.recyclerViewTransaction.setAdapter(recyclerAdapterUtil);
 
-        recyclerAdapterUtil.addOnClickListener((Function2<GetLeadTransactionStage.PipeLine, Integer, Unit>) (viewComplainList, integer) -> {
+        recyclerAdapterUtil.addOnClickListener((Function2<GetLeadTransactionStage.PipeLine, Integer, Unit>)
+                (viewComplainList, integer) -> {
 
+                    if (title.contains("Transaction 1")) {
+                        String pipelineID = String.valueOf(viewComplainList.id);
+                        String presentationID = "1";
+                        presenter.addPipelineMark(pipelineID, leadID, presentationID);
+                    } else if (title.contains("Transaction 2")) {
+                        String pipelineID = String.valueOf(viewComplainList.id);
+                        String presentationID = "2";
+                        presenter.addPipelineMark(pipelineID, leadID, presentationID);
+                    }
 
-            return Unit.INSTANCE;
-        });
-
+                    return Unit.INSTANCE;
+                });
     }
 
     private void handleIntent(Intent intent) {
-
-        String title = intent.getStringExtra("title");
+        title = intent.getStringExtra("title");
+        leadID = intent.getStringExtra("leadID");
         setToolBarTitle(bi.epToolbar.toolbar, title, true);
         currentPipeline = intent.getStringExtra("currentStage");
         transactionPipeline = (ArrayList<GetLeadTransactionStage.PipeLine>) intent.getExtras().getSerializable("Pipeline");
-
     }
 
     @Override
     public void updateUI(Response<BaseResponse> response) {
 
-
+        if (response.body().getStatus().equals("Success")) {
+            ToastUtils.showToast(context, "Assigned Successfully");
+        }
     }
 
     @Override

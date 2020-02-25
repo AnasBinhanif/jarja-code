@@ -86,6 +86,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     ArrayList<GetAgentsModel.Data> agentList;
     ArrayList<MultiSelectModel> searchListItems;
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
+    ArrayList<Integer> selectedLeadIdsList = new ArrayList<>();
 
     GetLead.LeadList getLeadListData;
     ArrayList<GetLead.AgentsList> getAssignedAgentList;
@@ -96,8 +97,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     ArrayList<GetLeadTransactionStage.LeadTransactionOne> transactionOneListModel;
     ArrayList<GetLeadTransactionStage.LeadTransactionTwo> transactionTwoListModel;
 
-    String currentStage1 = "", currentStage2 = "";
-    String agentIdsString = "";
+    String currentStage1 = "", currentStage2 = "",transLeadID1="",transLeadID2="";
+    String agentIdsString = "",agentLeadIdsString = "";
 
     BottomDialog bottomDialog;
     private final int RC_CAMERA_AND_STORAGE = 100;
@@ -393,6 +394,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
                 Intent intentT1 = new Intent(context, TransactionActivity.class);
                 intentT1.putExtra("title", title);
+                intentT1.putExtra("leadID",transLeadID1);
                 intentT1.putExtra("currentStage", currentStage1);
                 intentT1.putExtra("Pipeline", transactionPipeline);
                 startActivity(intentT1);
@@ -403,6 +405,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
                 Intent intentT2 = new Intent(context, TransactionActivity.class);
                 intentT2.putExtra("title", title);
+                intentT2.putExtra("leadID",transLeadID1);
                 intentT2.putExtra("currentStage", currentStage2);
                 intentT2.putExtra("Pipeline", transactionPipeline);
                 startActivity(intentT2);
@@ -616,10 +619,11 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             bi.rlTransaction2.setVisibility(View.GONE);
             bi.rlTransaction1.setVisibility(View.VISIBLE);
 
-            bi.tvStep1.setText(transactionOneListModel.get(0).currentStage);
-            bi.tvDate1.setText(transactionOneListModel.get(0).date);
+            bi.tvStep1.setText(transactionOneListModel.get(transactionOneListModel.size()-1).currentStage);
+            bi.tvDate1.setText(transactionOneListModel.get(transactionOneListModel.size()-1).date);
 
-            currentStage1 = transactionOneListModel.get(0).currentStage;
+            currentStage1 = transactionOneListModel.get(transactionOneListModel.size()-1).currentStage;
+            transLeadID1 = transactionOneListModel.get(transactionOneListModel.size()-1).encrypted_LeadDetailID;
 
         } else {
             bi.tvNoRecord.setVisibility(View.VISIBLE);
@@ -628,7 +632,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         }
 
         if (transactionTwoListModel != null) {
-            currentStage2 = transactionTwoListModel.get(0).currentStage;
+            currentStage2 = transactionTwoListModel.get(transactionTwoListModel.size()-1).currentStage;
+            transLeadID2 = transactionTwoListModel.get(transactionOneListModel.size()-1).encrypted_LeadDetailID;
         }
 
     }
@@ -919,8 +924,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
                         //will return list of selected IDS
-                        selectedIdsList = new ArrayList<>();
-                        selectedIdsList = selectedIds;
+                        selectedLeadIdsList = new ArrayList<>();
+                        selectedLeadIdsList = selectedIds;
 
                         if (lnAgent.getChildCount() > 0) {
                             lnAgent.removeAllViews();
@@ -940,15 +945,15 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
-                        agentIdsString = "";
+                        agentLeadIdsString = "";
                     }
 
                     @Override
                     public void onCancel() {
                     }
                 });
-        if (selectedIdsList.size() != 0) {
-            multiSelectDialog.preSelectIDsList(selectedIdsList);
+        if (selectedLeadIdsList.size() != 0) {
+            multiSelectDialog.preSelectIDsList(selectedLeadIdsList);
             multiSelectDialog.multiSelectList(searchLeadListItems);
         } else {
             multiSelectDialog.multiSelectList(searchLeadListItems);

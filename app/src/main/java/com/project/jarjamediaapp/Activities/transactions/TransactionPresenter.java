@@ -1,29 +1,32 @@
 package com.project.jarjamediaapp.Activities.transactions;
 
-import com.project.jarjamediaapp.Activities.lead_detail.LeadDetailContract;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Networking.ApiError;
+import com.project.jarjamediaapp.Networking.ApiMethods;
+import com.project.jarjamediaapp.Networking.ErrorUtils;
+import com.project.jarjamediaapp.Networking.NetworkController;
+import com.project.jarjamediaapp.Utilities.GH;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TransactionPresenter extends BasePresenter<TransactionContract.View> implements TransactionContract.Actions {
 
     Call<BaseResponse> _call;
 
-
     public TransactionPresenter(TransactionContract.View view) {
         super(view);
     }
 
-    public void initScreen() {
-        _view.initViews();
-    }
-
-   /* @Override
-    public void updateCardDetailStatus(String cardId, boolean status) {
+    @Override
+    public void addPipelineMark(String pipelineID, String encrypted_LeadDetailID,
+                                String presentationID) {
 
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class). ();
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddPipeLineMark(GH.getInstance().getAuthorization(),
+                pipelineID, encrypted_LeadDetailID,presentationID);
         _call.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
@@ -31,18 +34,20 @@ public class TransactionPresenter extends BasePresenter<TransactionContract.View
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
-                    BaseResponse baseResponse = response.body();
-                    if (baseResponse.getStatus()) {
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.getStatus().equals("Success")) {
+
                         _view.updateUI(response);
 
                     } else {
 
-                        _view.updateUIonFalse(baseResponse.getError());
+                        _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
-                    _view.updateUIonError(response.errorBody().toString());
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
                 }
             }
 
@@ -53,7 +58,12 @@ public class TransactionPresenter extends BasePresenter<TransactionContract.View
             }
         });
 
-    }*/
+    }
+
+    public void initScreen() {
+        _view.initViews();
+    }
+
 
     @Override
     public void detachView() {
@@ -63,11 +73,6 @@ public class TransactionPresenter extends BasePresenter<TransactionContract.View
             _call.cancel();
         }
         super.detachView();
-    }
-
-    @Override
-    public void addData() {
-
     }
 
 }
