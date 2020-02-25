@@ -1,5 +1,6 @@
 package com.project.jarjamediaapp.Activities.lead_detail;
 
+import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -19,10 +20,11 @@ import retrofit2.Response;
 public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> implements LeadDetailContract.Actions {
 
     Call<GetLead> _call;
-    Call<BaseResponse> _callAssignAgents;
+    Call<BaseResponse> call;
     Call<GetAgentsModel> _callGetAgentsModel;
     Call<GetLeadTransactionStage> _callGetLeadTransactionStage;
     Call<LeadDetailModel> _callLead;
+    Call<UploadImageModel> _cCall;
 
     public LeadDetailPresenter(LeadDetailContract.View view) {
         super(view);
@@ -30,10 +32,11 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
 
     @Override
     public void assignAgents(String agentsIDs, String leadID, String typeIndex) {
+
         _view.showProgressBar();
-        _callAssignAgents = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AssignAgentToLead(GH.getInstance().getAuthorization(),
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AssignAgentToLead(GH.getInstance().getAuthorization(),
                 agentsIDs, leadID, typeIndex);
-        _callAssignAgents.enqueue(new Callback<BaseResponse>() {
+        call.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
 
@@ -222,14 +225,78 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
     }
 
     @Override
-    public void sendEmailContent() {
+    public void sendEmailContent(String from, String[] to, String cc, String bcc, String subject, String body, String fileUrl, String leadId) {
 
+        _view.showProgressBar();
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).composeEmail(GH.getInstance().getAuthorization(), from, to,
+                cc, bcc, subject, body, "0", fileUrl,leadId);
+        call.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
 
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse baseResponse = response.body();
+                    if (baseResponse.getStatus().equals("Success")) {
+
+                        _view.updateUIEmailSent(response);
+
+                    } else {
+
+                        _view.updateUIonFalse(baseResponse.getMessage());
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
 
     }
 
     @Override
     public void uploadFile(MultipartBody.Part file) {
+
+        _view.showProgressBar();
+        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).uploadEmailAttachedFile(GH.getInstance().getAuthorization(), file, "image");
+
+        _cCall.enqueue(new Callback<UploadImageModel>() {
+            @Override
+            public void onResponse(Call<UploadImageModel> call, Response<UploadImageModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    UploadImageModel openHousesModel = response.body();
+                    if (response.body().getStatus().equals("Success")) {
+                        _view.updateUIAfterFileUpload(response);
+
+                    } else {
+
+                        _view.updateUIonFalse(openHousesModel.getMessage());
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UploadImageModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
 
     }
 

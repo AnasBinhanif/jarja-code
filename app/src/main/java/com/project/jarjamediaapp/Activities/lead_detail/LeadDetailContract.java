@@ -57,7 +57,7 @@ public interface LeadDetailContract {
 
         void getLeadRecipient(String leadId);
 
-        void sendEmailContent();
+        void sendEmailContent(String from , String[] to ,String cc , String bcc, String subject,String body ,String fileUrl,String leadId);
 
         void uploadFile(MultipartBody.Part file);
 

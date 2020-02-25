@@ -615,6 +615,13 @@ public interface ApiMethods {
                                               @Part MultipartBody.Part file,
                                               @Query("image") String image);
 
+    @Multipart
+    @POST("Lead/UploadEmailDoc")
+    Call<UploadImageModel> uploadEmailAttachedFile(@Header("Authorization") String authorization,
+                                              @Part MultipartBody.Part file,
+                                              @Query("image") String image);
+
+
     @FormUrlEncoded
     @POST("Lead/AddOpenHouse")
     Call<BaseResponse> addOpenHouse(@Header("Authorization") String authorization,
@@ -669,7 +676,17 @@ public interface ApiMethods {
     Call<LeadDetailModel> getLeadRecipient(@Header("Authorization") String authorization,
                                            @Query("LeadId") String leadId);
 
-
-
+    @FormUrlEncoded
+    @POST("Lead/SendLeadEmail")
+    Call<BaseResponse> composeEmail(@Header("Authorization") String authorization,
+                                    @Field("email_From") String from,
+                                    @Field("emailTo") String[] to,
+                                    @Field("email_Cc") String cc,
+                                    @Field("email_Bcc") String bcc,
+                                    @Field("subject") String subject,
+                                    @Field("body") String body,
+                                    @Field("lead_ID") String leadId,
+                                    @Field("attachFileLink") String fileUrl,
+                                    @Field("lead_EncryptedID") String lead_EncryptedID);
 
 }

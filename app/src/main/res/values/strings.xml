@@ -301,6 +301,7 @@
 
     <!-- Compose Email -->
     <string name="compose">Compose Email</string>
+    <string name="text">Compose Message</string>
     <string name="from">From:</string>
     <string name="to">To:</string>
     <string name="cc">CC:</string>
@@ -310,5 +311,10 @@
     <string name="choose">Choose File</string>
     <string name="send">Send</string>
     <string name="body_text">Call the lead and dont leave a message if they dont pick up</string>
+    <string name="error_from">Please select your email</string>
+    <string name="error_to">Please select Recipient</string>
+    <string name="error_subject">Please enter subject</string>
+    <string name="error_message">Please enter message</string>
+    <string name="recipient">Select Recipient</string>
 
 </resources>

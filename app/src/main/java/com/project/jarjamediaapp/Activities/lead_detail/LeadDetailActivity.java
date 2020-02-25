@@ -5,16 +5,15 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
@@ -47,6 +46,7 @@ import com.project.jarjamediaapp.Models.GetLeadDetails;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.Utilities.UserPermissions;
 import com.project.jarjamediaapp.databinding.ActivityLeadDetailBinding;
@@ -97,8 +97,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     ArrayList<GetLeadTransactionStage.LeadTransactionOne> transactionOneListModel;
     ArrayList<GetLeadTransactionStage.LeadTransactionTwo> transactionTwoListModel;
 
-    String currentStage1 = "", currentStage2 = "",transLeadID1="",transLeadID2="";
-    String agentIdsString = "",agentLeadIdsString = "";
+    String currentStage1 = "", currentStage2 = "", transLeadID1 = "", transLeadID2 = "";
+    String agentIdsString = "", agentLeadIdsString = "";
 
     BottomDialog bottomDialog;
     private final int RC_CAMERA_AND_STORAGE = 100;
@@ -107,13 +107,16 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     File compressedImage;
 
     AutoCompleteTextView atvCC, atvBCC, atvSubject, atvFrom;
-    TextView tvTo;
+    TextView tvTo, tvClose, filePreviewName;
     MultiAutoCompleteTextView mAtvBody;
     Button choosePicture, btnSendEmail;
     LinearLayout lnAgent;
 
     ArrayList<String> agentLeadList;
     ArrayList<MultiSelectModel> searchLeadListItems;
+    Dialog dialog;
+    String fileUrl = "";
+    MultipartBody.Part multipartFile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,16 +284,18 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     private void openEmailComposer(Context context) {
 
-        final Dialog dialog = new Dialog(context, R.style.Dialog);
+        dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.dialog_compose_email);
 
         atvFrom = dialog.findViewById(R.id.atvFrom);
         tvTo = dialog.findViewById(R.id.tvToAgent);
+        tvClose = dialog.findViewById(R.id.tvClose);
         atvCC = dialog.findViewById(R.id.atvCC);
         atvBCC = dialog.findViewById(R.id.atvBCC);
         atvSubject = dialog.findViewById(R.id.atvSubject);
         mAtvBody = dialog.findViewById(R.id.atvBody);
+        filePreviewName = dialog.findViewById(R.id.filePreviewName);
         choosePicture = dialog.findViewById(R.id.btnChooseFile);
         btnSendEmail = dialog.findViewById(R.id.btnSendEmail);
         lnAgent = dialog.findViewById(R.id.lnAgent);
@@ -313,13 +318,6 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             }
         });
 
-        atvFrom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
-
         atvFrom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -330,7 +328,16 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         btnSendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // HIT API
+
+                callComposeEmail();
+
+            }
+        });
+
+        tvClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -394,7 +401,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
                 Intent intentT1 = new Intent(context, TransactionActivity.class);
                 intentT1.putExtra("title", title);
-                intentT1.putExtra("leadID",transLeadID1);
+                intentT1.putExtra("leadID", transLeadID1);
                 intentT1.putExtra("currentStage", currentStage1);
                 intentT1.putExtra("Pipeline", transactionPipeline);
                 startActivity(intentT1);
@@ -405,7 +412,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
                 Intent intentT2 = new Intent(context, TransactionActivity.class);
                 intentT2.putExtra("title", title);
-                intentT2.putExtra("leadID",transLeadID1);
+                intentT2.putExtra("leadID", transLeadID1);
                 intentT2.putExtra("currentStage", currentStage2);
                 intentT2.putExtra("Pipeline", transactionPipeline);
                 startActivity(intentT2);
@@ -501,6 +508,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     }
 
     private void initListeners() {
+
         bi.btnActions.setOnClickListener(this);
         bi.btnDetails.setOnClickListener(this);
         bi.rlTransaction1.setOnClickListener(this);
@@ -619,11 +627,11 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             bi.rlTransaction2.setVisibility(View.GONE);
             bi.rlTransaction1.setVisibility(View.VISIBLE);
 
-            bi.tvStep1.setText(transactionOneListModel.get(transactionOneListModel.size()-1).currentStage);
-            bi.tvDate1.setText(transactionOneListModel.get(transactionOneListModel.size()-1).date);
+            bi.tvStep1.setText(transactionOneListModel.get(transactionOneListModel.size() - 1).currentStage);
+            bi.tvDate1.setText(transactionOneListModel.get(transactionOneListModel.size() - 1).date);
 
-            currentStage1 = transactionOneListModel.get(transactionOneListModel.size()-1).currentStage;
-            transLeadID1 = transactionOneListModel.get(transactionOneListModel.size()-1).encrypted_LeadDetailID;
+            currentStage1 = transactionOneListModel.get(transactionOneListModel.size() - 1).currentStage;
+            transLeadID1 = transactionOneListModel.get(transactionOneListModel.size() - 1).encrypted_LeadDetailID;
 
         } else {
             bi.tvNoRecord.setVisibility(View.VISIBLE);
@@ -632,8 +640,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         }
 
         if (transactionTwoListModel != null) {
-            currentStage2 = transactionTwoListModel.get(transactionTwoListModel.size()-1).currentStage;
-            transLeadID2 = transactionTwoListModel.get(transactionOneListModel.size()-1).encrypted_LeadDetailID;
+            currentStage2 = transactionTwoListModel.get(transactionTwoListModel.size() - 1).currentStage;
+            transLeadID2 = transactionTwoListModel.get(transactionOneListModel.size() - 1).encrypted_LeadDetailID;
         }
 
     }
@@ -658,42 +666,78 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     }
 
+    private void callComposeEmail() {
+
+        String _from = atvFrom.getText().toString();
+        String cc = atvCC.getText().toString();
+        String bcc = atvBCC.getText().toString();
+        String subject = atvSubject.getText().toString();
+        String body = mAtvBody.getText().toString();
+        String documentUrl = fileUrl;
+        String[] _to = new String[0];
+        if (searchLeadListItems != null && searchLeadListItems.size() > 0) {
+
+            ArrayList<String> arrayList = new ArrayList<>();
+            for (int i = 0; i < searchLeadListItems.size(); i++) {
+                arrayList.add(searchLeadListItems.get(i).getName());
+            }
+            _to = arrayList.toArray(new String[searchLeadListItems.size()]);
+        }
+
+        if (isValidate()) {
+            if (multipartFile != null) {
+                presenter.uploadFile(multipartFile);
+            } else {
+                presenter.sendEmailContent(_from, _to, cc, bcc, subject, body, documentUrl, leadID);
+            }
+
+        }
+
+    }
+
+    private boolean isValidate() {
+
+        if (Methods.isEmpty(atvFrom)) {
+            ToastUtils.showToast(context, R.string.error_from);
+            atvFrom.requestFocus();
+            return false;
+        }
+        if (searchLeadListItems != null && searchLeadListItems.size() == 0) {
+            ToastUtils.showToast(context, R.string.error_to);
+            return false;
+        }
+        if (Methods.isEmpty(atvSubject)) {
+            ToastUtils.showToast(context, R.string.error_subject);
+            atvSubject.requestFocus();
+            return false;
+        }
+        if (Methods.isEmpty(mAtvBody)) {
+            ToastUtils.showToast(context, R.string.error_message);
+            mAtvBody.requestFocus();
+            return false;
+        }
+
+
+        return true;
+    }
+
     @Override
     public void updateUIEmailSent(Response<BaseResponse> response) {
 
+        dialog.dismiss();
+        selectedLeadIdsList.clear();
+        searchLeadListItems.clear();
+        ToastUtils.showToastLong(context, response.body().getMessage());
 
     }
 
     @Override
     public void updateUIAfterFileUpload(Response<UploadImageModel> response) {
 
-    }
+        fileUrl = response.body().getData();
+        callComposeEmail();
+        multipartFile = null;
 
-    public void showCallDialog(Context context) {
-
-        final Dialog dialog = new Dialog(context, R.style.Dialog);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.custom_assignedto_dialog);
-
-        EditText txtCall1 = dialog.findViewById(R.id.edtAgent);
-
-        Button btnSave = dialog.findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        Button btnCancel = dialog.findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
     }
 
     @Override
@@ -715,6 +759,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     @Override
     public void updateUIonError(String error) {
+
         if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
@@ -825,6 +870,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
@@ -850,11 +896,11 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         Uri uri = Uri.fromFile(file);
         String type1 = GH.getInstance().getMimeType(LeadDetailActivity.this, uri);
         MediaType mediaType = MediaType.parse(type1);
-        MultipartBody.Part multipartFile = null;
         RequestBody requestFile = RequestBody.create(mediaType, file);
         multipartFile = MultipartBody.Part.createFormData("", file.getName(), requestFile);
+        filePreviewName.setPaintFlags(filePreviewName.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        filePreviewName.setText(file.getName() + "");
 
-        //  presenter.uploadFileService(multipartFile, caseId);
 
     }
 
@@ -891,12 +937,12 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             Uri uri = Uri.fromFile(result);
             String type1 = GH.getInstance().getMimeType(LeadDetailActivity.this, uri);
             MediaType mediaType = MediaType.parse(type1);
-            MultipartBody.Part file = null;
+
             if (result != null && actualImage != null) {
                 RequestBody requestFile = RequestBody.create(mediaType, result);
-                file = MultipartBody.Part.createFormData("", result.getName(), requestFile);
-
-                //   presenter.uploadFileService(file, caseId);
+                multipartFile = MultipartBody.Part.createFormData("", result.getName(), requestFile);
+                filePreviewName.setPaintFlags(filePreviewName.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                filePreviewName.setText(result.getName() + "");
             }
         }
 

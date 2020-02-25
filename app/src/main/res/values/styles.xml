@@ -6,7 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:autofilledHighlight" tools:targetApi="o">@android:color/transparent</item>
+        <item name="android:autofilledHighlight" tools:targetApi="o">@android:color/transparent
+        </item>
 
     </style>
 
@@ -90,6 +91,23 @@
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:textSize">16dp</item>
 
+    </style>
+
+    <style name="AutoCompleteLabelStyle">
+        <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="android:layout_marginTop">@dimen/_15sdp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AutoCompleteStyle">
+        <item name="android:textSize">@dimen/_11sdp</item>
+        <item name="android:padding">@dimen/_10sdp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:layout_marginTop">@dimen/_5sdp</item>
+        <item name="android:background">@drawable/bg_search</item>
     </style>
 
 
