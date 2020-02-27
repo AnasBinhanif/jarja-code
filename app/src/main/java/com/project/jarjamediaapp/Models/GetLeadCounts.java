@@ -17,7 +17,6 @@ public class GetLeadCounts {
     @Expose
     public String message;
 
-
     public class Data {
 
         @SerializedName("message")

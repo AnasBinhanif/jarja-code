@@ -36,7 +36,6 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.functions.Function4;
 
-
 public class FindLeadsFragment extends BaseFragment implements FindLeadsContract.View, View.OnClickListener {
 
     FragmentFindleadsBinding bi;
@@ -65,7 +64,6 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         presenter.initScreen();
 
         return bi.getRoot();
-
     }
 
     @Override
@@ -82,8 +80,8 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
     private void callGetLeadCounts(Intent bundle) {
 
-        String leadID = bundle!=null ? bundle.getStringExtra("leadID") : "";
-        String spouseName =  "";
+        String leadID = bundle != null ? bundle.getStringExtra("leadID") : "";
+        String spouseName = "";
         String email = "";
         String company = "";
         String phone = "";
@@ -97,21 +95,21 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         String timeFrameID = "";
         String preApproval = "";
         String houseToSell = "";
-        String agentID = "";
-        String leadTypeID = "";
+        String agentID = bundle != null ? bundle.getStringExtra("agentID") : "";
+        String leadTypeID = bundle != null ? bundle.getStringExtra("leadTypeID") : "";
         String leadScoreMin = "";
-        String leadScoreMax = "";
-        String tagsID = "";
-        String priceMin = "";
-        String priceMax = "";
-        String notes = "";
-        String dripCompaignID = "";
-        String lastTouch = "";
-        String lastLogin = "";
-        String pipelineID = "";
-        String sourceID = "";
-        String fromDate = "";
-        String toDate = "";
+        String leadScoreMax = bundle != null ? bundle.getStringExtra("leadScoreMax") : "";
+        String tagsID = bundle != null ? bundle.getStringExtra("tagsID") : "";
+        String priceMin = bundle != null ? bundle.getStringExtra("priceMin") : "";
+        String priceMax = bundle != null ? bundle.getStringExtra("priceMax") : "";
+        String notes = bundle != null ? bundle.getStringExtra("notes") : "";
+        String dripCompaignID = bundle != null ? bundle.getStringExtra("dripCompaignID") : "";
+        String lastTouch = bundle != null ? bundle.getStringExtra("lastTouch") : "";
+        String lastLogin = bundle != null ? bundle.getStringExtra("lastLogin") : "";
+        String pipelineID = bundle != null ? bundle.getStringExtra("pipelineID") : "";
+        String sourceID = bundle != null ? bundle.getStringExtra("sourceID") : "";
+        String fromDate = bundle != null ? bundle.getStringExtra("fromDate") : "";
+        String toDate = bundle != null ? bundle.getStringExtra("toDate") : "";
         String searchBy = "";
         String firstNameAsc = "";
         String lastNameAsc = "";
@@ -145,7 +143,6 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
     private void populateListData() {
 
-
         List<GetFindLeads> leadsList = new ArrayList<>();
 
         leadsList.add(new GetFindLeads("All Leads", getLeadCountList.get(0).allLeadsCount));
@@ -159,7 +156,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         bi.recyclerViewFindLeads.setItemAnimator(new DefaultItemAnimator());
         bi.recyclerViewFindLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewFindLeads.getContext(), 1));
         RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(getContext(), leadsList, R.layout.custom_find_leads_layout);
-        recyclerAdapterUtil.addViewsList(/*R.id.txtTitle, R.id.txtDescription,*/ R.id.tvName, R.id.tvCount);
+        recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvCount);
 
         recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetFindLeads, Integer, Map<Integer, ? extends View>, Unit>) (view, findLeadsList, integer, integerMap) -> {
 
@@ -174,37 +171,33 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
         bi.recyclerViewFindLeads.setAdapter(recyclerAdapterUtil);
 
-
         recyclerAdapterUtil.addOnClickListener((Function2<GetFindLeads, Integer, Unit>) (viewComplainList, integer) -> {
 
-            Map<String,String> map= new HashMap<>();
-            switch (integer){
+            Map<String, String> map = new HashMap<>();
+            switch (integer) {
                 case 0:
-                    map.put("resultType","All");
+                    map.put("resultType", "All");
                     break;
                 case 1:
-                    map.put("resultType","New Leads");
+                    map.put("resultType", "New Leads");
                     break;
                 case 2:
-                    map.put("resultType","Hot Leads");
+                    map.put("resultType", "Hot Leads");
                     break;
                 case 3:
-                    map.put("resultType","Active Clients");
+                    map.put("resultType", "Active Clients");
                     break;
                 case 4:
-                    map.put("resultType","Under Contract");
+                    map.put("resultType", "Under Contract");
                     break;
                 case 5:
-                    map.put("resultType","Closed Leads");
+                    map.put("resultType", "Closed Leads");
                     break;
             }
-
-            switchActivityWithIntentString(getActivity(), AllLeadsActivity.class,(HashMap<String, String>) map);
+            switchActivityWithIntentString(getActivity(), AllLeadsActivity.class, (HashMap<String, String>) map);
 
             return Unit.INSTANCE;
         });
-
-
     }
 
     @Override
@@ -251,7 +244,6 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         setHasOptionsMenu(true);
     }
 
-
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
@@ -259,6 +251,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         getActivity().getMenuInflater().inflate(R.menu.home, menu);
         menu.findItem(R.id.action_search).setVisible(false);
         menu.findItem(R.id.action_notify).setVisible(false);
+        menu.findItem(R.id.action_clear).setVisible(false);
         menu.findItem(R.id.action_add).setVisible(true);
     }
 
@@ -269,12 +262,10 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
             case R.id.tvFilter:
 
-                Intent i = new Intent(getActivity(),AddFiltersActivity.class);
-                startActivityForResult(i,05);
+                Intent i = new Intent(getActivity(), AddFiltersActivity.class);
+                startActivityForResult(i, 05);
                 //switchActivity(getActivity(), AddFiltersActivity.class);
-
                 break;
-
         }
     }
 
@@ -282,12 +273,8 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode ==05)
-        {
-
-
-
+        if (requestCode == 05) {
+            callGetLeadCounts(data);
         }
-
     }
 }

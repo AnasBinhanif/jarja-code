@@ -96,7 +96,6 @@ public class MultiSelectDialog extends AppCompatDialogFragment implements Search
             }
         });
 
-
         return dialog;
     }
 
@@ -198,8 +197,6 @@ public class MultiSelectDialog extends AppCompatDialogFragment implements Search
                 filteredModelList.add(model);
             }
         }
-
-
         return filteredModelList;
     }
 

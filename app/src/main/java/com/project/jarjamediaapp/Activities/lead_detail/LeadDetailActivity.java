@@ -684,8 +684,12 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         }
 
         if (transactionTwoListModel != null) {
+
+            bi.tvStep2.setText(transactionTwoListModel.get(transactionTwoListModel.size() - 1).currentStage);
+            bi.tvDate2.setText(transactionTwoListModel.get(transactionTwoListModel.size() - 1).date);
+
             currentStage2 = transactionTwoListModel.get(transactionTwoListModel.size() - 1).currentStage;
-            transLeadID2 = transactionTwoListModel.get(transactionOneListModel.size() - 1).encrypted_LeadDetailID;
+            transLeadID2 = transactionTwoListModel.get(transactionTwoListModel.size() - 1).encrypted_LeadDetailID;
         }
 
     }

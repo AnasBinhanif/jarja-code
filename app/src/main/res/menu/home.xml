@@ -22,5 +22,11 @@
         android:visible="false"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/action_clear"
+        android:title="@string/clear"
+        android:visible="false"
+        app:showAsAction="always" />
+
 
 </menu>
