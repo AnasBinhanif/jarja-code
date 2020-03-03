@@ -2,43 +2,59 @@ package com.project.jarjamediaapp.Activities.calendar;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioGroup;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Activities.add_calendar_task.AddCalendarTaskActivity;
+import com.project.jarjamediaapp.Activities.calendarDetail.CalendarDetailActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.CustomAdapter.SwipeCalendarEventsRecyclerAdapter;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.EventDecorator;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
-import com.project.jarjamediaapp.customCalendar.interfaces.OnCalendarScrolledListener;
 import com.project.jarjamediaapp.databinding.ActivityCalendarBinding;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Response;
 
-public class CalendarActivity extends BaseActivity implements View.OnClickListener, CalendarContract.View, OnCalendarScrolledListener {
+public class CalendarActivity extends BaseActivity implements View.OnClickListener, CalendarContract.View {
 
     ActivityCalendarBinding bi;
     Context context = CalendarActivity.this;
     CalendarPresenter presenter;
-    MonthYearPickerDialogFragment dialogFragment;
     Calendar calendar;
-    int yearSelected;
-    int monthSelected;
-    String previewMonth = "", previewYear = "";
+    int yearSelected, monthSelected, daySelected;
+    SwipeCalendarEventsRecyclerAdapter swipeCalendarEventsRecyclerAdapter;
+    List<CalendarModel.Data> dataList;
+    ArrayList<Integer> markedDates;
+    ArrayList<CalendarLabel> markedDatesFormatter;
+    ArrayList<CalendarModel.Data> dataArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +71,6 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View view) {
 
         int id = view.getId();
-        switch (id) {
-
-            case R.id.tvMonthYear: {
-                dialogFragment.show(getSupportFragmentManager(), null);
-            }
-            break;
-
-        }
 
     }
 
@@ -71,30 +79,57 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         //Set default values
         calendar = Calendar.getInstance();
         yearSelected = calendar.get(Calendar.YEAR);
-        monthSelected = calendar.get(Calendar.MONTH);
-        getMonth(monthSelected);
-        bi.tvMonthYear.setText(previewMonth + " " + yearSelected);
+        monthSelected = (calendar.get(Calendar.MONTH) + 1);
+        daySelected = calendar.get(Calendar.DAY_OF_MONTH);
+        bi.calendarView.setSelectedDate(CalendarDay.from(yearSelected, (monthSelected - 1), daySelected));
 
-        dialogFragment = MonthYearPickerDialogFragment.getInstance(monthSelected, yearSelected);
-
-        dialogFragment.setOnDateSetListener((year, monthOfYear) -> {
-            // do something
-            monthSelected = monthOfYear;
-            yearSelected = year;
-            getMonth(monthOfYear);
-            bi.tvMonthYear.setText(previewMonth + " " + year);
-            bi.activityMainViewCustomCalendar.updateCalendarView(year, monthOfYear, 1);
-
-        });
+        String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
+        String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
+        presenter.getCalendarEvents("Ma6juBsCigs=", month, year);
 
     }
 
     @Override
     public void initViews() {
 
-        bi.tvMonthYear.setOnClickListener(this);
-        bi.activityMainViewCustomCalendar.setOnPageScrolled(this);
         showMonthYearPicker();
+        bi.calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
+            @Override
+            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+
+                monthSelected = (date.getMonth() + 1);
+                yearSelected = date.getYear();
+                String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
+                String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
+                presenter.getCalendarEvents("Ma6juBsCigs=", month, year);
+
+            }
+        });
+        bi.calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+
+                filterDateData(date.getDay());
+
+            }
+        });
+
+    }
+
+    private void filterDateData(int day) {
+
+        dataArrayList = new ArrayList<>();
+        for (int i = 0; i < dataList.size(); i++) {
+            int _day = markedDates.get(i);
+            if (day == _day) {
+                dataArrayList.add(dataList.get(i));
+            }
+        }
+        if (dataArrayList.size() > 0) {
+            context.startActivity(new Intent(context, CalendarDetailActivity.class).putExtra("listData", (Serializable) dataArrayList));
+        } else {
+            ToastUtils.showToastLong(context, "No data found");
+        }
 
     }
 
@@ -107,20 +142,29 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void updateUIonFalse(String message) {
 
-        ToastUtils.showToastLong(context, message);
+        if (message.contains("Authorization has been denied for this request")) {
+            ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+            logout();
+        } else {
+            bi.rvEvents.setVisibility(View.GONE);
+            bi.tvMessage.setVisibility(View.VISIBLE);
+        }
 
     }
 
     @Override
     public void updateUIonError(String error) {
 
-        ToastUtils.showToastLong(context, error);
+        bi.rvEvents.setVisibility(View.GONE);
+        bi.tvMessage.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void updateUIonFailure() {
 
-        ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+        bi.rvEvents.setVisibility(View.GONE);
+        bi.tvMessage.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -160,70 +204,6 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
     }
 
-    @Override
-    public void OnPageScrolled(ViewPager viewPager, int pos, String month) {
-
-        bi.tvMonthYear.setText(month);
-
-    }
-
-    private void getMonth(int month) {
-
-        switch (month) {
-            case 0: {
-                previewMonth = "January";
-            }
-            break;
-            case 1: {
-                previewMonth = "February";
-            }
-            break;
-            case 2: {
-                previewMonth = "March";
-            }
-            break;
-            case 3: {
-                previewMonth = "April";
-            }
-            break;
-            case 4: {
-                previewMonth = "May";
-            }
-            break;
-            case 5: {
-                previewMonth = "June";
-            }
-            break;
-            case 6: {
-                previewMonth = "July";
-            }
-            break;
-            case 7: {
-                previewMonth = "August";
-            }
-            break;
-            case 8: {
-                previewMonth = "September";
-            }
-            break;
-            case 9: {
-                previewMonth = "October";
-            }
-            break;
-            case 10: {
-                previewMonth = "November";
-            }
-            break;
-            case 11: {
-                previewMonth = "December";
-            }
-            break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + month);
-
-        }
-    }
-
     private void showDialogForAppointment(Context context) {
 
         final Dialog dialog = new Dialog(context, R.style.Dialog);
@@ -237,7 +217,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
                 dialog.dismiss();
                 Map<String, String> map = new HashMap<>();
-                map.put("from","3");
+                map.put("from", "3");
                 switchActivityWithIntentString(AddAppointmentActivity.class, (HashMap<String, String>) map);
 
             }
@@ -257,9 +237,71 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void updateUIList() {
+    public void updateUIList(CalendarModel response) {
 
+        if (response.data.size() > 0) {
 
+            dataList = response.getData();
+            swipeCalendarEventsRecyclerAdapter = new SwipeCalendarEventsRecyclerAdapter(context, response.getData());
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.rvEvents.getContext(), 1);
+            bi.rvEvents.setLayoutManager(mLayoutManager);
+            bi.rvEvents.setItemAnimator(new DefaultItemAnimator());
+            bi.rvEvents.addItemDecoration(dividerItemDecoration);
+            bi.rvEvents.setAdapter(swipeCalendarEventsRecyclerAdapter);
+            bi.rvEvents.setVisibility(View.VISIBLE);
+            bi.tvMessage.setVisibility(View.GONE);
+            getMarkedEvents();
+
+        } else {
+
+            bi.rvEvents.setVisibility(View.GONE);
+            bi.tvMessage.setVisibility(View.VISIBLE);
+
+        }
 
     }
+
+    private void getMarkedEvents() {
+
+        markedDates = new ArrayList<>();
+        markedDatesFormatter = new ArrayList<>();
+
+        if (dataList != null && dataList.size() > 0) {
+            for (int i = 0; i < dataList.size(); i++) {
+                String[] formatString = dataList.get(i).getStart().split(" ");
+                markedDates.add(Integer.valueOf(GH.getInstance().formatter(formatString[0], "d", "mm/dd/yyyy")));
+
+            }
+        }
+
+        for (int i = 0; i < markedDates.size(); i++) {
+
+            int count = Collections.frequency(markedDates, markedDates.get(i));
+            if (count > 0) {
+                markedDatesFormatter.add(new CalendarLabel(markedDates.get(i), count));
+            }
+
+        }
+
+        LinkedHashSet<CalendarLabel> hashSet = new LinkedHashSet<CalendarLabel>(markedDatesFormatter);
+        ArrayList<CalendarLabel> listWithoutDuplicates = new ArrayList<>(hashSet);
+        markedDatesFormatter.clear();
+        markedDatesFormatter.addAll(listWithoutDuplicates);
+
+        List<CalendarDay> list = new ArrayList<CalendarDay>();
+        Calendar calendar = Calendar.getInstance();
+
+        for (int i = 0; i < markedDatesFormatter.size(); i++) {
+
+            calendar.set(yearSelected, (monthSelected - 1), markedDatesFormatter.get(i).getDateFormat());
+            CalendarDay calendarDay = CalendarDay.from(calendar);
+            list.add(calendarDay);
+        }
+
+        bi.calendarView.invalidateDecorators();
+        bi.calendarView.addDecorators(new EventDecorator(R.color.colorPrimary, list));
+
+    }
+
 }

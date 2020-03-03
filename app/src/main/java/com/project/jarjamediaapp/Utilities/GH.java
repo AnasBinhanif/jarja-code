@@ -147,4 +147,19 @@ public class GH {
         return extension;
     }
 
+    public String formatter(String dateString, String newFormat, String oldFormat) {
+
+        Date date;
+        String formattedDate = "";
+        try {
+            date = new SimpleDateFormat(oldFormat, Locale.getDefault()).parse(dateString);
+            formattedDate = new SimpleDateFormat(newFormat, Locale.getDefault()).format(date);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return formattedDate;
+    }
+
 }

@@ -28,6 +28,8 @@ public interface LeadDetailContract {
 
         void updateUIAfterFileUpload(Response<UploadImageModel> response);
 
+        void updateUIMessageSent(Response<BaseResponse> response);
+
         void updateUIonFalse(String message);
 
         void updateUIonError(String error);
@@ -37,6 +39,7 @@ public interface LeadDetailContract {
         void showProgressBar();
 
         void hideProgressBar();
+
     }
 
     /*
@@ -57,9 +60,11 @@ public interface LeadDetailContract {
 
         void getLeadRecipient(String leadId);
 
-        void sendEmailContent(String from , String[] to ,String cc , String bcc, String subject,String body ,String fileUrl,String leadId);
+        void sendEmailContent(String from, String[] to, String cc, String bcc, String subject, String body, String fileUrl, String leadId);
 
-        void uploadFile(MultipartBody.Part file);
+        void uploadFile(MultipartBody.Part file, String emailFrom);
+
+        void sendMessageContent(String fromPhoneNumber, String message, String leadId);
 
     }
 

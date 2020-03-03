@@ -1,12 +1,10 @@
-package com.project.jarjamediaapp.Activities.calendar;
+package com.project.jarjamediaapp.Activities.calendarDetail;
 
 import com.project.jarjamediaapp.Base.BaseContract;
 
-public interface CalendarContract {
+public interface CalendarDetailContract {
 
     interface View extends BaseContract.View {
-
-        void updateUIList(CalendarModel calendarModel);
 
 
     }
@@ -17,9 +15,6 @@ public interface CalendarContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void getCalendarEvents(String agentIdFromLogin, String month, String year);
-
-        void initScreen();
 
     }
 

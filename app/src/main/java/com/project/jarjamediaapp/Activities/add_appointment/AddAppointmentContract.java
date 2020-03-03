@@ -36,7 +36,7 @@ public interface AddAppointmentContract {
         void addAppointment(String leadStringID, String agentsStringIDs, String leadAppointmentID, String eventTitle, String location,
                             String desc, String isAppointmentFixed, String isAppointmentAttend, String appointmentDate, String datedFrom,
                             String datedTo, String isAllDay, String interval, String isSend, String viaReminder, String agentIds,
-                            String orderBy,String startTime, String endTime, String isCompleted, String fromId);
+                            String orderBy,String startTime, String endTime, String isCompleted, String fromId,String calendarId);
 
         void initScreen();
 

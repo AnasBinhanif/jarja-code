@@ -2,6 +2,8 @@ package com.project.jarjamediaapp.Networking;
 
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
+import com.project.jarjamediaapp.Activities.calendar.CalendarModel;
+import com.project.jarjamediaapp.Activities.calendarDetail.CalendarDetailModel;
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
 import com.project.jarjamediaapp.Activities.lead_detail.LeadDetailModel;
 import com.project.jarjamediaapp.Activities.listing_info.ListingInfoModel;
@@ -388,7 +390,9 @@ public interface ApiMethods {
             @Field("orderBy") String orderBy,
             @Field("startTime") String startTime,
             @Field("endTime") String endTime,
-            @Field("isCompleted") String isCompleted
+            @Field("isCompleted") String isCompleted,
+            @Field("calendarType") String calendarType
+
     );
 
     @FormUrlEncoded
@@ -618,9 +622,9 @@ public interface ApiMethods {
     @Multipart
     @POST("Lead/UploadEmailDoc")
     Call<UploadImageModel> uploadEmailAttachedFile(@Header("Authorization") String authorization,
-                                              @Part MultipartBody.Part file,
-                                              @Query("image") String image);
-
+                                                   @Part MultipartBody.Part file,
+                                                   @Query("image") String image,
+                                                   @Query("EmailFrom") String emailFrom);
 
     @FormUrlEncoded
     @POST("Lead/AddOpenHouse")
@@ -688,5 +692,93 @@ public interface ApiMethods {
                                     @Field("lead_ID") String leadId,
                                     @Field("attachFileLink") String fileUrl,
                                     @Field("lead_EncryptedID") String lead_EncryptedID);
+
+    @FormUrlEncoded
+    @POST("Lead/SendLeadMessage")
+    Call<BaseResponse> sendMessage(@Header("Authorization") String authorization,
+                                   @Field("fromNumber") String fromNumber,
+                                   @Field("message") String message,
+                                   @Field("lead_EncryptedID") String leadId);
+
+    @GET("Calender/GetCalendarData")
+    Call<CalendarModel> getCalendarEvents(@Header("Authorization") String authorization,
+                                          @Query("Encrypted_AgentIDs") String encryptedAgentId,
+                                          @Query("CalendarId") String calendarId,
+                                          @Query("month") String month,
+                                          @Query("year") String year);
+
+    @GET("Calender/GetCalendartAppointmentPreview")
+    Call<CalendarDetailModel> getCalendarAppointmentDetail(@Header("Authorization") String authorization,
+                                                           @Query("CalendarId") String calendarId);
+
+    @GET("Calender/GetCalendarTaskPreview")
+    Call<CalendarDetailModel> getCalendarTaskDetail(@Header("Authorization") String authorization,
+                                                    @Query("CalendarId") String calendarId,
+                                                    @Query("dtStart") String dtStart);
+
+    @POST("Calender/DeleteCalendarAppointment")
+    Call<BaseResponse> deleteCalendarAppointment(@Header("Authorization") String authorization,
+                                                 @Query("CalendarId") String calendarId);
+
+    @POST("Calender/DeleteCalendarTask")
+    Call<BaseResponse> deleteCalendarTask(@Header("Authorization") String authorization,
+                                          @Query("CalendarId") String calendarId);
+
+    @FormUrlEncoded
+    @POST("Calender/AddAppoinmentTaskCalender")
+    Call<BaseResponse> addAppointmentByCalendar(
+            @Header("Authorization") String authorization,
+            @Field("leadStringID") String leadStringID,
+            @Field("agentsStringIDs") String agentsStringIDs,
+            @Field("leadAppoinmentID") String leadAppointmentID,
+            @Field("eventTitle") String eventTitle,
+            @Field("location") String location,
+            @Field("desc") String desc,
+            @Field("isAppointmentFixed") String isAppointmentFixed,
+            @Field("isAppointmentAttend") String isAppointmentAttend,
+            @Field("appointmentDate") String appointmentDate,
+            @Field("datedFrom") String datedFrom,
+            @Field("datedTo") String datedTo,
+            @Field("isAllDay") String isAllDay,
+            @Field("interval") String interval,
+            @Field("isSend") String isSend,
+            @Field("viaReminder") String viaReminder,
+            @Field("agentIds") String agentIds,
+            @Field("orderBy") String orderBy,
+            @Field("startTime") String startTime,
+            @Field("endTime") String endTime,
+            @Field("isCompleted") String isCompleted,
+            @Field("calendarType") String calendarType,
+            @Field("isGmailApptActive") String isGmailAppActive,
+            @Field("gmailCalenderId") String gmailCalendarId);
+
+    @FormUrlEncoded
+    @POST("Calender/AddAppoinmentTaskCalender")
+    Call<BaseResponse> updateAppointmentTaskByCalendar(
+            @Header("Authorization") String authorization,
+            @Field("leadStringID") String leadStringID,
+            @Field("agentsStringIDs") String agentsStringIDs,
+            @Field("leadAppoinmentID") String leadAppointmentID,
+            @Field("eventTitle") String eventTitle,
+            @Field("location") String location,
+            @Field("desc") String desc,
+            @Field("isAppointmentFixed") String isAppointmentFixed,
+            @Field("isAppointmentAttend") String isAppointmentAttend,
+            @Field("appointmentDate") String appointmentDate,
+            @Field("datedFrom") String datedFrom,
+            @Field("datedTo") String datedTo,
+            @Field("isAllDay") String isAllDay,
+            @Field("interval") String interval,
+            @Field("isSend") String isSend,
+            @Field("viaReminder") String viaReminder,
+            @Field("agentIds") String agentIds,
+            @Field("orderBy") String orderBy,
+            @Field("startTime") String startTime,
+            @Field("endTime") String endTime,
+            @Field("isCompleted") String isCompleted,
+            @Field("calendarType") String calendarType,
+            @Field("isGmailApptActive") String isGmailAppActive,
+            @Field("gmailCalenderId") String gmailCalendarId);
+
 
 }

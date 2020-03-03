@@ -189,21 +189,38 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
     public void addAppointment(String leadStringID, String agentsStringIDs, String leadAppointmentID, String eventTitle, String location,
                                String desc, String isAppointmentFixed, String isAppointmentAttend, String appointmentDate, String datedFrom,
                                String datedTo, String isAllDay, String interval, String isSend, String viaReminder, String agentIds, String orderBy,
-                               String startTime, String endTime, String isCompleted, String fromId) {
+                               String startTime, String endTime, String isCompleted, String fromId,String calendarId) {
 
         _view.showProgressBar();
 
         if (fromId.equalsIgnoreCase("4") || fromId.equalsIgnoreCase("2")) {
 
+            // update appointment by dashboard or lead id
+
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateAppointment(GH.getInstance().getAuthorization(),
                     leadStringID, agentsStringIDs, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
                     datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted);
 
+        } else if (fromId.equalsIgnoreCase("6")) {
+
+            // for update calendar appointment
+            _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),
+                    leadStringID, agentsStringIDs, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
+                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted,"Event","",calendarId);
+
+        } else if (fromId.equalsIgnoreCase("3")) {
+
+            // for add calendar appointment
+            _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addAppointmentByCalendar(GH.getInstance().getAuthorization(),
+                    leadStringID, agentsStringIDs, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
+                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted,"Event","",calendarId);
+
         } else {
 
+            // add appointment by dashboard or lead id
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddAppointment(GH.getInstance().getAuthorization(),
                     leadStringID, agentsStringIDs, "0", eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
-                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted);
+                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted, "");
         }
 
         _callAddAppointment.enqueue(new Callback<BaseResponse>() {

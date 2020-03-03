@@ -149,7 +149,7 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
         GH.getInstance().ShowProgressDialog(context);
         Call<BaseResponse> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).DeleteLeadTag(GH.getInstance().getAuthorization(),
-               leadID, encryptedNoteID);
+                leadID, encryptedNoteID);
         _callToday.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {

@@ -17,6 +17,7 @@
     <!--- Add Appointment Activity -->
     <string name="add_appointment">Add Appointment</string>
     <string name="edit_appointment">Edit Appointment</string>
+    <string name="edit">Edit</string>
     <string name="name_of_contact">Name Of Contact</string>
     <string name="agent">Agent</string>
     <string name="event_title">Event Title</string>
@@ -171,6 +172,8 @@
     <!--- Side Menu Items -->
     <string name="dashboard">Dashboard</string>
     <string name="leads">Leads</string>
+    <string name="lead">Lead</string>
+    <string name="agents">Agent(s)</string>
     <string name="calendar">Calendar</string>
     <string name="openHouses">Open Houses</string>
     <string name="task">Task</string>
@@ -316,5 +319,7 @@
     <string name="error_subject">Please enter subject</string>
     <string name="error_message">Please enter message</string>
     <string name="recipient">Select Recipient</string>
+
+    <string name="delete">Delete</string>
 
 </resources>

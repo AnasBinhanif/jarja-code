@@ -229,7 +229,7 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
 
         _view.showProgressBar();
         call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).composeEmail(GH.getInstance().getAuthorization(), from, to,
-                cc, bcc, subject, body, "0", fileUrl,leadId);
+                cc, bcc, subject, body, "0", fileUrl, leadId);
         call.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
@@ -264,10 +264,11 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
     }
 
     @Override
-    public void uploadFile(MultipartBody.Part file) {
+    public void uploadFile(MultipartBody.Part file, String emailFrom) {
 
         _view.showProgressBar();
-        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).uploadEmailAttachedFile(GH.getInstance().getAuthorization(), file, "image");
+        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).uploadEmailAttachedFile(GH.getInstance().getAuthorization(),
+                file, "image", emailFrom);
 
         _cCall.enqueue(new Callback<UploadImageModel>() {
             @Override
@@ -297,6 +298,46 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
                 _view.updateUIonFailure();
             }
         });
+
+    }
+
+    @Override
+    public void sendMessageContent(String fromPhoneNumber, String message, String leadId) {
+
+        _view.showProgressBar();
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).sendMessage(GH.getInstance().getAuthorization(), fromPhoneNumber,message,leadId);
+        call.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse baseResponse = response.body();
+                    if (baseResponse.getStatus().equals("Success")) {
+
+                        _view.updateUIMessageSent(response);
+
+                    } else {
+
+                        _view.updateUIonFalse(baseResponse.getMessage());
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+
 
     }
 

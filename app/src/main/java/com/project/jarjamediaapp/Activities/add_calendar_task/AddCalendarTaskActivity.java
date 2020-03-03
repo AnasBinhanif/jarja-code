@@ -19,11 +19,8 @@ import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddCalendarTaskBinding;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import retrofit2.Response;
 
@@ -33,7 +30,8 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     Context context = AddCalendarTaskActivity.this;
     AddCalendarTaskPresenter presenter;
     String startDate, startTime, title, description, allDay, markComplete;
-
+    boolean isEdit;
+    String calendarId = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,16 +44,16 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     }
 
     @Override
-    public void setupUI(View view) {
-        super.setupUI(view);
-    }
-
-    @Override
     public void initViews() {
+
+        isEdit = getIntent().getBooleanExtra("isEdit", false);
+        // receive data here from intent
+
     }
 
     @Override
     public void onClick(View view) {
+
         super.onClick(view);
 
         switch (view.getId()) {
@@ -69,22 +67,20 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 callAddCalendarTask();
                 break;
             case R.id.btnCancel:
+                finish();
                 break;
             case R.id.cbAllDay:
                 allDay();
-                break;
-            case R.id.cbMarkComplete:
-                //
                 break;
         }
     }
 
     private void allDay() {
-        if (bi.cbAllDay.isChecked()) {
 
+        if (bi.cbAllDay.isChecked()) {
+            startTime = "00:00:00.000Z";
             bi.tvStartTime.setVisibility(View.GONE);
         } else {
-
             bi.tvStartTime.setVisibility(View.VISIBLE);
         }
     }
@@ -101,17 +97,14 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     private void showDateDialog(TextView textView) {
 
         final Calendar newCalendar = Calendar.getInstance();
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
         DatePickerDialog StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
 
-
-                startDate = dateFormatter.format(newDate.getTime());
-
-                textView.setText(dateFormatter2.format(newDate.getTime()));
+                int month = monthOfYear + 1;
+                startDate = year + "-" + month + "-" + dayOfMonth;
+                textView.setText(dayOfMonth + "-" + month + "-" + year);
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -128,19 +121,12 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 String time = "";
-                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:m:ss");
-                startTime = selectedHour + ":" + selectedMinute + ":00";
-
-                Date d = null;
-                try {
-                    d = dateFormat.parse(startTime);
-                    time = DateFormat.getTimeInstance(DateFormat.SHORT).format(d);
-                } catch (ParseException e) {
-
-                    e.printStackTrace();
-                }
-
+                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.sss'Z'");
+                time = selectedHour + ":" + selectedMinute + ":00";
                 textView.setText(time);
+                startTime = selectedHour + ":" + selectedMinute + ":" + "00.000Z";
+
+
             }
         }, hour, minute, false);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
@@ -155,8 +141,15 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         allDay = bi.cbAllDay.isChecked() ? "true" : "false";
         markComplete = bi.cbAllDay.isChecked() ? "true" : "false";
 
-        if (isValidate())
-            presenter.addCalendarTask(title, description, startDate, startTime, allDay, markComplete);
+        startDate = GH.getInstance().formatApiDateTime(startDate + "'T'" + startTime);
+
+        if (isValidate()) {
+            if (isEdit) {
+                presenter.updateCalendarTask(title, description, startDate, allDay, markComplete,calendarId);
+            } else {
+                presenter.addCalendarTask(title, description, startDate, allDay, markComplete);
+            }
+        }
 
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,32 +14,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fillViewport="true">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mcv_selectionColor="@color/colorYellow"
+                    app:mcv_showOtherDates="all" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvMonthYear"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_arrow_drop_down_black_24dp"
-                    android:includeFontPadding="false"
-                    android:padding="@dimen/_15sdp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/_17sdp"
-                    android:textStyle="bold" />
-
-                <com.project.jarjamediaapp.customCalendar.views.CustomCalendarView
-                    android:id="@+id/activity_main_view_custom_calendar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="visible" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -55,14 +52,29 @@
                     android:id="@+id/rvEvents"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_10sdp" />
+                    android:layout_margin="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tvMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:padding="@dimen/_10sdp"
+                        android:text="@string/no_records"
+                        android:textSize="@dimen/_16sdp"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 
-        </ScrollView>
-
+        </LinearLayout>
 
     </LinearLayout>
-
 
 </layout>

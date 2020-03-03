@@ -734,11 +734,10 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
         if (isValidate()) {
             if (multipartFile != null) {
-                presenter.uploadFile(multipartFile);
+                presenter.uploadFile(multipartFile,_from);
             } else {
                 presenter.sendEmailContent(_from, _to, cc, bcc, subject, body, documentUrl, leadID);
             }
-
         }
 
     }
@@ -785,6 +784,14 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         fileUrl = response.body().getData();
         callComposeEmail();
         multipartFile = null;
+
+    }
+
+    @Override
+    public void updateUIMessageSent(Response<BaseResponse> response) {
+
+        mDialog.dismiss();
+        ToastUtils.showToastLong(context, response.body().getMessage());
 
     }
 
@@ -1054,5 +1061,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         }
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
+
+
+
 
 }
