@@ -753,7 +753,7 @@ public interface ApiMethods {
             @Field("gmailCalenderId") String gmailCalendarId);
 
     @FormUrlEncoded
-    @POST("Calender/AddAppoinmentTaskCalender")
+    @POST("Calender/EditAppoinmentTaskCalender")
     Call<BaseResponse> updateAppointmentTaskByCalendar(
             @Header("Authorization") String authorization,
             @Field("leadStringID") String leadStringID,

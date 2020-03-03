@@ -32,6 +32,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     String startDate, startTime, title, description, allDay, markComplete;
     boolean isEdit;
     String calendarId = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +49,11 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         isEdit = getIntent().getBooleanExtra("isEdit", false);
         // receive data here from intent
+        bi.tvStartDate.setOnClickListener(this);
+        bi.tvStartTime.setOnClickListener(this);
+        bi.btnSave.setOnClickListener(this);
+        bi.btnCancel.setOnClickListener(this);
+        bi.cbAllDay.setOnClickListener(this);
 
     }
 
@@ -110,6 +116,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
         StartTime.show();
+
     }
 
     private void showTimeDialog(TextView textView) {
@@ -131,21 +138,21 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         }, hour, minute, false);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
+
     }
 
     private void callAddCalendarTask() {
 
-        //  startDate, startTime
         title = bi.atvEventTitle.getText().toString();
         description = bi.atvDescription.getText().toString() + "";
         allDay = bi.cbAllDay.isChecked() ? "true" : "false";
         markComplete = bi.cbAllDay.isChecked() ? "true" : "false";
 
-        startDate = GH.getInstance().formatApiDateTime(startDate + "'T'" + startTime);
+        startDate = GH.getInstance().formatApiDateTime(startDate + "T" + startTime);
 
         if (isValidate()) {
             if (isEdit) {
-                presenter.updateCalendarTask(title, description, startDate, allDay, markComplete,calendarId);
+                presenter.updateCalendarTask(title, description, startDate, allDay, markComplete, calendarId);
             } else {
                 presenter.addCalendarTask(title, description, startDate, allDay, markComplete);
             }

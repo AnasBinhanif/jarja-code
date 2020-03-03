@@ -79,7 +79,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     boolean isEdit;
     String fromId = "";
     ArrayList<String> arrayListReminderValue, arrayListReminderText;
-    CalendarDetailModel.CalendarData calendarData;
+    CalendarDetailModel.Data.CalendarData calendarData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,12 +194,11 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
             break;
 
-
         }
 
     }
 
-    private void prePopulateData(CalendarDetailModel.CalendarData modelData) {
+    private void prePopulateData(CalendarDetailModel.Data.CalendarData modelData) {
 
         leadAppointmentId = modelData.getLeadAppoinmentID();
         leadId = modelData.getLeadID();
@@ -361,6 +360,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         if (bi.cbAllDay.isChecked()) {
 
+            startTime = "00:00:00.000Z";
+            endTime = "00:00:00.000Z";
             bi.lblStartTime.setVisibility(View.GONE);
             bi.lblEndTime.setVisibility(View.GONE);
             bi.tvEndTime.setVisibility(View.GONE);
@@ -625,12 +626,17 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         String appointmentDate = "";
         String isSend = "false";
 
-        if (isValidate()) {
-            // Methods for Add Update are different in presenter
-            presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend,
-                    appointmentDate, datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo,
-                    isCompleted, fromId,calendarData.getCalendarId());
+        try {
+            if (isValidate()) {
+                // Methods for Add Update are different in presenter
+                presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend,
+                        appointmentDate, datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo,
+                        isCompleted, fromId,calendarData!= null ?calendarData.getCalendarId():"");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
     }
 
     private boolean isValidate() {

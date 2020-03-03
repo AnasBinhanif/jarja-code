@@ -179,6 +179,7 @@
     <string name="task">Task</string>
     <string name="logout">Logout</string>
 
+
     <!-- Login Screen -->
     <string name="footer_text">Jarja Media 2020 , All Rights Reserved.</string>
     <string name="header_text">Marketing at the speed of Today</string>
@@ -321,5 +322,6 @@
     <string name="recipient">Select Recipient</string>
 
     <string name="delete">Delete</string>
-
+    <string name="total">Total Attendees</string>
+    <string name="view_e_detail">View Event Details</string>
 </resources>

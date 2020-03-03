@@ -3,6 +3,7 @@ package com.project.jarjamediaapp.CustomAdapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class SwipeCalendarEventsRecyclerAdapter extends RecyclerView.Adapter {
+public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapter {
 
     private LayoutInflater mInflater;
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
@@ -46,7 +47,7 @@ public class SwipeCalendarEventsRecyclerAdapter extends RecyclerView.Adapter {
     Call<CalendarDetailModel> _call;
     Call<BaseResponse> call;
 
-    public SwipeCalendarEventsRecyclerAdapter(Context context, List<CalendarModel.Data> data) {
+    public SwipeCalendarAppointmentRecyclerAdapter(Context context, List<CalendarModel.Data> data) {
 
         mData = data;
         this.context = context;
@@ -184,7 +185,12 @@ public class SwipeCalendarEventsRecyclerAdapter extends RecyclerView.Adapter {
 
                     CalendarDetailModel calendarDetailModel = response.body();
                     if (calendarDetailModel.getStatus().equals("Success")) {
-                        showDialogForEditView(context, calendarDetailModel.getCalendarData());
+
+                        if (type != null && !type.equalsIgnoreCase("") && type.equalsIgnoreCase("Task")) {
+                            showDialogForCalendarTaskDetail(context, calendarDetailModel.getData().getList());
+                        } else {
+                            showDialogForCalendarAppointmentDetail(context, calendarDetailModel.getData().getCalendarData());
+                        }
                     } else {
                         ToastUtils.showToast(context, calendarDetailModel.getMessage());
                     }
@@ -240,11 +246,11 @@ public class SwipeCalendarEventsRecyclerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void showDialogForEditView(Context context, CalendarDetailModel.CalendarData calendarDetailModel) {
+    private void showDialogForCalendarAppointmentDetail(Context context, CalendarDetailModel.Data.CalendarData calendarDetailModel) {
 
         final Dialog dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
-        dialog.setContentView(R.layout.dialog_view_calendar_detail);
+        dialog.setContentView(R.layout.dialog_view_calendar_appointment_detail);
 
         TextView tvEventTitle, tvLead, tvAgents, tvDate, tvTime, tvLocation, tvDetail, tvNotes, tvClose;
 
@@ -258,17 +264,22 @@ public class SwipeCalendarEventsRecyclerAdapter extends RecyclerView.Adapter {
         tvNotes = dialog.findViewById(R.id.tvNotes);
 
         try {
+
+            String[] startTime = calendarDetailModel.getDatedFrom().split("T");
+            String[] endTime = calendarDetailModel.getDatedTo().split("T");
             tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
             if (calendarDetailModel.isAllDay) {
                 tvTime.setText("All Day");
             } else {
-                tvLocation.setText(calendarDetailModel.getLocation() != null ? calendarDetailModel.getLocation() : "");
-                tvNotes.setText(calendarDetailModel.getDescription() != null ? calendarDetailModel.getDescription() : "");
-                String[] startTime = calendarDetailModel.getStartTime().split("T");
-                String[] endTime = calendarDetailModel.getEndTime().split("T");
                 tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss") + " - " + GH.getInstance().formatter(endTime[1], "hh:mm:ss a", "HH:mm:ss"));
-                tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd"));
             }
+            tvLocation.setText(calendarDetailModel.getLocation() != null ? calendarDetailModel.getLocation() : "");
+            tvNotes.setText(calendarDetailModel.getDescription() != null ? calendarDetailModel.getDescription() : "");
+            tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd"));
+            tvLead.setText(calendarDetailModel.getLeadName() != null ? calendarDetailModel.getLeadName() : "");
+            tvAgents.setText(calendarDetailModel.getAgentName() != null ? calendarDetailModel.getAgentName() : "");
+            tvDetail.setText(calendarDetailModel.getDetail() != null ? calendarDetailModel.getDetail() : "");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -313,5 +324,76 @@ public class SwipeCalendarEventsRecyclerAdapter extends RecyclerView.Adapter {
 
     }
 
+    private void showDialogForCalendarTaskDetail(Context context, CalendarDetailModel.Data.CalendarData calendarDetailModel) {
+
+        final Dialog dialog = new Dialog(context, R.style.Dialog);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_view_calendar_task_detail);
+
+        TextView tvEventTitle, tvDate, tvTime, tvAttendeesCount, tvDetail, tvEventDetail, tvClose;
+
+        tvEventTitle = dialog.findViewById(R.id.tvEventTitle);
+        tvDate = dialog.findViewById(R.id.tvDate);
+        tvTime = dialog.findViewById(R.id.tvTime);
+        tvAttendeesCount = dialog.findViewById(R.id.tvAttendeesCount);
+        tvDetail = dialog.findViewById(R.id.tvDetails);
+        tvEventDetail = dialog.findViewById(R.id.tvEventDetails);
+        tvClose = dialog.findViewById(R.id.tvClose);
+
+        try {
+            tvEventDetail.setPaintFlags(tvEventDetail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            String[] startTime = calendarDetailModel.getDatedFrom().split("T");
+            String[] endTime = calendarDetailModel.getDatedTo().split("T");
+            tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
+            if (calendarDetailModel.isAllDay) {
+                tvTime.setText("All Day");
+            } else {
+                tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss") + " - " + GH.getInstance().formatter(endTime[1], "hh:mm:ss a", "HH:mm:ss"));
+            }
+            tvAttendeesCount.setText("0");
+            tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd"));
+            tvDetail.setText(calendarDetailModel.getDetail() != null ? calendarDetailModel.getDetail() : "");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Button btnCancel = dialog.findViewById(R.id.btnCancel);
+        Button btnEdit = dialog.findViewById(R.id.btnEdit);
+
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                if (calendarDetailModel.getCalendarType().equals("Event")) {
+                    // data and calendar id will be passed in intent
+                    context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                            .putExtra("from", "6")
+                            .putExtra("modelData", calendarDetailModel));
+                } else {
+                    context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
+                            .putExtra("isEdit", true)
+                            .putExtra("modelData", calendarDetailModel));
+                }
+            }
+        });
+
+        tvClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
 
 }

@@ -21,7 +21,7 @@ import com.project.jarjamediaapp.Activities.add_calendar_task.AddCalendarTaskAct
 import com.project.jarjamediaapp.Activities.calendarDetail.CalendarDetailActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
-import com.project.jarjamediaapp.CustomAdapter.SwipeCalendarEventsRecyclerAdapter;
+import com.project.jarjamediaapp.CustomAdapter.SwipeCalendarAppointmentRecyclerAdapter;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.EventDecorator;
 import com.project.jarjamediaapp.Utilities.GH;
@@ -50,7 +50,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     CalendarPresenter presenter;
     Calendar calendar;
     int yearSelected, monthSelected, daySelected;
-    SwipeCalendarEventsRecyclerAdapter swipeCalendarEventsRecyclerAdapter;
+    SwipeCalendarAppointmentRecyclerAdapter swipeCalendarAppointmentRecyclerAdapter;
     List<CalendarModel.Data> dataList;
     ArrayList<Integer> markedDates;
     ArrayList<CalendarLabel> markedDatesFormatter;
@@ -242,13 +242,13 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         if (response.data.size() > 0) {
 
             dataList = response.getData();
-            swipeCalendarEventsRecyclerAdapter = new SwipeCalendarEventsRecyclerAdapter(context, response.getData());
+            swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, response.getData());
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.rvEvents.getContext(), 1);
             bi.rvEvents.setLayoutManager(mLayoutManager);
             bi.rvEvents.setItemAnimator(new DefaultItemAnimator());
             bi.rvEvents.addItemDecoration(dividerItemDecoration);
-            bi.rvEvents.setAdapter(swipeCalendarEventsRecyclerAdapter);
+            bi.rvEvents.setAdapter(swipeCalendarAppointmentRecyclerAdapter);
             bi.rvEvents.setVisibility(View.VISIBLE);
             bi.tvMessage.setVisibility(View.GONE);
             getMarkedEvents();

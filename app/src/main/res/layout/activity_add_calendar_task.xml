@@ -36,6 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:text="@string/title"
+                    android:imeOptions="actionNext"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -47,6 +48,7 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_search"
                     android:hint="@string/event_title"
+                    android:singleLine="true"
                     android:padding="@dimen/_10sdp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_11sdp" />
@@ -68,6 +70,7 @@
                     android:background="@drawable/bg_search"
                     android:gravity="start|top"
                     android:hint="@string/description"
+                    android:imeOptions="actionDone"
                     android:inputType="textMultiLine"
                     android:lines="4"
                     android:padding="@dimen/_10sdp"
@@ -92,6 +95,7 @@
                     android:drawableEnd="@drawable/ic_calendar"
                     android:hint="@string/start_date"
                     android:padding="@dimen/_10sdp"
+                    android:focusable="false"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_11sdp" />
 
@@ -114,6 +118,7 @@
                     android:drawableEnd="@drawable/ic_calendar"
                     android:hint="@string/start_time"
                     android:padding="@dimen/_10sdp"
+                    android:focusable="false"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_11sdp" />
 
