@@ -76,7 +76,7 @@ public class GH {
 
             // 2020-02-12T11:31:00
             date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(dateString);
-            formattedDate = new SimpleDateFormat("dd/MM/YYYY", Locale.getDefault()).format(date);
+            formattedDate = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).format(date);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -123,7 +123,7 @@ public class GH {
         String formattedDate = "";
         try {
             date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'", Locale.getDefault()).parse(dateString);
-            formattedDate = new SimpleDateFormat("dd/MM/YYYY h:mm a", Locale.getDefault()).format(date);
+            formattedDate = new SimpleDateFormat("MM-dd-yyyy h:mm a", Locale.getDefault()).format(date);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

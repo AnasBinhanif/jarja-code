@@ -28,7 +28,6 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/_15sdp">
 
-
                 <Button
                     android:id="@+id/btnAdd"
                     android:layout_width="wrap_content"
@@ -59,7 +58,6 @@
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
 
-
             </LinearLayout>
 
             <TextView
@@ -81,7 +79,6 @@
                 android:visibility="gone" />
 
         </LinearLayout>
-
 
     </RelativeLayout>
 

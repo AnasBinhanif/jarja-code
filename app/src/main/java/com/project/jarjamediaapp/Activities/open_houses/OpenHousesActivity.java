@@ -376,7 +376,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     @Override
     public void updateUI(Response<BaseResponse> response) {
 
-        ToastUtils.showToastLong(context, response.body().message);
+        ToastUtils.showToastLong(context, "Open House Added Successfully");
         if (dialog != null) {
             dialog.dismiss();
         }
@@ -797,7 +797,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         try {
             final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.getDefault());
             final Date dateObj = sdf.parse(time);
-            return new SimpleDateFormat("dd/MM/yyyy  hh:mm a", Locale.getDefault()).format(dateObj);
+            return new SimpleDateFormat("MM-dd-yyyy  hh:mm a", Locale.getDefault()).format(dateObj);
 
         } catch (final ParseException e) {
             e.printStackTrace();
