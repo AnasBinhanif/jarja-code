@@ -351,7 +351,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     private void openMessageComposer(String phoneNo) {
 
-        if (phoneNo.equals("") || phoneNo.equals("null") || phoneNo == null) {
+        if ( phoneNo == null || phoneNo.equals("") || phoneNo.equals("null")) {
             ToastUtils.showToast(context, "No Primary Phone Found");
         } else {
 

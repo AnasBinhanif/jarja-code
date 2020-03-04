@@ -132,7 +132,11 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
             if (leadModel.source != null) {
                 int pos = getLeadSourceNameList.indexOf(leadModel.source);
-                bi.spnSource.setSelectedIndex(pos);
+                if (pos>=0)
+                {
+                    bi.spnSource.setSelectedIndex(pos);
+                }
+
             }
 
             if (leadModel.leadTypeID != null) {
@@ -365,7 +369,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     private void showDripDialog() {
 
         MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
-                .title("Select Drip Compaigns") //setting title for dialog
+                .title("Select Drip Campaigns") //setting title for dialog
                 .titleSize(25)
                 .positiveText("Done")
                 .negativeText("Cancel")

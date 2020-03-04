@@ -30,7 +30,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
 
     private LayoutInflater mInflater;
@@ -39,7 +38,6 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
     int pos;
     boolean isEditByLead;
     List<GetAppointmentsModel.Data> mData;
-
 
     public SwipeAppointPreviousRecyclerAdapter(Context context, List<GetAppointmentsModel.Data> data, boolean isEditByLead) {
 
@@ -154,32 +152,24 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
                 markAsRead(leadID + ",", "true");
             });
 
-            tvEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    pos = getAdapterPosition();
-
-                    String leadID = mData.get(pos).leadsData.leadID;
-                    GetAppointmentsModel.Data modelData = mData.get(pos);
-                    if (isEditByLead) {
-
-                        swipeLayout.close(true);
-                        context.startActivity(new Intent(context, AddAppointmentActivity.class)
-                                .putExtra("leadID", leadID)
-                                .putExtra("from", "2")
-                                .putExtra("model", modelData));
-                    } else {
-
-                        swipeLayout.close(true);
-                        context.startActivity(new Intent(context, AddAppointmentActivity.class)
-                                .putExtra("leadID", leadID)
-                                .putExtra("from", "4")
-                                .putExtra("model", modelData));
-                    }
-
+            tvEdit.setOnClickListener(v -> {
+                pos = getAdapterPosition();
+                String leadID = mData.get(pos).leadsData.leadID;
+                GetAppointmentsModel.Data modelData = mData.get(pos);
+                if (isEditByLead) {
+                    swipeLayout.close(true);
+                    context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                            .putExtra("leadID", leadID)
+                            .putExtra("from", "2")
+                            .putExtra("model", modelData));
+                } else {
+                    swipeLayout.close(true);
+                    context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                            .putExtra("leadID", leadID)
+                            .putExtra("from", "4")
+                            .putExtra("model", modelData));
                 }
             });
-
         }
     }
 
@@ -196,18 +186,13 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
 
                     BaseResponse getAppointmentsModel = response.body();
                     if (getAppointmentsModel.getStatus().equals("Success")) {
-
                         ToastUtils.showToast(context, "Successfully Done");
                         mData.remove(pos);
                         notifyDataSetChanged();
-
                     } else {
-
                         ToastUtils.showToast(context, getAppointmentsModel.message);
-
                     }
                 } else {
-
                     ApiError error = ErrorUtils.parseError(response);
                     ToastUtils.showToast(context, error.message());
                 }
@@ -220,5 +205,4 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
             }
         });
     }
-
 }

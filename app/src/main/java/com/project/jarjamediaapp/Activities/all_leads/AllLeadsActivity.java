@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.Activities.all_leads;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -38,7 +39,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     ArrayList<GetAllLeads.LeadsList> leadsList;
     String mSearchQuery = "";
     String resultSetType = "All";
-
+    Intent data= null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +53,12 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
     private void handleIntent() {
         resultSetType = getIntent().getStringExtra("resultType");
+        data = getIntent().getParcelableExtra("bundle");
     }
 
     @Override
     public void initViews() {
         handleIntent();
-        callGetAllLeads();
         bi.edtSearch.onActionViewExpanded();
         bi.edtSearch.clearFocus();
         bi.edtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -76,9 +77,15 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         });
     }
 
-    private void callGetAllLeads() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        callGetAllLeads(data);
+    }
 
-        String leadID = "";
+    private void callGetAllLeads(Intent bundle) {
+
+        String leadID = bundle != null ? bundle.getStringExtra("leadID") : "";
         String spouseName = "";
         String email = "";
         String company = "";
@@ -93,21 +100,21 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         String timeFrameID = "";
         String preApproval = "";
         String houseToSell = "";
-        String agentID = "";
-        String leadTypeID = "";
+        String agentID = bundle != null ? bundle.getStringExtra("agentID") : "";
+        String leadTypeID = bundle != null ? bundle.getStringExtra("leadTypeID") : "";
         String leadScoreMin = "";
-        String leadScoreMax = "";
-        String tagsID = "";
-        String priceMin = "";
-        String priceMax = "";
-        String notes = "";
-        String dripCompaignID = "";
-        String lastTouch = "";
-        String lastLogin = "";
-        String pipelineID = "";
-        String sourceID = "";
-        String fromDate = "";
-        String toDate = "";
+        String leadScoreMax = bundle != null ? bundle.getStringExtra("leadScoreMax") : "";
+        String tagsID = bundle != null ? bundle.getStringExtra("tagsID") : "";
+        String priceMin = bundle != null ? bundle.getStringExtra("priceMin") : "";
+        String priceMax = bundle != null ? bundle.getStringExtra("priceMax") : "";
+        String notes = bundle != null ? bundle.getStringExtra("notes") : "";
+        String dripCompaignID = bundle != null ? bundle.getStringExtra("dripCompaignID") : "";
+        String lastTouch = bundle != null ? bundle.getStringExtra("lastTouch") : "";
+        String lastLogin = bundle != null ? bundle.getStringExtra("lastLogin") : "";
+        String pipelineID = bundle != null ? bundle.getStringExtra("pipelineID") : "";
+        String sourceID = bundle != null ? bundle.getStringExtra("sourceID") : "";
+        String fromDate = bundle != null ? bundle.getStringExtra("fromDate") : "";
+        String toDate = bundle != null ? bundle.getStringExtra("toDate") : "";
         String searchBy = "";
         String firstNameAsc = "";
         String lastNameAsc = "";

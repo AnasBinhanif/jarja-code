@@ -448,14 +448,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 via = arrayListViaValue.get(position);
             }
         });
-
     }
 
     @Override
     public void updateUIListForLocation(GetLocationModel.Data response) {
 
         try {
-
             ArrayList<String> filterData = new ArrayList<>();
             for (int i = 0; i < response.getGroupName().size(); i++) {
                 filterData.add(response.getGroupName().get(i).getLabel());
@@ -517,7 +515,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                             ToastUtils.showToast(context, "No EncryptedID Found");
                         }
                     }
-
                     @Override
                     public void onCancel() {
 
@@ -530,9 +527,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         } else {
             multiSelectDialog.multiSelectList(searchListItems);
         }
-
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
-
     }
 
     private void showDateDialog(TextView textView, boolean isStart) {
@@ -550,12 +545,11 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 } else {
                     endDate = dateFormatter.format(newDate.getTime());
                 }
-
                 textView.setText(dateFormatter2.format(newDate.getTime()));
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-
+        StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         StartTime.show();
     }
 
@@ -580,8 +574,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
                         e.printStackTrace();
                     }
-
-
                 } else {
                     endTime = selectedHour + ":" + selectedMinute + ":00";
                     Date d = null;
@@ -592,8 +584,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                         e.printStackTrace();
                     }
                 }
-
-
                 textView.setText(time);
             }
         }, hour, minute, false);//Yes 24 hour time
@@ -624,12 +614,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         String isAppointmentAttend = "false";
         String appointmentDate = "";
         String isSend = "false";
+        String calendarID = calendarData !=null ? calendarData.getCalendarId() : "";
 
         if (isValidate()) {
             // Methods for Add Update are different in presenter
             presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend,
                     appointmentDate, datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo,
-                    isCompleted, fromId,calendarData.getCalendarId());
+                    isCompleted, fromId,calendarID);
         }
     }
 
@@ -691,7 +682,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
         }
 
-
         return true;
     }
 
@@ -714,19 +704,15 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         edtQuery.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
                 getLeadByText(editable.toString(), dialog);
-
             }
         });
 
@@ -810,12 +796,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                         setRecyclerSearch(dialog);
 
                     } else {
-
                         ToastUtils.showToast(context, getAppointmentsModel.message);
-
                     }
                 } else {
-
                     ApiError error = ErrorUtils.parseError(response);
                     ToastUtils.showToast(context, error.message());
                 }
@@ -827,5 +810,4 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
         });
     }
-
 }

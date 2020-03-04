@@ -505,7 +505,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-
+        StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         StartTime.show();
     }
 

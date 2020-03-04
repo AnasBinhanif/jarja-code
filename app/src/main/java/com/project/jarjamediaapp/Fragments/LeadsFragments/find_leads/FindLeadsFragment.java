@@ -42,6 +42,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     Context context;
     FindLeadsPresenter presenter;
     ArrayList<GetLeadCounts.LeadsCount> getLeadCountList;
+    Intent bundle=null;
 
     public FindLeadsFragment() {
         // Required empty public constructor
@@ -70,7 +71,13 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     public void setupViews() {
 
         initViews();
-        callGetLeadCounts(null);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        callGetLeadCounts(bundle);
     }
 
     private void initViews() {
@@ -173,28 +180,31 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetFindLeads, Integer, Unit>) (viewComplainList, integer) -> {
 
-            Map<String, String> map = new HashMap<>();
+            String resultTYpe="";
             switch (integer) {
                 case 0:
-                    map.put("resultType", "All");
+                    resultTYpe="All";
                     break;
                 case 1:
-                    map.put("resultType", "New Leads");
+                    resultTYpe="New Leads";
                     break;
                 case 2:
-                    map.put("resultType", "Hot Leads");
+                    resultTYpe="Hot Leads";
                     break;
                 case 3:
-                    map.put("resultType", "Active Clients");
+                    resultTYpe="Active Clients";
                     break;
                 case 4:
-                    map.put("resultType", "Under Contract");
+                    resultTYpe="Under Contract";
                     break;
                 case 5:
-                    map.put("resultType", "Closed Leads");
+                    resultTYpe="Closed Leads";
                     break;
             }
-            switchActivityWithIntentString(getActivity(), AllLeadsActivity.class, (HashMap<String, String>) map);
+            Intent intent = new Intent(context,AllLeadsActivity.class);
+            intent.putExtra("bundle",bundle);
+            intent.putExtra("resultType",resultTYpe);
+            startActivity(intent);
 
             return Unit.INSTANCE;
         });
@@ -274,6 +284,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 05) {
+            bundle = data;
             callGetLeadCounts(data);
         }
     }

@@ -43,7 +43,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/first_name"
-                        android:inputType="textPersonName" />
+                        android:imeOptions="actionNext"
+                        android:inputType="textPersonName"
+                        android:singleLine="true" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -54,8 +56,11 @@
                     <EditText
                         android:id="@+id/edtLName"
                         style="@style/AutoCompleteStyle"
+                        android:imeOptions="actionNext"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:singleLine="true"
                         android:hint="@string/last_name" />
 
                     <TextView
@@ -67,9 +72,12 @@
                     <EditText
                         android:id="@+id/edtSName"
                         style="@style/AutoCompleteStyle"
+                        android:imeOptions="actionNext"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/spouse_name" />
+                        android:hint="@string/spouse_name"
+                        android:inputType="textPersonName"
+                        android:singleLine="true"/>
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -81,6 +89,7 @@
                         android:id="@+id/edtCompany"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
+                        android:imeOptions="actionNext"
                         android:layout_height="wrap_content"
                         android:hint="@string/company" />
 
@@ -95,6 +104,7 @@
                         android:id="@+id/edtPhone"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
+                        android:imeOptions="actionNext"
                         android:layout_height="wrap_content"
                         android:hint="@string/cell_phone"
                         android:inputType="number" />
@@ -110,7 +120,9 @@
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
                         android:hint="@string/email"
+                        android:singleLine="true"
                         android:inputType="textEmailAddress" />
 
                     <TextView
@@ -185,7 +197,10 @@
                         android:id="@+id/edtAddress1"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
+                        android:imeOptions="actionNext"
                         android:layout_height="wrap_content"
+                        android:inputType="textPostalAddress"
+                        android:singleLine="true"
                         android:hint="@string/street_address_1" />
 
                     <TextView
@@ -199,6 +214,8 @@
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
+                        android:singleLine="true"
+                        android:imeOptions="actionNext"
                         android:hint="@string/city_1" />
 
                     <TextView
@@ -211,7 +228,9 @@
                         android:id="@+id/edtState1"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
+                        android:singleLine="true"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
                         android:hint="@string/state_1" />
 
                     <TextView
@@ -224,6 +243,9 @@
                         android:id="@+id/edtPostalCode1"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:inputType="number"
                         android:layout_height="wrap_content"
                         android:hint="@string/postal_code_1" />
 
@@ -238,6 +260,9 @@
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+
                         android:hint="@string/street_address_2" />
 
                     <TextView
@@ -250,6 +275,8 @@
                         android:id="@+id/edtCity2"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
                         android:layout_height="wrap_content"
                         android:hint="@string/city_2" />
 
@@ -264,6 +291,8 @@
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:imeOptions="actionNext"
                         android:hint="@string/state_2" />
 
                     <TextView
@@ -276,6 +305,9 @@
                         android:id="@+id/edtPostalCode2"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:inputType="number"
                         android:layout_height="wrap_content"
                         android:hint="@string/postal_code_2" />
 
@@ -288,6 +320,8 @@
                     <EditText
                         android:id="@+id/edtCountry"
                         style="@style/AutoCompleteStyle"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/country" />
@@ -460,6 +494,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top"
+                        android:imeOptions="actionDone"
                         android:hint="@string/add_notes"
                         android:inputType="textMultiLine"
                         android:lines="5" />

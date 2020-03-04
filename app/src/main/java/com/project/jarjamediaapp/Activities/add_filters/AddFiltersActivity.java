@@ -81,7 +81,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     ArrayList<GetPipeline.Data> getGetPipelineList;
     ArrayList<String> getGetPipelineNames;
 
-    MultiSelectModel tagModel, agentModel, dripModel, sourceModel;
+    MultiSelectModel tagModel, agentModel, dripModel;
 
     String priceTo = "", priceFrom = "";
     String agentIdsString = "", tagsIdsString = "", dripIdsString = "", sourceIdsString = "", typeIdsString = "";
@@ -267,7 +267,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     private void showDripDialog() {
 
         MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
-                .title("Select Drip Compaigns") //setting title for dialog
+                .title("Select Drip Campaigns") //setting title for dialog
                 .titleSize(25)
                 .positiveText("Done")
                 .negativeText("Cancel")
@@ -365,7 +365,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds,
                                            String commonSeperatedData) {
-
                     }
 
                     @Override
@@ -691,7 +690,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
             priceTo = edtPriceTo.getText().toString().equals("") ? "0" : edtPriceTo.getText().toString();
             priceFrom = edtPriceFrom.getText().toString().equals("") ? "max" : edtPriceFrom.getText().toString();
             priceFrom = priceFrom.equals("0") ? "max" : priceFrom;
-
 
 
             String price = priceFrom.equals("") ? "" : " to " + priceFrom;

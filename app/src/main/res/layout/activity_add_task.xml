@@ -44,6 +44,7 @@
                 <AutoCompleteTextView
                     android:id="@+id/atvNameTask"
                     android:layout_width="match_parent"
+                    android:imeOptions="actionNext"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_search"
@@ -72,6 +73,7 @@
                     android:gravity="top"
                     android:hint="@string/description"
                     android:inputType="textMultiLine"
+                    android:imeOptions="actionNext"
                     android:lines="4"
                     android:padding="@dimen/_10sdp"
                     android:paddingTop="12dp"
@@ -276,6 +278,8 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_search"
                     android:hint="@string/property_address"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true"
                     android:padding="@dimen/_10sdp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_12sdp" />
