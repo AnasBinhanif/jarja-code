@@ -621,8 +621,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
             bi.scLeadDetail.setVisibility(View.VISIBLE);
             bi.tvNoRecordFound.setVisibility(View.GONE);
-
-            bi.tvID.setText(getLeadListData.leadStringID);
+            bi.tvID.setText(getLeadListData.leadID);
             String firstName = getLeadListData.firstName;
             String lastName = getLeadListData.lastName;
             if (firstName != null && lastName != null) {

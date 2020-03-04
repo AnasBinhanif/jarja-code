@@ -373,7 +373,7 @@ public interface ApiMethods {
             @Header("Authorization") String authorization,
             @Field("leadStringID") String leadStringID,
             @Field("agentsStringIDs") String agentsStringIDs,
-            @Field("leadAppoinmentID") String leadAppointmentID,
+            @Field("leadAppoinmentID") Integer leadAppointmentID,
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
             @Field("desc") String desc,
@@ -382,15 +382,15 @@ public interface ApiMethods {
             @Field("appointmentDate") String appointmentDate,
             @Field("datedFrom") String datedFrom,
             @Field("datedTo") String datedTo,
-            @Field("isAllDay") String isAllDay,
-            @Field("interval") String interval,
-            @Field("isSend") String isSend,
+            @Field("isAllDay") boolean isAllDay,
+            @Field("interval") Integer interval,
+            @Field("isSend") boolean isSend,
             @Field("viaReminder") String viaReminder,
             @Field("agentIds") String agentIds,
-            @Field("orderBy") String orderBy,
+            @Field("orderBy") Integer orderBy,
             @Field("startTime") String startTime,
             @Field("endTime") String endTime,
-            @Field("isCompleted") String isCompleted,
+            @Field("isCompleted") boolean isCompleted,
             @Field("calendarType") String calendarType
 
     );
@@ -401,7 +401,7 @@ public interface ApiMethods {
             @Header("Authorization") String authorization,
             @Field("leadStringID") String leadStringID,
             @Field("agentsStringIDs") String agentsStringIDs,
-            @Field("leadAppoinmentID") String leadAppointmentID,
+            @Field("leadAppoinmentID") Integer leadAppointmentID,
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
             @Field("desc") String desc,
@@ -410,15 +410,15 @@ public interface ApiMethods {
             @Field("appointmentDate") String appointmentDate,
             @Field("datedFrom") String datedFrom,
             @Field("datedTo") String datedTo,
-            @Field("isAllDay") String isAllDay,
-            @Field("interval") String interval,
-            @Field("isSend") String isSend,
+            @Field("isAllDay") boolean isAllDay,
+            @Field("interval") Integer interval,
+            @Field("isSend") boolean isSend,
             @Field("viaReminder") String viaReminder,
             @Field("agentIds") String agentIds,
-            @Field("orderBy") String orderBy,
+            @Field("orderBy") Integer orderBy,
             @Field("startTime") String startTime,
             @Field("endTime") String endTime,
-            @Field("isCompleted") String isCompleted
+            @Field("isCompleted") boolean isCompleted
     );
 
     @FormUrlEncoded
@@ -638,6 +638,9 @@ public interface ApiMethods {
                                     @Field("openHouseDate") String openHouseDate,
                                     @Field("openHouseEndDate") String openHouseEndDate);
 
+    @GET("Notification/GetNotificationCount")
+    Call<UploadImageModel> getNotificationCount(@Header("Authorization") String authorization);
+
     @GET("Notification/GetAppointmentNotification")
     Call<NotificationModel> getNotificationByAppointments(@Header("Authorization") String authorization);
 
@@ -729,8 +732,8 @@ public interface ApiMethods {
     Call<BaseResponse> addAppointmentByCalendar(
             @Header("Authorization") String authorization,
             @Field("leadStringID") String leadStringID,
-            @Field("agentsStringIDs") String agentsStringIDs,
-            @Field("leadAppoinmentID") String leadAppointmentID,
+            @Field("agentIDsString") String agentsStringIDs,
+            @Field("leadAppoinmentID") Integer leadAppointmentID,
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
             @Field("desc") String desc,
@@ -739,17 +742,17 @@ public interface ApiMethods {
             @Field("appointmentDate") String appointmentDate,
             @Field("datedFrom") String datedFrom,
             @Field("datedTo") String datedTo,
-            @Field("isAllDay") String isAllDay,
-            @Field("interval") String interval,
-            @Field("isSend") String isSend,
+            @Field("isAllDay") boolean isAllDay,
+            @Field("interval") Integer interval,
+            @Field("isSend") boolean isSend,
             @Field("viaReminder") String viaReminder,
             @Field("agentIds") String agentIds,
-            @Field("orderBy") String orderBy,
+            @Field("orderBy") Integer orderBy,
             @Field("startTime") String startTime,
             @Field("endTime") String endTime,
-            @Field("isCompleted") String isCompleted,
+            @Field("isCompleted") boolean isCompleted,
             @Field("calendarType") String calendarType,
-            @Field("isGmailApptActive") String isGmailAppActive,
+            @Field("isGmailApptActive") boolean isGmailAppActive,
             @Field("gmailCalenderId") String gmailCalendarId);
 
     @FormUrlEncoded
@@ -758,7 +761,7 @@ public interface ApiMethods {
             @Header("Authorization") String authorization,
             @Field("leadStringID") String leadStringID,
             @Field("agentsStringIDs") String agentsStringIDs,
-            @Field("leadAppoinmentID") String leadAppointmentID,
+            @Field("leadAppoinmentID") Integer leadAppointmentID,
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
             @Field("desc") String desc,
@@ -767,18 +770,19 @@ public interface ApiMethods {
             @Field("appointmentDate") String appointmentDate,
             @Field("datedFrom") String datedFrom,
             @Field("datedTo") String datedTo,
-            @Field("isAllDay") String isAllDay,
-            @Field("interval") String interval,
-            @Field("isSend") String isSend,
+            @Field("isAllDay") boolean isAllDay,
+            @Field("interval") Integer interval,
+            @Field("isSend") boolean isSend,
             @Field("viaReminder") String viaReminder,
             @Field("agentIds") String agentIds,
-            @Field("orderBy") String orderBy,
+            @Field("orderBy") Integer orderBy,
             @Field("startTime") String startTime,
             @Field("endTime") String endTime,
-            @Field("isCompleted") String isCompleted,
+            @Field("isCompleted") boolean isCompleted,
             @Field("calendarType") String calendarType,
-            @Field("isGmailApptActive") String isGmailAppActive,
-            @Field("gmailCalenderId") String gmailCalendarId);
+            @Field("isGmailApptActive") boolean isGmailAppActive,
+            @Field("gmailCalenderId") String gmailCalendarId,
+            @Field("encrypted_LeadAppoinmentID") String encryptedLeadAppointmentId);
 
 
 }

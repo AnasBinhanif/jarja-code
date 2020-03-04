@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -187,7 +189,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                     if (calendarDetailModel.getStatus().equals("Success")) {
 
                         if (type != null && !type.equalsIgnoreCase("") && type.equalsIgnoreCase("Task")) {
-                            showDialogForCalendarTaskDetail(context, calendarDetailModel.getData().getList());
+                            // showDialogForCalendarTaskDetail(context, calendarDetailModel.getData().getList());
                         } else {
                             showDialogForCalendarAppointmentDetail(context, calendarDetailModel.getData().getCalendarData());
                         }
@@ -248,22 +250,22 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
     private void showDialogForCalendarAppointmentDetail(Context context, CalendarDetailModel.Data.CalendarData calendarDetailModel) {
 
-        final Dialog dialog = new Dialog(context, R.style.Dialog);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.dialog_view_calendar_appointment_detail);
-
-        TextView tvEventTitle, tvLead, tvAgents, tvDate, tvTime, tvLocation, tvDetail, tvNotes, tvClose;
-
-        tvEventTitle = dialog.findViewById(R.id.tvEventTitle);
-        tvLead = dialog.findViewById(R.id.tvLead);
-        tvAgents = dialog.findViewById(R.id.tvAgents);
-        tvDate = dialog.findViewById(R.id.tvDate);
-        tvLocation = dialog.findViewById(R.id.tvLocation);
-        tvDetail = dialog.findViewById(R.id.tvDetails);
-        tvTime = dialog.findViewById(R.id.tvTime);
-        tvNotes = dialog.findViewById(R.id.tvNotes);
-
         try {
+
+            final Dialog dialog = new Dialog(context, R.style.Dialog);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.dialog_view_calendar_appointment_detail);
+
+            TextView tvEventTitle, tvLead, tvAgents, tvDate, tvTime, tvLocation, tvDetail, tvNotes, tvClose;
+
+            tvEventTitle = dialog.findViewById(R.id.tvEventTitle);
+            tvLead = dialog.findViewById(R.id.tvLead);
+            tvAgents = dialog.findViewById(R.id.tvAgents);
+            tvDate = dialog.findViewById(R.id.tvDate);
+            tvLocation = dialog.findViewById(R.id.tvLocation);
+            tvDetail = dialog.findViewById(R.id.tvDetails);
+            tvTime = dialog.findViewById(R.id.tvTime);
+            tvNotes = dialog.findViewById(R.id.tvNotes);
 
             String[] startTime = calendarDetailModel.getDatedFrom().split("T");
             String[] endTime = calendarDetailModel.getDatedTo().split("T");
@@ -274,53 +276,66 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                 tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss") + " - " + GH.getInstance().formatter(endTime[1], "hh:mm:ss a", "HH:mm:ss"));
             }
             tvLocation.setText(calendarDetailModel.getLocation() != null ? calendarDetailModel.getLocation() : "");
-            tvNotes.setText(calendarDetailModel.getDescription() != null ? calendarDetailModel.getDescription() : "");
             tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd"));
             tvLead.setText(calendarDetailModel.getLeadName() != null ? calendarDetailModel.getLeadName() : "");
-            tvAgents.setText(calendarDetailModel.getAgentName() != null ? calendarDetailModel.getAgentName() : "");
-            tvDetail.setText(calendarDetailModel.getDetail() != null ? calendarDetailModel.getDetail() : "");
 
-        } catch (Exception e) {
+            if (calendarDetailModel != null && calendarDetailModel.getAgentList().size() > 0) {
+
+                ArrayList<String> arrayList = new ArrayList<>();
+                for (int i = 0; i < calendarDetailModel.getAgentList().size(); i++) {
+                    arrayList.add(calendarDetailModel.getAgentList().get(i).getAgentName());
+                }
+                String agentNames = TextUtils.join(" , ", arrayList);
+                tvAgents.setText(agentNames);
+            }
+
+            // need data from api
+            tvDetail.setText(calendarDetailModel.getDesc() != null ? calendarDetailModel.getDesc() : "");
+            tvNotes.setText(calendarDetailModel.getNote() != null ? calendarDetailModel.getNote() : "");
+
+            tvClose = dialog.findViewById(R.id.tvClose);
+            Button btnCancel = dialog.findViewById(R.id.btnCancel);
+            Button btnEdit = dialog.findViewById(R.id.btnEdit);
+
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    dialog.dismiss();
+                    if (calendarDetailModel.getCalendarType() == null) {
+                        // data and calendar id will be passed in intent
+                        context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                                .putExtra("from", "6")
+                                .putExtra("calendarId",modelData.getCalendarId())
+                                .putExtra("modelData", calendarDetailModel));
+                    } else {
+                        context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
+                                .putExtra("isEdit", true)
+                                .putExtra("calendarId",modelData.getCalendarId())
+                                .putExtra("modelData", calendarDetailModel));
+                    }
+                }
+            });
+
+            tvClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
-
-        tvClose = dialog.findViewById(R.id.tvClose);
-        Button btnCancel = dialog.findViewById(R.id.btnCancel);
-        Button btnEdit = dialog.findViewById(R.id.btnEdit);
-
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-                if (calendarDetailModel.getCalendarType().equals("Event")) {
-                    // data and calendar id will be passed in intent
-                    context.startActivity(new Intent(context, AddAppointmentActivity.class)
-                            .putExtra("from", "6")
-                            .putExtra("modelData", calendarDetailModel));
-                } else {
-                    context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
-                            .putExtra("isEdit", true)
-                            .putExtra("modelData", calendarDetailModel));
-                }
-            }
-        });
-
-        tvClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
 
     }
 
@@ -352,47 +367,51 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             }
             tvAttendeesCount.setText("0");
             tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd"));
-            tvDetail.setText(calendarDetailModel.getDetail() != null ? calendarDetailModel.getDetail() : "");
+            tvDetail.setText(calendarDetailModel.getDesc() != null ? calendarDetailModel.getDesc() : "");
 
-        } catch (Exception e) {
+            Button btnCancel = dialog.findViewById(R.id.btnCancel);
+            Button btnEdit = dialog.findViewById(R.id.btnEdit);
+
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    dialog.dismiss();
+                    if (calendarDetailModel != null) {
+                        if (calendarDetailModel.getCalendarType().equals("Event")) {
+                            // data and calendar id will be passed in intent
+                            context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                                    .putExtra("from", "6")
+                                    .putExtra("calendarId",modelData.getCalendarId())
+                                    .putExtra("modelData", calendarDetailModel));
+                        } else {
+                            context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
+                                    .putExtra("isEdit", true)
+                                    .putExtra("modelData", calendarDetailModel));
+                        }
+                    }
+                }
+            });
+
+            tvClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        Button btnCancel = dialog.findViewById(R.id.btnCancel);
-        Button btnEdit = dialog.findViewById(R.id.btnEdit);
-
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-                if (calendarDetailModel.getCalendarType().equals("Event")) {
-                    // data and calendar id will be passed in intent
-                    context.startActivity(new Intent(context, AddAppointmentActivity.class)
-                            .putExtra("from", "6")
-                            .putExtra("modelData", calendarDetailModel));
-                } else {
-                    context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
-                            .putExtra("isEdit", true)
-                            .putExtra("modelData", calendarDetailModel));
-                }
-            }
-        });
-
-        tvClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
 
     }
 

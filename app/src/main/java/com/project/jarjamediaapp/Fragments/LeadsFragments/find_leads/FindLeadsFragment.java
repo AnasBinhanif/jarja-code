@@ -78,6 +78,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     public void onResume() {
         super.onResume();
         callGetLeadCounts(bundle);
+
     }
 
     private void initViews() {

@@ -34,7 +34,8 @@ public class GH {
         USER_FIRSTNAME,
         USER_LASTNAME,
         ACCESS_TOKEN,
-        AUTHORIZATION
+        AUTHORIZATION,
+        AGENT_ID_CALENDAR
 
 
     }
@@ -49,6 +50,10 @@ public class GH {
 
     public String getUserID() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_ID.name(), "");
+    }
+
+    public String getCalendarAgentId() {
+        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.AGENT_ID_CALENDAR.name(), "");
     }
 
     public void ShowProgressDialog(Context context) {
@@ -108,7 +113,7 @@ public class GH {
         String formattedDate = "";
         try {
             date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(dateString);
-            formattedDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'", Locale.getDefault()).format(date);
+            formattedDate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.sss'Z'", Locale.getDefault()).format(date);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -122,7 +127,7 @@ public class GH {
         Date date;
         String formattedDate = "";
         try {
-            date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'", Locale.getDefault()).parse(dateString);
+            date = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.sss'Z'", Locale.getDefault()).parse(dateString);
             formattedDate = new SimpleDateFormat("MM-dd-yyyy h:mm a", Locale.getDefault()).format(date);
         } catch (ParseException e) {
             // TODO Auto-generated catch block

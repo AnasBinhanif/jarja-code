@@ -315,7 +315,7 @@
                         style="@style/AutoCompleteLabelStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/country" />
+                        android:text="@string/county" />
 
                     <EditText
                         android:id="@+id/edtCountry"
@@ -324,7 +324,7 @@
                         android:singleLine="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/country" />
+                        android:hint="@string/county" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"

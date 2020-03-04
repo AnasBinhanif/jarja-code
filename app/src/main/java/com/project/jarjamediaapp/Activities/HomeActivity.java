@@ -29,6 +29,7 @@ import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
 import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
 import com.project.jarjamediaapp.Activities.open_houses.OpenHousesActivity;
+import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Fragments.DashboardFragments.TabsFragment;
 import com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads.FindLeadsFragment;
@@ -66,7 +67,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     boolean shouldAnimate = false;
     Menu _menu;
     String picPath = "";
-
+    MenuItem item;
     CircleImageView navHeaderImageView;
     TextView navHeaderTextView;
 
@@ -118,6 +119,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     GetUserProfile getUserProfile = response.body();
                     if (response.body().status.equals("Success")) {
 
+                        easyPreference.addString(GH.KEYS.AGENT_ID_CALENDAR.name(), getUserProfile.data.getAgentData().getEncryptedAgentID()).save();
                         AppConstants.Keys.UserID = getUserProfile.data.userProfile.userID;
 
                         String fullName = getUserProfile.data.userProfile.firstName + " " + getUserProfile.data.userProfile.lastName;
@@ -138,7 +140,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                     if (error.message().contains("Authorization has been denied for this request")) {
                         ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
-                       logout();
+                        logout();
                     } else {
                         ToastUtils.showToastLong(context, error.message());
                     }
@@ -263,19 +265,51 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         getMenuInflater().inflate(R.menu.home, menu);
         _menu = menu;
 
-        MenuItem item = menu.findItem(R.id.action_notify);
-        item.setIcon(buildCounterDrawable(8, R.drawable.ic_notification));
-
-        /*getMenuInflater().inflate(R.menu.home, menu);
-        MenuItem item = menu.findItem(R.id.action_search);
-        item.setVisible(true);
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setVisibility(View.VISIBLE);
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));*/
+        item = menu.findItem(R.id.action_notify);
+        getNotificationCount();
 
         return true;
+    }
+
+    private void getNotificationCount() {
+
+
+        Call<UploadImageModel> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
+                getNotificationCount(GH.getInstance().getAuthorization());
+        _call.enqueue(new Callback<UploadImageModel>() {
+            @Override
+            public void onResponse(Call<UploadImageModel> call, Response<UploadImageModel> response) {
+
+                if (response.isSuccessful()) {
+
+                    UploadImageModel getUserProfile = response.body();
+                    if (getUserProfile.status.equals("Success")) {
+
+                        if (getUserProfile.getData() != null && !getUserProfile.getData().equalsIgnoreCase(""))
+                            item.setIcon(buildCounterDrawable(Integer.parseInt(getUserProfile.getData()), R.drawable.ic_notification));
+
+                    } else {
+                        Toast.makeText(context, getUserProfile.message, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    ApiError error = ErrorUtils.parseError(response);
+
+                    if (error.message().contains("Authorization has been denied for this request")) {
+                        ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+                        logout();
+                    } else {
+                        ToastUtils.showToastLong(context, error.message());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UploadImageModel> call, Throwable t) {
+
+                ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+            }
+        });
+
     }
 
     @Override
@@ -299,6 +333,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private Drawable buildCounterDrawable(int count, int backgroundImageId) {
+
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.custom_notification_badge, null);
         view.setBackgroundResource(backgroundImageId);
@@ -325,4 +360,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         return new BitmapDrawable(getResources(), bitmap);
     }
+
+
 }

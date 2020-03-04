@@ -27,7 +27,7 @@ public class AddCalendarTaskPresenter extends BasePresenter<AddCalendarTaskContr
     @Override
     public void addCalendarTask(String title, String description, String startDateTime, String allDay, String markComplete) {
 
-        _view.showProgressBar();
+        /*_view.showProgressBar();
 
         call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addAppointmentByCalendar(GH.getInstance().getAuthorization(),
                 "undefined", "", "0", title, "", description, "false",
@@ -64,7 +64,7 @@ public class AddCalendarTaskPresenter extends BasePresenter<AddCalendarTaskContr
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
-        });
+        });*/
 
     }
 
@@ -73,10 +73,10 @@ public class AddCalendarTaskPresenter extends BasePresenter<AddCalendarTaskContr
 
         _view.showProgressBar();
 
-        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),
+       /* call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),
                 "undefined", "", "0", title, "", description, "false",
                 "false", "", startDateTime, "", allDay, "0", "", "", "",
-                "0", "", "", markComplete, "Task", "", calendarId);
+                "0", "", "", markComplete, "Task", "", calendarId,"");
 
 
         call.enqueue(new Callback<BaseResponse>() {
@@ -108,7 +108,7 @@ public class AddCalendarTaskPresenter extends BasePresenter<AddCalendarTaskContr
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
-        });
+        });*/
 
 
     }

@@ -45,12 +45,11 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddAppointmentBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 import kotlin.Unit;
@@ -73,13 +72,15 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
     ArrayList<GetLeadTitlesModel.Data> nameList = new ArrayList<>();
     String startDate = "", endDate = "", startTime = "", endTime = "";
-    String via = "", reminder = "", leadId = "", location = "", agentIdsString = "", leadAppointmentId = "";
+    String via = "", reminder = "", leadId = "", location = "", agentIdsString = "", encryptedAppointmentId = "";
+    Integer leadAppointmentId;
     boolean isReminderClicked = false, isViaClicked = false;
     String leadName = "";
     boolean isEdit;
     String fromId = "";
     ArrayList<String> arrayListReminderValue, arrayListReminderText;
     CalendarDetailModel.Data.CalendarData calendarData;
+    String timedFrom = "", timedTo = "", datedFrom = "", datedTo = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,13 +202,14 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     private void prePopulateData(CalendarDetailModel.Data.CalendarData modelData) {
 
+        encryptedAppointmentId = modelData.getEncryptedLeadID();
         leadAppointmentId = modelData.getLeadAppoinmentID();
-        leadId = modelData.getLeadID();
-       // bi.tvName.setText((modelData.getName() != null ? modelData.getLeadsData().getFirstName() : "") + " " + (modelData.getLeadsData().getLastName() != null ? modelData.getLeadsData().getLastName() : ""));
+        leadId = modelData.getEncryptedLeadID();
+        bi.tvName.setText((modelData.getLeadName() != null ? modelData.getLeadName() : ""));
         bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
-        //
+
         startDate = GH.getInstance().formatApiDateTime(modelData.getDatedFrom());
         endDate = GH.getInstance().formatApiDateTime(modelData.getDatedTo());
         startTime = GH.getInstance().formatTime(modelData.getDatedFrom());
@@ -229,24 +231,26 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.atvVia.setText(modelData.getViaReminder() != null ? modelData.getViaReminder() : "");
         bi.cbAllDay.setChecked(modelData.isAllDay);
 
-       /* if (modelData.getVtCRMLeadAppoinmentDetailCustom() != null && modelData.getVtCRMLeadAppoinmentDetailCustom().size() > 0) {
+        if (modelData.getAgentList() != null && modelData.getAgentList().size() > 0) {
+
             ArrayList<String> arrayList = new ArrayList<>();
-            for (int i = 0; i < modelData.getVtCRMLeadAppoinmentDetailCustom().size(); i++) {
+            for (int i = 0; i < modelData.getAgentList().size(); i++) {
                 View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
                 TextView textView = child.findViewById(R.id.txtDynamic);
-                textView.setText(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getAgentName());
-                arrayList.add(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getAgentID());
+                textView.setText(modelData.getAgentList().get(i).getAgentName());
+                arrayList.add(modelData.getAgentList().get(i).getEncryptedAgentID());
                 bi.lnAgent.addView(child);
                 bi.lnAgent.setVisibility(View.VISIBLE);
             }
             agentIdsString = TextUtils.join(",", arrayList);
-        }*/
+
+        }
 
     }
 
     private void prePopulateData(GetAppointmentsModel.Data modelData) {
 
-        leadAppointmentId = modelData.getLeadAppoinmentID();
+        leadAppointmentId = Integer.valueOf(modelData.getLeadAppoinmentID());
         leadId = modelData.getLeadID();
         bi.tvName.setText((modelData.getLeadsData().getFirstName() != null ? modelData.getLeadsData().getFirstName() : "") + " " + (modelData.getLeadsData().getLastName() != null ? modelData.getLeadsData().getLastName() : ""));
         bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
@@ -515,6 +519,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                             ToastUtils.showToast(context, "No EncryptedID Found");
                         }
                     }
+
                     @Override
                     public void onCancel() {
 
@@ -533,8 +538,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     private void showDateDialog(TextView textView, boolean isStart) {
 
         final Calendar newCalendar = Calendar.getInstance();
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         DatePickerDialog StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
@@ -545,6 +550,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 } else {
                     endDate = dateFormatter.format(newDate.getTime());
                 }
+
                 textView.setText(dateFormatter2.format(newDate.getTime()));
             }
 
@@ -561,30 +567,21 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         TimePickerDialog mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+
                 String time = "";
-                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:m:ss");
                 if (isStart) {
-                    startTime = selectedHour + ":" + selectedMinute + ":00";
+                    startTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "h:mm:ss", "HH:mm:ss");
+                    time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "h:mm a", "HH:mm:ss");
+                    textView.setText(time);
 
-                    Date d = null;
-                    try {
-                        d = dateFormat.parse(startTime);
-                        time = DateFormat.getTimeInstance(DateFormat.SHORT).format(d);
-                    } catch (ParseException e) {
 
-                        e.printStackTrace();
-                    }
                 } else {
-                    endTime = selectedHour + ":" + selectedMinute + ":00";
-                    Date d = null;
-                    try {
-                        d = dateFormat.parse(endTime);
-                        time = DateFormat.getTimeInstance(DateFormat.SHORT).format(d);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    endTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "h:mm:ss", "HH:mm:ss");
+                    time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "h:mm a", "HH:mm:ss");
+                    textView.setText(time);
                 }
-                textView.setText(time);
+
+
             }
         }, hour, minute, false);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
@@ -598,29 +595,40 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         String eventTitle = bi.atvEventTitle.getText().toString() + "";
         String location = bi.atvLocation.getText().toString() + "";
         String desc = bi.atvDescription.getText().toString() + "";
-        String datedFrom = startDate + "";
-        String datedTo = endDate + "";
-        String isAllDay = bi.cbAllDay.isChecked() ? "true" : "false";
+
+        boolean isAllDay = bi.cbAllDay.isChecked() ? true : false;
         String viaReminder = via + "";
 
-        String timedFrom = startTime + "";
-        String timedTo = endTime + "";
-        String interval = reminder + "";
+        if (bi.cbAllDay.isChecked()) {
 
-        String orderBy = "0";
-        String isCompleted = "false";
-        String leadAppointmentID = leadAppointmentId;
+            timedFrom = new SimpleDateFormat("h:mm:ss", Locale.getDefault()).format(new Date());
+            timedTo = new SimpleDateFormat("h:mm:ss", Locale.getDefault()).format(new Date());
+
+        } else {
+            timedFrom = startTime;
+            timedTo = endTime;
+        }
+
+        datedFrom = GH.getInstance().formatter(startDate + " " + timedFrom, "yyyy-MM-dd'T'hh:mm:ss.SSS'Z'", "yyyy-MM-dd h:mm:ss");
+        datedTo = GH.getInstance().formatter(endDate + " " + timedTo, "yyyy-MM-dd'T'hh:mm:ss.SSS'Z'", "yyyy-MM-dd h:mm:ss");
+
+        Integer interval = Integer.valueOf(reminder);
+        Integer orderBy = 0;
+        boolean isCompleted = false;
+        Integer leadAppointmentID = leadAppointmentId != null ? leadAppointmentId : 0;
         String isAppointmentFixed = "false";
         String isAppointmentAttend = "false";
         String appointmentDate = "";
-        String isSend = "false";
-        String calendarID = calendarData !=null ? calendarData.getCalendarId() : "";
+        boolean isSend = false;
+
+        String data = getIntent().getStringExtra("calendarId");
+        String calendarId = data != null ? data : "";
 
         if (isValidate()) {
             // Methods for Add Update are different in presenter
             presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend,
                     appointmentDate, datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo,
-                    isCompleted, fromId,calendarID);
+                    isCompleted, fromId, calendarId, encryptedAppointmentId);
         }
     }
 
@@ -704,15 +712,19 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         edtQuery.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+
                 getLeadByText(editable.toString(), dialog);
+
             }
         });
 
@@ -796,9 +808,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                         setRecyclerSearch(dialog);
 
                     } else {
+
                         ToastUtils.showToast(context, getAppointmentsModel.message);
+
                     }
                 } else {
+
                     ApiError error = ErrorUtils.parseError(response);
                     ToastUtils.showToast(context, error.message());
                 }
@@ -810,4 +825,5 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
         });
     }
+
 }

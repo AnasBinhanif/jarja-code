@@ -85,7 +85,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
         String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
         String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
-        presenter.getCalendarEvents("Ma6juBsCigs=", month, year);
+        presenter.getCalendarEvents(GH.getInstance().getCalendarAgentId(), month, year);
 
     }
 
@@ -101,7 +101,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                 yearSelected = date.getYear();
                 String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
                 String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
-                presenter.getCalendarEvents("Ma6juBsCigs=", month, year);
+                presenter.getCalendarEvents(GH.getInstance().getCalendarAgentId(), month, year);
 
             }
         });

@@ -1,5 +1,8 @@
 package com.project.jarjamediaapp.Activities.add_appointment;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -186,10 +189,10 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
     }
 
     @Override
-    public void addAppointment(String leadStringID, String agentsStringIDs, String leadAppointmentID, String eventTitle, String location,
+    public void addAppointment(String leadStringID, String agentsStringIDs, Integer leadAppointmentID, String eventTitle, String location,
                                String desc, String isAppointmentFixed, String isAppointmentAttend, String appointmentDate, String datedFrom,
-                               String datedTo, String isAllDay, String interval, String isSend, String viaReminder, String agentIds, String orderBy,
-                               String startTime, String endTime, String isCompleted, String fromId,String calendarId) {
+                               String datedTo, boolean isAllDay, Integer interval, boolean isSend, String viaReminder, String agentIds, Integer orderBy,
+                               String startTime, String endTime, boolean isCompleted, String fromId, String calendarId, String encryptedAppointmentId) {
 
         _view.showProgressBar();
 
@@ -206,26 +209,28 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
             // for update calendar appointment
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),
                     leadStringID, agentsStringIDs, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
-                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted,"Event","",calendarId);
+                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted, "Event", true, calendarId, encryptedAppointmentId);
 
         } else if (fromId.equalsIgnoreCase("3")) {
 
             // for add calendar appointment
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addAppointmentByCalendar(GH.getInstance().getAuthorization(),
-                    leadStringID, agentsStringIDs, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
-                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted,"Event","",calendarId);
+                    leadStringID, agentsStringIDs, 0, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
+                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted, "Event", true, calendarId);
 
         } else {
 
             // add appointment by dashboard or lead id
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddAppointment(GH.getInstance().getAuthorization(),
-                    leadStringID, agentsStringIDs, "0", eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
+                    leadStringID, agentsStringIDs, 0, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
                     datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted, "");
         }
 
         _callAddAppointment.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+                Log.i("response", new Gson().toJson(response));
 
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {

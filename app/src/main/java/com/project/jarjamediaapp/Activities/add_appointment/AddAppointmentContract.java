@@ -33,10 +33,10 @@ public interface AddAppointmentContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void addAppointment(String leadStringID, String agentsStringIDs, String leadAppointmentID, String eventTitle, String location,
+        void addAppointment(String leadStringID, String agentsStringIDs, Integer leadAppointmentID, String eventTitle, String location,
                             String desc, String isAppointmentFixed, String isAppointmentAttend, String appointmentDate, String datedFrom,
-                            String datedTo, String isAllDay, String interval, String isSend, String viaReminder, String agentIds,
-                            String orderBy,String startTime, String endTime, String isCompleted, String fromId,String calendarId);
+                            String datedTo, boolean isAllDay, Integer interval, boolean isSend, String viaReminder, String agentIds,
+                            Integer orderBy,String startTime, String endTime, boolean isCompleted, String fromId,String calendarId,String encryptedAppointmentId);
 
         void initScreen();
 

@@ -19,7 +19,6 @@ public class CalendarPresenter extends BasePresenter<CalendarContract.View> impl
         super(view);
     }
 
-
     @Override
     public void getCalendarEvents(String agentIdFromLogin, String month, String year) {
 

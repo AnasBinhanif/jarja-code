@@ -14,7 +14,7 @@ public class GetUserProfile {
     public String message;
     @SerializedName("data")
     @Expose
-    public LoginModel.Data data;
+    public Data data;
 
     public class Data {
 
@@ -28,25 +28,32 @@ public class GetUserProfile {
         @Expose
         public LoginModel.UserProfile userProfile;
 
+        @SerializedName("agentData")
+        @Expose
+        public AgentData agentData;
+
+        public class AgentData {
+
+            @SerializedName("agentID")
+            @Expose
+            public Integer agentID;
+            @SerializedName("encrypted_AgentID")
+            @Expose
+            public String encryptedAgentID;
+            @SerializedName("agentName")
+            @Expose
+            public String agentName;
+
+            public String getEncryptedAgentID() {
+                return encryptedAgentID;
+            }
+        }
+
+        public AgentData getAgentData() {
+            return agentData;
+        }
+
     }
 
-    public class UserProfile {
-        @SerializedName("userID")
-        @Expose
-        public String userID;
-        @SerializedName("firstName")
-        @Expose
-        public String firstName;
-        @SerializedName("lastName")
-        @Expose
-        public String lastName;
-        @SerializedName("title")
-        @Expose
-        public String title;
-        @SerializedName("picPath")
-        @Expose
-        public String picPath;
-
-    }
 
 }
