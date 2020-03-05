@@ -373,7 +373,7 @@ public interface ApiMethods {
             @Header("Authorization") String authorization,
             @Field("leadStringID") String leadStringID,
             @Field("agentsStringIDs") String agentsStringIDs,
-            @Field("leadAppoinmentID") Integer leadAppointmentID,
+            @Field("leadAppoinmentID") String leadAppointmentID,
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
             @Field("desc") String desc,
@@ -391,9 +391,7 @@ public interface ApiMethods {
             @Field("startTime") String startTime,
             @Field("endTime") String endTime,
             @Field("isCompleted") boolean isCompleted,
-            @Field("calendarType") String calendarType
-
-    );
+            @Field("leadID") String leadID);
 
     @FormUrlEncoded
     @POST("Appointment/Update")
@@ -401,7 +399,7 @@ public interface ApiMethods {
             @Header("Authorization") String authorization,
             @Field("leadStringID") String leadStringID,
             @Field("agentsStringIDs") String agentsStringIDs,
-            @Field("leadAppoinmentID") Integer leadAppointmentID,
+            @Field("leadAppoinmentID") String leadAppointmentID,
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
             @Field("desc") String desc,
@@ -418,8 +416,8 @@ public interface ApiMethods {
             @Field("orderBy") Integer orderBy,
             @Field("startTime") String startTime,
             @Field("endTime") String endTime,
-            @Field("isCompleted") boolean isCompleted
-    );
+            @Field("isCompleted") boolean isCompleted,
+            @Field("leadID") String leadID);
 
     @FormUrlEncoded
     @POST("Tasks/AddNew")
@@ -733,7 +731,7 @@ public interface ApiMethods {
             @Header("Authorization") String authorization,
             @Field("leadStringID") String leadStringID,
             @Field("agentIDsString") String agentsStringIDs,
-            @Field("leadAppoinmentID") Integer leadAppointmentID,
+            @Field("leadAppoinmentID") String leadAppointmentID,
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
             @Field("desc") String desc,
@@ -760,8 +758,8 @@ public interface ApiMethods {
     Call<BaseResponse> updateAppointmentTaskByCalendar(
             @Header("Authorization") String authorization,
             @Field("leadStringID") String leadStringID,
-            @Field("agentsStringIDs") String agentsStringIDs,
-            @Field("leadAppoinmentID") Integer leadAppointmentID,
+            @Field("agentIDsString") String agentsStringIDs,
+            @Field("leadAppoinmentID") String leadAppointmentID,
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
             @Field("desc") String desc,

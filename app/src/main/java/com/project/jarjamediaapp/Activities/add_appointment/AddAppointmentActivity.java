@@ -73,7 +73,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     ArrayList<GetLeadTitlesModel.Data> nameList = new ArrayList<>();
     String startDate = "", endDate = "", startTime = "", endTime = "";
     String via = "", reminder = "", leadId = "", location = "", agentIdsString = "", encryptedAppointmentId = "";
-    Integer leadAppointmentId;
+    String leadAppointmentId;
     boolean isReminderClicked = false, isViaClicked = false;
     String leadName = "";
     boolean isEdit;
@@ -202,18 +202,17 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     private void prePopulateData(CalendarDetailModel.Data.CalendarData modelData) {
 
-        encryptedAppointmentId = modelData.getEncryptedLeadID();
-        leadAppointmentId = modelData.getLeadAppoinmentID();
-        leadId = modelData.getEncryptedLeadID();
+        encryptedAppointmentId = modelData.getEncrypted_LeadAppointmentID();
+        leadId = String.valueOf(modelData.getEncryptedLeadID());
         bi.tvName.setText((modelData.getLeadName() != null ? modelData.getLeadName() : ""));
         bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
 
-        startDate = GH.getInstance().formatApiDateTime(modelData.getDatedFrom());
-        endDate = GH.getInstance().formatApiDateTime(modelData.getDatedTo());
-        startTime = GH.getInstance().formatTime(modelData.getDatedFrom());
-        endTime = GH.getInstance().formatTime(modelData.getDatedTo());
+        startDate = GH.getInstance().formatter(modelData.getDatedFrom(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+        endDate = GH.getInstance().formatter(modelData.getDatedTo(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+        startTime = GH.getInstance().formatter(modelData.getDatedFrom(), "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+        endTime = GH.getInstance().formatter(modelData.getDatedTo(), "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
 
         bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(modelData.getDatedFrom()) : "");
         bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(modelData.getDatedFrom()) : "");
@@ -250,22 +249,23 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     private void prePopulateData(GetAppointmentsModel.Data modelData) {
 
-        leadAppointmentId = Integer.valueOf(modelData.getLeadAppoinmentID());
         leadId = modelData.getLeadID();
+        leadAppointmentId = modelData.getLeadAppoinmentID();
         bi.tvName.setText((modelData.getLeadsData().getFirstName() != null ? modelData.getLeadsData().getFirstName() : "") + " " + (modelData.getLeadsData().getLastName() != null ? modelData.getLeadsData().getLastName() : ""));
         bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
-        //
-        startDate = GH.getInstance().formatApiDateTime(modelData.getDatedFrom());
-        endDate = GH.getInstance().formatApiDateTime(modelData.getDatedTo());
-        startTime = GH.getInstance().formatTime(modelData.getDatedFrom());
-        endTime = GH.getInstance().formatTime(modelData.getDatedTo());
+
+        startDate = GH.getInstance().formatter(modelData.getDatedFrom(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+        endDate = GH.getInstance().formatter(modelData.getDatedTo(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+        startTime = GH.getInstance().formatter(modelData.getDatedFrom(), "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+        endTime = GH.getInstance().formatter(modelData.getDatedTo(), "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
 
         bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(modelData.getDatedFrom()) : "");
         bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(modelData.getDatedFrom()) : "");
         bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(modelData.getDatedTo()) : "");
         bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(modelData.getDatedTo()) : "");
+
         if (arrayListReminderValue != null && arrayListReminderValue.size() > 0) {
             reminder = String.valueOf(modelData.getInterval());
             via = modelData.getViaReminder();
@@ -305,12 +305,14 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 showAgentDialog();
                 break;
             case R.id.tvStartDate:
+                GH.getInstance().hideKeyboard(context, AddAppointmentActivity.this);
                 showDateDialog(bi.tvStartDate, true);
                 break;
             case R.id.tvEndDate:
                 showDateDialog(bi.tvEndDate, false);
                 break;
             case R.id.tvStartTime:
+
                 showTimeDialog(bi.tvStartTime, true);
                 break;
             case R.id.tvEndTime:
@@ -612,10 +614,10 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         datedFrom = GH.getInstance().formatter(startDate + " " + timedFrom, "yyyy-MM-dd'T'hh:mm:ss.SSS'Z'", "yyyy-MM-dd h:mm:ss");
         datedTo = GH.getInstance().formatter(endDate + " " + timedTo, "yyyy-MM-dd'T'hh:mm:ss.SSS'Z'", "yyyy-MM-dd h:mm:ss");
 
-        Integer interval = Integer.valueOf(reminder);
+        Integer interval = !reminder.equalsIgnoreCase("") ? Integer.parseInt(reminder) : 0;
         Integer orderBy = 0;
         boolean isCompleted = false;
-        Integer leadAppointmentID = leadAppointmentId != null ? leadAppointmentId : 0;
+        String leadAppointmentID = leadAppointmentId != null ? leadAppointmentId : "0";
         String isAppointmentFixed = "false";
         String isAppointmentAttend = "false";
         String appointmentDate = "";
@@ -626,9 +628,18 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         if (isValidate()) {
             // Methods for Add Update are different in presenter
+
+            Log.v("http", "leadStringId: " + leadStringID + "\n AgentId: " + agentsID + "\n leadAppointmentId: " + leadAppointmentID + "eventTitle: " + eventTitle + "\nlocation: " + location +
+                    "\ndescription" + desc + "\nisAppointmentFixed: " + isAppointmentFixed + "\n isAppointmentAttend: " + isAppointmentAttend + "\n appointmentDate: " + appointmentDate +
+                    "\n datedFrom: " + datedFrom + "\n datedTo: " + datedTo + "\n isAllDay: " + isAllDay + "\n interval:  " + interval + "\n isSend: " + isSend + "\n viaReminder: " + viaReminder +
+                    "\n agentid: " + agentsID + "\n orderBy: " + orderBy + "\n timedFrom: " + timedFrom + "\n timedTo: " + timedTo + "\n isCompleted" + isCompleted + "\nfromId: " + fromId + "\n CalendarId: " + calendarId +
+                    "\n encryptedAppointmentId: " + encryptedAppointmentId);
+
             presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend,
                     appointmentDate, datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo,
-                    isCompleted, fromId, calendarId, encryptedAppointmentId);
+                    isCompleted, fromId, calendarId, encryptedAppointmentId, leadId);
+
+
         }
     }
 

@@ -51,11 +51,11 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         try {
 
             Glide.with(context).load(data.get(position).getImgURL()).into(holder.ivHouse);
-            holder.tvStartDateTime.setText(GH.getInstance().formatDateTime(data.get(position).getOpenHouseDate()));
-            holder.tvEndDateTime.setText(GH.getInstance().formatDateTime(data.get(position).getOpenHouseEndDate()));
+            holder.tvStartDateTime.setText(GH.getInstance().formatter(data.get(position).getOpenHouseDate(), "MM-dd-yyyy h:mm a", "yyyy-MM-dd'T'h:mm:ss"));
+            holder.tvEndDateTime.setText(GH.getInstance().formatter(data.get(position).getOpenHouseEndDate(), "MM-dd-yyyy h:mm a", "yyyy-MM-dd'T'h:mm:ss"));
             holder.tvAddress.setText(data.get(position).getStreetName() + " , " + data.get(position).getCity());
             holder.tvCityPostal.setText(data.get(position).getState());
-            holder.tvLeadsCount.setText(data.get(position).getLeadCount());
+            holder.tvLeadsCount.setText(data.get(position).getLeadCount() != 0 ? "Leads " + data.get(position).getLeadCount() : "Leads 0");
 
         } catch (Exception e) {
             e.printStackTrace();

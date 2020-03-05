@@ -34,7 +34,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:text="12/31/2020 5:07 PM"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -56,7 +55,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="12/31/2020 5:07 PM"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -68,7 +66,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="90 gail Court Copy -2 North"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -79,7 +76,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="Branford CT 06472"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -96,7 +92,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="Leads 0"
                 android:layout_marginBottom="20dp"
                 android:textColor="@color/colorAccent"
                 android:textSize="20dp"

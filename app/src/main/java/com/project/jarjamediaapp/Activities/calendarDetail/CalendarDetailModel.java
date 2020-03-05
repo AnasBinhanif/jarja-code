@@ -166,6 +166,9 @@ public class CalendarDetailModel extends BaseResponse implements Parcelable {
             @SerializedName("encrypted_LeadID")
             @Expose
             public String encryptedLeadID;
+            @SerializedName("encrypted_LeadAppoinmentID")
+            @Expose
+            public String encrypted_LeadAppoinmentID;
             @SerializedName("note")
             @Expose
             public String note;
@@ -278,6 +281,7 @@ public class CalendarDetailModel extends BaseResponse implements Parcelable {
                 viaReminder = in.readString();
                 agentList = in.createTypedArrayList(AgentList.CREATOR);
                 encryptedLeadID = in.readString();
+                encrypted_LeadAppoinmentID = in.readString();
                 note = in.readString();
             }
 
@@ -323,6 +327,7 @@ public class CalendarDetailModel extends BaseResponse implements Parcelable {
                 dest.writeString(viaReminder);
                 dest.writeTypedList(agentList);
                 dest.writeString(encryptedLeadID);
+                dest.writeString(encrypted_LeadAppoinmentID);
                 dest.writeString(note);
             }
 
@@ -465,6 +470,10 @@ public class CalendarDetailModel extends BaseResponse implements Parcelable {
 
             public String getEncryptedLeadID() {
                 return encryptedLeadID;
+            }
+
+            public String getEncrypted_LeadAppointmentID() {
+                return encrypted_LeadAppoinmentID;
             }
 
             public String getNote() {

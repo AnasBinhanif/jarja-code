@@ -22,13 +22,15 @@
                 android:background="@color/colorYellow"
                 android:orientation="horizontal"
                 android:padding="@dimen/_10sdp"
-                android:weightSum="3">
+                android:weightSum="6">
 
                 <TextView
                     android:id="@+id/tvEventTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:layout_gravity="center"
                     android:drawableStart="@drawable/ic_calendar_white"
                     android:drawablePadding="@dimen/_10sdp"
@@ -41,7 +43,7 @@
                     android:id="@+id/tvClose"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="5"
                     android:drawableEnd="@drawable/ic_close_dg"
                     android:drawablePadding="@dimen/_10sdp"
                     android:paddingStart="0dp"

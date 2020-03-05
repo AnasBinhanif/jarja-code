@@ -68,6 +68,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_14sdp"
+                    android:maxLines="2"
                     android:textStyle="bold" />
 
             </LinearLayout>

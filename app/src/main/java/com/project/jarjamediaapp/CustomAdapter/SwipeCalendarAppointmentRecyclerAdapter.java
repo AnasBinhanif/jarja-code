@@ -80,6 +80,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                 @Override
                 public void onClick(View v) {
 
+                    modelData = mData.get(pos);
                     viewCalendarAppointmentOrTaskDetail(modelData.getCalendarId(), modelData.getCalendarType(), modelData.getStart());
 
                 }
@@ -306,12 +307,12 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                         // data and calendar id will be passed in intent
                         context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                 .putExtra("from", "6")
-                                .putExtra("calendarId",modelData.getCalendarId())
+                                .putExtra("calendarId", modelData.getCalendarId())
                                 .putExtra("modelData", calendarDetailModel));
                     } else {
                         context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
                                 .putExtra("isEdit", true)
-                                .putExtra("calendarId",modelData.getCalendarId())
+                                .putExtra("calendarId", modelData.getCalendarId())
                                 .putExtra("modelData", calendarDetailModel));
                     }
                 }
@@ -382,7 +383,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                             // data and calendar id will be passed in intent
                             context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                     .putExtra("from", "6")
-                                    .putExtra("calendarId",modelData.getCalendarId())
+                                    .putExtra("calendarId", modelData.getCalendarId())
                                     .putExtra("modelData", calendarDetailModel));
                         } else {
                             context.startActivity(new Intent(context, AddCalendarTaskActivity.class)

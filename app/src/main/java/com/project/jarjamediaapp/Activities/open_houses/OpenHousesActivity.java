@@ -380,6 +380,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         if (dialog != null) {
             dialog.dismiss();
         }
+        presenter.getAllOpenHouses("upcoming");
 
     }
 
@@ -786,7 +787,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
                 tvDateTime.setText(formattedTime(dayOfMonth + "-" + month + "-" + year + " " + selectedHour + ":" + selectedMinute));
 
             }
-        }, hour, minute, true);//Yes 24 hour time
+        }, hour, minute, false);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
 
