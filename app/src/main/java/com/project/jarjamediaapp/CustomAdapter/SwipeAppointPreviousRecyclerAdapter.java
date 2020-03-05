@@ -36,14 +36,15 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
     public Context context;
     int pos;
-    boolean isEditByLead;
+    boolean isEditByLead,isPreviousAppoint;
     List<GetAppointmentsModel.Data> mData;
 
-    public SwipeAppointPreviousRecyclerAdapter(Context context, List<GetAppointmentsModel.Data> data, boolean isEditByLead) {
+    public SwipeAppointPreviousRecyclerAdapter(Context context, List<GetAppointmentsModel.Data> data, boolean isEditByLead,boolean isPreviousAppoint) {
 
         mData = data;
         this.context = context;
         this.isEditByLead = isEditByLead;
+        this.isPreviousAppoint = isPreviousAppoint;
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
     }
@@ -148,13 +149,17 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
 
             tvDone.setOnClickListener(v -> {
                 pos = getAdapterPosition();
-                String leadID = mData.get(pos).leadsData.leadID;
+                String leadID = mData.get(pos).leadAppoinmentID;
                 markAsRead(leadID + ",", "true");
             });
 
+            if (isPreviousAppoint){
+                tvDone.setVisibility(View.GONE);
+            }
+
             tvEdit.setOnClickListener(v -> {
                 pos = getAdapterPosition();
-                String leadID = mData.get(pos).leadsData.leadID;
+                String leadID = mData.get(pos).leadAppoinmentID;
                 GetAppointmentsModel.Data modelData = mData.get(pos);
                 if (isEditByLead) {
                     swipeLayout.close(true);
@@ -186,6 +191,7 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
 
                     BaseResponse getAppointmentsModel = response.body();
                     if (getAppointmentsModel.getStatus().equals("Success")) {
+                        binderHelper.closeLayout(String.valueOf(pos));
                         ToastUtils.showToast(context, "Successfully Done");
                         mData.remove(pos);
                         notifyDataSetChanged();

@@ -36,9 +36,10 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     TransactionPresenter presenter;
 
     ArrayList<GetLeadTransactionStage.PipeLine> transactionPipeline = new ArrayList<>();
-    String currentPipeline = "";
+    String currentPipeline = "", markedPipeline = "";
     boolean bf = true;
     String leadID = "", title = "";
+    RecyclerAdapterUtil recyclerAdapterUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         bi.recyclerViewTransaction.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.recyclerViewTransaction.setItemAnimator(new DefaultItemAnimator());
         bi.recyclerViewTransaction.addItemDecoration(new DividerItemDecoration(bi.recyclerViewTransaction.getContext(), 1));
-        RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, transactionPipeline, R.layout.custom_transaction_layout);
+        recyclerAdapterUtil = new RecyclerAdapterUtil(context, transactionPipeline, R.layout.custom_transaction_layout);
         recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvDate, R.id.imgInitial, R.id.tvInitial);
 
         recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetLeadTransactionStage.PipeLine, Integer, Map<Integer, ? extends View>, Unit>)
@@ -91,6 +92,10 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
                         imgInitial.setVisibility(View.VISIBLE);
                         tvInitial.setVisibility(View.GONE);
+                    }else{
+                        tvName.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                        imgInitial.setVisibility(View.GONE);
+                        tvInitial.setVisibility(View.VISIBLE);
                     }
 
                     if (allLeadsList.pipeline.contains(currentPipeline)) {
@@ -99,6 +104,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         tvInitial.setVisibility(View.GONE);
                         bf = false;
                     }
+
                     return Unit.INSTANCE;
                 });
 
@@ -110,10 +116,12 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                     if (title.contains("Transaction 1")) {
                         String pipelineID = String.valueOf(viewComplainList.id);
                         String presentationID = "1";
+                        markedPipeline = viewComplainList.pipeline;
                         presenter.addPipelineMark(pipelineID, leadID, presentationID);
                     } else if (title.contains("Transaction 2")) {
                         String pipelineID = String.valueOf(viewComplainList.id);
                         String presentationID = "2";
+                        markedPipeline = viewComplainList.pipeline;
                         presenter.addPipelineMark(pipelineID, leadID, presentationID);
                     }
 
@@ -134,6 +142,10 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
         if (response.body().getStatus().equals("Success")) {
             ToastUtils.showToast(context, "Assigned Successfully");
+            bf = true;
+            currentPipeline = markedPipeline;
+            recyclerAdapterUtil.notifyDataSetChanged();
+            populateListData();
         }
     }
 

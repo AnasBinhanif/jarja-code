@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -91,10 +92,23 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.tvName.setOnClickListener(this);
         bi.tvAssignTo.setOnClickListener(this);
         bi.tvStartDate.setOnClickListener(this);
+        bi.tvEndDate.setOnClickListener(this);
         bi.atvType.setOnClickListener(this);
         bi.atvRecur.setOnClickListener(this);
         bi.atvReminder.setOnClickListener(this);
         bi.atvVia.setOnClickListener(this);
+
+        bi.cbEndDate.setOnCheckedChangeListener((compoundButton, b) -> {
+
+            if (b) {
+                endDate = "";
+                bi.tvEndDate.setText("");
+                bi.tvEndDate.setVisibility(View.GONE);
+            } else {
+                bi.tvEndDate.setVisibility(View.VISIBLE);
+            }
+
+        });
 
         // 1 from Add Task by Lead Id
         // 2 from Update Task Lead Id
@@ -255,12 +269,15 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListViaValue);
         bi.atvRecur.setAdapter(arrayAdapter);
 
-        bi.atvRecur.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        bi.atvRecur.setOnItemClickListener((parent, view, position, id) -> {
 
-                reoccur = arrayListViaText.get(position);
+            reoccur = arrayListViaText.get(position);
+            if (position != 0) {
+                bi.lnEndDate.setVisibility(View.VISIBLE);
+            } else {
+                bi.lnEndDate.setVisibility(View.GONE);
             }
+
         });
         presenter.getReminder();
 
@@ -328,6 +345,9 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             case R.id.tvStartDate:
                 showDateDialog(bi.tvStartDate, true);
                 break;
+            case R.id.tvEndDate:
+                showDateDialog(bi.tvEndDate, false);
+                break;
             case R.id.tvAssignTo:
                 showAgentDialog();
                 break;
@@ -352,7 +372,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     private void callAddTask() {
 
         String id = "1";
-        String agentIds = String.valueOf(agentModel.getId());
+        String agentIds = agentIdsString;
         String leadStringID = leadId + "";
         String isAssignNow = bi.tvName.getText().toString().equals("") ? "true" : "false";
         String monthType = "";
@@ -362,7 +382,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String reoccur = this.reoccur;
         String type = this.type;
         String datedFrom = startDate;
-        String datedto = startDate;
+        String datedto = endDate;
         String recurDay = "";
         String recureWeek = "";
         String noOfWeek = "";
@@ -371,7 +391,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String weekNo = "";
         String monthOfYear = "";
         String nextRun = "";
-        String isEndDate = "false";
+        String isEndDate = bi.cbEndDate.isChecked() ? "false" : "true";
         String reminderDate = "";
         String interval = reminder;
         String isSend = "";
@@ -380,8 +400,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String propertyAddress = bi.atvAddProperty.getText().toString() + "";
 
 
-        presenter.addTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
-                dayOfWeek, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);
+        presenter.addTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc,reoccur, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
+                dayOfWeek,dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);
 
     }
 

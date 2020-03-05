@@ -201,7 +201,6 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
     }
 
-
     @Override
     public void onClick(View view) {
 

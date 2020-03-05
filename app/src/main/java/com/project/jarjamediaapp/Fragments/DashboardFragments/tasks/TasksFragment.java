@@ -98,7 +98,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList, isFromActivity);
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList, isFromActivity,false);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerTaskViewDue.setLayoutManager(mLayoutManager);
                     bi.recyclerTaskViewDue.setItemAnimator(new DefaultItemAnimator());
@@ -121,7 +121,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskOverDue.setVisibility(View.VISIBLE);
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList, isFromActivity);
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList, isFromActivity,false);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewTaskOverDue.setLayoutManager(mLayoutManager);
                     bi.recyclerViewTaskOverDue.setItemAnimator(new DefaultItemAnimator());
@@ -143,7 +143,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
                     bi.recyclerViewTaskFutureTask.setVisibility(View.VISIBLE);
 
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList, isFromActivity);
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, tasksList, isFromActivity,true);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewTaskFutureTask.setLayoutManager(mLayoutManager);
                     bi.recyclerViewTaskFutureTask.setItemAnimator(new DefaultItemAnimator());

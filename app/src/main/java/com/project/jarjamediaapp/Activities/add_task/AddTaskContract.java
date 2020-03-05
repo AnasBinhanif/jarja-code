@@ -51,7 +51,8 @@ public interface AddTaskContract {
         void getVia();
 
         void addTask(String id, String agentIds, String leadIds, String isAssignNow, String monthType, String scheduleID, String name, String desc,
-                     String type, String startDate, String endDate, String recurDay, String recureWeek, String noOfWeek, String dayOfWeek, String weekNo,
+                     String scheduleRecurID, String type, String startDate, String endDate, String recurDay, String recureWeek, String noOfWeek, String dayOfWeek,
+                     String dayOfMonth,String weekNo,
                      String monthOfYear, String nextRun, String isEndDate, String reminderDate, String interval, String isSend, String viaReminder,
                      String propertyId, String propertyAddress);
 

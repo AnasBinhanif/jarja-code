@@ -34,13 +34,14 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
     public Context context;
     int pos;
-    boolean isEditByLead;
+    boolean isEditByLead, isFutureTask;
     List<GetTasksModel.Data> mData;
 
-    public SwipeTasksDueRecyclerAdapter(Context context, List<GetTasksModel.Data> data, boolean isEditByLead) {
+    public SwipeTasksDueRecyclerAdapter(Context context, List<GetTasksModel.Data> data, boolean isEditByLead, boolean isFutureTask) {
 
         mData = data;
         this.context = context;
+        this.isFutureTask = isFutureTask;
         this.isEditByLead = isEditByLead;
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
@@ -188,6 +189,10 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
                 markAsRead(taskID);
             });
 
+            if (isFutureTask) {
+
+                tvDone.setVisibility(View.GONE);
+            }
             tvEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

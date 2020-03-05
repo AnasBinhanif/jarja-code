@@ -261,7 +261,7 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
 
             tvView.setOnClickListener(v -> {
                 pos = getAdapterPosition();
-                viewDetail(mData.get(pos).leadID);
+                viewDetail(mData.get(pos).dripDetailID);
             });
         }
     }

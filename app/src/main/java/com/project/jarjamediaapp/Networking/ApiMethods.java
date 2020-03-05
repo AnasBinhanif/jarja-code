@@ -105,7 +105,7 @@ public interface ApiMethods {
             @Header("Authorization") String authorization
     );
 
-    @GET("FollowUp/GetFollowUpDetails")
+    @GET("FollowUp/GetFollowUpDetails_New")
     Call<ViewFollowUpModel> GetFollowUpDetails(
             @Header("Authorization") String authorization,
             @Query("id") String leadID
@@ -420,7 +420,7 @@ public interface ApiMethods {
             @Field("leadID") String leadID);
 
     @FormUrlEncoded
-    @POST("Tasks/AddNew")
+    @POST("Tasks/AddTaskNew")
     Call<BaseResponse> AddTask(
             @Header("Authorization") String authorization,
             @Field("id") String id,
@@ -431,6 +431,7 @@ public interface ApiMethods {
             @Field("scheduleID") String scheduleID,
             @Field("name") String name,
             @Field("desc") String desc,
+            @Field("scheduleRecurID") String scheduleRecurID,
             @Field("type") String type,
             @Field("startDate") String startDate,
             @Field("endDate") String endDate,
@@ -438,6 +439,7 @@ public interface ApiMethods {
             @Field("recureWeek") String recureWeek,
             @Field("noOfWeek") String noOfWeek,
             @Field("dayOfWeek") String dayOfWeek,
+            @Field("dayOfMonth") String dayOfMonth,
             @Field("weekNo") String weekNo,
             @Field("monthOfYear") String monthOfYear,
             @Field("nextRun") String nextRun,

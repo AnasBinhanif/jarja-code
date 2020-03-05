@@ -227,7 +227,7 @@
 
 
     <string name="errSinglePiece">Single piece of information is required.</string>
-    <string name="errSelectAgent">Agent(s) is required.</string>
+    <string name="errSelectAgent">Agent is required.</string>
 
     <string-array name="days_sunday_array">
         <item>S</item>

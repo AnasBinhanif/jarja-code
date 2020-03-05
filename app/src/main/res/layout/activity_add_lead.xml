@@ -129,26 +129,11 @@
                         style="@style/AutoCompleteLabelStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/spouse_bday" />
-
-                    <TextView
-                        android:id="@+id/edtSpouseBday"
-                        style="@style/AutoCompleteStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableRight="@drawable/ic_calendar"
-                        android:gravity="center|left"
-                        android:hint="@string/spouse_bday" />
-
-                    <TextView
-                        style="@style/AutoCompleteLabelStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="@string/birthday" />
 
                     <TextView
                         android:id="@+id/edtBday"
-                        style="@style/AutoCompleteLabelStyle"
+                        style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableRight="@drawable/ic_calendar"
@@ -167,11 +152,26 @@
                         style="@style/AutoCompleteLabelStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@string/spouse_bday" />
+
+                    <TextView
+                        android:id="@+id/edtSpouseBday"
+                        style="@style/AutoCompleteStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/ic_calendar"
+                        android:gravity="center|left"
+                        android:hint="@string/spouse_bday" />
+
+                    <TextView
+                        style="@style/AutoCompleteLabelStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/anniversary" />
 
                     <TextView
                         android:id="@+id/edtAnniversary"
-                        style="@style/AutoCompleteLabelStyle"
+                        style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableRight="@drawable/ic_calendar"
@@ -246,6 +246,7 @@
                         android:imeOptions="actionNext"
                         android:singleLine="true"
                         android:inputType="number"
+                        android:maxLength="10"
                         android:layout_height="wrap_content"
                         android:hint="@string/postal_code_1" />
 
@@ -281,6 +282,7 @@
                         android:hint="@string/city_2" />
 
                     <TextView
+                        style="@style/AutoCompleteLabelStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
@@ -307,6 +309,7 @@
                         android:layout_width="match_parent"
                         android:imeOptions="actionNext"
                         android:singleLine="true"
+                        android:maxLength="10"
                         android:inputType="number"
                         android:layout_height="wrap_content"
                         android:hint="@string/postal_code_2" />
@@ -424,7 +427,7 @@
 
                     <TextView
                         android:id="@+id/edtDripCompaign"
-                        style="@style/AutoCompleteLabelStyle"
+                        style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left|center"

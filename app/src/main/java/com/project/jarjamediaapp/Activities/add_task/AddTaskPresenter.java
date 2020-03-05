@@ -224,16 +224,16 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
     @Override
     public void addTask(String id, String agentIds, String leadIds, String isAssignNow, String monthType, String scheduleID, String name, String desc,
-                        String type, String startDate, String endDate, String recurDay, String recureWeek, String noOfWeek, String dayOfWeek,
-                        String weekNo, String monthOfYear, String nextRun, String isEndDate, String reminderDate, String interval, String isSend,
+                        String scheduleRecurID,String type, String startDate, String endDate, String recurDay, String recureWeek, String noOfWeek, String dayOfWeek,
+                        String dayOfMonth, String weekNo, String monthOfYear, String nextRun, String isEndDate, String reminderDate, String interval, String isSend,
                         String viaReminder, String propertyId, String propertyAddress) {
 
         _view.showProgressBar();
 
         callAddTask = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddTask(GH.getInstance().getAuthorization(),
                 id, agentIds, leadIds, isAssignNow, monthType, scheduleID, name, desc,
-                type, startDate, endDate, recurDay, recureWeek, noOfWeek, dayOfWeek,
-                weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend,
+                scheduleRecurID,type, startDate, endDate, recurDay, recureWeek, noOfWeek, dayOfWeek,
+                dayOfMonth,weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend,
                 viaReminder, propertyId, propertyAddress);
 
         callAddTask.enqueue(new Callback<BaseResponse>() {
