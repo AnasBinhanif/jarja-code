@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.CustomAdapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetTasksModel;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -208,7 +210,7 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
                     } else {
 
                         swipeLayout.close(true);
-                       /* context.startActivity(new Intent(context, AddTaskActivity.class)
+                     /*   context.startActivity(new Intent(context, AddTaskActivity.class)
                                 .putExtra("leadID", leadID)
                                 .putExtra("from", "3")
                                 .putExtra("model", mData));*/

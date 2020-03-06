@@ -135,7 +135,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
             }
             break;
-            case "3":
+            case "3":{
+
+            }
+            break;
             case "5": {
                 bi.tvName.setEnabled(true);
             }
