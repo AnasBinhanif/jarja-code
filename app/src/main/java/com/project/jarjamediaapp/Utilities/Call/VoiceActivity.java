@@ -4,11 +4,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.media.AudioAttributes;
@@ -35,7 +33,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ProcessLifecycleOwner;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -257,7 +254,7 @@ public class VoiceActivity extends AppCompatActivity {
                     Log.e(TAG, message);
                     Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
                 }
-                resetUI();
+                finish();
             }
         };
     }
@@ -306,6 +303,22 @@ public class VoiceActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+
+    private void makeCall(String toNumber) {
+        params.put("From", "(424) 320-6595");
+        params.put("callerid", "(424) 320-6595");
+        params.put("Called", toNumber);
+        params.put("To", toNumber);
+        params.put("Direction", "outbound-dial");
+        params.put("Type", "Phone");
+
+        ConnectOptions connectOptions = new ConnectOptions.Builder(accessToken)
+                .params(params)
+                .build();
+        activeCall = Voice.connect(VoiceActivity.this, connectOptions, callListener);
+        setCallUI();
+    }
+
     private DialogInterface.OnClickListener callClickListener() {
         return (dialog, which) -> {
             // Place a call
@@ -313,12 +326,12 @@ public class VoiceActivity extends AppCompatActivity {
             EditText token = ((AlertDialog) dialog).findViewById(R.id.token);
             //accessToken = token.getText().toString();
 
-            params.put("From","(424) 320-6595");
-            params.put("callerid","(424) 320-6595");
-            params.put("Called",contact.getText().toString());
+            params.put("From", "(424) 320-6595");
+            params.put("callerid", "(424) 320-6595");
+            params.put("Called", contact.getText().toString());
             params.put("To", contact.getText().toString());
-            params.put("Direction","outbound-dial");
-            params.put("Type","Phone");
+            params.put("Direction", "outbound-dial");
+            params.put("Type", "Phone");
 
             ConnectOptions connectOptions = new ConnectOptions.Builder(accessToken)
                     .params(params)
@@ -548,6 +561,8 @@ public class VoiceActivity extends AppCompatActivity {
                     if (e == null) {
                         Log.d(TAG, "Access token: " + accessToken);
                         VoiceActivity.this.accessToken = accessToken;
+                        String toNumber = getIntent().getStringExtra("to");
+                        makeCall(toNumber);
                         //registerForCallInvites();
                     } else {
                         Snackbar.make(coordinatorLayout,

@@ -45,6 +45,7 @@ import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadDetails;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.Call.VoiceActivity;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -420,7 +421,11 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 break;
 
             case R.id.imgCall:
-                callDialer(getLeadListData.primaryPhone + "");
+                //callDialer(getLeadListData.primaryPhone + "");
+                Intent intentVoice = new Intent(context, VoiceActivity.class);
+                intentVoice.putExtra("to", "(203) 872-4771");
+                startActivity(intentVoice);
+
                 break;
 
             case R.id.imgEditLead:

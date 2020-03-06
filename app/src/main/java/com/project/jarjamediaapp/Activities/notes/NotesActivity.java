@@ -53,7 +53,6 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.notes), true);
     }
 
-
     @Override
     public void onClick(View v) {
 

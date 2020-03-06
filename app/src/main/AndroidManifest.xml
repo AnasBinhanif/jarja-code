@@ -55,7 +55,7 @@
         <activity android:name=".Activities.notification.NotificationActivity"></activity>
         <activity android:name=".Activities.calendarDetail.CalendarDetailActivity"></activity>
 
-
+        <activity android:name=".Utilities.Call.VoiceActivity"></activity>
         <activity android:name=".Activities.all_leads.AllLeadsActivity">
 
             <intent-filter>
