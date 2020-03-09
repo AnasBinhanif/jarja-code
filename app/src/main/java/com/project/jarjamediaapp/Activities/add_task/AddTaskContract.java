@@ -20,6 +20,8 @@ public interface AddTaskContract {
 
         void updateUIListForReoccur(AddAppointmentModel response);
 
+        void updateTaskDetail(GetTaskDetail response);
+
         void updateUIonFalse(String message);
 
         void updateUIonError(String error);
@@ -55,6 +57,8 @@ public interface AddTaskContract {
                      String dayOfMonth,String weekNo,
                      String monthOfYear, String nextRun, String isEndDate, String reminderDate, int interval, String isSend, String viaReminder,
                      String propertyId, String propertyAddress);
+
+        void getTaskDetail(String taskId);
 
     }
 

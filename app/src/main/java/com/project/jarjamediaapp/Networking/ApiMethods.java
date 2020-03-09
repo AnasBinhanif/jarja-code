@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Networking;
 
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
+import com.project.jarjamediaapp.Activities.add_task.GetTaskDetail;
 import com.project.jarjamediaapp.Activities.calendar.CalendarModel;
 import com.project.jarjamediaapp.Activities.calendarDetail.CalendarDetailModel;
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
@@ -418,6 +419,10 @@ public interface ApiMethods {
             @Field("endTime") String endTime,
             @Field("isCompleted") boolean isCompleted,
             @Field("leadID") String leadID);
+
+    @GET("Tasks/GetTasks")
+    Call<GetTaskDetail> getTaskDetail(@Header("Authorization") String authorization,
+                                      @Query("TaskID") String taskId);
 
     @FormUrlEncoded
     @POST("Tasks/AddTaskNew")

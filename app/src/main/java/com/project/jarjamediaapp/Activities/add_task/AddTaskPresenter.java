@@ -19,6 +19,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
     Call<GetAgentsModel> _call;
     Call<BaseResponse> callAddTask;
     Call<AddAppointmentModel> call;
+    Call<GetTaskDetail> apiCall;
 
     public AddTaskPresenter(AddTaskContract.View view) {
         super(view);
@@ -224,7 +225,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
     @Override
     public void addTask(String id, String agentIds, String leadIds, String isAssignNow, String monthType, String scheduleID, String name, String desc,
-                        int scheduleRecurID,String type, String startDate, String endDate, String recurDay, String recureWeek, String noOfWeek, String dayOfWeek,
+                        int scheduleRecurID, String type, String startDate, String endDate, String recurDay, String recureWeek, String noOfWeek, String dayOfWeek,
                         String dayOfMonth, String weekNo, String monthOfYear, String nextRun, String isEndDate, String reminderDate, int interval, String isSend,
                         String viaReminder, String propertyId, String propertyAddress) {
 
@@ -232,8 +233,8 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
         callAddTask = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddTask(GH.getInstance().getAuthorization(),
                 id, agentIds, leadIds, isAssignNow, monthType, scheduleID, name, desc,
-                scheduleRecurID,type, startDate, endDate, recurDay, recureWeek, noOfWeek, dayOfWeek,
-                dayOfMonth,weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend,
+                scheduleRecurID, type, startDate, endDate, recurDay, recureWeek, noOfWeek, dayOfWeek,
+                dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend,
                 viaReminder, propertyId, propertyAddress);
 
         callAddTask.enqueue(new Callback<BaseResponse>() {
@@ -262,6 +263,45 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void getTaskDetail(String taskId) {
+
+        _view.showProgressBar();
+        apiCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getTaskDetail(GH.getInstance().getAuthorization(), taskId);
+        apiCall.enqueue(new Callback<GetTaskDetail>() {
+            @Override
+            public void onResponse(Call<GetTaskDetail> call, Response<GetTaskDetail> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetTaskDetail getTaskDetail = response.body();
+
+                    if (getTaskDetail.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateTaskDetail(getTaskDetail);
+
+                    } else {
+
+                        _view.updateUIonFalse(getTaskDetail.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTaskDetail> call, Throwable t) {
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }

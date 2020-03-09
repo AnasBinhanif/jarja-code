@@ -203,17 +203,16 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
                     if (isEditByLead) {
 
                         swipeLayout.close(true);
-                      /*  context.startActivity(new Intent(context, AddTaskActivity.class)
+                        context.startActivity(new Intent(context, AddTaskActivity.class)
                                 .putExtra("leadID", leadID)
                                 .putExtra("from", "2")
-                                .putExtra("model", mData));*/
+                                .putExtra("taskId", mData.get(pos).taskID));
                     } else {
 
                         swipeLayout.close(true);
-                     /*   context.startActivity(new Intent(context, AddTaskActivity.class)
-                                .putExtra("leadID", leadID)
+                        context.startActivity(new Intent(context, AddTaskActivity.class)
                                 .putExtra("from", "3")
-                                .putExtra("model", mData));*/
+                                .putExtra("taskId", mData.get(pos).taskID));
                     }
                 }
             });
