@@ -377,12 +377,12 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String id = "1";
         String agentIds = agentIdsString;
         String leadStringID = leadId + "";
-        String isAssignNow = bi.tvName.getText().toString().equals("") ? "true" : "false";
+        String isAssignNow = bi.tvName.getText().toString().equals("") ? "false" : "true";
         String monthType = "";
         String scheduleID = "0";
-        String name = bi.tvName.getText().toString() + "";
+        String name = bi.atvNameTask.getText().toString() + "";
         String desc = bi.atvDescription.getText().toString() + "";
-        String reoccur = this.reoccur;
+        int scheduleRecurID = Integer.valueOf(reoccur);
         String type = this.type;
         String datedFrom = startDate;
         String datedto = endDate;
@@ -396,14 +396,13 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String nextRun = "";
         String isEndDate = bi.cbEndDate.isChecked() ? "false" : "true";
         String reminderDate = "";
-        String interval = reminder;
+        int interval = Integer.valueOf(reminder);
         String isSend = "";
         String viaReminder = via;
         String propertyId = "";
         String propertyAddress = bi.atvAddProperty.getText().toString() + "";
 
-
-        presenter.addTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc,reoccur, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
+        presenter.addTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc,scheduleRecurID, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
                 dayOfWeek,dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);
 
     }
