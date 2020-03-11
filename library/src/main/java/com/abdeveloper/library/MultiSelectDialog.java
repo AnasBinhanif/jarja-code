@@ -138,22 +138,22 @@ public class MultiSelectDialog extends AppCompatDialogFragment implements Search
             maxSelectionLimit = list.size();
         return this;
     }
-	
+
     public MultiSelectDialog setMaxSelectionLimit(int limit){
         this.maxSelectionLimit = limit;
         return this;
     }
-	
+
 	public MultiSelectDialog setMaxSelectionMessage(String message) {
 		this.maxSelectionMessage = message;
 		return this;
 	}
-	
+
     public MultiSelectDialog setMinSelectionLimit(int limit){
         this.minSelectionLimit = limit;
         return this;
     }
-	
+
 	public MultiSelectDialog setMinSelectionMessage(String message) {
 		this.minSelectionMessage = message;
 		return this;

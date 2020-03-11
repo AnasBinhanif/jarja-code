@@ -60,9 +60,9 @@ class MutliSelectAdapter extends RecyclerView.Adapter<MutliSelectAdapter.MultiSe
             holder.dialog_item_checkbox.setChecked(false);
         }*/
 
-        if (!isSelectedAll && smm ==1) {
+        if (!isSelectedAll && smm == 1) {
             holder.dialog_item_checkbox.setChecked(false);
-        } else if (isSelectedAll && smm ==1) {
+        } else if (isSelectedAll && smm == 1) {
             holder.dialog_item_checkbox.setChecked(true);
         }
 
@@ -84,8 +84,8 @@ class MutliSelectAdapter extends RecyclerView.Adapter<MutliSelectAdapter.MultiSe
         holder.main_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isSelectedAll=false;
-                smm=0;
+                isSelectedAll = false;
+                smm = 0;
                 if (!holder.dialog_item_checkbox.isChecked()) {
                     MultiSelectDialog.selectedIdsForCallback.add(mDataSet.get(holder.getAdapterPosition()).getId());
                     holder.dialog_item_checkbox.setChecked(true);

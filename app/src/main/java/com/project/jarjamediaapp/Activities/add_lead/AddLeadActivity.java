@@ -144,7 +144,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 {
                     GetLeadTypeList.Data typemodel = getLeadTypeList.get(i);
                     Integer id = typemodel.id;
-                    if (id==leadModel.leadTypeID)
+                    if (id== leadModel.leadTypeID)
                     {
                         bi.spnSource.setSelectedIndex(i);
                     }
@@ -176,7 +176,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                     TextView textView = child.findViewById(R.id.txtDynamic);
                     textView.setText(String.valueOf(name.agentName));
                     bi.lnAgent.addView(child);
-                    selectedIdsList.add(name.agentID);
+                    selectedIdsList.add(Integer.valueOf(name.agentID));
                 }
             }
 

@@ -90,9 +90,14 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        showMonthYearPicker();
+    }
+
+    @Override
     public void initViews() {
 
-        showMonthYearPicker();
         bi.calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
@@ -291,7 +296,6 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
         List<CalendarDay> list = new ArrayList<CalendarDay>();
         Calendar calendar = Calendar.getInstance();
-
         for (int i = 0; i < markedDatesFormatter.size(); i++) {
 
             calendar.set(yearSelected, (monthSelected - 1), markedDatesFormatter.get(i).getDateFormat());
@@ -300,6 +304,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         }
 
         bi.calendarView.invalidateDecorators();
+        bi.calendarView.removeDecorators();
         bi.calendarView.addDecorators(new EventDecorator(R.color.colorPrimary, list));
 
     }

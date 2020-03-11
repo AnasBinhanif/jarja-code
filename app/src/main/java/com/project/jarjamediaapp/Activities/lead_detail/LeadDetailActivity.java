@@ -620,7 +620,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
             if (getAssignedAgentList.size() != 0) {
                 for (GetLead.AgentsList model : getAssignedAgentList) {
-                    selectedIdsList.add(model.agentID);
+                    selectedIdsList.add(model.assignAgentsID);
                 }
             }
 

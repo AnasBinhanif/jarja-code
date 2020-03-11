@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
+        android:orientation="vertical"
         android:layout_height="match_parent">
 
         <include
@@ -14,7 +15,6 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
             android:fillViewport="true">
 
             <LinearLayout
@@ -140,7 +140,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
 
-                <MultiAutoCompleteTextView
+                <AutoCompleteTextView
                     android:id="@+id/atvDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -148,7 +148,6 @@
                     android:background="@drawable/bg_search"
                     android:gravity="start|top"
                     android:hint="@string/description"
-                    android:imeOptions="actionDone"
                     android:inputType="textMultiLine"
                     android:lines="4"
                     android:padding="@dimen/_10sdp"
@@ -335,6 +334,6 @@
 
         </ScrollView>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </layout>

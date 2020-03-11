@@ -76,17 +76,6 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             holder.tvCount.setText(modelData.getCount() != null ? String.valueOf(modelData.getCount()) : "0");
 
 
-            holder.frameLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    modelData = mData.get(pos);
-                    viewCalendarAppointmentOrTaskDetail(modelData.getCalendarId(), modelData.getCalendarType(), modelData.getStart());
-
-                }
-            });
-
-
             holder.swipeLayout.setSwipeListener(new SwipeRevealLayout.SwipeListener() {
                 @Override
                 public void onClosed(SwipeRevealLayout view) {
@@ -241,9 +230,19 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
             tvDelete.setOnClickListener(v -> {
 
-                pos = getAdapterPosition();
+                modelData = mData.get(getAdapterPosition());
                 deleteCalendarAppointmentOrTaskDetail(modelData.getCalendarId(), modelData.getCalendarType(), swipeLayout);
 
+            });
+
+            frameLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    modelData = mData.get(getAdapterPosition());
+                    viewCalendarAppointmentOrTaskDetail(modelData.getCalendarId(), modelData.getCalendarType(), modelData.getStart());
+
+                }
             });
 
         }
