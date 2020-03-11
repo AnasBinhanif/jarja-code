@@ -18,6 +18,15 @@
     <string name="add_appointment">Add Appointment</string>
     <string name="edit_appointment">Edit Appointment</string>
     <string name="edit">Edit</string>
+    <string name="_name_of_contact">Name Of Contact *</string>
+    <string name="_agent">Agent *</string>
+    <string name="_event_title">Event Title *</string>
+    <string name="_description">Description *</string>
+    <string name="_start_date">Start Date *</string>
+    <string name="_end_date">End Date *</string>
+    <string name="_start_time">Start Time *</string>
+    <string name="_end_time">End Time *</string>
+    <string name="_reminder">Reminder *</string>
     <string name="name_of_contact">Name Of Contact</string>
     <string name="agent">Agent</string>
     <string name="event_title">Event Title</string>
@@ -50,9 +59,13 @@
     <!--- Add Task Activity -->
     <string name="add_task">Add Task</string>
     <string name="name_of_task">Name The Task</string>
+    <string name="_name_of_task">Name The Task *</string>
     <string name="type">Type</string>
+    <string name="_type">Type *</string>
     <string name="assign_to">Assign To</string>
+    <string name="_assign_to">Assign To *</string>
     <string name="recur">Reoccur</string>
+    <string name="_recur">Reoccur *</string>
     <string name="call">Call</string>
     <string name="one_time">One Time</string>
 
@@ -72,6 +85,8 @@
     <string name="add_lead">Add Lead</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
+    <string name="_first_name">First Name *</string>
+    <string name="_last_name">Last Name *</string>
     <string name="spouse_name">Spouse Name</string>
     <string name="spouse_bday">Spouse Birthday</string>
     <string name="cell_phone">Cell Phone</string>
@@ -156,12 +171,17 @@
     <string name="select_picture">Select Picture</string>
     <string name="file_name">File name</string>
     <string name="listing_price">Listing Price</string>
+    <string name="_state_province">State/Province *</string>
     <string name="state_province">State/Province</string>
     <string name="city">City</string>
+    <string name="_city">City *</string>
     <string name="address">Address</string>
+    <string name="_address">Address *</string>
     <string name="zip_postal">Zip/Postal Code</string>
     <string name="start_date_time">Start Date Time</string>
     <string name="end_date_time">End Date Time</string>
+    <string name="_start_date_time">Start Date Time *</string>
+    <string name="_end_date_time">End Date Time *</string>
 
     <!--- Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -301,8 +321,8 @@
     <string name="error_city">Please enter city</string>
     <string name="error_state">Please enter state/province</string>
     <string name="error_zip">Please enter zip/postal code</string>
-    <string name="error_start_time">Please enter start date</string>
-    <string name="error_end_time">Please enter end date</string>
+    <string name="error_start_time">Please enter start time</string>
+    <string name="error_end_time">Please enter end time</string>
 
     <!-- Compose Email -->
     <string name="compose">Compose Email</string>

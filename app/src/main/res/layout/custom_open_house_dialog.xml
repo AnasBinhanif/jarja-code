@@ -108,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="@string/address"
+                android:text="@string/_address"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
@@ -129,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="@string/city"
+                android:text="@string/_city"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
@@ -150,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="@string/state_province"
+                android:text="@string/_state_province"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
@@ -193,7 +193,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="@string/start_date_time"
+                android:text="@string/_start_date_time"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
@@ -216,7 +216,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="@string/end_date_time"
+                android:text="@string/_end_date_time"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />

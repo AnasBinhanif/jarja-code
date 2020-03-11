@@ -66,7 +66,7 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
 
             String firstName = modelData.leadsData.firstName + "";
             String lastName = modelData.leadsData.lastName + "";
-            String address = modelData.leadsData.address + "";
+            String evenTitle = modelData.eventTitle+ "";
 
             if (firstName.equals("null") || firstName.equals("")) {
                 firstName = "-";
@@ -74,12 +74,12 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
             if (lastName.equals("null") || lastName.equals("")) {
                 lastName = "-";
             }
-            if (address.equals("null") || address.equals("")) {
-                address = "-";
+            if (evenTitle.equals("null") || evenTitle.equals("")) {
+                evenTitle = "-";
             }
 
             holder.tvName.setText(firstName + " " + lastName);
-            holder.tvAddress.setText(address);
+            holder.tvAddress.setText(evenTitle);
 
             holder.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
 

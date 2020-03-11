@@ -27,7 +27,6 @@ import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
-import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetLeadTitlesModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -64,7 +63,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     ArrayList<GetLeadTitlesModel.Data> nameList;
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
     ArrayList<MultiSelectModel> searchListItems;
-    String startDate = "", endDate = "", reminder = "", via = "", leadId = "", type = "", reoccur = "", agentId = "";
+    String startDate = "", endDate = "", reminder = "0", via = "", leadId = "", type = "", reoccur = "", agentId = "";
     String agentIdsString = "", leadName = "", taskId = "";
     MultiSelectModel agentModel;
     boolean isEdit;
@@ -88,6 +87,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         presenter.getAgentNames();
 
         bi.btnSave.setOnClickListener(this);
+        bi.btnCancel.setOnClickListener(this);
         bi.tvName.setOnClickListener(this);
         bi.tvAssignTo.setOnClickListener(this);
         bi.tvStartDate.setOnClickListener(this);
@@ -187,7 +187,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 presenter.getVia();
                 reminder = arrayListReminderValue.get(position);
-                if (via.contains("None")) {
+                if (bi.atvReminder.getText().toString().contains("None")) {
                     bi.atvVia.setVisibility(View.GONE);
                     bi.lblVia.setVisibility(View.GONE);
                 } else {
@@ -283,7 +283,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     @Override
     public void updateTaskDetail(GetTaskDetail response) {
 
-        // data bind 
+        // data bind
 
     }
 
@@ -297,7 +297,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String scheduleID = "0";
         String name = bi.atvNameTask.getText().toString() + "";
         String desc = bi.atvDescription.getText().toString() + "";
-        int scheduleRecurID = Integer.valueOf(reoccur);
+        int scheduleRecurID = !reoccur.equals("") ? Integer.valueOf(reoccur) : 0;
         String type = this.type;
         String datedFrom = startDate;
         String datedto = endDate;
@@ -311,7 +311,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String nextRun = "";
         String isEndDate = bi.cbEndDate.isChecked() ? "false" : "true";
         String reminderDate = "";
-        int interval = Integer.valueOf(reminder);
+        int interval = !reminder.equals("") ? Integer.valueOf(reminder) : 0;
         String isSend = "";
         String viaReminder = via;
         String propertyId = "";
@@ -390,6 +390,9 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             case R.id.btnSave:
                 callAddTask();
                 break;
+            case R.id.btnCancel:
+                finish();
+                break;
             case R.id.atvReminder:
                 reminder();
                 break;
@@ -402,6 +405,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             case R.id.atvRecur:
                 recur();
                 break;
+
         }
     }
 

@@ -34,8 +34,9 @@
         <activity
             android:name=".Activities.forgot_password.ForgotPasswordActivity"
             android:windowSoftInputMode="adjustResize"></activity>
-        <activity android:name=".Activities.add_appointment.AddAppointmentActivity"
-            android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+            android:name=".Activities.add_appointment.AddAppointmentActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".Activities.add_calendar_task.AddCalendarTaskActivity"></activity>
         <activity android:name=".Activities.add_task.AddTaskActivity"></activity>
         <activity android:name=".Activities.lead_detail.LeadDetailActivity"></activity>

@@ -111,10 +111,10 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 int month = monthOfYear + 1;
                 startDate = year + "-" + month + "-" + dayOfMonth;
                 textView.setText(dayOfMonth + "-" + month + "-" + year);
+
             }
-
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-
+        StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         StartTime.show();
 
     }

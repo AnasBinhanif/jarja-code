@@ -66,10 +66,9 @@
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/_14sdp"
                     android:maxLines="2"
-                    android:textStyle="bold" />
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/_14sdp" />
 
             </LinearLayout>
 

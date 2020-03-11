@@ -3,6 +3,7 @@ package com.project.jarjamediaapp.Fragments.DashboardFragments.appointments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,14 +36,14 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     AppointmentPresenter presenter;
     SwipeAppointPreviousRecyclerAdapter swipeAppointPreviousRecyclerAdapter;
     boolean isFromActivity;
-    String leadID ="";
+    String leadID = "";
     ArrayList<GetAppointmentsModel.Data> appointmentList = new ArrayList<>();
 
     public FragmentAppointment() {
         // Required empty public constructor
     }
 
-    public static FragmentAppointment newInstance(String fragment_title,String leadID, boolean fromActivity) {
+    public static FragmentAppointment newInstance(String fragment_title, String leadID, boolean fromActivity) {
         FragmentAppointment fragmentAppointment = new FragmentAppointment();
         Bundle args = new Bundle();
         args.putString("title", fragment_title);
@@ -91,7 +92,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     bi.recyclerViewToday.setVisibility(View.GONE);
 
                 } else {
-                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList,isFromActivity,false);
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList, isFromActivity, false);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewToday.setLayoutManager(mLayoutManager);
                     bi.recyclerViewToday.setItemAnimator(new DefaultItemAnimator());
@@ -105,7 +106,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     bi.recyclerViewUpcoming.setVisibility(View.GONE);
 
                 } else {
-                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList,isFromActivity,false);
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList, isFromActivity, false);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewUpcoming.setLayoutManager(mLayoutManager);
                     bi.recyclerViewUpcoming.setItemAnimator(new DefaultItemAnimator());
@@ -119,7 +120,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     bi.recyclerViewPrevious.setVisibility(View.GONE);
 
                 } else {
-                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList,isFromActivity,true);
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList, isFromActivity, true);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewPrevious.setLayoutManager(mLayoutManager);
                     bi.recyclerViewPrevious.setItemAnimator(new DefaultItemAnimator());
@@ -197,8 +198,8 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
             case R.id.fbAddAppoint:
 
                 Map<String, String> map = new HashMap<>();
-                map.put("from","5");
-                switchActivityWithIntentString(context,AddAppointmentActivity.class, (HashMap<String, String>) map);
+                map.put("from", "5");
+                switchActivityWithIntentString(context, AddAppointmentActivity.class, (HashMap<String, String>) map);
 
                 break;
 
@@ -275,6 +276,8 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
     @Override
     public void onResumeFragment() {
+
+        Log.d("resume","On Resume Called");
 
     }
 

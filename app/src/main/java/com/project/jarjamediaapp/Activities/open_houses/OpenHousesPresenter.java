@@ -1,5 +1,7 @@
 package com.project.jarjamediaapp.Activities.open_houses;
 
+import android.util.Log;
+
 import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
@@ -35,6 +37,7 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
 
         _view.showProgressBar();
         callAddressDetail = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getAddressDetailByPrefix(GH.getInstance().getAuthorization(), prefix,type);
+     //   Log.d("param123",callAddressDetail.);
         callAddressDetail.enqueue(new Callback<AddressDetailModel>() {
             @Override
             public void onResponse(Call<AddressDetailModel> call, Response<AddressDetailModel> response) {

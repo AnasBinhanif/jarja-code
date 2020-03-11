@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Activities.appointments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -140,4 +141,9 @@ public class AppointmentActivity extends BaseActivity implements View.OnClickLis
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("resume123","On Resume Called");
+    }
 }

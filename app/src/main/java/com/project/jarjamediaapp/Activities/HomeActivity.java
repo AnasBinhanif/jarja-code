@@ -32,6 +32,7 @@ import com.project.jarjamediaapp.Activities.open_houses.OpenHousesActivity;
 import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Fragments.DashboardFragments.TabsFragment;
+import com.project.jarjamediaapp.Fragments.DashboardFragments.appointments.FragmentAppointment;
 import com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads.FindLeadsFragment;
 import com.project.jarjamediaapp.Interfaces.UpdateTitle;
 import com.project.jarjamediaapp.Models.GetUserProfile;
@@ -175,6 +176,16 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onResume() {
         super.onResume();
 
+        if (fragment != null) {
+
+            title = getResources().getString(R.string.dashboard);
+            fragment = TabsFragment.newInstance(title, R.id.nav_dashboard);
+            addToStack = false;
+            shouldAnimate = true;
+            ReplaceFragment(fragment, title, shouldAnimate, addToStack);
+
+        }
+
     }
 
     @Override
@@ -232,8 +243,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         }
         if (fragment != null) {
             ReplaceFragment(fragment, title, shouldAnimate, addToStack);
-            //ForBaseFragmentActivityLogic
-            //pushFragments("Home", fragment, shouldAnimate, addToStack);
         }
     }
 
@@ -360,6 +369,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         return new BitmapDrawable(getResources(), bitmap);
     }
+
 
 
 }

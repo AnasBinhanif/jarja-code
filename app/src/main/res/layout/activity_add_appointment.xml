@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/agent"
+                    android:text="@string/_agent"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -90,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/event_title"
+                    android:text="@string/_event_title"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -135,7 +135,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/description"
+                    android:text="@string/_description"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -159,7 +159,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/start_date"
+                    android:text="@string/_start_date"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -180,7 +180,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/end_date"
+                    android:text="@string/_end_date"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -202,7 +202,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/start_time"
+                    android:text="@string/_start_time"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -224,7 +224,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/end_time"
+                    android:text="@string/_end_time"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -303,7 +303,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="30dp"
                     android:orientation="horizontal"
                     android:weightSum="2">
 

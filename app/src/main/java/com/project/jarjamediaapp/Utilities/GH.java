@@ -101,7 +101,7 @@ public class GH {
 
             // 2020-02-12T11:31:00
             date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(dateString);
-            formattedDate = new SimpleDateFormat("h:mm a", Locale.getDefault()).format(date);
+            formattedDate = new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(date);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

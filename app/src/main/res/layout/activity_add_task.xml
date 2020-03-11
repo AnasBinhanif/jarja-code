@@ -36,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
-                    android:text="@string/name_of_task"
+                    android:text="@string/_name_of_task"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -108,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/type"
+                    android:text="@string/_type"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -132,7 +132,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/assign_to"
+                    android:text="@string/_assign_to"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -167,7 +167,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/recur"
+                    android:text="@string/_recur"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -191,7 +191,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/start_date"
+                    android:text="@string/_start_date"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -222,7 +222,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:text="@string/end_date"
+                        android:text="@string/_end_date"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/_12sdp"
                         android:textStyle="bold" />
@@ -328,7 +328,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="30dp"
                     android:orientation="horizontal"
                     android:weightSum="2">
 
