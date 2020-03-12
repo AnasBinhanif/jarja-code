@@ -194,10 +194,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
             }
             break;
-
-
         }
-
     }
 
     private void prePopulateData(CalendarDetailModel.Data.CalendarData modelData) {
@@ -285,6 +282,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         if (modelData.getVtCRMLeadAppoinmentDetailCustom() != null && modelData.getVtCRMLeadAppoinmentDetailCustom().size() > 0) {
             ArrayList<String> arrayList = new ArrayList<>();
+            selectedIdsList = new ArrayList<>();
             for (int i = 0; i < modelData.getVtCRMLeadAppoinmentDetailCustom().size(); i++) {
                 View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
                 TextView textView = child.findViewById(R.id.txtDynamic);
@@ -292,6 +290,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 arrayList.add(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getAgentID());
                 bi.lnAgent.addView(child);
                 bi.lnAgent.setVisibility(View.VISIBLE);
+                // selectedIdsList.add(Integer.valueOf(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getAgentID()));
             }
             agentIdsString = TextUtils.join(",", arrayList);
         }

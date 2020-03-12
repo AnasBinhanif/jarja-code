@@ -59,6 +59,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     RecyclerAdapterUtil recyclerAdapterUtil;
     RecyclerView recyclerSearch;
 
+    ArrayList<String> arrayListViaText = new ArrayList<>();
+    ArrayList<String> arrayListViaValue = new ArrayList<>();
+    ArrayList<String> arrayListReminderText = new ArrayList<>();
+    ArrayList<String> arrayListReminderValue = new ArrayList<>();
+
     ArrayList<GetAgentsModel.Data> agentList;
     ArrayList<GetLeadTitlesModel.Data> nameList;
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
@@ -85,6 +90,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     public void initViews() {
 
         presenter.getAgentNames();
+        presenter.getReminder();
+        presenter.getVia();
+        presenter.getType();
+        presenter.getRecur();
 
         bi.btnSave.setOnClickListener(this);
         bi.btnCancel.setOnClickListener(this);
@@ -164,14 +173,14 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         for (GetAgentsModel.Data model : agentList) {
             searchListItems.add(new MultiSelectModel(model.agentID, model.agentName, model.encryptedAgentID));
         }
-        presenter.getType();
+
     }
 
     @Override
     public void updateUIListForReminders(AddAppointmentModel response) {
 
-        ArrayList<String> arrayListReminderText = new ArrayList<>();
-        ArrayList<String> arrayListReminderValue = new ArrayList<>();
+        arrayListReminderText = new ArrayList<>();
+        arrayListReminderValue = new ArrayList<>();
 
         for (int i = 0; i < response.getData().size(); i++) {
 
@@ -202,8 +211,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     @Override
     public void updateUIListForVia(AddAppointmentModel response) {
 
-        ArrayList<String> arrayListViaText = new ArrayList<>();
-        ArrayList<String> arrayListViaValue = new ArrayList<>();
+        arrayListViaText = new ArrayList<>();
+        arrayListViaValue = new ArrayList<>();
 
         for (int i = 0; i < response.getData().size(); i++) {
 
@@ -247,7 +256,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
         });
 
-        presenter.getRecur();
+
 
     }
 
@@ -276,15 +285,47 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
 
         });
-        presenter.getReminder();
-
     }
 
     @Override
     public void updateTaskDetail(GetTaskDetail response) {
 
         // data bind
+        GetTaskDetail ft = response;
+        retrieveData(ft);
 
+    }
+
+    private void retrieveData(GetTaskDetail taskDetail) {
+
+        bi.atvNameTask.setText(taskDetail.data.name);
+        bi.atvDescription.setText(taskDetail.data.description);
+        bi.tvName.setText(taskDetail.data.firstName);
+        bi.atvType.setText(taskDetail.data.type);
+        bi.atvType.setText(taskDetail.data.type, false);
+        bi.atvRecur.setText(taskDetail.data.recur, false);
+        bi.atvReminder.setText(arrayListReminderText.get(arrayListReminderValue.indexOf(String.valueOf(taskDetail.data.interval))), false);
+        bi.atvVia.setText(arrayListViaText.get(arrayListViaValue.indexOf(taskDetail.data.viaReminder)), false);
+        String startDate = GH.getInstance().formatter(taskDetail.data.startDate, "MM-dd-yyyy", "dd/MM/yyyy hh:mm:ss a");
+        String endDate = GH.getInstance().formatter(taskDetail.data.endDate, "MM-dd-yyyy", "dd/MM/yyyy hh:mm:ss a");
+        bi.tvStartDate.setText(startDate);
+        bi.tvEndDate.setText(endDate);
+        if (taskDetail.data.agents.size() != 0) {
+
+            if (bi.lnAgent.getChildCount() > 0) {
+                bi.lnAgent.removeAllViews();
+            }
+            selectedIdsList = new ArrayList<>();
+
+            for (GetTaskDetail.Data.Agent name : taskDetail.data.agents) {
+
+                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                TextView textView = child.findViewById(R.id.txtDynamic);
+                textView.setText(String.valueOf(name.agentName));
+                bi.lnAgent.addView(child);
+                //selectedIdsList.add(name.);
+            }
+        }
     }
 
     private void callAddTask() {
@@ -405,7 +446,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             case R.id.atvRecur:
                 recur();
                 break;
-
         }
     }
 

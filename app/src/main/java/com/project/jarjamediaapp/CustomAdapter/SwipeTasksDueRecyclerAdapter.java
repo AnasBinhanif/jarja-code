@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -200,19 +201,28 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     pos = getAdapterPosition();
                     String leadID = mData.get(pos).leadID;
+                    String taskID = mData.get(pos).taskID;
                     if (isEditByLead) {
 
                         swipeLayout.close(true);
-                        context.startActivity(new Intent(context, AddTaskActivity.class)
-                                .putExtra("leadID", leadID)
-                                .putExtra("from", "2")
-                                .putExtra("taskId", mData.get(pos).taskID));
+                        if (taskID == null || taskID.equals("null") || taskID.equals("")) {
+                            Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                        } else {
+                            context.startActivity(new Intent(context, AddTaskActivity.class)
+                                    .putExtra("leadID", leadID)
+                                    .putExtra("from", "2")
+                                    .putExtra("taskId", taskID));
+                        }
                     } else {
 
                         swipeLayout.close(true);
-                        context.startActivity(new Intent(context, AddTaskActivity.class)
-                                .putExtra("from", "3")
-                                .putExtra("taskId", mData.get(pos).taskID));
+                        if (taskID == null || taskID.equals("null") || taskID.equals("")) {
+                            Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                        } else {
+                            context.startActivity(new Intent(context, AddTaskActivity.class)
+                                    .putExtra("from", "3")
+                                    .putExtra("taskId", taskID));
+                        }
                     }
                 }
             });

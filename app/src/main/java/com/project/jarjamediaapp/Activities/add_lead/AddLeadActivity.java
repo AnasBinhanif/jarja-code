@@ -176,7 +176,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                     TextView textView = child.findViewById(R.id.txtDynamic);
                     textView.setText(String.valueOf(name.agentName));
                     bi.lnAgent.addView(child);
-                    selectedIdsList.add(Integer.valueOf(name.agentID));
+                   // selectedIdsList.add(Integer.valueOf(name.agentID));
+                    selectedIdsList.add(name.assignAgentsID);
                 }
             }
 
