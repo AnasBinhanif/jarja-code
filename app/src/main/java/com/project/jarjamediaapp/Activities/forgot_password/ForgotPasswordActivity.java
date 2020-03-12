@@ -122,13 +122,13 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
     @Override
     public void showProgressBar() {
 
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(ForgotPasswordActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
 
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
 }

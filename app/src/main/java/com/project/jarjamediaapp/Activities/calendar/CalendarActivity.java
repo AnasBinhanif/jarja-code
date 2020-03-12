@@ -175,13 +175,13 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void showProgressBar() {
 
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(CalendarActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
 
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
     @Override
@@ -247,7 +247,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         if (response.data.size() > 0) {
 
             dataList = response.getData();
-            swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, response.getData());
+            swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, CalendarActivity.this, response.getData());
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.rvEvents.getContext(), 1);
             bi.rvEvents.setLayoutManager(mLayoutManager);

@@ -177,12 +177,12 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
 
     @Override
     public void showProgressBar() {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(ListingInfoActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
     @Override

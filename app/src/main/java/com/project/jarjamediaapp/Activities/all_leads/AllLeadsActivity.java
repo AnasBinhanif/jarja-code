@@ -250,13 +250,13 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void showProgressBar() {
 
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(AllLeadsActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
 
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
     @Override

@@ -633,12 +633,12 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
     @Override
     public void showProgressBar() {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(AddLeadActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
     @Override

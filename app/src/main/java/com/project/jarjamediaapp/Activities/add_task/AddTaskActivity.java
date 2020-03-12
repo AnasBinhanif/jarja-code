@@ -638,13 +638,13 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     @Override
     public void showProgressBar() {
 
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(AddTaskActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
 
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
     private void getLeadByText(String query, Dialog dialog) {
@@ -653,7 +653,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         _callToday.enqueue(new Callback<GetLeadTitlesModel>() {
             @Override
             public void onResponse(Call<GetLeadTitlesModel> call, Response<GetLeadTitlesModel> response) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
                     GetLeadTitlesModel getAppointmentsModel = response.body();

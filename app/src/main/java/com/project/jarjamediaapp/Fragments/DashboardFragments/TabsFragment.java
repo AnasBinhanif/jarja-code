@@ -119,5 +119,11 @@ public class TabsFragment extends BaseFragment {
         menu.findItem(R.id.action_notify).setVisible(true);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+
+
+    }
 }

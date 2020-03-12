@@ -88,20 +88,20 @@ public class CalendarDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void showProgressBar() {
 
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(CalendarDetailActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
 
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
     public void updateUIList(List<CalendarModel.Data> response) {
 
         if (response.size() > 0) {
 
-            swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, response);
+            swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, CalendarDetailActivity.this, response);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.rvEvents.getContext(), 1);
             bi.rvEvents.setLayoutManager(mLayoutManager);

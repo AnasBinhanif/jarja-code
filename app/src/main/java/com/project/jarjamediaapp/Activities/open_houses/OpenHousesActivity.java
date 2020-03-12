@@ -387,13 +387,13 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     @Override
     public void showProgressBar() {
 
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(OpenHousesActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
 
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
     @Override
@@ -643,7 +643,8 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
 
             ArrayList<Image> images = (ArrayList<Image>) ImagePicker.getImages(data);
             if (images != null) {
-                bottomDialogFragment.dismissAllowingStateLoss();
+                if (bottomDialogFragment != null)
+                    bottomDialogFragment.dismissAllowingStateLoss();
             }
             new ImageCompression(OpenHousesActivity.this).execute(images.get(0).getPath());
         }

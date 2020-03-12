@@ -1,5 +1,6 @@
 package com.project.jarjamediaapp.CustomAdapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,14 +36,16 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
     private LayoutInflater mInflater;
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
     public Context context;
+    Activity activity;
     int pos;
     boolean isEditByLead,isPreviousAppoint;
     List<GetAppointmentsModel.Data> mData;
 
-    public SwipeAppointPreviousRecyclerAdapter(Context context, List<GetAppointmentsModel.Data> data, boolean isEditByLead,boolean isPreviousAppoint) {
+    public SwipeAppointPreviousRecyclerAdapter(Context context, Activity activity ,List<GetAppointmentsModel.Data> data, boolean isEditByLead,boolean isPreviousAppoint) {
 
         mData = data;
         this.context = context;
+        this.activity = activity;
         this.isEditByLead = isEditByLead;
         this.isPreviousAppoint = isPreviousAppoint;
         mInflater = LayoutInflater.from(context);
@@ -179,14 +182,14 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     private void markAsRead(String leadID, String state) {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(activity);
         Call<BaseResponse> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).MarkComplete(GH.getInstance().getAuthorization(),
                 leadID, state);
         _callToday.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
@@ -206,7 +209,7 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
             }
         });

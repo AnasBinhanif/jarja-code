@@ -107,14 +107,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void getUserProfileData() {
 
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(HomeActivity.this);
         Call<GetUserProfile> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 getUserProfileData(GH.getInstance().getAuthorization());
         _call.enqueue(new Callback<GetUserProfile>() {
             @Override
             public void onResponse(Call<GetUserProfile> call, Response<GetUserProfile> response) {
 
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
                     GetUserProfile getUserProfile = response.body();
@@ -150,7 +150,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
             @Override
             public void onFailure(Call<GetUserProfile> call, Throwable t) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
             }
         });
@@ -176,15 +176,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onResume() {
         super.onResume();
 
-       /* if (fragment != null) {
 
-            title = getResources().getString(R.string.dashboard);
-            fragment = TabsFragment.newInstance(title, R.id.nav_dashboard);
-            addToStack = false;
-            shouldAnimate = true;
-            ReplaceFragment(fragment, title, shouldAnimate, addToStack);
-
-        }*/
 
     }
 

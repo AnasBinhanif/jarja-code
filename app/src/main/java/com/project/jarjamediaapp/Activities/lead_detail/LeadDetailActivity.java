@@ -834,12 +834,12 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     @Override
     public void showProgressBar() {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(LeadDetailActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
     @Override

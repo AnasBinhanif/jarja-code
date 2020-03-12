@@ -259,12 +259,12 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
 
     @Override
     public void showProgressBar() {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(AddNotesActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
     @Override

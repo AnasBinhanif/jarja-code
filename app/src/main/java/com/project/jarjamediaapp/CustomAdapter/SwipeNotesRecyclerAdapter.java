@@ -1,5 +1,6 @@
 package com.project.jarjamediaapp.CustomAdapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,6 +42,7 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
     private LayoutInflater mInflater;
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
     public Context context;
+    Activity activity;
     int pos;
     String status = "";
     ArrayList<GetLeadNotes.NotesList> mData;
@@ -49,9 +51,10 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
     String agentString = "";
 
 
-    public SwipeNotesRecyclerAdapter(Context context, ArrayList<GetLeadNotes.NotesList> getLeadNotes) {
+    public SwipeNotesRecyclerAdapter(Context context, Activity activity,ArrayList<GetLeadNotes.NotesList> getLeadNotes) {
 
         this.context = context;
+        this.activity = activity;
         mData = getLeadNotes;
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
@@ -237,14 +240,14 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     private void callDeleteNote(String encryptedNoteID) {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(activity);
         Call<BaseResponse> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).DeleteNote(GH.getInstance().getAuthorization(),
                 encryptedNoteID);
         _callToday.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
@@ -268,21 +271,21 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
             }
         });
     }
 
     private void callStickyNote(String encryptedNoteID, String encryptedLeadid, Boolean isSticky) {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(activity);
         Call<BaseResponse> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Make_Lead_Note_Sticky(GH.getInstance().getAuthorization(),
                 encryptedNoteID, encryptedLeadid, isSticky);
         _callToday.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
@@ -305,7 +308,7 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
             }
         });

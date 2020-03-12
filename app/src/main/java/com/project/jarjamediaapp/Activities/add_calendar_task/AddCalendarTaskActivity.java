@@ -128,8 +128,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 String time = "";
-                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.sss'Z'");
-                time = selectedHour + ":" + selectedMinute + ":00";
+                time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
                 textView.setText(time);
                 startTime = selectedHour + ":" + selectedMinute + ":" + "00.000Z";
 
@@ -213,12 +212,12 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
     @Override
     public void showProgressBar() {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(AddCalendarTaskActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
 }

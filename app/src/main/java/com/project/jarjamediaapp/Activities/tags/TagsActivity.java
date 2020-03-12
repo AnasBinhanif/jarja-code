@@ -98,11 +98,11 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
     private void populateData() {
 
         if (swipeTagsRecyclerAdapter != null) {
-            swipeTagsRecyclerAdapter = new SwipeTagsRecyclerAdapter(context, assignedTagsList,leadID);
+            swipeTagsRecyclerAdapter = new SwipeTagsRecyclerAdapter(context, TagsActivity.this, assignedTagsList, leadID);
             bi.recyclerViewTags.setAdapter(swipeTagsRecyclerAdapter);
         } else {
 
-            swipeTagsRecyclerAdapter = new SwipeTagsRecyclerAdapter(context, assignedTagsList,leadID);
+            swipeTagsRecyclerAdapter = new SwipeTagsRecyclerAdapter(context, TagsActivity.this, assignedTagsList, leadID);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewTags.getContext(), 1);
             bi.recyclerViewTags.setLayoutManager(mLayoutManager);
@@ -131,7 +131,7 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
 
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
-                        tagsIdsString="";
+                        tagsIdsString = "";
                         if (selectedEncyrptedIds != null || selectedEncyrptedIds.size() != 0) {
                             for (String i : selectedEncyrptedIds) {
 
@@ -257,12 +257,12 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
 
     @Override
     public void showProgressBar() {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(TagsActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
 }

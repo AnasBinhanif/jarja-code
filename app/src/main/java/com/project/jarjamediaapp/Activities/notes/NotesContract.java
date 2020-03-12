@@ -1,15 +1,20 @@
 package com.project.jarjamediaapp.Activities.notes;
 
 import com.project.jarjamediaapp.Base.BaseContract;
+import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetLeadNotes;
 import com.project.jarjamediaapp.Models.GetNoteDropDown;
 
+import retrofit2.Response;
+
 public interface NotesContract {
 
-    interface View extends BaseContract.View{
+    interface View extends BaseContract.View {
 
         void initViews();
+
+        void updateUI(Response<BaseResponse> response);
 
         void updateUI(GetNoteDropDown response);
 
@@ -34,7 +39,7 @@ public interface NotesContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void editNote(String leadID,String noteID,String Desc);
+        void editNote(String leadID, String noteID, String Desc);
 
         void getNoteDropDown();
 
@@ -42,7 +47,7 @@ public interface NotesContract {
 
         void getLeadNotes(String encryptedLeadID);
 
-        void addNote(String noteID,String leadID,String noteType,String desc,String isSticky,String dated,String agentIDs,String leadStringID);
+        void addNote(String noteID, String leadID, String noteType, String desc, String isSticky, String dated, String agentIDs, String leadStringID);
 
         void initScreen();
 

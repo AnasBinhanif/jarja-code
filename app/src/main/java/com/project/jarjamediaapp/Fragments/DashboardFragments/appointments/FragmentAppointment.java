@@ -92,7 +92,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     bi.recyclerViewToday.setVisibility(View.GONE);
 
                 } else {
-                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList, isFromActivity, false);
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context,getActivity(), appointmentList, isFromActivity, false);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewToday.setLayoutManager(mLayoutManager);
                     bi.recyclerViewToday.setItemAnimator(new DefaultItemAnimator());
@@ -106,7 +106,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     bi.recyclerViewUpcoming.setVisibility(View.GONE);
 
                 } else {
-                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList, isFromActivity, false);
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context,getActivity(), appointmentList, isFromActivity, false);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewUpcoming.setLayoutManager(mLayoutManager);
                     bi.recyclerViewUpcoming.setItemAnimator(new DefaultItemAnimator());
@@ -120,7 +120,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     bi.recyclerViewPrevious.setVisibility(View.GONE);
 
                 } else {
-                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, appointmentList, isFromActivity, true);
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context,getActivity(), appointmentList, isFromActivity, true);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewPrevious.setLayoutManager(mLayoutManager);
                     bi.recyclerViewPrevious.setItemAnimator(new DefaultItemAnimator());
@@ -159,12 +159,12 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
     @Override
     public void showProgressBar() {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(getActivity());
     }
 
     @Override
     public void hideProgressBar() {
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
     @SuppressLint("RestrictedApi")
@@ -281,5 +281,13 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isFromActivity) {
+            presenter.getLeadTodayAppointments(leadID);
+        } else {
+            presenter.getTodayAppointments();
+        }
+    }
 }

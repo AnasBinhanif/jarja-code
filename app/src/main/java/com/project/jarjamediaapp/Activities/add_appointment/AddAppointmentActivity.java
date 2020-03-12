@@ -275,6 +275,14 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
         }
         bi.atvVia.setText(modelData.getViaReminder() != null ? modelData.getViaReminder() : "");
+        if (reminder != null && !reminder.equalsIgnoreCase("None")) {
+            bi.atvVia.setVisibility(View.VISIBLE);
+            bi.lblVia.setVisibility(View.VISIBLE);
+        } else {
+            bi.atvVia.setVisibility(View.GONE);
+            bi.lblVia.setVisibility(View.GONE);
+        }
+
         bi.cbAllDay.setChecked(modelData.isAllDay);
         if (modelData.isAllDay) {
             allDay();
@@ -315,21 +323,19 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 showDateDialog(bi.tvEndDate, false);
                 break;
             case R.id.tvStartTime:
-                bi.atvLocation.clearFocus();
-                bi.atvEventTitle.clearFocus();
-                bi.atvDescription.clearFocus();
+                clearFocus();
                 showTimeDialog(bi.tvStartTime, true);
                 break;
             case R.id.tvEndTime:
-                bi.atvLocation.clearFocus();
-                bi.atvEventTitle.clearFocus();
-                bi.atvDescription.clearFocus();
+                clearFocus();
                 showTimeDialog(bi.tvEndTime, false);
                 break;
             case R.id.atvReminder:
+                clearFocus();
                 reminder();
                 break;
             case R.id.atvVia:
+                clearFocus();
                 via();
                 break;
             case R.id.btnSave:
@@ -693,6 +699,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 return false;
             }
         }
+        if (!bi.atvReminder.getText().toString().equalsIgnoreCase("")) {
+            if (via.equalsIgnoreCase("")) {
+                ToastUtils.showToast(context, R.string.error_via);
+                bi.atvVia.requestFocus();
+                return false;
+            }
+        }
 
         return true;
     }
@@ -786,12 +799,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     @Override
     public void showProgressBar() {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(AddAppointmentActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
     private void getLeadByText(String query, Dialog dialog) {
@@ -801,7 +814,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         _callToday.enqueue(new Callback<GetLeadTitlesModel>() {
             @Override
             public void onResponse(Call<GetLeadTitlesModel> call, Response<GetLeadTitlesModel> response) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
                     GetLeadTitlesModel getAppointmentsModel = response.body();
@@ -828,6 +841,14 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
             }
         });
+    }
+
+    private void clearFocus() {
+
+        bi.atvLocation.clearFocus();
+        bi.atvEventTitle.clearFocus();
+        bi.atvDescription.clearFocus();
+
     }
 
 }

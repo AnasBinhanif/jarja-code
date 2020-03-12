@@ -99,7 +99,7 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
                     bi.recyclerViewFollowOverDue.setVisibility(View.GONE);
                     bi.recyclerViewFollowDue.setVisibility(View.VISIBLE);
 
-                    swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context, followUpsList);
+                    swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context, getActivity(),followUpsList);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewFollowDue.setLayoutManager(mLayoutManager);
                     bi.recyclerViewFollowDue.setItemAnimator(new DefaultItemAnimator());
@@ -119,7 +119,7 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
                     bi.recyclerViewFollowDue.setVisibility(View.GONE);
                     bi.recyclerViewFollowOverDue.setVisibility(View.VISIBLE);
 
-                    swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context, followUpsList);
+                    swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context,getActivity() ,followUpsList);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewFollowOverDue.setLayoutManager(mLayoutManager);
                     bi.recyclerViewFollowOverDue.setItemAnimator(new DefaultItemAnimator());
@@ -238,12 +238,12 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
     @Override
     public void showProgressBar() {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(getActivity());
     }
 
     @Override
     public void hideProgressBar() {
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 
 }

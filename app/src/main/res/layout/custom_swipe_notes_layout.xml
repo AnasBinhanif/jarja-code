@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-
         <LinearLayout
             android:id="@+id/lnEdit"
             android:layout_width="80dp"
@@ -35,7 +34,6 @@
                 android:textColor="@android:color/white" />
 
         </LinearLayout>
-
 
         <LinearLayout
             android:id="@+id/lnDelete"
@@ -62,7 +60,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
     <FrameLayout
         android:id="@+id/frameLayout"

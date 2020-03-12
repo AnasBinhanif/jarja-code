@@ -54,12 +54,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void createNetWorkCallRequest(String userName, String password) {
-        GH.getInstance().ShowProgressDialog(context);
+
+        GH.getInstance().ShowProgressDialog(LoginActivity.this);
         NetworkController.getInstance().NetworkCall(NetworkController.getInstance().getApiMethods().getToken(userName, password, AppConstants.HTTP.GRANT_TYPE),
                 new RetrofitCallback<>(new CallbackInterface<AccessCode>() {
                     @Override
                     public void onSuccess(AccessCode response) {
-                        GH.getInstance().HideProgressDialog(context);
+                        GH.getInstance().HideProgressDialog();
                         //MyLog.d("Response", "onSuccess: " + response.toString());
                         Log.d("token", response.accessToken + "");
 
@@ -71,7 +72,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     @Override
                     public void onError(Throwable throwable) {
                         //Log.d("Response", "onError: " + throwable.toString());
-                        GH.getInstance().HideProgressDialog(context);
+                        GH.getInstance().HideProgressDialog();
                         ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
                     }
                 }));
@@ -150,12 +151,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void showProgressBar() {
 
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(LoginActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
 
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
 }

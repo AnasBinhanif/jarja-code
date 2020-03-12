@@ -1,5 +1,6 @@
 package com.project.jarjamediaapp.CustomAdapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,12 +39,14 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
     public Context context;
     int pos;
     boolean isEditByLead, isFutureTask;
+    Activity activity;
     List<GetTasksModel.Data> mData;
 
-    public SwipeTasksDueRecyclerAdapter(Context context, List<GetTasksModel.Data> data, boolean isEditByLead, boolean isFutureTask) {
+    public SwipeTasksDueRecyclerAdapter(Context context, Activity activity, List<GetTasksModel.Data> data, boolean isEditByLead, boolean isFutureTask) {
 
         mData = data;
         this.context = context;
+        this.activity = activity;
         this.isFutureTask = isFutureTask;
         this.isEditByLead = isEditByLead;
         mInflater = LayoutInflater.from(context);
@@ -118,7 +121,7 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
 
     private void markAsRead(String taskID) {
 
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(activity);
 
         Call<BaseResponse> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).MarkTaskComplete(GH.getInstance().getAuthorization(),
@@ -126,7 +129,7 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
         _callToday.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
@@ -151,7 +154,7 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
             }
         });

@@ -1,6 +1,5 @@
 package com.project.jarjamediaapp.Activities.notes;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +13,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.paris.Paris;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.CustomAdapter.SwipeDocumentRecyclerAdapter;
 import com.project.jarjamediaapp.CustomAdapter.SwipeNotesRecyclerAdapter;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetLeadNotes;
@@ -24,6 +25,9 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityNotesBinding;
+import com.vincent.filepicker.Constant;
+import com.vincent.filepicker.activity.NormalFilePickActivity;
+import com.vincent.filepicker.filter.entity.NormalFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,9 +41,10 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
     Context context = NotesActivity.this;
     NotesPresenter presenter;
     SwipeNotesRecyclerAdapter swipeNotesRecyclerAdapter;
-
     ArrayList<GetLeadNotes.NotesList> getLeadNotes;
-
+    String buttonType = "Notes";
+    public static ArrayList<UploadFilesModel> arrayListData;
+    SwipeDocumentRecyclerAdapter swipeDocumentRecyclerAdapter;
     String leadID = "";
 
     @Override
@@ -51,24 +56,60 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
         leadID = getIntent().getStringExtra("leadID");
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.notes), true);
+        arrayListData = new ArrayList<UploadFilesModel>();
     }
 
     @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.btnNotes:
+            case R.id.btnNotes: {
+
+                bi.recyclerViewDocuments.setVisibility(View.GONE);
+                buttonType = "Notes";
+                Paris.style(bi.btnNotes).apply(R.style.TabButtonYellowLeft);
+                Paris.style(bi.btnDocuments).apply(R.style.TabButtonTranparentRight);
                 presenter.getLeadNotes(leadID);
-                break;
+            }
+            break;
+            case R.id.btnDocuments: {
+
+                bi.recyclerViewNotes.setVisibility(View.GONE);
+                buttonType = "Documents";
+                Paris.style(bi.btnDocuments).apply(R.style.TabButtonYellowRight);
+                Paris.style(bi.btnNotes).apply(R.style.TabButtonTranparentLeft);
+            }
+            break;
+
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode== Activity.RESULT_OK)
-        {
-            presenter.getLeadNotes(leadID);
+
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Constant.REQUEST_CODE_PICK_FILE) {
+
+                ArrayList<NormalFile> list = data.getParcelableArrayListExtra(Constant.RESULT_PICK_FILE);
+                int addedListSize = arrayListData.size();
+                int selectedListSize = list.size();
+                int totalSize = addedListSize + selectedListSize;
+
+                if (totalSize <= 10) {
+                    for (int i = 0; i < list.size(); i++) {
+                        arrayListData.add(new UploadFilesModel(list.get(i).getPath(), list.get(i).getName()));
+                    }
+                    populateList(arrayListData);
+                } else {
+                    ToastUtils.showToast(context, getString(R.string.cannot_add_file));
+                }
+
+            } else {
+                presenter.getLeadNotes(leadID);
+            }
+
         }
     }
 
@@ -82,6 +123,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
 
         presenter.getLeadNotes(leadID);
         bi.btnNotes.setOnClickListener(this);
+        bi.btnDocuments.setOnClickListener(this);
 
     }
 
@@ -105,6 +147,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
             bi.tvNoRecordFound.setVisibility(View.GONE);
             bi.recyclerViewNotes.setVisibility(View.VISIBLE);
             populateDataDue();
+
         }
     }
 
@@ -116,10 +159,10 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
     private void populateDataDue() {
 
         if (swipeNotesRecyclerAdapter != null) {
-            swipeNotesRecyclerAdapter = new SwipeNotesRecyclerAdapter(context, getLeadNotes);
+            swipeNotesRecyclerAdapter = new SwipeNotesRecyclerAdapter(context, NotesActivity.this, getLeadNotes);
             bi.recyclerViewNotes.setAdapter(swipeNotesRecyclerAdapter);
         } else {
-            swipeNotesRecyclerAdapter = new SwipeNotesRecyclerAdapter(context, getLeadNotes);
+            swipeNotesRecyclerAdapter = new SwipeNotesRecyclerAdapter(context, NotesActivity.this, getLeadNotes);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewNotes.getContext(), 1);
             bi.recyclerViewNotes.setLayoutManager(mLayoutManager);
@@ -167,11 +210,18 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
 
-            //showCallDialog(context);
+            if (buttonType.equalsIgnoreCase("Notes")) {
+                Map<String, String> noteMap = new HashMap<>();
+                noteMap.put("leadID", leadID);
+                switchActivityWithIntentString(AddNotesActivity.class, (HashMap) noteMap);
+            } else {
 
-            Map<String, String> noteMap = new HashMap<>();
-            noteMap.put("leadID", leadID);
-            switchActivityWithIntentString(AddNotesActivity.class, (HashMap) noteMap);
+                Intent documentIntent = new Intent(context, NormalFilePickActivity.class);
+                documentIntent.putExtra(Constant.MAX_NUMBER, 10);
+                documentIntent.putExtra(NormalFilePickActivity.SUFFIX, new String[]{"xlsx", "xls", "doc", "docx", "ppt", "pptx", "pdf"});
+                startActivityForResult(documentIntent, Constant.REQUEST_CODE_PICK_FILE);
+
+            }
 
             return true;
         }
@@ -182,11 +232,26 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
 
     @Override
     public void showProgressBar() {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(NotesActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
-        GH.getInstance().HideProgressDialog(context);
+        GH.getInstance().HideProgressDialog();
     }
+
+    private void populateList(ArrayList<UploadFilesModel> arrayListData) {
+
+        swipeDocumentRecyclerAdapter = new SwipeDocumentRecyclerAdapter(context, NotesActivity.this, arrayListData);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewDocuments.getContext(), 1);
+        bi.recyclerViewDocuments.setLayoutManager(mLayoutManager);
+        bi.recyclerViewDocuments.setItemAnimator(new DefaultItemAnimator());
+        bi.recyclerViewDocuments.addItemDecoration(dividerItemDecoration);
+        bi.recyclerViewDocuments.setAdapter(swipeDocumentRecyclerAdapter);
+        bi.recyclerViewDocuments.setVisibility(View.VISIBLE);
+
+    }
+
+
 }

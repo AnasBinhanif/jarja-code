@@ -1,5 +1,6 @@
 package com.project.jarjamediaapp.CustomAdapter;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -36,15 +37,17 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
     private LayoutInflater mInflater;
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
     public Context context;
+    Activity activity;
     int pos;
     String status = "";
     List<GetFollowUpsModel.Data> mData;
 
 
-    public SwipeFollowUpsDueRecyclerAdapter(Context context, List<GetFollowUpsModel.Data> data) {
+    public SwipeFollowUpsDueRecyclerAdapter(Context context, Activity activity,List<GetFollowUpsModel.Data> data) {
 
         mData = data;
         this.context = context;
+        this.activity = activity;
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
     }
@@ -129,14 +132,14 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     private void markAsRead(String reminderID) {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(activity);
 
         Call<BaseResponse> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).MarkFollowUpComplete(GH.getInstance().getAuthorization(), reminderID+",","true");
         _callToday.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
@@ -161,20 +164,20 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
             }
         });
     }
 
     private void viewDetail(String leadID) {
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(activity);
         Call<ViewFollowUpModel> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), leadID);
         _callToday.enqueue(new Callback<ViewFollowUpModel>() {
             @Override
             public void onResponse(Call<ViewFollowUpModel> call, Response<ViewFollowUpModel> response) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
                     ViewFollowUpModel getDetails = response.body();
@@ -200,7 +203,7 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
 
             @Override
             public void onFailure(Call<ViewFollowUpModel> call, Throwable t) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
             }
         });

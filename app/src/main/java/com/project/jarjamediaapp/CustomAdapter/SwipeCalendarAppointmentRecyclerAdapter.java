@@ -1,5 +1,6 @@
 package com.project.jarjamediaapp.CustomAdapter;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -43,16 +44,18 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
     private LayoutInflater mInflater;
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
     public Context context;
+    Activity activity;
     int pos;
     List<CalendarModel.Data> mData;
     CalendarModel.Data modelData;
     Call<CalendarDetailModel> _call;
     Call<BaseResponse> call;
 
-    public SwipeCalendarAppointmentRecyclerAdapter(Context context, List<CalendarModel.Data> data) {
+    public SwipeCalendarAppointmentRecyclerAdapter(Context context,Activity activity, List<CalendarModel.Data> data) {
 
         mData = data;
         this.context = context;
+        this.activity = activity;
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
     }
@@ -117,7 +120,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
     private void deleteCalendarAppointmentOrTaskDetail(String calendarId, String type, SwipeRevealLayout swipeRevealLayout) {
 
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(activity);
 
         if (type != null && !type.equalsIgnoreCase("") && type.equalsIgnoreCase("Task")) {
             call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).deleteCalendarTask(GH.getInstance().getAuthorization(), calendarId);
@@ -128,7 +131,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
         call.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
                     BaseResponse calendarDetailModel = response.body();
@@ -153,7 +156,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
             }
         });
@@ -161,7 +164,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
     private void viewCalendarAppointmentOrTaskDetail(String calendarId, String type, String startDateTime) {
 
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(activity);
 
         if (type != null && !type.equalsIgnoreCase("") && type.equalsIgnoreCase("Task")) {
             _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getCalendarTaskDetail(GH.getInstance().getAuthorization(), calendarId, startDateTime);
@@ -172,7 +175,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
         _call.enqueue(new Callback<CalendarDetailModel>() {
             @Override
             public void onResponse(Call<CalendarDetailModel> call, Response<CalendarDetailModel> response) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
                     CalendarDetailModel calendarDetailModel = response.body();
@@ -195,7 +198,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
             @Override
             public void onFailure(Call<CalendarDetailModel> call, Throwable t) {
-                GH.getInstance().HideProgressDialog(context);
+                GH.getInstance().HideProgressDialog();
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
             }
         });

@@ -3,13 +3,19 @@ package com.project.jarjamediaapp.Utilities;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
+import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatDialog;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.project.jarjamediaapp.ProjectApplication;
+import com.project.jarjamediaapp.R;
 
 import java.io.File;
 import java.text.ParseException;
@@ -21,6 +27,7 @@ public class GH {
 
     private static final GH ourInstance = new GH();
     public KProgressHUD hud;
+    AppCompatDialog progressDialog;
 
     public static GH getInstance() {
         return ourInstance;
@@ -59,7 +66,7 @@ public class GH {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.AGENT_ID_CALENDAR.name(), "");
     }
 
-    public void ShowProgressDialog(Context context) {
+  /*  public void ShowProgressDialog(Context context) {
 
         if (hud != null && hud.isShowing()) {
             hud.dismiss();
@@ -74,6 +81,42 @@ public class GH {
             hud.dismiss();
         }
 
+    }*/
+
+    public void ShowProgressDialog(Activity activity) {
+
+        if (activity == null || activity.isFinishing()) {
+            return;
+        }
+
+        if (progressDialog != null && progressDialog.isShowing()) {
+        } else {
+
+            progressDialog = new AppCompatDialog(activity);
+            progressDialog.setCancelable(false);
+            progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            progressDialog.setContentView(R.layout.progress_dialog);
+            progressDialog.show();
+
+        }
+
+        final ImageView img_loading_frame = progressDialog.findViewById(R.id.ivGifJM);
+        final AnimationDrawable frameAnimation = (AnimationDrawable) img_loading_frame.getBackground();
+        img_loading_frame.post(new Runnable() {
+            @Override
+            public void run() {
+
+                if (frameAnimation != null)
+                    frameAnimation.start();
+            }
+        });
+
+    }
+
+    public void HideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     public String formatDate(String dateString) {
