@@ -176,7 +176,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onResume() {
         super.onResume();
 
-        if (fragment != null) {
+       /* if (fragment != null) {
 
             title = getResources().getString(R.string.dashboard);
             fragment = TabsFragment.newInstance(title, R.id.nav_dashboard);
@@ -184,7 +184,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             shouldAnimate = true;
             ReplaceFragment(fragment, title, shouldAnimate, addToStack);
 
-        }
+        }*/
 
     }
 
@@ -213,7 +213,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_lead:
                 title = getResources().getString(R.string.leads);
                 fragment = FindLeadsFragment.newInstance(title, R.id.nav_lead);
-                addToStack = false;
+                addToStack = true;
                 shouldAnimate = true;
                 _menu.findItem(R.id.action_search).setVisible(false);
                 break;

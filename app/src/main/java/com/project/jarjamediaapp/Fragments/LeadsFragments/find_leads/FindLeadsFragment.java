@@ -28,7 +28,6 @@ import com.project.jarjamediaapp.databinding.FragmentFindleadsBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,13 +35,15 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.functions.Function4;
 
+import static android.app.Activity.RESULT_OK;
+
 public class FindLeadsFragment extends BaseFragment implements FindLeadsContract.View, View.OnClickListener {
 
     FragmentFindleadsBinding bi;
     Context context;
     FindLeadsPresenter presenter;
     ArrayList<GetLeadCounts.LeadsCount> getLeadCountList;
-    Intent bundle=null;
+    Intent bundle = null;
 
     public FindLeadsFragment() {
         // Required empty public constructor
@@ -71,14 +72,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     public void setupViews() {
 
         initViews();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         callGetLeadCounts(bundle);
-
     }
 
     private void initViews() {
@@ -153,17 +147,17 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
         List<GetFindLeads> leadsList = new ArrayList<>();
 
-        leadsList.add(new GetFindLeads("All Leads", getLeadCountList.get(0).allLeadsCount));
         leadsList.add(new GetFindLeads("New Leads", getLeadCountList.get(0).newLeadsCount));
+        leadsList.add(new GetFindLeads("All Leads", getLeadCountList.get(0).allLeadsCount));
         leadsList.add(new GetFindLeads("Hot Leads", getLeadCountList.get(0).hotLeadsCount));
         leadsList.add(new GetFindLeads("Active Clients", getLeadCountList.get(0).activeLeadsCount));
         leadsList.add(new GetFindLeads("Under Contract", getLeadCountList.get(0).underContractLeadsCount));
         leadsList.add(new GetFindLeads("Closed", getLeadCountList.get(0).closeLeadsCount));
 
-        bi.recyclerViewFindLeads.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        bi.recyclerViewFindLeads.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.recyclerViewFindLeads.setItemAnimator(new DefaultItemAnimator());
-        bi.recyclerViewFindLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewFindLeads.getContext(), 1));
-        RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(getContext(), leadsList, R.layout.custom_find_leads_layout);
+        bi.recyclerViewFindLeads.addItemDecoration(new DividerItemDecoration(context, 1));
+        RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_find_leads_layout);
         recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvCount);
 
         recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetFindLeads, Integer, Map<Integer, ? extends View>, Unit>) (view, findLeadsList, integer, integerMap) -> {
@@ -181,30 +175,30 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetFindLeads, Integer, Unit>) (viewComplainList, integer) -> {
 
-            String resultTYpe="";
+            String resultTYpe = "";
             switch (integer) {
                 case 0:
-                    resultTYpe="All";
+                    resultTYpe = "All";
                     break;
                 case 1:
-                    resultTYpe="New Leads";
+                    resultTYpe = "New Leads";
                     break;
                 case 2:
-                    resultTYpe="Hot Leads";
+                    resultTYpe = "Hot Leads";
                     break;
                 case 3:
-                    resultTYpe="Active Clients";
+                    resultTYpe = "Active Clients";
                     break;
                 case 4:
-                    resultTYpe="Under Contract";
+                    resultTYpe = "Under Contract";
                     break;
                 case 5:
-                    resultTYpe="Closed Leads";
+                    resultTYpe = "Closed Leads";
                     break;
             }
-            Intent intent = new Intent(context,AllLeadsActivity.class);
-            intent.putExtra("bundle",bundle);
-            intent.putExtra("resultType",resultTYpe);
+            Intent intent = new Intent(context, AllLeadsActivity.class);
+            intent.putExtra("bundle", bundle);
+            intent.putExtra("resultType", resultTYpe);
             startActivity(intent);
 
             return Unit.INSTANCE;
@@ -285,8 +279,10 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 05) {
-            bundle = data;
-            callGetLeadCounts(data);
+            if (resultCode == RESULT_OK) {
+                bundle = data;
+                callGetLeadCounts(data);
+            }
         }
     }
 }

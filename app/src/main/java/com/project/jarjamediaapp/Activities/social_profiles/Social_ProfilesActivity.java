@@ -2,6 +2,8 @@ package com.project.jarjamediaapp.Activities.social_profiles;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -130,9 +132,30 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetAllSocialProfiles.Data, Integer, Unit>) (allsocialprofiles, integer) -> {
 
+
+            String url = allsocialprofiles.profilelink;
+            if (url.startsWith("http")) {
+                openWebPage(url);
+            } else if (url.startsWith("www")) {
+                url = "http://" + url;
+                openWebPage(url);
+            } else {
+                ToastUtils.showToast(context, "No Profile Found / Incorrect Profile Url");
+            }
+
+
+
             return Unit.INSTANCE;
         });
 
+    }
+
+    public void openWebPage(String url) {
+        Uri webpage = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
     public void showAddProfileDialog(Context context) {
@@ -153,8 +176,14 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
             String name = edtName.getText().toString() + "";
             String siteName = getSocialProfileDropdown.get(spnSIte.getSelectedIndex()).value + "";
             String profilelink = edtProfileLink.getText().toString() + "";
-            presenter.addSocialProfile(leadID, name, siteName, profilelink);
-
+            if (name.equals("") || profilelink.equals("")) {
+                ToastUtils.showToast(context, "Please Fill all the fields");
+            } else if (!android.util.Patterns.WEB_URL.matcher(profilelink).matches()){
+                ToastUtils.showToast(context, "Invalid Profile Link");
+            }else
+            {
+                presenter.addSocialProfile(leadID, name, siteName, profilelink);
+            }
         });
 
         Button btnCancel = dialog.findViewById(R.id.btnCancel);

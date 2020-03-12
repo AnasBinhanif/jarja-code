@@ -62,14 +62,14 @@ public class FindLeadsPresenter extends BasePresenter<FindLeadsContract.View> im
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
-                    GetLeadCounts getAppointmentsModel = response.body();
-                    if (getAppointmentsModel.status.equals("Success")) {
+                    GetLeadCounts getLeadCountsModel = response.body();
+                    if (getLeadCountsModel.status.equals("Success")) {
 
-                        _view.updateUI(getAppointmentsModel);
+                        _view.updateUI(getLeadCountsModel);
 
                     } else {
 
-                        _view.updateUIonFalse(getAppointmentsModel.message);
+                        _view.updateUIonFalse(getLeadCountsModel.message);
 
                     }
                 } else {

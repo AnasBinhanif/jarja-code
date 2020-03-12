@@ -490,7 +490,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         intent.putExtra("sourceID", sourceID);
         intent.putExtra("fromDate", fromDate);
         intent.putExtra("toDate", toDate);
-        setResult(05, intent);
+        setResult(RESULT_OK, intent);
         finish();
 
     }
