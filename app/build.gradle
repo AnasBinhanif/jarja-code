@@ -73,12 +73,11 @@ dependencies {
     implementation 'pub.devrel:easypermissions:2.0.0'
     // Calendarview
     implementation 'com.github.prolificinteractive:material-calendarview:1.4.2'
+    // Multi picker
     implementation 'com.vincent.filepicker:MultiTypeFilePicker:1.0.8'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
-
     //caLL Twilio
     implementation 'com.twilio:voice-android:5.0.2'
     implementation 'com.koushikdutta.ion:ion:2.1.8'

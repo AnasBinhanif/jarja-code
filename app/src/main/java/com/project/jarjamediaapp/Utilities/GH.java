@@ -3,7 +3,6 @@ package com.project.jarjamediaapp.Utilities;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatDialog;
 
+import com.bumptech.glide.Glide;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.project.jarjamediaapp.ProjectApplication;
 import com.project.jarjamediaapp.R;
@@ -101,16 +101,7 @@ public class GH {
         }
 
         final ImageView img_loading_frame = progressDialog.findViewById(R.id.ivGifJM);
-        final AnimationDrawable frameAnimation = (AnimationDrawable) img_loading_frame.getBackground();
-        img_loading_frame.post(new Runnable() {
-            @Override
-            public void run() {
-
-                if (frameAnimation != null)
-                    frameAnimation.start();
-            }
-        });
-
+        Glide.with(activity).load(R.drawable.jm_loader).into(img_loading_frame);
     }
 
     public void HideProgressDialog() {

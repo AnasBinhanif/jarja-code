@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,6 +19,7 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -47,6 +49,7 @@ import com.project.jarjamediaapp.Utilities.Call.VoiceActivity;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
+import com.project.jarjamediaapp.Utilities.UserPermissions;
 import com.project.jarjamediaapp.databinding.ActivityLeadDetailBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 import com.vincent.filepicker.Constant;
@@ -396,9 +399,11 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         if (phoneNo.equals("") || phoneNo.equals("null") || phoneNo == null) {
             ToastUtils.showToast(context, "No Primary Phone Found");
         } else {
-            Intent intentVoice = new Intent(context, VoiceActivity.class);
-            intentVoice.putExtra("to", primaryPhoneNumber);
-            startActivity(intentVoice);
+            if (UserPermissions.isPhonePermissionGranted(LeadDetailActivity.this)) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                    startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNo)));
+                }
+            }
         }
     }
 
