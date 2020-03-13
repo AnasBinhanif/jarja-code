@@ -134,9 +134,9 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
 
             String url = allsocialprofiles.profilelink;
-            if (url.startsWith("http")) {
+            if (url.startsWith("http")||url.startsWith("HTTP")) {
                 openWebPage(url);
-            } else if (url.startsWith("www")) {
+            } else if (url.startsWith("www") || url.startsWith("WWW")) {
                 url = "http://" + url;
                 openWebPage(url);
             } else {

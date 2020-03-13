@@ -83,7 +83,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
     MultiSelectModel tagModel, agentModel, dripModel;
 
-    String priceTo = "", priceFrom = "";
+    String priceTo = "", priceFrom = "",dateTo = "", dateFrom = "";
     String agentIdsString = "", tagsIdsString = "", dripIdsString = "", sourceIdsString = "", typeIdsString = "";
 
     @Override
@@ -698,6 +698,34 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
             bi.edtPriceRange.setText(price);
             priceFrom = priceFrom.equals("max") ? "" : priceFrom;
             dialog.dismiss();
+
+        });
+
+        dialog.show();
+
+    }
+
+    public void showDateRangeDialog(Context context) {
+
+        Dialog dialog = new Dialog(context, R.style.Dialog);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.custom_date_range_dialog);
+
+        TextView tvDateTO = dialog.findViewById(R.id.tvDateTO);
+        TextView tvDateFrom = dialog.findViewById(R.id.tvDateFrom);
+
+        tvDateTO.setText(dateTo);
+        tvDateFrom.setText(dateFrom);
+
+        Button btnSave = dialog.findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(v -> {
+
+            /*String price = priceFrom.equals("") ? "" : " to " + priceFrom;
+            price = priceTo + price;
+
+            bi.edtPriceRange.setText(price);
+            priceFrom = priceFrom.equals("max") ? "" : priceFrom;
+            dialog.dismiss();*/
 
         });
 

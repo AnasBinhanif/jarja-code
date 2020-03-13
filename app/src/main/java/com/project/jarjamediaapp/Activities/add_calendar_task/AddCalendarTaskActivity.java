@@ -19,7 +19,6 @@ import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddCalendarTaskBinding;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import retrofit2.Response;
@@ -32,6 +31,9 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     String startDate, startTime, title, description, allDay, markComplete;
     boolean isEdit;
     String calendarId = "";
+
+    int month, year, day, hour, minute;
+    Calendar newCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,13 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         bi.btnSave.setOnClickListener(this);
         bi.btnCancel.setOnClickListener(this);
         bi.cbAllDay.setOnClickListener(this);
+
+        newCalendar = Calendar.getInstance();
+        year = newCalendar.get(Calendar.YEAR);
+        month = newCalendar.get(Calendar.MONTH);
+        day = newCalendar.get(Calendar.DAY_OF_MONTH);
+        hour = newCalendar.get(Calendar.HOUR_OF_DAY);
+        minute = newCalendar.get(Calendar.MINUTE);
 
     }
 
@@ -104,16 +113,19 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         final Calendar newCalendar = Calendar.getInstance();
         DatePickerDialog StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
+            public void onDateSet(DatePicker view, int years, int monthOfYear, int dayOfMonth) {
+
+                year = years;
+                month = monthOfYear;
+                day = dayOfMonth;
+                newCalendar.set(year, month, day);
 
                 int month = monthOfYear + 1;
                 startDate = year + "-" + month + "-" + dayOfMonth;
                 textView.setText(dayOfMonth + "-" + month + "-" + year);
 
             }
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        }, year, month, day);
         StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         StartTime.show();
 
@@ -121,13 +133,12 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
     private void showTimeDialog(TextView textView) {
 
-        Calendar mcurrentTime = Calendar.getInstance();
-        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-        int minute = mcurrentTime.get(Calendar.MINUTE);
         TimePickerDialog mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 String time = "";
+                hour = selectedHour;
+                minute = selectedMinute;
                 time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
                 textView.setText(time);
                 startTime = selectedHour + ":" + selectedMinute + ":" + "00.000Z";

@@ -73,7 +73,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     MultiSelectModel agentModel;
     boolean isEdit;
     boolean isReminderClicked = false, isViaClicked = false, isTypeClicked = false, isRecurClicked = false;
-
+    int month, year, day;
+    Calendar newCalendar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,6 +162,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
             break;
         }
+
+        newCalendar = Calendar.getInstance();
+        year = newCalendar.get(Calendar.YEAR);
+        month = newCalendar.get(Calendar.MONTH);
+        day = newCalendar.get(Calendar.DAY_OF_MONTH);
 
     }
 
@@ -555,21 +561,30 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
         DatePickerDialog StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
+            public void onDateSet(DatePicker view, int years, int monthOfYear, int dayOfMonth) {
+
+                year = years;
+                month = monthOfYear;
+                day = dayOfMonth;
+                newCalendar.set(year, month, day);
 
                 if (isStart) {
-                    startDate = dateFormatter.format(newDate.getTime());
+                    startDate = dateFormatter.format(newCalendar.getTime());
                 } else {
-                    endDate = dateFormatter.format(newDate.getTime());
+                    endDate = dateFormatter.format(newCalendar.getTime());
                 }
 
-                textView.setText(dateFormatter2.format(newDate.getTime()));
+                textView.setText(dateFormatter2.format(newCalendar.getTime()));
+
             }
 
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        }, year, month, day);
+        if (isStart) {
+            StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        }else{
+            newCalendar.set(year, month, day);
+            StartTime.getDatePicker().setMinDate(newCalendar.getTime().getTime() - 1000);
+        }
         StartTime.show();
     }
 

@@ -81,6 +81,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     ArrayList<String> arrayListReminderValue, arrayListReminderText;
     CalendarDetailModel.Data.CalendarData calendarData;
     String timedFrom = "", timedTo = "", datedFrom = "", datedTo = "";
+    int month, year, day;
+    Calendar newCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +91,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi = DataBindingUtil.setContentView(this, R.layout.activity_add_appointment);
         presenter = new AddAppointmentPresenter(this);
         presenter.initScreen();
+
 
     }
 
@@ -128,6 +131,11 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 return false;
             }
         });
+
+        newCalendar = Calendar.getInstance();
+        year = newCalendar.get(Calendar.YEAR);
+        month = newCalendar.get(Calendar.MONTH);
+        day = newCalendar.get(Calendar.DAY_OF_MONTH);
 
     }
 
@@ -555,27 +563,33 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     private void showDateDialog(TextView textView, boolean isStart) {
 
-        final Calendar newCalendar = Calendar.getInstance();
         SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         DatePickerDialog StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            public void onDateSet(DatePicker view, int years, int monthOfYear, int dayOfMonth) {
 
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
+                year = years;
+                month = monthOfYear;
+                day = dayOfMonth;
+                newCalendar.set(year, month, day);
 
                 if (isStart) {
-                    startDate = dateFormatter.format(newDate.getTime());
+                    startDate = dateFormatter.format(newCalendar.getTime());
                 } else {
-                    endDate = dateFormatter.format(newDate.getTime());
+                    endDate = dateFormatter.format(newCalendar.getTime());
                 }
 
-                textView.setText(dateFormatter2.format(newDate.getTime()));
+                textView.setText(dateFormatter2.format(newCalendar.getTime()));
 
             }
 
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        }, year, month, day);
+        if (isStart) {
+            StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        }else{
+            newCalendar.set(year, month, day);
+            StartTime.getDatePicker().setMinDate(newCalendar.getTime().getTime() - 1000);
+        }
         StartTime.show();
     }
 
