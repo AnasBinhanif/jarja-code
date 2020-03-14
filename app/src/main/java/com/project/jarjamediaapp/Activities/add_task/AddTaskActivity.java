@@ -66,15 +66,18 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     ArrayList<GetAgentsModel.Data> agentList;
     ArrayList<GetLeadTitlesModel.Data> nameList;
+    ArrayList<Integer> selectedIdsListLead = new ArrayList<>();
+    ArrayList<MultiSelectModel> searchListItemsLead;
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
     ArrayList<MultiSelectModel> searchListItems;
     String startDate = "", endDate = "", reminder = "0", via = "", leadId = "", type = "", reoccur = "", agentId = "";
-    String agentIdsString = "", leadName = "", taskId = "";
+    String agentIdsString = "", leadName = "", taskId = "", searchLeadIdsString = "";
     MultiSelectModel agentModel;
     boolean isEdit;
     boolean isReminderClicked = false, isViaClicked = false, isTypeClicked = false, isRecurClicked = false;
     int month, year, day;
     Calendar newCalendar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -263,7 +266,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         });
 
 
-
     }
 
     @Override
@@ -329,7 +331,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 TextView textView = child.findViewById(R.id.txtDynamic);
                 textView.setText(String.valueOf(name.agentName));
                 bi.lnAgent.addView(child);
-                //selectedIdsList.add(name.);
+                selectedIdsList.add(name.agentID);
             }
         }
     }
@@ -338,7 +340,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         String id = "1";
         String agentIds = agentIdsString;
-        String leadStringID = leadId + "";
+        String leadStringID = searchLeadIdsString + "";
         String isAssignNow = bi.tvName.getText().toString().equals("") ? "false" : "true";
         String monthType = "";
         String scheduleID = "0";
@@ -364,9 +366,12 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String propertyId = "";
         String propertyAddress = bi.atvAddProperty.getText().toString() + "";
 
-        presenter.addTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc, scheduleRecurID, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
-                dayOfWeek, dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);
-
+        if (name.equals("") || type.equals("") || agentIds.equals("") || startDate.equals("")) {
+            ToastUtils.showToast(context, "Please fill all the required fields");
+        } else {
+            presenter.addTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc, scheduleRecurID, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
+                    dayOfWeek, dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);
+        }
     }
 
     private void type() {
@@ -581,11 +586,74 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         }, year, month, day);
         if (isStart) {
             StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-        }else{
+        } else {
             newCalendar.set(year, month, day);
             StartTime.getDatePicker().setMinDate(newCalendar.getTime().getTime() - 1000);
         }
         StartTime.show();
+    }
+
+    private void showSearchLeadDialog(Dialog dialog) {
+
+        MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
+                .title("Select Leads") //setting title for dialog
+                .titleSize(25)
+                .positiveText("Done")
+                .negativeText("Cancel")
+                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
+                        //will return list of selected IDS
+                        selectedIdsListLead = new ArrayList<>();
+                        selectedIdsListLead = selectedIds;
+                        if (bi.lnLead.getChildCount() > 0) {
+                            bi.lnLead.removeAllViews();
+                        }
+                        for (String name : selectedNames) {
+
+                            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                            TextView textView = child.findViewById(R.id.txtDynamic);
+                            textView.setText(name);
+                            bi.lnLead.addView(child);
+                        }
+                        dialog.dismiss();
+                        Log.e("DataString", dataString);
+                    }
+
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+
+                        searchLeadIdsString = "";
+                        if (selectedEncyrptedIds != null || selectedEncyrptedIds.size() != 0) {
+                            for (String i : selectedEncyrptedIds) {
+
+                                if (searchLeadIdsString.equals("")) {
+                                    searchLeadIdsString = i;
+                                } else {
+                                    searchLeadIdsString = searchLeadIdsString + "," + i;
+                                }
+                            }
+                        } else {
+                            ToastUtils.showToast(context, "No EncryptedID Found");
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+                    }
+                });
+
+        if (selectedIdsListLead.size() != 0) {
+            multiSelectDialog.preSelectIDsList(selectedIdsListLead);
+            multiSelectDialog.multiSelectList(searchListItemsLead);
+        } else {
+            multiSelectDialog.multiSelectList(searchListItemsLead);
+        }
+
+        multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialogLead");
+
     }
 
     private void setRecyclerSearch(Dialog dialog) {
@@ -676,7 +744,13 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
                         nameList = new ArrayList<>();
                         nameList.addAll(getAppointmentsModel.data);
-                        setRecyclerSearch(dialog);
+                        searchListItemsLead = new ArrayList<>();
+                        //setRecyclerSearch(dialog);
+                        for (GetLeadTitlesModel.Data data : nameList) {
+                            searchListItemsLead.add(new MultiSelectModel(data.decryptedLeadID, data.name, data.leadID));
+                        }
+
+                        showSearchLeadDialog(dialog);
 
                     } else {
 
@@ -696,5 +770,4 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
         });
     }
-
 }

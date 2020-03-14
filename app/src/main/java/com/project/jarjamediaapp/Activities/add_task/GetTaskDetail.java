@@ -86,8 +86,15 @@ public class GetTaskDetail extends BaseResponse {
             @SerializedName("agentID_Encrypted")
             @Expose
             public String agentIDEncrypted;
+            @SerializedName("agentID")
+            @Expose
+            public Integer agentID;
 
             public String getAgentName() {
+                return agentName;
+            }
+
+            public String getAgentID() {
                 return agentName;
             }
 

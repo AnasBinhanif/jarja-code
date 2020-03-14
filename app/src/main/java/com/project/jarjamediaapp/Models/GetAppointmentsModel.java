@@ -270,6 +270,9 @@ public class GetAppointmentsModel extends BaseResponse implements Parcelable {
             @SerializedName("agentName")
             @Expose
             public String agentName;
+            @SerializedName("agentDecryptedID")
+            @Expose
+            public Integer agentDecryptedID;
             @SerializedName("isSeen")
             @Expose
             public Boolean isSeen;
@@ -299,6 +302,7 @@ public class GetAppointmentsModel extends BaseResponse implements Parcelable {
                 }
                 agentID = in.readString();
                 agentName = in.readString();
+                agentDecryptedID = in.readInt();
                 byte tmpIsSeen = in.readByte();
                 isSeen = tmpIsSeen == 0 ? null : tmpIsSeen == 1;
                 if (in.readByte() == 0) {
@@ -330,6 +334,10 @@ public class GetAppointmentsModel extends BaseResponse implements Parcelable {
 
             public String getAgentID() {
                 return agentID;
+            }
+
+            public Integer getDecryptedAgentID() {
+                return agentDecryptedID;
             }
 
             public String getAgentName() {
@@ -377,6 +385,7 @@ public class GetAppointmentsModel extends BaseResponse implements Parcelable {
                 }
                 dest.writeString(agentID);
                 dest.writeString(agentName);
+                dest.writeInt(agentDecryptedID);
                 dest.writeByte((byte) (isSeen == null ? 0 : isSeen ? 1 : 2));
                 if (crmid == null) {
                     dest.writeByte((byte) 0);

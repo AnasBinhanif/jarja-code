@@ -186,7 +186,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 isEdit = true;
                 setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
                 bi.lblAppointment.setText(getString(R.string.edit_appointment));
-                GetAppointmentsModel.Data modelData = getIntent().getParcelableExtra("model");
+                GetAppointmentsModel.Data modelData = getIntent().getParcelableExtra("models");
                 prePopulateData(modelData);
 
             }
@@ -238,7 +238,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.cbAllDay.setChecked(modelData.isAllDay);
 
         if (modelData.getAgentList() != null && modelData.getAgentList().size() > 0) {
-
+            //selectedIdsList = new ArrayList<>();
             ArrayList<String> arrayList = new ArrayList<>();
             for (int i = 0; i < modelData.getAgentList().size(); i++) {
                 View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
@@ -247,6 +247,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 arrayList.add(modelData.getAgentList().get(i).getEncryptedAgentID());
                 bi.lnAgent.addView(child);
                 bi.lnAgent.setVisibility(View.VISIBLE);
+                //selectedIdsList.add(modelData.getAgentList().get(i).getAgentID());
             }
             agentIdsString = TextUtils.join(",", arrayList);
 
@@ -306,7 +307,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 arrayList.add(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getAgentID());
                 bi.lnAgent.addView(child);
                 bi.lnAgent.setVisibility(View.VISIBLE);
-                // selectedIdsList.add(Integer.valueOf(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getAgentID()));
+                selectedIdsList.add(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getDecryptedAgentID());
             }
             agentIdsString = TextUtils.join(",", arrayList);
         }

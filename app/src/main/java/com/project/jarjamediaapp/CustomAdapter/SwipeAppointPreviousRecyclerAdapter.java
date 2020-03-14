@@ -175,7 +175,7 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
                     context.startActivity(new Intent(context, AddAppointmentActivity.class)
                             .putExtra("leadID", leadID)
                             .putExtra("from", "4")
-                            .putExtra("model", modelData));
+                            .putExtra("models", modelData));
                 }
             });
         }

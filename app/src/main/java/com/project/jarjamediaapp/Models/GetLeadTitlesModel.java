@@ -28,6 +28,9 @@ public class GetLeadTitlesModel {
         @SerializedName("leadID")
         @Expose
         public String leadID;
+        @SerializedName("decryptedLeadID")
+        @Expose
+        public Integer decryptedLeadID;
 
     }
 }
