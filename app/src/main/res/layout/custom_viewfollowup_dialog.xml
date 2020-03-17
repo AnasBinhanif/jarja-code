@@ -85,11 +85,11 @@
             android:id="@+id/edtTime"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:text="8:00AM"
             android:paddingLeft="12dp"
             android:layout_marginTop="5dp"
             android:textSize="14dp"
             android:gravity="center|left"
+            android:drawableEnd="@drawable/ic_clock"
             android:inputType="textPersonName"
             android:background="@drawable/bg_search" />
 

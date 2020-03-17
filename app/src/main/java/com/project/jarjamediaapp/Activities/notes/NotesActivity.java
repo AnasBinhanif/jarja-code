@@ -1,12 +1,17 @@
 package com.project.jarjamediaapp.Activities.notes;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -14,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.paris.Paris;
+import com.project.jarjamediaapp.Activities.lead_detail.BottomDialog;
+import com.project.jarjamediaapp.Activities.lead_detail.HandleMultipleClickEvents;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.CustomAdapter.SwipeDocumentRecyclerAdapter;
@@ -26,16 +33,28 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityNotesBinding;
 import com.vincent.filepicker.Constant;
+import com.vincent.filepicker.activity.ImagePickActivity;
 import com.vincent.filepicker.activity.NormalFilePickActivity;
+import com.vincent.filepicker.filter.entity.ImageFile;
 import com.vincent.filepicker.filter.entity.NormalFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import id.zelory.compressor.Compressor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Response;
 
-public class NotesActivity extends BaseActivity implements NotesContract.View {
+import static com.vincent.filepicker.activity.VideoPickActivity.IS_NEED_CAMERA;
+
+public class NotesActivity extends BaseActivity implements NotesContract.View, EasyPermissions.PermissionCallbacks, HandleMultipleClickEvents {
 
     ActivityNotesBinding bi;
     Context context = NotesActivity.this;
@@ -46,6 +65,12 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
     public static ArrayList<UploadFilesModel> arrayListData;
     SwipeDocumentRecyclerAdapter swipeDocumentRecyclerAdapter;
     String leadID = "";
+    BottomDialog bottomDialog;
+    private final int RC_CAMERA_AND_STORAGE = 100;
+    private final int RC_CAMERA_ONLY = 101;
+    File actualImage;
+    File compressedImage;
+    MultipartBody.Part multipartFile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +82,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.notes), true);
         arrayListData = new ArrayList<UploadFilesModel>();
+
     }
 
     @Override
@@ -78,6 +104,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
                 buttonType = "Documents";
                 Paris.style(bi.btnDocuments).apply(R.style.TabButtonYellowRight);
                 Paris.style(bi.btnNotes).apply(R.style.TabButtonTranparentLeft);
+                presenter.getDocumentByLeadId(leadID);
             }
             break;
 
@@ -88,29 +115,24 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        switch (requestCode) {
+            case Constant.REQUEST_CODE_PICK_IMAGE:
+                if (resultCode == RESULT_OK) {
+                    ArrayList<ImageFile> arrayListData = data.getParcelableArrayListExtra(Constant.RESULT_PICK_IMAGE);
+                    new ImageCompression().execute(arrayListData.get(0).getPath());
 
-        if (resultCode == RESULT_OK) {
-            if (requestCode == Constant.REQUEST_CODE_PICK_FILE) {
-
-                ArrayList<NormalFile> list = data.getParcelableArrayListExtra(Constant.RESULT_PICK_FILE);
-                int addedListSize = arrayListData.size();
-                int selectedListSize = list.size();
-                int totalSize = addedListSize + selectedListSize;
-
-                if (totalSize <= 10) {
-                    for (int i = 0; i < list.size(); i++) {
-                        arrayListData.add(new UploadFilesModel(list.get(i).getPath(), list.get(i).getName()));
-                    }
-                    populateList(arrayListData);
-                } else {
-                    ToastUtils.showToast(context, getString(R.string.cannot_add_file));
                 }
-
-            } else {
+                break;
+            case Constant.REQUEST_CODE_PICK_FILE:
+                if (resultCode == RESULT_OK) {
+                    ArrayList<NormalFile> arrayListData = data.getParcelableArrayListExtra(Constant.RESULT_PICK_FILE);
+                    sendDocument(arrayListData.get(0).getPath());
+                }
+                break;
+            default:
                 presenter.getLeadNotes(leadID);
-            }
-
         }
+
     }
 
     @Override
@@ -153,6 +175,28 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
 
     @Override
     public void updateUI(GetAgentsModel response) {
+
+    }
+
+    @Override
+    public void updateUIListDocuments(DocumentModel response) {
+
+        // on api success response call this method
+        swipeDocumentRecyclerAdapter = new SwipeDocumentRecyclerAdapter(context, NotesActivity.this, response.getData());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewDocuments.getContext(), 1);
+        bi.recyclerViewDocuments.setLayoutManager(mLayoutManager);
+        bi.recyclerViewDocuments.setItemAnimator(new DefaultItemAnimator());
+        bi.recyclerViewDocuments.addItemDecoration(dividerItemDecoration);
+        bi.recyclerViewDocuments.setAdapter(swipeDocumentRecyclerAdapter);
+        bi.recyclerViewDocuments.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void updateUIListAfterAddDoc(BaseResponse response) {
+
+        presenter.getDocumentByLeadId(leadID);
 
     }
 
@@ -216,10 +260,9 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
                 switchActivityWithIntentString(AddNotesActivity.class, (HashMap) noteMap);
             } else {
 
-                Intent documentIntent = new Intent(context, NormalFilePickActivity.class);
-                documentIntent.putExtra(Constant.MAX_NUMBER, 10);
-                documentIntent.putExtra(NormalFilePickActivity.SUFFIX, new String[]{"xlsx", "xls", "doc", "docx", "ppt", "pptx", "pdf"});
-                startActivityForResult(documentIntent, Constant.REQUEST_CODE_PICK_FILE);
+                bottomDialog = BottomDialog.getInstance();
+                bottomDialog.setClickHandleEvents(NotesActivity.this);
+                bottomDialog.show(getSupportFragmentManager(), "Select File");
 
             }
 
@@ -240,18 +283,154 @@ public class NotesActivity extends BaseActivity implements NotesContract.View {
         GH.getInstance().HideProgressDialog();
     }
 
-    private void populateList(ArrayList<UploadFilesModel> arrayListData) {
+    @Override
+    public void onGalleryClick() {
 
-        swipeDocumentRecyclerAdapter = new SwipeDocumentRecyclerAdapter(context, NotesActivity.this, arrayListData);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewDocuments.getContext(), 1);
-        bi.recyclerViewDocuments.setLayoutManager(mLayoutManager);
-        bi.recyclerViewDocuments.setItemAnimator(new DefaultItemAnimator());
-        bi.recyclerViewDocuments.addItemDecoration(dividerItemDecoration);
-        bi.recyclerViewDocuments.setAdapter(swipeDocumentRecyclerAdapter);
-        bi.recyclerViewDocuments.setVisibility(View.VISIBLE);
+        bottomDialog.dismiss();
+        oPenGallery();
+    }
+
+    @Override
+    public void onCameraClick() {
+
+        bottomDialog.dismiss();
+        accessCamera();
+    }
+
+    @Override
+    public void onDocumentClick() {
+
+        bottomDialog.dismiss();
+        accessDocuments();
 
     }
 
+    @AfterPermissionGranted(RC_CAMERA_AND_STORAGE)
+    private void oPenGallery() {
+
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(context, perms)) {
+            // Already have permission, do the thing
+            Intent imageIntent = new Intent(context, ImagePickActivity.class);
+            imageIntent.putExtra(IS_NEED_CAMERA, false);
+            imageIntent.putExtra(Constant.MAX_NUMBER, 1);
+            startActivityForResult(imageIntent, Constant.REQUEST_CODE_PICK_IMAGE);
+
+
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, getString(R.string.permission_message),
+                    RC_CAMERA_AND_STORAGE, perms);
+        }
+    }
+
+    @AfterPermissionGranted(RC_CAMERA_ONLY)
+    private void accessCamera() {
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(context, perms)) {
+            // Already have permission, do the thing
+            Intent imageIntent = new Intent(context, ImagePickActivity.class);
+            imageIntent.putExtra(IS_NEED_CAMERA, true);
+            imageIntent.putExtra(Constant.MAX_NUMBER, 1);
+            startActivityForResult(imageIntent, Constant.REQUEST_CODE_TAKE_IMAGE);
+
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, getString(R.string.permission_message),
+                    RC_CAMERA_ONLY, perms);
+        }
+    }
+
+    @AfterPermissionGranted(RC_CAMERA_AND_STORAGE)
+    private void accessDocuments() {
+
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(context, perms)) {
+            // Already have permission, do the thing
+            Intent documentIntent = new Intent(context, NormalFilePickActivity.class);
+            documentIntent.putExtra(Constant.MAX_NUMBER, 1);
+            documentIntent.putExtra(NormalFilePickActivity.SUFFIX, new String[]{"xlsx", "xls", "doc", "docx", "ppt", "pptx", "pdf"});
+            startActivityForResult(documentIntent, Constant.REQUEST_CODE_PICK_FILE);
+
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, getString(R.string.permission_message),
+                    RC_CAMERA_ONLY, perms);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+
+    }
+
+    private void sendDocument(String result) {
+
+        File file = new File(result);
+        Uri uri = Uri.fromFile(file);
+        String type1 = GH.getInstance().getMimeType(NotesActivity.this, uri);
+        MediaType mediaType = MediaType.parse(type1);
+        RequestBody requestFile = RequestBody.create(mediaType, file);
+        multipartFile = MultipartBody.Part.createFormData("", file.getName(), requestFile);
+        presenter.addDocumentByLeadId(multipartFile, leadID);
+
+
+    }
+
+    private File ImageCompression(String filePath) {
+
+        actualImage = new File(filePath);
+        Log.i("imageCompresser", "Original image file size: " + actualImage.length());
+        try {
+            String compressedFileName = System.currentTimeMillis() + ".jpg";
+            compressedImage = new Compressor(this).compressToFile(actualImage, compressedFileName);
+            Log.i("imageCompresser", "Compressed image file size: " + compressedImage.length());
+        } catch (Exception e) {
+            e.printStackTrace();
+            compressedImage = null;
+        }
+        return compressedImage;
+    }
+
+    public class ImageCompression extends AsyncTask<String, Void, File> {
+
+        // only retain a weak reference to the activity
+        ImageCompression() {
+
+        }
+
+        @Override
+        protected File doInBackground(String... params) {
+            return ImageCompression(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(File result) {
+
+            Uri uri = Uri.fromFile(result);
+            String type1 = GH.getInstance().getMimeType(NotesActivity.this, uri);
+            MediaType mediaType = MediaType.parse(type1);
+
+            if (result != null && actualImage != null) {
+                RequestBody requestFile = RequestBody.create(mediaType, result);
+                multipartFile = MultipartBody.Part.createFormData("", result.getName(), requestFile);
+                presenter.addDocumentByLeadId(multipartFile, leadID);
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            Log.d("Test", "onPreExecute: " + "");
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+    }
 
 }

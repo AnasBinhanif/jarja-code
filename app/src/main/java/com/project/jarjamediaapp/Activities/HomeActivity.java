@@ -126,7 +126,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         String fullName = getUserProfile.data.userProfile.firstName + " " + getUserProfile.data.userProfile.lastName;
                         navHeaderTextView.setText(fullName);
 
-                        picPath = AppConstants.HTTP.BASE_IMAGE_URL + getUserProfile.data.userProfile.picPath;
+                        picPath = getUserProfile.data.userProfile.picPath;
 
                         Glide.with(context)
                                 .load(picPath)

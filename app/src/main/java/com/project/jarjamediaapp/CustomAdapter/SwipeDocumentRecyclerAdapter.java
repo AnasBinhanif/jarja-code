@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
-import com.project.jarjamediaapp.Activities.notes.UploadFilesModel;
+import com.project.jarjamediaapp.Activities.notes.DocumentModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -26,7 +26,6 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,9 +39,9 @@ public class SwipeDocumentRecyclerAdapter extends RecyclerView.Adapter {
     public Context context;
     Activity activity;
     int pos;
-    ArrayList<UploadFilesModel> mData;
+    ArrayList<DocumentModel.Data> mData;
 
-    public SwipeDocumentRecyclerAdapter(Context context, Activity activity, ArrayList<UploadFilesModel> getData) {
+    public SwipeDocumentRecyclerAdapter(Context context, Activity activity, ArrayList<DocumentModel.Data> getData) {
 
         this.context = context;
         this.activity = activity;
@@ -64,9 +63,9 @@ public class SwipeDocumentRecyclerAdapter extends RecyclerView.Adapter {
         pos = position;
         if (mData != null && 0 <= position && position < mData.size()) {
 
-            UploadFilesModel modelData = mData.get(position);
-            String[] extension = modelData.getImage().split(Pattern.quote("."));
-            holder.txtFileName.setText(modelData.getName() + "." + extension[1]);
+            DocumentModel.Data modelData = mData.get(position);
+            String fileName = modelData.getAttachmentOrignalName();
+            holder.txtFileName.setText(fileName);
 
             holder.swipeLayout.setSwipeListener(new SwipeRevealLayout.SwipeListener() {
                 @Override
@@ -139,20 +138,21 @@ public class SwipeDocumentRecyclerAdapter extends RecyclerView.Adapter {
 
             lnDelete.setOnClickListener(v -> {
                 pos = getAdapterPosition();
-                UploadFilesModel modelData = mData.get(pos);
-                showDeleteDialog(modelData);
-            });
-
-            lnEmail.setOnClickListener(v -> {
-
-                pos = getAdapterPosition();
-
+                DocumentModel.Data modelData = mData.get(pos);
+                showDeleteDialog(modelData,swipeLayout);
             });
 
         }
     }
 
-    private void showDeleteDialog(UploadFilesModel uploadFilesModel) {
+    public void addData(DocumentModel.Data modelData) {
+
+        mData.add(modelData);
+        notifyDataSetChanged();
+
+    }
+
+    private void showDeleteDialog(DocumentModel.Data data,SwipeRevealLayout swipeRevealLayout) {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setIcon(R.drawable.logo_round);
@@ -162,8 +162,7 @@ public class SwipeDocumentRecyclerAdapter extends RecyclerView.Adapter {
 
         alertDialogBuilder.setPositiveButton("Yes", (dialog, which) -> {
             dialog.dismiss();
-            mData.remove(uploadFilesModel);
-            notifyDataSetChanged();
+            callDeleteDocument(String.valueOf(data.getLeadAttachmentID()),swipeRevealLayout);
         });
         alertDialogBuilder.setNegativeButton("No", (dialog, which) -> {
             dialog.dismiss();
@@ -174,12 +173,12 @@ public class SwipeDocumentRecyclerAdapter extends RecyclerView.Adapter {
 
     }
 
-    private void callDeleteNote(String encryptedNoteID) {
+    private void callDeleteDocument(String docId,SwipeRevealLayout swipeRevealLayout) {
+
         GH.getInstance().ShowProgressDialog(activity);
-        Call<BaseResponse> _callToday;
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).DeleteNote(GH.getInstance().getAuthorization(),
-                encryptedNoteID);
-        _callToday.enqueue(new Callback<BaseResponse>() {
+        Call<BaseResponse> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).deleteDocumentByDocumentId(GH.getInstance().getAuthorization(),
+                docId);
+        _call.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 GH.getInstance().HideProgressDialog();
@@ -191,6 +190,7 @@ public class SwipeDocumentRecyclerAdapter extends RecyclerView.Adapter {
                         ToastUtils.showToast(context, "Successfully Done");
                         mData.remove(pos);
                         notifyDataSetChanged();
+                        swipeRevealLayout.close(true);
 
                     } else {
 
@@ -212,40 +212,4 @@ public class SwipeDocumentRecyclerAdapter extends RecyclerView.Adapter {
         });
     }
 
-    private void callStickyNote(String encryptedNoteID, String encryptedLeadid, Boolean isSticky) {
-        GH.getInstance().ShowProgressDialog(activity);
-        Call<BaseResponse> _callToday;
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Make_Lead_Note_Sticky(GH.getInstance().getAuthorization(),
-                encryptedNoteID, encryptedLeadid, isSticky);
-        _callToday.enqueue(new Callback<BaseResponse>() {
-            @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                GH.getInstance().HideProgressDialog();
-                if (response.isSuccessful()) {
-
-                    BaseResponse getAppointmentsModel = response.body();
-                    if (getAppointmentsModel.getStatus().equals("Success")) {
-
-                        ToastUtils.showToast(context, "Successfully Done");
-                        notifyDataSetChanged();
-
-                    } else {
-
-                        ToastUtils.showToast(context, getAppointmentsModel.message);
-
-                    }
-                } else {
-
-                    ApiError error = ErrorUtils.parseError(response);
-                    ToastUtils.showToast(context, error.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                GH.getInstance().HideProgressDialog();
-                ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
-            }
-        });
-    }
 }

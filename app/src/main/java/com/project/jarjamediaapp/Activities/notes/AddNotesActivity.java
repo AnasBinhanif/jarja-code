@@ -226,6 +226,16 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
     }
 
     @Override
+    public void updateUIListDocuments(DocumentModel response) {
+
+    }
+
+    @Override
+    public void updateUIListAfterAddDoc(BaseResponse response) {
+
+    }
+
+    @Override
     public void updateUI(Response<BaseResponse> response) {
 
         if (response.body().getStatus().equalsIgnoreCase("Success")) {

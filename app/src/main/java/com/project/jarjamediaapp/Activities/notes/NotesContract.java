@@ -6,6 +6,7 @@ import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetLeadNotes;
 import com.project.jarjamediaapp.Models.GetNoteDropDown;
 
+import okhttp3.MultipartBody;
 import retrofit2.Response;
 
 public interface NotesContract {
@@ -21,6 +22,10 @@ public interface NotesContract {
         void updateUI(GetLeadNotes response);
 
         void updateUI(GetAgentsModel response);
+
+        void updateUIListDocuments(DocumentModel response);
+
+        void updateUIListAfterAddDoc(BaseResponse response);
 
         void updateUIonFalse(String message);
 
@@ -50,6 +55,11 @@ public interface NotesContract {
         void addNote(String noteID, String leadID, String noteType, String desc, String isSticky, String dated, String agentIDs, String leadStringID);
 
         void initScreen();
+
+        void getDocumentByLeadId(String leadId);
+
+        void addDocumentByLeadId(MultipartBody.Part part, String leadId);
+
 
     }
 
