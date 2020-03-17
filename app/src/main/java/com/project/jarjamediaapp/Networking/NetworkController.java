@@ -18,7 +18,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkController {
 
-
     private static NetworkController singleTonInstance = null;
     private Retrofit mRetrofit;
     private ApiMethods mApiMethods;

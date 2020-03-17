@@ -1,7 +1,6 @@
 
 package com.project.jarjamediaapp.Utilities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
