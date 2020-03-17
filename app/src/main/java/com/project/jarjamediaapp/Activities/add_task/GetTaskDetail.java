@@ -55,7 +55,7 @@ public class GetTaskDetail extends BaseResponse {
         public String startDate;
         @SerializedName("lead_EncryptedId")
         @Expose
-        public Object leadEncryptedId;
+        public String leadEncryptedId;
         @SerializedName("description")
         @Expose
         public String description;
@@ -70,7 +70,7 @@ public class GetTaskDetail extends BaseResponse {
         public Integer interval;
         @SerializedName("viaReminder")
         @Expose
-        public Object viaReminder;
+        public String viaReminder;
         @SerializedName("scheduleRecurID")
         @Expose
         public Integer scheduleRecurID;

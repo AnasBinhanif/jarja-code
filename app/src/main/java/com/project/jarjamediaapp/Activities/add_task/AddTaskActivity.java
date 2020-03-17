@@ -318,6 +318,12 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String endDate = GH.getInstance().formatter(taskDetail.data.endDate, "MM-dd-yyyy", "dd/MM/yyyy hh:mm:ss a");
         bi.tvStartDate.setText(startDate);
         bi.tvEndDate.setText(endDate);
+        type = taskDetail.data.type;
+        this.startDate = taskDetail.data.startDate;
+        searchLeadIdsString = taskDetail.data.leadEncryptedId;
+        this.endDate = taskDetail.data.endDate;
+        reminder = String.valueOf(taskDetail.data.interval);
+        via = taskDetail.data.viaReminder;
         if (taskDetail.data.agents.size() != 0) {
 
             if (bi.lnAgent.getChildCount() > 0) {
@@ -332,6 +338,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 textView.setText(String.valueOf(name.agentName));
                 bi.lnAgent.addView(child);
                 selectedIdsList.add(name.agentID);
+                if (agentIdsString.equals("")) {
+                    agentIdsString = name.agentIDEncrypted;
+                } else {
+                    agentIdsString = agentIdsString + "," + name.agentIDEncrypted;
+                }
             }
         }
     }
@@ -366,8 +377,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String propertyId = "";
         String propertyAddress = bi.atvAddProperty.getText().toString() + "";
 
-        if (name.equals("") || type.equals("") || agentIds.equals("") || startDate.equals("")) {
+        if (name.equals("") || type.equals("") || agentIds.equals("") || datedFrom.equals("")) {
             ToastUtils.showToast(context, "Please fill all the required fields");
+        } else if (interval != 0 && viaReminder.equals("")) {
+            ToastUtils.showToast(context, "Please select Via");
         } else {
             presenter.addTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc, scheduleRecurID, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
                     dayOfWeek, dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);
@@ -383,7 +396,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             isTypeClicked = false;
             bi.atvType.dismissDropDown();
         }
-
     }
 
     private void recur() {
@@ -395,7 +407,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             isRecurClicked = false;
             bi.atvRecur.dismissDropDown();
         }
-
     }
 
     private void reminder() {
@@ -407,7 +418,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             isReminderClicked = false;
             bi.atvReminder.dismissDropDown();
         }
-
     }
 
     private void via() {
@@ -419,7 +429,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             isViaClicked = false;
             bi.atvVia.dismissDropDown();
         }
-
     }
 
     @Override
@@ -519,7 +528,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         }
 
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
-
     }
 
     public void showSearchDialog(Context context) {
@@ -541,12 +549,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         edtQuery.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -691,14 +697,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             ToastUtils.showToast(context, "Added Successfully");
             finish();
         }
-
     }
 
     @Override
     public void updateUIonFalse(String message) {
-
         ToastUtils.showToastLong(context, message);
-
     }
 
     @Override

@@ -165,7 +165,7 @@ public interface ApiMethods {
             @Header("Authorization") String authorization
     );
 
-    @GET("Lead/GetLeadScore")
+    @GET("Lead/Get")
     Call<GetLeadScore> GetLeadScore(
             @Header("Authorization") String authorization
     );

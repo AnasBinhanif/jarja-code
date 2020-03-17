@@ -81,7 +81,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     ArrayList<String> arrayListReminderValue, arrayListReminderText;
     CalendarDetailModel.Data.CalendarData calendarData;
     String timedFrom = "", timedTo = "", datedFrom = "", datedTo = "";
-    int month, year, day;
+    int month, year, day,mHour,mMinute;
     Calendar newCalendar;
 
     @Override
@@ -136,6 +136,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         year = newCalendar.get(Calendar.YEAR);
         month = newCalendar.get(Calendar.MONTH);
         day = newCalendar.get(Calendar.DAY_OF_MONTH);
+        mHour = newCalendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = newCalendar.get(Calendar.MINUTE);
 
     }
 
@@ -238,7 +240,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.cbAllDay.setChecked(modelData.isAllDay);
 
         if (modelData.getAgentList() != null && modelData.getAgentList().size() > 0) {
-            //selectedIdsList = new ArrayList<>();
+            selectedIdsList = new ArrayList<>();
             ArrayList<String> arrayList = new ArrayList<>();
             for (int i = 0; i < modelData.getAgentList().size(); i++) {
                 View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
@@ -247,7 +249,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 arrayList.add(modelData.getAgentList().get(i).getEncryptedAgentID());
                 bi.lnAgent.addView(child);
                 bi.lnAgent.setVisibility(View.VISIBLE);
-                //selectedIdsList.add(modelData.getAgentList().get(i).getAgentID());
+                selectedIdsList.add(modelData.getAgentList().get(i).getAgentID());
             }
             agentIdsString = TextUtils.join(",", arrayList);
 
@@ -596,12 +598,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     private void showTimeDialog(TextView textView, boolean isStart) {
 
-        Calendar mcurrentTime = Calendar.getInstance();
-        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-        int minute = mcurrentTime.get(Calendar.MINUTE);
         TimePickerDialog mTimePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+
+                mHour = selectedHour;
+                mMinute = selectedMinute;
 
                 String time = "";
                 if (isStart) {
@@ -617,7 +619,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 textView.setText(time);
 
             }
-        }, hour, minute, false);//Yes 24 hour time
+        }, mHour, mMinute, false);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
     }
