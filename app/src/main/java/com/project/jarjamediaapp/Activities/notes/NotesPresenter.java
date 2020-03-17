@@ -11,16 +11,18 @@ import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.Utilities.GH;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NotesPresenter extends BasePresenter<NotesContract.View> implements NotesContract.Actions {
 
-    Call<BaseResponse> _callAddNote;
+    Call<BaseResponse> _call;
     Call<GetAgentsModel> _callGetAgentsModel;
     Call<GetNoteDropDown> _callGetNoteDropDown;
     Call<GetLeadNotes> _callGetLeadNotes;
+    Call<DocumentModel> _callDoc;
 
 
     public NotesPresenter(NotesContract.View view) {
@@ -30,9 +32,9 @@ public class NotesPresenter extends BasePresenter<NotesContract.View> implements
     @Override
     public void editNote(String leadID, String noteID, String Desc) {
         _view.showProgressBar();
-        _callAddNote = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).EditNote(GH.getInstance().getAuthorization(),
-                noteID,leadID, Desc);
-        _callAddNote.enqueue(new Callback<BaseResponse>() {
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).EditNote(GH.getInstance().getAuthorization(),
+                noteID, leadID, Desc);
+        _call.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
 
@@ -188,9 +190,9 @@ public class NotesPresenter extends BasePresenter<NotesContract.View> implements
 
 
         _view.showProgressBar();
-        _callAddNote = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddNote(GH.getInstance().getAuthorization(),
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddNote(GH.getInstance().getAuthorization(),
                 noteID, leadID, noteType, desc, isSticky, dated, agentIDs, leadStringID);
-        _callAddNote.enqueue(new Callback<BaseResponse>() {
+        _call.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
 
@@ -229,6 +231,83 @@ public class NotesPresenter extends BasePresenter<NotesContract.View> implements
     }
 
     @Override
+    public void getDocumentByLeadId(String leadId) {
+
+        _view.showProgressBar();
+        _callDoc = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getDocumentByLeadId(GH.getInstance().getAuthorization(), leadId);
+        _callDoc.enqueue(new Callback<DocumentModel>() {
+            @Override
+            public void onResponse(Call<DocumentModel> call, Response<DocumentModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    DocumentModel documentModel = response.body();
+                    if (documentModel.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateUIListDocuments(documentModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(documentModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DocumentModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void addDocumentByLeadId(MultipartBody.Part part, String leadId) {
+
+        _view.showProgressBar();
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).uploadDocumentByLeadId(GH.getInstance().getAuthorization(), part, leadId);
+        _call.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse documentModel = response.body();
+                    if (documentModel.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateUIListAfterAddDoc(documentModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(documentModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+
+    }
+
+    @Override
     public void detachView() {
 
         if (_callGetNoteDropDown != null) {
@@ -237,4 +316,5 @@ public class NotesPresenter extends BasePresenter<NotesContract.View> implements
         }
         super.detachView();
     }
+
 }

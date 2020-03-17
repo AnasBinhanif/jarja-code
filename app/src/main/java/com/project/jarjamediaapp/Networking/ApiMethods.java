@@ -8,6 +8,7 @@ import com.project.jarjamediaapp.Activities.calendarDetail.CalendarDetailModel;
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
 import com.project.jarjamediaapp.Activities.lead_detail.LeadDetailModel;
 import com.project.jarjamediaapp.Activities.listing_info.ListingInfoModel;
+import com.project.jarjamediaapp.Activities.notes.DocumentModel;
 import com.project.jarjamediaapp.Activities.notification.NotificationModel;
 import com.project.jarjamediaapp.Activities.open_houses.AddressDetailModel;
 import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
@@ -789,5 +790,18 @@ public interface ApiMethods {
             @Field("gmailCalenderId") String gmailCalendarId,
             @Field("encrypted_LeadAppoinmentID") String encryptedLeadAppointmentId);
 
+    @GET("Lead/GetLeadDocDetail")
+    Call<DocumentModel> getDocumentByLeadId(@Header("Authorization") String authorization,
+                                            @Query("LeadID") String leadId);
+
+    @POST("Lead/DeleteLeadDoc")
+    Call<BaseResponse> deleteDocumentByDocumentId(@Header("Authorization") String authorization,
+                                                  @Query("DocID") String DocId);
+
+    @Multipart
+    @POST("Lead/AddLeadDoc")
+    Call<BaseResponse> uploadDocumentByLeadId(@Header("Authorization") String authorization,
+                                                  @Part MultipartBody.Part file,
+                                                  @Query("LeadID") String leadId);
 
 }

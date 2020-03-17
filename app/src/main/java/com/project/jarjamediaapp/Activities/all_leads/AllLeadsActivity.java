@@ -54,6 +54,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     private void handleIntent() {
         resultSetType = getIntent().getStringExtra("resultType");
         data = getIntent().getParcelableExtra("bundle");
+        callGetAllLeads(data);
     }
 
     @Override
@@ -75,12 +76,6 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                 return false;
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        callGetAllLeads(data);
     }
 
     private void callGetAllLeads(Intent bundle) {

@@ -104,6 +104,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
                 buttonType = "Documents";
                 Paris.style(bi.btnDocuments).apply(R.style.TabButtonYellowRight);
                 Paris.style(bi.btnNotes).apply(R.style.TabButtonTranparentLeft);
+                presenter.getDocumentByLeadId(leadID);
             }
             break;
 
@@ -174,6 +175,28 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
 
     @Override
     public void updateUI(GetAgentsModel response) {
+
+    }
+
+    @Override
+    public void updateUIListDocuments(DocumentModel response) {
+
+        // on api success response call this method
+        swipeDocumentRecyclerAdapter = new SwipeDocumentRecyclerAdapter(context, NotesActivity.this, response.getData());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewDocuments.getContext(), 1);
+        bi.recyclerViewDocuments.setLayoutManager(mLayoutManager);
+        bi.recyclerViewDocuments.setItemAnimator(new DefaultItemAnimator());
+        bi.recyclerViewDocuments.addItemDecoration(dividerItemDecoration);
+        bi.recyclerViewDocuments.setAdapter(swipeDocumentRecyclerAdapter);
+        bi.recyclerViewDocuments.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void updateUIListAfterAddDoc(BaseResponse response) {
+
+        presenter.getDocumentByLeadId(leadID);
 
     }
 
@@ -258,20 +281,6 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
     @Override
     public void hideProgressBar() {
         GH.getInstance().HideProgressDialog();
-    }
-
-    private void populateList(ArrayList<UploadFilesModel> arrayListData) {
-
-        // on api success response call this method
-        swipeDocumentRecyclerAdapter = new SwipeDocumentRecyclerAdapter(context, NotesActivity.this, arrayListData);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewDocuments.getContext(), 1);
-        bi.recyclerViewDocuments.setLayoutManager(mLayoutManager);
-        bi.recyclerViewDocuments.setItemAnimator(new DefaultItemAnimator());
-        bi.recyclerViewDocuments.addItemDecoration(dividerItemDecoration);
-        bi.recyclerViewDocuments.setAdapter(swipeDocumentRecyclerAdapter);
-        bi.recyclerViewDocuments.setVisibility(View.VISIBLE);
-
     }
 
     @Override
@@ -367,6 +376,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
         MediaType mediaType = MediaType.parse(type1);
         RequestBody requestFile = RequestBody.create(mediaType, file);
         multipartFile = MultipartBody.Part.createFormData("", file.getName(), requestFile);
+        presenter.addDocumentByLeadId(multipartFile, leadID);
 
 
     }
@@ -408,6 +418,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
             if (result != null && actualImage != null) {
                 RequestBody requestFile = RequestBody.create(mediaType, result);
                 multipartFile = MultipartBody.Part.createFormData("", result.getName(), requestFile);
+                presenter.addDocumentByLeadId(multipartFile, leadID);
             }
         }
 
