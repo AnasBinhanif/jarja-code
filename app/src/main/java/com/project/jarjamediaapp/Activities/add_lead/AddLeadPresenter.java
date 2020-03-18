@@ -264,11 +264,11 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
 
     @Override
     public void addLead(String firstName, String lastName, String spousname, String company, String cellPhone, String primaryPhone,
-                        String primaryEmail, String dateOfBirth, String isBirthDayNotify, String dateOfMarriage, String isAnniversaryNotify,
+                        String primaryEmail, String dateOfBirth, boolean isBirthDayNotify, String dateOfMarriage, boolean isAnniversaryNotify,
                         String leadAgentIDs, String allAgentIds, String alldripcampaignids, String notes, String b_PreQual, String address,
                         String street, String zipcode, String city, String state, String description, String source, String county, String timeFrameId,
-                        String state2, String city2, String zipcode2, String leadTypeID, String emailList, String phoneList, String labelsID, String leadStringID,
-                        String leadID, String countryid) {
+                        String state2, String city2, String zipcode2, int leadTypeID, String emailList, String phoneList, String labelsID, String leadStringID,
+                        String countryid) {
 
         _view.showProgressBar();
         _callAddLead = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddLead(GH.getInstance().getAuthorization(),
@@ -276,8 +276,8 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
                 primaryEmail, dateOfBirth, isBirthDayNotify, dateOfMarriage, isAnniversaryNotify,
                 leadAgentIDs, allAgentIds, alldripcampaignids, notes, b_PreQual, address,
                 street, zipcode, city, state, description, source, county, timeFrameId,
-                state2, city2, zipcode2, leadTypeID, emailList, phoneList, labelsID, leadID,
-                leadID, countryid);
+                state2, city2, zipcode2, leadTypeID, emailList, phoneList, labelsID,leadStringID,
+                countryid);
 
         _callAddLead.enqueue(new Callback<BaseResponse>() {
             @Override
@@ -309,8 +309,6 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
                 _view.updateUIonFailure();
             }
         });
-
-
     }
 
     @Override

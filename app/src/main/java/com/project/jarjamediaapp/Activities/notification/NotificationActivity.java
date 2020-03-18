@@ -60,14 +60,11 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                 TextView tvName = (TextView) integerMap.get(R.id.tvName);
                 tvName.setText(data.getTaskName() != null ? data.getTaskName() : "");
 
-
                 TextView tvDesc = (TextView) integerMap.get(R.id.tvLeadName);
                 tvDesc.setText(data.getVtCRMLeadCustom().getFirstName() != null && data.getVtCRMLeadCustom().getLastName() != null ? data.getVtCRMLeadCustom().getFirstName() + " " + data.getVtCRMLeadCustom().getLastName() : "");
 
-
                 TextView tvContact = (TextView) integerMap.get(R.id.tvContact);
                 tvContact.setText(data.getVtCRMLeadCustom().getPrimaryPhone() != null ? data.getVtCRMLeadCustom().getPrimaryPhone() : "");
-
 
                 TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
                 tvEmail.setText(data.getVtCRMLeadCustom().getPrimaryEmail() != null ? data.getVtCRMLeadCustom().getPrimaryEmail() : "");
@@ -85,7 +82,6 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
     @Override
     public void onClick(View v) {
-
 
         switch (v.getId()) {
 
@@ -115,9 +111,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                 presenter.getNotificationByFollowUps();
 
                 break;
-
         }
-
     }
 
     @Override
@@ -190,8 +184,6 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
             bi.rvNotifications.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
         }
-
-
     }
 
 }

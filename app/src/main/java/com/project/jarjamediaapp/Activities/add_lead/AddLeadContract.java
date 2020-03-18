@@ -56,10 +56,10 @@ public interface AddLeadContract {
         void GetLeadTimeFrame();
         void GetLeadDripCampaignList();
         void addLead(String firstName, String lastName, String spousname, String company, String cellPhone, String primaryPhone,String primaryEmail,
-                     String dateOfBirth, String isBirthDayNotify, String dateOfMarriage, String isAnniversaryNotify, String leadAgentIDs, String allAgentIds, String alldripcampaignids,
+                     String dateOfBirth, boolean isBirthDayNotify, String dateOfMarriage, boolean isAnniversaryNotify, String leadAgentIDs, String allAgentIds, String alldripcampaignids,
                      String notes, String b_PreQual, String address, String street, String zipcode, String city, String state, String description, String source,
-                     String county, String timeFrameId, String state2, String city2, String zipcode2, String leadTypeID,String emailList, String phoneList, String labelsID,
-                     String leadStringID, String leadID, String countryid);
+                     String county, String timeFrameId, String state2, String city2, String zipcode2, int leadTypeID,String emailList, String phoneList, String labelsID,
+                     String leadStringID, String countryid);
 
     }
 

@@ -470,9 +470,9 @@ public interface ApiMethods {
             @Field("primaryPhone") String primaryPhone,
             @Field("primaryEmail") String primaryEmail,
             @Field("dateOfBirth") String dateOfBirth,
-            @Field("isBirthDayNotify") String isBirthDayNotify,
+            @Field("isBirthDayNotify") boolean isBirthDayNotify,
             @Field("dateOfMarriage") String dateOfMarriage,
-            @Field("isAnniversaryNotify") String isAnniversaryNotify,
+            @Field("isAnniversaryNotify") boolean isAnniversaryNotify,
             @Field("leadAgentIDs") String leadAgentIDs,
             @Field("allAgentIds") String allAgentIds,
             @Field("alldripcampaignids") String alldripcampaignids,
@@ -490,12 +490,11 @@ public interface ApiMethods {
             @Field("state2") String state2,
             @Field("city2") String city2,
             @Field("zipcode2") String zipcode2,
-            @Field("leadTypeID") String leadTypeID,
+            @Field("leadTypeID") int leadTypeID,
             @Field("emailList") String emailList,
             @Field("phoneList") String phoneList,
             @Field("labelsID") String labelsID,
             @Field("leadStringID") String leadStringID,
-            @Field("leadID") String leadID,
             @Field("countryid") String countryid
     );
 

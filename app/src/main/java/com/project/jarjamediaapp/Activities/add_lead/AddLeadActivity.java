@@ -68,7 +68,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
     String agentIdsString="",tagsIdsString="",dripIdsString="";
 
-    String bday, sBday, anniversary;
+    String bday="", sBday="", anniversary="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -434,10 +434,11 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String cellPhone = bi.edtPhone.getText().toString();
         String primaryPhone = bi.edtPhone.getText().toString();
         String primaryEmail = bi.edtEmail.getText().toString();
-        String dateOfBirth = bday;
-        String isBirthDayNotify = bi.chkBdayNotify.isChecked() ? "true" : "false";
-        String dateOfMarriage = anniversary;
-        String isAnniversaryNotify = bi.chkAnnivNotify.isChecked() ? "true" : "false";
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        String dateOfBirth = bday.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : bday;
+        boolean isBirthDayNotify = bi.chkBdayNotify.isChecked() ? true : false;
+        String dateOfMarriage = anniversary.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : anniversary;
+        boolean isAnniversaryNotify = bi.chkAnnivNotify.isChecked() ? true : false;
         String leadAgentIDs = agentIdsString;//selectedIdsList.size() == 0 ? "" : agentIdsString ;
         String allAgentIds = agentIdsString;//agentModel == null ? "" : String.valueOf(agentModel.getId());
         String alldripcampaignids = dripIdsString;
@@ -451,11 +452,11 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String description = bi.edtNotes.getText().toString();
         String source = bi.spnSource.isSelected() ? String.valueOf(getLeadSourceList.get(bi.spnSource.getSelectedIndex()).sourceName) :"";
         String county = bi.edtCountry.getText().toString();
-        String timeFrameId = bi.spnTimeFrame.isSelected() ? String.valueOf(getLeadTimeFrameList.get(bi.spnTimeFrame.getSelectedIndex()).timeFrameId) : "";
+        String timeFrameId = bi.spnTimeFrame.isSelected() ? String.valueOf(getLeadTimeFrameList.get(bi.spnTimeFrame.getSelectedIndex()).timeFrameId) : null;
         String state2 = bi.edtState2.getText().toString();
         String city2 = bi.edtCity2.getText().toString();
         String zipcode2 = bi.edtPostalCode2.getText().toString();
-        String leadTypeID = bi.spnType.isSelected() ? String.valueOf(getLeadTypeList.get(bi.spnType.getSelectedIndex()).id): "";
+        int leadTypeID = bi.spnType.isSelected() ? getLeadTypeList.get(bi.spnType.getSelectedIndex()).id: 0;
         String labelsID = tagsIdsString;
         String leadStringID = "";
         String leadID = "0";
@@ -464,7 +465,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         JSONObject emailObject = new JSONObject();
         try {
             emailObject.put("email", primaryEmail);
-            emailObject.put("isNotify", "true");
+            emailObject.put("isNotify", true);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -475,7 +476,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         JSONObject phoneObject = new JSONObject();
         try {
             phoneObject.put("phone", cellPhone);
-            phoneObject.put("isNotify", "true");
+            phoneObject.put("isNotify", true);
             phoneObject.put("phoneType", "phoneType");
 
         } catch (JSONException e) {
@@ -496,7 +497,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         } else {
             presenter.addLead(firstName, lastName, spousname, company, cellPhone, primaryPhone, primaryEmail, dateOfBirth, isBirthDayNotify, dateOfMarriage,
                     isAnniversaryNotify, leadAgentIDs, allAgentIds, alldripcampaignids, notes, b_PreQual, address, street, zipcode, city, state, description,
-                    source, county, timeFrameId, state2, city2, zipcode2, leadTypeID, emailList, phoneList, labelsID, leadStringID, leadID, countryid);
+                    source, county, timeFrameId, state2, city2, zipcode2, leadTypeID, emailList, phoneList, labelsID, leadStringID, countryid);
         }
     }
 

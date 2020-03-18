@@ -133,6 +133,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         });
 
         newCalendar = Calendar.getInstance();
+
         year = newCalendar.get(Calendar.YEAR);
         month = newCalendar.get(Calendar.MONTH);
         day = newCalendar.get(Calendar.DAY_OF_MONTH);
