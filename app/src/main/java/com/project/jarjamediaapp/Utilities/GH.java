@@ -105,9 +105,17 @@ public class GH {
     }
 
     public void HideProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
+        try {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        } catch (final Exception e) {
+            // Handle or log or ignore
+            e.printStackTrace();
+        } finally {
+            this.progressDialog = null;
         }
+
     }
 
     public String formatDate(String dateString) {

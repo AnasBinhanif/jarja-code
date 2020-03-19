@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Activities.add_task;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -71,11 +73,12 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
     ArrayList<MultiSelectModel> searchListItems;
     String startDate = "", endDate = "", reminder = "0", via = "", leadId = "", type = "", reoccur = "", agentId = "";
-    String agentIdsString = "", leadName = "", taskId = "", searchLeadIdsString = "";
+    String agentIdsString = "", leadName = "", taskId = "", searchLeadIdsString = "", startTime = "", endTime = "";
+    ;
     MultiSelectModel agentModel;
     boolean isEdit;
     boolean isReminderClicked = false, isViaClicked = false, isTypeClicked = false, isRecurClicked = false;
-    int month, year, day;
+    int month, year, day, mHour, mMinute;
     Calendar newCalendar;
 
     @Override
@@ -440,10 +443,20 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 showSearchDialog(context);
                 break;
             case R.id.tvStartDate:
+                clearFocus();
                 showDateDialog(bi.tvStartDate, true);
                 break;
             case R.id.tvEndDate:
+                clearFocus();
                 showDateDialog(bi.tvEndDate, false);
+                break;
+            case R.id.tvStartTime:
+                clearFocus();
+                showTimeDialog(bi.tvStartTime, true);
+                break;
+            case R.id.tvEndTime:
+                clearFocus();
+                showTimeDialog(bi.tvEndTime, false);
                 break;
             case R.id.tvAssignTo:
                 showAgentDialog();
@@ -467,6 +480,40 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 recur();
                 break;
         }
+    }
+
+    private void showTimeDialog(TextView textView, boolean isStart) {
+
+        TimePickerDialog mTimePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+
+                mHour = selectedHour;
+                mMinute = selectedMinute;
+
+                String time = "";
+                if (isStart) {
+                    startTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
+                    time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
+
+
+                } else {
+                    endTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
+                    time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
+
+                }
+                textView.setText(time);
+
+            }
+        }, mHour, mMinute, false);//Yes 24 hour time
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
+    }
+
+    private void clearFocus() {
+
+        bi.atvAddProperty.clearFocus();
+        bi.atvDescription.clearFocus();
     }
 
     private void showAgentDialog() {
