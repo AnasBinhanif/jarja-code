@@ -3,6 +3,7 @@ package com.project.jarjamediaapp.Activities.all_leads;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.jarjamediaapp.Activities.lead_detail.LeadDetailActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
@@ -36,10 +38,16 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     ActivityAllleadsBinding bi;
     Context context = AllLeadsActivity.this;
     AllLeadsPresenter presenter;
-    ArrayList<GetAllLeads.LeadsList> leadsList;
+    ArrayList<GetAllLeads.LeadsList> leadsList = new ArrayList<>();
     String mSearchQuery = "";
     String resultSetType = "All";
-    Intent data= null;
+    Intent data = null;
+    LinearLayoutManager linearLayoutManager;
+    int page = 0;
+    int totalPages;
+    RecyclerAdapterUtil recyclerAdapterUtil;
+    boolean isLoading = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +62,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     private void handleIntent() {
         resultSetType = getIntent().getStringExtra("resultType");
         data = getIntent().getParcelableExtra("bundle");
-        callGetAllLeads(data);
+        totalPages = getIntent().getIntExtra("totalPages", 0);
     }
 
     @Override
@@ -76,9 +84,43 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                 return false;
             }
         });
+        initPagination();
+        callGetAllLeads(data, String.valueOf(page));
     }
 
-    private void callGetAllLeads(Intent bundle) {
+    private void initPagination() {
+
+        bi.recyclerViewAllLeads.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+                Log.d("scroll", "scroll down");
+                int visibleItemCount = linearLayoutManager.getChildCount();
+                int totalItemCount = linearLayoutManager.getItemCount();
+                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+
+                // Load more if we have reach the end to the recyclerView
+                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
+                    Log.d("scroll", "last item");
+                    if (!isLoading) {
+                        if (totalPages > leadsList.size()) {
+                            page++;
+                            try {
+                                callGetAllLeads(data, String.valueOf(page));
+                                isLoading = true;
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
+                            Log.d("scroll", "More to come");
+                        }
+                    }
+                }
+
+            }
+        });
+    }
+
+    private void callGetAllLeads(Intent bundle, String pgNo) {
 
         String leadID = bundle != null ? bundle.getStringExtra("leadID") : "";
         String spouseName = "";
@@ -129,7 +171,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         String activitiesFavoriteAsc = "";
         String isSaveSearch = "false";
         String isFilterClear = "false";
-        String pageNo = "0";
+        String pageNo = pgNo;
         String resultType = resultSetType;
         String pageSize = "25";
 
@@ -143,35 +185,42 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
     private void populateListData(ArrayList<GetAllLeads.LeadsList> leadsList) {
 
-        bi.recyclerViewAllLeads.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
-        bi.recyclerViewAllLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewAllLeads.getContext(), 1));
-        RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
-        recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail, R.id.tvInitial);
+        if (page == 0) {
+            linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+            bi.recyclerViewAllLeads.setLayoutManager(linearLayoutManager);
+            bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
+            bi.recyclerViewAllLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewAllLeads.getContext(), 1));
+            recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
+            recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail, R.id.tvInitial);
 
-        recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetAllLeads.LeadsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
+            recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetAllLeads.LeadsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
 
-            TextView tvName = (TextView) integerMap.get(R.id.tvName);
-            TextView tvPhone = (TextView) integerMap.get(R.id.tvPhone);
-            TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
-            TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
+                TextView tvName = (TextView) integerMap.get(R.id.tvName);
+                TextView tvPhone = (TextView) integerMap.get(R.id.tvPhone);
+                TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
+                TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
 
-            tvName.setText(allLeadsList.firstName + " " + allLeadsList.lastName);
-            tvPhone.setText(allLeadsList.primaryPhone);
-            tvEmail.setText(allLeadsList.primaryEmail);
+                tvName.setText(allLeadsList.firstName + " " + allLeadsList.lastName);
+                tvPhone.setText(allLeadsList.primaryPhone);
+                tvEmail.setText(allLeadsList.primaryEmail);
 
-            tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1));
+                tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1));
 
-            return Unit.INSTANCE;
-        });
+                return Unit.INSTANCE;
+            });
 
-        bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
+            bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
+            isLoading = false;
+        } else {
+            isLoading = false;
+            recyclerAdapterUtil.notifyDataSetChanged();
+        }
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetAllLeads.LeadsList, Integer, Unit>) (viewComplainList, integer) -> {
 
-            Map<String,String> map = new HashMap<>();
-            map.put("leadID",viewComplainList.id);
-            switchActivityWithIntentString(LeadDetailActivity.class,(HashMap<String, String>) map);
+            Map<String, String> map = new HashMap<>();
+            map.put("leadID", viewComplainList.id);
+            switchActivityWithIntentString(LeadDetailActivity.class, (HashMap<String, String>) map);
 
             return Unit.INSTANCE;
         });
@@ -203,8 +252,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void updateUI(GetAllLeads response) {
 
-        leadsList = new ArrayList<>();
-        leadsList = response.data.leadsList;
+        leadsList.addAll(response.data.leadsList);
 
         if (leadsList.size() == 0) {
             bi.lnAllLeads.setVisibility(View.GONE);

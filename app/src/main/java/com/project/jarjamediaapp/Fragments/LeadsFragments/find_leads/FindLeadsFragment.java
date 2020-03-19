@@ -44,7 +44,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     FindLeadsPresenter presenter;
     ArrayList<GetLeadCounts.LeadsCount> getLeadCountList;
     Intent bundle = null;
-
+    int totalPages =0;
     public FindLeadsFragment() {
         // Required empty public constructor
     }
@@ -179,26 +179,33 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
             switch (integer) {
                 case 0:
                     resultTYpe = "All";
+                    totalPages = Integer.valueOf(viewComplainList.getCount());
                     break;
                 case 1:
                     resultTYpe = "New Leads";
+                    totalPages = Integer.valueOf(viewComplainList.getCount());
                     break;
                 case 2:
                     resultTYpe = "Hot Leads";
+                    totalPages = Integer.valueOf(viewComplainList.getCount());
                     break;
                 case 3:
                     resultTYpe = "Active Clients";
+                    totalPages = Integer.valueOf(viewComplainList.getCount());
                     break;
                 case 4:
                     resultTYpe = "Under Contract";
+                    totalPages = Integer.valueOf(viewComplainList.getCount());
                     break;
                 case 5:
                     resultTYpe = "Closed Leads";
+                    totalPages = Integer.valueOf(viewComplainList.getCount());
                     break;
             }
             Intent intent = new Intent(context, AllLeadsActivity.class);
             intent.putExtra("bundle", bundle);
             intent.putExtra("resultType", resultTYpe);
+            intent.putExtra("totalPages", totalPages);
             startActivity(intent);
 
             return Unit.INSTANCE;
