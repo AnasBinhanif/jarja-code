@@ -15,9 +15,9 @@ public interface AddCalendarTaskContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void addCalendarTask(String title, String description, String startDateTime, String allDay, String markComplete);
+        void addCalendarTask(String title, String description, String startDateTime, boolean allDay, boolean markComplete);
 
-        void updateCalendarTask(String title, String description, String startDateTime, String allDay, String markComplete,String calendarId);
+        void updateCalendarTask(String title, String description, String startDateTime, boolean allDay, boolean markComplete,String calendarId,String encryptedLeadId);
 
     }
 

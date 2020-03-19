@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,7 +50,7 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
     String agentString = "";
 
 
-    public SwipeNotesRecyclerAdapter(Context context, Activity activity,ArrayList<GetLeadNotes.NotesList> getLeadNotes) {
+    public SwipeNotesRecyclerAdapter(Context context, Activity activity, ArrayList<GetLeadNotes.NotesList> getLeadNotes) {
 
         this.context = context;
         this.activity = activity;
@@ -117,7 +116,7 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
 
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                 alertDialog.setTitle("Confirmation");
-                alertDialog.setMessage("Are you sure yout want to edit this Note ?");
+                alertDialog.setMessage("Are you sure you want to edit this Note ?");
                 alertDialog.setPositiveButton(android.R.string.yes, (dialog, which) -> {
 
 
@@ -133,10 +132,9 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
-                        if (b)
-                        {
+                        if (b) {
                             holder.cbNoteSticky.setChecked(false);
-                        }else{
+                        } else {
                             holder.cbNoteSticky.setChecked(true);
                         }
                     }
@@ -221,9 +219,24 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
         public void bind() {
 
             lnDelete.setOnClickListener(v -> {
-                pos = getAdapterPosition();
-                String noteID = mData.get(pos).encryptedNoteID;
-                callDeleteNote(noteID);
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+                alertDialog.setTitle("Confirmation");
+                alertDialog.setMessage("Are you sure you want to delete this Note ?");
+                alertDialog.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+
+                    pos = getAdapterPosition();
+                    String noteID = mData.get(pos).encryptedNoteID;
+                    callDeleteNote(noteID, swipeLayout);
+                    dialog.dismiss();
+
+                });
+                alertDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
             });
 
             lnEdit.setOnClickListener(v -> {
@@ -236,10 +249,11 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
 
             });
 
+
         }
     }
 
-    private void callDeleteNote(String encryptedNoteID) {
+    private void callDeleteNote(String encryptedNoteID, SwipeRevealLayout swipeLayout) {
         GH.getInstance().ShowProgressDialog(activity);
         Call<BaseResponse> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).DeleteNote(GH.getInstance().getAuthorization(),
@@ -255,6 +269,7 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
 
                         ToastUtils.showToast(context, "Successfully Done");
                         mData.remove(pos);
+                        swipeLayout.close(true);
                         notifyDataSetChanged();
 
                     } else {

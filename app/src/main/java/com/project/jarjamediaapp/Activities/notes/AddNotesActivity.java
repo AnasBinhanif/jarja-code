@@ -86,38 +86,12 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
             bi.edtAgent.setVisibility(View.GONE);
             bi.tvAgent.setVisibility(View.GONE);
             bi.tvTYpe.setVisibility(View.GONE);
-
-           /* if (notesListModel.noteType != null) {
-                if (notesListModel.noteType.contains("Call")) {
-                    bi.spnNoteType.setSelectedIndex(1);
-                } else {
-                    bi.spnNoteType.setSelectedIndex(0);
-                }
-            }
-            if (notesListModel.isSticky) {
-                bi.cbNoteSticky.setChecked(true);
-            } else {
-                bi.cbNoteSticky.setChecked(true);
-            }
-
-            if (notesListModel.agentList.size() != 0) {
-
-                if (bi.lnAgents.getChildCount() > 0) {
-                    bi.lnAgents.removeAllViews();
-                }
-                selectedIdsList = new ArrayList<>();
-
-                for (GetLeadNotes.AgentList name : notesListModel.agentList) {
-
-                    View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
-                    TextView textView = child.findViewById(R.id.txtDynamic);
-                    textView.setText(name.agentName);
-                    bi.lnAgents.addView(child);
-                    selectedIdsList.add(name.agentID);
-                }
-            }*/
             bi.btnAdd.setText("Update");
         }
+        View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+        TextView textView = child.findViewById(R.id.txtDynamic);
+        textView.setText(GH.getInstance().getUserName() != null ? GH.getInstance().getUserName() : "");
+        bi.lnAgents.addView(child);
     }
 
     private void callAddNote() {
@@ -287,13 +261,17 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
             case R.id.btnAdd:
                 SwipeNotesRecyclerAdapter.isEditable = false;
                 if (notesListModel != null) {
-                    if (bi.edtDescription.getText().toString().equals("")) {
+                    if (bi.edtDescription.getText().toString().equalsIgnoreCase("")) {
                         ToastUtils.showToast(context, "Please Add Description");
                     } else {
                         presenter.editNote(notesListModel.encrypted_LeadID, notesListModel.encryptedNoteID, bi.edtDescription.getText().toString());
                     }
                 } else {
-                    callAddNote();
+                    if (bi.edtDescription.getText().toString().equalsIgnoreCase("")) {
+                        ToastUtils.showToast(context, "Please Add Description");
+                    } else {
+                        callAddNote();
+                    }
                 }
                 break;
         }

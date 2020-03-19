@@ -143,10 +143,15 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
     @Override
     public void initViews() {
 
-        presenter.getLeadNotes(leadID);
         bi.btnNotes.setOnClickListener(this);
         bi.btnDocuments.setOnClickListener(this);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.getLeadNotes(leadID);
     }
 
     @Override

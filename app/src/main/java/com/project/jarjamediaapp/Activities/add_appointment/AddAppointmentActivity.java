@@ -45,6 +45,7 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddAppointmentBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,7 +82,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     ArrayList<String> arrayListReminderValue, arrayListReminderText;
     CalendarDetailModel.Data.CalendarData calendarData;
     String timedFrom = "", timedTo = "", datedFrom = "", datedTo = "";
-    int month, year, day,mHour,mMinute;
+    int month, year, day, mHour, mMinute;
     Calendar newCalendar;
 
     @Override
@@ -170,7 +171,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 bi.tvName.setText(leadName);
                 bi.tvName.setEnabled(false);
                 isEdit = true;
-
                 GetAppointmentsModel.Data modelData = getIntent().getParcelableExtra("model");
                 prePopulateData(modelData);
 
@@ -290,9 +290,11 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         if (reminder != null && !reminder.equalsIgnoreCase("None")) {
             bi.atvVia.setVisibility(View.VISIBLE);
             bi.lblVia.setVisibility(View.VISIBLE);
+            via = "";
         } else {
             bi.atvVia.setVisibility(View.GONE);
             bi.lblVia.setVisibility(View.GONE);
+            via = "";
         }
 
         bi.cbAllDay.setChecked(modelData.isAllDay);
@@ -314,6 +316,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
             agentIdsString = TextUtils.join(",", arrayList);
         }
+
 
     }
 
@@ -426,6 +429,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             searchListItems.add(new MultiSelectModel(model.agentID, model.agentName, model.encryptedAgentID));
         }
         presenter.getReminder();
+        if(isEdit)
+            presenter.getVia();
     }
 
     @Override
@@ -590,7 +595,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         }, year, month, day);
         if (isStart) {
             StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-        }else{
+        } else {
             newCalendar.set(year, month, day);
             StartTime.getDatePicker().setMinDate(newCalendar.getTime().getTime() - 1000);
         }
@@ -705,6 +710,19 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             bi.tvName.requestFocus();
             return false;
         }
+
+        Date date1 = null, date2 = null;
+        try {
+            date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
+            date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (date2.compareTo(date1) < 0) {
+            ToastUtils.showToast(context, "Start date cannot be greater than start date");
+            bi.tvEndDate.requestFocus();
+            return false;
+        }
         if (!bi.cbAllDay.isChecked()) {
             if (Methods.isEmpty(bi.tvStartTime)) {
                 ToastUtils.showToast(context, R.string.error_start_time);
@@ -717,7 +735,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 return false;
             }
         }
-        if (!bi.atvReminder.getText().toString().equalsIgnoreCase("")) {
+        if (!bi.atvReminder.getText().toString().equalsIgnoreCase("") &&
+                !bi.atvReminder.getText().toString().equalsIgnoreCase("None")) {
             if (via.equalsIgnoreCase("")) {
                 ToastUtils.showToast(context, R.string.error_via);
                 bi.atvVia.requestFocus();

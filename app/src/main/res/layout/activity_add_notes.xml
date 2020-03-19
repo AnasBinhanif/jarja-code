@@ -36,6 +36,7 @@
                         android:baselineAligned="false"
                         android:orientation="horizontal"
                         android:padding="10dp"
+                        android:visibility="gone"
                         android:paddingStart="@dimen/_15sdp"
                         android:paddingEnd="@dimen/_15sdp"
                         android:weightSum="2">
@@ -81,7 +82,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="15dp"
-                            android:text="Add Note"
+                            android:text="Add Note *"
                             android:textColor="@color/colorBlack"
                             android:textSize="14dp"
                             android:textStyle="bold" />

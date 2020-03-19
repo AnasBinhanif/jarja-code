@@ -36,13 +36,16 @@ import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddTaskBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import kotlin.Unit;
@@ -108,6 +111,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.tvAssignTo.setOnClickListener(this);
         bi.tvStartDate.setOnClickListener(this);
         bi.tvEndDate.setOnClickListener(this);
+        bi.tvStartTime.setOnClickListener(this);
+        bi.tvEndTime.setOnClickListener(this);
         bi.atvType.setOnClickListener(this);
         bi.atvRecur.setOnClickListener(this);
         bi.atvReminder.setOnClickListener(this);
@@ -117,10 +122,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
             if (b) {
                 endDate = "";
-                bi.tvEndDate.setText("");
                 bi.tvEndDate.setVisibility(View.GONE);
+                bi.lblEndDate.setVisibility(View.GONE);
             } else {
                 bi.tvEndDate.setVisibility(View.VISIBLE);
+                bi.lblEndDate.setVisibility(View.VISIBLE);
             }
 
         });
@@ -315,8 +321,9 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvType.setText(taskDetail.data.type);
         bi.atvType.setText(taskDetail.data.type, false);
         bi.atvRecur.setText(taskDetail.data.recur, false);
-        bi.atvReminder.setText(arrayListReminderText.get(arrayListReminderValue.indexOf(String.valueOf(taskDetail.data.interval))), false);
-        bi.atvVia.setText(arrayListViaText.get(arrayListViaValue.indexOf(taskDetail.data.viaReminder)), false);
+        // api correction needed
+    /*    bi.atvReminder.setText(arrayListReminderText.get(arrayListReminderValue.indexOf(String.valueOf(taskDetail.data.interval))), false);
+        bi.atvVia.setText(arrayListViaText.get(arrayListViaValue.indexOf(taskDetail.data.viaReminder)), false);*/
         String startDate = GH.getInstance().formatter(taskDetail.data.startDate, "MM-dd-yyyy", "dd/MM/yyyy hh:mm:ss a");
         String endDate = GH.getInstance().formatter(taskDetail.data.endDate, "MM-dd-yyyy", "dd/MM/yyyy hh:mm:ss a");
         bi.tvStartDate.setText(startDate);
@@ -380,14 +387,78 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String propertyId = "";
         String propertyAddress = bi.atvAddProperty.getText().toString() + "";
 
-        if (name.equals("") || type.equals("") || agentIds.equals("") || datedFrom.equals("")) {
-            ToastUtils.showToast(context, "Please fill all the required fields");
-        } else if (interval != 0 && viaReminder.equals("")) {
-            ToastUtils.showToast(context, "Please select Via");
-        } else {
+        if (isValidate()) {
             presenter.addTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc, scheduleRecurID, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
                     dayOfWeek, dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);
         }
+    }
+
+    private boolean isValidate() {
+
+        if (Methods.isEmpty(bi.atvNameTask)) {
+            ToastUtils.showToast(context,"Please enter task name");
+            bi.atvNameTask.requestFocus();
+            return false;
+        }
+        if (Methods.isEmpty(bi.atvType)) {
+            ToastUtils.showToast(context,"Please select type");
+            bi.atvType.requestFocus();
+            return false;
+        }
+        if (agentIdsString.equalsIgnoreCase("")) {
+            ToastUtils.showToast(context,"Please assign agent");
+            bi.tvAssignTo.requestFocus();
+            return false;
+        }
+        if (Methods.isEmpty(bi.atvRecur)) {
+            ToastUtils.showToast(context,"Please select recur");
+            bi.atvRecur.requestFocus();
+            return false;
+        }
+        if (Methods.isEmpty(bi.tvStartDate)) {
+            ToastUtils.showToast(context, R.string.error_start_date);
+            bi.tvStartTime.requestFocus();
+            return false;
+        }
+        if (Methods.isEmpty(bi.tvEndDate)) {
+            ToastUtils.showToast(context, R.string.error_end_date);
+            bi.tvName.requestFocus();
+            return false;
+        }
+
+        Date date1 = null, date2 = null;
+        try {
+            date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
+            date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (date2.compareTo(date1) < 0) {
+            ToastUtils.showToast(context, "Start date cannot be greater than start date");
+            bi.tvEndDate.requestFocus();
+            return false;
+        }
+        if (!bi.cbEndDate.isChecked()) {
+            if (Methods.isEmpty(bi.tvStartTime)) {
+                ToastUtils.showToast(context, R.string.error_start_time);
+                bi.tvStartTime.requestFocus();
+                return false;
+            }
+            if (Methods.isEmpty(bi.tvEndTime)) {
+                ToastUtils.showToast(context, R.string.error_end_time);
+                bi.tvEndTime.requestFocus();
+                return false;
+            }
+        }
+        if (!bi.atvReminder.getText().toString().equalsIgnoreCase("") &&
+                !bi.atvReminder.getText().toString().equalsIgnoreCase("None")) {
+            if (via != null && via.equalsIgnoreCase("")) {
+                ToastUtils.showToast(context, R.string.error_via);
+                bi.atvVia.requestFocus();
+                return false;
+            }
+        }
+        return true;
     }
 
     private void type() {
@@ -707,34 +778,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialogLead");
 
-    }
-
-    private void setRecyclerSearch(Dialog dialog) {
-
-        recyclerSearch.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        recyclerSearch.setItemAnimator(new DefaultItemAnimator());
-        recyclerSearch.addItemDecoration(new DividerItemDecoration(recyclerSearch.getContext(), 1));
-        recyclerAdapterUtil = new RecyclerAdapterUtil(context, nameList, R.layout.custom_search_layout);
-        recyclerAdapterUtil.addViewsList(R.id.tvName);
-
-        recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetLeadTitlesModel.Data, Integer, Map<Integer, ? extends View>, Unit>) (view, nameList, integer, integerMap) -> {
-
-            TextView tvName = (TextView) integerMap.get(R.id.tvName);
-            tvName.setText(nameList.name);
-
-            return Unit.INSTANCE;
-        });
-
-        recyclerSearch.setAdapter(recyclerAdapterUtil);
-
-        recyclerAdapterUtil.addOnClickListener((Function2<GetLeadTitlesModel.Data, Integer, Unit>) (list, integer) -> {
-
-            bi.tvName.setText(nameList.get(integer).name);
-            leadId = nameList.get(integer).leadID;
-            dialog.dismiss();
-
-            return Unit.INSTANCE;
-        });
     }
 
     @Override

@@ -45,8 +45,8 @@ public class GH {
         USER_LASTNAME,
         ACCESS_TOKEN,
         AUTHORIZATION,
-        AGENT_ID_CALENDAR
-
+        AGENT_ID_CALENDAR,
+        USER_NAME
 
     }
 
@@ -64,6 +64,10 @@ public class GH {
 
     public String getCalendarAgentId() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.AGENT_ID_CALENDAR.name(), "");
+    }
+
+    public String getUserName() {
+        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_NAME.name(), "");
     }
 
   /*  public void ShowProgressDialog(Context context) {

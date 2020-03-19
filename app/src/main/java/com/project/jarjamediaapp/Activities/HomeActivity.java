@@ -32,7 +32,6 @@ import com.project.jarjamediaapp.Activities.open_houses.OpenHousesActivity;
 import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Fragments.DashboardFragments.TabsFragment;
-import com.project.jarjamediaapp.Fragments.DashboardFragments.appointments.FragmentAppointment;
 import com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads.FindLeadsFragment;
 import com.project.jarjamediaapp.Interfaces.UpdateTitle;
 import com.project.jarjamediaapp.Models.GetUserProfile;
@@ -124,6 +123,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         AppConstants.Keys.UserID = getUserProfile.data.userProfile.userID;
 
                         String fullName = getUserProfile.data.userProfile.firstName + " " + getUserProfile.data.userProfile.lastName;
+                        easyPreference.addString(GH.KEYS.USER_NAME.name(), fullName).save();
                         navHeaderTextView.setText(fullName);
 
                         picPath = getUserProfile.data.userProfile.picPath;
@@ -157,7 +157,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
 
-
     @Override
     public void onBackPressed() {
 
@@ -177,7 +176,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onResume() {
         super.onResume();
-
 
 
     }
@@ -363,7 +361,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         return new BitmapDrawable(getResources(), bitmap);
     }
-
 
 
 }

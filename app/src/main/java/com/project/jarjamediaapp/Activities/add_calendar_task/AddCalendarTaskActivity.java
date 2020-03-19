@@ -28,9 +28,10 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     ActivityAddCalendarTaskBinding bi;
     Context context = AddCalendarTaskActivity.this;
     AddCalendarTaskPresenter presenter;
-    String startDate, startTime, title, description, allDay, markComplete;
+    String startDate, startTime, title, description;
+    boolean allDay, markComplete;
     boolean isEdit;
-    String calendarId = "";
+    String calendarId = "",encryptedLeadAppointmentId="";
 
     int month, year, day, hour, minute;
     Calendar newCalendar;
@@ -155,14 +156,15 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         title = bi.atvEventTitle.getText().toString();
         description = bi.atvDescription.getText().toString() + "";
-        allDay = bi.cbAllDay.isChecked() ? "true" : "false";
-        markComplete = bi.cbAllDay.isChecked() ? "true" : "false";
+        allDay = bi.cbAllDay.isChecked() ? true : false;
+        markComplete = bi.cbAllDay.isChecked() ? true : false;
+        // encryptedLeadAppointmentId
 
         startDate = GH.getInstance().formatApiDateTime(startDate + "T" + startTime);
 
         if (isValidate()) {
             if (isEdit) {
-                presenter.updateCalendarTask(title, description, startDate, allDay, markComplete, calendarId);
+                presenter.updateCalendarTask(title, description, startDate, allDay, markComplete, calendarId,encryptedLeadAppointmentId);
             } else {
                 presenter.addCalendarTask(title, description, startDate, allDay, markComplete);
             }

@@ -25,14 +25,14 @@ public class AddCalendarTaskPresenter extends BasePresenter<AddCalendarTaskContr
     }
 
     @Override
-    public void addCalendarTask(String title, String description, String startDateTime, String allDay, String markComplete) {
+    public void addCalendarTask(String title, String description, String startDateTime, boolean allDay, boolean markComplete) {
 
-        /*_view.showProgressBar();
+        _view.showProgressBar();
 
         call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addAppointmentByCalendar(GH.getInstance().getAuthorization(),
                 "undefined", "", "0", title, "", description, "false",
-                "false", "", startDateTime, "", allDay, "0", "", "", "",
-                "0", "", "", markComplete, "Task", "", "");
+                "false", "", startDateTime, startDateTime, allDay, 0, false, "", "",
+                0, "", "", markComplete, "Task", false, "");
 
 
         call.enqueue(new Callback<BaseResponse>() {
@@ -64,19 +64,19 @@ public class AddCalendarTaskPresenter extends BasePresenter<AddCalendarTaskContr
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
-        });*/
+        });
 
     }
 
     @Override
-    public void updateCalendarTask(String title, String description, String startDateTime, String allDay, String markComplete, String calendarId) {
+    public void updateCalendarTask(String title, String description, String startDateTime, boolean allDay, boolean markComplete, String calendarId, String encryptedLeadId) {
 
         _view.showProgressBar();
 
-       /* call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),
                 "undefined", "", "0", title, "", description, "false",
-                "false", "", startDateTime, "", allDay, "0", "", "", "",
-                "0", "", "", markComplete, "Task", "", calendarId,"");
+                "false", "", startDateTime, startDateTime, allDay, 0, false, "", "",
+                0, "", "", markComplete, "Task", false, calendarId, encryptedLeadId);
 
 
         call.enqueue(new Callback<BaseResponse>() {
@@ -108,7 +108,7 @@ public class AddCalendarTaskPresenter extends BasePresenter<AddCalendarTaskContr
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
-        });*/
+        });
 
 
     }

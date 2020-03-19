@@ -155,9 +155,9 @@
     <string name="upgrade_social_profile">Upgrade Social Profile</string>
     <string name="view_profile">View Profile</string>
     <string name="add_profile">Add Profile</string>
-    <string name="name">Name</string>
-    <string name="profile_link">Profile Link</string>
-    <string name="site">Site</string>
+    <string name="name">Name *</string>
+    <string name="profile_link">Profile Link *</string>
+    <string name="site">Site *</string>
     <string name="http">https://</string>
 
     <!--- Notes Activity -->
