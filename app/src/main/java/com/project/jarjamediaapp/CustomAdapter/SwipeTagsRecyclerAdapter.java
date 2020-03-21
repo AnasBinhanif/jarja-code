@@ -142,13 +142,13 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     pos = getAdapterPosition();
                     String noteID = mData.get(pos).encryptedTagID;
-                    callDeleteTag(noteID,leadID);
+                    callDeleteTag(noteID,leadID,swipeLayout);
                 }
             });
         }
     }
 
-    private void callDeleteTag(String encryptedNoteID,String leadID) {
+    private void callDeleteTag(String encryptedNoteID,String leadID,SwipeRevealLayout swipeRevealLayout) {
         GH.getInstance().ShowProgressDialog(activity);
         Call<BaseResponse> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).DeleteLeadTag(GH.getInstance().getAuthorization(),
@@ -164,6 +164,7 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
 
                         ToastUtils.showToast(context, "Successfully Done");
                         mData.remove(pos);
+                        swipeRevealLayout.close(true);
                         notifyDataSetChanged();
 
                     } else {

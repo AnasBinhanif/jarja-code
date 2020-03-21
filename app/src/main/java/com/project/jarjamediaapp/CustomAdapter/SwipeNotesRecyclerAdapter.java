@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.project.jarjamediaapp.Activities.notes.AddNotesActivity;
+import com.project.jarjamediaapp.Activities.notes.NotesActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetLeadNotes;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -112,36 +113,38 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            holder.cbNoteSticky.setOnCheckedChangeListener((compoundButton, b) -> {
+            holder.cbNoteSticky.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-                alertDialog.setTitle("Confirmation");
-                alertDialog.setMessage("Are you sure you want to edit this Note ?");
-                alertDialog.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+                    alertDialog.setTitle("Confirmation");
+                    alertDialog.setMessage("Are you sure you want to edit this Note ?");
+                    alertDialog.setPositiveButton(android.R.string.yes, (dialog, which) -> {
 
-
-                    if (b) {
-                        callStickyNote(modelData.encryptedNoteID, modelData.encrypted_LeadID, b);
-                    } else {
-                        callStickyNote(modelData.encryptedNoteID, modelData.encrypted_LeadID, b);
-                    }
-                    dialog.dismiss();
-
-                });
-                alertDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        if (b) {
-                            holder.cbNoteSticky.setChecked(false);
+                        if (holder.cbNoteSticky.isChecked()) {
+                            callStickyNote(modelData.encryptedNoteID, modelData.encrypted_LeadID, holder.cbNoteSticky.isChecked());
                         } else {
-                            holder.cbNoteSticky.setChecked(true);
+                            callStickyNote(modelData.encryptedNoteID, modelData.encrypted_LeadID, holder.cbNoteSticky.isChecked());
                         }
-                    }
-                });
+                        dialog.dismiss();
 
-                alertDialog.create().show();
+                    });
+                    alertDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            if (holder.cbNoteSticky.isChecked()) {
+                                holder.cbNoteSticky.setChecked(false);
+                            } else {
+                                holder.cbNoteSticky.setChecked(true);
+                            }
+                        }
+                    });
 
+                    alertDialog.create().show();
+
+                }
             });
 
             holder.swipeLayout.setSwipeListener(new SwipeRevealLayout.SwipeListener() {
@@ -218,6 +221,17 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
 
         public void bind() {
 
+
+            lnEdit.setOnClickListener(v -> {
+
+                isEditable = true;
+                pos = getAdapterPosition();
+                Intent intent = new Intent(context, AddNotesActivity.class);
+                intent.putExtra("Note", mData.get(pos));
+                context.startActivity(intent);
+
+            });
+
             lnDelete.setOnClickListener(v -> {
 
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
@@ -233,20 +247,12 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
                 });
                 alertDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.dismiss();
                     }
                 });
-            });
 
-            lnEdit.setOnClickListener(v -> {
-
-                isEditable = true;
-                pos = getAdapterPosition();
-                Intent intent = new Intent(context, AddNotesActivity.class);
-                intent.putExtra("Note", mData.get(pos));
-                context.startActivity(intent);
-
+                alertDialog.show();
             });
 
 
@@ -254,6 +260,7 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     private void callDeleteNote(String encryptedNoteID, SwipeRevealLayout swipeLayout) {
+
         GH.getInstance().ShowProgressDialog(activity);
         Call<BaseResponse> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).DeleteNote(GH.getInstance().getAuthorization(),
@@ -307,7 +314,7 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
                     if (getAppointmentsModel.getStatus().equals("Success")) {
 
                         ToastUtils.showToast(context, "Successfully Done");
-                        notifyDataSetChanged();
+                        ((NotesActivity)context).refreshData();
 
                     } else {
 
@@ -328,4 +335,5 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
             }
         });
     }
+
 }

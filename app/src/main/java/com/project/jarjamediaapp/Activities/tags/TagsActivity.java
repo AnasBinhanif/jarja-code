@@ -71,8 +71,12 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
     @Override
     public void initViews() {
 
-        presenter.getTags(leadID);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.getTags(leadID);
     }
 
     @Override

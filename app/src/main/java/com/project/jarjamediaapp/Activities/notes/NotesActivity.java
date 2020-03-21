@@ -151,7 +151,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.getLeadNotes(leadID);
+        refreshData();
     }
 
     @Override
@@ -436,6 +436,10 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
         @Override
         protected void onProgressUpdate(Void... values) {
         }
+    }
+
+    public void refreshData() {
+        presenter.getLeadNotes(leadID);
     }
 
 }

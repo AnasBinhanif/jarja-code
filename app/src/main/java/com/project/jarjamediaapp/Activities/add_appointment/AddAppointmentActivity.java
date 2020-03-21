@@ -45,6 +45,9 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddAppointmentBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,7 +85,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     ArrayList<String> arrayListReminderValue, arrayListReminderText;
     CalendarDetailModel.Data.CalendarData calendarData;
     String timedFrom = "", timedTo = "", datedFrom = "", datedTo = "";
-    int month, year, day, mHour, mMinute;
+    int month, year, day, _month, _year, _day, mHour, mMinute;
     Calendar newCalendar;
 
     @Override
@@ -133,14 +136,16 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
         });
 
-        newCalendar = Calendar.getInstance();
+    }
 
+    private void calendarInstance() {
+
+        newCalendar = Calendar.getInstance();
         year = newCalendar.get(Calendar.YEAR);
         month = newCalendar.get(Calendar.MONTH);
         day = newCalendar.get(Calendar.DAY_OF_MONTH);
         mHour = newCalendar.get(Calendar.HOUR_OF_DAY);
         mMinute = newCalendar.get(Calendar.MINUTE);
-
     }
 
     private void getUpdatedData() {
@@ -236,8 +241,15 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
         }
         bi.atvVia.setText(modelData.getViaReminder() != null ? modelData.getViaReminder() : "");
-        bi.atvVia.setVisibility(View.VISIBLE);
-        bi.lblVia.setVisibility(View.VISIBLE);
+        if (reminder != null && !reminder.equalsIgnoreCase("0")) {
+            bi.atvVia.setVisibility(View.VISIBLE);
+            bi.lblVia.setVisibility(View.VISIBLE);
+            via = modelData.getViaReminder();
+        } else {
+            bi.atvVia.setVisibility(View.GONE);
+            bi.lblVia.setVisibility(View.GONE);
+            via = "";
+        }
         bi.cbAllDay.setChecked(modelData.isAllDay);
 
         if (modelData.getAgentList() != null && modelData.getAgentList().size() > 0) {
@@ -287,10 +299,10 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
         }
         bi.atvVia.setText(modelData.getViaReminder() != null ? modelData.getViaReminder() : "");
-        if (reminder != null && !reminder.equalsIgnoreCase("None")) {
+        if (reminder != null && !reminder.equalsIgnoreCase("0")) {
             bi.atvVia.setVisibility(View.VISIBLE);
             bi.lblVia.setVisibility(View.VISIBLE);
-            via = "";
+            via = modelData.getViaReminder();
         } else {
             bi.atvVia.setVisibility(View.GONE);
             bi.lblVia.setVisibility(View.GONE);
@@ -332,17 +344,29 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 showAgentDialog();
                 break;
             case R.id.tvStartDate:
+                if(bi.tvStartDate.getText().toString().equalsIgnoreCase("")){
+                    calendarInstance();
+                }
                 showDateDialog(bi.tvStartDate, true);
                 break;
             case R.id.tvEndDate:
+                if(bi.tvEndDate.getText().toString().equalsIgnoreCase("")){
+                    calendarInstance();
+                }
                 showDateDialog(bi.tvEndDate, false);
                 break;
             case R.id.tvStartTime:
                 clearFocus();
+                if(bi.tvStartTime.getText().toString().equalsIgnoreCase("")){
+                    calendarInstance();
+                }
                 showTimeDialog(bi.tvStartTime, true);
                 break;
             case R.id.tvEndTime:
                 clearFocus();
+                if(bi.tvEndTime.getText().toString().equalsIgnoreCase("")){
+                    calendarInstance();
+                }
                 showTimeDialog(bi.tvEndTime, false);
                 break;
             case R.id.atvReminder:
@@ -429,7 +453,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             searchListItems.add(new MultiSelectModel(model.agentID, model.agentName, model.encryptedAgentID));
         }
         presenter.getReminder();
-        if(isEdit)
+        if (isEdit)
             presenter.getVia();
     }
 
@@ -587,18 +611,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 } else {
                     endDate = dateFormatter.format(newCalendar.getTime());
                 }
-
                 textView.setText(dateFormatter2.format(newCalendar.getTime()));
 
             }
 
         }, year, month, day);
-        if (isStart) {
-            StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-        } else {
-            newCalendar.set(year, month, day);
-            StartTime.getDatePicker().setMinDate(newCalendar.getTime().getTime() - 1000);
-        }
+        newCalendar.set(year, month, day);
+        StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         StartTime.show();
     }
 
@@ -632,7 +651,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     private void callAddAppointment(String from) {
 
-        String leadStringID = leadId + "";
+        String leadStringID = leadId != null ? leadId : "";
         String agentsID = agentIdsString;
         String eventTitle = bi.atvEventTitle.getText().toString() + "";
         String location = bi.atvLocation.getText().toString() + "";
@@ -675,6 +694,35 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     "\n agentid: " + agentsID + "\n orderBy: " + orderBy + "\n timedFrom: " + timedFrom + "\n timedTo: " + timedTo + "\n isCompleted" + isCompleted + "\nfromId: " + fromId + "\n CalendarId: " + calendarId +
                     "\n encryptedAppointmentId: " + encryptedAppointmentId);
 
+            JSONObject obj = new JSONObject();
+
+            try {
+                obj.put("location", location);
+                obj.put("isCompleted", isCompleted);
+                obj.put("appointmentDate", "");
+                obj.put("leadStringID", leadStringID);
+                obj.put("orderBy", orderBy);
+                obj.put("startTime", startTime);
+                obj.put("interval", interval);
+                obj.put("datedTo", datedTo);
+                obj.put("eventTitle", eventTitle);
+                obj.put("isAppointmentAttend", isAppointmentAttend);
+                obj.put("isAppointmentFixed", isAppointmentFixed);
+                obj.put("leadAppoinmentID", leadAppointmentID);
+                obj.put("datedFrom", datedFrom);
+                obj.put("isAllDay", isAllDay);
+                obj.put("agentIds", agentsID);
+                obj.put("endTime", endTime);
+                obj.put("desc", desc);
+                obj.put("isSend", isSend);
+                obj.put("agentsStringIDs", agentIdsString);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            String jsonObjectString = obj.toString();
+            Log.d("json",jsonObjectString);
+
             presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend,
                     appointmentDate, datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo,
                     isCompleted, fromId, calendarId, encryptedAppointmentId, leadId);
@@ -715,14 +763,15 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         try {
             date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
             date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+            if (date2.compareTo(date1) < 0) {
+                ToastUtils.showToast(context, "Start date cannot be greater than start date");
+                bi.tvEndDate.requestFocus();
+                return false;
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (date2.compareTo(date1) < 0) {
-            ToastUtils.showToast(context, "Start date cannot be greater than start date");
-            bi.tvEndDate.requestFocus();
-            return false;
-        }
+
         if (!bi.cbAllDay.isChecked()) {
             if (Methods.isEmpty(bi.tvStartTime)) {
                 ToastUtils.showToast(context, R.string.error_start_time);

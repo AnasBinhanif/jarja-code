@@ -287,6 +287,9 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         if (isFromActivity) {
             presenter.getLeadTodayAppointments(leadID);
         } else {
+            Paris.style(bi.btnToday).apply(R.style.TabButtonYellowLeft);
+            Paris.style(bi.btnUpcoming).apply(R.style.TabButtonTranparentMiddle);
+            Paris.style(bi.btnPrevious).apply(R.style.TabButtonTranparentRight);
             presenter.getTodayAppointments();
         }
     }

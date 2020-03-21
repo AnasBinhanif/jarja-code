@@ -320,7 +320,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_notify) {
             switchActivity(NotificationActivity.class);
-
             return true;
         }
 

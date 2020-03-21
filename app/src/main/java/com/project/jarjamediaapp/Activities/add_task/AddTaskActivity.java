@@ -121,7 +121,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.cbEndDate.setOnCheckedChangeListener((compoundButton, b) -> {
 
             if (b) {
-                endDate = "";
                 bi.tvEndDate.setVisibility(View.GONE);
                 bi.lblEndDate.setVisibility(View.GONE);
             } else {
@@ -175,10 +174,16 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             break;
         }
 
+    }
+
+    private void calendarInstance() {
+
         newCalendar = Calendar.getInstance();
         year = newCalendar.get(Calendar.YEAR);
         month = newCalendar.get(Calendar.MONTH);
         day = newCalendar.get(Calendar.DAY_OF_MONTH);
+        mHour = newCalendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = newCalendar.get(Calendar.MINUTE);
 
     }
 
@@ -361,7 +366,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         String id = "1";
         String agentIds = agentIdsString;
-        String leadStringID = searchLeadIdsString + "";
+        String leadStringID = searchLeadIdsString != null ? searchLeadIdsString : "";
         String isAssignNow = bi.tvName.getText().toString().equals("") ? "false" : "true";
         String monthType = "";
         String scheduleID = "0";
@@ -425,31 +430,33 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             bi.tvName.requestFocus();
             return false;
         }
+        if (!bi.cbEndDate.isChecked()) {
 
-        Date date1 = null, date2 = null;
-        try {
-            date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
-            date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
+            Date date1 = null, date2 = null;
+            try {
+                date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
+                date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if (date2.compareTo(date1) < 0) {
+                ToastUtils.showToast(context, "Start date cannot be greater than start date");
+                bi.tvEndDate.requestFocus();
+                return false;
+            }
         }
-        if (date2.compareTo(date1) < 0) {
-            ToastUtils.showToast(context, "Start date cannot be greater than start date");
-            bi.tvEndDate.requestFocus();
+        if (Methods.isEmpty(bi.tvStartTime)) {
+            ToastUtils.showToast(context, R.string.error_start_time);
+            bi.tvStartTime.requestFocus();
             return false;
         }
-        if (!bi.cbEndDate.isChecked()) {
-            if (Methods.isEmpty(bi.tvStartTime)) {
-                ToastUtils.showToast(context, R.string.error_start_time);
-                bi.tvStartTime.requestFocus();
-                return false;
-            }
-            if (Methods.isEmpty(bi.tvEndTime)) {
-                ToastUtils.showToast(context, R.string.error_end_time);
-                bi.tvEndTime.requestFocus();
-                return false;
-            }
+        if (Methods.isEmpty(bi.tvEndTime)) {
+            ToastUtils.showToast(context, R.string.error_end_time);
+            bi.tvEndTime.requestFocus();
+            return false;
         }
+
         if (!bi.atvReminder.getText().toString().equalsIgnoreCase("") &&
                 !bi.atvReminder.getText().toString().equalsIgnoreCase("None")) {
             if (via != null && via.equalsIgnoreCase("")) {
@@ -514,22 +521,33 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 showSearchDialog(context);
                 break;
             case R.id.tvStartDate:
-                clearFocus();
-                showDateDialog(bi.tvStartDate, true);
+                if(bi.tvStartDate.getText().toString().equalsIgnoreCase("")){
+                    calendarInstance();
+                }
+                showDateDialog(bi.tvStartDate, false);
                 break;
             case R.id.tvEndDate:
-                clearFocus();
+                if(bi.tvEndDate.getText().toString().equalsIgnoreCase("")){
+                    calendarInstance();
+                }
                 showDateDialog(bi.tvEndDate, false);
                 break;
             case R.id.tvStartTime:
                 clearFocus();
+                if(bi.tvStartTime.getText().toString().equalsIgnoreCase("")){
+                    calendarInstance();
+                }
                 showTimeDialog(bi.tvStartTime, true);
                 break;
             case R.id.tvEndTime:
                 clearFocus();
+                if(bi.tvEndTime.getText().toString().equalsIgnoreCase("")){
+                    calendarInstance();
+                }
                 showTimeDialog(bi.tvEndTime, false);
                 break;
             case R.id.tvAssignTo:
+                clearFocus();
                 showAgentDialog();
                 break;
             case R.id.btnSave:
@@ -708,12 +726,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
 
         }, year, month, day);
-        if (isStart) {
-            StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-        } else {
-            newCalendar.set(year, month, day);
-            StartTime.getDatePicker().setMinDate(newCalendar.getTime().getTime() - 1000);
-        }
+        newCalendar.set(year, month, day);
+        StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         StartTime.show();
     }
 
