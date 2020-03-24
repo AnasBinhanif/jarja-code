@@ -18,6 +18,7 @@ import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetTasksModel;
+import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
@@ -41,6 +42,7 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
     boolean isEditByLead, isFutureTask;
     Activity activity;
     List<GetTasksModel.Data> mData;
+    GetUserPermission userPermission;
 
     public SwipeTasksDueRecyclerAdapter(Context context, Activity activity, List<GetTasksModel.Data> data, boolean isEditByLead, boolean isFutureTask) {
 
@@ -202,30 +204,37 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
             tvEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    pos = getAdapterPosition();
-                    String leadID = mData.get(pos).leadID;
-                    String taskID = mData.get(pos).taskID;
-                    if (isEditByLead) {
+                    userPermission = GH.getInstance().getUserPermissions();
+                    if (userPermission.data.dashboard.get(2).value) {
 
-                        swipeLayout.close(true);
-                        if (taskID == null || taskID.equals("null") || taskID.equals("")) {
-                            Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                        pos = getAdapterPosition();
+                        String leadID = mData.get(pos).leadID;
+                        String taskID = mData.get(pos).taskID;
+                        if (isEditByLead) {
+
+                            swipeLayout.close(true);
+                            if (taskID == null || taskID.equals("null") || taskID.equals("")) {
+                                Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                            } else {
+                                context.startActivity(new Intent(context, AddTaskActivity.class)
+                                        .putExtra("leadID", leadID)
+                                        .putExtra("from", "2")
+                                        .putExtra("taskId", taskID));
+                            }
                         } else {
-                            context.startActivity(new Intent(context, AddTaskActivity.class)
-                                    .putExtra("leadID", leadID)
-                                    .putExtra("from", "2")
-                                    .putExtra("taskId", taskID));
+
+                            swipeLayout.close(true);
+                            if (taskID == null || taskID.equals("null") || taskID.equals("")) {
+                                Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                            } else {
+                                context.startActivity(new Intent(context, AddTaskActivity.class)
+                                        .putExtra("from", "3")
+                                        .putExtra("taskId", taskID));
+                            }
                         }
                     } else {
 
-                        swipeLayout.close(true);
-                        if (taskID == null || taskID.equals("null") || taskID.equals("")) {
-                            Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
-                        } else {
-                            context.startActivity(new Intent(context, AddTaskActivity.class)
-                                    .putExtra("from", "3")
-                                    .putExtra("taskId", taskID));
-                        }
+                        ToastUtils.showToast(context, context.getString(R.string.dashboard_EditTask));
                     }
                 }
             });

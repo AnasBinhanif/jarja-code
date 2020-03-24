@@ -105,6 +105,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                     if (!isLoading) {
                         if (totalPages > leadsList.size()) {
                             page++;
+                            page = page * 25;
                             try {
                                 callGetAllLeads(data, String.valueOf(page));
                                 isLoading = true;
@@ -115,7 +116,6 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                         }
                     }
                 }
-
             }
         });
     }

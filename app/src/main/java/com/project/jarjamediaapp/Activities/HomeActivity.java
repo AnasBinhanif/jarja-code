@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
 import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
 import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
 import com.project.jarjamediaapp.Activities.login.LoginActivity;
@@ -34,6 +35,7 @@ import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Fragments.DashboardFragments.TabsFragment;
 import com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads.FindLeadsFragment;
 import com.project.jarjamediaapp.Interfaces.UpdateTitle;
+import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -101,7 +103,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         getUserProfileData();
 
-        onNavigationItemSelected(navigationView.getMenu().getItem(0));
+
     }
 
     private void getUserProfileData() {
@@ -131,6 +133,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         Glide.with(context)
                                 .load(picPath)
                                 .into(navHeaderImageView);
+
+                        getUserPermissions();
 
                     } else {
 
@@ -193,21 +197,37 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         int itemId = item.getItemId();
         item.setChecked(true);
         mCurrentFragmentId = itemId;
+        GetUserPermission userPermission;
 
         switch (itemId) {
 
             case R.id.nav_dashboard:
-                title = getResources().getString(R.string.dashboard);
-                fragment = TabsFragment.newInstance(title, R.id.nav_dashboard);
-                addToStack = false;
-                shouldAnimate = true;
+
+                userPermission = GH.getInstance().getUserPermissions();
+                if (userPermission.data.dashboard.get(0).value) {
+                    title = getResources().getString(R.string.dashboard);
+                    fragment = TabsFragment.newInstance(title, R.id.nav_dashboard);
+                    addToStack = false;
+                    shouldAnimate = true;
+                } else {
+                    ToastUtils.showToast(context, getString(R.string.dashboard_ViewDashboard));
+                }
+
                 break;
             case R.id.nav_lead:
-                title = getResources().getString(R.string.leads);
-                fragment = FindLeadsFragment.newInstance(title, R.id.nav_lead);
-                addToStack = true;
-                shouldAnimate = true;
-                _menu.findItem(R.id.action_search).setVisible(false);
+
+                userPermission = GH.getInstance().getUserPermissions();
+                if (userPermission.data.lead.get(0).value) {
+                    title = getResources().getString(R.string.leads);
+                    fragment = FindLeadsFragment.newInstance(title, R.id.nav_lead);
+                    addToStack = true;
+                    shouldAnimate = true;
+                    _menu.findItem(R.id.action_search).setVisible(false);
+                } else {
+
+                    ToastUtils.showToast(context, getString(R.string.lead_ViewLeads));
+                }
+
                 break;
             case R.id.nav_calendar:
                 fragment = null;
@@ -274,7 +294,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void getNotificationCount() {
 
-
         Call<UploadImageModel> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 getNotificationCount(GH.getInstance().getAuthorization());
         _call.enqueue(new Callback<UploadImageModel>() {
@@ -310,7 +329,53 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
             }
         });
+    }
 
+    private void getUserPermissions() {
+
+        Call<GetUserPermission> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
+                GetUserPermission(GH.getInstance().getAuthorization());
+        _call.enqueue(new Callback<GetUserPermission>() {
+            @Override
+            public void onResponse(Call<GetUserPermission> call, Response<GetUserPermission> response) {
+
+                if (response.isSuccessful()) {
+
+                    GetUserPermission getUserProfile = response.body();
+                    if (getUserProfile.status.equals("Success")) {
+
+                        Gson gson = new Gson();
+                        String jsonText = gson.toJson(getUserProfile);
+                        easyPreference.addString(GH.KEYS.USER_PERMISSIONS.name(), jsonText).save();
+
+                        if (getUserProfile.data.dashboard.get(0).value) {
+                            onNavigationItemSelected(navigationView.getMenu().getItem(0));
+                        } else {
+
+                            ToastUtils.showToast(context, getString(R.string.dashboard_ViewDashboard));
+                        }
+
+                    } else {
+                        Toast.makeText(context, getUserProfile.message, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    ApiError error = ErrorUtils.parseError(response);
+
+                    if (error.message().contains("Authorization has been denied for this request")) {
+                        ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+                        logout();
+                    } else {
+                        ToastUtils.showToastLong(context, error.message());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetUserPermission> call, Throwable t) {
+
+                ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+            }
+        });
     }
 
     @Override
@@ -320,6 +385,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_notify) {
             switchActivity(NotificationActivity.class);
+
             return true;
         }
 
@@ -360,6 +426,5 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         return new BitmapDrawable(getResources(), bitmap);
     }
-
 
 }

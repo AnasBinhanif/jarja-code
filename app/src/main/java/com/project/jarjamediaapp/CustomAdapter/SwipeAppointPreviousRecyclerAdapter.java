@@ -17,6 +17,7 @@ import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
+import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
@@ -38,10 +39,12 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
     public Context context;
     Activity activity;
     int pos;
-    boolean isEditByLead,isPreviousAppoint;
+    boolean isEditByLead, isPreviousAppoint;
     List<GetAppointmentsModel.Data> mData;
 
-    public SwipeAppointPreviousRecyclerAdapter(Context context, Activity activity ,List<GetAppointmentsModel.Data> data, boolean isEditByLead,boolean isPreviousAppoint) {
+    GetUserPermission userPermission;
+
+    public SwipeAppointPreviousRecyclerAdapter(Context context, Activity activity, List<GetAppointmentsModel.Data> data, boolean isEditByLead, boolean isPreviousAppoint) {
 
         mData = data;
         this.context = context;
@@ -69,7 +72,7 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
 
             String firstName = modelData.leadsData.firstName + "";
             String lastName = modelData.leadsData.lastName + "";
-            String evenTitle = modelData.eventTitle+ "";
+            String evenTitle = modelData.eventTitle + "";
 
             if (firstName.equals("null") || firstName.equals("")) {
                 firstName = "-";
@@ -156,27 +159,35 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
                 markAsRead(leadID + ",", "true");
             });
 
-            if (isPreviousAppoint){
+            if (isPreviousAppoint) {
                 tvDone.setVisibility(View.GONE);
             }
 
             tvEdit.setOnClickListener(v -> {
-                pos = getAdapterPosition();
-                String leadID = mData.get(pos).leadAppoinmentID;
-                GetAppointmentsModel.Data modelData = mData.get(pos);
-                if (isEditByLead) {
-                    swipeLayout.close(true);
-                    context.startActivity(new Intent(context, AddAppointmentActivity.class)
-                            .putExtra("leadID", leadID)
-                            .putExtra("from", "2")
-                            .putExtra("model", modelData));
+
+                userPermission = GH.getInstance().getUserPermissions();
+                if (userPermission.data.dashboard.get(6).value) {
+                    pos = getAdapterPosition();
+                    String leadID = mData.get(pos).leadAppoinmentID;
+                    GetAppointmentsModel.Data modelData = mData.get(pos);
+                    if (isEditByLead) {
+                        swipeLayout.close(true);
+                        context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                                .putExtra("leadID", leadID)
+                                .putExtra("from", "2")
+                                .putExtra("model", modelData));
+                    } else {
+                        swipeLayout.close(true);
+                        context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                                .putExtra("leadID", leadID)
+                                .putExtra("from", "4")
+                                .putExtra("models", modelData));
+                    }
                 } else {
-                    swipeLayout.close(true);
-                    context.startActivity(new Intent(context, AddAppointmentActivity.class)
-                            .putExtra("leadID", leadID)
-                            .putExtra("from", "4")
-                            .putExtra("models", modelData));
+                    ToastUtils.showToast(context, context.getString(R.string.dashboard_ViewEditAppoint));
                 }
+
+
             });
         }
     }

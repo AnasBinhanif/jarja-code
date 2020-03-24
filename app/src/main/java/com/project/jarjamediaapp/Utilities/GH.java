@@ -13,7 +13,9 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatDialog;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.ProjectApplication;
 import com.project.jarjamediaapp.R;
 
@@ -46,13 +48,24 @@ public class GH {
         ACCESS_TOKEN,
         AUTHORIZATION,
         AGENT_ID_CALENDAR,
-        USER_NAME
+        USER_NAME,
+        USER_PERMISSIONS
 
     }
 
     public String getAuthorization() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.AUTHORIZATION.name(), null);
     }
+
+    public GetUserPermission getUserPermissions() {
+        Gson gson = new Gson();
+        String jsonText = EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_PERMISSIONS.name(), null);;
+        GetUserPermission text = gson.fromJson(jsonText, GetUserPermission.class);
+
+        return text;
+
+    }
+
 
     public boolean isLoggedIn() {
         return EasyPreference.with(ProjectApplication.getInstance()).getBoolean(KEYS.IS_LOGGED_IN.name(), false);

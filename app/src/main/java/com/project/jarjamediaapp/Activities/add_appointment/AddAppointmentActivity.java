@@ -309,9 +309,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 selectedIdsList.add(modelData.getAgentList().get(i).getAgentID());
             }
             agentIdsString = TextUtils.join(",", arrayList);
-
         }
-
     }
 
     private void prePopulateData(GetAppointmentsModel.Data modelData) {
@@ -372,8 +370,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
             agentIdsString = TextUtils.join(",", arrayList);
         }
-
-
     }
 
     @Override
@@ -457,7 +453,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             isReminderClicked = false;
             bi.atvReminder.dismissDropDown();
         }
-
     }
 
     private void via() {
@@ -469,7 +464,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             isViaClicked = false;
             bi.atvVia.dismissDropDown();
         }
-
     }
 
     private void allDay() {
@@ -585,7 +579,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void showAgentDialog() {
@@ -637,7 +630,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
                     @Override
                     public void onCancel() {
-
                     }
                 });
 
@@ -668,7 +660,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     endDate = dateFormatter.format(newCalendar.getTime());
                 }
                 textView.setText(dateFormatter2.format(newCalendar.getTime()));
-
             }
 
         }, year, month, day);
@@ -691,11 +682,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     startTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
                     time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
 
-
                 } else {
                     endTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
                     time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
-
                 }
                 textView.setText(time);
             }
@@ -716,7 +705,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         String viaReminder = via + "";
 
         if (bi.cbAllDay.isChecked()) {
-
             timedFrom = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
             timedTo = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
             startTime = timedFrom;
@@ -863,7 +851,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 return false;
             }
         }
-
         return true;
     }
 
@@ -1005,7 +992,5 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.atvLocation.clearFocus();
         bi.atvEventTitle.clearFocus();
         bi.atvDescription.clearFocus();
-
     }
-
 }

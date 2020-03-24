@@ -15,7 +15,6 @@ import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetTagListByLeadID;
-import com.project.jarjamediaapp.Models.GetTags;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
@@ -25,7 +24,6 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,10 +41,10 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
     ArrayList<GetTagListByLeadID.Data> mData;
 
 
-    public SwipeTagsRecyclerAdapter(Context context, Activity activity,ArrayList<GetTagListByLeadID.Data> data,String leadID) {
+    public SwipeTagsRecyclerAdapter(Context context, Activity activity, ArrayList<GetTagListByLeadID.Data> data, String leadID) {
 
         mData = data;
-        this.leadID=leadID;
+        this.leadID = leadID;
         this.context = context;
         this.activity = activity;
         mInflater = LayoutInflater.from(context);
@@ -68,20 +66,17 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
 
             GetTagListByLeadID.Data modelData = mData.get(position);
 
-            if (modelData.added!=null) {
+            if (modelData.added != null) {
                 holder.tvName.setText(modelData.label + "");
             }
 
             holder.frameLayout.setOnClickListener(v -> {
             });
 
-
             holder.swipeLayout.setSwipeListener(new SwipeRevealLayout.SwipeListener() {
                 @Override
                 public void onClosed(SwipeRevealLayout view) {
-
                     view.getParent().requestDisallowInterceptTouchEvent(false);
-
                 }
 
                 @Override
@@ -94,7 +89,6 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
                     view.getParent().requestDisallowInterceptTouchEvent(true);
                 }
             });
-
 
             // Use ViewBindHelper to restore and save the open/close state of the SwipeRevealView
             // put an unique string id as value, can be any string which uniquely define the data
@@ -142,13 +136,13 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     pos = getAdapterPosition();
                     String noteID = mData.get(pos).encryptedTagID;
-                    callDeleteTag(noteID,leadID,swipeLayout);
+                    callDeleteTag(noteID, leadID, swipeLayout);
                 }
             });
         }
     }
 
-    private void callDeleteTag(String encryptedNoteID,String leadID,SwipeRevealLayout swipeRevealLayout) {
+    private void callDeleteTag(String encryptedNoteID, String leadID, SwipeRevealLayout swipeRevealLayout) {
         GH.getInstance().ShowProgressDialog(activity);
         Call<BaseResponse> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).DeleteLeadTag(GH.getInstance().getAuthorization(),

@@ -51,7 +51,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
     Call<CalendarDetailModel> _call;
     Call<BaseResponse> call;
 
-    public SwipeCalendarAppointmentRecyclerAdapter(Context context,Activity activity, List<CalendarModel.Data> data) {
+    public SwipeCalendarAppointmentRecyclerAdapter(Context context, Activity activity, List<CalendarModel.Data> data) {
 
         mData = data;
         this.context = context;

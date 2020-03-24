@@ -314,7 +314,7 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
                     if (getAppointmentsModel.getStatus().equals("Success")) {
 
                         ToastUtils.showToast(context, "Successfully Done");
-                        ((NotesActivity)context).refreshData();
+                        ((NotesActivity) context).refreshData();
 
                     } else {
 

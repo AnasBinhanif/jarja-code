@@ -37,6 +37,7 @@ import com.project.jarjamediaapp.Models.GetPipeline;
 import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
 import com.project.jarjamediaapp.Models.GetTagListByLeadID;
 import com.project.jarjamediaapp.Models.GetTasksModel;
+import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
@@ -71,6 +72,11 @@ public interface ApiMethods {
 
     @GET("User/GetUserProfileData")
     Call<GetUserProfile> getUserProfileData(
+            @Header("Authorization") String authorization
+    );
+
+    @GET("User/GetUserPermission")
+    Call<GetUserPermission> GetUserPermission(
             @Header("Authorization") String authorization
     );
 

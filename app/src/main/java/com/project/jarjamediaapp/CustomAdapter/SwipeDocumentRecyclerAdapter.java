@@ -139,7 +139,7 @@ public class SwipeDocumentRecyclerAdapter extends RecyclerView.Adapter {
             lnDelete.setOnClickListener(v -> {
                 pos = getAdapterPosition();
                 DocumentModel.Data modelData = mData.get(pos);
-                showDeleteDialog(modelData,swipeLayout);
+                showDeleteDialog(modelData, swipeLayout);
             });
 
         }
@@ -152,7 +152,7 @@ public class SwipeDocumentRecyclerAdapter extends RecyclerView.Adapter {
 
     }
 
-    private void showDeleteDialog(DocumentModel.Data data,SwipeRevealLayout swipeRevealLayout) {
+    private void showDeleteDialog(DocumentModel.Data data, SwipeRevealLayout swipeRevealLayout) {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setIcon(R.drawable.logo_round);
@@ -162,7 +162,7 @@ public class SwipeDocumentRecyclerAdapter extends RecyclerView.Adapter {
 
         alertDialogBuilder.setPositiveButton("Yes", (dialog, which) -> {
             dialog.dismiss();
-            callDeleteDocument(String.valueOf(data.getLeadAttachmentID()),swipeRevealLayout);
+            callDeleteDocument(String.valueOf(data.getLeadAttachmentID()), swipeRevealLayout);
         });
         alertDialogBuilder.setNegativeButton("No", (dialog, which) -> {
             dialog.dismiss();
@@ -173,7 +173,7 @@ public class SwipeDocumentRecyclerAdapter extends RecyclerView.Adapter {
 
     }
 
-    private void callDeleteDocument(String docId,SwipeRevealLayout swipeRevealLayout) {
+    private void callDeleteDocument(String docId, SwipeRevealLayout swipeRevealLayout) {
 
         GH.getInstance().ShowProgressDialog(activity);
         Call<BaseResponse> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).deleteDocumentByDocumentId(GH.getInstance().getAuthorization(),

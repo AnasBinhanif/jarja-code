@@ -16,6 +16,7 @@ import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
+import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -42,8 +43,9 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
     String status = "";
     List<GetFollowUpsModel.Data> mData;
 
+    GetUserPermission userPermission;
 
-    public SwipeFollowUpsDueRecyclerAdapter(Context context, Activity activity,List<GetFollowUpsModel.Data> data) {
+    public SwipeFollowUpsDueRecyclerAdapter(Context context, Activity activity, List<GetFollowUpsModel.Data> data) {
 
         mData = data;
         this.context = context;
@@ -96,20 +98,20 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClosed(SwipeRevealLayout view) {
 
-                    pos=position;
+                    pos = position;
                     view.getParent().requestDisallowInterceptTouchEvent(false);
 
                 }
 
                 @Override
                 public void onOpened(SwipeRevealLayout view) {
-                    pos=position;
+                    pos = position;
                     view.getParent().requestDisallowInterceptTouchEvent(true);
                 }
 
                 @Override
                 public void onSlide(SwipeRevealLayout view, float slideOffset) {
-                    pos=position;
+                    pos = position;
                     view.getParent().requestDisallowInterceptTouchEvent(true);
                 }
             });
@@ -135,7 +137,7 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
         GH.getInstance().ShowProgressDialog(activity);
 
         Call<BaseResponse> _callToday;
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).MarkFollowUpComplete(GH.getInstance().getAuthorization(), reminderID+",","true");
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).MarkFollowUpComplete(GH.getInstance().getAuthorization(), reminderID + ",", "true");
         _callToday.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
@@ -258,8 +260,13 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
         public void bind() {
 
             tvDone.setOnClickListener(v -> {
-                pos = getAdapterPosition();
-                markAsRead(mData.get(pos).reminderId);
+                userPermission = GH.getInstance().getUserPermissions();
+                if (userPermission.data.dashboard.get(3).value) {
+                    pos = getAdapterPosition();
+                    markAsRead(mData.get(pos).reminderId);
+                } else {
+                    ToastUtils.showToast(context, context.getString(R.string.dashboard_EditFollowUps));
+                }
             });
 
             tvView.setOnClickListener(v -> {
