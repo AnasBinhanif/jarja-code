@@ -800,7 +800,34 @@ public interface ApiMethods {
     @Multipart
     @POST("Lead/AddLeadDoc")
     Call<BaseResponse> uploadDocumentByLeadId(@Header("Authorization") String authorization,
-                                                  @Part MultipartBody.Part file,
-                                                  @Query("LeadID") String leadId);
+                                              @Part MultipartBody.Part file,
+                                              @Query("LeadID") String leadId);
+
+    @FormUrlEncoded
+    @POST("Calender/AddAppoinmentTaskCalender")
+    Call<BaseResponse> addUpdateCalendarAppointmentViaTask(
+            @Header("Authorization") String authorization,
+            @Field("leadStringID") String leadStringID,
+            @Field("agentIDsString") String agentIDsString,
+            @Field("agentIds") String agentIds,
+            @Field("leadAppoinmentID") String leadAppoinmentID,
+            @Field("isAppointmentFixed") String isAppointmentFixed,
+            @Field("isAppointmentAttend") String isAppointmentAttend,
+            @Field("isSend") boolean isSend,
+            @Field("isAllDay") boolean isAllDay,
+            @Field("isCompleted") boolean isCompleted,
+            @Field("datedFrom") String datedFrom,
+            @Field("datedTo") String datedTo,
+            @Field("appointmentDate") String appointmentDate,
+            @Field("startTime") String startTime,
+            @Field("eventTitle") String eventTitle,
+            @Field("desc") String desc,
+            @Field("location") String location,
+            @Field("viaReminder") String viaReminder,
+            @Field("interval") Integer interval,
+            @Field("orderBy") Integer orderBy,
+            @Field("isGmailApptActive") boolean isGmailApptActive,
+            @Field("calendarType") String calendarType,
+            @Field("gmailCalenderId") String gmailCalendarId);
 
 }

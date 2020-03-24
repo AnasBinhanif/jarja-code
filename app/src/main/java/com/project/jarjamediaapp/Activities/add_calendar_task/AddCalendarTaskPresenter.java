@@ -25,15 +25,14 @@ public class AddCalendarTaskPresenter extends BasePresenter<AddCalendarTaskContr
     }
 
     @Override
-    public void addCalendarTask(String title, String description, String startDateTime, boolean allDay, boolean markComplete) {
+    public void addUpdateCalendarAppointmentViaTask(String leadStringID, String agentIDsString, String agentIds, String leadAppointmentID, String isAppointmentFixed,
+                                                    String isAppointmentAttend, boolean isSend, boolean isAllDay, boolean isCompleted, String datedFrom, String datedTo,
+                                                    String appointmentDate, String startTime, String eventTitle, String desc, String location, String viaReminder,
+                                                    Integer interval, Integer orderBy, boolean isGmailApptActive, String calendarType, String gmailCalendarId) {
 
         _view.showProgressBar();
 
-        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addAppointmentByCalendar(GH.getInstance().getAuthorization(),
-                "undefined", "", "0", title, "", description, "false",
-                "false", "", startDateTime, startDateTime, allDay, 0, false, "", "",
-                0, "", "", markComplete, "Task", false, "");
-
+      //  call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addUpdateCalendarAppointmentViaTask(GH.getInstance().getAuthorization(), );
 
         call.enqueue(new Callback<BaseResponse>() {
             @Override
@@ -65,51 +64,6 @@ public class AddCalendarTaskPresenter extends BasePresenter<AddCalendarTaskContr
                 _view.updateUIonFailure();
             }
         });
-
-    }
-
-    @Override
-    public void updateCalendarTask(String title, String description, String startDateTime, boolean allDay, boolean markComplete, String calendarId, String encryptedLeadId) {
-
-        _view.showProgressBar();
-
-        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),
-                "undefined", "", "0", title, "", description, "false",
-                "false", "", startDateTime, startDateTime, allDay, 0, false, "", "",
-                0, "", "", markComplete, "Task", false, calendarId, encryptedLeadId);
-
-
-        call.enqueue(new Callback<BaseResponse>() {
-            @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-
-                _view.hideProgressBar();
-                if (response.isSuccessful()) {
-
-                    BaseResponse getAppointmentsModel = response.body();
-                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
-
-                        _view.updateUI(response);
-
-                    } else {
-
-                        _view.updateUIonFalse(getAppointmentsModel.message);
-
-                    }
-                } else {
-
-                    ApiError error = ErrorUtils.parseError(response);
-                    _view.updateUIonError(error.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                _view.hideProgressBar();
-                _view.updateUIonFailure();
-            }
-        });
-
 
     }
 

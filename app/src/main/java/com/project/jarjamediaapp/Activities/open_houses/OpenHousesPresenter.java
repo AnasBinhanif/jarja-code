@@ -53,7 +53,7 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
 
                     } else {
 
-                        _view.updateUIonFalse(getAppointmentsModel.message);
+                        _view._updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {

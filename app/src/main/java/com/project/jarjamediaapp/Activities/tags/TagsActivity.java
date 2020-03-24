@@ -166,44 +166,6 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
 
-    public void showAddDialog(Context context) {
-
-        final Dialog dialog = new Dialog(context, R.style.Dialog);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.custom_assignedto_dialog);
-
-        TextView txtTitle = dialog.findViewById(R.id.tvAssignedTo);
-        TextView tvTags = dialog.findViewById(R.id.tvTags);
-        LinearLayout lnTags = dialog.findViewById(R.id.lnTags);
-        txtTitle.setText("Assign Tags");
-
-        tvTags.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTagsDialog();
-            }
-        });
-
-        Button btnSave = dialog.findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                presenter.getTags(leadID);
-            }
-        });
-
-        Button btnCancel = dialog.findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
-
     @Override
     public void updateUI(Response<BaseResponse> response) {
         if (response.body().getStatus().equals("Success")) {

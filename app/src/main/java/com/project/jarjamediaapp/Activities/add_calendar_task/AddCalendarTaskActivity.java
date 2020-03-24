@@ -31,7 +31,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     String startDate, startTime, title, description;
     boolean allDay, markComplete;
     boolean isEdit;
-    String calendarId = "",encryptedLeadAppointmentId="";
+    String calendarId = "";
 
     int month, year, day, hour, minute;
     Calendar newCalendar;
@@ -105,7 +105,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     public void updateUI(Response<BaseResponse> response) {
 
         if (response.body().getStatus().equalsIgnoreCase("Success")) {
-            ToastUtils.showToast(context, "Added Successfully");
+            ToastUtils.showToast(context, response.body().getMessage() != null ? response.body().getMessage() : "");
             finish();
         }
     }
@@ -158,45 +158,23 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         description = bi.atvDescription.getText().toString() + "";
         allDay = bi.cbAllDay.isChecked() ? true : false;
         markComplete = bi.cbAllDay.isChecked() ? true : false;
-        // encryptedLeadAppointmentId
-
         startDate = GH.getInstance().formatApiDateTime(startDate + "T" + startTime);
 
         if (isValidate()) {
-            if (isEdit) {
-                presenter.updateCalendarTask(title, description, startDate, allDay, markComplete, calendarId,encryptedLeadAppointmentId);
-            } else {
-                presenter.addCalendarTask(title, description, startDate, allDay, markComplete);
-            }
+
+          //  presenter.addUpdateCalendarAppointmentViaTask();
+
         }
 
     }
 
     private boolean isValidate() {
 
-        if (Methods.isEmpty(bi.atvEventTitle)) {
-            ToastUtils.showToast(context, R.string.error_title);
-            bi.atvEventTitle.requestFocus();
-            return false;
-        }
-        if (Methods.isEmpty(bi.atvDescription)) {
-            ToastUtils.showToast(context, R.string.error_description);
-            bi.atvDescription.requestFocus();
-            return false;
-        }
+
         if (Methods.isEmpty(bi.tvStartDate)) {
             ToastUtils.showToast(context, R.string.error_start_date);
             bi.tvStartTime.requestFocus();
             return false;
-        }
-
-        if (!bi.cbAllDay.isChecked()) {
-            if (Methods.isEmpty(bi.tvStartTime)) {
-                ToastUtils.showToast(context, R.string.error_start_time);
-                bi.tvStartTime.requestFocus();
-                return false;
-            }
-
         }
 
         return true;

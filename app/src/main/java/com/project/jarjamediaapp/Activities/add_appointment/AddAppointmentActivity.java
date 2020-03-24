@@ -148,6 +148,51 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         mMinute = newCalendar.get(Calendar.MINUTE);
     }
 
+    private void calendarEditInstance(int id) {
+
+        // 1 for start date
+        // 2 for end date
+        // 3 for start time
+        // 4 for end time
+        try {
+            newCalendar = Calendar.getInstance();
+            switch (id) {
+                case 1: {
+                    String[] formattedDate = startDate.split("-");
+                    year = Integer.parseInt(formattedDate[0]);
+                    month = Integer.parseInt(formattedDate[1]);
+                    day = Integer.parseInt(formattedDate[2]);
+                    newCalendar.set(year, month, day);
+                }
+                break;
+                case 2: {
+                    String[] formattedDate = endDate.split("-");
+                    year = Integer.parseInt(formattedDate[0]);
+                    month = Integer.parseInt(formattedDate[1]);
+                    day = Integer.parseInt(formattedDate[2]);
+                    newCalendar.set(year, month, day);
+                }
+                break;
+                case 3: {
+                    String[] formattedTime = startTime.split(":");
+                    mHour = Integer.parseInt(formattedTime[0]);
+                    mMinute = Integer.parseInt(formattedTime[1]);
+
+                }
+                break;
+                case 4: {
+                    String[] formattedTime = endTime.split(":");
+                    mHour = Integer.parseInt(formattedTime[0]);
+                    mMinute = Integer.parseInt(formattedTime[1]);
+                }
+                break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     private void getUpdatedData() {
 
         // 1 from Add Appointment by Lead Id
@@ -226,7 +271,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         endDate = GH.getInstance().formatter(modelData.getDatedTo(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
         startTime = GH.getInstance().formatter(modelData.getDatedFrom(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
         endTime = GH.getInstance().formatter(modelData.getDatedTo(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
-
         bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(modelData.getDatedFrom()) : "");
         bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(modelData.getDatedFrom()) : "");
         bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(modelData.getDatedTo()) : "");
@@ -344,28 +388,40 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 showAgentDialog();
                 break;
             case R.id.tvStartDate:
-                if(bi.tvStartDate.getText().toString().equalsIgnoreCase("")){
+                if (bi.tvStartDate.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
+                }
+                if (isEdit) {
+                    calendarEditInstance(1);
                 }
                 showDateDialog(bi.tvStartDate, true);
                 break;
             case R.id.tvEndDate:
-                if(bi.tvEndDate.getText().toString().equalsIgnoreCase("")){
+                if (isEdit) {
+                    calendarEditInstance(2);
+                }
+                if (bi.tvEndDate.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
                 }
                 showDateDialog(bi.tvEndDate, false);
                 break;
             case R.id.tvStartTime:
                 clearFocus();
-                if(bi.tvStartTime.getText().toString().equalsIgnoreCase("")){
+                if (bi.tvStartTime.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
+                }
+                if (isEdit) {
+                    calendarEditInstance(3);
                 }
                 showTimeDialog(bi.tvStartTime, true);
                 break;
             case R.id.tvEndTime:
                 clearFocus();
-                if(bi.tvEndTime.getText().toString().equalsIgnoreCase("")){
+                if (bi.tvEndTime.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
+                }
+                if (isEdit) {
+                    calendarEditInstance(4);
                 }
                 showTimeDialog(bi.tvEndTime, false);
                 break;
@@ -642,7 +698,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
                 }
                 textView.setText(time);
-
             }
         }, mHour, mMinute, false);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
@@ -664,6 +719,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
             timedFrom = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
             timedTo = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+            startTime = timedFrom;
+            endTime = timedTo;
 
         } else {
             timedFrom = startTime;
@@ -721,7 +778,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
 
             String jsonObjectString = obj.toString();
-            Log.d("json",jsonObjectString);
+            Log.d("json", jsonObjectString);
 
             presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend,
                     appointmentDate, datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo,
@@ -759,7 +816,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             return false;
         }
 
-        Date date1 = null, date2 = null;
+        Date date1 = null, date2 = null, time1 = null, time2 = null;
         try {
             date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
             date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
@@ -782,6 +839,20 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 ToastUtils.showToast(context, R.string.error_end_time);
                 bi.tvEndTime.requestFocus();
                 return false;
+            }
+            if (date2.compareTo(date1) == 0) {
+                try {
+                    time1 = new SimpleDateFormat("HH:mm:ss").parse(startTime);
+                    time2 = new SimpleDateFormat("HH:mm:ss").parse(endTime);
+                    if (time2.before(time1)) {
+                        ToastUtils.showToast(context, "End time cannot be greater than start time");
+                        bi.tvStartTime.requestFocus();
+                        return false;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
         if (!bi.atvReminder.getText().toString().equalsIgnoreCase("") &&

@@ -129,7 +129,6 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         UserPermissions.isCameraStorageLocationPermissionGranted(OpenHousesActivity.this);
         bi.btnPastOH.setOnClickListener(this);
         bi.btnUpcomingOH.setOnClickListener(this);
-        presenter.getAllOpenHouses("upcoming");
 
     }
 
@@ -354,11 +353,6 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             atvState.requestFocus();
             return false;
         }
-        if (Methods.isEmpty(atvZip)) {
-            ToastUtils.showToast(context, R.string.error_zip);
-            atvZip.requestFocus();
-            return false;
-        }
         if (Methods.isEmpty(atvOpenHouseStartDate)) {
             ToastUtils.showToast(context, R.string.error_start_time);
             atvOpenHouseStartDate.requestFocus();
@@ -368,6 +362,19 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             ToastUtils.showToast(context, R.string.error_end_time);
             atvOpenHouseEndDate.requestFocus();
             return false;
+        }
+        Date date1 = null, date2 = null, time1 = null, time2 = null;
+
+        try {
+            time1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(openHouseStartDate);
+            time2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(openHouseEndDate);
+            if (time2.before(time1)) {
+                ToastUtils.showToast(context, "End date time cannot be greater than start date time");
+                atvOpenHouseEndDate.requestFocus();
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
         return true;
@@ -461,51 +468,67 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
                 case R.id.atvAddress: {
 
                     ArrayList<String> arrayList = new ArrayList<>();
-                    for (int i = 0; i < response.getStreetFilter().size(); i++) {
-                        arrayList.add(response.getStreetFilter().get(i).getN());
+                    if (response.getStreetFilter().size() > 0) {
+                        for (int i = 0; i < response.getStreetFilter().size(); i++) {
+                            arrayList.add(response.getStreetFilter().get(i).getN());
+                        }
+                        ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
+                        atvAddress.setAdapter(arrayAdapter);
+                        atvAddress.showDropDown();
+                        atvAddress.setThreshold(1);
+                    } else {
+                        ToastUtils.showToast(context, "No data found");
                     }
-                    ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
-                    atvAddress.setAdapter(arrayAdapter);
-                    atvAddress.showDropDown();
-                    atvAddress.setThreshold(1);
                 }
                 break;
                 case R.id.atvCity: {
 
                     ArrayList<String> arrayList = new ArrayList<>();
-                    for (int i = 0; i < response.getCityFilter().size(); i++) {
-                        arrayList.add(response.getCityFilter().get(i).getN());
+                    if (response.getCityFilter().size() > 0) {
+                        for (int i = 0; i < response.getCityFilter().size(); i++) {
+                            arrayList.add(response.getCityFilter().get(i).getN());
+                        }
+                        ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
+                        atvCity.setAdapter(arrayAdapter);
+                        atvCity.showDropDown();
+                        atvCity.setThreshold(1);
+                    } else {
+                        ToastUtils.showToast(context, "No data found");
                     }
-                    ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
-                    atvCity.setAdapter(arrayAdapter);
-                    atvCity.showDropDown();
-                    atvCity.setThreshold(1);
 
                 }
                 break;
                 case R.id.atvState: {
 
                     ArrayList<String> arrayList = new ArrayList<>();
-                    for (int i = 0; i < response.getStateFilter().size(); i++) {
-                        arrayList.add(response.getStateFilter().get(i).getN());
+                    if (response.getStateFilter().size() > 0) {
+                        for (int i = 0; i < response.getStateFilter().size(); i++) {
+                            arrayList.add(response.getStateFilter().get(i).getN());
+                        }
+                        ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
+                        atvState.setAdapter(arrayAdapter);
+                        atvState.showDropDown();
+                        atvState.setThreshold(1);
+                    } else {
+                        ToastUtils.showToast(context, "No data found");
                     }
-                    ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
-                    atvState.setAdapter(arrayAdapter);
-                    atvState.showDropDown();
-                    atvState.setThreshold(1);
 
                 }
                 break;
                 case R.id.atvPostalCode: {
 
                     ArrayList<String> arrayList = new ArrayList<>();
-                    for (int i = 0; i < response.getZipCode().size(); i++) {
-                        arrayList.add(response.getZipCode().get(i).getN());
+                    if (response.getZipCode().size() > 0) {
+                        for (int i = 0; i < response.getZipCode().size(); i++) {
+                            arrayList.add(response.getZipCode().get(i).getN());
+                        }
+                        ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
+                        atvZip.setAdapter(arrayAdapter);
+                        atvZip.showDropDown();
+                        atvZip.setThreshold(1);
+                    } else {
+                        ToastUtils.showToast(context, "No data found");
                     }
-                    ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
-                    atvZip.setAdapter(arrayAdapter);
-                    atvZip.showDropDown();
-                    atvZip.setThreshold(1);
 
                 }
                 break;
@@ -807,4 +830,9 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.getAllOpenHouses("upcoming");
+    }
 }
