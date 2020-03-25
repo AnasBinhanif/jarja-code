@@ -33,8 +33,10 @@
                     android:drawableStart="@drawable/ic_calendar_white"
                     android:drawablePadding="@dimen/_10sdp"
                     android:text="@string/event_title"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/_18sdp"
+                    android:textSize="@dimen/_14sdp"
                     android:textStyle="bold" />
 
                 <TextView

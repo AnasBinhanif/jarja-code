@@ -44,6 +44,9 @@ public class CalendarDetailModel extends BaseResponse implements Parcelable {
         @SerializedName("calendarData")
         @Expose
         public CalendarData calendarData;
+        @SerializedName("list")
+        @Expose
+        public CalendarList list;
 
         protected Data(Parcel in) {
             calendarData = in.readParcelable(CalendarData.class.getClassLoader());
@@ -483,6 +486,301 @@ public class CalendarDetailModel extends BaseResponse implements Parcelable {
 
         public CalendarData getCalendarData() {
             return calendarData;
+        }
+
+        public static class CalendarList implements Parcelable{
+
+            @SerializedName("id")
+            @Expose
+            public Object id;
+            @SerializedName("excludeDates")
+            @Expose
+            public Object excludeDates;
+            @SerializedName("eventSTime")
+            @Expose
+            public Object eventSTime;
+            @SerializedName("eventETime")
+            @Expose
+            public Object eventETime;
+            @SerializedName("calendarType")
+            @Expose
+            public String calendarType;
+            @SerializedName("calID")
+            @Expose
+            public Integer calID;
+            @SerializedName("calendarEventID")
+            @Expose
+            public String calendarEventID;
+            @SerializedName("userCalenderID")
+            @Expose
+            public Object userCalenderID;
+            @SerializedName("userID")
+            @Expose
+            public Object userID;
+            @SerializedName("eventTitle")
+            @Expose
+            public String eventTitle;
+            @SerializedName("description")
+            @Expose
+            public String description;
+            @SerializedName("startTime")
+            @Expose
+            public String startTime;
+            @SerializedName("endTime")
+            @Expose
+            public String endTime;
+            @SerializedName("link")
+            @Expose
+            public String link;
+            @SerializedName("location")
+            @Expose
+            public Object location;
+            @SerializedName("createDate")
+            @Expose
+            public Object createDate;
+            @SerializedName("updateDate")
+            @Expose
+            public Object updateDate;
+            @SerializedName("crmid")
+            @Expose
+            public Integer crmid;
+            @SerializedName("agentID")
+            @Expose
+            public Object agentID;
+            @SerializedName("isDeleted")
+            @Expose
+            public Object isDeleted;
+            @SerializedName("attendees")
+            @Expose
+            public Object attendees;
+            @SerializedName("integLogId")
+            @Expose
+            public Object integLogId;
+            @SerializedName("recurrence")
+            @Expose
+            public Object recurrence;
+            @SerializedName("freq")
+            @Expose
+            public Object freq;
+            @SerializedName("count")
+            @Expose
+            public Object count;
+            @SerializedName("interval")
+            @Expose
+            public Object interval;
+            @SerializedName("until")
+            @Expose
+            public Object until;
+            @SerializedName("byDay")
+            @Expose
+            public Object byDay;
+            @SerializedName("isDateWithTime")
+            @Expose
+            public Object isDateWithTime;
+            @SerializedName("isAllDay")
+            @Expose
+            public Boolean isAllDay;
+            @SerializedName("updatedBy")
+            @Expose
+            public Object updatedBy;
+            @SerializedName("vt_CRM_IntegrationLog")
+            @Expose
+            public Object vtCRMIntegrationLog;
+
+            protected CalendarList(Parcel in) {
+                calendarType = in.readString();
+                if (in.readByte() == 0) {
+                    calID = null;
+                } else {
+                    calID = in.readInt();
+                }
+                calendarEventID = in.readString();
+                eventTitle = in.readString();
+                description = in.readString();
+                startTime = in.readString();
+                endTime = in.readString();
+                link = in.readString();
+                if (in.readByte() == 0) {
+                    crmid = null;
+                } else {
+                    crmid = in.readInt();
+                }
+                byte tmpIsAllDay = in.readByte();
+                isAllDay = tmpIsAllDay == 0 ? null : tmpIsAllDay == 1;
+            }
+
+            public static final Creator<CalendarList> CREATOR = new Creator<CalendarList>() {
+                @Override
+                public CalendarList createFromParcel(Parcel in) {
+                    return new CalendarList(in);
+                }
+
+                @Override
+                public CalendarList[] newArray(int size) {
+                    return new CalendarList[size];
+                }
+            };
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(calendarType);
+                if (calID == null) {
+                    dest.writeByte((byte) 0);
+                } else {
+                    dest.writeByte((byte) 1);
+                    dest.writeInt(calID);
+                }
+                dest.writeString(calendarEventID);
+                dest.writeString(eventTitle);
+                dest.writeString(description);
+                dest.writeString(startTime);
+                dest.writeString(endTime);
+                dest.writeString(link);
+                if (crmid == null) {
+                    dest.writeByte((byte) 0);
+                } else {
+                    dest.writeByte((byte) 1);
+                    dest.writeInt(crmid);
+                }
+                dest.writeByte((byte) (isAllDay == null ? 0 : isAllDay ? 1 : 2));
+            }
+
+            public Object getId() {
+                return id;
+            }
+
+            public Object getExcludeDates() {
+                return excludeDates;
+            }
+
+            public Object getEventSTime() {
+                return eventSTime;
+            }
+
+            public Object getEventETime() {
+                return eventETime;
+            }
+
+            public String getCalendarType() {
+                return calendarType;
+            }
+
+            public Integer getCalID() {
+                return calID;
+            }
+
+            public String getCalendarEventID() {
+                return calendarEventID;
+            }
+
+            public Object getUserCalenderID() {
+                return userCalenderID;
+            }
+
+            public Object getUserID() {
+                return userID;
+            }
+
+            public String getEventTitle() {
+                return eventTitle;
+            }
+
+            public String getDescription() {
+                return description;
+            }
+
+            public String getStartTime() {
+                return startTime;
+            }
+
+            public String getEndTime() {
+                return endTime;
+            }
+
+            public String getLink() {
+                return link;
+            }
+
+            public Object getLocation() {
+                return location;
+            }
+
+            public Object getCreateDate() {
+                return createDate;
+            }
+
+            public Object getUpdateDate() {
+                return updateDate;
+            }
+
+            public Integer getCrmid() {
+                return crmid;
+            }
+
+            public Object getAgentID() {
+                return agentID;
+            }
+
+            public Object getIsDeleted() {
+                return isDeleted;
+            }
+
+            public Object getAttendees() {
+                return attendees;
+            }
+
+            public Object getIntegLogId() {
+                return integLogId;
+            }
+
+            public Object getRecurrence() {
+                return recurrence;
+            }
+
+            public Object getFreq() {
+                return freq;
+            }
+
+            public Object getCount() {
+                return count;
+            }
+
+            public Object getInterval() {
+                return interval;
+            }
+
+            public Object getUntil() {
+                return until;
+            }
+
+            public Object getByDay() {
+                return byDay;
+            }
+
+            public Object getIsDateWithTime() {
+                return isDateWithTime;
+            }
+
+            public Boolean getAllDay() {
+                return isAllDay;
+            }
+
+            public Object getUpdatedBy() {
+                return updatedBy;
+            }
+
+            public Object getVtCRMIntegrationLog() {
+                return vtCRMIntegrationLog;
+            }
+        }
+
+        public CalendarList getList() {
+            return list;
         }
     }
 

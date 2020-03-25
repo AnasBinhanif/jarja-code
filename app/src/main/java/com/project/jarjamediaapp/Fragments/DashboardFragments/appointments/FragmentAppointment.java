@@ -39,6 +39,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     String leadID = "";
     ArrayList<GetAppointmentsModel.Data> appointmentList = new ArrayList<>();
     GetUserPermission userPermission;
+    String buttonType = "T";
 
     public FragmentAppointment() {
         // Required empty public constructor
@@ -214,6 +215,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
             case R.id.btnToday:
 
+                buttonType = "T";
                 if (isFromActivity) {
                     presenter.getLeadTodayAppointments(leadID);
                 } else {
@@ -237,6 +239,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
             case R.id.btnUpcoming:
 
+                buttonType = "U";
                 if (isFromActivity) {
                     presenter.getLeadUpcomingAppointments(leadID);
                 } else {
@@ -262,6 +265,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
             case R.id.btnPrevious:
 
+                buttonType = "P";
                 if (isFromActivity) {
 
                     presenter.getLeadPreviousAppointments(leadID);
@@ -312,9 +316,39 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     public void onResume() {
         super.onResume();
         if (isFromActivity) {
-            presenter.getLeadTodayAppointments(leadID);
+            switch (buttonType) {
+                case "T": {
+                    presenter.getLeadTodayAppointments(leadID);
+                }
+                break;
+                case "U": {
+                    presenter.getLeadUpcomingAppointments(leadID);
+                }
+                break;
+                case "P": {
+                    presenter.getLeadPreviousAppointments(leadID);
+                }
+                break;
+            }
+
         } else {
-            presenter.getTodayAppointments();
+            switch (buttonType) {
+                case "T": {
+                    presenter.getTodayAppointments();
+                    Log.d("bt",buttonType);
+                }
+                break;
+                case "U": {
+                    presenter.getUpcomingAppointments();
+                    Log.d("bt",buttonType);
+                }
+                break;
+                case "P": {
+                    presenter.getPreviousAppointments();
+                    Log.d("bt",buttonType);
+                }
+                break;
+            }
         }
     }
 }

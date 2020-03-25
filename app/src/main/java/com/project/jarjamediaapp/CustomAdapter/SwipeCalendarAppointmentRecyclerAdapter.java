@@ -182,7 +182,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                     if (calendarDetailModel.getStatus().equals("Success")) {
 
                         if (type != null && !type.equalsIgnoreCase("") && type.equalsIgnoreCase("Task")) {
-                            // showDialogForCalendarTaskDetail(context, calendarDetailModel.getData().getList());
+                             showDialogForCalendarTaskDetail(context, calendarDetailModel.getData().getList());
                         } else {
                             showDialogForCalendarAppointmentDetail(context, calendarDetailModel.getData().getCalendarData());
                         }
@@ -342,7 +342,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
     }
 
-    private void showDialogForCalendarTaskDetail(Context context, CalendarDetailModel.Data.CalendarData calendarDetailModel) {
+    private void showDialogForCalendarTaskDetail(Context context, CalendarDetailModel.Data.CalendarList calendarDetailModel) {
 
         final Dialog dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
@@ -360,8 +360,8 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
         try {
             tvEventDetail.setPaintFlags(tvEventDetail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            String[] startTime = calendarDetailModel.getDatedFrom().split("T");
-            String[] endTime = calendarDetailModel.getDatedTo().split("T");
+            String[] startTime = calendarDetailModel.getStartTime().split("T");
+            String[] endTime = calendarDetailModel.getEndTime().split("T");
             tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
             if (calendarDetailModel.isAllDay) {
                 tvTime.setText("All Day");
@@ -370,7 +370,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             }
             tvAttendeesCount.setText("0");
             tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd"));
-            tvDetail.setText(calendarDetailModel.getDesc() != null ? calendarDetailModel.getDesc() : "");
+            tvDetail.setText(calendarDetailModel.getDescription() != null ? calendarDetailModel.getDescription() : "");
 
             Button btnCancel = dialog.findViewById(R.id.btnCancel);
             Button btnEdit = dialog.findViewById(R.id.btnEdit);
@@ -390,6 +390,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                         } else {
                             context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
                                     .putExtra("isEdit", true)
+                                    .putExtra("calendarId", modelData.getCalendarId())
                                     .putExtra("modelData", calendarDetailModel));
                         }
                     }

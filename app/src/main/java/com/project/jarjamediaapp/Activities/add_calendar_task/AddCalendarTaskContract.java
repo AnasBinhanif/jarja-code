@@ -15,10 +15,8 @@ public interface AddCalendarTaskContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void addUpdateCalendarAppointmentViaTask(String leadStringID, String agentIDsString, String agentIds, String leadAppointmentID, String isAppointmentFixed,
-                                                 String isAppointmentAttend, boolean isSend, boolean isAllDay, boolean isCompleted, String datedFrom, String datedTo,
-                                                 String appointmentDate, String startTime, String eventTitle, String desc, String location, String viaReminder,
-                                                 Integer interval, Integer orderBy, boolean isGmailApptActive, String calendarType, String gmailCalendarId);
+        void addUpdateCalendarAppointmentViaTask(Integer leadAppointmentID, String isAppointmentAttend, String datedFrom, String datedTo, boolean isAllDay,
+                                                 boolean isCompleted, String eventTitle, String desc, boolean isGmailAppActive, String calendarType, String gmailCalendarId);
 
 
     }

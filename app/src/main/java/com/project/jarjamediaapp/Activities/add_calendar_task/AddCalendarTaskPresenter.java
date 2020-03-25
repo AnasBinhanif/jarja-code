@@ -25,14 +25,13 @@ public class AddCalendarTaskPresenter extends BasePresenter<AddCalendarTaskContr
     }
 
     @Override
-    public void addUpdateCalendarAppointmentViaTask(String leadStringID, String agentIDsString, String agentIds, String leadAppointmentID, String isAppointmentFixed,
-                                                    String isAppointmentAttend, boolean isSend, boolean isAllDay, boolean isCompleted, String datedFrom, String datedTo,
-                                                    String appointmentDate, String startTime, String eventTitle, String desc, String location, String viaReminder,
-                                                    Integer interval, Integer orderBy, boolean isGmailApptActive, String calendarType, String gmailCalendarId) {
+    public void addUpdateCalendarAppointmentViaTask(Integer leadAppointmentID, String isAppointmentAttend, String datedFrom, String datedTo, boolean isAllDay,
+                                                    boolean isCompleted, String eventTitle, String desc, boolean isGmailAppActive, String calendarType, String gmailCalendarId) {
 
         _view.showProgressBar();
 
-      //  call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addUpdateCalendarAppointmentViaTask(GH.getInstance().getAuthorization(), );
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addUpdateCalendarAppointmentViaTask(GH.getInstance().getAuthorization(),
+                leadAppointmentID, isAppointmentAttend, datedFrom, datedTo, isAllDay, isCompleted, eventTitle, desc, isGmailAppActive, calendarType, gmailCalendarId);
 
         call.enqueue(new Callback<BaseResponse>() {
             @Override
