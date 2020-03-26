@@ -314,7 +314,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                     } else {
                         context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
                                 .putExtra("isEdit", true)
-                                .putExtra("calendarId", modelData.getCalendarId())
+                                .putExtra("calendarId", calendarDetailModel.getGmailCalenderId())
                                 .putExtra("modelData", calendarDetailModel));
                     }
                 }
@@ -363,7 +363,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             String[] startTime = calendarDetailModel.getStartTime().split("T");
             String[] endTime = calendarDetailModel.getEndTime().split("T");
             tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
-            if (calendarDetailModel.isAllDay) {
+            if (calendarDetailModel.isAllDay != null && calendarDetailModel.isAllDay) {
                 tvTime.setText("All Day");
             } else {
                 tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss") + " - " + GH.getInstance().formatter(endTime[1], "hh:mm:ss a", "HH:mm:ss"));
@@ -385,12 +385,12 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                             // data and calendar id will be passed in intent
                             context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                     .putExtra("from", "6")
-                                    .putExtra("calendarId", modelData.getCalendarId())
+                                    .putExtra("calendarId", calendarDetailModel.getCalendarEventID())
                                     .putExtra("modelData", calendarDetailModel));
                         } else {
                             context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
                                     .putExtra("isEdit", true)
-                                    .putExtra("calendarId", modelData.getCalendarId())
+                                    .putExtra("calendarId", calendarDetailModel.getCalendarEventID())
                                     .putExtra("modelData", calendarDetailModel));
                         }
                     }

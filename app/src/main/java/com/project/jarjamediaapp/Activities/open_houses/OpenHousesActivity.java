@@ -363,9 +363,11 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             atvOpenHouseEndDate.requestFocus();
             return false;
         }
-        Date date1 = null, date2 = null, time1 = null, time2 = null;
+        Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null;
 
         try {
+            String time = new Date().toString();
+            currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
             time1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(openHouseStartDate);
             time2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(openHouseEndDate);
             if (time2.before(time1)) {
@@ -373,6 +375,14 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
                 atvOpenHouseEndDate.requestFocus();
                 return false;
             }
+
+            if (time1.before(currentTime)) {
+                ToastUtils.showToast(context, "Start time cannot be greater than current time");
+                atvOpenHouseStartDate.requestFocus();
+                return false;
+            }
+
+
         } catch (ParseException e) {
             e.printStackTrace();
         }

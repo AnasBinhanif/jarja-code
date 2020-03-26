@@ -18,9 +18,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdeveloper.library.MultiSelectDialog;
@@ -46,11 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function2;
-import kotlin.jvm.functions.Function4;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -401,25 +394,26 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     private boolean isValidate() {
 
         if (Methods.isEmpty(bi.atvNameTask)) {
-            ToastUtils.showToast(context,"Please enter task name");
+            ToastUtils.showToast(context, "Please enter task name");
             bi.atvNameTask.requestFocus();
             return false;
         }
         if (Methods.isEmpty(bi.atvType)) {
-            ToastUtils.showToast(context,"Please select type");
+            ToastUtils.showToast(context, "Please select type");
             bi.atvType.requestFocus();
             return false;
         }
         if (agentIdsString.equalsIgnoreCase("")) {
-            ToastUtils.showToast(context,"Please assign agent");
+            ToastUtils.showToast(context, "Please assign agent");
             bi.tvAssignTo.requestFocus();
             return false;
         }
         if (Methods.isEmpty(bi.atvRecur)) {
-            ToastUtils.showToast(context,"Please select recur");
+            ToastUtils.showToast(context, "Please select recur");
             bi.atvRecur.requestFocus();
             return false;
         }
+
         if (Methods.isEmpty(bi.tvStartDate)) {
             ToastUtils.showToast(context, R.string.error_start_date);
             bi.tvStartTime.requestFocus();
@@ -429,22 +423,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             ToastUtils.showToast(context, R.string.error_end_date);
             bi.tvName.requestFocus();
             return false;
-        }
-        if (!bi.cbEndDate.isChecked()) {
-
-            Date date1 = null, date2 = null;
-            try {
-                date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
-                date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            if (date2.compareTo(date1) < 0) {
-                ToastUtils.showToast(context, "Start date cannot be greater than start date");
-                bi.tvEndDate.requestFocus();
-                return false;
-            }
         }
         if (Methods.isEmpty(bi.tvStartTime)) {
             ToastUtils.showToast(context, R.string.error_start_time);
@@ -457,8 +435,60 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             return false;
         }
 
-        if (!bi.atvReminder.getText().toString().equalsIgnoreCase("") &&
-                !bi.atvReminder.getText().toString().equalsIgnoreCase("None")) {
+        if (!bi.cbEndDate.isChecked()) {
+            Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null;
+            try {
+                date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
+                date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+                if (date2.compareTo(date1) < 0) {
+                    ToastUtils.showToast(context, "Start date cannot be greater than end date");
+                    bi.tvEndDate.requestFocus();
+                    return false;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (date2.compareTo(date1) == 0) {
+                try {
+                    String time = new Date().toString();
+                    currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
+                    time1 = new SimpleDateFormat("HH:mm:ss").parse(startTime);
+                    time2 = new SimpleDateFormat("HH:mm:ss").parse(endTime);
+                    if (time2.before(time1)) {
+                        ToastUtils.showToast(context, "End time cannot be greater than start time");
+                        bi.tvStartTime.requestFocus();
+                        return false;
+                    }
+                    if (time1.before(currentTime)) {
+                        ToastUtils.showToast(context, "Start time cannot be greater than current time");
+                        bi.tvStartTime.requestFocus();
+                        return false;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+
+
+                }
+            }
+        }
+        if (!bi.atvReminder.getText().toString().equalsIgnoreCase("") && !bi.atvReminder.getText().toString().equalsIgnoreCase("None")) {
+            if (via.equalsIgnoreCase("")) {
+                ToastUtils.showToast(context, R.string.error_via);
+                bi.atvVia.requestFocus();
+                return false;
+            }
+        }
+
+        if (!bi.atvReminder.getText().
+
+                toString().
+
+                equalsIgnoreCase("") &&
+                !bi.atvReminder.getText().
+
+                        toString().
+
+                        equalsIgnoreCase("None")) {
             if (via != null && via.equalsIgnoreCase("")) {
                 ToastUtils.showToast(context, R.string.error_via);
                 bi.atvVia.requestFocus();
@@ -518,30 +548,33 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         super.onClick(view);
         switch (view.getId()) {
             case R.id.tvName:
+                clearFocus();
                 showSearchDialog(context);
                 break;
             case R.id.tvStartDate:
-                if(bi.tvStartDate.getText().toString().equalsIgnoreCase("")){
+                clearFocus();
+                if (bi.tvStartDate.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
                 }
                 showDateDialog(bi.tvStartDate, false);
                 break;
             case R.id.tvEndDate:
-                if(bi.tvEndDate.getText().toString().equalsIgnoreCase("")){
+                clearFocus();
+                if (bi.tvEndDate.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
                 }
                 showDateDialog(bi.tvEndDate, false);
                 break;
             case R.id.tvStartTime:
                 clearFocus();
-                if(bi.tvStartTime.getText().toString().equalsIgnoreCase("")){
+                if (bi.tvStartTime.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
                 }
                 showTimeDialog(bi.tvStartTime, true);
                 break;
             case R.id.tvEndTime:
                 clearFocus();
-                if(bi.tvEndTime.getText().toString().equalsIgnoreCase("")){
+                if (bi.tvEndTime.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
                 }
                 showTimeDialog(bi.tvEndTime, false);
@@ -557,15 +590,19 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 finish();
                 break;
             case R.id.atvReminder:
+                clearFocus();
                 reminder();
                 break;
             case R.id.atvVia:
+                clearFocus();
                 via();
                 break;
             case R.id.atvType:
+                clearFocus();
                 type();
                 break;
             case R.id.atvRecur:
+                clearFocus();
                 recur();
                 break;
         }

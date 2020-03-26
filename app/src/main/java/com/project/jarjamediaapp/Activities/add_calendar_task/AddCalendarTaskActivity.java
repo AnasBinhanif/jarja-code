@@ -42,7 +42,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     String calendarId = "";
     CalendarDetailModel.Data.CalendarList calendarDetailModel;
 
-    int month, year, day, hour, minute;
+    int month, year, day, mHour, mMinute;
     Calendar newCalendar;
 
     @Override
@@ -90,13 +90,6 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         bi.btnCancel.setOnClickListener(this);
         bi.cbAllDay.setOnClickListener(this);
 
-        newCalendar = Calendar.getInstance();
-        year = newCalendar.get(Calendar.YEAR);
-        month = newCalendar.get(Calendar.MONTH);
-        day = newCalendar.get(Calendar.DAY_OF_MONTH);
-        hour = newCalendar.get(Calendar.HOUR_OF_DAY);
-        minute = newCalendar.get(Calendar.MINUTE);
-
     }
 
     @Override
@@ -106,9 +99,21 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         switch (view.getId()) {
             case R.id.tvStartDate:
+                if (bi.tvStartDate.getText().toString().equalsIgnoreCase("")) {
+                    calendarInstance();
+                }
+                if (isEdit) {
+                    calendarEditInstance(1);
+                }
                 showDateDialog(bi.tvStartDate);
                 break;
             case R.id.tvStartTime:
+                if (bi.tvStartTime.getText().toString().equalsIgnoreCase("")) {
+                    calendarInstance();
+                }
+                if (isEdit) {
+                    calendarEditInstance(2);
+                }
                 showTimeDialog(bi.tvStartTime);
                 break;
             case R.id.btnSave:
@@ -122,6 +127,47 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 break;
         }
     }
+
+    private void calendarInstance() {
+
+        newCalendar = Calendar.getInstance();
+        year = newCalendar.get(Calendar.YEAR);
+        month = newCalendar.get(Calendar.MONTH);
+        day = newCalendar.get(Calendar.DAY_OF_MONTH);
+        mHour = newCalendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = newCalendar.get(Calendar.MINUTE);
+    }
+
+    private void calendarEditInstance(int id) {
+
+        // 1 for start date
+        // 2 for start time
+
+        try {
+            newCalendar = Calendar.getInstance();
+            switch (id) {
+                case 1: {
+                    String[] formattedDate = startDate.split("-");
+                    year = Integer.parseInt(formattedDate[0]);
+                    month = Integer.parseInt(formattedDate[1]);
+                    day = Integer.parseInt(formattedDate[2]);
+                    month = month - 1;
+                    newCalendar.set(year,month, day);
+                }
+                break;
+                case 3: {
+                    String[] formattedTime = startTime.split(":");
+                    mHour = Integer.parseInt(formattedTime[0]);
+                    mMinute = Integer.parseInt(formattedTime[1]);
+
+                }
+                break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void allDay() {
 
@@ -171,15 +217,15 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 String time = "";
-                hour = selectedHour;
-                minute = selectedMinute;
+                mHour = selectedHour;
+                mMinute = selectedMinute;
                 time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
                 textView.setText(time);
                 startTime = selectedHour + ":" + selectedMinute + ":" + "00.000Z";
 
 
             }
-        }, hour, minute, false);//Yes 24 hour time
+        }, mHour, mMinute, false);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
 
@@ -239,7 +285,6 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     }
 
     private boolean isValidate() {
-
 
         if (Methods.isEmpty(bi.tvStartDate)) {
             ToastUtils.showToast(context, R.string.error_start_date);

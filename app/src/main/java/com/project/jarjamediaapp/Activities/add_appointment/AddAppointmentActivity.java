@@ -162,6 +162,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     year = Integer.parseInt(formattedDate[0]);
                     month = Integer.parseInt(formattedDate[1]);
                     day = Integer.parseInt(formattedDate[2]);
+                    month = month - 1;
                     newCalendar.set(year, month, day);
                 }
                 break;
@@ -170,7 +171,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     year = Integer.parseInt(formattedDate[0]);
                     month = Integer.parseInt(formattedDate[1]);
                     day = Integer.parseInt(formattedDate[2]);
-                    newCalendar.set(year, month, day);
+                    month = month - 1;
+                    newCalendar.set(year,month, day);
                 }
                 break;
                 case 3: {
@@ -378,12 +380,15 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         switch (view.getId()) {
             case R.id.tvName:
+                clearFocus();
                 showSearchDialog(context);
                 break;
             case R.id.tvAgent:
+                clearFocus();
                 showAgentDialog();
                 break;
             case R.id.tvStartDate:
+                clearFocus();
                 if (bi.tvStartDate.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
                 }
@@ -393,6 +398,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 showDateDialog(bi.tvStartDate, true);
                 break;
             case R.id.tvEndDate:
+                clearFocus();
                 if (isEdit) {
                     calendarEditInstance(2);
                 }
@@ -804,12 +810,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             return false;
         }
 
-        Date date1 = null, date2 = null, time1 = null, time2 = null;
+        Date date1 = null, date2 = null, time1 = null, time2 = null,currentTime = null;
         try {
             date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
             date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
             if (date2.compareTo(date1) < 0) {
-                ToastUtils.showToast(context, "Start date cannot be greater than start date");
+                ToastUtils.showToast(context, "Start date cannot be greater than end date");
                 bi.tvEndDate.requestFocus();
                 return false;
             }
@@ -830,10 +836,17 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
             if (date2.compareTo(date1) == 0) {
                 try {
+                    String time = new Date().toString();
+                    currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
                     time1 = new SimpleDateFormat("HH:mm:ss").parse(startTime);
                     time2 = new SimpleDateFormat("HH:mm:ss").parse(endTime);
                     if (time2.before(time1)) {
                         ToastUtils.showToast(context, "End time cannot be greater than start time");
+                        bi.tvStartTime.requestFocus();
+                        return false;
+                    }
+                    if(time1.before(currentTime)){
+                        ToastUtils.showToast(context, "Start time cannot be greater than current time");
                         bi.tvStartTime.requestFocus();
                         return false;
                     }

@@ -147,7 +147,7 @@ public class CalendarDetailModel extends BaseResponse implements Parcelable {
             public Object isGmailApptActive;
             @SerializedName("gmailCalenderId")
             @Expose
-            public Object gmailCalenderId;
+            public String gmailCalenderId;
             @SerializedName("isAllDay")
             @Expose
             public Boolean isAllDay;
@@ -443,7 +443,7 @@ public class CalendarDetailModel extends BaseResponse implements Parcelable {
                 return isGmailApptActive;
             }
 
-            public Object getGmailCalenderId() {
+            public String getGmailCalenderId() {
                 return gmailCalenderId;
             }
 
