@@ -450,7 +450,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
             if (date2.compareTo(date1) == 0) {
                 try {
-                    String time = new Date().toString();
+                    String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
                     currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
                     time1 = new SimpleDateFormat("HH:mm:ss").parse(startTime);
                     time2 = new SimpleDateFormat("HH:mm:ss").parse(endTime);

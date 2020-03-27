@@ -99,6 +99,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         switch (view.getId()) {
             case R.id.tvStartDate:
+                GH.getInstance().hideKeyboard(context,AddCalendarTaskActivity.this);
                 if (bi.tvStartDate.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
                 }
@@ -108,6 +109,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 showDateDialog(bi.tvStartDate);
                 break;
             case R.id.tvStartTime:
+                GH.getInstance().hideKeyboard(context,AddCalendarTaskActivity.this);
                 if (bi.tvStartTime.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
                 }
