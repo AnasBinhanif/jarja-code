@@ -138,7 +138,7 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
                     if (getAppointmentsModel.getStatus().equals("Success")) {
 
                         binderHelper.closeLayout(String.valueOf(pos));
-                        ToastUtils.showToast(context, "Successfully Done");
+                        ToastUtils.showToast(context, "Done");
                         mData.remove(pos);
                         notifyDataSetChanged();
 

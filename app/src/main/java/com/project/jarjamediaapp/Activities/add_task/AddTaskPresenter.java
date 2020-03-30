@@ -271,6 +271,53 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
     }
 
     @Override
+    public void updateTask(String id, String agentIds, String leadIds, String isAssignNow, String monthType, String scheduleID, String name, String desc,
+                        int scheduleRecurID, String type, String startDate, String endDate, String recurDay, String recureWeek, String noOfWeek, String dayOfWeek,
+                        String dayOfMonth, String weekNo, String monthOfYear, String nextRun, String isEndDate, String reminderDate, int interval, String isSend,
+                        String viaReminder, String propertyId, String propertyAddress) {
+
+        _view.showProgressBar();
+
+        callAddTask = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateTask(GH.getInstance().getAuthorization(),
+                id, agentIds, leadIds, isAssignNow, monthType, scheduleID, name, desc,
+                scheduleRecurID, type, startDate, endDate, recurDay, recureWeek, noOfWeek, dayOfWeek,
+                dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend,
+                viaReminder, propertyId, propertyAddress);
+
+        callAddTask.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (response.body().getStatus().equals("Success")) {
+
+                        _view.updateUI(response);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
     public void getTaskDetail(String taskId) {
 
         _view.showProgressBar();

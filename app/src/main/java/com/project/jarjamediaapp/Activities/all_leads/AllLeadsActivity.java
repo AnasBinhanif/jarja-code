@@ -105,9 +105,9 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                     if (!isLoading) {
                         if (totalPages > leadsList.size()) {
                             page++;
-                            page = page * 25;
+                            int pg = page * 25;
                             try {
-                                callGetAllLeads(data, String.valueOf(page));
+                                callGetAllLeads(data, String.valueOf(pg));
                                 isLoading = true;
                             } catch (NullPointerException e) {
                                 e.printStackTrace();

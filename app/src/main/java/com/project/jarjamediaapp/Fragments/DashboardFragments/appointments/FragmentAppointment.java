@@ -189,15 +189,12 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         if (isFromActivity) {
             presenter.getLeadTodayAppointments(leadID);
         } else {
-
             if (userPermission.data.dashboard.get(6).value) {
                 presenter.getTodayAppointments();
             } else {
                 ToastUtils.showToast(context, getString(R.string.dashboard_ViewEditAppoint));
             }
-
         }
-
     }
 
     @Override
@@ -277,7 +274,6 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     } else {
                         ToastUtils.showToast(context, getString(R.string.dashboard_ViewEditAppoint));
                     }
-
                 }
 
                 Paris.style(bi.btnToday).apply(R.style.TabButtonTranparentLeft);
@@ -290,7 +286,6 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                 bi.recyclerViewPrevious.setVisibility(View.VISIBLE);
 
                 break;
-
         }
     }
 
@@ -335,17 +330,17 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
             switch (buttonType) {
                 case "T": {
                     presenter.getTodayAppointments();
-                    Log.d("bt",buttonType);
+                    Log.d("bt", buttonType);
                 }
                 break;
                 case "U": {
                     presenter.getUpcomingAppointments();
-                    Log.d("bt",buttonType);
+                    Log.d("bt", buttonType);
                 }
                 break;
                 case "P": {
                     presenter.getPreviousAppointments();
-                    Log.d("bt",buttonType);
+                    Log.d("bt", buttonType);
                 }
                 break;
             }

@@ -92,6 +92,11 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
                 } else {
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    bi.recyclerTaskViewDue.setLayoutManager(mLayoutManager);
+                    bi.recyclerTaskViewDue.setItemAnimator(new DefaultItemAnimator());
+                    bi.recyclerTaskViewDue.setAdapter(swipeTasksDueRecyclerAdapter);
+
 
                     bi.tvNoRecordFound.setVisibility(View.GONE);
                     bi.recyclerTaskViewDue.setVisibility(View.VISIBLE);
@@ -99,10 +104,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
                     swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(),tasksList, isFromActivity,false);
-                    mLayoutManager = new LinearLayoutManager(getContext());
-                    bi.recyclerTaskViewDue.setLayoutManager(mLayoutManager);
-                    bi.recyclerTaskViewDue.setItemAnimator(new DefaultItemAnimator());
-                    bi.recyclerTaskViewDue.setAdapter(swipeTasksDueRecyclerAdapter);
+
                 }
                 break;
 
@@ -115,6 +117,10 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
                 } else {
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    bi.recyclerViewTaskOverDue.setLayoutManager(mLayoutManager);
+                    bi.recyclerViewTaskOverDue.setItemAnimator(new DefaultItemAnimator());
+                    bi.recyclerViewTaskOverDue.setAdapter(swipeTasksDueRecyclerAdapter);
 
                     bi.tvNoRecordFound.setVisibility(View.GONE);
                     bi.recyclerTaskViewDue.setVisibility(View.GONE);
@@ -122,10 +128,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
                     swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context,getActivity(), tasksList, isFromActivity,false);
-                    mLayoutManager = new LinearLayoutManager(getContext());
-                    bi.recyclerViewTaskOverDue.setLayoutManager(mLayoutManager);
-                    bi.recyclerViewTaskOverDue.setItemAnimator(new DefaultItemAnimator());
-                    bi.recyclerViewTaskOverDue.setAdapter(swipeTasksDueRecyclerAdapter);
+
                 }
                 break;
 
@@ -138,16 +141,18 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
                 } else {
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    bi.recyclerViewTaskFutureTask.setLayoutManager(mLayoutManager);
+                    bi.recyclerViewTaskFutureTask.setItemAnimator(new DefaultItemAnimator());
+                    bi.recyclerViewTaskFutureTask.setAdapter(swipeTasksDueRecyclerAdapter);
+
                     bi.tvNoRecordFound.setVisibility(View.GONE);
                     bi.recyclerTaskViewDue.setVisibility(View.GONE);
                     bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
                     bi.recyclerViewTaskFutureTask.setVisibility(View.VISIBLE);
 
                     swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(),tasksList, isFromActivity,true);
-                    mLayoutManager = new LinearLayoutManager(getContext());
-                    bi.recyclerViewTaskFutureTask.setLayoutManager(mLayoutManager);
-                    bi.recyclerViewTaskFutureTask.setItemAnimator(new DefaultItemAnimator());
-                    bi.recyclerViewTaskFutureTask.setAdapter(swipeTasksDueRecyclerAdapter);
+
                 }
                 break;
 
