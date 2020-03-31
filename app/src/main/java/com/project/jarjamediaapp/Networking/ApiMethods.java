@@ -13,6 +13,7 @@ import com.project.jarjamediaapp.Activities.notification.NotificationModel;
 import com.project.jarjamediaapp.Activities.open_houses.AddressDetailModel;
 import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
 import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
+import com.project.jarjamediaapp.Activities.transactions.TransactionModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetAllLeads;
@@ -44,10 +45,12 @@ import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -251,8 +254,7 @@ public interface ApiMethods {
             @Header("Authorization") String authorization,
             @Field("agentIds") String agentIds,
             @Field("leadStringID") String leadStringID,
-            @Field("typeIndex") String typeIndex
-    );
+            @Field("typeIndex") String typeIndex);
 
     @FormUrlEncoded
     @POST("Lead/AddPipeLineMark")
@@ -260,14 +262,23 @@ public interface ApiMethods {
             @Header("Authorization") String authorization,
             @Field("pipelineID") String pipelineID,
             @Field("encrypted_LeadDetailID") String encrypted_LeadDetailID,
-            @Field("presentationID") String presentationID
-    );
+            @Field("presentationID") String presentationID);
+
+    @POST("Lead/GetAgentCommissionByLeadDetail")
+    Call<TransactionModel> getAgentCommissionViaLead(@Header("Authorization") String authorization,
+                                                     @Query("Encrypted_LeadID") String encryptedLeadID,
+                                                     @Query("EncryptedLeadDetailID") String encrypted_LeadDetailID);
+
+    @Headers("Content-Type: application/json")
+    @POST("Lead/AddCommissionTrasactionClose")
+    Call<BaseResponse> addAgentCommissionViaLead(@Header("Authorization") String authorization,
+                                                 @Body String body);
+
 
     @GET("Lead/GetLeadTransactionStage")
     Call<GetLeadTransactionStage> GetLeadTransactionStage(
             @Header("Authorization") String authorization,
-            @Query("LeadId") String leadID
-    );
+            @Query("LeadId") String leadID);
 
 
     @GET("Lead/GetSocialProfileDropdown")

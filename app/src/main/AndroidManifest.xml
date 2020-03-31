@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.project.jarjamediaapp">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.project.jarjamediaapp"
+    tools:ignore="LockedOrientationActivity">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -20,60 +22,103 @@
         android:usesCleartextTraffic="true">
 
 
-        <activity android:name=".Activities.splash.MainActivity">
+        <activity
+            android:name=".Activities.splash.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.HomeActivity">
+        <activity
+            android:name=".Activities.HomeActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".Activities.all_leads.AllLeadsActivity" />
         </activity>
         <activity
             android:name=".Activities.forgot_password.ForgotPasswordActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"></activity>
         <activity
             android:name=".Activities.add_appointment.AddAppointmentActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".Activities.add_calendar_task.AddCalendarTaskActivity"></activity>
-        <activity android:name=".Activities.add_task.AddTaskActivity"></activity>
-        <activity android:name=".Activities.lead_detail.LeadDetailActivity"></activity>
-        <activity android:name=".Activities.add_filters.AddFiltersActivity"></activity>
-        <activity android:name=".Activities.add_lead.AddLeadActivity"></activity>
-        <activity android:name=".Activities.transactions.TransactionActivity"></activity>
-        <activity android:name=".Activities.followups.FollowupsActivity"></activity>
-        <activity android:name=".Activities.appointments.AppointmentActivity"></activity>
-        <activity android:name=".Activities.tasks.TasksActivity"></activity>
-        <activity android:name=".Activities.listing_info.ListingInfoActivity"></activity>
-        <activity android:name=".Activities.social_profiles.Social_ProfilesActivity"></activity>
-        <activity android:name=".Activities.open_houses.OpenHousesActivity"></activity>
-        <activity android:name=".Activities.calendar.CalendarActivity"></activity>
-        <activity android:name=".Activities.tags.TagsActivity"></activity>
-        <activity android:name=".Activities.notes.NotesActivity"></activity>
-        <activity android:name=".Activities.notes.AddNotesActivity"></activity>
-        <activity android:name=".Activities.notification.NotificationActivity"></activity>
-        <activity android:name=".Activities.calendarDetail.CalendarDetailActivity"></activity>
-
-        <activity android:name=".Utilities.Call.VoiceActivity"></activity>
-        <activity android:name=".Activities.all_leads.AllLeadsActivity">
-
+        <activity
+            android:name=".Activities.add_calendar_task.AddCalendarTaskActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.add_task.AddTaskActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.lead_detail.LeadDetailActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.add_filters.AddFiltersActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.add_lead.AddLeadActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.transactions.TransactionActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.followups.FollowupsActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.appointments.AppointmentActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.tasks.TasksActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.listing_info.ListingInfoActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.social_profiles.Social_ProfilesActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.open_houses.OpenHousesActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.calendar.CalendarActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.tags.TagsActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.notes.NotesActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.notes.AddNotesActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.notification.NotificationActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.calendarDetail.CalendarDetailActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Utilities.Call.VoiceActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.all_leads.AllLeadsActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
-        <activity android:name=".Activities.search_activity.SearchResultsActivity"></activity>
-
+        <activity
+            android:name=".Activities.search_activity.SearchResultsActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Activities.login.LoginActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"></activity>
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

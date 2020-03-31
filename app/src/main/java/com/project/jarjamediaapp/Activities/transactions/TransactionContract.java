@@ -1,17 +1,25 @@
 package com.project.jarjamediaapp.Activities.transactions;
 
+import com.google.gson.JsonObject;
 import com.project.jarjamediaapp.Base.BaseContract;
 import com.project.jarjamediaapp.Base.BaseResponse;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import retrofit2.Response;
 
 public interface TransactionContract {
 
-    interface View extends BaseContract.View{
+    interface View extends BaseContract.View {
 
         void initViews();
 
         void updateUI(Response<BaseResponse> response);
+
+        void addAgentCommission(Response<BaseResponse> response);
+
+        void getAgentCommission(Response<TransactionModel> response);
 
         void updateUIonFalse(String message);
 
@@ -31,8 +39,11 @@ public interface TransactionContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void addPipelineMark(String pipelineID, String encrypted_LeadDetailID,
-                             String presentationID);
+        void addPipelineMark(String pipelineID, String encrypted_LeadDetailID, String presentationID);
+
+        void addAgentCommission(String data);
+
+        void getAgentCommission(String leadId,String leadDetailId);
 
         void initScreen();
 

@@ -1,9 +1,15 @@
 package com.project.jarjamediaapp.Activities.transactions;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +17,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
@@ -21,7 +28,12 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityTransactionsBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import kotlin.Unit;
@@ -34,12 +46,15 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     ActivityTransactionsBinding bi;
     Context context = TransactionActivity.this;
     TransactionPresenter presenter;
-
     ArrayList<GetLeadTransactionStage.PipeLine> transactionPipeline = new ArrayList<>();
     String currentPipeline = "", markedPipeline = "";
     boolean bf = true;
-    String leadID = "", title = "";
-    RecyclerAdapterUtil recyclerAdapterUtil;
+    String leadID = "", title = "", pipelineID = "", presentationID = "", leadDetailId = "", agentStringId = "";
+    RecyclerAdapterUtil recyclerAdapterUtil, raCommission;
+    Dialog dialog;
+    Button btnSave, btnCancel;
+    RecyclerView rvAgentCommission;
+    List<TransactionModel.Data> dataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +107,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
                         imgInitial.setVisibility(View.VISIBLE);
                         tvInitial.setVisibility(View.GONE);
-                    }else{
+                    } else {
                         tvName.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                         imgInitial.setVisibility(View.GONE);
                         tvInitial.setVisibility(View.VISIBLE);
@@ -114,27 +129,31 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                 (viewComplainList, integer) -> {
 
                     if (title.contains("Transaction 1")) {
-                        String pipelineID = String.valueOf(viewComplainList.id);
-                        String presentationID = "1";
+                        pipelineID = String.valueOf(viewComplainList.id);
+                        presentationID = "1";
                         markedPipeline = viewComplainList.pipeline;
                         presenter.addPipelineMark(pipelineID, leadID, presentationID);
                     } else if (title.contains("Transaction 2")) {
-                        String pipelineID = String.valueOf(viewComplainList.id);
-                        String presentationID = "2";
+                        pipelineID = String.valueOf(viewComplainList.id);
+                        presentationID = "2";
                         markedPipeline = viewComplainList.pipeline;
                         presenter.addPipelineMark(pipelineID, leadID, presentationID);
                     }
 
                     return Unit.INSTANCE;
                 });
+
     }
 
     private void handleIntent(Intent intent) {
+
         title = intent.getStringExtra("title");
         leadID = intent.getStringExtra("leadID");
+        leadDetailId = intent.getStringExtra("leadDetailId");
         setToolBarTitle(bi.epToolbar.toolbar, title, true);
         currentPipeline = intent.getStringExtra("currentStage");
         transactionPipeline = (ArrayList<GetLeadTransactionStage.PipeLine>) intent.getExtras().getSerializable("Pipeline");
+
     }
 
     @Override
@@ -146,7 +165,117 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
             currentPipeline = markedPipeline;
             recyclerAdapterUtil.notifyDataSetChanged();
             populateListData();
+            if (pipelineID.equalsIgnoreCase("11")) {
+                showAgentCommissionDialog();
+            }
         }
+    }
+
+    @Override
+    public void addAgentCommission(Response<BaseResponse> response) {
+
+        ToastUtils.showToast(context, response.body().getMessage());
+        presenter.getAgentCommission(leadID, leadDetailId);
+    }
+
+    @Override
+    public void getAgentCommission(Response<TransactionModel> response) {
+
+        dataList = new ArrayList<>();
+        dataList.addAll(response.body().getData());
+        if (response.body().getData().size() > 0) {
+            rvAgentCommission.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+            rvAgentCommission.setItemAnimator(new DefaultItemAnimator());
+            rvAgentCommission.addItemDecoration(new DividerItemDecoration(rvAgentCommission.getContext(), 1));
+            raCommission = new RecyclerAdapterUtil(context, dataList, R.layout.custom_adp_agent_commission);
+            raCommission.addViewsList(R.id.tvAgentName, R.id.atvAgentCommission);
+
+            raCommission.addOnDataBindListener((Function4<View, TransactionModel.Data, Integer, Map<Integer, ? extends View>, Unit>)
+                    (view, data, position, integerMap) -> {
+
+                        TextView tvAgentName = (TextView) integerMap.get(R.id.tvAgentName);
+                        tvAgentName.setText(data.getAgentName() != null ? data.getAgentName() : "");
+
+                        AutoCompleteTextView atvAgentCommission = (AutoCompleteTextView) integerMap.get(R.id.atvAgentCommission);
+                        atvAgentCommission.setText(data.getCommission() + "");
+
+                        atvAgentCommission.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                if (s.length() > 0) {
+                                    data.setCommission(Integer.valueOf(atvAgentCommission.getText().toString()));
+                                    dataList.set(position, data);
+                                }
+                            }
+                        });
+
+                        return Unit.INSTANCE;
+                    });
+
+            rvAgentCommission.setAdapter(raCommission);
+            dialog.show();
+
+        } else {
+            ToastUtils.showToast(context, "No agents found");
+        }
+
+    }
+
+    private void showAgentCommissionDialog() {
+
+        dialog = new Dialog(context, R.style.Dialog);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.custom_agent_commission);
+
+        rvAgentCommission = dialog.findViewById(R.id.rvAgentCommission);
+        btnSave = dialog.findViewById(R.id.btnSave);
+        btnCancel = dialog.findViewById(R.id.btnCancel);
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                JSONObject obj, obj1 = null;
+                JSONArray array = new JSONArray();
+                try {
+                    obj1 = new JSONObject();
+                    obj1.put("encrypted_LeadID", leadID);
+                    obj1.put("encryptedLeadDetailID", leadDetailId);
+                    for (int i = 0; i < dataList.size(); i++) {
+                        obj = new JSONObject();
+                        obj.put("commission", dataList.get(i).getCommission());
+                        obj.put("agentID", dataList.get(i).getAgentID());
+                        obj.put("agentName", dataList.get(i).getAgentName() != null ? dataList.get(i).getAgentName() : "");
+                        array.put(obj);
+                    }
+                    obj1.put("agentList", array);
+                    agentStringId = obj1.toString();
+                    Log.d("json", agentStringId);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                presenter.addAgentCommission(agentStringId);
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+        presenter.getAgentCommission(leadID, leadDetailId);
+
     }
 
     @Override

@@ -75,6 +75,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     OpenHousesPresenter presenter;
     Dialog dialog;
     String listPrice = "", city = "", address = "", state = "", zip = "", image = "", dateTimeToServer = "";
+    String timeS = "", timeE = "";
     String openHouseStartDate = "", openHouseEndDate = "", dateToServer = "", timeToServer = "";
     private BottomDialogFragment bottomDialogFragment;
     private final int RC_CAMERA_AND_STORAGE = 100;
@@ -371,20 +372,38 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             time1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(openHouseStartDate);
             time2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(openHouseEndDate);
             if (time2.before(time1)) {
-                ToastUtils.showToast(context, "End date time cannot be greater than start date time");
+                ToastUtils.showToast(context, "End date time cannot be less than start date time");
                 atvOpenHouseEndDate.requestFocus();
                 return false;
             }
-
             if (time1.before(currentTime)) {
-                ToastUtils.showToast(context, "Start time cannot be greater than current time");
+                ToastUtils.showToast(context, "Start time cannot be less than current time");
                 atvOpenHouseStartDate.requestFocus();
                 return false;
             }
-
-
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+        if (date2.compareTo(date1) == 0) {
+            try {
+                String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+                currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
+                time1 = new SimpleDateFormat("HH:mm:ss").parse(timeS);
+                time2 = new SimpleDateFormat("HH:mm:ss").parse(timeE);
+                if (time2.before(time1)) {
+                    ToastUtils.showToast(context, "End time cannot be less than start time");
+                    atvOpenHouseEndDate.requestFocus();
+                    return false;
+                }
+                if (time1.before(currentTime)) {
+                    ToastUtils.showToast(context, "Start time cannot be less than current time");
+                    atvOpenHouseStartDate.requestFocus();
+                    return false;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
         }
 
         return true;
@@ -444,11 +463,17 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
 
         try {
 
-            bi.rvOpenHouse.setLayoutManager(new CenterZoomLayoutManager(context, RecyclerView.HORIZONTAL, false));
-            bi.rvOpenHouse.setItemAnimator(new DefaultItemAnimator());
-            bi.rvOpenHouse.setAdapter(new HorizontalAdapter(context, response.body().getData().openHouse));
-            bi.rvOpenHouse.setVisibility(View.VISIBLE);
-            bi.tvMessage.setVisibility(View.GONE);
+            if (response.body().getData().openHouse.size() > 0) {
+                bi.rvOpenHouse.setLayoutManager(new CenterZoomLayoutManager(context, RecyclerView.HORIZONTAL, false));
+                bi.rvOpenHouse.setItemAnimator(new DefaultItemAnimator());
+                bi.rvOpenHouse.setAdapter(new HorizontalAdapter(context, response.body().getData().openHouse));
+                bi.rvOpenHouse.setVisibility(View.VISIBLE);
+                bi.tvMessage.setVisibility(View.GONE);
+            } else {
+                bi.rvOpenHouse.setVisibility(View.GONE);
+                bi.tvMessage.setVisibility(View.VISIBLE);
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -813,8 +838,10 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
                 }
 
                 if (type.equalsIgnoreCase("1")) {
+                    timeS = selectedHour + ":" + selectedMinute + ":00";
                     openHouseStartDate = dateToServer + "T" + timeToServer;
                 } else {
+                    timeE = selectedHour + ":" + selectedMinute + ":00";
                     openHouseEndDate = dateToServer + "T" + timeToServer;
                 }
 

@@ -815,7 +815,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
             date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
             if (date2.compareTo(date1) < 0) {
-                ToastUtils.showToast(context, "Start date cannot be greater than end date");
+                ToastUtils.showToast(context, "Start date cannot be less than end date");
                 bi.tvEndDate.requestFocus();
                 return false;
             }
@@ -841,12 +841,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     time1 = new SimpleDateFormat("HH:mm:ss").parse(startTime);
                     time2 = new SimpleDateFormat("HH:mm:ss").parse(endTime);
                     if (time2.before(time1)) {
-                        ToastUtils.showToast(context, "End time cannot be greater than start time");
+                        ToastUtils.showToast(context, "End time cannot be less than start time");
                         bi.tvStartTime.requestFocus();
                         return false;
                     }
                     if (time1.before(currentTime)) {
-                        ToastUtils.showToast(context, "Start time cannot be greater than current time");
+                        ToastUtils.showToast(context, "Start time cannot be less than current time");
                         bi.tvStartTime.requestFocus();
                         return false;
                     }

@@ -45,7 +45,6 @@ import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadDetails;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 import com.project.jarjamediaapp.R;
-import com.project.jarjamediaapp.Utilities.Call.VoiceActivity;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -438,7 +437,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
                 Intent intentT1 = new Intent(context, TransactionActivity.class);
                 intentT1.putExtra("title", title);
-                intentT1.putExtra("leadID", transLeadID1);
+                intentT1.putExtra("leadID", leadID);
+                intentT1.putExtra("leadDetailId", transLeadID1);
                 intentT1.putExtra("currentStage", currentStage1);
                 intentT1.putExtra("Pipeline", transactionPipeline);
                 startActivity(intentT1);
@@ -449,7 +449,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
                 Intent intentT2 = new Intent(context, TransactionActivity.class);
                 intentT2.putExtra("title", title);
-                intentT2.putExtra("leadID", transLeadID1);
+                intentT2.putExtra("leadID", leadID);
+                intentT2.putExtra("leadDetailId", transLeadID2);
                 intentT2.putExtra("currentStage", currentStage2);
                 intentT2.putExtra("Pipeline", transactionPipeline);
                 startActivity(intentT2);
@@ -614,7 +615,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
         if (getLeadListData != null) {
 
-            primaryPhoneNumber = getLeadListData.phoneNumber==null ? "" : getLeadListData.phoneNumber;
+            primaryPhoneNumber = getLeadListData.phoneNumber == null ? "" : getLeadListData.phoneNumber;
 
             if (getAssignedAgentList.size() != 0) {
                 for (GetLead.AgentsList model : getAssignedAgentList) {

@@ -15,6 +15,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class NetworkController {
 
@@ -40,6 +41,7 @@ public class NetworkController {
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(AppConstants.HTTP.BASE_URL)
                 .client(getHttpClient())
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         return mRetrofit;
