@@ -86,6 +86,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     Button btnSave, btnCancel;
     AutoCompleteTextView atvPrice, atvAddress, atvCity, atvState, atvZip, atvOpenHouseStartDate, atvOpenHouseEndDate;
     int viewId;
+    String openHouseType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +106,8 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         switch (id) {
             case R.id.btnUpcomingOH:
 
-                presenter.getAllOpenHouses("upcoming");
+                openHouseType = "upcoming";
+                presenter.getAllOpenHouses(openHouseType);
 
                 Paris.style(bi.btnUpcomingOH).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnPastOH).apply(R.style.TabButtonTranparentRight);
@@ -114,7 +116,8 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
 
             case R.id.btnPastOH:
 
-                presenter.getAllOpenHouses("past");
+                openHouseType = "past";
+                presenter.getAllOpenHouses(openHouseType);
 
                 Paris.style(bi.btnPastOH).apply(R.style.TabButtonYellowRight);
                 Paris.style(bi.btnUpcomingOH).apply(R.style.TabButtonTranparentLeft);
@@ -416,7 +419,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         if (dialog != null) {
             dialog.dismiss();
         }
-        presenter.getAllOpenHouses("upcoming");
+        presenter.getAllOpenHouses(openHouseType);
 
     }
 
@@ -870,6 +873,6 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.getAllOpenHouses("upcoming");
+        presenter.getAllOpenHouses(openHouseType);
     }
 }
