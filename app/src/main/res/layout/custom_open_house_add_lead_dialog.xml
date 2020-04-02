@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:orientation="vertical"
+        android:padding="@dimen/_10sdp">
+
+        <TextView
+            android:id="@+id/tvAssignedTo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/open_house_steps"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorGrey_light" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/name"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <AutoCompleteTextView
+                android:id="@+id/atvFirstName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_search"
+                android:hint="@string/first_name"
+                android:imeOptions="actionNext"
+                android:padding="@dimen/_10sdp"
+                android:singleLine="true"
+                android:textSize="@dimen/_11sdp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/atvLastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_search"
+                android:hint="@string/last_name"
+                android:imeOptions="actionNext"
+                android:padding="@dimen/_10sdp"
+                android:singleLine="true"
+                android:textSize="@dimen/_11sdp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/_email"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
+
+        <AutoCompleteTextView
+            android:id="@+id/atvEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_search"
+            android:hint="@string/email"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:padding="@dimen/_10sdp"
+            android:singleLine="true"
+            android:textSize="@dimen/_11sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/_phone"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
+
+        <AutoCompleteTextView
+            android:id="@+id/atvPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_search"
+            android:hint="@string/phone"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:padding="@dimen/_10sdp"
+            android:singleLine="true"
+            android:textSize="@dimen/_11sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/month"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
+
+        <AutoCompleteTextView
+            android:id="@+id/tvPlan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_search"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_black_24dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/nothing_selected"
+            android:padding="@dimen/_7sdp"
+            android:singleLine="true"
+            android:textSize="@dimen/_11sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/approved"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
+
+        <AutoCompleteTextView
+            android:id="@+id/tvApprove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_search"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_black_24dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/nothing_selected"
+            android:padding="@dimen/_7sdp"
+            android:singleLine="true"
+            android:textSize="@dimen/_11sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/pay"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
+
+        <AutoCompleteTextView
+            android:id="@+id/tvPay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_search"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_black_24dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/nothing_selected"
+            android:padding="@dimen/_7sdp"
+            android:singleLine="true"
+            android:textSize="@dimen/_11sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/sell"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
+
+        <AutoCompleteTextView
+            android:id="@+id/tvSell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_search"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_black_24dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/nothing_selected"
+            android:padding="@dimen/_7sdp"
+            android:singleLine="true"
+            android:textSize="@dimen/_11sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/deals"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
+
+        <AutoCompleteTextView
+            android:id="@+id/tvDeal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_search"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_black_24dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/nothing_selected"
+            android:padding="@dimen/_7sdp"
+            android:singleLine="true"
+            android:textSize="@dimen/_11sdp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@color/colorGreen"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite" />
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:background="@color/colorRed"
+                android:text="@string/cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>
+

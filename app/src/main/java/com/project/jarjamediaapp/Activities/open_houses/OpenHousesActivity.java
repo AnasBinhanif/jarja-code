@@ -86,7 +86,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     Button btnSave, btnCancel;
     AutoCompleteTextView atvPrice, atvAddress, atvCity, atvState, atvZip, atvOpenHouseStartDate, atvOpenHouseEndDate;
     int viewId;
-    String openHouseType = "";
+    String openHouseType = "upcoming";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -469,7 +469,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             if (response.body().getData().openHouse.size() > 0) {
                 bi.rvOpenHouse.setLayoutManager(new CenterZoomLayoutManager(context, RecyclerView.HORIZONTAL, false));
                 bi.rvOpenHouse.setItemAnimator(new DefaultItemAnimator());
-                bi.rvOpenHouse.setAdapter(new HorizontalAdapter(context, response.body().getData().openHouse));
+                bi.rvOpenHouse.setAdapter(new HorizontalAdapter(context, response.body().getData().openHouse,openHouseType));
                 bi.rvOpenHouse.setVisibility(View.VISIBLE);
                 bi.tvMessage.setVisibility(View.GONE);
             } else {
@@ -873,6 +873,10 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
+        presenter.getAllOpenHouses(openHouseType);
+    }
+
+    public void hitApiForRefresh(){
         presenter.getAllOpenHouses(openHouseType);
     }
 }

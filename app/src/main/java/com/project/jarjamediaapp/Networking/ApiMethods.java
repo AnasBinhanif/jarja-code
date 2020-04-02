@@ -12,6 +12,7 @@ import com.project.jarjamediaapp.Activities.notes.DocumentModel;
 import com.project.jarjamediaapp.Activities.notification.NotificationModel;
 import com.project.jarjamediaapp.Activities.open_houses.AddressDetailModel;
 import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
+import com.project.jarjamediaapp.Activities.open_houses.GetTimeFrameModel;
 import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Activities.transactions.TransactionModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
@@ -868,5 +869,25 @@ public interface ApiMethods {
             @Field("isGmailApptActive") boolean isGmailAppActive,
             @Field("calendarType") String calendarType,
             @Field("gmailCalenderId") String gmailCalendarId);
+
+    @GET("Dashboard/GetLeadTimeFrame")
+    Call<GetTimeFrameModel> getTimeFrame(@Header("Authorization") String authorization);
+
+    @GET("Lead/GetPropertyAmountRangeDropDownList")
+    Call<GetTimeFrameModel> getAmountRange(@Header("Authorization") String authorization);
+
+    @FormUrlEncoded
+    @POST("Lead/CreateOpenHouseLead")
+    Call<BaseResponse> addLeadViaOpenHouse(@Header("Authorization") String authorization,
+                                            @Field("propertyId") String propertyId,
+                                           @Field("firstName") String firstName,
+                                           @Field("lastName") String lastName,
+                                           @Field("primaryEmail") String primaryEmail,
+                                           @Field("primaryPhone") String primaryPhone,
+                                           @Field("withAgent") boolean withAgent,
+                                           @Field("timeFrame") String timeFrame,
+                                           @Field("houseSell") boolean houseSell,
+                                           @Field("preQual") boolean preQual,
+                                           @Field("priceRange") String priceRange);
 
 }

@@ -6,7 +6,8 @@ import com.project.jarjamediaapp.Base.BaseResponse;
 
 import java.util.List;
 
-public class AddressDetailModel extends BaseResponse {
+public class
+AddressDetailModel extends BaseResponse {
 
     @SerializedName("data")
     @Expose

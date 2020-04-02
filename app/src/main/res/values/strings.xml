@@ -90,6 +90,8 @@
     <string name="spouse_name">Spouse Name</string>
     <string name="spouse_bday">Spouse Birthday</string>
     <string name="cell_phone">Cell Phone</string>
+    <string name="_phone">Phone Number*</string>
+    <string name="phone">Phone Number</string>
     <string name="birthday">Birthday</string>
     <string name="bday_notify">Turn On Birthday Notification</string>
     <string name="anniversary_notify">Turn On Anniversary Notification</string>
@@ -183,7 +185,12 @@
     <string name="end_date_time">End Date Time</string>
     <string name="_start_date_time">Start Date Time *</string>
     <string name="_end_date_time">End Date Time *</string>
-
+    <string name="open_house_steps">Open House Steps</string>
+    <string name="month">Within how many months do you plan to buy a home?</string>
+    <string name="approved">Have you been pre-approved?</string>
+    <string name="pay">How much do you want to pay for a house?</string>
+    <string name="sell">Do you have a house to sell?</string>
+    <string name="deals">Do you have anyone sending you good deals?</string>
     <!--- Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -206,6 +213,7 @@
     <string name="footer_text">Jarja Media 2020 , All Rights Reserved.</string>
     <string name="header_text">Marketing at the speed of Today</string>
     <string name="email">Email</string>
+    <string name="_email">Email*</string>
     <string name="password">Password</string>
     <string name="login">LOGIN</string>
     <string name="forgot_password">FORGOT YOUR PASSWORD?</string>
