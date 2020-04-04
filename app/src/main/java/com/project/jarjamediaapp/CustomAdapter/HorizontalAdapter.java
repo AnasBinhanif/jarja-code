@@ -243,7 +243,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                 JSONObject obj = new JSONObject();
 
                 try {
-                    obj.put("propertyId", propertyId);
+                    obj.put("propertyId", Integer.valueOf(propertyId));
                     obj.put("firstName", firstName);
                     obj.put("priceRange", priceRange);
                     obj.put("houseSell", _houseSell);
@@ -259,7 +259,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                 Log.d("json", obj.toString());
 
                 if (isValidate()) {
-                    sendDataToServer(propertyId);
+                    sendDataToServer(Integer.valueOf(propertyId));
                 }
 
             }
@@ -352,7 +352,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
 
     }
 
-    private void sendDataToServer(String propertyId) {
+    private void sendDataToServer(int propertyId) {
 
         GH.getInstance().ShowProgressDialog((Activity) context);
         Call<BaseResponse> _callToday;

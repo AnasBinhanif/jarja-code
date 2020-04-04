@@ -79,6 +79,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             @Override
             public boolean onQueryTextChange(String newText) {
                 mSearchQuery = newText;
+                isLoading = true;
                 ArrayList<GetAllLeads.LeadsList> filteredlist = filter(leadsList, newText);
                 populateListData(filteredlist);
                 return false;

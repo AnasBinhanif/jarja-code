@@ -160,7 +160,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     public void updateUI(Response<BaseResponse> response) {
 
         if (response.body().getStatus().equals("Success")) {
-            ToastUtils.showToast(context, "Assigned Successfully");
+            //ToastUtils.showToast(context, "Assigned Successfully");
             bf = true;
             currentPipeline = markedPipeline;
             recyclerAdapterUtil.notifyDataSetChanged();

@@ -21,6 +21,7 @@ import retrofit2.Response;
 public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implements AddLeadContract.Actions {
 
     Call<BaseResponse> _callAddLead;
+    Call<BaseResponse> _callUpdateLead;
     Call<GetAgentsModel> _callGetAgentsModel;
     Call<GetLeadSource> _callGetLeadSource;
     Call<GetLeadTagList> _callGetLeadTagList;
@@ -309,6 +310,51 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
                 _view.updateUIonFailure();
             }
         });
+    }
+
+    @Override
+    public void updateLead(String firstName, String lastName, String spousname, String company, String cellPhone, String primaryPhone, String primaryEmail, String dateOfBirth, boolean isBirthDayNotify, String dateOfMarriage, boolean isAnniversaryNotify, String leadAgentIDs, String allAgentIds, String alldripcampaignids, String notes, String b_PreQual, String address, String street, String zipcode, String city, String state, String description, String source, String county, String timeFrameId, String state2, String city2, String zipcode2, int leadTypeID, String emailList, String phoneList, String labelsID, String leadStringID, String countryid) {
+
+        _view.showProgressBar();
+        _callUpdateLead = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateLEad(GH.getInstance().getAuthorization(),
+                firstName, lastName, spousname, company, cellPhone, primaryPhone,
+                primaryEmail, dateOfBirth, isBirthDayNotify, dateOfMarriage, isAnniversaryNotify,
+                leadAgentIDs, allAgentIds, alldripcampaignids, notes, b_PreQual, address,
+                street, zipcode, city, state, description, source, county, timeFrameId,
+                state2, city2, zipcode2, leadTypeID, emailList, phoneList, labelsID,leadStringID,
+                countryid);
+
+        _callUpdateLead.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.getStatus().equals("Success")) {
+
+                        _view.updateUI(response);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
     }
 
     @Override

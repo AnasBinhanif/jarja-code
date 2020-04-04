@@ -65,9 +65,10 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
     MultiSelectModel tagModel, agentModel, dripModel;
 
-    String agentIdsString = "", tagsIdsString = "", dripIdsString = "";
+    String leadID = "", agentIdsString = "", tagsIdsString = "", dripIdsString = "";
 
     String bday = "", sBday = "", anniversary = "";
+    boolean isUpdate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,9 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
             GetLead.LeadList leadModel = (GetLead.LeadList) getIntent().getExtras().getSerializable("Lead");
 
+            isUpdate = true;
+            bi.btnSave.setText("Update");
+            leadID = leadModel.leadStringID;
             bi.edtFName.setText(leadModel.firstName);
             bi.edtLName.setText(leadModel.lastName);
             bi.edtSName.setText(leadModel.spousname);
@@ -176,6 +180,11 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                     bi.lnAgent.addView(child);
                     // selectedIdsList.add(Integer.valueOf(name.agentID));
                     selectedIdsList.add(name.assignAgentsID);
+                    if (agentIdsString.equals("")) {
+                        agentIdsString = name.agentID;
+                    } else {
+                        agentIdsString = agentIdsString + "," + name.agentID;
+                    }
                 }
             }
 
@@ -456,7 +465,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String zipcode2 = bi.edtPostalCode2.getText().toString();
         int leadTypeID = bi.spnType.isSelected() ? getLeadTypeList.get(bi.spnType.getSelectedIndex()).id : 0;
         String labelsID = tagsIdsString;
-        String leadStringID = "";
+        String leadStringID = leadID;
         String leadID = "0";
         String countryid = "";
 
@@ -492,8 +501,94 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             ToastUtils.showToast(context, getString(R.string.errSinglePiece));
         } else if (selectedIdsList.size() == 0) {
             ToastUtils.showToast(context, getString(R.string.errSelectAgent));
+        } else if (!zipcode.equals("") && zipcode.trim().length() < 5) {
+            ToastUtils.showToast(context, "Postal code cannot be less than 5");
+        } else if (!zipcode2.equals("") && zipcode2.trim().length() < 5) {
+            ToastUtils.showToast(context, "Postal code cannot be less than 5");
         } else {
+
             presenter.addLead(firstName, lastName, spousname, company, cellPhone, primaryPhone, primaryEmail, dateOfBirth, isBirthDayNotify, dateOfMarriage,
+                    isAnniversaryNotify, leadAgentIDs, allAgentIds, alldripcampaignids, notes, b_PreQual, address, street, zipcode, city, state, description,
+                    source, county, timeFrameId, state2, city2, zipcode2, leadTypeID, emailList, phoneList, labelsID, leadStringID, countryid);
+        }
+    }
+
+    private void callUpdateLead() {
+
+        String firstName = bi.edtFName.getText().toString();
+        String lastName = bi.edtLName.getText().toString();
+        String spousname = bi.edtSName.getText().toString();
+        String company = bi.edtCompany.getText().toString();
+        String cellPhone = bi.edtPhone.getText().toString();
+        String primaryPhone = bi.edtPhone.getText().toString();
+        String primaryEmail = bi.edtEmail.getText().toString();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        String dateOfBirth = bday.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : bday;
+        boolean isBirthDayNotify = bi.chkBdayNotify.isChecked() ? true : false;
+        String dateOfMarriage = anniversary.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : anniversary;
+        boolean isAnniversaryNotify = bi.chkAnnivNotify.isChecked() ? true : false;
+        String leadAgentIDs = agentIdsString;//selectedIdsList.size() == 0 ? "" : agentIdsString ;
+        String allAgentIds = agentIdsString;//agentModel == null ? "" : String.valueOf(agentModel.getId());
+        String alldripcampaignids = dripIdsString;
+        String notes = bi.edtNotes.getText().toString();
+        String b_PreQual = "";
+        String address = bi.edtAddress1.getText().toString();
+        String street = bi.edtAddress1.getText().toString();
+        String zipcode = bi.edtPostalCode1.getText().toString();
+        String city = bi.edtCity1.getText().toString();
+        String state = bi.edtState1.getText().toString();
+        String description = bi.edtNotes.getText().toString();
+        String source = bi.spnSource.isSelected() ? String.valueOf(getLeadSourceList.get(bi.spnSource.getSelectedIndex()).sourceName) : "";
+        String county = bi.edtCountry.getText().toString();
+        String timeFrameId = bi.spnTimeFrame.isSelected() ? String.valueOf(getLeadTimeFrameList.get(bi.spnTimeFrame.getSelectedIndex()).timeFrameId) : null;
+        String state2 = bi.edtState2.getText().toString();
+        String city2 = bi.edtCity2.getText().toString();
+        String zipcode2 = bi.edtPostalCode2.getText().toString();
+        int leadTypeID = bi.spnType.isSelected() ? getLeadTypeList.get(bi.spnType.getSelectedIndex()).id : 0;
+        String labelsID = tagsIdsString;
+        String leadStringID = leadID;
+        String leadID = "0";
+        String countryid = "";
+
+        JSONObject emailObject = new JSONObject();
+        try {
+            emailObject.put("email", primaryEmail);
+            emailObject.put("isNotify", true);
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        JSONArray emailArray = new JSONArray();
+        emailArray.put(emailObject);
+
+        JSONObject phoneObject = new JSONObject();
+        try {
+            phoneObject.put("phone", cellPhone);
+            phoneObject.put("isNotify", true);
+            phoneObject.put("phoneType", "phoneType");
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        JSONArray phoneArray = new JSONArray();
+        phoneArray.put(phoneObject);
+
+        String emailList = emailArray.toString();
+        String phoneList = phoneArray.toString();
+
+        if (firstName.equals("") && lastName.equals("") && spousname.equals("") && company.equals("") && cellPhone.equals("")) {
+            ToastUtils.showToast(context, getString(R.string.errSinglePiece));
+        } else if (selectedIdsList.size() == 0) {
+            ToastUtils.showToast(context, getString(R.string.errSelectAgent));
+        } else if (!zipcode.equals("") && zipcode.trim().length() < 5) {
+            ToastUtils.showToast(context, "Postal code cannot be less than 5");
+        } else if (!zipcode2.equals("") && zipcode2.trim().length() < 5) {
+            ToastUtils.showToast(context, "Postal code cannot be less than 5");
+        } else {
+
+            presenter.updateLead(firstName, lastName, spousname, company, cellPhone, primaryPhone, primaryEmail, dateOfBirth, isBirthDayNotify, dateOfMarriage,
                     isAnniversaryNotify, leadAgentIDs, allAgentIds, alldripcampaignids, notes, b_PreQual, address, street, zipcode, city, state, description,
                     source, county, timeFrameId, state2, city2, zipcode2, leadTypeID, emailList, phoneList, labelsID, leadStringID, countryid);
         }
@@ -605,7 +700,11 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     @Override
     public void updateUI(Response<BaseResponse> response) {
         if (response.body().getStatus().equals("Success")) {
-            ToastUtils.showToast(context, "Added Successfully");
+            if (isUpdate) {
+                ToastUtils.showToast(context, "Updated");
+            }else{
+                ToastUtils.showToast(context, "Added Successfully");
+            }
             finish();
         }
     }
@@ -664,7 +763,11 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 showDripDialog();
                 break;
             case R.id.btnSave:
-                callAddNewLead();
+                if (isUpdate) {
+                    callUpdateLead();
+                } else {
+                    callAddNewLead();
+                }
                 break;
         }
     }

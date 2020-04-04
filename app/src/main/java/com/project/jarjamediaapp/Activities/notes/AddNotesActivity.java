@@ -87,11 +87,13 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
             bi.tvAgent.setVisibility(View.GONE);
             bi.tvTYpe.setVisibility(View.GONE);
             bi.btnAdd.setText("Update");
+
+            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+            TextView textView = child.findViewById(R.id.txtDynamic);
+            textView.setText(GH.getInstance().getUserName() != null ? GH.getInstance().getUserName() : "");
+            bi.lnAgents.addView(child);
         }
-        View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
-        TextView textView = child.findViewById(R.id.txtDynamic);
-        textView.setText(GH.getInstance().getUserName() != null ? GH.getInstance().getUserName() : "");
-        bi.lnAgents.addView(child);
+
     }
 
     private void callAddNote() {

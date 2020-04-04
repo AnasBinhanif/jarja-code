@@ -274,7 +274,7 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
                     BaseResponse getAppointmentsModel = response.body();
                     if (getAppointmentsModel.getStatus().equals("Success")) {
 
-                        ToastUtils.showToast(context, "Successfully Done");
+                        ToastUtils.showToast(context, "Successfully Deleted");
                         mData.remove(pos);
                         swipeLayout.close(true);
                         notifyDataSetChanged();
