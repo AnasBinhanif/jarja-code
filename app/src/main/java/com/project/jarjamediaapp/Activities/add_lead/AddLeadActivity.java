@@ -47,7 +47,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
 
     ArrayList<GetLeadSource.Data> getLeadSourceList;
-    ArrayList<String> getLeadSourceNameList;
+    ArrayList<String> getLeadSourceNameList=new ArrayList<>();
 
     ArrayList<GetLeadTagList.Data> getLeadTagList;
     ArrayList<MultiSelectModel> getLeadTagModelList;

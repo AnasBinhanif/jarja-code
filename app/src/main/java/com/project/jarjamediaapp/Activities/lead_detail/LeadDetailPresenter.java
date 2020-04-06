@@ -31,7 +31,7 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
     }
 
     @Override
-    public void assignAgents(String agentsIDs, String leadID, String typeIndex) {
+    public void assignAgents(String agentsIDs, String leadID, boolean typeIndex) {
 
         _view.showProgressBar();
         call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AssignAgentToLead(GH.getInstance().getAuthorization(),

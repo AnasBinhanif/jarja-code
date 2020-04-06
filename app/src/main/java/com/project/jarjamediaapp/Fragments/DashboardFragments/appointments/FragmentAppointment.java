@@ -94,10 +94,10 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     bi.recyclerViewToday.setVisibility(View.GONE);
 
                 } else {
-                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, getActivity(), appointmentList, isFromActivity, false);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewToday.setLayoutManager(mLayoutManager);
                     bi.recyclerViewToday.setItemAnimator(new DefaultItemAnimator());
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, getActivity(), appointmentList, isFromActivity, false);
                     bi.recyclerViewToday.setAdapter(swipeAppointPreviousRecyclerAdapter);
                 }
                 break;
@@ -108,10 +108,10 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     bi.recyclerViewUpcoming.setVisibility(View.GONE);
 
                 } else {
-                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, getActivity(), appointmentList, isFromActivity, false);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewUpcoming.setLayoutManager(mLayoutManager);
                     bi.recyclerViewUpcoming.setItemAnimator(new DefaultItemAnimator());
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, getActivity(), appointmentList, isFromActivity, false);
                     bi.recyclerViewUpcoming.setAdapter(swipeAppointPreviousRecyclerAdapter);
                 }
                 break;
@@ -122,10 +122,10 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     bi.recyclerViewPrevious.setVisibility(View.GONE);
 
                 } else {
-                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, getActivity(), appointmentList, isFromActivity, true);
                     mLayoutManager = new LinearLayoutManager(getContext());
                     bi.recyclerViewPrevious.setLayoutManager(mLayoutManager);
                     bi.recyclerViewPrevious.setItemAnimator(new DefaultItemAnimator());
+                    swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, getActivity(), appointmentList, isFromActivity, true);
                     bi.recyclerViewPrevious.setAdapter(swipeAppointPreviousRecyclerAdapter);
                 }
                 break;

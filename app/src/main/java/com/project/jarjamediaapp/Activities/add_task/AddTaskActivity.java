@@ -38,11 +38,15 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddTaskBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,6 +65,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     ArrayList<String> arrayListViaValue = new ArrayList<>();
     ArrayList<String> arrayListReminderText = new ArrayList<>();
     ArrayList<String> arrayListReminderValue = new ArrayList<>();
+    HashMap<Integer, String> hashMapReminder = new HashMap<>();
 
     ArrayList<GetAgentsModel.Data> agentList;
     ArrayList<GetLeadTitlesModel.Data> nameList;
@@ -68,13 +73,14 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     ArrayList<MultiSelectModel> searchListItemsLead;
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
     ArrayList<MultiSelectModel> searchListItems;
-    String startDate = "", endDate = "", reminder = "0", via = "", leadId = "", type = "", reoccur = "", agentId = "";
+    String startDate = "", endDate = "", reminder = "0", via = "", leadId = "", type = "", reoccur = "", scheduleId = "";
     String agentIdsString = "", leadName = "", taskId = "", searchLeadIdsString = "", startTime = "", endTime = "";
     ;
     MultiSelectModel agentModel;
     boolean isEdit;
     boolean isReminderClicked = false, isViaClicked = false, isTypeClicked = false, isRecurClicked = false;
     int month, year, day, mHour, mMinute;
+    String from = "";
     Calendar newCalendar;
 
     @Override
@@ -131,6 +137,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         // 3 from Update Task
         // 4 from Add Task
         String id = getIntent().getStringExtra("from");
+        from = id;
         switch (id) {
             case "1": {
                 searchLeadIdsString = getIntent().getStringExtra("leadID");
@@ -146,6 +153,13 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 bi.tvName.setText(leadName);
                 bi.tvName.setEnabled(false);
                 isEdit = true;
+
+                bi.tvStartTime.setEnabled(false);
+                bi.atvRecur.setEnabled(false);
+                bi.tvStartTime.setClickable(false);
+                bi.atvRecur.setClickable(false);
+                bi.tvStartTime.setFocusableInTouchMode(false);
+                bi.atvRecur.setFocusableInTouchMode(false);
                 // hit api for task detail
                 presenter.getTaskDetail(taskId);
             }
@@ -155,6 +169,13 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 isEdit = true;
                 leadId = "";
                 taskId = getIntent().getStringExtra("taskId");
+
+                bi.tvStartTime.setEnabled(false);
+                bi.atvRecur.setEnabled(false);
+                bi.tvStartTime.setClickable(false);
+                bi.atvRecur.setClickable(false);
+                bi.tvStartTime.setFocusableInTouchMode(false);
+                bi.atvRecur.setFocusableInTouchMode(false);
                 presenter.getTaskDetail(taskId);
             }
             break;
@@ -176,6 +197,17 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         mHour = newCalendar.get(Calendar.HOUR_OF_DAY);
         mMinute = newCalendar.get(Calendar.MINUTE);
 
+
+        if (from.equals("1") || from.equals("4")) {
+
+            SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
+            startDate = dateFormatter2.format(newCalendar.getTime());
+            bi.tvStartDate.setText(dateFormatter2.format(newCalendar.getTime()));
+
+            startTime = GH.getInstance().formatter(mHour + ":" + mMinute + ":00", "HH:mm:ss", "HH:mm:ss");
+            String time = GH.getInstance().formatter(mHour + ":" + mMinute + ":00", "hh:mm a", "HH:mm:ss");
+            bi.tvStartTime.setText(time);
+        }
     }
 
     @Override
@@ -186,6 +218,21 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         agentList = response.data;
         for (GetAgentsModel.Data model : agentList) {
             searchListItems.add(new MultiSelectModel(model.agentID, model.agentName, model.encryptedAgentID));
+        }
+
+        if (from.equals("1") || from.equals("4")) {
+
+            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+            TextView textView = child.findViewById(R.id.txtDynamic);
+            textView.setText(String.valueOf(agentList.get(0).agentName));
+            bi.lnAgent.addView(child);
+            selectedIdsList.add(agentList.get(0).agentID);
+            if (agentIdsString.equals("")) {
+                agentIdsString = agentList.get(0).encryptedAgentID;
+            } else {
+                agentIdsString = agentIdsString + "," + agentList.get(0).encryptedAgentID;
+            }
+
         }
     }
 
@@ -199,6 +246,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
             arrayListReminderText.add(response.getData().get(i).getText());
             arrayListReminderValue.add(response.getData().get(i).getValue());
+            hashMapReminder.put(Integer.valueOf(response.getData().get(i).getValue()), response.getData().get(i).getText());
         }
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListReminderText);
@@ -276,6 +324,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListViaValue);
         bi.atvRecur.setAdapter(arrayAdapter);
 
+
         bi.atvRecur.setOnItemClickListener((parent, view, position, id) -> {
 
             reoccur = arrayListViaText.get(position);
@@ -286,8 +335,12 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
 
         });
-
         checkIntent();
+        if (from.equals("1") || from.equals("4")) {
+            bi.atvRecur.setText(arrayListViaValue.get(0), false);
+            reoccur = arrayListViaValue.get(0);
+        }
+        calendarInstance();
     }
 
     @Override
@@ -307,27 +360,30 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvType.setText(taskDetail.data.type);
         bi.atvType.setText(taskDetail.data.type, false);
         bi.atvRecur.setText(taskDetail.data.recur, false);
+        bi.atvAddProperty.setText(taskDetail.data.address);
         // api correction needed
     /*    bi.atvReminder.setText(arrayListReminderText.get(arrayListReminderValue.indexOf(String.valueOf(taskDetail.data.interval))), false);
         bi.atvVia.setText(arrayListViaText.get(arrayListViaValue.indexOf(taskDetail.data.viaReminder)), false);*/
-        startDate = GH.getInstance().formatter(taskDetail.data.startDate, "MM-dd-yyyy", "dd/MM/yyyy hh:mm:ss a");
-        endDate = GH.getInstance().formatter(taskDetail.data.endDate, "MM-dd-yyyy", "dd/MM/yyyy hh:mm:ss a");
+        startDate = GH.getInstance().formatter(taskDetail.data.startDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "dd/MM/yyyy hh:mm:ss a");
+        endDate = GH.getInstance().formatter(taskDetail.data.endDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "dd/MM/yyyy hh:mm:ss a");
+
+        String sDate = GH.getInstance().formatter(taskDetail.data.startDate, "MM-dd-yyyy", "dd/MM/yyyy hh:mm:ss a");
+        String eDate = GH.getInstance().formatter(taskDetail.data.endDate, "MM-dd-yyyy", "dd/MM/yyyy hh:mm:ss a");
 
         startTime = GH.getInstance().formatter(taskDetail.data.startDate, "hh:mm:ss", "dd/MM/yyyy hh:mm:ss a");
         endTime = GH.getInstance().formatter(taskDetail.data.endDate, "hh:mm:ss", "dd/MM/yyyy hh:mm:ss a");
 
-        bi.tvStartDate.setText(startDate);
-        bi.tvEndDate.setText(endDate);
+        bi.tvStartDate.setText(sDate);
+        bi.tvEndDate.setText(eDate);
         bi.tvStartTime.setText(startTime);
         bi.tvEndTime.setText(endTime);
         type = taskDetail.data.type;
-        this.startDate = startDate;
+        scheduleId = taskDetail.data.scheduleID;
         searchLeadIdsString = taskDetail.data.leadEncryptedId;
-        this.endDate = endDate;
         reminder = String.valueOf(taskDetail.data.interval);
         via = taskDetail.data.viaReminder;
 
-        bi.atvReminder.setText(arrayListReminderText.get(Integer.valueOf(reminder)), false);
+        bi.atvReminder.setText(hashMapReminder.get(Integer.valueOf(reminder)), false);
         if (Integer.valueOf(reminder) > 0) {
             bi.atvVia.setText(via, false);
             bi.lblVia.setVisibility(View.VISIBLE);
@@ -387,7 +443,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String weekNo = "";
         String monthOfYear = "";
         String nextRun = "";
-        String isEndDate = bi.cbEndDate.isChecked() ? "false" : "true";
+        String isEndDate = !bi.cbEndDate.isChecked() ? "false" : "true";
         String reminderDate = "";
         int interval = !reminder.equals("") ? Integer.valueOf(reminder) : 0;
         String isSend = "";
@@ -396,6 +452,45 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String propertyAddress = bi.atvAddProperty.getText().toString() + "";
 
         if (isValidate()) {
+
+            JSONObject obj = new JSONObject();
+
+            try {
+                obj.put("id", id);
+                obj.put("agentIds", agentIds);
+                obj.put("leadStringID", leadStringID);
+                obj.put("isAssignNow", isAssignNow);
+                obj.put("monthType", monthType);
+                obj.put("scheduleID", scheduleID);
+                obj.put("name", name);
+                obj.put("desc", desc);
+                obj.put("scheduleRecurID", scheduleRecurID);
+                obj.put("type", type);
+                obj.put("datedFrom", datedFrom);
+                obj.put("datedto", datedto);
+                obj.put("datedFrom", datedFrom);
+                obj.put("recurDay", recurDay);
+                obj.put("recureWeek", recureWeek);
+                obj.put("noOfWeek", noOfWeek);
+                obj.put("dayOfWeek", dayOfWeek);
+                obj.put("dayOfMonth", dayOfMonth);
+                obj.put("weekNo", weekNo);
+                obj.put("monthOfYear", monthOfYear);
+                obj.put("nextRun", nextRun);
+                obj.put("isEndDate", isEndDate);
+                obj.put("reminderDate", reminderDate);
+                obj.put("interval", interval);
+                obj.put("isSend", isSend);
+                obj.put("viaReminder", viaReminder);
+                obj.put("propertyId", propertyId);
+                obj.put("propertyAddress", propertyAddress);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            String jsonObjectString = obj.toString();
+            Log.d("json", jsonObjectString);
+
             presenter.addTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc, scheduleRecurID, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
                     dayOfWeek, dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);
         }
@@ -408,7 +503,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String leadStringID = searchLeadIdsString != null ? searchLeadIdsString : "";
         String isAssignNow = bi.tvName.getText().toString().equals("") ? "false" : "true";
         String monthType = "";
-        String scheduleID = taskId;
+        String scheduleID = scheduleId;
         String name = bi.atvNameTask.getText().toString() + "";
         String desc = bi.atvDescription.getText().toString() + "";
         int scheduleRecurID = !reoccur.equals("") ? Integer.valueOf(reoccur) : 0;
@@ -423,7 +518,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String weekNo = "";
         String monthOfYear = "";
         String nextRun = "";
-        String isEndDate = bi.cbEndDate.isChecked() ? "false" : "true";
+        boolean isEndDate = bi.cbEndDate.isChecked() ? false : true;
         String reminderDate = "";
         int interval = !reminder.equals("") ? Integer.valueOf(reminder) : 0;
         String isSend = "";
@@ -432,6 +527,44 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String propertyAddress = bi.atvAddProperty.getText().toString() + "";
 
         if (isValidate()) {
+
+            JSONObject obj = new JSONObject();
+
+            try {
+                obj.put("id", id);
+                obj.put("agentIds", agentIds);
+                obj.put("leadIds", leadStringID);
+                obj.put("isAssignNow", isAssignNow);
+                obj.put("monthType", monthType);
+                obj.put("scheduleID", scheduleID);
+                obj.put("name", name);
+                obj.put("desc", desc);
+                obj.put("scheduleRecurID", scheduleRecurID);
+                obj.put("type", type);
+                obj.put("startDate", datedFrom);
+                obj.put("endDate", datedto);
+                obj.put("recurDay", recurDay);
+                obj.put("recureWeek", recureWeek);
+                obj.put("noOfWeek", noOfWeek);
+                obj.put("dayOfWeek", dayOfWeek);
+                obj.put("dayOfMonth", dayOfMonth);
+                obj.put("weekNo", weekNo);
+                obj.put("monthOfYear", monthOfYear);
+                obj.put("nextRun", nextRun);
+                obj.put("isEndDate", isEndDate);
+                obj.put("reminderDate", reminderDate);
+                obj.put("interval", interval);
+                obj.put("isSend", isSend);
+                obj.put("viaReminder", viaReminder);
+                obj.put("propertyId", propertyId);
+                obj.put("propertyAddress", propertyAddress);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            String jsonObjectString = obj.toString();
+            Log.d("json", jsonObjectString);
+
             presenter.updateTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc, scheduleRecurID, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
                     dayOfWeek, dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);
         }
@@ -469,7 +602,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             return false;
         }
 
-        if (!reoccur.equals("1") && Methods.isEmpty(bi.tvEndDate)) {
+        if (!reoccur.equals("1") && !bi.cbEndDate.isChecked() && Methods.isEmpty(bi.tvEndDate)) {
             ToastUtils.showToast(context, R.string.error_end_date);
             bi.tvName.requestFocus();
             return false;
@@ -489,11 +622,14 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         if (!bi.cbEndDate.isChecked()) {
             Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null;
             try {
-                date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
-                date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                date1 = sdf.parse(startDate);
+                date2 = sdf.parse(endDate);
 
-                if (date2.compareTo(date1) < 0) {
-                    ToastUtils.showToast(context, "Start date cannot be less than end date");
+                if (startDate.compareTo(endDate) <= 0) {
+
+                } else {
+                    ToastUtils.showToast(context, "Start date must be lesser than end date");
                     bi.tvEndDate.requestFocus();
                     return false;
                 }
@@ -502,7 +638,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 e.printStackTrace();
             }
 
-            if (!reoccur.equals("1") && date2.compareTo(date1) == 0) {
+            if (!reoccur.equals("1") && endDate.compareTo(startDate) == 0) {
                 try {
                     String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
                     currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
@@ -887,7 +1023,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     public void updateUI(Response<BaseResponse> response) {
 
         if (response.body().getStatus().equals("Success")) {
-            ToastUtils.showToast(context, "Added Successfully");
+            ToastUtils.showToast(context, response.body().getMessage());
             finish();
         }
     }
@@ -927,12 +1063,13 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     }
 
     private void getLeadByText(String query, Dialog dialog) {
+        showProgressBar();
         Call<GetLeadTitlesModel> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadTitlesModel(GH.getInstance().getAuthorization(), query);
         _callToday.enqueue(new Callback<GetLeadTitlesModel>() {
             @Override
             public void onResponse(Call<GetLeadTitlesModel> call, Response<GetLeadTitlesModel> response) {
-                GH.getInstance().HideProgressDialog();
+                hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetLeadTitlesModel getAppointmentsModel = response.body();
@@ -962,6 +1099,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
             @Override
             public void onFailure(Call<GetLeadTitlesModel> call, Throwable t) {
+                hideProgressBar();
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
             }
         });

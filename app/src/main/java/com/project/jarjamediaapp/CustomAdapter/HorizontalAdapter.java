@@ -3,6 +3,7 @@ package com.project.jarjamediaapp.CustomAdapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.project.jarjamediaapp.Activities.all_leads.AllLeadsActivity;
 import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
 import com.project.jarjamediaapp.Activities.open_houses.GetTimeFrameModel;
 import com.project.jarjamediaapp.Activities.open_houses.OpenHousesActivity;
@@ -128,8 +130,17 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                 @Override
                 public void onClick(View v) {
 
-                    GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
-                    showAddLeadDialog(context, String.valueOf(openHouse.propertyId));
+                    if (openHouseType.equals("upcoming")) {
+                        GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
+                        showAddLeadDialog(context, String.valueOf(openHouse.propertyId));
+                    } else if (openHouseType.equals("past")) {
+
+                        GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
+                        Intent intent = new Intent(context, AllLeadsActivity.class);
+                        intent.putExtra("type", 1);
+                        intent.putExtra("propertyID", String.valueOf(openHouse.propertyId));
+                        context.startActivity(intent);
+                    }
                 }
             });
 
@@ -137,8 +148,17 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                 @Override
                 public void onClick(View v) {
 
-                    GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
-                    showAddLeadDialog(context, String.valueOf(openHouse.propertyId));
+                    if (openHouseType.equals("upcoming")) {
+                        GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
+                        showAddLeadDialog(context, String.valueOf(openHouse.propertyId));
+                    } else if (openHouseType.equals("past")) {
+
+                        GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
+                        Intent intent = new Intent(context, AllLeadsActivity.class);
+                        intent.putExtra("type", 1);
+                        intent.putExtra("propertyID", String.valueOf(openHouse.propertyId));
+                        context.startActivity(intent);
+                    }
                 }
             });
 

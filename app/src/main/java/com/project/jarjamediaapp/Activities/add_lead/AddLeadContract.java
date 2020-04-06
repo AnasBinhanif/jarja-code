@@ -7,6 +7,7 @@ import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
 import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
 import com.project.jarjamediaapp.Models.GetLeadTypeList;
+import com.project.jarjamediaapp.Models.GetPropertyLeads;
 
 import retrofit2.http.Field;
 

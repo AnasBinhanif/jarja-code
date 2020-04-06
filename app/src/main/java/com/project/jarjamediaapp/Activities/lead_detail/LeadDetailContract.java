@@ -48,7 +48,7 @@ public interface LeadDetailContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void assignAgents(String agentsIDs, String leadID, String typeIndex);
+        void assignAgents(String agentsIDs, String leadID, boolean typeIndex);
 
         void getAgentNames();
 

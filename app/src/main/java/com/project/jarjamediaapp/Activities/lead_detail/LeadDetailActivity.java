@@ -270,7 +270,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                             ToastUtils.showToast(context, "No EncryptedID Found");
                         }
 
-                        presenter.assignAgents(agentIdsString, leadID, "true");
+                        presenter.assignAgents(agentIdsString, leadID, true);
                     }
 
                     @Override
@@ -619,7 +619,13 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
             if (getAssignedAgentList.size() != 0) {
                 for (GetLead.AgentsList model : getAssignedAgentList) {
-                    selectedIdsList.add(model.assignAgentsID);
+                    selectedIdsList.add(model.agentDryptedID);
+
+                    if (agentIdsString.equals("")) {
+                        agentIdsString = model.agentID;
+                    } else {
+                        agentIdsString = agentIdsString + "," + model.agentID;
+                    }
                 }
             }
 

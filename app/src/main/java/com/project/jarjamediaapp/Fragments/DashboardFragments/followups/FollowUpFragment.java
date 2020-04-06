@@ -95,14 +95,15 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
                 } else {
 
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    bi.recyclerViewFollowDue.setLayoutManager(mLayoutManager);
+                    bi.recyclerViewFollowDue.setItemAnimator(new DefaultItemAnimator());
+
                     bi.tvNoRecordFound.setVisibility(View.GONE);
                     bi.recyclerViewFollowOverDue.setVisibility(View.GONE);
                     bi.recyclerViewFollowDue.setVisibility(View.VISIBLE);
 
                     swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context, getActivity(),followUpsList);
-                    mLayoutManager = new LinearLayoutManager(getContext());
-                    bi.recyclerViewFollowDue.setLayoutManager(mLayoutManager);
-                    bi.recyclerViewFollowDue.setItemAnimator(new DefaultItemAnimator());
                     bi.recyclerViewFollowDue.setAdapter(swipeFollowUpsDueRecyclerAdapter);
                 }
                 break;
@@ -115,14 +116,15 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
                 } else {
 
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    bi.recyclerViewFollowOverDue.setLayoutManager(mLayoutManager);
+                    bi.recyclerViewFollowOverDue.setItemAnimator(new DefaultItemAnimator());
+
                     bi.tvNoRecordFound.setVisibility(View.GONE);
                     bi.recyclerViewFollowDue.setVisibility(View.GONE);
                     bi.recyclerViewFollowOverDue.setVisibility(View.VISIBLE);
 
                     swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context,getActivity() ,followUpsList);
-                    mLayoutManager = new LinearLayoutManager(getContext());
-                    bi.recyclerViewFollowOverDue.setLayoutManager(mLayoutManager);
-                    bi.recyclerViewFollowOverDue.setItemAnimator(new DefaultItemAnimator());
                     bi.recyclerViewFollowOverDue.setAdapter(swipeFollowUpsDueRecyclerAdapter);
                 }
                 break;

@@ -36,6 +36,7 @@ import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 import com.project.jarjamediaapp.Models.GetLeadTypeList;
 import com.project.jarjamediaapp.Models.GetNoteDropDown;
 import com.project.jarjamediaapp.Models.GetPipeline;
+import com.project.jarjamediaapp.Models.GetPropertyLeads;
 import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
 import com.project.jarjamediaapp.Models.GetTagListByLeadID;
 import com.project.jarjamediaapp.Models.GetTasksModel;
@@ -255,7 +256,7 @@ public interface ApiMethods {
             @Header("Authorization") String authorization,
             @Field("agentIds") String agentIds,
             @Field("leadStringID") String leadStringID,
-            @Field("typeIndex") String typeIndex);
+            @Field("typeIndex") boolean typeIndex);
 
     @FormUrlEncoded
     @POST("Lead/AddPipeLineMark")
@@ -500,7 +501,7 @@ public interface ApiMethods {
             @Field("weekNo") String weekNo,
             @Field("monthOfYear") String monthOfYear,
             @Field("nextRun") String nextRun,
-            @Field("isEndDate") String isEndDate,
+            @Field("isEndDate") boolean isEndDate,
             @Field("reminderDate") String reminderDate,
             @Field("interval") int interval,
             @Field("isSend") String isSend,
@@ -705,6 +706,10 @@ public interface ApiMethods {
             @Field("pageSize") String pageSize
     );
 
+    @GET("Lead/GetPropertyLeads")
+    Call<GetPropertyLeads> GetPropertyLeads(@Header("Authorization") String authorization,
+                                            @Query("PropertyID") String propertyId);
+
     @GET("Lead/GetAllOpenHouse")
     Call<GetAllOpenHousesModel> getAllOpenHouses(@Header("Authorization") String authorization,
                                                  @Query("type") String type);
@@ -828,7 +833,7 @@ public interface ApiMethods {
     Call<BaseResponse> addAppointmentByCalendar(
             @Header("Authorization") String authorization,
             @Field("leadStringID") String leadStringID,
-            @Field("agentIDsString") String agentsStringIDs,
+            @Field("agentsStringIDs") String agentsStringIDs,
             @Field("leadAppoinmentID") String leadAppointmentID,
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
@@ -841,15 +846,11 @@ public interface ApiMethods {
             @Field("isAllDay") boolean isAllDay,
             @Field("interval") Integer interval,
             @Field("isSend") boolean isSend,
-            @Field("viaReminder") String viaReminder,
             @Field("agentIds") String agentIds,
             @Field("orderBy") Integer orderBy,
             @Field("startTime") String startTime,
             @Field("endTime") String endTime,
-            @Field("isCompleted") boolean isCompleted,
-            @Field("calendarType") String calendarType,
-            @Field("isGmailApptActive") boolean isGmailAppActive,
-            @Field("gmailCalenderId") String gmailCalendarId);
+            @Field("isCompleted") boolean isCompleted);
 
     @FormUrlEncoded
     @POST("Calender/EditAppoinmentTaskCalender")

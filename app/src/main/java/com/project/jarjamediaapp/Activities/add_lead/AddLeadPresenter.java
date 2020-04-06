@@ -8,6 +8,7 @@ import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
 import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
 import com.project.jarjamediaapp.Models.GetLeadTypeList;
+import com.project.jarjamediaapp.Models.GetPropertyLeads;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;

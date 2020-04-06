@@ -217,7 +217,7 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
             // for add calendar appointment
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addAppointmentByCalendar(GH.getInstance().getAuthorization(),
                     leadStringID, agentsStringIDs, "0", eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
-                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted, "Event", true, calendarId);
+                    datedTo, isAllDay, interval, isSend, agentIds, orderBy, startTime, endTime, isCompleted);
 
         } else {
 

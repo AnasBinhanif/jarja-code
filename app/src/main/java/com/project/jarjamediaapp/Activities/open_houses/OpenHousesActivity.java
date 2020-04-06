@@ -370,7 +370,8 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null;
 
         try {
-            String time = new Date().toString();
+            SimpleDateFormat simpleDate =  new SimpleDateFormat("HH:mm:ss");
+            String time = simpleDate.format(Calendar.getInstance().getTime());
             currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
             time1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(openHouseStartDate);
             time2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(openHouseEndDate);
@@ -386,27 +387,6 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             }
         } catch (ParseException e) {
             e.printStackTrace();
-        }
-        if (date2.compareTo(date1) == 0) {
-            try {
-                String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
-                currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
-                time1 = new SimpleDateFormat("HH:mm:ss").parse(timeS);
-                time2 = new SimpleDateFormat("HH:mm:ss").parse(timeE);
-                if (time2.before(time1)) {
-                    ToastUtils.showToast(context, "End time cannot be less than start time");
-                    atvOpenHouseEndDate.requestFocus();
-                    return false;
-                }
-                if (time1.before(currentTime)) {
-                    ToastUtils.showToast(context, "Start time cannot be less than current time");
-                    atvOpenHouseStartDate.requestFocus();
-                    return false;
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
         }
 
         return true;

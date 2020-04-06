@@ -26,6 +26,7 @@ import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
+import com.project.jarjamediaapp.Activities.all_leads.AllLeadsActivity;
 import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
 import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
@@ -108,14 +109,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void getUserProfileData() {
 
-        GH.getInstance().ShowProgressDialog(HomeActivity.this);
+        showProgressBar();
         Call<GetUserProfile> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 getUserProfileData(GH.getInstance().getAuthorization());
         _call.enqueue(new Callback<GetUserProfile>() {
             @Override
             public void onResponse(Call<GetUserProfile> call, Response<GetUserProfile> response) {
-
-                GH.getInstance().HideProgressDialog();
+                hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetUserProfile getUserProfile = response.body();
@@ -154,7 +154,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
             @Override
             public void onFailure(Call<GetUserProfile> call, Throwable t) {
-                GH.getInstance().HideProgressDialog();
+                hideProgressBar();
                 ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
             }
         });
@@ -333,12 +333,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void getUserPermissions() {
 
+        showProgressBar();
         Call<GetUserPermission> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 GetUserPermission(GH.getInstance().getAuthorization());
         _call.enqueue(new Callback<GetUserPermission>() {
             @Override
             public void onResponse(Call<GetUserPermission> call, Response<GetUserPermission> response) {
 
+                hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetUserPermission getUserProfile = response.body();
@@ -372,7 +374,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
             @Override
             public void onFailure(Call<GetUserPermission> call, Throwable t) {
-
+                hideProgressBar();
                 ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
             }
         });
@@ -427,4 +429,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         return new BitmapDrawable(getResources(), bitmap);
     }
 
+
+    public void showProgressBar() {
+
+        GH.getInstance().ShowProgressDialog(HomeActivity.this);
+    }
+
+
+    public void hideProgressBar() {
+
+        GH.getInstance().HideProgressDialog();
+    }
 }

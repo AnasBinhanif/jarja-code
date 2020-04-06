@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -95,7 +96,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi = DataBindingUtil.setContentView(this, R.layout.activity_add_appointment);
         presenter = new AddAppointmentPresenter(this);
         presenter.initScreen();
-
 
     }
 
@@ -229,6 +229,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
             break;
             case "3":
+                break;
             case "5": {
                 bi.tvName.setEnabled(true);
                 setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_appointment), true);
@@ -874,8 +875,30 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         dialog.setContentView(R.layout.custom_search_dialog);
 
         EditText edtQuery = dialog.findViewById(R.id.edtQuery);
+        ImageView imgClear = dialog.findViewById(R.id.imgClear);
+
+        edtQuery.setText(bi.tvName.getText().toString());
         TextView tvTitle = dialog.findViewById(R.id.tvTitle);
         recyclerSearch = dialog.findViewById(R.id.recyclerSearch);
+
+
+        if (!edtQuery.getText().toString().equals(""))
+        {
+            imgClear.setVisibility(View.VISIBLE);
+        }else{
+            imgClear.setVisibility(View.GONE);
+        }
+
+        imgClear.setOnClickListener(v -> {
+
+            if (!edtQuery.getText().toString().equals("")) {
+                bi.tvName.setText("");
+                edtQuery.setText("");
+                leadId = "";
+            }
+
+        });
+
 
         tvTitle.setText("Name of Contact");
         edtQuery.requestFocus();

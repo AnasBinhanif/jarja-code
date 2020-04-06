@@ -69,6 +69,12 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        callGetLeadCounts(null);
+    }
+
+    @Override
     public void setupViews() {
 
         initViews();
@@ -206,6 +212,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
             intent.putExtra("bundle", bundle);
             intent.putExtra("resultType", resultTYpe);
             intent.putExtra("totalPages", totalPages);
+            intent.putExtra("type", 0);
             startActivity(intent);
 
             return Unit.INSTANCE;

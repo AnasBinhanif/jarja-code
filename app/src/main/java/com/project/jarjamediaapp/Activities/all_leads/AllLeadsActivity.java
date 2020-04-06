@@ -18,6 +18,7 @@ import com.project.jarjamediaapp.Activities.lead_detail.LeadDetailActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAllLeads;
+import com.project.jarjamediaapp.Models.GetPropertyLeads;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -39,12 +40,13 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     Context context = AllLeadsActivity.this;
     AllLeadsPresenter presenter;
     ArrayList<GetAllLeads.LeadsList> leadsList = new ArrayList<>();
-    String mSearchQuery = "";
+    ArrayList<GetPropertyLeads.LeadsList> propertyleadsList = new ArrayList<>();
+    String mSearchQuery = "", propertyID = "";
     String resultSetType = "All";
     Intent data = null;
     LinearLayoutManager linearLayoutManager;
     int page = 0;
-    int totalPages;
+    int totalPages, type = 0;
     RecyclerAdapterUtil recyclerAdapterUtil;
     boolean isLoading = false;
 
@@ -60,14 +62,33 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void handleIntent() {
-        resultSetType = getIntent().getStringExtra("resultType");
-        data = getIntent().getParcelableExtra("bundle");
-        totalPages = getIntent().getIntExtra("totalPages", 0);
+
+        type = getIntent().getIntExtra("type", 0);
+
+        // 0 For All Leads
+        //1 For PropertyLeads
+
+        switch (type) {
+
+            case 0:
+                resultSetType = getIntent().getStringExtra("resultType");
+                data = getIntent().getParcelableExtra("bundle");
+                totalPages = getIntent().getIntExtra("totalPages", 0);
+
+                callGetAllLeads(data, String.valueOf(page));
+                break;
+            case 1:
+                propertyID = getIntent().getStringExtra("propertyID");
+                callPropertyLeadList();
+                break;
+
+        }
+
+
     }
 
     @Override
     public void initViews() {
-        handleIntent();
         bi.edtSearch.onActionViewExpanded();
         bi.edtSearch.clearFocus();
         bi.edtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -86,7 +107,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             }
         });
         initPagination();
-        callGetAllLeads(data, String.valueOf(page));
+        handleIntent();
     }
 
     private void initPagination() {
@@ -184,6 +205,10 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
     }
 
+    private void callPropertyLeadList() {
+        presenter.GetPropertyLeads(propertyID);
+    }
+
     private void populateListData(ArrayList<GetAllLeads.LeadsList> leadsList) {
 
         if (page == 0) {
@@ -229,6 +254,51 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
     }
 
+    private void populatePropertyListData(ArrayList<GetPropertyLeads.LeadsList> leadsList) {
+
+        if (page == 0) {
+            linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+            bi.recyclerViewAllLeads.setLayoutManager(linearLayoutManager);
+            bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
+            bi.recyclerViewAllLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewAllLeads.getContext(), 1));
+            recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
+            recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail, R.id.tvInitial);
+
+            recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetPropertyLeads.LeadsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
+
+                TextView tvName = (TextView) integerMap.get(R.id.tvName);
+                TextView tvPhone = (TextView) integerMap.get(R.id.tvPhone);
+                TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
+                TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
+
+                tvName.setText(allLeadsList.firstName + " " + allLeadsList.lastName);
+                tvPhone.setText(allLeadsList.primaryPhone);
+                tvEmail.setText(allLeadsList.primaryEmail);
+
+                tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1));
+
+                return Unit.INSTANCE;
+            });
+
+            bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
+            isLoading = false;
+        } else {
+            isLoading = false;
+            recyclerAdapterUtil.notifyDataSetChanged();
+        }
+
+        recyclerAdapterUtil.addOnClickListener((Function2<GetPropertyLeads.LeadsList, Integer, Unit>) (viewComplainList, integer) -> {
+
+            Map<String, String> map = new HashMap<>();
+            map.put("leadID", viewComplainList.id);
+            switchActivityWithIntentString(LeadDetailActivity.class, (HashMap<String, String>) map);
+
+            return Unit.INSTANCE;
+        });
+
+
+    }
+
     private ArrayList<GetAllLeads.LeadsList> filter(ArrayList<GetAllLeads.LeadsList> models, String query) {
         query = query.toLowerCase();
         final ArrayList<GetAllLeads.LeadsList> filteredModelList = new ArrayList<>();
@@ -262,6 +332,21 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             bi.lnAllLeads.setVisibility(View.VISIBLE);
             bi.tvNoRecordFound.setVisibility(View.GONE);
             populateListData(leadsList);
+        }
+    }
+
+    @Override
+    public void updateUI(GetPropertyLeads response) {
+
+        propertyleadsList.addAll(response.data.leadsList);
+
+        if (propertyleadsList.size() == 0) {
+            bi.lnAllLeads.setVisibility(View.GONE);
+            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+        } else {
+            bi.lnAllLeads.setVisibility(View.VISIBLE);
+            bi.tvNoRecordFound.setVisibility(View.GONE);
+            populatePropertyListData(propertyleadsList);
         }
     }
 

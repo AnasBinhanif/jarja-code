@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Activities.all_leads;
 
 import com.project.jarjamediaapp.Base.BaseContract;
 import com.project.jarjamediaapp.Models.GetAllLeads;
+import com.project.jarjamediaapp.Models.GetPropertyLeads;
 
 public interface AllLeadsContract {
 
@@ -10,6 +11,8 @@ public interface AllLeadsContract {
         void initViews();
 
         void updateUI(GetAllLeads response);
+
+        void updateUI(GetPropertyLeads response);
 
         void updateUIonFalse(String message);
 
@@ -29,6 +32,7 @@ public interface AllLeadsContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
+        void GetPropertyLeads(String propertyID);
         void getAllLeads(String leadID, String spouseName, String email, String company, String phone, String address, String city, String state,
                            String county, String zip, String countryID, String propertyType, String timeFrameID, String preApproval, String houseToSell,
                            String agentID, String leadTypeID, String leadScoreMin, String leadScoreMax, String tagsID, String priceMin, String priceMax,

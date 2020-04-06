@@ -92,6 +92,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
             case R.id.btnNotes: {
 
                 bi.recyclerViewDocuments.setVisibility(View.GONE);
+                bi.recyclerViewNotes.setVisibility(View.VISIBLE);
                 buttonType = "Notes";
                 Paris.style(bi.btnNotes).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnDocuments).apply(R.style.TabButtonTranparentRight);
@@ -101,6 +102,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
             case R.id.btnDocuments: {
 
                 bi.recyclerViewNotes.setVisibility(View.GONE);
+                bi.recyclerViewDocuments.setVisibility(View.VISIBLE);
                 buttonType = "Documents";
                 Paris.style(bi.btnDocuments).apply(R.style.TabButtonYellowRight);
                 Paris.style(bi.btnNotes).apply(R.style.TabButtonTranparentLeft);
@@ -195,6 +197,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
         bi.recyclerViewDocuments.addItemDecoration(dividerItemDecoration);
         bi.recyclerViewDocuments.setAdapter(swipeDocumentRecyclerAdapter);
         bi.recyclerViewDocuments.setVisibility(View.VISIBLE);
+        bi.recyclerViewNotes.setVisibility(View.GONE);
 
     }
 
@@ -439,7 +442,13 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
     }
 
     public void refreshData() {
-        presenter.getLeadNotes(leadID);
+
+        if (buttonType.equalsIgnoreCase("Notes")) {
+            presenter.getLeadNotes(leadID);
+        } else {
+            presenter.getDocumentByLeadId(leadID);
+
+        }
     }
 
 }

@@ -40,6 +40,9 @@ public class GetLead implements Serializable {
         @SerializedName("agentID")
         @Expose
         public String agentID;
+        @SerializedName("agentDryptedID")
+        @Expose
+        public Integer agentDryptedID;
         @SerializedName("agentName")
         @Expose
         public String agentName;

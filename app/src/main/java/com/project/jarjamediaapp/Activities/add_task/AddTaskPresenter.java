@@ -273,7 +273,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
     @Override
     public void updateTask(String id, String agentIds, String leadIds, String isAssignNow, String monthType, String scheduleID, String name, String desc,
                         int scheduleRecurID, String type, String startDate, String endDate, String recurDay, String recureWeek, String noOfWeek, String dayOfWeek,
-                        String dayOfMonth, String weekNo, String monthOfYear, String nextRun, String isEndDate, String reminderDate, int interval, String isSend,
+                        String dayOfMonth, String weekNo, String monthOfYear, String nextRun, boolean isEndDate, String reminderDate, int interval, String isSend,
                         String viaReminder, String propertyId, String propertyAddress) {
 
         _view.showProgressBar();
