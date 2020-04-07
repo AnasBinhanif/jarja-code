@@ -88,7 +88,12 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         // Data binding
         try {
 
-            Glide.with(context).load(data.get(position).getImgURL()).into(holder.ivHouse);
+            String image = data.get(position).getImgURL();
+            if (!image.equalsIgnoreCase("")) {
+                Glide.with(context).load(image).into(holder.ivHouse);
+            } else {
+                holder.ivHouse.setImageResource(R.drawable.open_house);
+            }
             holder.tvStartDateTime.setText(GH.getInstance().formatter(data.get(position).getOpenHouseDate(), "MM-dd-yyyy h:mm a", "yyyy-MM-dd'T'h:mm:ss"));
             holder.tvEndDateTime.setText(GH.getInstance().formatter(data.get(position).getOpenHouseEndDate(), "MM-dd-yyyy h:mm a", "yyyy-MM-dd'T'h:mm:ss"));
             holder.tvAddress.setText(data.get(position).getStreetName() + " , " + data.get(position).getCity());
@@ -250,18 +255,28 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                 preQual = atvApprove.getText().toString();
                 withAgent = atvDeal.getText().toString();
 
-                if (houseSell.equalsIgnoreCase("Yes") || preQual.equalsIgnoreCase("Yes") || withAgent.equalsIgnoreCase("Yes")) {
+                if (priceRange.equalsIgnoreCase("")) {
+                    priceRange = "Nothing Selected";
+                }
+                if (timeFrame.equalsIgnoreCase("")) {
+                    timeFrame = "Nothing Selected";
+                }
+                if (houseSell.equalsIgnoreCase("Yes")) {
                     _houseSell = true;
-                    _preQual = true;
-                    _withAgent = true;
                 } else {
                     _houseSell = false;
+                }
+                if (preQual.equalsIgnoreCase("Yes")) {
+                    _preQual = true;
+                } else {
                     _preQual = false;
+                }
+                if (withAgent.equalsIgnoreCase("Yes")) {
+                    _withAgent = true;
+                } else {
                     _withAgent = false;
                 }
-
                 JSONObject obj = new JSONObject();
-
                 try {
                     obj.put("propertyId", Integer.valueOf(propertyId));
                     obj.put("firstName", firstName);
@@ -277,11 +292,9 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                     e.printStackTrace();
                 }
                 Log.d("json", obj.toString());
-
                 if (isValidate()) {
                     sendDataToServer(Integer.valueOf(propertyId));
                 }
-
             }
         });
 

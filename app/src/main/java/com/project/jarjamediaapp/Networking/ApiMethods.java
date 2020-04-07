@@ -920,7 +920,7 @@ public interface ApiMethods {
     @FormUrlEncoded
     @POST("Lead/CreateOpenHouseLead")
     Call<BaseResponse> addLeadViaOpenHouse(@Header("Authorization") String authorization,
-                                            @Field("propertyId") int propertyId,
+                                           @Field("propertyId") int propertyId,
                                            @Field("firstName") String firstName,
                                            @Field("lastName") String lastName,
                                            @Field("primaryEmail") String primaryEmail,
