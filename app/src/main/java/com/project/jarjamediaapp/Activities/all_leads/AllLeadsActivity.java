@@ -362,7 +362,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void updateUIonFalse(String message) {
-        ToastUtils.showToastLong(context, message);
+        //ToastUtils.showToastLong(context, message);
     }
 
     @Override

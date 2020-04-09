@@ -161,7 +161,17 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 bi.tvStartTime.setFocusableInTouchMode(false);
                 bi.atvRecur.setFocusableInTouchMode(false);
                 // hit api for task detail
-                presenter.getTaskDetail(taskId);
+
+                int whichTasks =getIntent().getIntExtra("whichTasks",1);
+                switch (whichTasks){
+
+                    case 1:
+                        presenter.getTaskDetail(taskId);
+                        break;
+                    case 3:
+                        presenter.getFutureTaskDetail(taskId);
+                        break;
+                }
             }
             break;
             case "3": {
@@ -176,7 +186,15 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 bi.atvRecur.setClickable(false);
                 bi.tvStartTime.setFocusableInTouchMode(false);
                 bi.atvRecur.setFocusableInTouchMode(false);
-                presenter.getTaskDetail(taskId);
+                int whichTasks =getIntent().getIntExtra("whichTasks",1);
+                switch (whichTasks){
+                    case 1:
+                        presenter.getTaskDetail(taskId);
+                        break;
+                    case 3:
+                        presenter.getFutureTaskDetail(taskId);
+                        break;
+                }
             }
             break;
             case "4": {
@@ -498,8 +516,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             String jsonObjectString = obj.toString();
             Log.d("json", jsonObjectString);
 
-            presenter.addTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc, scheduleRecurID, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
-                    dayOfWeek, dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);
+            presenter.addTask(jsonObjectString);
+
+            /*presenter.addTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc, scheduleRecurID, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
+                    dayOfWeek, dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);*/
         }
     }
 

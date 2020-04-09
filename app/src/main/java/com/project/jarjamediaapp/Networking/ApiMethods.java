@@ -388,6 +388,11 @@ public interface ApiMethods {
             @Header("Authorization") String authorization
     );
 
+    @Headers("Content-Type: application/json")
+    @POST("Appointment/AddNew")
+    Call<BaseResponse> AddAppointment(@Header("Authorization") String authorization,
+                               @Body String body);
+
     @FormUrlEncoded
     @POST("Appointment/AddNew")
     Call<BaseResponse> AddAppointment(
@@ -398,8 +403,8 @@ public interface ApiMethods {
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
             @Field("desc") String desc,
-            @Field("isAppointmentFixed") String isAppointmentFixed,
-            @Field("isAppointmentAttend") String isAppointmentAttend,
+            @Field("isAppointmentFixed") boolean isAppointmentFixed,
+            @Field("isAppointmentAttend") boolean isAppointmentAttend,
             @Field("appointmentDate") String appointmentDate,
             @Field("datedFrom") String datedFrom,
             @Field("datedTo") String datedTo,
@@ -424,8 +429,8 @@ public interface ApiMethods {
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
             @Field("desc") String desc,
-            @Field("isAppointmentFixed") String isAppointmentFixed,
-            @Field("isAppointmentAttend") String isAppointmentAttend,
+            @Field("isAppointmentFixed") boolean isAppointmentFixed,
+            @Field("isAppointmentAttend") boolean isAppointmentAttend,
             @Field("appointmentDate") String appointmentDate,
             @Field("datedFrom") String datedFrom,
             @Field("datedTo") String datedTo,
@@ -443,6 +448,15 @@ public interface ApiMethods {
     @GET("Tasks/GetTasks")
     Call<GetTaskDetail> getTaskDetail(@Header("Authorization") String authorization,
                                       @Query("TaskID") String taskId);
+
+    @GET("Tasks/GetFutureTask")
+    Call<GetTaskDetail> getFutureTaskDetail(@Header("Authorization") String authorization,
+                                      @Query("ScheduleID") String taskId);
+
+    @Headers("Content-Type: application/json")
+    @POST("Tasks/AddTaskNew")
+    Call<BaseResponse> AddTask(@Header("Authorization") String authorization,
+                                                 @Body String body);
 
     @FormUrlEncoded
     @POST("Tasks/AddTaskNew")
@@ -828,6 +842,13 @@ public interface ApiMethods {
     Call<BaseResponse> deleteCalendarTask(@Header("Authorization") String authorization,
                                           @Query("CalendarId") String calendarId);
 
+
+    @Headers("Content-Type: application/json")
+    @POST("Calender/AddAppoinmentTaskCalender")
+    Call<BaseResponse> addAppointmentByCalendar(
+            @Header("Authorization") String authorization,
+            @Body String body);
+
     @FormUrlEncoded
     @POST("Calender/AddAppoinmentTaskCalender")
     Call<BaseResponse> addAppointmentByCalendar(
@@ -838,8 +859,8 @@ public interface ApiMethods {
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
             @Field("desc") String desc,
-            @Field("isAppointmentFixed") String isAppointmentFixed,
-            @Field("isAppointmentAttend") String isAppointmentAttend,
+            @Field("isAppointmentFixed") boolean isAppointmentFixed,
+            @Field("isAppointmentAttend") boolean isAppointmentAttend,
             @Field("appointmentDate") String appointmentDate,
             @Field("datedFrom") String datedFrom,
             @Field("datedTo") String datedTo,
@@ -863,8 +884,8 @@ public interface ApiMethods {
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
             @Field("desc") String desc,
-            @Field("isAppointmentFixed") String isAppointmentFixed,
-            @Field("isAppointmentAttend") String isAppointmentAttend,
+            @Field("isAppointmentFixed") boolean isAppointmentFixed,
+            @Field("isAppointmentAttend") boolean isAppointmentAttend,
             @Field("appointmentDate") String appointmentDate,
             @Field("datedFrom") String datedFrom,
             @Field("datedTo") String datedTo,

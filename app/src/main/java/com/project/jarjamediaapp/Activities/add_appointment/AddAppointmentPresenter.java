@@ -73,6 +73,53 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
     }
 
     @Override
+    public void addAppointment(String prefix,String fromid) {
+
+        _view.showProgressBar();
+
+        if (fromid.equals("3")) {
+            _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addAppointmentByCalendar(GH.getInstance().getAuthorization(),
+                    prefix);
+        }else{
+            _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddAppointment(GH.getInstance().getAuthorization(),
+                    prefix);
+        }
+        _callAddAppointment.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+                Log.i("response", new Gson().toJson(response));
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateUI(response);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
     public void getDropDownLocation(String prefix) {
 
         _view.showProgressBar();
@@ -190,7 +237,7 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
 
     @Override
     public void addAppointment(String leadStringID, String agentsStringIDs, String leadAppointmentID, String eventTitle, String location,
-                               String desc, String isAppointmentFixed, String isAppointmentAttend, String appointmentDate, String datedFrom,
+                               String desc, boolean isAppointmentFixed, boolean isAppointmentAttend, String appointmentDate, String datedFrom,
                                String datedTo, boolean isAllDay, Integer interval, boolean isSend, String viaReminder, String agentIds, Integer orderBy,
                                String startTime, String endTime, boolean isCompleted, String fromId, String calendarId, String encryptedAppointmentId, String leadId) {
 

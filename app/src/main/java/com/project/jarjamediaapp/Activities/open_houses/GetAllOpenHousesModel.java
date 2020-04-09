@@ -49,7 +49,7 @@ public class GetAllOpenHousesModel extends BaseResponse {
             public Integer propertyId;
             @SerializedName("listPrice")
             @Expose
-            public Integer listPrice;
+            public String listPrice;
             @SerializedName("streetName")
             @Expose
             public String streetName;
@@ -81,7 +81,7 @@ public class GetAllOpenHousesModel extends BaseResponse {
                 return propertyId;
             }
 
-            public Integer getListPrice() {
+            public String getListPrice() {
                 return listPrice;
             }
 

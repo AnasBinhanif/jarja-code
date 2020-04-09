@@ -66,6 +66,10 @@ public interface AddTaskContract {
 
         void getTaskDetail(String taskId);
 
+        void getFutureTaskDetail(String scheduleID);
+
+        void addTask(String body);
+
     }
 
 }

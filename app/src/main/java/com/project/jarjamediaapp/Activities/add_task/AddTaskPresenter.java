@@ -357,6 +357,83 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
     }
 
     @Override
+    public void getFutureTaskDetail(String scheduleID) {
+
+        _view.showProgressBar();
+        apiCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class)
+                .getFutureTaskDetail(GH.getInstance().getAuthorization(), scheduleID);
+        apiCall.enqueue(new Callback<GetTaskDetail>() {
+            @Override
+            public void onResponse(Call<GetTaskDetail> call, Response<GetTaskDetail> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetTaskDetail getTaskDetail = response.body();
+
+                    if (getTaskDetail.getStatus().equalsIgnoreCase("Success")) {
+
+                        _view.updateTaskDetail(getTaskDetail);
+
+                    } else {
+
+                        _view.updateUIonFalse(getTaskDetail.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTaskDetail> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void addTask(String body) {
+        _view.showProgressBar();
+        callAddTask= NetworkController.getInstance().getRetrofit().create(ApiMethods.class)
+                .AddTask(GH.getInstance().getAuthorization(), body);
+        callAddTask.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (response.body().getStatus().equals("Success")) {
+
+                        _view.updateUI(response);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+    }
+
+    @Override
     public void detachView() {
 
         if (_call != null) {

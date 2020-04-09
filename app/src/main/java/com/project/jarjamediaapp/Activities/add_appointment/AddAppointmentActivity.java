@@ -762,13 +762,14 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     private void callAddAppointment(String from) {
 
         String leadStringID = leadId != null ? leadId : "";
+        // leadStringID = leadStringID.equals("") ? "null" : leadId ;
         String agentsID = agentIdsString;
         String eventTitle = bi.atvEventTitle.getText().toString() + "";
         String location = bi.atvLocation.getText().toString() + "";
         String desc = bi.atvDescription.getText().toString() + "";
 
         boolean isAllDay = bi.cbAllDay.isChecked() ? true : false;
-        String viaReminder = via + "";
+        String viaReminder = via.equals("") ? "" : via;
 
         if (bi.cbAllDay.isChecked()) {
             timedFrom = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
@@ -788,8 +789,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         Integer orderBy = 0;
         boolean isCompleted = false;
         String leadAppointmentID = leadAppointmentId != null ? leadAppointmentId : "0";
-        String isAppointmentFixed = "false";
-        String isAppointmentAttend = "false";
+        boolean isAppointmentFixed = false;
+        boolean isAppointmentAttend = false;
         String appointmentDate = "";
         boolean isSend = false;
 
@@ -807,38 +808,75 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
             JSONObject obj = new JSONObject();
 
-            try {
-                obj.put("location", location);
-                obj.put("isCompleted", isCompleted);
-                obj.put("appointmentDate", "");
-                obj.put("leadStringID", leadStringID);
-                obj.put("orderBy", orderBy);
-                obj.put("startTime", startTime);
-                obj.put("interval", interval);
-                obj.put("datedTo", datedTo);
-                obj.put("eventTitle", eventTitle);
-                obj.put("isAppointmentAttend", isAppointmentAttend);
-                obj.put("isAppointmentFixed", isAppointmentFixed);
-                obj.put("leadAppoinmentID", leadAppointmentID);
-                obj.put("datedFrom", datedFrom);
-                obj.put("isAllDay", isAllDay);
-                obj.put("agentIds", agentsID);
-                obj.put("endTime", endTime);
-                obj.put("desc", desc);
-                obj.put("isSend", isSend);
-                obj.put("calendarType", "Event");
-                obj.put("agentsStringIDs", agentIdsString);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if (fromId.equals("3")) {
+                try {
+                    obj.put("location", location);
+                    obj.put("isCompleted", isCompleted);
+                    obj.put("appointmentDate", "");
+                    obj.put("leadStringID", leadStringID);
+                    obj.put("orderBy", orderBy);
+                    obj.put("startTime", startTime);
+                    obj.put("interval", interval);
+                    obj.put("datedTo", datedTo);
+                    obj.put("eventTitle", eventTitle);
+                    obj.put("isAppointmentAttend", isAppointmentAttend);
+                    obj.put("isAppointmentFixed", isAppointmentFixed);
+                    obj.put("leadAppoinmentID", leadAppointmentID);
+                    obj.put("datedFrom", datedFrom);
+                    obj.put("isAllDay", isAllDay);
+                    obj.put("agentIds", agentsID);
+                    obj.put("endTime", endTime);
+                    obj.put("desc", desc);
+                    obj.put("isSend", isSend);
+                    obj.put("calendarType", "Event");
+                    obj.put("agentsStringIDs", agentIdsString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    obj.put("location", location);
+                    obj.put("isCompleted", isCompleted);
+                    obj.put("appointmentDate", "");
+                    obj.put("leadStringID", leadStringID);
+                    obj.put("orderBy", orderBy);
+                    obj.put("startTime", startTime);
+                    obj.put("interval", interval);
+                    obj.put("datedTo", datedTo);
+                    obj.put("eventTitle", eventTitle);
+                    obj.put("isAppointmentAttend", isAppointmentAttend);
+                    obj.put("isAppointmentFixed", isAppointmentFixed);
+                    obj.put("leadAppoinmentID", leadAppointmentID);
+                    obj.put("datedFrom", datedFrom);
+                    obj.put("isAllDay", isAllDay);
+                    obj.put("agentIds", agentsID);
+                    obj.put("endTime", endTime);
+                    obj.put("desc", desc);
+                    obj.put("isSend", isSend);
+                    obj.put("viaReminder", via);
+                    obj.put("leadID", "0");
+                    obj.put("agentsStringIDs", agentIdsString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             String jsonObjectString = obj.toString();
             Log.d("json", jsonObjectString);
 
-            presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend,
-                    appointmentDate, datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo,
-                    isCompleted, fromId, calendarId, encryptedAppointmentId, "0");
 
+            if (fromId.equals("3")) {
+
+                presenter.addAppointment(jsonObjectString,fromId);
+            } else if (fromId.equals("5")) {
+
+                presenter.addAppointment(jsonObjectString,fromId);
+            } else {
+
+                presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend,
+                        appointmentDate, datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo,
+                        isCompleted, fromId, calendarId, encryptedAppointmentId, "0");
+            }
 
         }
     }

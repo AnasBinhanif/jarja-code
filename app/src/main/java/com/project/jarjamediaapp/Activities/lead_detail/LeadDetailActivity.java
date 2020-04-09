@@ -442,25 +442,29 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
             case R.id.rlTransaction1:
 
-                Intent intentT1 = new Intent(context, TransactionActivity.class);
-                intentT1.putExtra("title", title);
-                intentT1.putExtra("leadID", leadID);
-                intentT1.putExtra("leadDetailId", transLeadID1);
-                intentT1.putExtra("currentStage", currentStage1);
-                intentT1.putExtra("Pipeline", transactionPipeline);
-                startActivity(intentT1);
+                if (currentStage1!=null) {
+                    Intent intentT1 = new Intent(context, TransactionActivity.class);
+                    intentT1.putExtra("title", title);
+                    intentT1.putExtra("leadID", leadID);
+                    intentT1.putExtra("leadDetailId", transLeadID1);
+                    intentT1.putExtra("currentStage", currentStage1);
+                    intentT1.putExtra("Pipeline", transactionPipeline);
+                    startActivity(intentT1);
+                }
 
                 break;
 
             case R.id.rlTransaction2:
 
-                Intent intentT2 = new Intent(context, TransactionActivity.class);
-                intentT2.putExtra("title", title);
-                intentT2.putExtra("leadID", leadID);
-                intentT2.putExtra("leadDetailId", transLeadID2);
-                intentT2.putExtra("currentStage", currentStage2);
-                intentT2.putExtra("Pipeline", transactionPipeline);
-                startActivity(intentT2);
+                if (currentStage2!=null) {
+                    Intent intentT2 = new Intent(context, TransactionActivity.class);
+                    intentT2.putExtra("title", title);
+                    intentT2.putExtra("leadID", leadID);
+                    intentT2.putExtra("leadDetailId", transLeadID2);
+                    intentT2.putExtra("currentStage", currentStage2);
+                    intentT2.putExtra("Pipeline", transactionPipeline);
+                    startActivity(intentT2);
+                }
 
                 break;
 

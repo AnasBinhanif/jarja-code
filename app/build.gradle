@@ -44,9 +44,9 @@ dependencies {
 
     // Retrofit library
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation'com.squareup.retrofit2:converter-scalars:2.5.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation'com.squareup.retrofit2:converter-scalars:2.1.0'
     // UI Component
     implementation 'com.kaopiz:kprogresshud:1.1.0'
     // Custom Size for fonts and dimensions

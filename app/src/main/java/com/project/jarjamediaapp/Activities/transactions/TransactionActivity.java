@@ -113,11 +113,15 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         tvInitial.setVisibility(View.VISIBLE);
                     }
 
-                    if (allLeadsList.pipeline.contains(currentPipeline)) {
-                        tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
-                        imgInitial.setVisibility(View.VISIBLE);
-                        tvInitial.setVisibility(View.GONE);
-                        bf = false;
+                    if (allLeadsList.pipeline!=null && currentPipeline!=null) {
+                        if (allLeadsList.pipeline.contains(currentPipeline)) {
+                            tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
+                            imgInitial.setVisibility(View.VISIBLE);
+                            tvInitial.setVisibility(View.GONE);
+                            bf = false;
+                        }
+                    }else{
+                        ToastUtils.showToast(context,"Pipeline Data Not Found");
                     }
 
                     return Unit.INSTANCE;
@@ -174,6 +178,12 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void addAgentCommission(Response<BaseResponse> response) {
 
+        if (dialog!=null) {
+            if (dialog.isShowing())
+            {
+                dialog.dismiss();
+            }
+        }
         ToastUtils.showToast(context, response.body().getMessage());
         presenter.getAgentCommission(leadID, leadDetailId);
     }

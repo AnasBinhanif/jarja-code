@@ -36,7 +36,9 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     TasksPresenter presenter;
     SwipeTasksDueRecyclerAdapter swipeTasksDueRecyclerAdapter;
     boolean isFromActivity;
+
     String leadID = "";
+    int whichTasks = 1;
 
     ArrayList<GetTasksModel.Data> tasksList = new ArrayList<>();
 
@@ -79,11 +81,10 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
 
         tasksList = response.data;
 
-
-
         switch (whichTask) {
 
             case "due":
+                whichTasks = 1;
                 if (tasksList.size() == 0) {
 
                     bi.tvNoRecordFound.setVisibility(View.VISIBLE);
@@ -107,6 +108,9 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 break;
 
             case "overdue":
+
+                whichTasks = 2;
+
                 if (tasksList.size() == 0) {
 
                     bi.tvNoRecordFound.setVisibility(View.VISIBLE);
@@ -131,6 +135,8 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 break;
 
             case "future":
+
+                whichTasks = 3;
                 if (tasksList.size() == 0) {
 
                     bi.tvNoRecordFound.setVisibility(View.VISIBLE);
@@ -287,9 +293,29 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
         super.onResume();
 
         if (isFromActivity) {
-            presenter.getLeadDueTasks(leadID);
+            switch (whichTasks) {
+                case 1:
+                    presenter.getLeadDueTasks(leadID);
+                    break;
+                case 2:
+                    presenter.getLeadOverDueTasks(leadID);
+                    break;
+                case 3:
+                    presenter.getLeadFutureTasks(leadID);
+                    break;
+            }
         } else {
-            presenter.getDueTasks();
+            switch (whichTasks) {
+                case 1:
+                    presenter.getDueTasks();
+                    break;
+                case 2:
+                    presenter.getOverDueTasks();
+                    break;
+                case 3:
+                    presenter.getFutureTasks();
+                    break;
+            }
         }
 
     }

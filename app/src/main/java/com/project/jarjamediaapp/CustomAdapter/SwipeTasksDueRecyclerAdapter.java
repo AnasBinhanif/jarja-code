@@ -210,26 +210,56 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
                         pos = getAdapterPosition();
                         String leadID = mData.get(pos).leadID;
                         String taskID = mData.get(pos).taskID;
+                        String scheduleID = mData.get(pos).scheduleID;
                         if (isEditByLead) {
 
                             swipeLayout.close(true);
-                            if (taskID == null || taskID.equals("null") || taskID.equals("")) {
-                                Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                            if (!isFutureTask) {
+                                if (taskID == null || taskID.equals("null") || taskID.equals("")) {
+                                    Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    context.startActivity(new Intent(context, AddTaskActivity.class)
+                                            .putExtra("from", "3")
+                                            .putExtra("whichTasks", 1)
+                                            .putExtra("taskId", taskID));
+                                }
                             } else {
-                                context.startActivity(new Intent(context, AddTaskActivity.class)
-                                        .putExtra("leadID", leadID)
-                                        .putExtra("from", "2")
-                                        .putExtra("taskId", taskID));
+
+                                if (scheduleID == null || scheduleID.equals("null") || scheduleID.equals("")) {
+                                    Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                                } else {
+
+                                    context.startActivity(new Intent(context, AddTaskActivity.class)
+                                            .putExtra("from", "3")
+                                            .putExtra("whichTasks", 3)
+                                            .putExtra("taskId", scheduleID));
+                                }
                             }
                         } else {
 
                             swipeLayout.close(true);
-                            if (taskID == null || taskID.equals("null") || taskID.equals("")) {
-                                Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                            if (!isFutureTask) {
+                                if (taskID == null || taskID.equals("null") || taskID.equals("")) {
+                                    Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    context.startActivity(new Intent(context, AddTaskActivity.class)
+                                            .putExtra("from", "3")
+                                            .putExtra("whichTasks", 1)
+                                            .putExtra("taskId", taskID));
+                                }
                             } else {
-                                context.startActivity(new Intent(context, AddTaskActivity.class)
-                                        .putExtra("from", "3")
-                                        .putExtra("taskId", taskID));
+
+                                if (scheduleID == null || scheduleID.equals("null") || scheduleID.equals("")) {
+                                    Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                                } else {
+
+                                    context.startActivity(new Intent(context, AddTaskActivity.class)
+                                            .putExtra("from", "3")
+                                            .putExtra("whichTasks", 3)
+                                            .putExtra("taskId", scheduleID));
+                                }
+
+
                             }
                         }
                     } else {
