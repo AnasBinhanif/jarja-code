@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -238,7 +239,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             break;
             case "4": {
 
-                bi.tvName.setEnabled(true);
+                bi.tvName.setEnabled(false);
+                bi.tvName.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_search_dark));
                 isEdit = true;
                 setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
                 bi.lblAppointment.setText(getString(R.string.edit_appointment));
@@ -254,10 +256,41 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
                 bi.lblAppointment.setText(getString(R.string.edit_appointment));
                 calendarData = getIntent().getParcelableExtra("modelData");
-                prePopulateData(calendarData);
+                if (calendarData != null) {
+                    prePopulateData(calendarData);
+                } else {
+                    ToastUtils.showToast(context, "No Data Found");
+                }
 
             }
             break;
+            case "7": {
+
+                isEdit = true;
+                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.appointment), true);
+                bi.lblAppointment.setText(getString(R.string.appointment));
+                GetAppointmentsModel.Data modelData = getIntent().getParcelableExtra("models");
+                prePopulateData(modelData);
+                setViewAndChildrenEnabled(bi.appointParent, false);
+                bi.lnBottom.setVisibility(View.GONE);
+            }
+            break;
+        }
+    }
+
+
+    private void setViewAndChildrenEnabled(View view, boolean enabled) {
+        view.setEnabled(enabled);
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View child = viewGroup.getChildAt(i);
+                if (child instanceof ViewGroup) {
+                    setViewAndChildrenEnabled(child, enabled);
+                } else {
+                    child.setEnabled(enabled);
+                }
+            }
         }
     }
 
@@ -270,14 +303,20 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
 
-        startDate = GH.getInstance().formatter(modelData.getDatedFrom(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-        endDate = GH.getInstance().formatter(modelData.getDatedTo(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-        startTime = GH.getInstance().formatter(modelData.getDatedFrom(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
-        endTime = GH.getInstance().formatter(modelData.getDatedTo(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
-        bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(modelData.getDatedFrom()) : "");
-        bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(modelData.getDatedFrom()) : "");
-        bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(modelData.getDatedTo()) : "");
-        bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(modelData.getDatedTo()) : "");
+        String sDateTime = addHour(modelData.getDatedFrom(), 5);
+        String eDateTime = addHour(modelData.getDatedTo(), 5);
+
+        startDate = GH.getInstance().formatter(sDateTime, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+        endDate = GH.getInstance().formatter(eDateTime, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+        startTime = GH.getInstance().formatter(sDateTime, "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+        endTime = GH.getInstance().formatter(eDateTime, "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+
+
+        bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(sDateTime) : "");
+        bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(sDateTime) : "");
+        bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(eDateTime) : "");
+        bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(eDateTime) : "");
+
         if (arrayListReminderValue != null && arrayListReminderValue.size() > 0) {
             reminder = String.valueOf(modelData.getInterval());
             via = modelData.getViaReminder();
@@ -324,15 +363,19 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
 
-        startDate = GH.getInstance().formatter(modelData.getDatedFrom(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-        endDate = GH.getInstance().formatter(modelData.getDatedTo(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-        startTime = GH.getInstance().formatter(modelData.getDatedFrom(), "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
-        endTime = GH.getInstance().formatter(modelData.getDatedTo(), "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+        String sDateTime = addHour(modelData.getDatedFrom(), 5);
+        String eDateTime = addHour(modelData.getDatedTo(), 5);
 
-        bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(modelData.getDatedFrom()) : "");
-        bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(modelData.getDatedFrom()) : "");
-        bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(modelData.getDatedTo()) : "");
-        bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(modelData.getDatedTo()) : "");
+        startDate = GH.getInstance().formatter(sDateTime, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+        endDate = GH.getInstance().formatter(eDateTime, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+        startTime = GH.getInstance().formatter(sDateTime, "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+        endTime = GH.getInstance().formatter(eDateTime, "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+
+
+        bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(sDateTime) : "");
+        bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(sDateTime) : "");
+        bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(eDateTime) : "");
+        bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(eDateTime) : "");
 
         if (arrayListReminderValue != null && arrayListReminderValue.size() > 0) {
             reminder = String.valueOf(modelData.getInterval());
@@ -373,6 +416,22 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
             agentIdsString = TextUtils.join(",", arrayList);
         }
+    }
+
+    private String addHour(String myTime, int number) {
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date d = df.parse(myTime);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(d);
+            cal.add(Calendar.HOUR, number);
+            String newTime = df.format(cal.getTime());
+            return newTime;
+        } catch (ParseException e) {
+            System.out.println(" Parsing Exception");
+        }
+        return null;
+
     }
 
     @Override
@@ -767,6 +826,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 obj.put("endTime", endTime);
                 obj.put("desc", desc);
                 obj.put("isSend", isSend);
+                obj.put("calendarType", "Event");
                 obj.put("agentsStringIDs", agentIdsString);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -777,7 +837,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
             presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend,
                     appointmentDate, datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo,
-                    isCompleted, fromId, calendarId, encryptedAppointmentId, leadId);
+                    isCompleted, fromId, calendarId, encryptedAppointmentId, "0");
 
 
         }
@@ -882,10 +942,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         recyclerSearch = dialog.findViewById(R.id.recyclerSearch);
 
 
-        if (!edtQuery.getText().toString().equals(""))
-        {
+        if (!edtQuery.getText().toString().equals("")) {
             imgClear.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             imgClear.setVisibility(View.GONE);
         }
 

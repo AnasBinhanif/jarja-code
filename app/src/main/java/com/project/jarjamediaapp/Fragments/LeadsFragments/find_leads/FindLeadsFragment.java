@@ -228,7 +228,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
     @Override
     public void updateUIonFalse(String message) {
-        ToastUtils.showToastLong(context, message);
+        //ToastUtils.showToastLong(context, message);
     }
 
     @Override

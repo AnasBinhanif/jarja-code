@@ -305,8 +305,15 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListViaText);
         bi.atvType.setAdapter(arrayAdapter);
+        bi.atvType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                type = arrayListViaValue.get(position);
+            }
+        });
 
-        bi.atvType.setOnItemClickListener((parent, view, position, id) -> type = arrayListViaValue.get(position));
+        bi.atvType.setText(arrayListViaText.get(0),false);
+        type = arrayListViaValue.get(0);
     }
 
     @Override
@@ -338,7 +345,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         checkIntent();
         if (from.equals("1") || from.equals("4")) {
             bi.atvRecur.setText(arrayListViaValue.get(0), false);
-            reoccur = arrayListViaValue.get(0);
+            reoccur = arrayListViaText.get(0);
+            bi.lnEndDate.setVisibility(View.GONE);
         }
         calendarInstance();
     }
@@ -428,13 +436,13 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String type = this.type;
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
-        startDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+        String sDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
                 "MM-dd-yyyy HH:mm:ss");
-        endDate = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+        String eDate = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
                 "MM-dd-yyyy HH:mm:ss");
 
-        String datedFrom = startDate;
-        String datedto = endDate;
+        String datedFrom = sDate;
+        String datedto = eDate;
         String recurDay = "";
         String recureWeek = "";
         String noOfWeek = "";
@@ -443,7 +451,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String weekNo = "";
         String monthOfYear = "";
         String nextRun = "";
-        String isEndDate = !bi.cbEndDate.isChecked() ? "false" : "true";
+        boolean isEndDate = bi.cbEndDate.isChecked() ? false : true;
         String reminderDate = "";
         int interval = !reminder.equals("") ? Integer.valueOf(reminder) : 0;
         String isSend = "";
@@ -458,7 +466,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             try {
                 obj.put("id", id);
                 obj.put("agentIds", agentIds);
-                obj.put("leadStringID", leadStringID);
+                obj.put("leadIds", leadStringID);
                 obj.put("isAssignNow", isAssignNow);
                 obj.put("monthType", monthType);
                 obj.put("scheduleID", scheduleID);
@@ -466,9 +474,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 obj.put("desc", desc);
                 obj.put("scheduleRecurID", scheduleRecurID);
                 obj.put("type", type);
-                obj.put("datedFrom", datedFrom);
-                obj.put("datedto", datedto);
-                obj.put("datedFrom", datedFrom);
+                obj.put("startDate", datedFrom);
+                obj.put("endDate", datedto);
                 obj.put("recurDay", recurDay);
                 obj.put("recureWeek", recureWeek);
                 obj.put("noOfWeek", noOfWeek);

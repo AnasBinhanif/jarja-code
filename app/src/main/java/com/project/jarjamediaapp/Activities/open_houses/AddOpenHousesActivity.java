@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,13 +14,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -30,10 +25,7 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.paris.Paris;
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
@@ -41,14 +33,12 @@ import com.project.jarjamediaapp.Activities.bottomsheet.BottomDialogFragment;
 import com.project.jarjamediaapp.Activities.bottomsheet.HandleClickEvents;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
-import com.project.jarjamediaapp.CustomAdapter.HorizontalAdapter;
 import com.project.jarjamediaapp.R;
-import com.project.jarjamediaapp.Utilities.CenterZoomLayoutManager;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.Utilities.UserPermissions;
-import com.project.jarjamediaapp.databinding.ActivityOpenHousesBinding;
+import com.project.jarjamediaapp.databinding.CustomOpenHouseDialogBinding;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -68,12 +58,11 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Response;
 
-public class OpenHousesActivity extends BaseActivity implements View.OnClickListener, OpenHousesContract.View, HandleClickEvents, EasyPermissions.PermissionCallbacks {
+public class AddOpenHousesActivity extends BaseActivity implements View.OnClickListener, OpenHousesContract.View, HandleClickEvents, EasyPermissions.PermissionCallbacks {
 
-    ActivityOpenHousesBinding bi;
-    Context context = OpenHousesActivity.this;
+    CustomOpenHouseDialogBinding bi;
+    Context context = AddOpenHousesActivity.this;
     OpenHousesPresenter presenter;
-    Dialog dialog;
     String listPrice = "", city = "", address = "", state = "", zip = "", image = "", dateTimeToServer = "";
     String timeS = "", timeE = "";
     String openHouseStartDate = "", openHouseEndDate = "", dateToServer = "", timeToServer = "";
@@ -82,9 +71,6 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     private final int RC_CAMERA_ONLY = 101;
     File actualImage;
     File compressedImage;
-    TextView tvSelectPictures, tvRemovePictures;
-    Button btnSave, btnCancel;
-    AutoCompleteTextView atvPrice, atvAddress, atvCity, atvState, atvZip, atvOpenHouseStartDate, atvOpenHouseEndDate;
     int viewId;
     String openHouseType = "upcoming";
 
@@ -92,68 +78,25 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bi = DataBindingUtil.setContentView(this, R.layout.activity_open_houses);
+        bi = DataBindingUtil.setContentView(this, R.layout.custom_open_house_dialog);
         presenter = new OpenHousesPresenter(this);
         presenter.initScreen();
-        setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.openHouses), true);
-
+        setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_open_house), true);
     }
 
-    @Override
-    public void onClick(View view) {
-
-        int id = view.getId();
-        switch (id) {
-            case R.id.btnUpcomingOH:
-
-                openHouseType = "upcoming";
-                presenter.getAllOpenHouses(openHouseType);
-
-                Paris.style(bi.btnUpcomingOH).apply(R.style.TabButtonYellowLeft);
-                Paris.style(bi.btnPastOH).apply(R.style.TabButtonTranparentRight);
-
-                break;
-
-            case R.id.btnPastOH:
-
-                openHouseType = "past";
-                presenter.getAllOpenHouses(openHouseType);
-
-                Paris.style(bi.btnPastOH).apply(R.style.TabButtonYellowRight);
-                Paris.style(bi.btnUpcomingOH).apply(R.style.TabButtonTranparentLeft);
-
-                break;
-
-        }
-    }
 
     @Override
     public void initViews() {
 
-        UserPermissions.isCameraStorageLocationPermissionGranted(OpenHousesActivity.this);
-        bi.btnPastOH.setOnClickListener(this);
-        bi.btnUpcomingOH.setOnClickListener(this);
+        UserPermissions.isCameraStorageLocationPermissionGranted(AddOpenHousesActivity.this);
+
+        initListeners();
 
     }
 
-    public void showAddHouseDialog(Context context) {
+    private void initListeners() {
 
-        dialog = new Dialog(context, R.style.Dialog);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.custom_open_house_dialog);
-
-        atvPrice = dialog.findViewById(R.id.atvPrice);
-        atvAddress = dialog.findViewById(R.id.atvAddress);
-        atvCity = dialog.findViewById(R.id.atvCity);
-        atvState = dialog.findViewById(R.id.atvState);
-        atvZip = dialog.findViewById(R.id.atvZip);
-        atvOpenHouseStartDate = dialog.findViewById(R.id.atvOpenHouseStartDate);
-        atvOpenHouseEndDate = dialog.findViewById(R.id.atvOpenHouseEndDate);
-
-        tvSelectPictures = dialog.findViewById(R.id.tvSelectPictures);
-        tvRemovePictures = dialog.findViewById(R.id.tvRemovePictures);
-
-        atvAddress.setOnClickListener(new View.OnClickListener() {
+        bi.atvAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -162,16 +105,16 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        atvAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        bi.atvAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-                    int length = atvAddress.getText().length();
+                    int length = bi.atvAddress.getText().length();
                     try {
                         if (length > 0)
-                            presenter.getAddressDetailByPrefix(atvAddress.getText().toString(), "street");
+                            presenter.getAddressDetailByPrefix(bi.atvAddress.getText().toString(), "street");
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -184,7 +127,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         });
 
 
-        atvCity.setOnClickListener(new View.OnClickListener() {
+        bi.atvCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -193,16 +136,16 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        atvCity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        bi.atvCity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-                    int length = atvCity.getText().length();
+                    int length = bi.atvCity.getText().length();
                     try {
                         if (length > 0)
-                            presenter.getAddressDetailByPrefix(atvCity.getText().toString(), "city");
+                            presenter.getAddressDetailByPrefix(bi.atvCity.getText().toString(), "city");
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -214,7 +157,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        atvState.setOnClickListener(new View.OnClickListener() {
+        bi.atvState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -223,16 +166,16 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        atvState.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        bi.atvState.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-                    int length = atvState.getText().length();
+                    int length = bi.atvState.getText().length();
                     try {
                         if (length > 0)
-                            presenter.getAddressDetailByPrefix(atvState.getText().toString(), "state");
+                            presenter.getAddressDetailByPrefix(bi.atvState.getText().toString(), "state");
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -244,7 +187,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        atvZip.setOnClickListener(new View.OnClickListener() {
+        bi.atvZip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -253,16 +196,16 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        atvZip.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        bi.atvZip.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-                    int length = atvZip.getText().length();
+                    int length = bi.atvZip.getText().length();
                     try {
                         if (length > 0)
-                            presenter.getAddressDetailByPrefix(atvZip.getText().toString(), "zip");
+                            presenter.getAddressDetailByPrefix(bi.atvZip.getText().toString(), "zip");
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -274,52 +217,51 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        atvOpenHouseStartDate.setOnClickListener(new View.OnClickListener() {
+        bi.atvOpenHouseStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateDialog(context, atvOpenHouseStartDate, true, "1");
+                DateDialog(context, bi.atvOpenHouseStartDate, true, "1");
             }
         });
 
-        atvOpenHouseEndDate.setOnClickListener(new View.OnClickListener() {
+        bi.atvOpenHouseEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateDialog(context, atvOpenHouseEndDate, true, "2");
+                DateDialog(context, bi.atvOpenHouseEndDate, true, "2");
             }
         });
 
-        tvSelectPictures.setOnClickListener(new View.OnClickListener() {
+        bi.tvSelectPictures.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 bottomDialogFragment = BottomDialogFragment.getInstance();
-                bottomDialogFragment.setCLickHandleClickEvents(OpenHousesActivity.this);
+                bottomDialogFragment.setCLickHandleClickEvents(AddOpenHousesActivity.this);
                 bottomDialogFragment.show(getSupportFragmentManager(), "Select Image");
             }
         });
 
-        tvRemovePictures.setOnClickListener(new View.OnClickListener() {
+        bi.tvRemovePictures.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 image = "";
-                tvRemovePictures.setVisibility(View.GONE);
-                tvSelectPictures.setVisibility(View.VISIBLE);
+                bi.tvRemovePictures.setVisibility(View.GONE);
+                bi.tvSelectPictures.setVisibility(View.VISIBLE);
 
             }
         });
 
-        btnSave = dialog.findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(new View.OnClickListener() {
+        bi.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // dismiss dialogue on api integration
 
-                address = atvAddress.getText().toString();
-                listPrice = atvPrice.getText().toString();
-                city = atvCity.getText().toString();
-                state = atvState.getText().toString();
-                zip = atvZip.getText().toString();
+                address = bi.atvAddress.getText().toString();
+                listPrice = bi.atvPrice.getText().toString();
+                city = bi.atvCity.getText().toString();
+                state = bi.atvState.getText().toString();
+                zip = bi.atvZip.getText().toString();
 
                 if (isValidate()) {
                     presenter.addOpenHouse(listPrice, city, address, state, zip, image, openHouseStartDate, openHouseEndDate);
@@ -328,61 +270,58 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             }
         });
 
-        btnCancel = dialog.findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        bi.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                finish();
             }
         });
-
-        dialog.show();
 
     }
 
     private boolean isValidate() {
 
-        if (Methods.isEmpty(atvAddress)) {
+        if (Methods.isEmpty(bi.atvAddress)) {
             ToastUtils.showToast(context, R.string.error_address);
-            atvAddress.requestFocus();
+            bi.atvAddress.requestFocus();
             return false;
         }
-        if (Methods.isEmpty(atvCity)) {
+        if (Methods.isEmpty(bi.atvCity)) {
             ToastUtils.showToast(context, R.string.error_city);
-            atvCity.requestFocus();
+            bi.atvCity.requestFocus();
             return false;
         }
-        if (Methods.isEmpty(atvState)) {
+        if (Methods.isEmpty(bi.atvState)) {
             ToastUtils.showToast(context, R.string.error_state);
-            atvState.requestFocus();
+            bi.atvState.requestFocus();
             return false;
         }
-        if (Methods.isEmpty(atvOpenHouseStartDate)) {
+        if (Methods.isEmpty(bi.atvOpenHouseStartDate)) {
             ToastUtils.showToast(context, R.string.error_start_time);
-            atvOpenHouseStartDate.requestFocus();
+            bi.atvOpenHouseStartDate.requestFocus();
             return false;
         }
-        if (Methods.isEmpty(atvOpenHouseEndDate)) {
+        if (Methods.isEmpty(bi.atvOpenHouseEndDate)) {
             ToastUtils.showToast(context, R.string.error_end_time);
-            atvOpenHouseEndDate.requestFocus();
+            bi.atvOpenHouseEndDate.requestFocus();
             return false;
         }
         Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null;
 
         try {
-            SimpleDateFormat simpleDate =  new SimpleDateFormat("HH:mm:ss");
+            SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm:ss");
             String time = simpleDate.format(Calendar.getInstance().getTime());
             currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
             time1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(openHouseStartDate);
             time2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(openHouseEndDate);
             if (time2.before(time1)) {
                 ToastUtils.showToast(context, "End date time cannot be less than start date time");
-                atvOpenHouseEndDate.requestFocus();
+                bi.atvOpenHouseEndDate.requestFocus();
                 return false;
             }
             if (time1.before(currentTime)) {
                 ToastUtils.showToast(context, "Start time cannot be less than current time");
-                atvOpenHouseStartDate.requestFocus();
+                bi.atvOpenHouseStartDate.requestFocus();
                 return false;
             }
         } catch (ParseException e) {
@@ -396,17 +335,13 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     public void updateUI(Response<BaseResponse> response) {
 
         ToastUtils.showToastLong(context, "Open House Added Successfully");
-        if (dialog != null) {
-            dialog.dismiss();
-        }
-        presenter.getAllOpenHouses(openHouseType);
-
+        finish();
     }
 
     @Override
     public void showProgressBar() {
 
-        GH.getInstance().ShowProgressDialog(OpenHousesActivity.this);
+        GH.getInstance().ShowProgressDialog(AddOpenHousesActivity.this);
     }
 
     @Override
@@ -416,50 +351,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.home, menu);
-        menu.findItem(R.id.action_notify).setVisible(false);
-        MenuItem item = menu.findItem(R.id.action_add);
-        item.setVisible(true);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_add) {
-
-            //showAddHouseDialog(context);
-            switchActivity(AddOpenHousesActivity.class);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-
-    }
-
-    @Override
     public void updateUIListForOpenHouses(Response<GetAllOpenHousesModel> response) {
-
-        try {
-
-            if (response.body().getData().openHouse.size() > 0) {
-                bi.rvOpenHouse.setLayoutManager(new CenterZoomLayoutManager(context, RecyclerView.HORIZONTAL, false));
-                bi.rvOpenHouse.setItemAnimator(new DefaultItemAnimator());
-                bi.rvOpenHouse.setAdapter(new HorizontalAdapter(context, response.body().getData().openHouse,openHouseType));
-                bi.rvOpenHouse.setVisibility(View.VISIBLE);
-                bi.tvMessage.setVisibility(View.GONE);
-            } else {
-                bi.rvOpenHouse.setVisibility(View.GONE);
-                bi.tvMessage.setVisibility(View.VISIBLE);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -467,9 +359,9 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     public void updateAfterUploadFile(Response<UploadImageModel> response) {
 
         hideProgressBar();
-        tvRemovePictures.setVisibility(View.VISIBLE);
-        tvRemovePictures.setText("Image uploaded");
-        tvSelectPictures.setVisibility(View.GONE);
+        bi.tvRemovePictures.setVisibility(View.VISIBLE);
+        bi.tvRemovePictures.setText("Image uploaded");
+        bi.tvSelectPictures.setVisibility(View.GONE);
         ToastUtils.showToast(context, "Image uploaded");
         image = response.body().getData();
 
@@ -478,81 +370,76 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     @Override
     public void updateUIListForAddressDetail(AddressDetailModel.Data response) {
 
-        try {
+       AddressDetailModel.Data data = response;
+        switch (viewId) {
 
-            switch (viewId) {
+            case R.id.atvAddress: {
 
-                case R.id.atvAddress: {
-
-                    ArrayList<String> arrayList = new ArrayList<>();
-                    if (response.getStreetFilter().size() > 0) {
-                        for (int i = 0; i < response.getStreetFilter().size(); i++) {
-                            arrayList.add(response.getStreetFilter().get(i).getN());
-                        }
-                        ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
-                        atvAddress.setAdapter(arrayAdapter);
-                        atvAddress.showDropDown();
-                        atvAddress.setThreshold(1);
-                    } else {
-                        ToastUtils.showToast(context, "No data found");
+                ArrayList<String> arrayList = new ArrayList<>();
+                if (response.getStreetFilter().size() > 0) {
+                    for (int i = 0; i < response.getStreetFilter().size(); i++) {
+                        arrayList.add(response.getStreetFilter().get(i).getN());
                     }
+                    ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
+                    bi.atvAddress.setAdapter(arrayAdapter);
+                    bi.atvAddress.showDropDown();
+                    bi.atvAddress.setThreshold(1);
+                } else {
+                    ToastUtils.showToast(context, "No data found");
                 }
-                break;
-                case R.id.atvCity: {
-
-                    ArrayList<String> arrayList = new ArrayList<>();
-                    if (response.getCityFilter().size() > 0) {
-                        for (int i = 0; i < response.getCityFilter().size(); i++) {
-                            arrayList.add(response.getCityFilter().get(i).getN());
-                        }
-                        ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
-                        atvCity.setAdapter(arrayAdapter);
-                        atvCity.showDropDown();
-                        atvCity.setThreshold(1);
-                    } else {
-                        ToastUtils.showToast(context, "No data found");
-                    }
-
-                }
-                break;
-                case R.id.atvState: {
-
-                    ArrayList<String> arrayList = new ArrayList<>();
-                    if (response.getStateFilter().size() > 0) {
-                        for (int i = 0; i < response.getStateFilter().size(); i++) {
-                            arrayList.add(response.getStateFilter().get(i).getN());
-                        }
-                        ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
-                        atvState.setAdapter(arrayAdapter);
-                        atvState.showDropDown();
-                        atvState.setThreshold(1);
-                    } else {
-                        ToastUtils.showToast(context, "No data found");
-                    }
-
-                }
-                break;
-                case R.id.atvZip: {
-
-                    ArrayList<String> arrayList = new ArrayList<>();
-                    if (response.getZipCode().size() > 0) {
-                        for (int i = 0; i < response.getZipCode().size(); i++) {
-                            arrayList.add(response.getZipCode().get(i).getN());
-                        }
-                        ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
-                        atvZip.setAdapter(arrayAdapter);
-                        atvZip.showDropDown();
-                        atvZip.setThreshold(1);
-                    } else {
-                        ToastUtils.showToast(context, "No data found");
-                    }
-
-                }
-                break;
             }
+            break;
+            case R.id.atvCity: {
 
-        } catch (Exception e) {
-            e.printStackTrace();
+                ArrayList<String> arrayList = new ArrayList<>();
+                if (response.getCityFilter().size() > 0) {
+                    for (int i = 0; i < response.getCityFilter().size(); i++) {
+                        arrayList.add(response.getCityFilter().get(i).getN());
+                    }
+                    ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
+                    bi.atvCity.setAdapter(arrayAdapter);
+                    bi.atvCity.showDropDown();
+                    bi.atvCity.setThreshold(1);
+                } else {
+                    ToastUtils.showToast(context, "No data found");
+                }
+
+            }
+            break;
+            case R.id.atvState: {
+
+                ArrayList<String> arrayList = new ArrayList<>();
+                if (response.getStateFilter().size() > 0) {
+                    for (int i = 0; i < response.getStateFilter().size(); i++) {
+                        arrayList.add(response.getStateFilter().get(i).getN());
+                    }
+                    ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
+                    bi.atvState.setAdapter(arrayAdapter);
+                    bi.atvState.showDropDown();
+                    bi.atvState.setThreshold(1);
+                } else {
+                    ToastUtils.showToast(context, "No data found");
+                }
+
+            }
+            break;
+            case R.id.atvZip: {
+
+                ArrayList<String> arrayList = new ArrayList<>();
+                if (response.getZipCode().size() > 0) {
+                    for (int i = 0; i < response.getZipCode().size(); i++) {
+                        arrayList.add(response.getZipCode().get(i).getN());
+                    }
+                    ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
+                    bi.atvZip.setAdapter(arrayAdapter);
+                    bi.atvZip.showDropDown();
+                    bi.atvZip.setThreshold(1);
+                } else {
+                    ToastUtils.showToast(context, "No data found");
+                }
+
+            }
+            break;
         }
 
     }
@@ -583,10 +470,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void updateUIonFalse(String message) {
-
-        bi.rvOpenHouse.setVisibility(View.GONE);
-        bi.tvMessage.setVisibility(View.VISIBLE);
-
+        ToastUtils.showToastLong(context, message);
     }
 
     @Override
@@ -596,18 +480,14 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
         } else {
-            bi.rvOpenHouse.setVisibility(View.GONE);
-            bi.tvMessage.setVisibility(View.VISIBLE);
+            ToastUtils.showToastLong(context, error);
         }
 
     }
 
     @Override
     public void updateUIonFailure() {
-
-        bi.rvOpenHouse.setVisibility(View.GONE);
-        bi.tvMessage.setVisibility(View.VISIBLE);
-
+        ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
     }
 
     @Override
@@ -686,17 +566,17 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
                 if (bottomDialogFragment != null)
                     bottomDialogFragment.dismissAllowingStateLoss();
             }
-            new ImageCompression(OpenHousesActivity.this).execute(images.get(0).getPath());
+            new ImageCompression(AddOpenHousesActivity.this).execute(images.get(0).getPath());
         }
     }
 
     private class ImageCompression extends AsyncTask<String, Void, File> {
 
 
-        private WeakReference<OpenHousesActivity> activityReference;
+        private WeakReference<AddOpenHousesActivity> activityReference;
 
         // only retain a weak reference to the activity
-        ImageCompression(OpenHousesActivity context) {
+        ImageCompression(AddOpenHousesActivity context) {
             activityReference = new WeakReference<>(context);
         }
 
@@ -709,7 +589,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         protected void onPostExecute(File result) {
             Log.d("Test", "onPreExecute: " + "" + result);
 
-            OpenHousesActivity activity = activityReference.get();
+            AddOpenHousesActivity activity = activityReference.get();
             if (activity == null || activity.isFinishing()) return;
 
             Uri uri = Uri.fromFile(result);
@@ -795,7 +675,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
         TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(OpenHousesActivity.this, new TimePickerDialog.OnTimeSetListener() {
+        mTimePicker = new TimePickerDialog(AddOpenHousesActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
 
@@ -847,15 +727,5 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             e.printStackTrace();
             return "";
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        presenter.getAllOpenHouses(openHouseType);
-    }
-
-    public void hitApiForRefresh(){
-        presenter.getAllOpenHouses(openHouseType);
     }
 }

@@ -88,6 +88,12 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        callGetAllLeads(data, String.valueOf(page));
+    }
+
+    @Override
     public void initViews() {
         bi.edtSearch.onActionViewExpanded();
         bi.edtSearch.clearFocus();

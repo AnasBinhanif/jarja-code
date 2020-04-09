@@ -109,6 +109,31 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
             });
 
 
+            holder.frameLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (!isPreviousAppoint) {
+
+                        userPermission = GH.getInstance().getUserPermissions();
+                        if (userPermission.data.dashboard.get(6).value) {
+                            pos = position;
+                            String leadID = mData.get(pos).leadAppoinmentID;
+                            GetAppointmentsModel.Data modelData = mData.get(pos);
+                            context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                                    .putExtra("leadID", leadID)
+                                    .putExtra("from", "7")
+                                    .putExtra("models", modelData));
+
+                        } else {
+                            ToastUtils.showToast(context, context.getString(R.string.dashboard_ViewEditAppoint));
+                        }
+
+                    }
+                }
+            });
+
+
             // Use ViewBindHelper to restore and save the open/close state of the SwipeRevealView
             // put an unique string id as value, can be any string which uniquely define the data
 

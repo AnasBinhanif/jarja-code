@@ -49,7 +49,7 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
 
                     if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
 
-                        _view.updateUIListForAddressDetail(getAppointmentsModel.getData());
+                        _view.updateUIListForAddressDetail(getAppointmentsModel.data);
 
                     } else {
 
@@ -149,7 +149,8 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
     public void getAllOpenHouses(String openHouseType) {
 
         _view.showProgressBar();
-        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getAllOpenHouses(GH.getInstance().getAuthorization(), openHouseType);
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getAllOpenHouses(GH.getInstance().getAuthorization(),openHouseType);
+
         call.enqueue(new Callback<GetAllOpenHousesModel>() {
             @Override
             public void onResponse(Call<GetAllOpenHousesModel> call, Response<GetAllOpenHousesModel> response) {
@@ -167,14 +168,14 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
                 } else {
 
                     ApiError error = ErrorUtils.parseError(response);
-                    _view.updateUIonError(error.message());
+                    _view._updateUIonError(error.message());
                 }
             }
 
             @Override
             public void onFailure(Call<GetAllOpenHousesModel> call, Throwable t) {
                 _view.hideProgressBar();
-                _view.updateUIonFailure();
+                _view._updateUIonFailure();
             }
         });
 

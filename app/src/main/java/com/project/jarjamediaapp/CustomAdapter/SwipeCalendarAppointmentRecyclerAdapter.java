@@ -31,7 +31,11 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -182,7 +186,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                     if (calendarDetailModel.getStatus().equals("Success")) {
 
                         if (type != null && !type.equalsIgnoreCase("") && type.equalsIgnoreCase("Task")) {
-                             showDialogForCalendarTaskDetail(context, calendarDetailModel.getData().getList());
+                            showDialogForCalendarTaskDetail(context, calendarDetailModel.getData().getList());
                         } else {
                             showDialogForCalendarAppointmentDetail(context, calendarDetailModel.getData().getCalendarData());
                         }
@@ -251,6 +255,22 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
         }
     }
 
+    private String addHour(String myTime, int number) {
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date d = df.parse(myTime);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(d);
+            cal.add(Calendar.HOUR, number);
+            String newTime = df.format(cal.getTime());
+            return newTime;
+        } catch (ParseException e) {
+            System.out.println(" Parsing Exception");
+        }
+        return null;
+
+    }
+
     private void showDialogForCalendarAppointmentDetail(Context context, CalendarDetailModel.Data.CalendarData calendarDetailModel) {
 
         try {
@@ -270,8 +290,13 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             tvTime = dialog.findViewById(R.id.tvTime);
             tvNotes = dialog.findViewById(R.id.tvNotes);
 
-            String[] startTime = calendarDetailModel.getDatedFrom().split("T");
-            String[] endTime = calendarDetailModel.getDatedTo().split("T");
+            String sDateTime = addHour(calendarDetailModel.getDatedFrom(), 5);
+            String eDateTime = addHour(calendarDetailModel.getDatedTo(), 5);
+
+            String[] startTime = sDateTime.split("T");
+            String[] endTime = eDateTime.split("T");
+
+
             tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
             if (calendarDetailModel.isAllDay) {
                 tvTime.setText("All Day");

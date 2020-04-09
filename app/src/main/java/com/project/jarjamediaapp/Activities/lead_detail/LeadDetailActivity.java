@@ -91,7 +91,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     GetLead.LeadList getLeadListData;
     ArrayList<GetLead.AgentsList> getAssignedAgentList;
 
-    String leadID = "", primaryPhoneNumber = "";
+    String leadID = "", primaryPhoneNumber = "", primaryEmail = "";
 
     ArrayList<GetLeadTransactionStage.PipeLine> transactionPipeline;
     ArrayList<GetLeadTransactionStage.LeadTransactionOne> transactionOneListModel;
@@ -395,10 +395,11 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     }
 
     private void callDialer(String phoneNo) {
-        if (phoneNo.equals("") || phoneNo.equals("null") || phoneNo == null) {
-            ToastUtils.showToast(context, "No Primary Phone Found");
-        } else {
-            if (UserPermissions.isPhonePermissionGranted(LeadDetailActivity.this)) {
+        if (UserPermissions.isPhonePermissionGranted(LeadDetailActivity.this)) {
+
+            if ( phoneNo == null || phoneNo.equals("") || phoneNo.equals("null")) {
+                ToastUtils.showToast(context, "No Primary Phone Found");
+            } else {
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                     startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNo)));
                 }
@@ -412,7 +413,13 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         switch (v.getId()) {
 
             case R.id.imgEmail:
-                presenter.getLeadRecipient(leadID);
+                if (primaryEmail.equals("") || primaryEmail.equals("null") || primaryEmail == null) {
+                    ToastUtils.showToast(context, "No Primary Email Found");
+                } else {
+                    presenter.getLeadRecipient(leadID);
+                }
+
+                //presenter.getLeadRecipient(leadID);
                 break;
 
             case R.id.imgMessage:
@@ -545,6 +552,15 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        presenter.getAgentNames();
+        presenter.getLead(leadID);
+        presenter.getTransaction(leadID);
+    }
+
     private void initListeners() {
 
         bi.btnActions.setOnClickListener(this);
@@ -580,7 +596,6 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 tvIsPrimary.setVisibility(View.INVISIBLE);
             }
 
-
             return Unit.INSTANCE;
         });
 
@@ -588,10 +603,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetLead.AgentsList, Integer, Unit>) (viewComplainList, integer) -> {
 
-
             return Unit.INSTANCE;
         });
-
 
     }
 
@@ -615,7 +628,9 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
         if (getLeadListData != null) {
 
-            primaryPhoneNumber = getLeadListData.phoneNumber == null ? "" : getLeadListData.phoneNumber;
+            primaryPhoneNumber = getLeadListData.primaryPhone == null ? "" : getLeadListData.primaryPhone;
+
+            primaryEmail = getLeadListData.primaryEmail == null ? "" : getLeadListData.primaryEmail;
 
             if (getAssignedAgentList.size() != 0) {
                 for (GetLead.AgentsList model : getAssignedAgentList) {
@@ -720,7 +735,6 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             agentLeadList.add(response.toEmailList.get(i));
             searchLeadListItems.add(new MultiSelectModel((i + 1), response.toEmailList.get(i)));
         }
-
     }
 
     private void callComposeEmail() {

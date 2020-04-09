@@ -468,7 +468,7 @@ public interface ApiMethods {
             @Field("weekNo") String weekNo,
             @Field("monthOfYear") String monthOfYear,
             @Field("nextRun") String nextRun,
-            @Field("isEndDate") String isEndDate,
+            @Field("isEndDate") boolean isEndDate,
             @Field("reminderDate") String reminderDate,
             @Field("interval") int interval,
             @Field("isSend") String isSend,
@@ -850,7 +850,8 @@ public interface ApiMethods {
             @Field("orderBy") Integer orderBy,
             @Field("startTime") String startTime,
             @Field("endTime") String endTime,
-            @Field("isCompleted") boolean isCompleted);
+            @Field("isCompleted") boolean isCompleted,
+            @Field("calendarType") String calendarType);
 
     @FormUrlEncoded
     @POST("Calender/EditAppoinmentTaskCalender")

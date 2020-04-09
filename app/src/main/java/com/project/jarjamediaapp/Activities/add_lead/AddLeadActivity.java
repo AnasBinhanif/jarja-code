@@ -121,16 +121,20 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             bi.edtCountry.setText(leadModel.county);
             bi.edtNotes.setText(leadModel.description);
 
-            if (leadModel.isBirthDayNotify) {
-                bi.chkBdayNotify.setChecked(true);
-            } else {
-                bi.chkBdayNotify.setChecked(false);
+            if (leadModel.isBirthDayNotify!=null) {
+                if (leadModel.isBirthDayNotify) {
+                    bi.chkBdayNotify.setChecked(true);
+                } else {
+                    bi.chkBdayNotify.setChecked(false);
+                }
             }
 
-            if (leadModel.isAnniversaryNotify) {
-                bi.chkAnnivNotify.setChecked(true);
-            } else {
-                bi.chkAnnivNotify.setChecked(false);
+            if (leadModel.isAnniversaryNotify!=null) {
+                if (leadModel.isAnniversaryNotify) {
+                    bi.chkAnnivNotify.setChecked(true);
+                } else {
+                    bi.chkAnnivNotify.setChecked(false);
+                }
             }
 
             if (leadModel.source != null) {

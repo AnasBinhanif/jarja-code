@@ -82,6 +82,9 @@
             android:name=".Activities.open_houses.OpenHousesActivity"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".Activities.open_houses.AddOpenHousesActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".Activities.calendar.CalendarActivity"
             android:screenOrientation="portrait"></activity>
         <activity

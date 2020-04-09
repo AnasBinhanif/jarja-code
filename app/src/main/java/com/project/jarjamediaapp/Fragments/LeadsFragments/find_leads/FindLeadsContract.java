@@ -42,11 +42,4 @@ public interface FindLeadsContract {
                            String pageNo, String pageSize);
     }
 
-    /*
-    this defines the methods that pure model or persistence class like database or server data will implement.
-    */
-    interface Repository {
-
-    }
-
 }

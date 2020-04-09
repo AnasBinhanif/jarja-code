@@ -190,13 +190,13 @@ public class GH {
         String formattedDate = "";
         try {
             date = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.sss'Z'", Locale.getDefault()).parse(dateString);
-            formattedDate = new SimpleDateFormat("MM-dd-yyyy h:mm a", Locale.getDefault()).format(date);
+            dateString = new SimpleDateFormat("MM-dd-yyyy h:mm a", Locale.getDefault()).format(date);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        return formattedDate;
+        return dateString;
     }
 
     public String getMimeType(Context context, Uri uri) {
@@ -220,13 +220,13 @@ public class GH {
         String formattedDate = "";
         try {
             date = new SimpleDateFormat(oldFormat, Locale.getDefault()).parse(dateString);
-            formattedDate = new SimpleDateFormat(newFormat, Locale.getDefault()).format(date);
+            dateString = new SimpleDateFormat(newFormat, Locale.getDefault()).format(date);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        return formattedDate;
+        return dateString;
     }
 
     public void hideKeyboard(Context context, Activity activity) {
