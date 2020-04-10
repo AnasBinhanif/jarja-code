@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -96,12 +97,12 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
     private void initListeners() {
 
-        bi.atvAddress.setOnClickListener(new View.OnClickListener() {
+        bi.atvAddress.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View view, MotionEvent event) {
 
                 viewId = view.getId();
-
+                return false;
             }
         });
 
@@ -111,7 +112,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-                    int length = bi.atvAddress.getText().length();
+                    int length = bi.atvAddress.getText().toString().trim().length();
                     try {
                         if (length > 0)
                             presenter.getAddressDetailByPrefix(bi.atvAddress.getText().toString(), "street");
@@ -127,22 +128,21 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         });
 
 
-        bi.atvCity.setOnClickListener(new View.OnClickListener() {
+        bi.atvCity.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View view, MotionEvent event) {
 
                 viewId = view.getId();
-
+                return false;
             }
         });
-
         bi.atvCity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-                    int length = bi.atvCity.getText().length();
+                    int length = bi.atvCity.getText().toString().trim().length();
                     try {
                         if (length > 0)
                             presenter.getAddressDetailByPrefix(bi.atvCity.getText().toString(), "city");
@@ -157,12 +157,12 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-        bi.atvState.setOnClickListener(new View.OnClickListener() {
+        bi.atvState.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View view, MotionEvent event) {
 
                 viewId = view.getId();
-
+                return false;
             }
         });
 
@@ -172,7 +172,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-                    int length = bi.atvState.getText().length();
+                    int length = bi.atvState.getText().toString().trim().length();
                     try {
                         if (length > 0)
                             presenter.getAddressDetailByPrefix(bi.atvState.getText().toString(), "state");
@@ -187,12 +187,12 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-        bi.atvZip.setOnClickListener(new View.OnClickListener() {
+        bi.atvZip.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View view, MotionEvent event) {
 
                 viewId = view.getId();
-
+                return false;
             }
         });
 
@@ -202,7 +202,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-                    int length = bi.atvZip.getText().length();
+                    int length = bi.atvZip.getText().toString().trim().length();
                     try {
                         if (length > 0)
                             presenter.getAddressDetailByPrefix(bi.atvZip.getText().toString(), "zip");
@@ -370,20 +370,18 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     @Override
     public void updateUIListForAddressDetail(AddressDetailModel.Data response) {
 
-       AddressDetailModel.Data data = response;
         switch (viewId) {
 
             case R.id.atvAddress: {
 
                 ArrayList<String> arrayList = new ArrayList<>();
-                if (response.getStreetFilter().size() > 0) {
+                if (response.getStreetFilter() != null && response.getStreetFilter().size() > 0) {
                     for (int i = 0; i < response.getStreetFilter().size(); i++) {
                         arrayList.add(response.getStreetFilter().get(i).getN());
                     }
                     ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
                     bi.atvAddress.setAdapter(arrayAdapter);
                     bi.atvAddress.showDropDown();
-                    bi.atvAddress.setThreshold(1);
                 } else {
                     ToastUtils.showToast(context, "No data found");
                 }
@@ -392,14 +390,13 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             case R.id.atvCity: {
 
                 ArrayList<String> arrayList = new ArrayList<>();
-                if (response.getCityFilter().size() > 0) {
+                if (response.getCityFilter() != null && response.getCityFilter().size() > 0) {
                     for (int i = 0; i < response.getCityFilter().size(); i++) {
                         arrayList.add(response.getCityFilter().get(i).getN());
                     }
                     ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
                     bi.atvCity.setAdapter(arrayAdapter);
                     bi.atvCity.showDropDown();
-                    bi.atvCity.setThreshold(1);
                 } else {
                     ToastUtils.showToast(context, "No data found");
                 }
@@ -409,14 +406,13 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             case R.id.atvState: {
 
                 ArrayList<String> arrayList = new ArrayList<>();
-                if (response.getStateFilter().size() > 0) {
+                if (response.getStateFilter() != null && response.getStateFilter().size() > 0) {
                     for (int i = 0; i < response.getStateFilter().size(); i++) {
                         arrayList.add(response.getStateFilter().get(i).getN());
                     }
                     ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
                     bi.atvState.setAdapter(arrayAdapter);
                     bi.atvState.showDropDown();
-                    bi.atvState.setThreshold(1);
                 } else {
                     ToastUtils.showToast(context, "No data found");
                 }
@@ -426,14 +422,13 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             case R.id.atvZip: {
 
                 ArrayList<String> arrayList = new ArrayList<>();
-                if (response.getZipCode().size() > 0) {
+                if (response.getZipCode() != null && response.getZipCode().size() > 0) {
                     for (int i = 0; i < response.getZipCode().size(); i++) {
                         arrayList.add(response.getZipCode().get(i).getN());
                     }
                     ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, arrayList);
                     bi.atvZip.setAdapter(arrayAdapter);
                     bi.atvZip.showDropDown();
-                    bi.atvZip.setThreshold(1);
                 } else {
                     ToastUtils.showToast(context, "No data found");
                 }
