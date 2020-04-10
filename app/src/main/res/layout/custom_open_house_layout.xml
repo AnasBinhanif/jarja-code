@@ -27,7 +27,7 @@
                 android:layout_height="350dp"
                 android:clickable="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/house" />
+                android:src="@drawable/open_house" />
 
             <TextView
                 android:id="@+id/tvStartDateTime"

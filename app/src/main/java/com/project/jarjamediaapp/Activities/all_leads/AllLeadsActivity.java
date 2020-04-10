@@ -90,7 +90,11 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        callGetAllLeads(data, String.valueOf(page));
+        if (type==0) {
+            callGetAllLeads(data, String.valueOf(page));
+        }else{
+            callPropertyLeadList();
+        }
     }
 
     @Override

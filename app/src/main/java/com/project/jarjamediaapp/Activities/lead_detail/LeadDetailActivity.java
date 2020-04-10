@@ -9,7 +9,9 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -758,15 +760,45 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             }
             _to = arrayList.toArray(new String[searchLeadListItems.size()]);
         }
-
-        if (isValidate()) {
-            if (multipartFile != null) {
-                presenter.uploadFile(multipartFile, _from);
-            } else {
-                presenter.sendEmailContent(_from, _to, cc, bcc, subject, body, documentUrl, leadID);
+        if (!cc.equals(""))
+        {
+            if (!isValidEmail(cc.toString())){
+                ToastUtils.showToast(context,"Invalid Email in Cc");
+            }else{
+                if (isValidate()) {
+                    if (multipartFile != null) {
+                        presenter.uploadFile(multipartFile, _from);
+                    } else {
+                        presenter.sendEmailContent(_from, _to, cc, bcc, subject, body, documentUrl, leadID);
+                    }
+                }
+            }
+        }else if (!bcc.equals("")){
+            if (!isValidEmail(bcc.toString())){
+                ToastUtils.showToast(context,"Invalid Email in Bcc");
+            }else{
+                if (isValidate()) {
+                    if (multipartFile != null) {
+                        presenter.uploadFile(multipartFile, _from);
+                    } else {
+                        presenter.sendEmailContent(_from, _to, cc, bcc, subject, body, documentUrl, leadID);
+                    }
+                }
+            }
+        }else {
+            if (isValidate()) {
+                if (multipartFile != null) {
+                    presenter.uploadFile(multipartFile, _from);
+                } else {
+                    presenter.sendEmailContent(_from, _to, cc, bcc, subject, body, documentUrl, leadID);
+                }
             }
         }
 
+    }
+
+    public static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
 
     private boolean isValidate() {
