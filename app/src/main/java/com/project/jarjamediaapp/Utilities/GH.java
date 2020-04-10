@@ -83,7 +83,7 @@ public class GH {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_NAME.name(), "");
     }
 
-  /*  public void ShowProgressDialog(Context context) {
+    public void ShowProgressDialog(Context context) {
 
         if (hud != null && hud.isShowing()) {
             hud.dismiss();
@@ -92,15 +92,15 @@ public class GH {
 
     }
 
-    public void HideProgressDialog(Context context) {
+    public void HideProgressDialog() {
 
         if (hud != null && hud.isShowing()) {
             hud.dismiss();
         }
 
-    }*/
+    }
 
-    public void ShowProgressDialog(Activity activity) {
+    /*public void ShowProgressDialog(Activity activity) {
 
         if (activity == null || activity.isFinishing()) {
             return;
@@ -119,9 +119,9 @@ public class GH {
 
         final ImageView img_loading_frame = progressDialog.findViewById(R.id.ivGifJM);
         Glide.with(activity).load(R.drawable.jm_loader).into(img_loading_frame);
-    }
+    }*/
 
-    public void HideProgressDialog() {
+    /*public void HideProgressDialog() {
         try {
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
@@ -133,7 +133,7 @@ public class GH {
             this.progressDialog = null;
         }
 
-    }
+    }*/
 
     public String formatDate(String dateString) {
 
