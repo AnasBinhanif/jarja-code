@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.project.jarjamediaapp.Activities.tags.TagsActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetTagListByLeadID;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -39,7 +40,6 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
     int pos;
     String leadID = "";
     ArrayList<GetTagListByLeadID.Data> mData;
-
 
     public SwipeTagsRecyclerAdapter(Context context, Activity activity, ArrayList<GetTagListByLeadID.Data> data, String leadID) {
 
@@ -157,6 +157,7 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
                     if (getAppointmentsModel.getStatus().equals("Success")) {
 
                         ToastUtils.showToast(context, "Successfully Done");
+                        TagsActivity.selectedTagIdsList.remove(mData.get(pos).tagID);
                         mData.remove(pos);
                         swipeRevealLayout.close(true);
                         notifyDataSetChanged();

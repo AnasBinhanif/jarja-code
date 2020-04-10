@@ -92,6 +92,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     GetLead.LeadList getLeadListData;
     ArrayList<GetLead.AgentsList> getAssignedAgentList;
+    ArrayList<GetLead.LeadDripCompaignList> getAssignedDripCompaign;
+    ArrayList<GetLead.LeadTaskList> getAssignedTagList;
 
     String leadID = "", primaryPhoneNumber = "", primaryEmail = "";
 

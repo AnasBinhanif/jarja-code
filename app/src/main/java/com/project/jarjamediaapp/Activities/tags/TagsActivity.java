@@ -42,7 +42,7 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
     ArrayList<GetTagListByLeadID.Data> assignedTagsList;
     ArrayList<MultiSelectModel> getLeadTagModelList;
     ArrayList<MultiSelectModel> getLeadAssignedTagModelList;
-    ArrayList<Integer> selectedTagIdsList = new ArrayList<>();
+    public static ArrayList<Integer> selectedTagIdsList = new ArrayList<>();
     String leadID = "", tagsIdsString = "";
 
     @Override

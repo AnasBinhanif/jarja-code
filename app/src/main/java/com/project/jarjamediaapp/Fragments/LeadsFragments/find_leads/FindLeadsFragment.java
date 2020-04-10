@@ -71,7 +71,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     @Override
     public void onResume() {
         super.onResume();
-        callGetLeadCounts(null);
+        callGetLeadCounts(bundle);
     }
 
     @Override

@@ -140,7 +140,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             if (leadModel.source != null) {
                 int pos = getLeadSourceNameList.indexOf(leadModel.source);
                 if (pos >= 0) {
-                    bi.spnSource.setSelectedIndex(pos);
+                    bi.spnSource.setText(leadModel.source);
                 }
 
             }
@@ -191,6 +191,53 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                     }
                 }
             }
+
+            if (leadModel.leadDripCompaignList.size() != 0) {
+
+                if (bi.lnDrip.getChildCount() > 0) {
+                    bi.lnDrip.removeAllViews();
+                }
+                selectedDripIdsList = new ArrayList<>();
+
+                for (GetLead.LeadDripCompaignList name : leadModel.leadDripCompaignList) {
+
+                    View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                    TextView textView = child.findViewById(R.id.txtDynamic);
+                    textView.setText(String.valueOf(name.name));
+                    bi.lnDrip.addView(child);
+                    // selectedIdsList.add(Integer.valueOf(name.agentID));
+                    selectedDripIdsList.add(name.dripCompaignID);
+                    if (dripIdsString.equals("")) {
+                        dripIdsString = name.encryptedID;
+                    } else {
+                        dripIdsString = dripIdsString + "," + name.encryptedID;
+                    }
+                }
+            }
+
+            if (leadModel.leadTaskList.size() != 0) {
+
+                if (bi.lnTags.getChildCount() > 0) {
+                    bi.lnTags.removeAllViews();
+                }
+                selectedTagIdsList = new ArrayList<>();
+
+                for (GetLead.LeadTaskList name : leadModel.leadTaskList) {
+
+                    View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                    TextView textView = child.findViewById(R.id.txtDynamic);
+                    textView.setText(String.valueOf(name.label));
+                    bi.lnTags.addView(child);
+                    // selectedIdsList.add(Integer.valueOf(name.agentID));
+                    selectedTagIdsList.add(name.id);
+                    if (tagsIdsString.equals("")) {
+                        tagsIdsString = name.encryptedTagID;
+                    } else {
+                        tagsIdsString = tagsIdsString + "," + name.encryptedTagID;
+                    }
+                }
+            }
+
 
 
            /* if (notesListModel.noteType != null) {

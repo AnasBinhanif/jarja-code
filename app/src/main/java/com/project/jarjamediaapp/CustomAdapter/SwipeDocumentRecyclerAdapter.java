@@ -187,7 +187,7 @@ public class SwipeDocumentRecyclerAdapter extends RecyclerView.Adapter {
                     BaseResponse getAppointmentsModel = response.body();
                     if (getAppointmentsModel.getStatus().equals("Success")) {
 
-                        ToastUtils.showToast(context, "Successfully Done");
+                        ToastUtils.showToast(context, "Successfully Deleted");
                         mData.remove(pos);
                         notifyDataSetChanged();
                         swipeRevealLayout.close(true);

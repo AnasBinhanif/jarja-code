@@ -54,6 +54,37 @@ public class GetLead implements Serializable {
         public Boolean isPrimaryAgent;
     }
 
+    public class LeadDripCompaignList implements Serializable
+    {
+
+        @SerializedName("dripCompaignID")
+        @Expose
+        public Integer dripCompaignID;
+        @SerializedName("encryptedID")
+        @Expose
+        public String encryptedID;
+        @SerializedName("name")
+        @Expose
+        public String name;
+
+    }
+
+    public class LeadTaskList implements Serializable
+    {
+
+        @SerializedName("id")
+        @Expose
+        public Integer id;
+        @SerializedName("encrypted_TagID")
+        @Expose
+        public String encryptedTagID;
+        @SerializedName("label")
+        @Expose
+        public String label;
+        private final static long serialVersionUID = 804799143587321048L;
+
+    }
+
     public class LeadList implements Serializable{
 
         @SerializedName("leadID")
@@ -245,6 +276,12 @@ public class GetLead implements Serializable {
         @SerializedName("agentsList")
         @Expose
         public ArrayList<AgentsList> agentsList = null;
+        @SerializedName("leadDripCompaignList")
+        @Expose
+        public ArrayList<LeadDripCompaignList> leadDripCompaignList = null;
+        @SerializedName("leadTaskList")
+        @Expose
+        public ArrayList<LeadTaskList> leadTaskList = null;
         @SerializedName("phoneNumber")
         @Expose
         public String phoneNumber;
