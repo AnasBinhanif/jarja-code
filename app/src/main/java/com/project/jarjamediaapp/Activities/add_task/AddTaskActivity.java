@@ -394,17 +394,17 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String sDateTime = addHour(taskDetail.data.startDate, 5);
         String eDateTime = addHour(taskDetail.data.endDate, 5);
 
-        startDate = GH.getInstance().formatter(sDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "dd/MM/yyyy hh:mm:ss a");
-        endDate = GH.getInstance().formatter(eDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "dd/MM/yyyy hh:mm:ss a");
+        startDate = GH.getInstance().formatter(sDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy hh:mm:ss a");
+        endDate = GH.getInstance().formatter(eDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy hh:mm:ss a");
 
-        String sDate = GH.getInstance().formatter(sDateTime, "MM-dd-yyyy", "dd/MM/yyyy hh:mm:ss a");
-        String eDate = GH.getInstance().formatter(eDateTime, "MM-dd-yyyy", "dd/MM/yyyy hh:mm:ss a");
+        String sDate = GH.getInstance().formatter(sDateTime, "MM-dd-yyyy", "MM/dd/yyyy hh:mm:ss a");
+        String eDate = GH.getInstance().formatter(eDateTime, "MM-dd-yyyy", "MM/dd/yyyy hh:mm:ss a");
 
-        startTime = GH.getInstance().formatter(sDateTime, "hh:mm:ss", "dd/MM/yyyy hh:mm:ss a");
-        endTime = GH.getInstance().formatter(eDateTime, "hh:mm:ss", "dd/MM/yyyy hh:mm:ss a");
+        startTime = GH.getInstance().formatter(sDateTime, "hh:mm:ss", "MM/dd/yyyy hh:mm:ss a");
+        endTime = GH.getInstance().formatter(eDateTime, "hh:mm:ss", "MM/dd/yyyy hh:mm:ss a");
 
-        String sTime = GH.getInstance().formatter(sDateTime, "hh:mm a", "dd/MM/yyyy hh:mm:ss a");
-        String eTime = GH.getInstance().formatter(eDateTime, "hh:mm a", "dd/MM/yyyy hh:mm:ss a");
+        String sTime = GH.getInstance().formatter(sDateTime, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
+        String eTime = GH.getInstance().formatter(eDateTime, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
 
         bi.tvStartDate.setText(sDate);
         bi.tvEndDate.setText(eDate);
@@ -449,7 +449,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     private String addHour(String myTime, int number) {
         try {
-            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+            SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
             Date d = df.parse(myTime);
             Calendar cal = Calendar.getInstance();
             cal.setTime(d);
@@ -1018,7 +1018,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 .titleSize(25)
                 .positiveText("Done")
                 .negativeText("Cancel")
-                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                //.setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
                 .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {

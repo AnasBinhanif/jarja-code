@@ -16,10 +16,12 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.bumptech.glide.Glide;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAllSocialProfiles;
+import com.project.jarjamediaapp.Models.GetLeadSocialProfile;
 import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
@@ -41,7 +43,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
     Context context = Social_ProfilesActivity.this;
     Social_ProfilesPresenter presenter;
 
-    ArrayList<GetAllSocialProfiles.Data> getAllSocialProfiles;
+    ArrayList<GetLeadSocialProfile.Data> getAllSocialProfiles;
     ArrayList<GetSocialProfileDropdown.Data> getSocialProfileDropdown;
     ArrayList<String> getSocialProfileDropdownNames;
     String leadID = "";
@@ -81,7 +83,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
 
     @Override
-    public void updateUI(GetAllSocialProfiles response) {
+    public void updateUI(GetLeadSocialProfile response) {
 
         getAllSocialProfiles = new ArrayList<>();
         getAllSocialProfiles = response.data;
@@ -117,20 +119,20 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
         RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, getAllSocialProfiles, R.layout.custom_social_profiles);
         recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvViewProfile, R.id.imgSocial);
 
-        recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetAllSocialProfiles.Data, Integer, Map<Integer, ? extends View>, Unit>) (view, allsocialprofiles, integer, integerMap) -> {
+        recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetLeadSocialProfile.Data, Integer, Map<Integer, ? extends View>, Unit>) (view, allsocialprofiles, integer, integerMap) -> {
 
             TextView tvName = (TextView) integerMap.get(R.id.tvName);
             tvName.setText(allsocialprofiles.name);
 
             ImageView imgSocial = (ImageView) integerMap.get(R.id.imgSocial);
-            imgSocial.setImageDrawable(getDrawable(R.drawable.ic_facebook));
+            Glide.with(context).load(allsocialprofiles.imagelink).into(imgSocial);
 
             return Unit.INSTANCE;
         });
 
         bi.recyclerViewSocialProfiles.setAdapter(recyclerAdapterUtil);
 
-        recyclerAdapterUtil.addOnClickListener((Function2<GetAllSocialProfiles.Data, Integer, Unit>) (allsocialprofiles, integer) -> {
+        recyclerAdapterUtil.addOnClickListener((Function2<GetLeadSocialProfile.Data, Integer, Unit>) (allsocialprofiles, integer) -> {
 
 
             String url = allsocialprofiles.profilelink;

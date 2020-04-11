@@ -22,11 +22,11 @@ public class TransactionPresenter extends BasePresenter<TransactionContract.View
     }
 
     @Override
-    public void addPipelineMark(String pipelineID, String encrypted_LeadDetailID, String presentationID) {
+    public void addPipelineMark(String body) {
 
         _view.showProgressBar();
         _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddPipeLineMark(GH.getInstance().getAuthorization(),
-                pipelineID, encrypted_LeadDetailID, presentationID);
+                body);
         _call.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {

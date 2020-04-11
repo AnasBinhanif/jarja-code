@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Activities.social_profiles;
 
 import com.project.jarjamediaapp.Base.BaseContract;
 import com.project.jarjamediaapp.Models.GetAllSocialProfiles;
+import com.project.jarjamediaapp.Models.GetLeadSocialProfile;
 import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
 
 public interface Social_ProfilesContract {
@@ -10,7 +11,7 @@ public interface Social_ProfilesContract {
 
         void initViews();
 
-        void updateUI(GetAllSocialProfiles response);
+        void updateUI(GetLeadSocialProfile response);
 
         void updateUI(GetSocialProfileDropdown response);
 

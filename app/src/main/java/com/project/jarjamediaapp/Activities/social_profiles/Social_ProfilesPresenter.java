@@ -4,6 +4,7 @@ import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAllSocialProfiles;
 import com.project.jarjamediaapp.Models.GetLastTouch;
+import com.project.jarjamediaapp.Models.GetLeadSocialProfile;
 import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -17,7 +18,7 @@ import retrofit2.Response;
 
 public class Social_ProfilesPresenter extends BasePresenter<Social_ProfilesContract.View> implements Social_ProfilesContract.Actions {
 
-    Call<GetAllSocialProfiles> _call;
+    Call<GetLeadSocialProfile> _call;
     Call<BaseResponse> _callAddSocialProfile;
     Call<GetSocialProfileDropdown> _callGetSocialProfileDropdown;
 
@@ -69,14 +70,14 @@ public class Social_ProfilesPresenter extends BasePresenter<Social_ProfilesContr
         _view.showProgressBar();
         _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetAllSocialProfiles(GH.getInstance().getAuthorization()
         ,leadId);
-        _call.enqueue(new Callback<GetAllSocialProfiles>() {
+        _call.enqueue(new Callback<GetLeadSocialProfile>() {
             @Override
-            public void onResponse(Call<GetAllSocialProfiles> call, Response<GetAllSocialProfiles> response) {
+            public void onResponse(Call<GetLeadSocialProfile> call, Response<GetLeadSocialProfile> response) {
 
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
-                    GetAllSocialProfiles getAppointmentsModel = response.body();
+                    GetLeadSocialProfile getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         _view.updateUI(getAppointmentsModel);
@@ -94,7 +95,7 @@ public class Social_ProfilesPresenter extends BasePresenter<Social_ProfilesContr
             }
 
             @Override
-            public void onFailure(Call<GetAllSocialProfiles> call, Throwable t) {
+            public void onFailure(Call<GetLeadSocialProfile> call, Throwable t) {
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }

@@ -3,6 +3,7 @@ package com.project.jarjamediaapp.Fragments.DashboardFragments.tasks;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,17 +94,13 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
                 } else {
-                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-                    bi.recyclerTaskViewDue.setLayoutManager(mLayoutManager);
-                    bi.recyclerTaskViewDue.setItemAnimator(new DefaultItemAnimator());
-
                     bi.tvNoRecordFound.setVisibility(View.GONE);
                     bi.recyclerTaskViewDue.setVisibility(View.VISIBLE);
                     bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
-
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
-                    bi.recyclerTaskViewDue.setAdapter(swipeTasksDueRecyclerAdapter);
+                    new AsyncTaskExample().execute(whichTasks);
+                   // swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
+                    //bi.recyclerTaskViewDue.setAdapter(swipeTasksDueRecyclerAdapter);
                 }
                 break;
 
@@ -119,18 +116,15 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
                 } else {
-                    RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getContext());
-                    bi.recyclerViewTaskOverDue.setLayoutManager(mLayoutManager1);
-                    bi.recyclerViewTaskOverDue.setItemAnimator(new DefaultItemAnimator());
-
 
                     bi.tvNoRecordFound.setVisibility(View.GONE);
                     bi.recyclerTaskViewDue.setVisibility(View.GONE);
                     bi.recyclerViewTaskOverDue.setVisibility(View.VISIBLE);
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
-                    bi.recyclerViewTaskOverDue.setAdapter(swipeTasksDueRecyclerAdapter);
+                    /*swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
+                    bi.recyclerViewTaskOverDue.setAdapter(swipeTasksDueRecyclerAdapter);*/
+                    new AsyncTaskExample().execute(whichTasks);
                 }
                 break;
 
@@ -145,23 +139,79 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
                 } else {
-                    RecyclerView.LayoutManager mLayoutManager2 = new LinearLayoutManager(getContext());
-                    bi.recyclerViewTaskFutureTask.setLayoutManager(mLayoutManager2);
-                    bi.recyclerViewTaskFutureTask.setItemAnimator(new DefaultItemAnimator());
-
-
                     bi.tvNoRecordFound.setVisibility(View.GONE);
                     bi.recyclerTaskViewDue.setVisibility(View.GONE);
                     bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
                     bi.recyclerViewTaskFutureTask.setVisibility(View.VISIBLE);
 
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, true);
-                    bi.recyclerViewTaskFutureTask.setAdapter(swipeTasksDueRecyclerAdapter);
-
+                    /*swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, true);
+                    bi.recyclerViewTaskFutureTask.setAdapter(swipeTasksDueRecyclerAdapter);*/
+                    new AsyncTaskExample().execute(whichTasks);
                 }
                 break;
         }
 
+    }
+
+    private class AsyncTaskExample extends AsyncTask<Integer, Integer,Integer> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+           showProgressBar();
+        }
+        @Override
+        protected Integer doInBackground(Integer... strings) {
+           int whichTasks = strings[0];
+            switch (whichTasks){
+
+                case 1:
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
+                    break;
+                case 2:
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
+                    break;
+                case 3:
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, true);
+                    break;
+
+            }
+
+            return strings[0];
+        }
+        @Override
+        protected void onPostExecute(Integer bitmap) {
+            super.onPostExecute(bitmap);
+
+            switch (bitmap){
+
+                case 1:
+                    bi.recyclerTaskViewDue.setAdapter(swipeTasksDueRecyclerAdapter);
+                    break;
+                case 2:
+                    bi.recyclerViewTaskOverDue.setAdapter(swipeTasksDueRecyclerAdapter);
+                    break;
+                case 3:
+                    bi.recyclerViewTaskFutureTask.setAdapter(swipeTasksDueRecyclerAdapter);
+                    break;
+
+            }
+
+            hideProgressBar();
+        }
+    }
+
+    private void initRecyclers(){
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        bi.recyclerTaskViewDue.setLayoutManager(mLayoutManager);
+        bi.recyclerTaskViewDue.setItemAnimator(new DefaultItemAnimator());
+
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getContext());
+        bi.recyclerViewTaskOverDue.setLayoutManager(mLayoutManager1);
+        bi.recyclerViewTaskOverDue.setItemAnimator(new DefaultItemAnimator());
+
+        RecyclerView.LayoutManager mLayoutManager2 = new LinearLayoutManager(getContext());
+        bi.recyclerViewTaskFutureTask.setLayoutManager(mLayoutManager2);
+        bi.recyclerViewTaskFutureTask.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override
@@ -209,6 +259,8 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
         bi.btnTaskOverDue.setOnClickListener(this);
         bi.btnTaskFutureTask.setOnClickListener(this);
         bi.fbAddTask.setOnClickListener(this);
+
+        initRecyclers();
 
         if (isFromActivity) {
             presenter.getLeadDueTasks(leadID);

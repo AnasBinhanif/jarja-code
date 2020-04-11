@@ -39,7 +39,7 @@ public interface TransactionContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void addPipelineMark(String pipelineID, String encrypted_LeadDetailID, String presentationID);
+        void addPipelineMark(String body);
 
         void addAgentCommission(String data);
 

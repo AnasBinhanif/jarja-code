@@ -132,16 +132,36 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         recyclerAdapterUtil.addOnClickListener((Function2<GetLeadTransactionStage.PipeLine, Integer, Unit>)
                 (viewComplainList, integer) -> {
 
+                    JSONObject obj = new JSONObject();
+
+                    try {
+                        obj.put("pipelineID", pipelineID);
+                        obj.put("encrypted_LeadDetailID", leadID);
+                        obj.put("presentationID", presentationID);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
                     if (title.contains("Transaction 1")) {
                         pipelineID = String.valueOf(viewComplainList.id);
                         presentationID = "1";
                         markedPipeline = viewComplainList.pipeline;
-                        presenter.addPipelineMark(pipelineID, leadID, presentationID);
+
+                        String jsonObjectString = obj.toString();
+                        Log.d("json", jsonObjectString);
+
+                        presenter.addPipelineMark(jsonObjectString);
+
                     } else if (title.contains("Transaction 2")) {
                         pipelineID = String.valueOf(viewComplainList.id);
                         presentationID = "2";
                         markedPipeline = viewComplainList.pipeline;
-                        presenter.addPipelineMark(pipelineID, leadID, presentationID);
+
+                        String jsonObjectString = obj.toString();
+                        Log.d("json", jsonObjectString);
+
+                        presenter.addPipelineMark(jsonObjectString);
                     }
 
                     return Unit.INSTANCE;
@@ -173,16 +193,16 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                 if (dialog != null) {
                     if (dialog.isShowing()) {
                         dialog.dismiss();
-                    }else {
+                    } else {
                         showAgentCommissionDialog();
                     }
                 } else {
                     showAgentCommissionDialog();
+                }
             }
         }
-    }
 
-}
+    }
 
     @Override
     public void addAgentCommission(Response<BaseResponse> response) {
@@ -192,8 +212,9 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
+        } else {
+            presenter.getAgentCommission(leadID, leadDetailId);
         }
-        //presenter.getAgentCommission(leadID, leadDetailId);
     }
 
     @Override

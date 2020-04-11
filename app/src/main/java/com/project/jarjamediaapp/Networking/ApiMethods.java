@@ -28,6 +28,7 @@ import com.project.jarjamediaapp.Models.GetLeadCounts;
 import com.project.jarjamediaapp.Models.GetLeadDripCampaignList;
 import com.project.jarjamediaapp.Models.GetLeadNotes;
 import com.project.jarjamediaapp.Models.GetLeadScore;
+import com.project.jarjamediaapp.Models.GetLeadSocialProfile;
 import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
 import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
@@ -258,13 +259,11 @@ public interface ApiMethods {
             @Field("leadStringID") String leadStringID,
             @Field("typeIndex") boolean typeIndex);
 
-    @FormUrlEncoded
+    @Headers("Content-Type: application/json")
     @POST("Lead/AddPipeLineMark")
     Call<BaseResponse> AddPipeLineMark(
             @Header("Authorization") String authorization,
-            @Field("pipelineID") String pipelineID,
-            @Field("encrypted_LeadDetailID") String encrypted_LeadDetailID,
-            @Field("presentationID") String presentationID);
+            @Body String body);
 
     @POST("Lead/GetAgentCommissionByLeadDetail")
     Call<TransactionModel> getAgentCommissionViaLead(@Header("Authorization") String authorization,
@@ -288,10 +287,10 @@ public interface ApiMethods {
             @Header("Authorization") String authorization
     );
 
-    @GET("Lead/GetAllSocialProfiles")
-    Call<GetAllSocialProfiles> GetAllSocialProfiles(
+    @GET("Lead/GetLeadSocialProfile")
+    Call<GetLeadSocialProfile> GetAllSocialProfiles(
             @Header("Authorization") String authorization,
-            @Query("Encrypted_LeadID") String leadID
+            @Query("LeadID") String leadID
     );
 
     @FormUrlEncoded
