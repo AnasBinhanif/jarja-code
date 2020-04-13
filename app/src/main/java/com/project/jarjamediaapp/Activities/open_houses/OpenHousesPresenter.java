@@ -74,10 +74,11 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
     }
 
     @Override
-    public void addOpenHouse(String listPrice, String city, String address, String state, String zip, String image, String openHouseDate, String openHouseEndDate) {
+    public void addOpenHouse(String body) {
 
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addOpenHouse(GH.getInstance().getAuthorization(), listPrice, city, address, state, zip, image, openHouseDate, openHouseEndDate);
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addOpenHouse(GH.getInstance().getAuthorization(),
+                body);
 
         _call.enqueue(new Callback<BaseResponse>() {
             @Override

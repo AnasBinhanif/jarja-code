@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -41,8 +42,12 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.Utilities.UserPermissions;
 import com.project.jarjamediaapp.databinding.CustomOpenHouseDialogBinding;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -95,7 +100,20 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
     }
 
+    private String getFormatedAmount(int amount){
+        return NumberFormat.getNumberInstance(Locale.US).format(amount);
+    }
+
     private void initListeners() {
+
+
+        bi.atvPrice.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                   bi.atvPrice.setText(getFormatedAmount(Integer.valueOf(bi.atvPrice.getText().toString())));
+                }
+            }
+        });
 
         bi.atvAddress.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -264,7 +282,26 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                 zip = bi.atvZip.getText().toString();
 
                 if (isValidate()) {
-                    presenter.addOpenHouse(listPrice, city, address, state, zip, image, openHouseStartDate, openHouseEndDate);
+
+                    JSONObject obj = new JSONObject();
+                    try {
+                    obj.put("listPrice", listPrice);
+                    obj.put("city", city);
+                    obj.put("address", address);
+                    obj.put("state", state);
+                    obj.put("zip", zip);
+                    obj.put("image", image);
+                    obj.put("openHouseDate", openHouseStartDate);
+                    obj.put("openHouseEndDate", openHouseEndDate);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    String jsonObjectString = obj.toString();
+                    Log.d("json", jsonObjectString);
+
+
+                    presenter.addOpenHouse(jsonObjectString);
                 }
 
             }
@@ -308,12 +345,16 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         }
         Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null;
 
+        String sDate = GH.getInstance().formatter(openHouseStartDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+        String eDate = GH.getInstance().formatter(openHouseEndDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+
+
         try {
             SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm:ss");
-            String time = simpleDate.format(Calendar.getInstance().getTime());
+            String time = simpleDate.format(new Date());
             currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
-            time1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(openHouseStartDate);
-            time2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(openHouseEndDate);
+            time1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(sDate);
+            time2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(eDate);
             if (time2.before(time1)) {
                 ToastUtils.showToast(context, "End date time cannot be less than start date time");
                 bi.atvOpenHouseEndDate.requestFocus();

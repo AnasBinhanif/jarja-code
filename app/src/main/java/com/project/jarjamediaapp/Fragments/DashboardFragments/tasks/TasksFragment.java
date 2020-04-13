@@ -98,9 +98,9 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerTaskViewDue.setVisibility(View.VISIBLE);
                     bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
-                    new AsyncTaskExample().execute(whichTasks);
-                   // swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
-                    //bi.recyclerTaskViewDue.setAdapter(swipeTasksDueRecyclerAdapter);
+                   // new AsyncTaskExample().execute(whichTasks);
+                   swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
+                    bi.recyclerTaskViewDue.setAdapter(swipeTasksDueRecyclerAdapter);
                 }
                 break;
 
@@ -122,9 +122,9 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskOverDue.setVisibility(View.VISIBLE);
                     bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
 
-                    /*swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
-                    bi.recyclerViewTaskOverDue.setAdapter(swipeTasksDueRecyclerAdapter);*/
-                    new AsyncTaskExample().execute(whichTasks);
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
+                    bi.recyclerViewTaskOverDue.setAdapter(swipeTasksDueRecyclerAdapter);
+                    //new AsyncTaskExample().execute(whichTasks);
                 }
                 break;
 
@@ -144,9 +144,9 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                     bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
                     bi.recyclerViewTaskFutureTask.setVisibility(View.VISIBLE);
 
-                    /*swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, true);
-                    bi.recyclerViewTaskFutureTask.setAdapter(swipeTasksDueRecyclerAdapter);*/
-                    new AsyncTaskExample().execute(whichTasks);
+                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, true);
+                    bi.recyclerViewTaskFutureTask.setAdapter(swipeTasksDueRecyclerAdapter);
+                    //new AsyncTaskExample().execute(whichTasks);
                 }
                 break;
         }

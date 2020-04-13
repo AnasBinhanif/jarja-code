@@ -95,6 +95,7 @@
                     android:background="@drawable/bg_search"
                     android:hint="@string/listing_price"
                     android:imeOptions="actionNext"
+                    android:maxLength="9"
                     android:inputType="number"
                     android:padding="@dimen/_10sdp"
                     android:singleLine="true"

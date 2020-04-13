@@ -58,6 +58,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
     ArrayAdapter<String> arrayAdapterPlanName, arrayAdapterPayName, arrayAdapter;
     Call<GetTimeFrameModel> _call;
     boolean _preQual = false, _withAgent = false, _houseSell = false;
+    int pos;
 
     public HorizontalAdapter(Context context, List<GetAllOpenHousesModel.Data.OpenHouse> data, String openHouseType) {
 
@@ -84,7 +85,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        pos=position;
         // Data binding
         try {
 
@@ -140,11 +141,15 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                         showAddLeadDialog(context, String.valueOf(openHouse.propertyId));
                     } else if (openHouseType.equals("past")) {
 
-                        GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
-                        Intent intent = new Intent(context, AllLeadsActivity.class);
-                        intent.putExtra("type", 1);
-                        intent.putExtra("propertyID", String.valueOf(openHouse.propertyId));
-                        context.startActivity(intent);
+                        if (data.get(getAdapterPosition()).getLeadCount() != 0) {
+                            GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
+                            Intent intent = new Intent(context, AllLeadsActivity.class);
+                            intent.putExtra("type", 1);
+                            intent.putExtra("propertyID", String.valueOf(openHouse.propertyId));
+                            context.startActivity(intent);
+                        }else{
+                            ToastUtils.showToast(context,"No Leads Founds");
+                        }
                     }
                 }
             });
@@ -158,11 +163,15 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                         showAddLeadDialog(context, String.valueOf(openHouse.propertyId));
                     } else if (openHouseType.equals("past")) {
 
-                        GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
-                        Intent intent = new Intent(context, AllLeadsActivity.class);
-                        intent.putExtra("type", 1);
-                        intent.putExtra("propertyID", String.valueOf(openHouse.propertyId));
-                        context.startActivity(intent);
+                        if (data.get(getAdapterPosition()).getLeadCount() != 0) {
+                            GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
+                            Intent intent = new Intent(context, AllLeadsActivity.class);
+                            intent.putExtra("type", 1);
+                            intent.putExtra("propertyID", String.valueOf(openHouse.propertyId));
+                            context.startActivity(intent);
+                        }else{
+                            ToastUtils.showToast(context,"No Leads Founds");
+                        }
                     }
                 }
             });

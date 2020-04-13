@@ -212,7 +212,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                 .titleSize(25)
                 .positiveText("Done")
                 .negativeText("Cancel")
-                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                //.setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
                 .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
@@ -271,7 +271,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                 .titleSize(25)
                 .positiveText("Done")
                 .negativeText("Cancel")
-                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                //.setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
                 .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
@@ -331,7 +331,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                 .titleSize(25)
                 .positiveText("Done")
                 .negativeText("Cancel")
-                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                //.setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
                 .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
@@ -388,7 +388,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                 .titleSize(25)
                 .positiveText("Done")
                 .negativeText("Cancel")
-                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                //.setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
                 .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {

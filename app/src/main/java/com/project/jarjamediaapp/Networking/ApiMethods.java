@@ -523,84 +523,18 @@ public interface ApiMethods {
             @Field("propertyAddress") String propertyAddress
     );
 
-    @FormUrlEncoded
+    @Headers("Content-Type: application/json")
     @POST("Lead/AddNewLead")
     Call<BaseResponse> AddLead(
             @Header("Authorization") String authorization,
-            @Field("firstName") String firstName,
-            @Field("lastName") String lastName,
-            @Field("spousname") String spousname,
-            @Field("company") String company,
-            @Field("cellPhone") String cellPhone,
-            @Field("primaryPhone") String primaryPhone,
-            @Field("primaryEmail") String primaryEmail,
-            @Field("dateOfBirth") String dateOfBirth,
-            @Field("isBirthDayNotify") boolean isBirthDayNotify,
-            @Field("dateOfMarriage") String dateOfMarriage,
-            @Field("isAnniversaryNotify") boolean isAnniversaryNotify,
-            @Field("leadAgentIDs") String leadAgentIDs,
-            @Field("allAgentIds") String allAgentIds,
-            @Field("alldripcampaignids") String alldripcampaignids,
-            @Field("notes") String notes,
-            @Field("b_PreQual") String b_PreQual,
-            @Field("address") String address,
-            @Field("street") String street,
-            @Field("zipcode") String zipcode,
-            @Field("city") String city,
-            @Field("state") String state,
-            @Field("description") String description,
-            @Field("source") String source,
-            @Field("county") String county,
-            @Field("timeFrameId") String timeFrameId,
-            @Field("state2") String state2,
-            @Field("city2") String city2,
-            @Field("zipcode2") String zipcode2,
-            @Field("leadTypeID") int leadTypeID,
-            @Field("emailList") String emailList,
-            @Field("phoneList") String phoneList,
-            @Field("labelsID") String labelsID,
-            @Field("leadStringID") String leadStringID,
-            @Field("countryid") String countryid
+            @Body String body
     );
 
-    @FormUrlEncoded
+    @Headers("Content-Type: application/json")
     @POST("Lead/Update")
     Call<BaseResponse> UpdateLEad(
             @Header("Authorization") String authorization,
-            @Field("firstName") String firstName,
-            @Field("lastName") String lastName,
-            @Field("spousname") String spousname,
-            @Field("company") String company,
-            @Field("cellPhone") String cellPhone,
-            @Field("primaryPhone") String primaryPhone,
-            @Field("primaryEmail") String primaryEmail,
-            @Field("dateOfBirth") String dateOfBirth,
-            @Field("isBirthDayNotify") boolean isBirthDayNotify,
-            @Field("dateOfMarriage") String dateOfMarriage,
-            @Field("isAnniversaryNotify") boolean isAnniversaryNotify,
-            @Field("leadAgentIDs") String leadAgentIDs,
-            @Field("allAgentIds") String allAgentIds,
-            @Field("alldripcampaignids") String alldripcampaignids,
-            @Field("notes") String notes,
-            @Field("b_PreQual") String b_PreQual,
-            @Field("address") String address,
-            @Field("street") String street,
-            @Field("zipcode") String zipcode,
-            @Field("city") String city,
-            @Field("state") String state,
-            @Field("description") String description,
-            @Field("source") String source,
-            @Field("county") String county,
-            @Field("timeFrameId") String timeFrameId,
-            @Field("state2") String state2,
-            @Field("city2") String city2,
-            @Field("zipcode2") String zipcode2,
-            @Field("leadTypeID") int leadTypeID,
-            @Field("emailList") String emailList,
-            @Field("phoneList") String phoneList,
-            @Field("labelsID") String labelsID,
-            @Field("leadStringID") String leadStringID,
-            @Field("countryid") String countryid
+            @Body String body
     );
 
     @FormUrlEncoded
@@ -740,17 +674,10 @@ public interface ApiMethods {
                                                    @Query("image") String image,
                                                    @Query("EmailFrom") String emailFrom);
 
-    @FormUrlEncoded
+    @Headers("Content-Type: application/json")
     @POST("Lead/AddOpenHouse")
     Call<BaseResponse> addOpenHouse(@Header("Authorization") String authorization,
-                                    @Field("listPrice") String listPrice,
-                                    @Field("city") String city,
-                                    @Field("address") String address,
-                                    @Field("state") String state,
-                                    @Field("zip") String zip,
-                                    @Field("image") String image,
-                                    @Field("openHouseDate") String openHouseDate,
-                                    @Field("openHouseEndDate") String openHouseEndDate);
+                                    @Body String body);
 
     @GET("Notification/GetNotificationCount")
     Call<UploadImageModel> getNotificationCount(@Header("Authorization") String authorization);

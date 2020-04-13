@@ -36,7 +36,7 @@ public interface OpenHousesContract {
 
         void getAllOpenHouses(String openHouseType);
 
-        void addOpenHouse(String listPrice, String city, String address, String state, String zip, String image, String openHouseDate, String openHouseEndDate);
+        void addOpenHouse(String body);
 
         void uploadImage(MultipartBody.Part file);
     }
