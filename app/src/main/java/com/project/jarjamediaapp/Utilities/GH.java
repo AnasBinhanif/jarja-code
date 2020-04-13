@@ -101,14 +101,11 @@ public class GH {
     }
 
     /*public void ShowProgressDialog(Activity activity) {
-
         if (activity == null || activity.isFinishing()) {
             return;
         }
-
         if (progressDialog != null && progressDialog.isShowing()) {
         } else {
-
             progressDialog = new AppCompatDialog(activity);
             progressDialog.setCancelable(false);
             progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -116,7 +113,6 @@ public class GH {
             progressDialog.show();
 
         }
-
         final ImageView img_loading_frame = progressDialog.findViewById(R.id.ivGifJM);
         Glide.with(activity).load(R.drawable.jm_loader).into(img_loading_frame);
     }*/
