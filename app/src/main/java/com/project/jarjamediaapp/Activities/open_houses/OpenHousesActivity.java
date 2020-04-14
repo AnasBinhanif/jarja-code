@@ -110,7 +110,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             case R.id.btnUpcomingOH:
 
                 openHouseType = "upcoming";
-                presenter.getAllOpenHouses(openHouseType);
+                presenter.getAllOpenHouses(openHouseType,0);
 
                 Paris.style(bi.btnUpcomingOH).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnPastOH).apply(R.style.TabButtonTranparentRight);
@@ -120,7 +120,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
             case R.id.btnPastOH:
 
                 openHouseType = "past";
-                presenter.getAllOpenHouses(openHouseType);
+                presenter.getAllOpenHouses(openHouseType,0);
 
                 Paris.style(bi.btnPastOH).apply(R.style.TabButtonYellowRight);
                 Paris.style(bi.btnUpcomingOH).apply(R.style.TabButtonTranparentLeft);
@@ -146,7 +146,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         if (dialog != null) {
             dialog.dismiss();
         }
-        presenter.getAllOpenHouses(openHouseType);
+        presenter.getAllOpenHouses(openHouseType,0);
 
     }
 
@@ -189,7 +189,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
-    public void updateUIListForOpenHouses(Response<GetAllOpenHousesModel> response) {
+    public void updateUIListForOpenHouses(Response<GetAllOpenHousesModel> response,int position) {
 
         try {
 
@@ -197,6 +197,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
                 bi.rvOpenHouse.setLayoutManager(new CenterZoomLayoutManager(context, RecyclerView.HORIZONTAL, false));
                 bi.rvOpenHouse.setItemAnimator(new DefaultItemAnimator());
                 bi.rvOpenHouse.setAdapter(new HorizontalAdapter(context, response.body().getData().openHouse,openHouseType));
+                bi.rvOpenHouse.scrollToPosition(position);
                 bi.rvOpenHouse.setVisibility(View.VISIBLE);
                 bi.tvMessage.setVisibility(View.GONE);
             } else {
@@ -432,10 +433,10 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.getAllOpenHouses(openHouseType);
+        presenter.getAllOpenHouses(openHouseType,0);
     }
 
-    public void hitApiForRefresh(){
-        presenter.getAllOpenHouses(openHouseType);
+    public void hitApiForRefresh(int position){
+        presenter.getAllOpenHouses(openHouseType,position);
     }
 }

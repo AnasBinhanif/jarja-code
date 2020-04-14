@@ -9,7 +9,7 @@ public interface OpenHousesContract {
 
     interface View extends BaseContract.View {
 
-        void updateUIListForOpenHouses(Response<GetAllOpenHousesModel> response);
+        void updateUIListForOpenHouses(Response<GetAllOpenHousesModel> response,int position);
 
         void updateAfterUploadFile(Response<UploadImageModel> response);
 
@@ -34,7 +34,7 @@ public interface OpenHousesContract {
 
         void getAddressDetailByPrefix(String prefix, String type);
 
-        void getAllOpenHouses(String openHouseType);
+        void getAllOpenHouses(String openHouseType,int position);
 
         void addOpenHouse(String body);
 

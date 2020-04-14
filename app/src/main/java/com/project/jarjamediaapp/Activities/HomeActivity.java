@@ -26,7 +26,6 @@ import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
-import com.project.jarjamediaapp.Activities.all_leads.AllLeadsActivity;
 import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
 import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
@@ -115,7 +114,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         _call.enqueue(new Callback<GetUserProfile>() {
             @Override
             public void onResponse(Call<GetUserProfile> call, Response<GetUserProfile> response) {
-                hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     GetUserProfile getUserProfile = response.body();
@@ -137,10 +136,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         getUserPermissions();
 
                     } else {
-
+                        hideProgressBar();
                         Toast.makeText(context, getUserProfile.message, Toast.LENGTH_SHORT).show();
                     }
                 } else {
+
+                    hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
 
                     if (error.message().contains("Authorization has been denied for this request")) {
@@ -287,7 +288,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         _menu = menu;
 
         item = menu.findItem(R.id.action_notify);
-        getNotificationCount();
 
         return true;
     }
@@ -304,16 +304,19 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                     UploadImageModel getUserProfile = response.body();
                     if (getUserProfile.status.equals("Success")) {
-
+                        hideProgressBar();
                         if (getUserProfile.getData() != null && !getUserProfile.getData().equalsIgnoreCase(""))
                             item.setIcon(buildCounterDrawable(Integer.parseInt(getUserProfile.getData()), R.drawable.ic_notification));
 
                     } else {
+
+                        hideProgressBar();
                         Toast.makeText(context, getUserProfile.message, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    ApiError error = ErrorUtils.parseError(response);
 
+                    hideProgressBar();
+                    ApiError error = ErrorUtils.parseError(response);
                     if (error.message().contains("Authorization has been denied for this request")) {
                         ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
                         logout();
@@ -326,6 +329,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             @Override
             public void onFailure(Call<UploadImageModel> call, Throwable t) {
 
+                hideProgressBar();
                 ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
             }
         });
@@ -333,19 +337,18 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void getUserPermissions() {
 
-        showProgressBar();
         Call<GetUserPermission> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 GetUserPermission(GH.getInstance().getAuthorization());
         _call.enqueue(new Callback<GetUserPermission>() {
             @Override
             public void onResponse(Call<GetUserPermission> call, Response<GetUserPermission> response) {
 
-                hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetUserPermission getUserProfile = response.body();
                     if (getUserProfile.status.equals("Success")) {
 
+                        getNotificationCount();
                         Gson gson = new Gson();
                         String jsonText = gson.toJson(getUserProfile);
                         easyPreference.addString(GH.KEYS.USER_PERMISSIONS.name(), jsonText).save();
@@ -353,16 +356,17 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         if (getUserProfile.data.dashboard.get(0).value) {
                             onNavigationItemSelected(navigationView.getMenu().getItem(0));
                         } else {
-
+                            hideProgressBar();
                             ToastUtils.showToast(context, getString(R.string.dashboard_ViewDashboard));
                         }
 
                     } else {
+                        hideProgressBar();
                         Toast.makeText(context, getUserProfile.message, Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
-
                     if (error.message().contains("Authorization has been denied for this request")) {
                         ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
                         logout();

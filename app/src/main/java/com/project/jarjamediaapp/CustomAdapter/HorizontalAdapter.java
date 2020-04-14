@@ -85,21 +85,27 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        pos=position;
+        pos = position;
         // Data binding
         try {
 
+            String[] startDateTime = data.get(position).getOpenHouseDate().split("T");
+            String[] endDateTime = data.get(position).getOpenHouseEndDate().split("T");
+
+            String finalStartDateTime = startDateTime[0] + " " + GH.getInstance().addFiveHours(startDateTime[1]);
+            String finalEndDateTime = endDateTime[0] + " " + GH.getInstance().addFiveHours(endDateTime[1]);
+
+            holder.tvStartDateTime.setText(GH.getInstance().formatter(finalStartDateTime, "MM-dd-yyyy h:mm a", "yyyy-MM-dd h:mm:ss"));
+            holder.tvEndDateTime.setText(GH.getInstance().formatter(finalEndDateTime, "MM-dd-yyyy h:mm a", "yyyy-MM-dd h:mm:ss"));
+            holder.tvAddress.setText(data.get(position).getStreetName() + " , " + data.get(position).getCity());
+            holder.tvCityPostal.setText(data.get(position).getState());
+            holder.tvLeadsCount.setText(data.get(position).getLeadCount() != 0 ? "Leads " + data.get(position).getLeadCount() : "Leads 0");
             String image = data.get(position).getImgURL();
             if (!image.equalsIgnoreCase("")) {
                 Glide.with(context).load(image).into(holder.ivHouse);
             } else {
                 holder.ivHouse.setImageResource(R.drawable.open_house);
             }
-            holder.tvStartDateTime.setText(GH.getInstance().formatter(data.get(position).getOpenHouseDate(), "MM-dd-yyyy h:mm a", "yyyy-MM-dd'T'h:mm:ss"));
-            holder.tvEndDateTime.setText(GH.getInstance().formatter(data.get(position).getOpenHouseEndDate(), "MM-dd-yyyy h:mm a", "yyyy-MM-dd'T'h:mm:ss"));
-            holder.tvAddress.setText(data.get(position).getStreetName() + " , " + data.get(position).getCity());
-            holder.tvCityPostal.setText(data.get(position).getState());
-            holder.tvLeadsCount.setText(data.get(position).getLeadCount() != 0 ? "Leads " + data.get(position).getLeadCount() : "Leads 0");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,7 +144,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
 
                     if (openHouseType.equals("upcoming")) {
                         GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
-                        showAddLeadDialog(context, String.valueOf(openHouse.propertyId));
+                        showAddLeadDialog(context, String.valueOf(openHouse.propertyId), getAdapterPosition());
                     } else if (openHouseType.equals("past")) {
 
                         if (data.get(getAdapterPosition()).getLeadCount() != 0) {
@@ -147,8 +153,8 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                             intent.putExtra("type", 1);
                             intent.putExtra("propertyID", String.valueOf(openHouse.propertyId));
                             context.startActivity(intent);
-                        }else{
-                            ToastUtils.showToast(context,"No Leads Founds");
+                        } else {
+                            ToastUtils.showToast(context, "No Leads Founds");
                         }
                     }
                 }
@@ -160,7 +166,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
 
                     if (openHouseType.equals("upcoming")) {
                         GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
-                        showAddLeadDialog(context, String.valueOf(openHouse.propertyId));
+                        showAddLeadDialog(context, String.valueOf(openHouse.propertyId), pos);
                     } else if (openHouseType.equals("past")) {
 
                         if (data.get(getAdapterPosition()).getLeadCount() != 0) {
@@ -169,8 +175,8 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                             intent.putExtra("type", 1);
                             intent.putExtra("propertyID", String.valueOf(openHouse.propertyId));
                             context.startActivity(intent);
-                        }else{
-                            ToastUtils.showToast(context,"No Leads Founds");
+                        } else {
+                            ToastUtils.showToast(context, "No Leads Founds");
                         }
                     }
                 }
@@ -181,7 +187,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
 
     }
 
-    public void showAddLeadDialog(Context context, String propertyId) {
+    public void showAddLeadDialog(Context context, String propertyId, int pos) {
 
         dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
@@ -302,7 +308,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                 }
                 Log.d("json", obj.toString());
                 if (isValidate()) {
-                    sendDataToServer(Integer.valueOf(propertyId));
+                    sendDataToServer(Integer.valueOf(propertyId), pos);
                 }
             }
         });
@@ -394,7 +400,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
 
     }
 
-    private void sendDataToServer(int propertyId) {
+    private void sendDataToServer(int propertyId, int pos) {
 
         GH.getInstance().ShowProgressDialog((Activity) context);
         Call<BaseResponse> _callToday;
@@ -409,8 +415,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                     BaseResponse baseResponse = response.body();
                     if (baseResponse.getStatus().equals("Success")) {
                         dialog.dismiss();
-
-                        ((OpenHousesActivity) context).hitApiForRefresh();
+                        ((OpenHousesActivity) context).hitApiForRefresh(pos);
                     } else {
                         ToastUtils.showToast(context, baseResponse.message);
                     }

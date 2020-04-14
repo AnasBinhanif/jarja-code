@@ -147,7 +147,7 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
     }
 
     @Override
-    public void getAllOpenHouses(String openHouseType) {
+    public void getAllOpenHouses(String openHouseType,int position) {
 
         _view.showProgressBar();
         call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getAllOpenHouses(GH.getInstance().getAuthorization(),openHouseType);
@@ -161,7 +161,7 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
 
                     GetAllOpenHousesModel openHousesModel = response.body();
                     if (response.body().getStatus().equals("Success")) {
-                        _view.updateUIListForOpenHouses(response);
+                        _view.updateUIListForOpenHouses(response,position);
 
                     } else {
                         _view.updateUIonFalse(openHousesModel.getMessage());

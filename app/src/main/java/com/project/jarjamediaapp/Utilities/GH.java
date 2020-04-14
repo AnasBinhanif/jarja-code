@@ -3,25 +3,22 @@ package com.project.jarjamediaapp.Utilities;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatDialog;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.ProjectApplication;
-import com.project.jarjamediaapp.R;
 
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -59,7 +56,8 @@ public class GH {
 
     public GetUserPermission getUserPermissions() {
         Gson gson = new Gson();
-        String jsonText = EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_PERMISSIONS.name(), null);;
+        String jsonText = EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_PERMISSIONS.name(), null);
+        ;
         GetUserPermission text = gson.fromJson(jsonText, GetUserPermission.class);
 
         return text;
@@ -88,7 +86,9 @@ public class GH {
         if (hud != null && hud.isShowing()) {
             hud.dismiss();
         }
-        hud = KProgressHUD.create(context).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).show();
+        hud = KProgressHUD.create(context)
+                .setCancellable(false)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).show();
 
     }
 
@@ -236,6 +236,24 @@ public class GH {
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
+    }
+
+    public String addFiveHours(String time) {
+
+        String addedTime = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss");
+            Date date = sdf.parse(time);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.HOUR, 5);
+            SimpleDateFormat sdf1 = new SimpleDateFormat("h:mm:ss");
+            addedTime = sdf1.format(calendar.getTime());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return addedTime;
     }
 
 }

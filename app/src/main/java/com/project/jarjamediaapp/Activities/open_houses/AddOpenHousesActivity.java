@@ -392,7 +392,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
-    public void updateUIListForOpenHouses(Response<GetAllOpenHousesModel> response) {
+    public void updateUIListForOpenHouses(Response<GetAllOpenHousesModel> response,int position) {
 
     }
 
