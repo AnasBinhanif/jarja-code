@@ -111,28 +111,13 @@
 
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewToday"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:nestedScrollingEnabled="true"
-                    android:visibility="visible" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewUpcoming"
+                    android:id="@+id/rvAppointments"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:nestedScrollingEnabled="true"
                     android:visibility="gone" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewPrevious"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:nestedScrollingEnabled="true"
-                    android:visibility="gone" />
 
             </LinearLayout>
 

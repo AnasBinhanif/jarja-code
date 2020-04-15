@@ -3,103 +3,96 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/colorGrey_light"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorGrey_light">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center|left"
-                    android:orientation="horizontal"
-                    android:layout_margin="@dimen/_15sdp"
-                    android:weightSum="3">
-
-                    <TextView
-                        android:id="@+id/tvTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2.9"
-                        android:text="@string/follow_up"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="22dp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:baselineAligned="false"
-                    android:paddingStart="@dimen/_15sdp"
-                    android:paddingEnd="@dimen/_15sdp"
-                    android:weightSum="2">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/btnFollowDue"
-                            android:text="@string/due"
-                            style="@style/TabButtonYellowLeft" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_rightstroke_transparent"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/btnFollowOverDue"
-                            android:text="@string/Overdue"
-                            style="@style/TabButtonTranparentRight" />
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_15sdp"
+                android:gravity="center|left"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <TextView
-                    android:id="@+id/tvNoRecordFound"
+                    android:id="@+id/tvTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorWhite"
-                    android:gravity="center"
-                    android:visibility="gone"
-                    android:layout_centerInParent="true"
-                    android:text="No Record Found"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.9"
+                    android:text="@string/follow_up"
                     android:textColor="@color/colorPrimaryDark"
+                    android:textSize="22dp"
                     android:textStyle="bold" />
 
+            </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewFollowDue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:nestedScrollingEnabled="false"
-                    android:visibility="visible" />
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/_15sdp"
+                android:paddingEnd="@dimen/_15sdp"
+                android:weightSum="2">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewFollowOverDue"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:nestedScrollingEnabled="false"
-                    android:visibility="gone" />
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnFollowDue"
+                        style="@style/TabButtonYellowLeft"
+                        android:text="@string/due" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_rightstroke_transparent"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnFollowOverDue"
+                        style="@style/TabButtonTranparentRight"
+                        android:text="@string/Overdue" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvNoRecordFound"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:background="@color/colorWhite"
+                android:gravity="center"
+                android:text="No Record Found"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFollowUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone" />
+
+
+        </LinearLayout>
 
 
     </RelativeLayout>

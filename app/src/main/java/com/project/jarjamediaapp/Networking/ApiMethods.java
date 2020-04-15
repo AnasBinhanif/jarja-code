@@ -86,19 +86,16 @@ public interface ApiMethods {
     );
 
     @GET("Appointment/GetTodayAppointment")
-    Call<GetAppointmentsModel> GetTodayAppointment(
-            @Header("Authorization") String authorization
-    );
+    Call<GetAppointmentsModel> GetTodayAppointment(@Header("Authorization") String authorization,
+                                                   @Query("pageNumber") int page);
 
     @GET("Appointment/GetPreviousAppointment")
-    Call<GetAppointmentsModel> GetPreviousAppointment(
-            @Header("Authorization") String authorization
-    );
+    Call<GetAppointmentsModel> GetPreviousAppointment(@Header("Authorization") String authorization,
+                                                      @Query("PageNo") int page);
 
     @GET("Appointment/GetUpcomingAppointment")
-    Call<GetAppointmentsModel> GetUpcomingAppointment(
-            @Header("Authorization") String authorization
-    );
+    Call<GetAppointmentsModel> GetUpcomingAppointment(@Header("Authorization") String authorization,
+                                                      @Query("pageNumber") int page);
 
     @FormUrlEncoded
     @POST("Appointment/MarkComplete")
@@ -109,28 +106,22 @@ public interface ApiMethods {
     );
 
     @GET("FollowUp/GetDueFollowUps")
-    Call<GetFollowUpsModel> GetFollowUpsDue(
-            @Header("Authorization") String authorization
-    );
+    Call<GetFollowUpsModel> GetFollowUpsDue(@Header("Authorization") String authorization,
+                                            @Query("PageNo") int page);
 
     @GET("FollowUp/GetOverDueFollowUps")
-    Call<GetFollowUpsModel> GetFollowUpsOverDue(
-            @Header("Authorization") String authorization
-    );
+    Call<GetFollowUpsModel> GetFollowUpsOverDue(@Header("Authorization") String authorization,
+                                                @Query("PageNo") int page);
 
     @GET("FollowUp/GetFollowUpDetails_New")
-    Call<ViewFollowUpModel> GetFollowUpDetails(
-            @Header("Authorization") String authorization,
-            @Query("id") String leadID
-    );
+    Call<ViewFollowUpModel> GetFollowUpDetails(@Header("Authorization") String authorization,
+                                               @Query("id") String leadID);
 
     @FormUrlEncoded
     @POST("FollowUp/MarkComplete")
-    Call<BaseResponse> MarkFollowUpComplete(
-            @Header("Authorization") String authorization,
-            @Field("encrypted_ReminderId") String reminderDI,
-            @Field("state") String state
-    );
+    Call<BaseResponse> MarkFollowUpComplete(@Header("Authorization") String authorization,
+                                            @Field("encrypted_ReminderId") String reminderDI,
+                                            @Field("state") String state);
 
     @GET("Tasks/GetDueTasksNew")
     Call<GetTasksModel> GetDueTasks(@Header("Authorization") String authorization,
@@ -194,26 +185,24 @@ public interface ApiMethods {
     );
 
     @GET("Lead/GetDueFollowUps")
-    Call<GetFollowUpsModel> GetDueFollowUps(
-            @Header("Authorization") String authorization,
-            @Query("Encrypted_LeadID") String leadID
-    );
+    Call<GetFollowUpsModel> GetDueFollowUps(@Header("Authorization") String authorization,
+                                            @Query("Encrypted_LeadID") String leadID,
+                                            @Query("PageNo") int page);
 
     @GET("Lead/GetOverDueFollowUps")
-    Call<GetFollowUpsModel> GetOverDueFollowUps(
-            @Header("Authorization") String authorization,
-            @Query("Encrypted_LeadID") String leadID
-    );
+    Call<GetFollowUpsModel> GetOverDueFollowUps(@Header("Authorization") String authorization,
+                                                @Query("Encrypted_LeadID") String leadID,
+                                                @Query("PageNo") int page);
 
     @GET("Lead/GetTodayAppointmentByLeadID")
-    Call<GetAppointmentsModel> GetTodayAppointmentByLeadID(
-            @Header("Authorization") String authorization,
-            @Query("Encrypted_LeadID") String leadID
-    );
+    Call<GetAppointmentsModel> GetTodayAppointmentByLeadID(@Header("Authorization") String authorization,
+                                                           @Query("Encrypted_LeadID") String leadID,
+                                                           @Query("pageNumber") int page);
 
     @GET("Lead/GetUpcomingAppointmentByLeadID")
     Call<GetAppointmentsModel> GetUpcomingAppointmentByLeadID(@Header("Authorization") String authorization,
-                                                              @Query("Encrypted_LeadID") String leadID);
+                                                              @Query("Encrypted_LeadID") String leadID,
+                                                              @Query("pageNumber") int page);
 
     @GET("Lead/GetLeadDueTasksNew")
     Call<GetTasksModel> GetLeadDueTasksNew(@Header("Authorization") String authorization,
@@ -231,10 +220,9 @@ public interface ApiMethods {
                                               @Query("PageNo") int page);
 
     @GET("Lead/GetPreviousAppointmentByLeadID")
-    Call<GetAppointmentsModel> GetPreviousAppointmentByLeadID(
-            @Header("Authorization") String authorization,
-            @Query("Encrypted_LeadID") String leadID
-    );
+    Call<GetAppointmentsModel> GetPreviousAppointmentByLeadID(@Header("Authorization") String authorization,
+                                                              @Query("Encrypted_LeadID") String leadID,
+                                                              @Query("pageNumber") int page);
 
     @GET("Lead/GetLead")
     Call<GetLead> GetLead(

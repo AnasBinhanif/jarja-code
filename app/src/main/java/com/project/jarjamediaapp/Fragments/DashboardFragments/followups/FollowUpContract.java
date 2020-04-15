@@ -12,7 +12,7 @@ public interface FollowUpContract {
     */
      interface View {
          void setupViews();
-        void updateUI(GetFollowUpsModel response, String whichFollowUp);
+        void updateUI(GetFollowUpsModel response);
 
         void updateUIonFalse(String message);
 
@@ -31,10 +31,10 @@ public interface FollowUpContract {
     */
      interface Actions {
          void initScreen();
-        void getDueFollowUps();
-        void getOverDueFollowUps();
-        void getLeadFollowupsDue(String leadID);
-        void getLeadFollowupsOverDue(String leadID);
+        void getDueFollowUps(int page);
+        void getOverDueFollowUps(int page);
+        void getLeadFollowupsDue(String leadID,int page);
+        void getLeadFollowupsOverDue(String leadID,int page);
     }
 
     /*

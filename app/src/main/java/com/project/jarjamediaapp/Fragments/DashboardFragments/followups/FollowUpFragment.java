@@ -3,6 +3,7 @@ package com.project.jarjamediaapp.Fragments.DashboardFragments.followups;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.FragmentFollowupBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle, FollowUpContract.View, View.OnClickListener {
@@ -32,9 +34,11 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
     FollowUpPresenter presenter;
     SwipeFollowUpsDueRecyclerAdapter swipeFollowUpsDueRecyclerAdapter;
     boolean isFromActivity;
-    ArrayList<GetFollowUpsModel.Data> followUpsList = new ArrayList<>();
-
+    List<GetFollowUpsModel.Data.FollowUpsList> followUpsList = new ArrayList<>();
     String leadID = "";
+    int page = 1;
+    int totalPages;
+    String taskType = "due";
 
     public FollowUpFragment() {
         // Required empty public constructor
@@ -77,57 +81,20 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
     }
 
     @Override
-    public void updateUI(GetFollowUpsModel response, String whichFollowUp) {
+    public void updateUI(GetFollowUpsModel response) {
 
-        followUpsList = response.data;
+        totalPages = response.getData().getFollowCount();
+        followUpsList = response.getData().getFollowUpsList();
+        if (followUpsList.size() == 0) {
 
-        RecyclerView.LayoutManager mLayoutManager;
+            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+            bi.rvFollowUp.setVisibility(View.GONE);
+        } else {
 
-        switch (whichFollowUp) {
+            bi.tvNoRecordFound.setVisibility(View.GONE);
+            bi.rvFollowUp.setVisibility(View.VISIBLE);
+            swipeFollowUpsDueRecyclerAdapter.notifyDataSetChanged();
 
-            case "due":
-
-                if (followUpsList.size() == 0) {
-
-                    bi.tvNoRecordFound.setVisibility(View.VISIBLE);
-                    bi.recyclerViewFollowDue.setVisibility(View.GONE);
-                    bi.recyclerViewFollowOverDue.setVisibility(View.GONE);
-
-                } else {
-
-                    mLayoutManager = new LinearLayoutManager(getContext());
-                    bi.recyclerViewFollowDue.setLayoutManager(mLayoutManager);
-                    bi.recyclerViewFollowDue.setItemAnimator(new DefaultItemAnimator());
-
-                    bi.tvNoRecordFound.setVisibility(View.GONE);
-                    bi.recyclerViewFollowOverDue.setVisibility(View.GONE);
-                    bi.recyclerViewFollowDue.setVisibility(View.VISIBLE);
-
-                    swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context, getActivity(),followUpsList);
-                    bi.recyclerViewFollowDue.setAdapter(swipeFollowUpsDueRecyclerAdapter);
-                }
-                break;
-            case "overdue":
-                if (followUpsList.size() == 0) {
-
-                    bi.tvNoRecordFound.setVisibility(View.VISIBLE);
-                    bi.recyclerViewFollowDue.setVisibility(View.GONE);
-                    bi.recyclerViewFollowOverDue.setVisibility(View.GONE);
-
-                } else {
-
-                    mLayoutManager = new LinearLayoutManager(getContext());
-                    bi.recyclerViewFollowOverDue.setLayoutManager(mLayoutManager);
-                    bi.recyclerViewFollowOverDue.setItemAnimator(new DefaultItemAnimator());
-
-                    bi.tvNoRecordFound.setVisibility(View.GONE);
-                    bi.recyclerViewFollowDue.setVisibility(View.GONE);
-                    bi.recyclerViewFollowOverDue.setVisibility(View.VISIBLE);
-
-                    swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context,getActivity() ,followUpsList);
-                    bi.recyclerViewFollowOverDue.setAdapter(swipeFollowUpsDueRecyclerAdapter);
-                }
-                break;
         }
 
     }
@@ -152,6 +119,14 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
         ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
     }
 
+    private void hitApi() {
+        if (isFromActivity) {
+            presenter.getLeadFollowupsDue(leadID, page);
+        } else {
+            presenter.getDueFollowUps(page);
+        }
+    }
+
     private void initViews() {
 
         isFromActivity = this.getArguments().getBoolean("isFromActivity");
@@ -162,35 +137,41 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
         bi.btnFollowDue.setOnClickListener(this);
         bi.btnFollowOverDue.setOnClickListener(this);
 
-        if (isFromActivity) {
-            presenter.getLeadFollowupsDue(leadID);
-        } else {
-            presenter.getDueFollowUps();
-        }
+        hitApi();
 
-    }
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context, getActivity(), followUpsList);
+        bi.rvFollowUp.setAdapter(swipeFollowUpsDueRecyclerAdapter);
+        bi.rvFollowUp.setLayoutManager(layoutManager);
+        bi.rvFollowUp.setItemAnimator(new DefaultItemAnimator());
 
-    private void populateDataDue() {
+        bi.rvFollowUp.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) //check for scroll down
+                {
+                    Log.d("scroll", "scroll down");
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
-       /* List<GetFollowUpsModel> appointmentList = new ArrayList<>();
+                    // Load more if we have reach the end to the recyclerView
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
+                        Log.d("scroll", "last item");
+                        if (totalPages > followUpsList.size()) {
+                            page++;
+                            try {
+                                hitApi();
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
+                            Log.d("scroll", "More to come");
+                        }
+                    }
+                }
+            }
+        });
 
-        appointmentList.add(new GetFollowUpsModel("NAME NAME ", "Address Address Address Address"));
-        appointmentList.add(new GetFollowUpsModel("NAME NAME NAME ", "Address Address Address Address"));
-        appointmentList.add(new GetFollowUpsModel("NAME NAME ", "Address Address Address Address"));
-        appointmentList.add(new GetFollowUpsModel("NAME NAME ", "Address Address Address Address"));
-        appointmentList.add(new GetFollowUpsModel("NAME NAME ", "Address Address Address Address"));
-        appointmentList.add(new GetFollowUpsModel("NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetFollowUpsModel("NAME NAME NAME ", "Address Address Address Address"));
-        appointmentList.add(new GetFollowUpsModel("NAME NAME", "Address Address Address Address"));
-        appointmentList.add(new GetFollowUpsModel("NAME NAME ", "Address Address Address Address"));
-
-        swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context, appointmentList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        // DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewPrevious.getContext(), 1);
-        bi.recyclerViewFollowDue.setLayoutManager(mLayoutManager);
-        bi.recyclerViewFollowDue.setItemAnimator(new DefaultItemAnimator());
-        // bi.recyclerViewPrevious.addItemDecoration(dividerItemDecoration);
-        bi.recyclerViewFollowDue.setAdapter(swipeFollowUpsDueRecyclerAdapter);*/
     }
 
     @Override
@@ -210,10 +191,11 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
             case R.id.btnFollowDue:
 
+                followUpsList.clear();
                 if (isFromActivity) {
-                    presenter.getLeadFollowupsDue(leadID);
+                    presenter.getLeadFollowupsDue(leadID, page);
                 } else {
-                    presenter.getDueFollowUps();
+                    presenter.getDueFollowUps(page);
                 }
 
                 Paris.style(bi.btnFollowDue).apply(R.style.TabButtonYellowLeft);
@@ -223,10 +205,11 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
             case R.id.btnFollowOverDue:
 
+                followUpsList.clear();
                 if (isFromActivity) {
-                    presenter.getLeadFollowupsOverDue(leadID);
+                    presenter.getLeadFollowupsOverDue(leadID, page);
                 } else {
-                    presenter.getOverDueFollowUps();
+                    presenter.getOverDueFollowUps(page);
                 }
 
                 Paris.style(bi.btnFollowOverDue).apply(R.style.TabButtonYellowRight);

@@ -39,11 +39,12 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     SwipeTasksDueRecyclerAdapter swipeTasksDueRecyclerAdapter;
     boolean isFromActivity;
     String leadID = "";
-    int page = 1;
+    int page = 0;
     int totalPages;
     String taskType = "due";
 
-    List<GetTasksModel.Data.TaskList> tasksList ;
+    List<GetTasksModel.Data.TaskList> tasksList;
+
     public TasksFragment() {
         // Required empty public constructor
     }
@@ -101,7 +102,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
 
     private void initRecyclers() {
 
-       LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
         bi.rvTasks.setAdapter(swipeTasksDueRecyclerAdapter);
         bi.rvTasks.setLayoutManager(layoutManager);
@@ -124,7 +125,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                             page++;
                             try {
                                 hitApi();
-                            }catch (NullPointerException e){
+                            } catch (NullPointerException e) {
                                 e.printStackTrace();
                             }
                             Log.d("scroll", "More to come");
@@ -219,13 +220,13 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
 
                 taskType = "due";
                 tasksList.clear();
-                page =1;
+                page = 0;
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonTranparentRight);
 
                 if (isFromActivity) {
-                    presenter.getLeadDueTasks(leadID,page);
+                    presenter.getLeadDueTasks(leadID, page);
                 } else {
                     presenter.getDueTasks(page);
                 }
@@ -236,13 +237,13 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
 
                 taskType = "overDue";
                 tasksList.clear();
-                page=1;
+                page = 0;
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonYellowMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonTranparentRight);
 
                 if (isFromActivity) {
-                    presenter.getLeadOverDueTasks(leadID,page);
+                    presenter.getLeadOverDueTasks(leadID, page);
                 } else {
                     presenter.getOverDueTasks(page);
                 }
@@ -253,12 +254,12 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
 
                 taskType = "future";
                 tasksList.clear();
-                page =1;
+                page = 0;
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonYellowRight);
                 if (isFromActivity) {
-                    presenter.getLeadFutureTasks(leadID,page);
+                    presenter.getLeadFutureTasks(leadID, page);
                 } else {
                     presenter.getFutureTasks(page);
                 }
@@ -270,24 +271,24 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     public void onResume() {
         super.onResume();
 
-        page = 1;
+        page = 0;
         tasksList.clear();
         hitApi();
 
     }
 
-    private void hitApi(){
+    private void hitApi() {
 
         if (isFromActivity) {
             switch (taskType) {
                 case "due":
-                    presenter.getLeadDueTasks(leadID,page);
+                    presenter.getLeadDueTasks(leadID, page);
                     break;
                 case "oveDue":
-                    presenter.getLeadOverDueTasks(leadID,page);
+                    presenter.getLeadOverDueTasks(leadID, page);
                     break;
                 case "future":
-                    presenter.getLeadFutureTasks(leadID,page);
+                    presenter.getLeadFutureTasks(leadID, page);
                     break;
             }
         } else {

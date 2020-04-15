@@ -1,8 +1,6 @@
 package com.project.jarjamediaapp.Fragments.DashboardFragments.followups;
 
 import com.project.jarjamediaapp.Base.BasePresenter;
-import com.project.jarjamediaapp.Base.BaseResponse;
-import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -38,9 +36,9 @@ public class FollowUpPresenter extends BasePresenter<FollowUpContract.View> impl
     }
 
     @Override
-    public void getDueFollowUps() {
+    public void getDueFollowUps(int page) {
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpsDue(GH.getInstance().getAuthorization());
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpsDue(GH.getInstance().getAuthorization(), page);
         _call.enqueue(new Callback<GetFollowUpsModel>() {
             @Override
             public void onResponse(Call<GetFollowUpsModel> call, Response<GetFollowUpsModel> response) {
@@ -51,7 +49,7 @@ public class FollowUpPresenter extends BasePresenter<FollowUpContract.View> impl
                     GetFollowUpsModel getFollowUpsModel = response.body();
                     if (getFollowUpsModel.status.equals("Success")) {
 
-                        _view.updateUI(getFollowUpsModel,"due");
+                        _view.updateUI(getFollowUpsModel);
 
                     } else {
 
@@ -74,9 +72,9 @@ public class FollowUpPresenter extends BasePresenter<FollowUpContract.View> impl
     }
 
     @Override
-    public void getOverDueFollowUps() {
+    public void getOverDueFollowUps(int page) {
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpsOverDue(GH.getInstance().getAuthorization());
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpsOverDue(GH.getInstance().getAuthorization(), page);
         _call.enqueue(new Callback<GetFollowUpsModel>() {
             @Override
             public void onResponse(Call<GetFollowUpsModel> call, Response<GetFollowUpsModel> response) {
@@ -87,7 +85,7 @@ public class FollowUpPresenter extends BasePresenter<FollowUpContract.View> impl
                     GetFollowUpsModel getFollowUpsModel = response.body();
                     if (getFollowUpsModel.status.equals("Success")) {
 
-                        _view.updateUI(getFollowUpsModel,"overdue");
+                        _view.updateUI(getFollowUpsModel);
 
                     } else {
 
@@ -111,10 +109,10 @@ public class FollowUpPresenter extends BasePresenter<FollowUpContract.View> impl
     }
 
     @Override
-    public void getLeadFollowupsDue(String leadID) {
+    public void getLeadFollowupsDue(String leadID, int page) {
         _view.showProgressBar();
         _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetDueFollowUps(GH.getInstance().getAuthorization(),
-                leadID);
+                leadID, page);
         _call.enqueue(new Callback<GetFollowUpsModel>() {
             @Override
             public void onResponse(Call<GetFollowUpsModel> call, Response<GetFollowUpsModel> response) {
@@ -125,7 +123,7 @@ public class FollowUpPresenter extends BasePresenter<FollowUpContract.View> impl
                     GetFollowUpsModel getFollowUpsModel = response.body();
                     if (getFollowUpsModel.status.equals("Success")) {
 
-                        _view.updateUI(getFollowUpsModel,"due");
+                        _view.updateUI(getFollowUpsModel);
 
                     } else {
 
@@ -148,10 +146,10 @@ public class FollowUpPresenter extends BasePresenter<FollowUpContract.View> impl
     }
 
     @Override
-    public void getLeadFollowupsOverDue(String leadID) {
+    public void getLeadFollowupsOverDue(String leadID, int page) {
         _view.showProgressBar();
         _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetOverDueFollowUps(GH.getInstance().getAuthorization(),
-                leadID);
+                leadID, page);
         _call.enqueue(new Callback<GetFollowUpsModel>() {
             @Override
             public void onResponse(Call<GetFollowUpsModel> call, Response<GetFollowUpsModel> response) {
@@ -162,7 +160,7 @@ public class FollowUpPresenter extends BasePresenter<FollowUpContract.View> impl
                     GetFollowUpsModel getFollowUpsModel = response.body();
                     if (getFollowUpsModel.status.equals("Success")) {
 
-                        _view.updateUI(getFollowUpsModel,"due");
+                        _view.updateUI(getFollowUpsModel);
 
                     } else {
 
@@ -183,4 +181,5 @@ public class FollowUpPresenter extends BasePresenter<FollowUpContract.View> impl
             }
         });
     }
+
 }

@@ -291,6 +291,13 @@ public class GetLead implements Serializable {
         @SerializedName("msg")
         @Expose
         public String msg;
+        @SerializedName("preApproved")
+        @Expose
+        public boolean preApproved;
+        @SerializedName("timeFrameName")
+        @Expose
+        public String timeFrameName;
+
     }
 
 

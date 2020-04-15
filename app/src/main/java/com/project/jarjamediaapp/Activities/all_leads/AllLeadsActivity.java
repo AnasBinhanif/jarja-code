@@ -90,11 +90,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        if (type==0) {
-            callGetAllLeads(data, String.valueOf(page));
-        }else{
-            callPropertyLeadList();
-        }
+       handleIntent();
     }
 
     @Override
@@ -117,7 +113,6 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             }
         });
         initPagination();
-        handleIntent();
     }
 
     private void initPagination() {
@@ -348,6 +343,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void updateUI(GetPropertyLeads response) {
 
+        propertyleadsList.clear();
         propertyleadsList.addAll(response.data.leadsList);
 
         if (propertyleadsList.size() == 0) {

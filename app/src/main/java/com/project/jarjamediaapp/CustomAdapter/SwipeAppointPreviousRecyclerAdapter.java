@@ -40,11 +40,11 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
     Activity activity;
     int pos;
     boolean isEditByLead, isPreviousAppoint;
-    List<GetAppointmentsModel.Data> mData;
+    List<GetAppointmentsModel.Data.Datum> mData;
 
     GetUserPermission userPermission;
 
-    public SwipeAppointPreviousRecyclerAdapter(Context context, Activity activity, List<GetAppointmentsModel.Data> data, boolean isEditByLead, boolean isPreviousAppoint) {
+    public SwipeAppointPreviousRecyclerAdapter(Context context, Activity activity, List<GetAppointmentsModel.Data.Datum> data, boolean isEditByLead, boolean isPreviousAppoint) {
 
         mData = data;
         this.context = context;
@@ -68,10 +68,10 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
         pos = position;
         if (mData != null && 0 <= position && position < mData.size()) {
 
-            GetAppointmentsModel.Data modelData = mData.get(position);
+            GetAppointmentsModel.Data.Datum modelData = mData.get(position);
 
-            String firstName = modelData.leadsData.firstName + "";
-            String lastName = modelData.leadsData.lastName + "";
+            String firstName = modelData.getVtCRMLeadCustom().firstName + "";
+            String lastName = modelData.getVtCRMLeadCustom().lastName + "";
             String evenTitle = modelData.eventTitle + "";
 
             if (firstName.equals("null") || firstName.equals("")) {
@@ -119,7 +119,7 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
                         if (userPermission.data.dashboard.get(6).value) {
                             pos = position;
                             String leadID = mData.get(pos).leadAppoinmentID;
-                            GetAppointmentsModel.Data modelData = mData.get(pos);
+                            GetAppointmentsModel.Data.Datum modelData = mData.get(pos);
                             context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                     .putExtra("leadID", leadID)
                                     .putExtra("from", "7")
@@ -194,7 +194,7 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
                 if (userPermission.data.dashboard.get(6).value) {
                     pos = getAdapterPosition();
                     String leadID = mData.get(pos).leadAppoinmentID;
-                    GetAppointmentsModel.Data modelData = mData.get(pos);
+                    GetAppointmentsModel.Data.Datum modelData = mData.get(pos);
                     if (isEditByLead) {
                         swipeLayout.close(true);
                         context.startActivity(new Intent(context, AddAppointmentActivity.class)

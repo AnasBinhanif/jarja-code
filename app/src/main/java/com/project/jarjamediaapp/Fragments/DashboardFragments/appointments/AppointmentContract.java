@@ -31,12 +31,12 @@ public interface AppointmentContract {
     */
     interface Actions {
         void initScreen();
-        void getTodayAppointments();
-        void getUpcomingAppointments();
-        void getPreviousAppointments();
-        void getLeadTodayAppointments(String leadID);
-        void getLeadUpcomingAppointments(String leadID);
-        void getLeadPreviousAppointments(String leadID);
+        void getTodayAppointments(int page);
+        void getUpcomingAppointments(int page);
+        void getPreviousAppointments(int page);
+        void getLeadTodayAppointments(String leadID, int page);
+        void getLeadUpcomingAppointments(String leadID,int page);
+        void getLeadPreviousAppointments(String leadID,int page);
     }
 
     /*

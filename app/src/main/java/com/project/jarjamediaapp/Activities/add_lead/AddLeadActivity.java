@@ -164,6 +164,12 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
             }
 
+            if (leadModel.preApproved) {
+                bi.spnPreApprove.setText("Yes");
+            }else {
+                bi.spnPreApprove.setText("No");
+            }
+
             if (leadModel.leadTypeID != null) {
 
                 if (getLeadTypeList != null && getLeadTypeList.size() > 0) {
@@ -174,18 +180,22 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                             bi.spnSource.setSelectedIndex(i);
                         }
                     }
+                }else {
+                    bi.spnSource.setSelectedIndex(0);
                 }
 
             }
 
             if (leadModel.timeFrameId != null) {
-                for (int i = 0; i < getLeadTimeFrameList.size(); i++) {
+
+              //  bi.spnTimeFrame.setText(leadModel.timeFrameName!= null?leadModel.timeFrameName:"");
+                /*for (int i = 0; i < getLeadTimeFrameList.size(); i++) {
                     GetLeadTimeFrame.Data typemodel = getLeadTimeFrameList.get(i);
                     Integer id = typemodel.timeFrameId;
                     if (id == leadModel.timeFrameId) {
                         bi.spnTimeFrame.setSelectedIndex(i);
                     }
-                }
+                }*/
             }
 
             if (leadModel.agentsList.size() != 0) {
@@ -520,7 +530,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String allAgentIds = agentIdsString;//agentModel == null ? "" : String.valueOf(agentModel.getId());
         String alldripcampaignids = dripIdsString;
         String notes = bi.edtNotes.getText().toString();
-        String b_PreQual = bi.spnPreApprove.isSelected() ? preAprrovedList.get(bi.spnPreApprove.getSelectedIndex()) : "No" ;
+        String b_PreQual = bi.spnPreApprove.getText().toString().equals("Yes") ? "true":"false";
         String address = bi.edtAddress1.getText().toString();
         String street = bi.edtAddress1.getText().toString();
         String zipcode = bi.edtPostalCode1.getText().toString();
@@ -645,7 +655,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String allAgentIds = agentIdsString;//agentModel == null ? "" : String.valueOf(agentModel.getId());
         String alldripcampaignids = dripIdsString;
         String notes = bi.edtNotes.getText().toString();
-        String b_PreQual = bi.spnPreApprove.isSelected() ? preAprrovedList.get(bi.spnPreApprove.getSelectedIndex()) : "No" ;
+        String b_PreQual = bi.spnPreApprove.getText().toString().equals("Yes") ? "true":"false";
         String address = bi.edtAddress1.getText().toString();
         String street = bi.edtAddress1.getText().toString();
         String zipcode = bi.edtPostalCode1.getText().toString();

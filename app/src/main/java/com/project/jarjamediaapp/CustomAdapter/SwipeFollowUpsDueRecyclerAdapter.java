@@ -41,11 +41,11 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
     Activity activity;
     int pos;
     String status = "";
-    List<GetFollowUpsModel.Data> mData;
+    List<GetFollowUpsModel.Data.FollowUpsList> mData;
 
     GetUserPermission userPermission;
 
-    public SwipeFollowUpsDueRecyclerAdapter(Context context, Activity activity, List<GetFollowUpsModel.Data> data) {
+    public SwipeFollowUpsDueRecyclerAdapter(Context context, Activity activity, List<GetFollowUpsModel.Data.FollowUpsList> data) {
 
         mData = data;
         this.context = context;
@@ -67,7 +67,7 @@ public class SwipeFollowUpsDueRecyclerAdapter extends RecyclerView.Adapter {
         pos = position;
         if (mData != null && 0 <= position && position < mData.size()) {
 
-            GetFollowUpsModel.Data modelData = mData.get(position);
+            GetFollowUpsModel.Data.FollowUpsList modelData = mData.get(position);
 
             String firstName = modelData.leadName + "";
             String summary = modelData.summary + "";

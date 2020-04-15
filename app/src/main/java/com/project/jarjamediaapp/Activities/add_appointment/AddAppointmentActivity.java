@@ -225,7 +225,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 bi.tvName.setText(leadName);
                 bi.tvName.setEnabled(false);
                 isEdit = true;
-                GetAppointmentsModel.Data modelData = getIntent().getParcelableExtra("model");
+                GetAppointmentsModel.Data.Datum modelData = getIntent().getParcelableExtra("model");
                 prePopulateData(modelData);
 
             }
@@ -245,7 +245,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 isEdit = true;
                 setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
                 bi.lblAppointment.setText(getString(R.string.edit_appointment));
-                GetAppointmentsModel.Data modelData = getIntent().getParcelableExtra("models");
+                GetAppointmentsModel.Data.Datum modelData = getIntent().getParcelableExtra("models");
                 prePopulateData(modelData);
 
             }
@@ -270,7 +270,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 isEdit = true;
                 setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.appointment), true);
                 bi.lblAppointment.setText(getString(R.string.appointment));
-                GetAppointmentsModel.Data modelData = getIntent().getParcelableExtra("models");
+                GetAppointmentsModel.Data.Datum modelData = getIntent().getParcelableExtra("models");
                 prePopulateData(modelData);
                 setViewAndChildrenEnabled(bi.appointParent, false);
                 bi.lnBottom.setVisibility(View.GONE);
@@ -355,11 +355,11 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         }
     }
 
-    private void prePopulateData(GetAppointmentsModel.Data modelData) {
+    private void prePopulateData(GetAppointmentsModel.Data.Datum modelData) {
 
         leadId = modelData.getLeadID();
         leadAppointmentId = modelData.getLeadAppoinmentID();
-        bi.tvName.setText((modelData.getLeadsData().getFirstName() != null ? modelData.getLeadsData().getFirstName() : "") + " " + (modelData.getLeadsData().getLastName() != null ? modelData.getLeadsData().getLastName() : ""));
+        bi.tvName.setText((modelData.getVtCRMLeadCustom().getFirstName() != null ? modelData.getVtCRMLeadCustom().getFirstName() : "") + " " + (modelData.getVtCRMLeadCustom().getLastName() != null ? modelData.getVtCRMLeadCustom().getLastName() : ""));
         bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
@@ -413,7 +413,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 arrayList.add(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getAgentID());
                 bi.lnAgent.addView(child);
                 bi.lnAgent.setVisibility(View.VISIBLE);
-                selectedIdsList.add(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getDecryptedAgentID());
+                selectedIdsList.add(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getAgentDecryptedID());
             }
             agentIdsString = TextUtils.join(",", arrayList);
         }

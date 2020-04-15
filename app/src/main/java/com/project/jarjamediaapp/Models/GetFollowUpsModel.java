@@ -2,52 +2,70 @@ package com.project.jarjamediaapp.Models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.project.jarjamediaapp.Base.BaseResponse;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class GetFollowUpsModel {
+public class GetFollowUpsModel extends BaseResponse {
 
-    @SerializedName("status")
-    @Expose
-    public String status;
     @SerializedName("data")
     @Expose
-    public ArrayList<Data> data = null;
-    @SerializedName("message")
-    @Expose
-    public String message;
+    public Data data;
 
     public class Data {
 
-        @SerializedName("leadID")
+        @SerializedName("followCount")
         @Expose
-        public String leadID;
-        @SerializedName("address")
+        public Integer followCount;
+        @SerializedName("followUpsList")
         @Expose
-        public String address;
-        @SerializedName("leadName")
-        @Expose
-        public String leadName;
-        @SerializedName("summary")
-        @Expose
-        public String summary;
-        @SerializedName("dripType")
-        @Expose
-        public String dripType;
-        @SerializedName("dripDetailID")
-        @Expose
-        public String dripDetailID;
-        @SerializedName("reminderId")
-        @Expose
-        public String reminderId;
-        @SerializedName("assignDate")
-        @Expose
-        public String assignDate;
-        @SerializedName("description")
-        @Expose
-        public String description;
-        @SerializedName("followUpsType")
-        @Expose
-        public String followUpsType;
+        public List<FollowUpsList> followUpsList = null;
+
+        public class FollowUpsList {
+
+            @SerializedName("leadID")
+            @Expose
+            public String leadID;
+            @SerializedName("address")
+            @Expose
+            public Object address;
+            @SerializedName("leadName")
+            @Expose
+            public String leadName;
+            @SerializedName("summary")
+            @Expose
+            public String summary;
+            @SerializedName("dripType")
+            @Expose
+            public String dripType;
+            @SerializedName("dripDetailID")
+            @Expose
+            public String dripDetailID;
+            @SerializedName("reminderId")
+            @Expose
+            public String reminderId;
+            @SerializedName("assignDate")
+            @Expose
+            public String assignDate;
+            @SerializedName("description")
+            @Expose
+            public Object description;
+            @SerializedName("followUpsType")
+            @Expose
+            public String followUpsType;
+
+        }
+
+        public Integer getFollowCount() {
+            return followCount;
+        }
+
+        public List<FollowUpsList> getFollowUpsList() {
+            return followUpsList;
+        }
+    }
+
+    public Data getData() {
+        return data;
     }
 }
