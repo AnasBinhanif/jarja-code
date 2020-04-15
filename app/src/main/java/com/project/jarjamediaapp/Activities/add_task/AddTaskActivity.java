@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -162,8 +163,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 bi.atvRecur.setFocusableInTouchMode(false);
                 // hit api for task detail
 
-                int whichTasks =getIntent().getIntExtra("whichTasks",1);
-                switch (whichTasks){
+                int whichTasks = getIntent().getIntExtra("whichTasks", 1);
+                switch (whichTasks) {
 
                     case 1:
                         presenter.getTaskDetail(taskId);
@@ -186,8 +187,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 bi.atvRecur.setClickable(false);
                 bi.tvStartTime.setFocusableInTouchMode(false);
                 bi.atvRecur.setFocusableInTouchMode(false);
-                int whichTasks =getIntent().getIntExtra("whichTasks",1);
-                switch (whichTasks){
+                int whichTasks = getIntent().getIntExtra("whichTasks", 1);
+                switch (whichTasks) {
                     case 1:
                         presenter.getTaskDetail(taskId);
                         break;
@@ -214,17 +215,51 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         day = newCalendar.get(Calendar.DAY_OF_MONTH);
         mHour = newCalendar.get(Calendar.HOUR_OF_DAY);
         mMinute = newCalendar.get(Calendar.MINUTE);
+    }
 
+    private void calendarEditInstance(int id) {
 
-        if (from.equals("1") || from.equals("4")) {
+        // 1 for start date
+        // 2 for end date
+        // 3 for start time
+        // 4 for end time
+        try {
+            newCalendar = Calendar.getInstance();
+            switch (id) {
+                case 1: {
+                    String[] formattedDate = startDate.split("-");
+                    year = Integer.parseInt(formattedDate[0]);
+                    month = Integer.parseInt(formattedDate[1]);
+                    day = Integer.parseInt(formattedDate[2]);
+                    month = month - 1;
+                    newCalendar.set(year, month, day);
+                }
+                break;
+                case 2: {
+                    String[] formattedDate = endDate.split("-");
+                    year = Integer.parseInt(formattedDate[0]);
+                    month = Integer.parseInt(formattedDate[1]);
+                    day = Integer.parseInt(formattedDate[2]);
+                    month = month - 1;
+                    newCalendar.set(year, month, day);
+                }
+                break;
+                case 3: {
+                    String[] formattedTime = startTime.split(":");
+                    mHour = Integer.parseInt(formattedTime[0]);
+                    mMinute = Integer.parseInt(formattedTime[1]);
 
-            SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
-            startDate = dateFormatter2.format(newCalendar.getTime());
-            bi.tvStartDate.setText(dateFormatter2.format(newCalendar.getTime()));
-
-            startTime = GH.getInstance().formatter(mHour + ":" + mMinute + ":00", "HH:mm:ss", "HH:mm:ss");
-            String time = GH.getInstance().formatter(mHour + ":" + mMinute + ":00", "hh:mm a", "HH:mm:ss");
-            bi.tvStartTime.setText(time);
+                }
+                break;
+                case 4: {
+                    String[] formattedTime = endTime.split(":");
+                    mHour = Integer.parseInt(formattedTime[0]);
+                    mMinute = Integer.parseInt(formattedTime[1]);
+                }
+                break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -330,7 +365,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
         });
 
-        bi.atvType.setText(arrayListViaText.get(0),false);
+        bi.atvType.setText(arrayListViaText.get(0), false);
         type = arrayListViaValue.get(0);
     }
 
@@ -387,9 +422,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvType.setText(taskDetail.data.type, false);
         bi.atvRecur.setText(taskDetail.data.recur, false);
         bi.atvAddProperty.setText(taskDetail.data.address);
-        // api correction needed
-    /*    bi.atvReminder.setText(arrayListReminderText.get(arrayListReminderValue.indexOf(String.valueOf(taskDetail.data.interval))), false);
-        bi.atvVia.setText(arrayListViaText.get(arrayListViaValue.indexOf(taskDetail.data.viaReminder)), false);*/
 
         String sDateTime = addHour(taskDetail.data.startDate, 5);
         String eDateTime = addHour(taskDetail.data.endDate, 5);
@@ -416,13 +448,23 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         reminder = String.valueOf(taskDetail.data.interval);
         via = taskDetail.data.viaReminder;
 
+        if(taskDetail.data.isEndDate){
+            bi.lblEndDate.setVisibility(View.GONE);
+            bi.tvEndDate.setVisibility(View.GONE);
+            bi.cbEndDate.setChecked(true);
+            bi.cbEndDate.setVisibility(View.VISIBLE);
+        }else {
+            bi.lblEndDate.setVisibility(View.VISIBLE);
+            bi.tvEndDate.setVisibility(View.VISIBLE);
+            bi.cbEndDate.setChecked(false);
+            bi.cbEndDate.setVisibility(View.GONE);
+        }
         bi.atvReminder.setText(hashMapReminder.get(Integer.valueOf(reminder)), false);
         if (Integer.valueOf(reminder) > 0) {
             bi.atvVia.setText(via, false);
             bi.lblVia.setVisibility(View.VISIBLE);
             bi.atvVia.setVisibility(View.VISIBLE);
         }
-
 
         if (taskDetail.data.agents.size() != 0) {
 
@@ -475,12 +517,12 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String desc = bi.atvDescription.getText().toString() + "";
         int scheduleRecurID = !reoccur.equals("") ? Integer.valueOf(reoccur) : 0;
         String type = this.type;
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
-        String sDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                "MM-dd-yyyy HH:mm:ss");
-        String eDate = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                "MM-dd-yyyy HH:mm:ss");
+        if (endDate.equalsIgnoreCase("")) {
+            endDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        }
+        String sDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+        String eDate = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
 
         String datedFrom = sDate;
         String datedto = eDate;
@@ -541,12 +583,16 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
             presenter.addTask(jsonObjectString);
 
-            /*presenter.addTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc, scheduleRecurID, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
-                    dayOfWeek, dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);*/
         }
     }
 
     private void callUpdateTask() {
+
+        if (endDate.equalsIgnoreCase("")) {
+            endDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        }
+        String sDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+        String eDate = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
 
         String id = "1";
         String agentIds = agentIdsString;
@@ -558,8 +604,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String desc = bi.atvDescription.getText().toString() + "";
         int scheduleRecurID = !reoccur.equals("") ? Integer.valueOf(reoccur) : 0;
         String type = this.type;
-        String datedFrom = startDate;
-        String datedto = endDate;
+        String datedFrom = sDate;
+        String datedto = eDate;
         String recurDay = "";
         String recureWeek = "";
         String noOfWeek = "";
@@ -669,53 +715,45 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             return false;
         }
 
+        Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null;
         if (!bi.cbEndDate.isChecked()) {
-            Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null;
-            String sDate =GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                    "MM-dd-yyyy HH:mm:ss");
 
-            String eDate =GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                    "MM-dd-yyyy HH:mm:ss");
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                date1 = sdf.parse(sDate);
-                date2 = sdf.parse(eDate);
-
-                if (sDate.compareTo(eDate) <= 0) {
-
-                } else {
-                    ToastUtils.showToast(context, "Start date must be lesser than end date");
+                date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
+                date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+                if (date2.compareTo(date1) < 0) {
+                    ToastUtils.showToast(context, "Start date cannot be less than end date");
                     bi.tvEndDate.requestFocus();
                     return false;
                 }
-
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        }
 
-            if (!reoccur.equals("1") && endDate.compareTo(startDate) == 0) {
-                try {
-                    String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
-                    currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
-                    time1 = new SimpleDateFormat("HH:mm:ss").parse(sDate);
-                    time2 = new SimpleDateFormat("HH:mm:ss").parse(eDate);
+        if (!reoccur.equals("1") && endDate.compareTo(startDate) == 0) {
+            try {
+                String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+                currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
+                time1 = new SimpleDateFormat("HH:mm:ss").parse(startDate);
+                time2 = new SimpleDateFormat("HH:mm:ss").parse(endDate);
 
-                    if (time2.before(time1)) {
-                        ToastUtils.showToast(context, "End time cannot be less than start time");
-                        bi.tvStartTime.requestFocus();
-                        return false;
-                    }
-
-                    if (time1.before(currentTime)) {
-                        ToastUtils.showToast(context, "Start time cannot be less than current time");
-                        bi.tvStartTime.requestFocus();
-                        return false;
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                if (time2.before(time1)) {
+                    ToastUtils.showToast(context, "End time cannot be less than start time");
+                    bi.tvStartTime.requestFocus();
+                    return false;
                 }
+
+                if (time1.before(currentTime)) {
+                    ToastUtils.showToast(context, "Start time cannot be less than current time");
+                    bi.tvStartTime.requestFocus();
+                    return false;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         }
+
 
         if (!bi.atvReminder.getText().toString().equalsIgnoreCase("") && !bi.atvReminder.getText().toString().equalsIgnoreCase("None")) {
             if (via.equalsIgnoreCase("")) {
@@ -794,6 +832,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 clearFocus();
                 if (bi.tvStartDate.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
+                } else {
+                    calendarEditInstance(1);
                 }
                 showDateDialog(bi.tvStartDate, true);
                 break;
@@ -801,6 +841,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 clearFocus();
                 if (bi.tvEndDate.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
+                } else {
+                    calendarEditInstance(2);
                 }
                 showDateDialog(bi.tvEndDate, false);
                 break;
@@ -808,6 +850,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 clearFocus();
                 if (bi.tvStartTime.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
+                } else {
+                    calendarEditInstance(3);
                 }
                 showTimeDialog(bi.tvStartTime, true);
                 break;
@@ -815,6 +859,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 clearFocus();
                 if (bi.tvEndTime.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
+                } else {
+                    calendarEditInstance(4);
                 }
                 showTimeDialog(bi.tvEndTime, false);
                 break;
@@ -851,6 +897,32 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         }
     }
 
+    private void showDateDialog(TextView textView, boolean isStart) {
+
+        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        DatePickerDialog StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int years, int monthOfYear, int dayOfMonth) {
+
+                year = years;
+                month = monthOfYear;
+                day = dayOfMonth;
+                newCalendar.set(year, month, day);
+
+                if (isStart) {
+                    startDate = dateFormatter.format(newCalendar.getTime());
+                } else {
+                    endDate = dateFormatter.format(newCalendar.getTime());
+                }
+                textView.setText(dateFormatter2.format(newCalendar.getTime()));
+            }
+
+        }, year, month, day);
+        newCalendar.set(year, month, day);
+        StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        StartTime.show();
+    }
+
     private void showTimeDialog(TextView textView, boolean isStart) {
 
         TimePickerDialog mTimePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
@@ -865,14 +937,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     startTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
                     time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
 
-
                 } else {
                     endTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
                     time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
-
                 }
                 textView.setText(time);
-
             }
         }, mHour, mMinute, false);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
@@ -980,35 +1049,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         });
 
         dialog.show();
-    }
-
-    private void showDateDialog(TextView textView, boolean isStart) {
-
-        final Calendar newCalendar = Calendar.getInstance();
-
-        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
-        DatePickerDialog StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int years, int monthOfYear, int dayOfMonth) {
-
-                year = years;
-                month = monthOfYear;
-                day = dayOfMonth;
-                newCalendar.set(year, month, day);
-
-                if (isStart) {
-                    startDate = dateFormatter2.format(newCalendar.getTime());
-                } else {
-                    endDate = dateFormatter2.format(newCalendar.getTime());
-                }
-
-                textView.setText(dateFormatter2.format(newCalendar.getTime()));
-
-            }
-
-        }, year, month, day);
-        newCalendar.set(year, month, day);
-        StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-        StartTime.show();
     }
 
     private void showSearchLeadDialog(Dialog dialog) {
@@ -1159,4 +1199,5 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
         });
     }
+
 }

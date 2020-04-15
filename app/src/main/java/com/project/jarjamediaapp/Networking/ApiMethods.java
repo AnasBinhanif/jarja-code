@@ -18,7 +18,6 @@ import com.project.jarjamediaapp.Activities.transactions.TransactionModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetAllLeads;
-import com.project.jarjamediaapp.Models.GetAllSocialProfiles;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
 import com.project.jarjamediaapp.Models.GetLastLogin;
@@ -134,19 +133,16 @@ public interface ApiMethods {
     );
 
     @GET("Tasks/GetDueTasksNew")
-    Call<GetTasksModel> GetDueTasks(
-            @Header("Authorization") String authorization
-    );
+    Call<GetTasksModel> GetDueTasks(@Header("Authorization") String authorization,
+                                    @Query("PageNo") int page);
 
     @GET("Tasks/GetOverDueTasksNew")
-    Call<GetTasksModel> GetOverDueTasks(
-            @Header("Authorization") String authorization
-    );
+    Call<GetTasksModel> GetOverDueTasks(@Header("Authorization") String authorization,
+                                        @Query("PageNo") int page);
 
     @GET("Tasks/GetFutureTasksNew")
-    Call<GetTasksModel> GetFutureTasks(
-            @Header("Authorization") String authorization
-    );
+    Call<GetTasksModel> GetFutureTasks(@Header("Authorization") String authorization,
+                                       @Query("PageNo") int page);
 
     @FormUrlEncoded
     @POST("Tasks/MarkComplete")
@@ -216,28 +212,23 @@ public interface ApiMethods {
     );
 
     @GET("Lead/GetUpcomingAppointmentByLeadID")
-    Call<GetAppointmentsModel> GetUpcomingAppointmentByLeadID(
-            @Header("Authorization") String authorization,
-            @Query("Encrypted_LeadID") String leadID
-    );
+    Call<GetAppointmentsModel> GetUpcomingAppointmentByLeadID(@Header("Authorization") String authorization,
+                                                              @Query("Encrypted_LeadID") String leadID);
 
     @GET("Lead/GetLeadDueTasksNew")
-    Call<GetTasksModel> GetLeadDueTasksNew(
-            @Header("Authorization") String authorization,
-            @Query("LeadID") String leadID
-    );
+    Call<GetTasksModel> GetLeadDueTasksNew(@Header("Authorization") String authorization,
+                                           @Query("LeadID") String leadID,
+                                           @Query("PageNo") int page);
 
     @GET("Lead/GetLeadOverDueTasks")
-    Call<GetTasksModel> GetLeadOverDueTasks(
-            @Header("Authorization") String authorization,
-            @Query("LeadID") String leadID
-    );
+    Call<GetTasksModel> GetLeadOverDueTasks(@Header("Authorization") String authorization,
+                                            @Query("LeadID") String leadID,
+                                            @Query("PageNo") int page);
 
     @GET("Lead/GetLeadFutureTasksNew")
-    Call<GetTasksModel> GetLeadFutureTasksNew(
-            @Header("Authorization") String authorization,
-            @Query("LeadID") String leadID
-    );
+    Call<GetTasksModel> GetLeadFutureTasksNew(@Header("Authorization") String authorization,
+                                              @Query("LeadID") String leadID,
+                                              @Query("PageNo") int page);
 
     @GET("Lead/GetPreviousAppointmentByLeadID")
     Call<GetAppointmentsModel> GetPreviousAppointmentByLeadID(
@@ -390,14 +381,14 @@ public interface ApiMethods {
     @Headers("Content-Type: application/json")
     @POST("Appointment/AddNew")
     Call<BaseResponse> AddAppointment(@Header("Authorization") String authorization,
-                               @Body String body);
+                                      @Body String body);
 
     @FormUrlEncoded
     @POST("Appointment/AddNew")
     Call<BaseResponse> AddAppointment(
             @Header("Authorization") String authorization,
             @Field("leadStringID") String leadStringID,
-            @Field("agentsStringIDs") String agentsStringIDs,
+            @Field("agentIDsString") String agentsStringIDs,
             @Field("leadAppoinmentID") String leadAppointmentID,
             @Field("eventTitle") String eventTitle,
             @Field("location") String location,
@@ -450,12 +441,12 @@ public interface ApiMethods {
 
     @GET("Tasks/GetFutureTask")
     Call<GetTaskDetail> getFutureTaskDetail(@Header("Authorization") String authorization,
-                                      @Query("ScheduleID") String taskId);
+                                            @Query("ScheduleID") String taskId);
 
     @Headers("Content-Type: application/json")
     @POST("Tasks/AddTaskNew")
     Call<BaseResponse> AddTask(@Header("Authorization") String authorization,
-                                                 @Body String body);
+                               @Body String body);
 
     @FormUrlEncoded
     @POST("Tasks/AddTaskNew")

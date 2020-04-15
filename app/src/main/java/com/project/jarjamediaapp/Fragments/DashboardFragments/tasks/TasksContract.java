@@ -9,9 +9,10 @@ public interface TasksContract {
     /*
     View - this defines the methods that the pure views like Activity or Fragments etc will implement.
     */
-     interface View {
-         void setupViews();
-        void updateUI(GetTasksModel response, String whichTask);
+    interface View {
+        void setupViews();
+
+        void updateUI(GetTasksModel response);
 
         void updateUIonFalse(String message);
 
@@ -28,20 +29,26 @@ public interface TasksContract {
     Actions - this defines the methods the pure Presenter class will implement. Also known as user actions,
     this is where the app logic is defined.
     */
-     interface Actions {
-         void initScreen();
-        void getDueTasks();
-        void getOverDueTasks();
-        void getFutureTasks();
-        void getLeadDueTasks(String leadID);
-        void getLeadOverDueTasks(String leadID);
-        void getLeadFutureTasks(String leadID);
+    interface Actions {
+        void initScreen();
+
+        void getDueTasks(int page);
+
+        void getOverDueTasks(int page);
+
+        void getFutureTasks(int page);
+
+        void getLeadDueTasks(String leadID, int page);
+
+        void getLeadOverDueTasks(String leadID, int page);
+
+        void getLeadFutureTasks(String leadID, int page);
     }
 
     /*
     this defines the methods that pure model or persistence class like database or server data will implement.
     */
-     interface Repository {
+    interface Repository {
 
     }
 

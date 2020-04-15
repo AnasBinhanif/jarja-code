@@ -3,8 +3,8 @@ package com.project.jarjamediaapp.Fragments.DashboardFragments.tasks;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +27,7 @@ import com.project.jarjamediaapp.databinding.FragmentTasksBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -37,12 +38,12 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     TasksPresenter presenter;
     SwipeTasksDueRecyclerAdapter swipeTasksDueRecyclerAdapter;
     boolean isFromActivity;
-
     String leadID = "";
-    int whichTasks = 1;
+    int page = 1;
+    int totalPages;
+    String taskType = "due";
 
-    ArrayList<GetTasksModel.Data> tasksList = new ArrayList<>();
-
+    List<GetTasksModel.Data.TaskList> tasksList ;
     public TasksFragment() {
         // Required empty public constructor
     }
@@ -71,147 +72,68 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     @Override
     public void setupViews() {
 
+        tasksList = new ArrayList<>();
         initViews();
-
         bi.fbAddTask.setOnClickListener(this);
 
     }
 
     @Override
-    public void updateUI(GetTasksModel response, String whichTask) {
+    public void updateUI(GetTasksModel response) {
 
-        tasksList = response.data;
+        tasksList.addAll(response.getData().getTaskList());
 
-        switch (whichTask) {
+        totalPages = response.getData().getTaskCount();
+        if (tasksList.size() == 0) {
 
-            case "due":
-                whichTasks = 1;
-                if (tasksList.size() == 0) {
+            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+            bi.rvTasks.setVisibility(View.GONE);
 
-                    bi.tvNoRecordFound.setVisibility(View.VISIBLE);
-                    bi.recyclerTaskViewDue.setVisibility(View.GONE);
-                    bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
-                    bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
+        } else {
 
-                } else {
-                    bi.tvNoRecordFound.setVisibility(View.GONE);
-                    bi.recyclerTaskViewDue.setVisibility(View.VISIBLE);
-                    bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
-                    bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
-                   // new AsyncTaskExample().execute(whichTasks);
-                   swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
-                    bi.recyclerTaskViewDue.setAdapter(swipeTasksDueRecyclerAdapter);
-                }
-                break;
+            swipeTasksDueRecyclerAdapter.notifyDataSetChanged();
+            bi.tvNoRecordFound.setVisibility(View.GONE);
+            bi.rvTasks.setVisibility(View.VISIBLE);
 
-            case "overdue":
-
-                whichTasks = 2;
-
-                if (tasksList.size() == 0) {
-
-                    bi.tvNoRecordFound.setVisibility(View.VISIBLE);
-                    bi.recyclerTaskViewDue.setVisibility(View.GONE);
-                    bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
-                    bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
-
-                } else {
-
-                    bi.tvNoRecordFound.setVisibility(View.GONE);
-                    bi.recyclerTaskViewDue.setVisibility(View.GONE);
-                    bi.recyclerViewTaskOverDue.setVisibility(View.VISIBLE);
-                    bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
-
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
-                    bi.recyclerViewTaskOverDue.setAdapter(swipeTasksDueRecyclerAdapter);
-                    //new AsyncTaskExample().execute(whichTasks);
-                }
-                break;
-
-            case "future":
-
-                whichTasks = 3;
-                if (tasksList.size() == 0) {
-
-                    bi.tvNoRecordFound.setVisibility(View.VISIBLE);
-                    bi.recyclerTaskViewDue.setVisibility(View.GONE);
-                    bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
-                    bi.recyclerViewTaskFutureTask.setVisibility(View.GONE);
-
-                } else {
-                    bi.tvNoRecordFound.setVisibility(View.GONE);
-                    bi.recyclerTaskViewDue.setVisibility(View.GONE);
-                    bi.recyclerViewTaskOverDue.setVisibility(View.GONE);
-                    bi.recyclerViewTaskFutureTask.setVisibility(View.VISIBLE);
-
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, true);
-                    bi.recyclerViewTaskFutureTask.setAdapter(swipeTasksDueRecyclerAdapter);
-                    //new AsyncTaskExample().execute(whichTasks);
-                }
-                break;
         }
 
     }
 
-    private class AsyncTaskExample extends AsyncTask<Integer, Integer,Integer> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-           showProgressBar();
-        }
-        @Override
-        protected Integer doInBackground(Integer... strings) {
-           int whichTasks = strings[0];
-            switch (whichTasks){
+    private void initRecyclers() {
 
-                case 1:
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
-                    break;
-                case 2:
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
-                    break;
-                case 3:
-                    swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, true);
-                    break;
+       LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
+        bi.rvTasks.setAdapter(swipeTasksDueRecyclerAdapter);
+        bi.rvTasks.setLayoutManager(layoutManager);
+        bi.rvTasks.setItemAnimator(new DefaultItemAnimator());
 
+        bi.rvTasks.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) //check for scroll down
+                {
+                    Log.d("scroll", "scroll down");
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                    // Load more if we have reach the end to the recyclerView
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
+                        Log.d("scroll", "last item");
+                        if (totalPages > tasksList.size()) {
+                            page++;
+                            try {
+                                hitApi();
+                            }catch (NullPointerException e){
+                                e.printStackTrace();
+                            }
+                            Log.d("scroll", "More to come");
+                        }
+                    }
+                }
             }
+        });
 
-            return strings[0];
-        }
-        @Override
-        protected void onPostExecute(Integer bitmap) {
-            super.onPostExecute(bitmap);
-
-            switch (bitmap){
-
-                case 1:
-                    bi.recyclerTaskViewDue.setAdapter(swipeTasksDueRecyclerAdapter);
-                    break;
-                case 2:
-                    bi.recyclerViewTaskOverDue.setAdapter(swipeTasksDueRecyclerAdapter);
-                    break;
-                case 3:
-                    bi.recyclerViewTaskFutureTask.setAdapter(swipeTasksDueRecyclerAdapter);
-                    break;
-
-            }
-
-            hideProgressBar();
-        }
-    }
-
-    private void initRecyclers(){
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        bi.recyclerTaskViewDue.setLayoutManager(mLayoutManager);
-        bi.recyclerTaskViewDue.setItemAnimator(new DefaultItemAnimator());
-
-        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getContext());
-        bi.recyclerViewTaskOverDue.setLayoutManager(mLayoutManager1);
-        bi.recyclerViewTaskOverDue.setItemAnimator(new DefaultItemAnimator());
-
-        RecyclerView.LayoutManager mLayoutManager2 = new LinearLayoutManager(getContext());
-        bi.recyclerViewTaskFutureTask.setLayoutManager(mLayoutManager2);
-        bi.recyclerViewTaskFutureTask.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override
@@ -262,12 +184,6 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
 
         initRecyclers();
 
-        if (isFromActivity) {
-            presenter.getLeadDueTasks(leadID);
-        } else {
-            presenter.getDueTasks();
-        }
-
     }
 
     @Override
@@ -300,41 +216,51 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 break;
 
             case R.id.btnTaskDue:
+
+                taskType = "due";
+                tasksList.clear();
+                page =1;
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonTranparentRight);
 
                 if (isFromActivity) {
-                    presenter.getLeadDueTasks(leadID);
+                    presenter.getLeadDueTasks(leadID,page);
                 } else {
-                    presenter.getDueTasks();
+                    presenter.getDueTasks(page);
                 }
 
                 break;
 
             case R.id.btnTaskOverDue:
 
+                taskType = "overDue";
+                tasksList.clear();
+                page=1;
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonYellowMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonTranparentRight);
 
                 if (isFromActivity) {
-                    presenter.getLeadOverDueTasks(leadID);
+                    presenter.getLeadOverDueTasks(leadID,page);
                 } else {
-                    presenter.getOverDueTasks();
+                    presenter.getOverDueTasks(page);
                 }
 
                 break;
 
             case R.id.btnTaskFutureTask:
 
+                taskType = "future";
+                tasksList.clear();
+                page =1;
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnTaskOverDue).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnTaskFutureTask).apply(R.style.TabButtonYellowRight);
                 if (isFromActivity) {
-                    presenter.getLeadFutureTasks(leadID);
+                    presenter.getLeadFutureTasks(leadID,page);
                 } else {
-                    presenter.getFutureTasks();
+                    presenter.getFutureTasks(page);
                 }
                 break;
         }
@@ -344,31 +270,39 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     public void onResume() {
         super.onResume();
 
+        page = 1;
+        tasksList.clear();
+        hitApi();
+
+    }
+
+    private void hitApi(){
+
         if (isFromActivity) {
-            switch (whichTasks) {
-                case 1:
-                    presenter.getLeadDueTasks(leadID);
+            switch (taskType) {
+                case "due":
+                    presenter.getLeadDueTasks(leadID,page);
                     break;
-                case 2:
-                    presenter.getLeadOverDueTasks(leadID);
+                case "oveDue":
+                    presenter.getLeadOverDueTasks(leadID,page);
                     break;
-                case 3:
-                    presenter.getLeadFutureTasks(leadID);
+                case "future":
+                    presenter.getLeadFutureTasks(leadID,page);
                     break;
             }
         } else {
-            switch (whichTasks) {
-                case 1:
-                    presenter.getDueTasks();
+            switch (taskType) {
+                case "due":
+                    presenter.getDueTasks(page);
                     break;
-                case 2:
-                    presenter.getOverDueTasks();
+                case "overDue":
+                    presenter.getOverDueTasks(page);
                     break;
-                case 3:
-                    presenter.getFutureTasks();
+                case "future":
+                    presenter.getFutureTasks(page);
                     break;
             }
         }
-
     }
+
 }

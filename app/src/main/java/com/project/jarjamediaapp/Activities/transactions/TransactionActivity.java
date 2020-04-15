@@ -132,37 +132,21 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         recyclerAdapterUtil.addOnClickListener((Function2<GetLeadTransactionStage.PipeLine, Integer, Unit>)
                 (viewComplainList, integer) -> {
 
-                    JSONObject obj = new JSONObject();
-
-                    try {
-                        obj.put("pipelineID", pipelineID);
-                        obj.put("encrypted_LeadDetailID", leadID);
-                        obj.put("presentationID", presentationID);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+                    String jsonObjectString = "";
+                    pipelineID = String.valueOf(viewComplainList.id);
+                    markedPipeline = viewComplainList.pipeline;
 
                     if (title.contains("Transaction 1")) {
-                        pipelineID = String.valueOf(viewComplainList.id);
                         presentationID = "1";
-                        markedPipeline = viewComplainList.pipeline;
-
-                        String jsonObjectString = obj.toString();
-                        Log.d("json", jsonObjectString);
-
-                        presenter.addPipelineMark(jsonObjectString);
-
                     } else if (title.contains("Transaction 2")) {
-                        pipelineID = String.valueOf(viewComplainList.id);
                         presentationID = "2";
-                        markedPipeline = viewComplainList.pipeline;
-
-                        String jsonObjectString = obj.toString();
-                        Log.d("json", jsonObjectString);
-
-                        presenter.addPipelineMark(jsonObjectString);
                     }
+
+                    jsonObjectString = "{\"presentationID\": \"" + presentationID + "\"," +
+                            " \"encrypted_LeadDetailID\": \"" + leadDetailId +
+                            "\", \"pipelineID\":\"" + pipelineID + "\"}";
+                    Log.d("json", jsonObjectString);
+                    presenter.addPipelineMark(jsonObjectString);
 
                     return Unit.INSTANCE;
                 });

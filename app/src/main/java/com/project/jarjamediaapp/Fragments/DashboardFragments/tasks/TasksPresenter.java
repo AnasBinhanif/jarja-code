@@ -1,8 +1,6 @@
 package com.project.jarjamediaapp.Fragments.DashboardFragments.tasks;
 
 import com.project.jarjamediaapp.Base.BasePresenter;
-import com.project.jarjamediaapp.Base.BaseResponse;
-import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetTasksModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -38,9 +36,9 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
     }
 
     @Override
-    public void getDueTasks() {
+    public void getDueTasks(int page) {
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetDueTasks(GH.getInstance().getAuthorization());
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetDueTasks(GH.getInstance().getAuthorization(), page);
         _call.enqueue(new Callback<GetTasksModel>() {
             @Override
             public void onResponse(Call<GetTasksModel> call, Response<GetTasksModel> response) {
@@ -51,7 +49,7 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
                     GetTasksModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
-                        _view.updateUI(getAppointmentsModel,"due");
+                        _view.updateUI(getAppointmentsModel);
 
                     } else {
 
@@ -75,10 +73,10 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
     }
 
     @Override
-    public void getOverDueTasks() {
+    public void getOverDueTasks(int page) {
 
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetOverDueTasks(GH.getInstance().getAuthorization());
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetOverDueTasks(GH.getInstance().getAuthorization(), page);
         _call.enqueue(new Callback<GetTasksModel>() {
             @Override
             public void onResponse(Call<GetTasksModel> call, Response<GetTasksModel> response) {
@@ -89,45 +87,7 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
                     GetTasksModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
-                        _view.updateUI(getAppointmentsModel,"overdue");
-
-                    } else {
-
-                        _view.updateUIonFalse(getAppointmentsModel.message);
-
-                    }
-                } else {
-
-                    ApiError error = ErrorUtils.parseError(response);
-                    _view.updateUIonError(error.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetTasksModel> call, Throwable t) {
-                _view.hideProgressBar();
-                _view.updateUIonFailure();
-            }
-        });
-
-
-    }
-
-    @Override
-    public void getFutureTasks() {
-        _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFutureTasks(GH.getInstance().getAuthorization());
-        _call.enqueue(new Callback<GetTasksModel>() {
-            @Override
-            public void onResponse(Call<GetTasksModel> call, Response<GetTasksModel> response) {
-
-                _view.hideProgressBar();
-                if (response.isSuccessful()) {
-
-                    GetTasksModel getAppointmentsModel = response.body();
-                    if (getAppointmentsModel.status.equals("Success")) {
-
-                        _view.updateUI(getAppointmentsModel,"future");
+                        _view.updateUI(getAppointmentsModel);
 
                     } else {
 
@@ -152,10 +112,9 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
     }
 
     @Override
-    public void getLeadDueTasks(String leadID) {
+    public void getFutureTasks(int page) {
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadDueTasksNew(GH.getInstance().getAuthorization(),
-                leadID);
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFutureTasks(GH.getInstance().getAuthorization(), page);
         _call.enqueue(new Callback<GetTasksModel>() {
             @Override
             public void onResponse(Call<GetTasksModel> call, Response<GetTasksModel> response) {
@@ -166,7 +125,45 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
                     GetTasksModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
-                        _view.updateUI(getAppointmentsModel,"due");
+                        _view.updateUI(getAppointmentsModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTasksModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+
+    }
+
+    @Override
+    public void getLeadDueTasks(String leadID, int page) {
+        _view.showProgressBar();
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadDueTasksNew(GH.getInstance().getAuthorization(), leadID, page);
+        _call.enqueue(new Callback<GetTasksModel>() {
+            @Override
+            public void onResponse(Call<GetTasksModel> call, Response<GetTasksModel> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetTasksModel getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel);
 
                     } else {
 
@@ -190,11 +187,10 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
     }
 
     @Override
-    public void getLeadOverDueTasks(String leadID) {
+    public void getLeadOverDueTasks(String leadID, int page) {
 
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadOverDueTasks(GH.getInstance().getAuthorization(),
-                leadID);
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadOverDueTasks(GH.getInstance().getAuthorization(), leadID, page);
         _call.enqueue(new Callback<GetTasksModel>() {
             @Override
             public void onResponse(Call<GetTasksModel> call, Response<GetTasksModel> response) {
@@ -205,7 +201,7 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
                     GetTasksModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
-                        _view.updateUI(getAppointmentsModel,"overdue");
+                        _view.updateUI(getAppointmentsModel);
 
                     } else {
 
@@ -229,10 +225,9 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
     }
 
     @Override
-    public void getLeadFutureTasks(String leadID) {
+    public void getLeadFutureTasks(String leadID, int page) {
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadFutureTasksNew(GH.getInstance().getAuthorization(),
-                leadID);
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadFutureTasksNew(GH.getInstance().getAuthorization(), leadID, page);
         _call.enqueue(new Callback<GetTasksModel>() {
             @Override
             public void onResponse(Call<GetTasksModel> call, Response<GetTasksModel> response) {
@@ -243,7 +238,7 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
                     GetTasksModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
-                        _view.updateUI(getAppointmentsModel,"future");
+                        _view.updateUI(getAppointmentsModel);
 
                     } else {
 
@@ -264,4 +259,5 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
             }
         });
     }
+
 }

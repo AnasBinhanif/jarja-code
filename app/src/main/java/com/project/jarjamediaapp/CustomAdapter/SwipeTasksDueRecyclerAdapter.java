@@ -41,10 +41,10 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
     int pos;
     boolean isEditByLead, isFutureTask;
     Activity activity;
-    List<GetTasksModel.Data> mData;
+    List<GetTasksModel.Data.TaskList> mData;
     GetUserPermission userPermission;
 
-    public SwipeTasksDueRecyclerAdapter(Context context, Activity activity, List<GetTasksModel.Data> data, boolean isEditByLead, boolean isFutureTask) {
+    public SwipeTasksDueRecyclerAdapter(Context context, Activity activity, List<GetTasksModel.Data.TaskList> data, boolean isEditByLead, boolean isFutureTask) {
 
         mData = data;
         this.context = context;
@@ -69,7 +69,7 @@ public class SwipeTasksDueRecyclerAdapter extends RecyclerView.Adapter {
         pos = position;
         if (mData != null && 0 <= position && position < mData.size()) {
 
-            GetTasksModel.Data modelData = mData.get(position);
+            GetTasksModel.Data.TaskList modelData = mData.get(position);
 
             holder.tvName.setText(modelData.name + " for " + modelData.agentName);
             holder.tvAddress.setText(modelData.firstName + " " + modelData.lastName);

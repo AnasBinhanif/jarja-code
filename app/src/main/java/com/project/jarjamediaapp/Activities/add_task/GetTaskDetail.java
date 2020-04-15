@@ -74,6 +74,9 @@ public class GetTaskDetail extends BaseResponse {
         @SerializedName("scheduleRecurID")
         @Expose
         public Integer scheduleRecurID;
+        @SerializedName("isEndDate")
+        @Expose
+        public boolean isEndDate;
         @SerializedName("agents")
         @Expose
         public List<Agent> agents = null;
@@ -185,6 +188,10 @@ public class GetTaskDetail extends BaseResponse {
 
         public List<Agent> getAgents() {
             return agents;
+        }
+
+        public boolean isEndDate() {
+            return isEndDate;
         }
     }
 
