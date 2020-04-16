@@ -174,7 +174,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getCalendarTaskDetail(GH.getInstance().getAuthorization(), calendarId, startDateTime);
 
         } else {
-            _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getCalendarAppointmentDetail(GH.getInstance().getAuthorization(), calendarId);
+            _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getCalendarAppointmentDetail(GH.getInstance().getAuthorization(), calendarId,startDateTime);
         }
         _call.enqueue(new Callback<CalendarDetailModel>() {
             @Override

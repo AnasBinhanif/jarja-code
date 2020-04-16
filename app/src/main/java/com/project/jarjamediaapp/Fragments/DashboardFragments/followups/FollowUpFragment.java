@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.paris.Paris;
 import com.project.jarjamediaapp.Base.BaseFragment;
-import com.project.jarjamediaapp.CustomAdapter.SwipeFollowUpsDueRecyclerAdapter;
+import com.project.jarjamediaapp.CustomAdapter.SwipeFollowUpsRecyclerAdapter;
 import com.project.jarjamediaapp.Fragments.FragmentLifeCycle;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
 import com.project.jarjamediaapp.R;
@@ -32,7 +32,7 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
     FragmentFollowupBinding bi;
     Context context;
     FollowUpPresenter presenter;
-    SwipeFollowUpsDueRecyclerAdapter swipeFollowUpsDueRecyclerAdapter;
+    SwipeFollowUpsRecyclerAdapter swipeFollowUpsRecyclerAdapter;
     boolean isFromActivity;
     List<GetFollowUpsModel.Data.FollowUpsList> followUpsList = new ArrayList<>();
     String leadID = "";
@@ -93,7 +93,7 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
             bi.tvNoRecordFound.setVisibility(View.GONE);
             bi.rvFollowUp.setVisibility(View.VISIBLE);
-            swipeFollowUpsDueRecyclerAdapter.notifyDataSetChanged();
+            swipeFollowUpsRecyclerAdapter.notifyDataSetChanged();
 
         }
 
@@ -140,8 +140,8 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
         hitApi();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
-        swipeFollowUpsDueRecyclerAdapter = new SwipeFollowUpsDueRecyclerAdapter(context, getActivity(), followUpsList);
-        bi.rvFollowUp.setAdapter(swipeFollowUpsDueRecyclerAdapter);
+        swipeFollowUpsRecyclerAdapter = new SwipeFollowUpsRecyclerAdapter(context, getActivity(), followUpsList);
+        bi.rvFollowUp.setAdapter(swipeFollowUpsRecyclerAdapter);
         bi.rvFollowUp.setLayoutManager(layoutManager);
         bi.rvFollowUp.setItemAnimator(new DefaultItemAnimator());
 

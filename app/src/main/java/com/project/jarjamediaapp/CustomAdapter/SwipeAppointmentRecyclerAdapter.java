@@ -32,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
+public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
 
     private LayoutInflater mInflater;
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
@@ -44,7 +44,7 @@ public class SwipeAppointPreviousRecyclerAdapter extends RecyclerView.Adapter {
 
     GetUserPermission userPermission;
 
-    public SwipeAppointPreviousRecyclerAdapter(Context context, Activity activity, List<GetAppointmentsModel.Data.Datum> data, boolean isEditByLead, boolean isPreviousAppoint) {
+    public SwipeAppointmentRecyclerAdapter(Context context, Activity activity, List<GetAppointmentsModel.Data.Datum> data, boolean isEditByLead, boolean isPreviousAppoint) {
 
         mData = data;
         this.context = context;

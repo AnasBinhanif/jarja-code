@@ -38,7 +38,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
     @Override
     public void getTodayAppointments(int page) {
         _view.showProgressBar();
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetTodayAppointment(GH.getInstance().getAuthorization(),page);
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetTodayAppointment(GH.getInstance().getAuthorization(), page);
         _callToday.enqueue(new Callback<GetAppointmentsModel>() {
             @Override
             public void onResponse(Call<GetAppointmentsModel> call, Response<GetAppointmentsModel> response) {
@@ -49,7 +49,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
                     GetAppointmentsModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
-                        _view.updateUI(getAppointmentsModel, "today");
+                        _view.updateAppointmentUI(getAppointmentsModel);
 
                     } else {
 
@@ -75,7 +75,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
     @Override
     public void getUpcomingAppointments(int page) {
         _view.showProgressBar();
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetUpcomingAppointment(GH.getInstance().getAuthorization(),page);
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetUpcomingAppointment(GH.getInstance().getAuthorization(), page);
         _callToday.enqueue(new Callback<GetAppointmentsModel>() {
             @Override
             public void onResponse(Call<GetAppointmentsModel> call, Response<GetAppointmentsModel> response) {
@@ -86,7 +86,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
                     GetAppointmentsModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
-                        _view.updateUI(getAppointmentsModel, "upcoming");
+                        _view.updateAppointmentUI(getAppointmentsModel);
 
                     } else {
 
@@ -112,7 +112,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
     @Override
     public void getPreviousAppointments(int page) {
         _view.showProgressBar();
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetPreviousAppointment(GH.getInstance().getAuthorization(),page);
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetPreviousAppointment(GH.getInstance().getAuthorization(), page);
         _callToday.enqueue(new Callback<GetAppointmentsModel>() {
             @Override
             public void onResponse(Call<GetAppointmentsModel> call, Response<GetAppointmentsModel> response) {
@@ -123,7 +123,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
                     GetAppointmentsModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
-                        _view.updateUI(getAppointmentsModel, "previous");
+                        _view.updateAppointmentUI(getAppointmentsModel);
 
                     } else {
 
@@ -147,11 +147,11 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
     }
 
     @Override
-    public void getLeadTodayAppointments(String leadID,int page) {
+    public void getLeadTodayAppointments(String leadID, int page) {
 
         _view.showProgressBar();
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetTodayAppointmentByLeadID(GH.getInstance().getAuthorization(),
-                leadID,page);
+                leadID, page);
         _callToday.enqueue(new Callback<GetAppointmentsModel>() {
             @Override
             public void onResponse(Call<GetAppointmentsModel> call, Response<GetAppointmentsModel> response) {
@@ -162,7 +162,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
                     GetAppointmentsModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
-                        _view.updateUI(getAppointmentsModel, "today");
+                        _view.updateAppointmentUI(getAppointmentsModel);
 
                     } else {
 
@@ -189,7 +189,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
     public void getLeadUpcomingAppointments(String leadID, int page) {
         _view.showProgressBar();
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetUpcomingAppointmentByLeadID(GH.getInstance().getAuthorization(),
-                leadID,page);
+                leadID, page);
         _callToday.enqueue(new Callback<GetAppointmentsModel>() {
             @Override
             public void onResponse(Call<GetAppointmentsModel> call, Response<GetAppointmentsModel> response) {
@@ -200,7 +200,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
                     GetAppointmentsModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
-                        _view.updateUI(getAppointmentsModel, "upcoming");
+                        _view.updateAppointmentUI(getAppointmentsModel);
 
                     } else {
 
@@ -224,10 +224,10 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
     }
 
     @Override
-    public void getLeadPreviousAppointments(String leadID,int page) {
+    public void getLeadPreviousAppointments(String leadID, int page) {
         _view.showProgressBar();
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetPreviousAppointmentByLeadID(GH.getInstance().getAuthorization(),
-                leadID,page);
+                leadID, page);
         _callToday.enqueue(new Callback<GetAppointmentsModel>() {
             @Override
             public void onResponse(Call<GetAppointmentsModel> call, Response<GetAppointmentsModel> response) {
@@ -238,7 +238,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
                     GetAppointmentsModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
-                        _view.updateUI(getAppointmentsModel, "previous");
+                        _view.updateAppointmentUI(getAppointmentsModel);
 
                     } else {
 
@@ -259,4 +259,5 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
             }
         });
     }
+
 }

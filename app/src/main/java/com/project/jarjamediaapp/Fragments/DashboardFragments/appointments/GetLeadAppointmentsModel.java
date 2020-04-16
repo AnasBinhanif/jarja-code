@@ -1,4 +1,4 @@
-package com.project.jarjamediaapp.Models;
+package com.project.jarjamediaapp.Fragments.DashboardFragments.appointments;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,12 +9,37 @@ import com.project.jarjamediaapp.Base.BaseResponse;
 
 import java.util.List;
 
-public class GetAppointmentsModel extends BaseResponse  {
+public class GetLeadAppointmentsModel extends BaseResponse implements Parcelable {
 
     @SerializedName("data")
     @Expose
     public Data data;
 
+    protected GetLeadAppointmentsModel(Parcel in) {
+        data = in.readParcelable(Data.class.getClassLoader());
+    }
+
+    public static final Creator<GetLeadAppointmentsModel> CREATOR = new Creator<GetLeadAppointmentsModel>() {
+        @Override
+        public GetLeadAppointmentsModel createFromParcel(Parcel in) {
+            return new GetLeadAppointmentsModel(in);
+        }
+
+        @Override
+        public GetLeadAppointmentsModel[] newArray(int size) {
+            return new GetLeadAppointmentsModel[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(data, flags);
+    }
 
     public static class Data implements Parcelable {
 
@@ -24,41 +49,6 @@ public class GetAppointmentsModel extends BaseResponse  {
         @SerializedName("totalRecordCount")
         @Expose
         public Integer totalRecordCount;
-
-        protected Data(Parcel in) {
-            if (in.readByte() == 0) {
-                totalRecordCount = null;
-            } else {
-                totalRecordCount = in.readInt();
-            }
-        }
-
-        public static final Creator<Data> CREATOR = new Creator<Data>() {
-            @Override
-            public Data createFromParcel(Parcel in) {
-                return new Data(in);
-            }
-
-            @Override
-            public Data[] newArray(int size) {
-                return new Data[size];
-            }
-        };
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            if (totalRecordCount == null) {
-                dest.writeByte((byte) 0);
-            } else {
-                dest.writeByte((byte) 1);
-                dest.writeInt(totalRecordCount);
-            }
-        }
 
         public static class Datum implements Parcelable{
 
@@ -278,7 +268,7 @@ public class GetAppointmentsModel extends BaseResponse  {
                 dest.writeTypedList(vtCRMLeadAppoinmentDetailCustom);
             }
 
-            public static class VtCRMLeadAppoinmentDetailCustom implements Parcelable {
+            public static class VtCRMLeadAppoinmentDetailCustom implements Parcelable{
 
                 @SerializedName("leadAppoinmentDetailID")
                 @Expose
@@ -338,6 +328,42 @@ public class GetAppointmentsModel extends BaseResponse  {
                     }
                 }
 
+                @Override
+                public void writeToParcel(Parcel dest, int flags) {
+                    if (leadAppoinmentDetailID == null) {
+                        dest.writeByte((byte) 0);
+                    } else {
+                        dest.writeByte((byte) 1);
+                        dest.writeInt(leadAppoinmentDetailID);
+                    }
+                    if (leadAppoinmentID == null) {
+                        dest.writeByte((byte) 0);
+                    } else {
+                        dest.writeByte((byte) 1);
+                        dest.writeInt(leadAppoinmentID);
+                    }
+                    dest.writeString(agentID);
+                    if (agentDecryptedID == null) {
+                        dest.writeByte((byte) 0);
+                    } else {
+                        dest.writeByte((byte) 1);
+                        dest.writeInt(agentDecryptedID);
+                    }
+                    dest.writeString(agentName);
+                    dest.writeByte((byte) (isSeen == null ? 0 : isSeen ? 1 : 2));
+                    if (crmid == null) {
+                        dest.writeByte((byte) 0);
+                    } else {
+                        dest.writeByte((byte) 1);
+                        dest.writeInt(crmid);
+                    }
+                }
+
+                @Override
+                public int describeContents() {
+                    return 0;
+                }
+
                 public static final Creator<VtCRMLeadAppoinmentDetailCustom> CREATOR = new Creator<VtCRMLeadAppoinmentDetailCustom>() {
                     @Override
                     public VtCRMLeadAppoinmentDetailCustom createFromParcel(Parcel in) {
@@ -389,45 +415,9 @@ public class GetAppointmentsModel extends BaseResponse  {
                 public Object getVtCRMLeadAppoinmentCustom() {
                     return vtCRMLeadAppoinmentCustom;
                 }
-
-                @Override
-                public int describeContents() {
-                    return 0;
-                }
-
-                @Override
-                public void writeToParcel(Parcel dest, int flags) {
-                    if (leadAppoinmentDetailID == null) {
-                        dest.writeByte((byte) 0);
-                    } else {
-                        dest.writeByte((byte) 1);
-                        dest.writeInt(leadAppoinmentDetailID);
-                    }
-                    if (leadAppoinmentID == null) {
-                        dest.writeByte((byte) 0);
-                    } else {
-                        dest.writeByte((byte) 1);
-                        dest.writeInt(leadAppoinmentID);
-                    }
-                    dest.writeString(agentID);
-                    if (agentDecryptedID == null) {
-                        dest.writeByte((byte) 0);
-                    } else {
-                        dest.writeByte((byte) 1);
-                        dest.writeInt(agentDecryptedID);
-                    }
-                    dest.writeString(agentName);
-                    dest.writeByte((byte) (isSeen == null ? 0 : isSeen ? 1 : 2));
-                    if (crmid == null) {
-                        dest.writeByte((byte) 0);
-                    } else {
-                        dest.writeByte((byte) 1);
-                        dest.writeInt(crmid);
-                    }
-                }
             }
 
-            public static class VtCRMLeadCustom implements Parcelable  {
+            public static class VtCRMLeadCustom implements Parcelable {
 
                 @SerializedName("leadID")
                 @Expose
@@ -437,34 +427,34 @@ public class GetAppointmentsModel extends BaseResponse  {
                 public Integer decryptedLeadID;
                 @SerializedName("firstName")
                 @Expose
-                public String firstName;
+                public Object firstName;
                 @SerializedName("lastName")
                 @Expose
-                public String lastName;
+                public Object lastName;
                 @SerializedName("primaryEmail")
                 @Expose
                 public String primaryEmail;
                 @SerializedName("primaryPhone")
                 @Expose
-                public String primaryPhone;
+                public Object primaryPhone;
                 @SerializedName("address")
                 @Expose
-                public String address;
+                public Object address;
                 @SerializedName("street")
                 @Expose
-                public String street;
+                public Object street;
                 @SerializedName("zipcode")
                 @Expose
-                public String zipcode;
+                public Object zipcode;
                 @SerializedName("city")
                 @Expose
-                public String city;
+                public Object city;
                 @SerializedName("state")
                 @Expose
-                public String state;
+                public Object state;
                 @SerializedName("description")
                 @Expose
-                public String description;
+                public Object description;
                 @SerializedName("source")
                 @Expose
                 public String source;
@@ -617,16 +607,7 @@ public class GetAppointmentsModel extends BaseResponse  {
                     } else {
                         decryptedLeadID = in.readInt();
                     }
-                    firstName = in.readString();
-                    lastName = in.readString();
                     primaryEmail = in.readString();
-                    primaryPhone = in.readString();
-                    address = in.readString();
-                    street = in.readString();
-                    zipcode = in.readString();
-                    city = in.readString();
-                    state = in.readString();
-                    description = in.readString();
                     source = in.readString();
                     if (in.readByte() == 0) {
                         crmid = null;
@@ -938,16 +919,7 @@ public class GetAppointmentsModel extends BaseResponse  {
                         dest.writeByte((byte) 1);
                         dest.writeInt(decryptedLeadID);
                     }
-                    dest.writeString(firstName);
-                    dest.writeString(lastName);
                     dest.writeString(primaryEmail);
-                    dest.writeString(primaryPhone);
-                    dest.writeString(address);
-                    dest.writeString(street);
-                    dest.writeString(zipcode);
-                    dest.writeString(city);
-                    dest.writeString(state);
-                    dest.writeString(description);
                     dest.writeString(source);
                     if (crmid == null) {
                         dest.writeByte((byte) 0);
@@ -1271,6 +1243,43 @@ public class GetAppointmentsModel extends BaseResponse  {
                 this.vtCRMLeadAppoinmentDetailCustom = vtCRMLeadAppoinmentDetailCustom;
             }
         }
+
+        protected Data(Parcel in) {
+            data = in.createTypedArrayList(Datum.CREATOR);
+            if (in.readByte() == 0) {
+                totalRecordCount = null;
+            } else {
+                totalRecordCount = in.readInt();
+            }
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeTypedList(data);
+            if (totalRecordCount == null) {
+                dest.writeByte((byte) 0);
+            } else {
+                dest.writeByte((byte) 1);
+                dest.writeInt(totalRecordCount);
+            }
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        public static final Creator<Data> CREATOR = new Creator<Data>() {
+            @Override
+            public Data createFromParcel(Parcel in) {
+                return new Data(in);
+            }
+
+            @Override
+            public Data[] newArray(int size) {
+                return new Data[size];
+            }
+        };
 
         public List<Datum> getData() {
             return data;

@@ -242,12 +242,12 @@ public class GH {
 
         String addedTime = "";
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             Date date = sdf.parse(time);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             calendar.add(Calendar.HOUR, 5);
-            SimpleDateFormat sdf1 = new SimpleDateFormat("h:mm:ss");
+            SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm:ss");
             addedTime = sdf1.format(calendar.getTime());
 
         } catch (Exception e) {

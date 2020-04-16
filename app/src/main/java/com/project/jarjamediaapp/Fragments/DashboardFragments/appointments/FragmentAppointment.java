@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.airbnb.paris.Paris;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Base.BaseFragment;
-import com.project.jarjamediaapp.CustomAdapter.SwipeAppointPreviousRecyclerAdapter;
+import com.project.jarjamediaapp.CustomAdapter.SwipeAppointmentRecyclerAdapter;
 import com.project.jarjamediaapp.Fragments.FragmentLifeCycle;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetUserPermission;
@@ -35,10 +35,11 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     Context context;
     FragmentAppointmentBinding bi;
     AppointmentPresenter presenter;
-    SwipeAppointPreviousRecyclerAdapter swipeAppointPreviousRecyclerAdapter;
+    SwipeAppointmentRecyclerAdapter swipeAppointmentRecyclerAdapter;
     boolean isFromActivity;
     String leadID = "";
     List<GetAppointmentsModel.Data.Datum> appointmentList;
+    List<GetAppointmentsModel.Data> leadAppointmentList;
     GetUserPermission userPermission;
     String buttonType = "T";
     int page = 1;
@@ -81,11 +82,13 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     }
 
     @Override
-    public void updateUI(GetAppointmentsModel response, String whichAppoint) {
+    public void updateAppointmentUI(GetAppointmentsModel response) {
 
-        totalPages = response.getData().getTotalRecordCount() != null ? response.getData().getTotalRecordCount() : 0;
         appointmentList = response.getData().getData();
 
+        if(!isFromActivity){
+            totalPages = response.getData().getTotalRecordCount() != null ? response.getData().getTotalRecordCount() : 0;
+        }
         if (appointmentList.size() == 0) {
 
             bi.tvNoRecordFound.setVisibility(View.VISIBLE);
@@ -94,8 +97,8 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         } else {
             bi.tvNoRecordFound.setVisibility(View.GONE);
             bi.rvAppointments.setVisibility(View.VISIBLE);
-            swipeAppointPreviousRecyclerAdapter = new SwipeAppointPreviousRecyclerAdapter(context, getActivity(), appointmentList, isFromActivity, false);
-            bi.rvAppointments.setAdapter(swipeAppointPreviousRecyclerAdapter);
+            swipeAppointmentRecyclerAdapter = new SwipeAppointmentRecyclerAdapter(context, getActivity(), appointmentList, isFromActivity, false);
+            bi.rvAppointments.setAdapter(swipeAppointmentRecyclerAdapter);
 
         }
 
@@ -205,7 +208,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
             case R.id.btnToday:
 
-                page =1;
+                page = 1;
                 appointmentList.clear();
                 buttonType = "T";
                 if (isFromActivity) {

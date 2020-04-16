@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -100,7 +99,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
     }
 
-    private String getFormatedAmount(int amount){
+    private String getFormatedAmount(int amount) {
         return NumberFormat.getNumberInstance(Locale.US).format(amount);
     }
 
@@ -109,8 +108,11 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
         bi.atvPrice.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus) {
-                   bi.atvPrice.setText(getFormatedAmount(Integer.valueOf(bi.atvPrice.getText().toString())));
+                if (!hasFocus) {
+                    if (bi.atvPrice.getText().toString().length() > 0) {
+                        bi.atvPrice.setText(getFormatedAmount(Integer.valueOf(bi.atvPrice.getText().toString())));
+                    }
+
                 }
             }
         });
@@ -238,6 +240,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         bi.atvOpenHouseStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                clearFocus();
                 DateDialog(context, bi.atvOpenHouseStartDate, true, "1");
             }
         });
@@ -245,6 +249,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         bi.atvOpenHouseEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                clearFocus();
                 DateDialog(context, bi.atvOpenHouseEndDate, true, "2");
             }
         });
@@ -253,6 +259,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
 
+                clearFocus();
                 bottomDialogFragment = BottomDialogFragment.getInstance();
                 bottomDialogFragment.setCLickHandleClickEvents(AddOpenHousesActivity.this);
                 bottomDialogFragment.show(getSupportFragmentManager(), "Select Image");
@@ -263,6 +270,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
 
+                clearFocus();
                 image = "";
                 bi.tvRemovePictures.setVisibility(View.GONE);
                 bi.tvSelectPictures.setVisibility(View.VISIBLE);
@@ -285,14 +293,14 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
                     JSONObject obj = new JSONObject();
                     try {
-                    obj.put("listPrice", listPrice);
-                    obj.put("city", city);
-                    obj.put("address", address);
-                    obj.put("state", state);
-                    obj.put("zip", zip);
-                    obj.put("image", image);
-                    obj.put("openHouseDate", openHouseStartDate);
-                    obj.put("openHouseEndDate", openHouseEndDate);
+                        obj.put("listPrice", listPrice);
+                        obj.put("city", city);
+                        obj.put("address", address);
+                        obj.put("state", state);
+                        obj.put("zip", zip);
+                        obj.put("image", image);
+                        obj.put("openHouseDate", openHouseStartDate);
+                        obj.put("openHouseEndDate", openHouseEndDate);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -348,11 +356,10 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         String sDate = GH.getInstance().formatter(openHouseStartDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
         String eDate = GH.getInstance().formatter(openHouseEndDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
 
-
         try {
-            SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm:ss");
+            SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             String time = simpleDate.format(new Date());
-            currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
+            currentTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(time);
             time1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(sDate);
             time2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(eDate);
             if (time2.before(time1)) {
@@ -365,8 +372,23 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                 bi.atvOpenHouseStartDate.requestFocus();
                 return false;
             }
+
+            String dateString[] = sDate.split("T");
+            String startDate = dateString[0];
+
+            SimpleDateFormat simpleDate1 = new SimpleDateFormat("yyyy-MM-dd");
+            String date = simpleDate1.format(new Date());
+
+            if (date.compareTo(startDate) == 0) {
+                if (time1.before(currentTime)) {
+                    ToastUtils.showToast(context, "Start time cannot be less than current time");
+                    bi.atvOpenHouseStartDate.requestFocus();
+                    return false;
+                }
+            }
         } catch (ParseException e) {
             e.printStackTrace();
+            ToastUtils.showToast(context, "error" + e);
         }
 
         return true;
@@ -392,7 +414,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
-    public void updateUIListForOpenHouses(Response<GetAllOpenHousesModel> response,int position) {
+    public void updateUIListForOpenHouses(Response<GetAllOpenHousesModel> response, int position) {
 
     }
 
@@ -763,5 +785,15 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             e.printStackTrace();
             return "";
         }
+    }
+
+    private void clearFocus() {
+
+        bi.atvPrice.clearFocus();
+        bi.atvAddress.clearFocus();
+        bi.atvZip.clearFocus();
+        bi.atvCity.clearFocus();
+        bi.atvState.clearFocus();
+
     }
 }

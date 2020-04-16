@@ -73,14 +73,17 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
     }
 
     @Override
-    public void addAppointment(String prefix,String fromid) {
+    public void addAppointment(String prefix, String fromid) {
 
         _view.showProgressBar();
 
         if (fromid.equals("3")) {
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addAppointmentByCalendar(GH.getInstance().getAuthorization(),
                     prefix);
-        }else{
+        } else if (fromid.equalsIgnoreCase("4") || fromid.equalsIgnoreCase("2")) {
+            _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateAppointment(GH.getInstance().getAuthorization(),
+                    prefix);
+        } else {
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddAppointment(GH.getInstance().getAuthorization(),
                     prefix);
         }
@@ -243,15 +246,7 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
 
         _view.showProgressBar();
 
-        if (fromId.equalsIgnoreCase("4") || fromId.equalsIgnoreCase("2")) {
-
-            // update appointment by dashboard or lead id
-
-            _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateAppointment(GH.getInstance().getAuthorization(),
-                    leadStringID, agentsStringIDs, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
-                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted, leadId);
-
-        } else if (fromId.equalsIgnoreCase("6")) {
+        if (fromId.equalsIgnoreCase("6")) {
 
             // for update calendar appointment
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),

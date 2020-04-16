@@ -448,12 +448,12 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         reminder = String.valueOf(taskDetail.data.interval);
         via = taskDetail.data.viaReminder;
 
-        if(taskDetail.data.isEndDate){
+        if (taskDetail.data.isEndDate) {
             bi.lblEndDate.setVisibility(View.GONE);
             bi.tvEndDate.setVisibility(View.GONE);
             bi.cbEndDate.setChecked(true);
             bi.cbEndDate.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             bi.lblEndDate.setVisibility(View.VISIBLE);
             bi.tvEndDate.setVisibility(View.VISIBLE);
             bi.cbEndDate.setChecked(false);
@@ -715,7 +715,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             return false;
         }
 
-        Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null;
+        Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null, currentDate = null;
+        String date = "", time = "";
         if (!bi.cbEndDate.isChecked()) {
 
             try {
@@ -731,26 +732,64 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
         }
 
+        try {
+            date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
+            date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+            time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+            currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
+            time1 = new SimpleDateFormat("HH:mm:ss").parse(startTime);
+            time2 = new SimpleDateFormat("HH:mm:ss").parse(endTime);
+            date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (!reoccur.equals("1") && endDate.compareTo(startDate) == 0) {
-            try {
-                String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
-                currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
-                time1 = new SimpleDateFormat("HH:mm:ss").parse(startDate);
-                time2 = new SimpleDateFormat("HH:mm:ss").parse(endDate);
+
+            if (date2.compareTo(date1) < 0) {
+                ToastUtils.showToast(context, "Start date cannot be less than end date");
+                bi.tvEndDate.requestFocus();
+                return false;
+            }
+            if (date2.compareTo(date1) == 0 && date1.compareTo(currentDate) == 0) {
 
                 if (time2.before(time1)) {
                     ToastUtils.showToast(context, "End time cannot be less than start time");
                     bi.tvStartTime.requestFocus();
                     return false;
                 }
-
                 if (time1.before(currentTime)) {
                     ToastUtils.showToast(context, "Start time cannot be less than current time");
                     bi.tvStartTime.requestFocus();
                     return false;
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
+            } else if (date2.compareTo(date1) != 0) {
+
+                if (date.compareTo(startDate) == 0) {
+                    if (time1.before(currentTime)) {
+                        ToastUtils.showToast(context, "Start time cannot be less than current time");
+                        bi.tvStartTime.requestFocus();
+                        return false;
+                    }
+                }
+                if (time2.before(time1)) {
+                    ToastUtils.showToast(context, "End time cannot be less than start time");
+                    bi.tvStartTime.requestFocus();
+                    return false;
+                }
+            }
+        } else {
+            if (time2.before(time1)) {
+                ToastUtils.showToast(context, "End time cannot be less than start time");
+                bi.tvStartTime.requestFocus();
+                return false;
+            }
+            if (time1.before(currentTime)) {
+                ToastUtils.showToast(context, "Start time cannot be less than current time");
+                bi.tvStartTime.requestFocus();
+                return false;
             }
         }
 
@@ -763,8 +802,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
         }
 
-        if (!bi.atvReminder.getText().toString().equalsIgnoreCase("") &&
-                !bi.atvReminder.getText().toString().equalsIgnoreCase("None")) {
+        if (!bi.atvReminder.getText().toString().equalsIgnoreCase("") && !bi.atvReminder.getText().toString().equalsIgnoreCase("None")) {
             if (via != null && via.equalsIgnoreCase("")) {
                 ToastUtils.showToast(context, R.string.error_via);
                 bi.atvVia.requestFocus();

@@ -8,7 +8,6 @@ import com.project.jarjamediaapp.Models.GetLeadSource;
 import com.project.jarjamediaapp.Models.GetLeadTagList;
 import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
 import com.project.jarjamediaapp.Models.GetLeadTypeList;
-import com.project.jarjamediaapp.Models.GetPropertyLeads;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
@@ -46,7 +45,6 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
             @Override
             public void onResponse(Call<GetAgentsModel> call, Response<GetAgentsModel> response) {
 
-                _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetAgentsModel getAppointmentsModel = response.body();
@@ -56,11 +54,13 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
 
                     } else {
 
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -77,13 +77,11 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
     @Override
     public void GetLeadSource() {
 
-        _view.showProgressBar();
         _callGetLeadSource = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadSource(GH.getInstance().getAuthorization());
         _callGetLeadSource.enqueue(new Callback<GetLeadSource>() {
             @Override
             public void onResponse(Call<GetLeadSource> call, Response<GetLeadSource> response) {
 
-                _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetLeadSource getAppointmentsModel = response.body();
@@ -93,11 +91,13 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
 
                     } else {
 
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -115,13 +115,12 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
     @Override
     public void GetLeadTagList() {
 
-        _view.showProgressBar();
         _callGetLeadTagList = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadTagList(GH.getInstance().getAuthorization());
         _callGetLeadTagList.enqueue(new Callback<GetLeadTagList>() {
             @Override
             public void onResponse(Call<GetLeadTagList> call, Response<GetLeadTagList> response) {
 
-                _view.hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     GetLeadTagList getAppointmentsModel = response.body();
@@ -131,11 +130,13 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
 
                     } else {
 
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -153,13 +154,12 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
     @Override
     public void GetLeadTypeList() {
 
-        _view.showProgressBar();
         _callGetLeadTypeList = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadTypeList(GH.getInstance().getAuthorization());
         _callGetLeadTypeList.enqueue(new Callback<GetLeadTypeList>() {
             @Override
             public void onResponse(Call<GetLeadTypeList> call, Response<GetLeadTypeList> response) {
 
-                _view.hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     GetLeadTypeList getAppointmentsModel = response.body();
@@ -169,11 +169,13 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
 
                     } else {
 
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -191,13 +193,13 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
     @Override
     public void GetLeadTimeFrame() {
 
-        _view.showProgressBar();
+
         _callGetLeadTimeFrame = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadTimeFrame(GH.getInstance().getAuthorization());
         _callGetLeadTimeFrame.enqueue(new Callback<GetLeadTimeFrame>() {
             @Override
             public void onResponse(Call<GetLeadTimeFrame> call, Response<GetLeadTimeFrame> response) {
 
-                _view.hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     GetLeadTimeFrame getAppointmentsModel = response.body();
@@ -207,11 +209,13 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
 
                     } else {
 
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -229,13 +233,13 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
     @Override
     public void GetLeadDripCampaignList() {
 
-        _view.showProgressBar();
         _callGetLeadDripCampaignList = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadDripCampaignList(GH.getInstance().getAuthorization());
         _callGetLeadDripCampaignList.enqueue(new Callback<GetLeadDripCampaignList>() {
             @Override
             public void onResponse(Call<GetLeadDripCampaignList> call, Response<GetLeadDripCampaignList> response) {
 
                 _view.hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     GetLeadDripCampaignList getAppointmentsModel = response.body();
@@ -308,7 +312,7 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
 
         _view.showProgressBar();
         _callUpdateLead = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateLEad(GH.getInstance().getAuthorization(),
-               body);
+                body);
 
         _callUpdateLead.enqueue(new Callback<BaseResponse>() {
             @Override

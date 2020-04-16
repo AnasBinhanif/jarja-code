@@ -3,6 +3,7 @@ package com.project.jarjamediaapp.Activities.add_lead;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -12,6 +13,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -47,7 +49,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
 
     ArrayList<GetLeadSource.Data> getLeadSourceList;
-    ArrayList<String> getLeadSourceNameList=new ArrayList<>();
+    ArrayList<String> getLeadSourceNameList = new ArrayList<>();
 
     ArrayList<GetLeadTagList.Data> getLeadTagList;
     ArrayList<MultiSelectModel> getLeadTagModelList;
@@ -71,6 +73,10 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
     String bday = "", sBday = "", anniversary = "";
     boolean isUpdate = false;
+    GetLead.LeadList leadModel;
+
+    String source = "";
+    int timeFrame, leadType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +105,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
         if (getIntent().getExtras() != null) {
 
-            GetLead.LeadList leadModel = (GetLead.LeadList) getIntent().getExtras().getSerializable("Lead");
+            leadModel = (GetLead.LeadList) getIntent().getExtras().getSerializable("Lead");
 
             isUpdate = true;
             bi.btnSave.setText("Update");
@@ -111,24 +117,18 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             bi.edtPhone.setText(leadModel.primaryPhone);
             bi.edtEmail.setText(leadModel.primaryEmail);
 
-            if (leadModel.dateOfBirth==null || leadModel.dateOfBirth.equals("") || leadModel.dateOfBirth.equals("") ){
+            if (leadModel.dateOfBirth == null || leadModel.dateOfBirth.equals("") || leadModel.dateOfBirth.equals("")) {
                 bi.edtBday.setText("");
-            }else {
+            } else {
                 String bday = GH.getInstance().formatter(leadModel.dateOfBirth, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
                 bi.edtBday.setText(bday);
             }
-            if (leadModel.dateOfMarriage==null || leadModel.dateOfMarriage.equals("") || leadModel.dateOfMarriage.equals("") ){
+            if (leadModel.dateOfMarriage == null || leadModel.dateOfMarriage.equals("") || leadModel.dateOfMarriage.equals("")) {
                 bi.edtAnniversary.setText("");
-            }else {
+            } else {
                 String anniv = GH.getInstance().formatter(leadModel.dateOfMarriage, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
                 bi.edtAnniversary.setText(anniv);
             }
-            /*if (leadModel.dat!=null || leadModel.dateOfMarriage.equals("") || leadModel.dateOfMarriage.equals("") ){
-                bi.edtAnniversary.setText("");
-            }else {
-                String bday = GH.getInstance().formatter(leadModel.dateOfMarriage, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-                bi.edtAnniversary.setText(bday);
-            }*/
             bi.edtAddress1.setText(leadModel.street);
             bi.edtCity1.setText(leadModel.city);
             bi.edtState1.setText(leadModel.state);
@@ -140,7 +140,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             bi.edtCountry.setText(leadModel.county);
             bi.edtNotes.setText(leadModel.description);
 
-            if (leadModel.isBirthDayNotify!=null) {
+            if (leadModel.isBirthDayNotify != null) {
                 if (leadModel.isBirthDayNotify) {
                     bi.chkBdayNotify.setChecked(true);
                 } else {
@@ -148,7 +148,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 }
             }
 
-            if (leadModel.isAnniversaryNotify!=null) {
+            if (leadModel.isAnniversaryNotify != null) {
                 if (leadModel.isAnniversaryNotify) {
                     bi.chkAnnivNotify.setChecked(true);
                 } else {
@@ -159,6 +159,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             if (leadModel.source != null) {
                 int pos = getLeadSourceNameList.indexOf(leadModel.source);
                 if (pos >= 0) {
+
+                    source = leadModel.source;
                     bi.spnSource.setText(leadModel.source);
                 }
 
@@ -166,7 +168,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
             if (leadModel.preApproved) {
                 bi.spnPreApprove.setText("Yes");
-            }else {
+            } else {
                 bi.spnPreApprove.setText("No");
             }
 
@@ -176,26 +178,34 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                     for (int i = 0; i < getLeadTypeList.size(); i++) {
                         GetLeadTypeList.Data typemodel = getLeadTypeList.get(i);
                         Integer id = typemodel.id;
-                        if (id == leadModel.leadTypeID) {
-                            bi.spnSource.setSelectedIndex(i);
+                        if (id.equals(leadModel.leadTypeID)) {
+                            leadType = id;
+                            bi.spnType.setText(typemodel.leadType);
                         }
                     }
-                }else {
-                    bi.spnSource.setSelectedIndex(0);
+                } else {
+                    bi.spnType.setSelectedIndex(0);
                 }
 
             }
 
+
             if (leadModel.timeFrameId != null) {
 
-              //  bi.spnTimeFrame.setText(leadModel.timeFrameName!= null?leadModel.timeFrameName:"");
-                /*for (int i = 0; i < getLeadTimeFrameList.size(); i++) {
-                    GetLeadTimeFrame.Data typemodel = getLeadTimeFrameList.get(i);
-                    Integer id = typemodel.timeFrameId;
-                    if (id == leadModel.timeFrameId) {
-                        bi.spnTimeFrame.setSelectedIndex(i);
+                if (getLeadTimeFrameList != null && getLeadTimeFrameList.size() > 0) {
+                    for (int i = 0; i < getLeadTimeFrameList.size(); i++) {
+                        GetLeadTimeFrame.Data typemodel = getLeadTimeFrameList.get(i);
+                        Integer id = typemodel.timeFrameId;
+                        if (id.equals(leadModel.timeFrameId)) {
+
+                            timeFrame = typemodel.timeFrameId;
+                            bi.spnTimeFrame.setText(typemodel.timeFrame);
+                        }
                     }
-                }*/
+                } else {
+                    bi.spnTimeFrame.setSelectedIndex(0);
+                }
+
             }
 
             if (leadModel.agentsList.size() != 0) {
@@ -267,48 +277,13 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 }
             }
 
-
-
-           /* if (notesListModel.noteType != null) {
-                if (notesListModel.noteType.contains("Call")) {
-                    bi.spnNoteType.setSelectedIndex(1);
-                } else {
-                    bi.spnNoteType.setSelectedIndex(0);
-                }
-            }
-            if (notesListModel.isSticky) {
-                bi.cbNoteSticky.setChecked(true);
-            } else {
-                bi.cbNoteSticky.setChecked(true);
-            }
-
-            if (notesListModel.agentList.size() != 0) {
-
-                if (bi.lnAgents.getChildCount() > 0) {
-                    bi.lnAgents.removeAllViews();
-                }
-                selectedIdsList = new ArrayList<>();
-
-                for (GetLeadNotes.AgentList name : notesListModel.agentList) {
-
-                    View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
-                    TextView textView = child.findViewById(R.id.txtDynamic);
-                    textView.setText(name.agentName);
-                    bi.lnAgents.addView(child);
-                    selectedIdsList.add(name.agentID);
-                }
-            }*/
-
         }
     }
 
     private void initCallsData() {
+
         presenter.getAgentNames();
-        presenter.GetLeadSource();
-        presenter.GetLeadTagList();
-        presenter.GetLeadTypeList();
-        presenter.GetLeadTimeFrame();
-        presenter.GetLeadDripCampaignList();
+
     }
 
     private void initListeners() {
@@ -489,7 +464,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                             }
                         }
 
-                       // dripModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
+                        // dripModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
                     }
 
@@ -530,145 +505,20 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String allAgentIds = agentIdsString;//agentModel == null ? "" : String.valueOf(agentModel.getId());
         String alldripcampaignids = dripIdsString;
         String notes = bi.edtNotes.getText().toString();
-        String b_PreQual = bi.spnPreApprove.getText().toString().equals("Yes") ? "true":"false";
+        boolean b_PreQual = bi.spnPreApprove.getText().toString().equals("Yes") ? true : false;
         String address = bi.edtAddress1.getText().toString();
         String street = bi.edtAddress1.getText().toString();
         String zipcode = bi.edtPostalCode1.getText().toString();
         String city = bi.edtCity1.getText().toString();
         String state = bi.edtState1.getText().toString();
         String description = bi.edtNotes.getText().toString();
-        String source = bi.spnSource.isSelected() ? String.valueOf(getLeadSourceList.get(bi.spnSource.getSelectedIndex()).sourceName) : "";
+        String source = this.source;
         String county = bi.edtCountry.getText().toString();
-        String timeFrameId = bi.spnTimeFrame.isSelected() ? String.valueOf(getLeadTimeFrameList.get(bi.spnTimeFrame.getSelectedIndex()).timeFrameId) : null;
+        int timeFrameId = this.timeFrame;
         String state2 = bi.edtState2.getText().toString();
         String city2 = bi.edtCity2.getText().toString();
         String zipcode2 = bi.edtPostalCode2.getText().toString();
-        int leadTypeID = bi.spnType.isSelected() ? getLeadTypeList.get(bi.spnType.getSelectedIndex()).id : 0;
-        String labelsID = tagsIdsString;
-        String leadStringID = leadID;
-        String leadID = "0";
-        String countryid = "";
-
-        JSONObject emailObject = new JSONObject();
-        try {
-            emailObject.put("email", primaryEmail);
-            emailObject.put("isNotify", true);
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        JSONArray emailArray = new JSONArray();
-        emailArray.put(emailObject);
-
-        JSONObject phoneObject = new JSONObject();
-        try {
-            phoneObject.put("phone", cellPhone);
-            phoneObject.put("isNotify", true);
-            phoneObject.put("phoneType", "phoneType");
-
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        JSONArray phoneArray = new JSONArray();
-        phoneArray.put(phoneObject);
-
-        String emailList = emailArray.toString();
-        String phoneList = phoneArray.toString();
-
-        if (firstName.equals("") && lastName.equals("") && spousname.equals("") && company.equals("")&& primaryEmail.equals("") && cellPhone.equals("")) {
-            ToastUtils.showToast(context, getString(R.string.errSinglePiece));
-        } else if (selectedIdsList.size() == 0) {
-            ToastUtils.showToast(context, getString(R.string.errSelectAgent));
-        } else if (!zipcode.equals("") && zipcode.trim().length() < 5) {
-            ToastUtils.showToast(context, "Postal code cannot be less than 5");
-        } else if (!zipcode2.equals("") && zipcode2.trim().length() < 5) {
-            ToastUtils.showToast(context, "Postal code cannot be less than 5");
-        } else {
-
-
-            JSONObject obj = new JSONObject();
-
-            try {
-                obj.put("firstName", firstName);
-                obj.put("lastName", lastName);
-                obj.put("spousname", spousname);
-                obj.put("company", company);
-                obj.put("cellPhone", cellPhone);
-                obj.put("primaryPhone", primaryPhone);
-                obj.put("primaryEmail", primaryEmail);
-                obj.put("dateOfBirth", dateOfBirth);
-                obj.put("isBirthDayNotify", isBirthDayNotify);
-                obj.put("dateOfMarriage", dateOfMarriage);
-                obj.put("isAnniversaryNotify", isAnniversaryNotify);
-                obj.put("leadAgentIDs", leadAgentIDs);
-                obj.put("allAgentIds", allAgentIds);
-                obj.put("alldripcampaignids", alldripcampaignids);
-                obj.put("notes", notes);
-                obj.put("b_PreQual", b_PreQual);
-                obj.put("address", address);
-                obj.put("street", street);
-                obj.put("zipcode", zipcode);
-                obj.put("city", city);
-                obj.put("state", state);
-                obj.put("description", description);
-                obj.put("source", source);
-                obj.put("county", county);
-                obj.put("timeFrameId", timeFrameId);
-                obj.put("state2", state2);
-                obj.put("city2" , city2);
-                obj.put("zipcode2" , zipcode2);
-                obj.put("leadTypeID" , leadTypeID);
-                obj.put("emailList" , emailArray);
-                obj.put("phoneList" , phoneArray);
-                obj.put("labelsID", labelsID);
-                obj.put("leadStringID" , leadStringID);
-                obj.put("countryid" , countryid);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            String jsonObjectString = obj.toString();
-            Log.d("json", jsonObjectString);
-
-            presenter.addLead(jsonObjectString);
-        }
-    }
-
-    private void callUpdateLead() {
-
-        String firstName = bi.edtFName.getText().toString();
-        String lastName = bi.edtLName.getText().toString();
-        String spousname = bi.edtSName.getText().toString();
-        String company = bi.edtCompany.getText().toString();
-        String cellPhone = bi.edtPhone.getText().toString();
-        String primaryPhone = bi.edtPhone.getText().toString();
-        String primaryEmail = bi.edtEmail.getText().toString();
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        String dateOfBirth = bday.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : bday;
-        boolean isBirthDayNotify = bi.chkBdayNotify.isChecked() ? true : false;
-        String dateOfMarriage = anniversary.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : anniversary;
-        boolean isAnniversaryNotify = bi.chkAnnivNotify.isChecked() ? true : false;
-        String leadAgentIDs = agentIdsString;//selectedIdsList.size() == 0 ? "" : agentIdsString ;
-        String allAgentIds = agentIdsString;//agentModel == null ? "" : String.valueOf(agentModel.getId());
-        String alldripcampaignids = dripIdsString;
-        String notes = bi.edtNotes.getText().toString();
-        String b_PreQual = bi.spnPreApprove.getText().toString().equals("Yes") ? "true":"false";
-        String address = bi.edtAddress1.getText().toString();
-        String street = bi.edtAddress1.getText().toString();
-        String zipcode = bi.edtPostalCode1.getText().toString();
-        String city = bi.edtCity1.getText().toString();
-        String state = bi.edtState1.getText().toString();
-        String description = bi.edtNotes.getText().toString();
-        String source = bi.spnSource.isSelected() ? String.valueOf(getLeadSourceList.get(bi.spnSource.getSelectedIndex()).sourceName) : "";
-        String county = bi.edtCountry.getText().toString();
-        String timeFrameId = bi.spnTimeFrame.isSelected() ? String.valueOf(getLeadTimeFrameList.get(bi.spnTimeFrame.getSelectedIndex()).timeFrameId) : "null";
-        String state2 = bi.edtState2.getText().toString();
-        String city2 = bi.edtCity2.getText().toString();
-        String zipcode2 = bi.edtPostalCode2.getText().toString();
-        int leadTypeID = bi.spnType.isSelected() ? getLeadTypeList.get(bi.spnType.getSelectedIndex()).id : 0;
+        int leadTypeID = this.leadType;
         String labelsID = tagsIdsString;
         String leadStringID = leadID;
         String leadID = "0";
@@ -742,14 +592,14 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 obj.put("county", county);
                 obj.put("timeFrameId", timeFrameId);
                 obj.put("state2", state2);
-                obj.put("city2" , city2);
-                obj.put("zipcode2" , zipcode2);
-                obj.put("leadTypeID" , leadTypeID);
-                obj.put("emailList" , emailArray);
-                obj.put("phoneList" , phoneArray);
+                obj.put("city2", city2);
+                obj.put("zipcode2", zipcode2);
+                obj.put("leadTypeID", leadTypeID);
+                obj.put("emailList", emailArray);
+                obj.put("phoneList", phoneArray);
                 obj.put("labelsID", labelsID);
-                obj.put("leadStringID" , leadStringID);
-                obj.put("countryid" , countryid);
+                obj.put("leadStringID", leadStringID);
+                obj.put("countryid", countryid);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -757,6 +607,131 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
             String jsonObjectString = obj.toString();
             Log.d("json", jsonObjectString);
+
+            presenter.addLead(jsonObjectString);
+        }
+    }
+
+    private void callUpdateLead() {
+
+        String firstName = bi.edtFName.getText().toString();
+        String lastName = bi.edtLName.getText().toString();
+        String spousname = bi.edtSName.getText().toString();
+        String company = bi.edtCompany.getText().toString();
+        String cellPhone = bi.edtPhone.getText().toString();
+        String primaryPhone = bi.edtPhone.getText().toString();
+        String primaryEmail = bi.edtEmail.getText().toString();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        String dateOfBirth = bday.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : bday;
+        boolean isBirthDayNotify = bi.chkBdayNotify.isChecked() ? true : false;
+        String dateOfMarriage = anniversary.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : anniversary;
+        boolean isAnniversaryNotify = bi.chkAnnivNotify.isChecked() ? true : false;
+        String leadAgentIDs = agentIdsString;//selectedIdsList.size() == 0 ? "" : agentIdsString ;
+        String allAgentIds = agentIdsString;//agentModel == null ? "" : String.valueOf(agentModel.getId());
+        String alldripcampaignids = dripIdsString;
+        String notes = bi.edtNotes.getText().toString();
+        boolean b_PreQual = bi.spnPreApprove.getText().toString().equals("Yes") ? true : false;
+        String address = bi.edtAddress1.getText().toString();
+        String street = bi.edtAddress1.getText().toString();
+        String zipcode = bi.edtPostalCode1.getText().toString();
+        String city = bi.edtCity1.getText().toString();
+        String state = bi.edtState1.getText().toString();
+        String description = bi.edtNotes.getText().toString();
+        String source = this.source;
+        String county = bi.edtCountry.getText().toString();
+        int timeFrameId = this.timeFrame;
+        String state2 = bi.edtState2.getText().toString();
+        String city2 = bi.edtCity2.getText().toString();
+        String zipcode2 = bi.edtPostalCode2.getText().toString();
+        int leadTypeID = this.leadType;
+        String labelsID = tagsIdsString;
+        String leadStringID = leadID;
+        String leadID = "0";
+        String countryid = "";
+
+        JSONObject emailObject = new JSONObject();
+        try {
+            emailObject.put("email", primaryEmail);
+            emailObject.put("isNotify", true);
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        JSONArray emailArray = new JSONArray();
+        emailArray.put(emailObject);
+
+        JSONObject phoneObject = new JSONObject();
+        try {
+            phoneObject.put("phone", cellPhone);
+            phoneObject.put("isNotify", true);
+            phoneObject.put("phoneType", "phoneType");
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        JSONArray phoneArray = new JSONArray();
+        phoneArray.put(phoneObject);
+
+        String emailList = emailArray.toString();
+        String phoneList = phoneArray.toString();
+
+        if (firstName.equals("") && lastName.equals("") && spousname.equals("") && company.equals("") && primaryEmail.equals("") && cellPhone.equals("")) {
+            ToastUtils.showToast(context, getString(R.string.errSinglePiece));
+        } else if (selectedIdsList.size() == 0) {
+            ToastUtils.showToast(context, getString(R.string.errSelectAgent));
+        } else if (!zipcode.equals("") && zipcode.trim().length() < 5) {
+            ToastUtils.showToast(context, "Postal code cannot be less than 5");
+        } else if (!zipcode2.equals("") && zipcode2.trim().length() < 5) {
+            ToastUtils.showToast(context, "Postal code cannot be less than 5");
+        } else {
+
+
+            JSONObject obj = new JSONObject();
+
+            try {
+                obj.put("firstName", firstName);
+                obj.put("lastName", lastName);
+                obj.put("spousname", spousname);
+                obj.put("company", company);
+                obj.put("cellPhone", cellPhone);
+                obj.put("primaryPhone", primaryPhone);
+                obj.put("primaryEmail", primaryEmail);
+                obj.put("dateOfBirth", dateOfBirth);
+                obj.put("isBirthDayNotify", isBirthDayNotify);
+                obj.put("dateOfMarriage", dateOfMarriage);
+                obj.put("isAnniversaryNotify", isAnniversaryNotify);
+                obj.put("leadAgentIDs", leadAgentIDs);
+                obj.put("allAgentIds", allAgentIds);
+                obj.put("alldripcampaignids", alldripcampaignids);
+                obj.put("notes", notes);
+                obj.put("b_PreQual", b_PreQual);
+                obj.put("address", address);
+                obj.put("street", street);
+                obj.put("zipcode", zipcode);
+                obj.put("city", city);
+                obj.put("state", state);
+                obj.put("description", description);
+                obj.put("source", source);
+                obj.put("county", county);
+                obj.put("timeFrameId", timeFrameId);
+                obj.put("state2", state2);
+                obj.put("city2", city2);
+                obj.put("zipcode2", zipcode2);
+                obj.put("leadTypeID", leadTypeID);
+                obj.put("emailList", emailArray);
+                obj.put("phoneList", phoneArray);
+                obj.put("labelsID", labelsID);
+                obj.put("leadStringID", leadStringID);
+                obj.put("countryid", countryid);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            String jsonObjectString = obj.toString();
+            Log.d("json123", jsonObjectString);
 
             presenter.updateLead(jsonObjectString);
         }
@@ -796,6 +771,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         for (GetAgentsModel.Data model : agentList) {
             searchListItems.add(new MultiSelectModel(model.agentID, model.agentName, model.encryptedAgentID));
         }
+        presenter.GetLeadSource();
     }
 
     @Override
@@ -810,6 +786,14 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         }
 
         bi.spnSource.setItems(getLeadSourceNameList);
+        bi.spnSource.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                source = String.valueOf(getLeadSourceList.get(position).sourceID);
+            }
+        });
+        presenter.GetLeadTagList();
+
     }
 
     @Override
@@ -822,6 +806,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         for (GetLeadTagList.Data model : getLeadTagList) {
             getLeadTagModelList.add(new MultiSelectModel(model.tagID, model.label, model.encryptedTagID));
         }
+        presenter.GetLeadTypeList();
     }
 
     @Override
@@ -836,6 +821,14 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         }
 
         bi.spnType.setItems(getLeadTypeNameList);
+        bi.spnType.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                leadType = getLeadTypeList.get(position).id;
+            }
+        });
+        presenter.GetLeadTimeFrame();
+
     }
 
     @Override
@@ -850,6 +843,14 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         }
 
         bi.spnTimeFrame.setItems(getLeadTimeFrameNames);
+
+        bi.spnTimeFrame.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                timeFrame = getLeadTimeFrameList.get(position).timeFrameId;
+            }
+        });
+        presenter.GetLeadDripCampaignList();
     }
 
     @Override
@@ -861,8 +862,22 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         for (GetLeadDripCampaignList.Data model : getLeadDripCampaignList) {
             getLeadDripCampaignModelList.add(new MultiSelectModel(model.dripCompaignID, model.name));
         }
+        GH.getInstance().ShowProgressDialog(context);
+        addTimer();
+    }
 
-        initData();
+    private void addTimer() {
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 100ms
+                GH.getInstance().HideProgressDialog();
+                initData();
+            }
+        }, 3000);
+
     }
 
     @Override
@@ -870,7 +885,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         if (response.body().getStatus().equals("Success")) {
             if (isUpdate) {
                 ToastUtils.showToast(context, "Updated");
-            }else{
+            } else {
                 ToastUtils.showToast(context, "Added Successfully");
             }
             finish();
@@ -939,4 +954,5 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 break;
         }
     }
+
 }

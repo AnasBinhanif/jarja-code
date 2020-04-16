@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.airbnb.paris.Paris;
 import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
 import com.project.jarjamediaapp.Base.BaseFragment;
-import com.project.jarjamediaapp.CustomAdapter.SwipeTasksDueRecyclerAdapter;
+import com.project.jarjamediaapp.CustomAdapter.SwipeTasksRecyclerAdapter;
 import com.project.jarjamediaapp.Fragments.FragmentLifeCycle;
 import com.project.jarjamediaapp.Models.GetTasksModel;
 import com.project.jarjamediaapp.R;
@@ -36,7 +36,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     FragmentTasksBinding bi;
     Context context;
     TasksPresenter presenter;
-    SwipeTasksDueRecyclerAdapter swipeTasksDueRecyclerAdapter;
+    SwipeTasksRecyclerAdapter swipeTasksRecyclerAdapter;
     boolean isFromActivity;
     String leadID = "";
     int page = 0;
@@ -92,7 +92,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
 
         } else {
 
-            swipeTasksDueRecyclerAdapter.notifyDataSetChanged();
+            swipeTasksRecyclerAdapter.notifyDataSetChanged();
             bi.tvNoRecordFound.setVisibility(View.GONE);
             bi.rvTasks.setVisibility(View.VISIBLE);
 
@@ -103,8 +103,8 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     private void initRecyclers() {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
-        swipeTasksDueRecyclerAdapter = new SwipeTasksDueRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
-        bi.rvTasks.setAdapter(swipeTasksDueRecyclerAdapter);
+        swipeTasksRecyclerAdapter = new SwipeTasksRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
+        bi.rvTasks.setAdapter(swipeTasksRecyclerAdapter);
         bi.rvTasks.setLayoutManager(layoutManager);
         bi.rvTasks.setItemAnimator(new DefaultItemAnimator());
 

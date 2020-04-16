@@ -12,7 +12,7 @@ public interface AppointmentContract {
     interface View {
         void setupViews();
 
-        void updateUI(GetAppointmentsModel response,String whichAppointment);
+        void updateAppointmentUI(GetAppointmentsModel response);
 
         void updateUIonFalse(String message);
 

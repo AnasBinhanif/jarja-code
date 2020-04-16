@@ -240,8 +240,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             break;
             case "4": {
 
-                bi.tvName.setEnabled(false);
-                bi.tvName.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_search_dark));
+                bi.tvName.setEnabled(true);
                 isEdit = true;
                 setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
                 bi.lblAppointment.setText(getString(R.string.edit_appointment));
@@ -873,7 +872,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 presenter.addAppointment(jsonObjectString, fromId);
             } else if (from.equals("1")) {
                 presenter.addAppointment(jsonObjectString, fromId);
-            }else {
+            } else if (fromId.equalsIgnoreCase("4") || fromId.equalsIgnoreCase("2")) {
+                presenter.addAppointment(jsonObjectString, fromId);
+            } else {
                 presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend,
                         appointmentDate, datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo,
                         isCompleted, fromId, calendarId, encryptedAppointmentId, "0");
@@ -914,6 +915,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         try {
             date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
             date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+            String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+            currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
+            time1 = new SimpleDateFormat("HH:mm:ss").parse(startTime);
+            time2 = new SimpleDateFormat("HH:mm:ss").parse(endTime);
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+
             if (date2.compareTo(date1) < 0) {
                 ToastUtils.showToast(context, "Start date cannot be less than end date");
                 bi.tvEndDate.requestFocus();
@@ -934,15 +942,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 bi.tvEndTime.requestFocus();
                 return false;
             }
-            try {
-                String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
-                currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
-                time1 = new SimpleDateFormat("HH:mm:ss").parse(startTime);
-                time2 = new SimpleDateFormat("HH:mm:ss").parse(endTime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            if (date2.compareTo(date1) == 0) {
+
+            if (date2.compareTo(date1) == 0 && date1.compareTo(currentDate) == 0) {
 
                 if (time2.before(time1)) {
                     ToastUtils.showToast(context, "End time cannot be less than start time");
@@ -954,15 +955,20 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     bi.tvStartTime.requestFocus();
                     return false;
                 }
+            }else if (date2.compareTo(date1) == 0 ) {
+
+                if (time2.before(time1)) {
+                    ToastUtils.showToast(context, "End time cannot be less than start time");
+                    bi.tvStartTime.requestFocus();
+                    return false;
+                }
             } else if (date2.compareTo(date1) != 0) {
 
-                String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                try {
-                    currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                if (date1.compareTo(currentDate) == 0) {
+                String startDate = this.startDate;
+                SimpleDateFormat simpleDate1 = new SimpleDateFormat("yyyy-MM-dd");
+                String date = simpleDate1.format(new Date());
+
+                if (date.compareTo(startDate) == 0) {
                     if (time1.before(currentTime)) {
                         ToastUtils.showToast(context, "Start time cannot be less than current time");
                         bi.tvStartTime.requestFocus();
@@ -971,6 +977,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 }
             }
         }
+
         if (!bi.atvReminder.getText().toString().equalsIgnoreCase("") &&
                 !bi.atvReminder.getText().toString().equalsIgnoreCase("None")) {
             if (via.equalsIgnoreCase("")) {

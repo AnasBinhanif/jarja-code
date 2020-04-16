@@ -371,6 +371,11 @@ public interface ApiMethods {
     Call<BaseResponse> AddAppointment(@Header("Authorization") String authorization,
                                       @Body String body);
 
+    @Headers("Content-Type: application/json")
+    @POST("Appointment/Update")
+    Call<BaseResponse> UpdateAppointment(@Header("Authorization") String authorization,
+                                         @Body String body);
+
     @FormUrlEncoded
     @POST("Appointment/AddNew")
     Call<BaseResponse> AddAppointment(
@@ -397,31 +402,6 @@ public interface ApiMethods {
             @Field("isCompleted") boolean isCompleted,
             @Field("leadID") String leadID);
 
-    @FormUrlEncoded
-    @POST("Appointment/Update")
-    Call<BaseResponse> UpdateAppointment(
-            @Header("Authorization") String authorization,
-            @Field("leadStringID") String leadStringID,
-            @Field("agentsStringIDs") String agentsStringIDs,
-            @Field("leadAppoinmentID") String leadAppointmentID,
-            @Field("eventTitle") String eventTitle,
-            @Field("location") String location,
-            @Field("desc") String desc,
-            @Field("isAppointmentFixed") boolean isAppointmentFixed,
-            @Field("isAppointmentAttend") boolean isAppointmentAttend,
-            @Field("appointmentDate") String appointmentDate,
-            @Field("datedFrom") String datedFrom,
-            @Field("datedTo") String datedTo,
-            @Field("isAllDay") boolean isAllDay,
-            @Field("interval") Integer interval,
-            @Field("isSend") boolean isSend,
-            @Field("viaReminder") String viaReminder,
-            @Field("agentIds") String agentIds,
-            @Field("orderBy") Integer orderBy,
-            @Field("startTime") String startTime,
-            @Field("endTime") String endTime,
-            @Field("isCompleted") boolean isCompleted,
-            @Field("leadID") String leadID);
 
     @GET("Tasks/GetTasks")
     Call<GetTaskDetail> getTaskDetail(@Header("Authorization") String authorization,
@@ -732,7 +712,8 @@ public interface ApiMethods {
 
     @GET("Calender/GetCalendartAppointmentPreview")
     Call<CalendarDetailModel> getCalendarAppointmentDetail(@Header("Authorization") String authorization,
-                                                           @Query("CalendarId") String calendarId);
+                                                           @Query("CalendarId") String calendarId,
+                                                           @Query("dtStart") String dtStart);
 
     @GET("Calender/GetCalendarTaskPreview")
     Call<CalendarDetailModel> getCalendarTaskDetail(@Header("Authorization") String authorization,
