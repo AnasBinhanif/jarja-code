@@ -52,17 +52,7 @@ public interface AddTaskContract {
 
         void getVia();
 
-        void addTask(String id, String agentIds, String leadIds, String isAssignNow, String monthType, String scheduleID, String name, String desc,
-                     int scheduleRecurID, String type, String startDate, String endDate, String recurDay, String recureWeek, String noOfWeek, String dayOfWeek,
-                     String dayOfMonth,String weekNo,
-                     String monthOfYear, String nextRun, boolean isEndDate, String reminderDate, int interval, String isSend, String viaReminder,
-                     String propertyId, String propertyAddress);
-
-        void updateTask(String id, String agentIds, String leadIds, String isAssignNow, String monthType, String scheduleID, String name, String desc,
-                     int scheduleRecurID, String type, String startDate, String endDate, String recurDay, String recureWeek, String noOfWeek, String dayOfWeek,
-                     String dayOfMonth,String weekNo,
-                     String monthOfYear, String nextRun, boolean isEndDate, String reminderDate, int interval, String isSend, String viaReminder,
-                     String propertyId, String propertyAddress);
+        void updateTask(String jsonObject);
 
         void getTaskDetail(String taskId);
 

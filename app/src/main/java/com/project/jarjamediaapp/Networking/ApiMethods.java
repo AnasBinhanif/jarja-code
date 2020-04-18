@@ -416,71 +416,10 @@ public interface ApiMethods {
     Call<BaseResponse> AddTask(@Header("Authorization") String authorization,
                                @Body String body);
 
-    @FormUrlEncoded
-    @POST("Tasks/AddTaskNew")
-    Call<BaseResponse> AddTask(
-            @Header("Authorization") String authorization,
-            @Field("id") String id,
-            @Field("agentIds") String agentIds,
-            @Field("leadIds") String leadIds,
-            @Field("isAssignNow") String isAssignNow,
-            @Field("monthType") String monthType,
-            @Field("scheduleID") String scheduleID,
-            @Field("name") String name,
-            @Field("desc") String desc,
-            @Field("scheduleRecurID") int scheduleRecurID,
-            @Field("type") String type,
-            @Field("startDate") String startDate,
-            @Field("endDate") String endDate,
-            @Field("recurDay") String recurDay,
-            @Field("recureWeek") String recureWeek,
-            @Field("noOfWeek") String noOfWeek,
-            @Field("dayOfWeek") String dayOfWeek,
-            @Field("dayOfMonth") String dayOfMonth,
-            @Field("weekNo") String weekNo,
-            @Field("monthOfYear") String monthOfYear,
-            @Field("nextRun") String nextRun,
-            @Field("isEndDate") boolean isEndDate,
-            @Field("reminderDate") String reminderDate,
-            @Field("interval") int interval,
-            @Field("isSend") String isSend,
-            @Field("viaReminder") String viaReminder,
-            @Field("propertyId") String propertyId,
-            @Field("propertyAddress") String propertyAddress
-    );
-
-    @FormUrlEncoded
+    @Headers("Content-Type: application/json")
     @POST("Tasks/UpdateTaskNew")
-    Call<BaseResponse> UpdateTask(
-            @Header("Authorization") String authorization,
-            @Field("id") String id,
-            @Field("agentIds") String agentIds,
-            @Field("leadIds") String leadIds,
-            @Field("isAssignNow") String isAssignNow,
-            @Field("monthType") String monthType,
-            @Field("scheduleID") String scheduleID,
-            @Field("name") String name,
-            @Field("desc") String desc,
-            @Field("scheduleRecurID") int scheduleRecurID,
-            @Field("type") String type,
-            @Field("startDate") String startDate,
-            @Field("endDate") String endDate,
-            @Field("recurDay") String recurDay,
-            @Field("recureWeek") String recureWeek,
-            @Field("noOfWeek") String noOfWeek,
-            @Field("dayOfWeek") String dayOfWeek,
-            @Field("dayOfMonth") String dayOfMonth,
-            @Field("weekNo") String weekNo,
-            @Field("monthOfYear") String monthOfYear,
-            @Field("nextRun") String nextRun,
-            @Field("isEndDate") boolean isEndDate,
-            @Field("reminderDate") String reminderDate,
-            @Field("interval") int interval,
-            @Field("isSend") String isSend,
-            @Field("viaReminder") String viaReminder,
-            @Field("propertyId") String propertyId,
-            @Field("propertyAddress") String propertyAddress
-    );
+    Call<BaseResponse> UpdateTask(@Header("Authorization") String authorization,
+                               @Body String body);
 
     @Headers("Content-Type: application/json")
     @POST("Lead/AddNewLead")

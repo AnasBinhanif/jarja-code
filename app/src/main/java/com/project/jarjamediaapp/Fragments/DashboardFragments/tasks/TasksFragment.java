@@ -91,8 +91,8 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
             bi.rvTasks.setVisibility(View.GONE);
 
         } else {
-
-            swipeTasksRecyclerAdapter.notifyDataSetChanged();
+            swipeTasksRecyclerAdapter = new SwipeTasksRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, taskType.equalsIgnoreCase("future") ? true : false);
+            bi.rvTasks.setAdapter(swipeTasksRecyclerAdapter);
             bi.tvNoRecordFound.setVisibility(View.GONE);
             bi.rvTasks.setVisibility(View.VISIBLE);
 
@@ -103,8 +103,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     private void initRecyclers() {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
-        swipeTasksRecyclerAdapter = new SwipeTasksRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
-        bi.rvTasks.setAdapter(swipeTasksRecyclerAdapter);
+
         bi.rvTasks.setLayoutManager(layoutManager);
         bi.rvTasks.setItemAnimator(new DefaultItemAnimator());
 

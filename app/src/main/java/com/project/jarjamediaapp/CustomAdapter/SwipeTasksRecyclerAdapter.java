@@ -198,7 +198,6 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
             });
 
             if (isFutureTask) {
-
                 tvDone.setVisibility(View.GONE);
             }
             tvEdit.setOnClickListener(new View.OnClickListener() {

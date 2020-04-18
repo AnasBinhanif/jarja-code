@@ -813,7 +813,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 try {
                     obj.put("location", location);
                     obj.put("isCompleted", isCompleted);
-                    obj.put("appointmentDate", "");
+                  //  obj.put("appointmentDate", "");
                     obj.put("leadStringID", leadStringID);
                     obj.put("orderBy", orderBy);
                     obj.put("startTime", startTime);
@@ -915,10 +915,10 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         try {
             date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
             date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
-            String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
-            currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
-            time1 = new SimpleDateFormat("HH:mm:ss").parse(startTime);
-            time2 = new SimpleDateFormat("HH:mm:ss").parse(endTime);
+            String time = new SimpleDateFormat("hh:mm:ss").format(new Date());
+            currentTime = new SimpleDateFormat("hh:mm:ss").parse(time);
+            time1 = new SimpleDateFormat("hh:mm:ss").parse(startTime);
+            time2 = new SimpleDateFormat("hh:mm:ss").parse(endTime);
             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 
@@ -974,6 +974,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                         bi.tvStartTime.requestFocus();
                         return false;
                     }
+                }
+            }
+            if(!isEdit){
+                if (time1.before(currentTime)) {
+                    ToastUtils.showToast(context, "Start time cannot be less than current time");
+                    bi.tvStartTime.requestFocus();
+                    return false;
                 }
             }
         }
@@ -1148,5 +1155,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.atvLocation.clearFocus();
         bi.atvEventTitle.clearFocus();
         bi.atvDescription.clearFocus();
+        bi.tvName.clearFocus();
     }
 }

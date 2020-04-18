@@ -423,6 +423,13 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         reoccur = String.valueOf(taskDetail.data.scheduleRecurID);
         Log.d("recur", reoccur);
         bi.atvRecur.setText(taskDetail.data.recur, false);
+        if (taskDetail.data.recur.equals("One Time")) {
+            bi.tvEndDate.setVisibility(View.GONE);
+            bi.lblEndDate.setVisibility(View.GONE);
+        } else {
+            bi.tvEndDate.setVisibility(View.VISIBLE);
+            bi.lblEndDate.setVisibility(View.VISIBLE);
+        }
         bi.atvAddProperty.setText(taskDetail.data.address);
 
         String sDateTime = addHour(taskDetail.data.startDate, 5);
@@ -434,8 +441,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String sDate = GH.getInstance().formatter(sDateTime, "MM-dd-yyyy", "MM/dd/yyyy hh:mm:ss a");
         String eDate = GH.getInstance().formatter(eDateTime, "MM-dd-yyyy", "MM/dd/yyyy hh:mm:ss a");
 
-        startTime = GH.getInstance().formatter(sDateTime, "hh:mm:ss", "MM/dd/yyyy hh:mm:ss a");
-        endTime = GH.getInstance().formatter(eDateTime, "hh:mm:ss", "MM/dd/yyyy hh:mm:ss a");
+        startTime = GH.getInstance().formatter(sDateTime, "HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
+        endTime = GH.getInstance().formatter(eDateTime, "HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
 
         String sTime = GH.getInstance().formatter(sDateTime, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
         String eTime = GH.getInstance().formatter(eDateTime, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
@@ -449,6 +456,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         searchLeadIdsString = taskDetail.data.leadEncryptedId;
         reminder = String.valueOf(taskDetail.data.interval);
         via = taskDetail.data.viaReminder;
+
 
         if (taskDetail.data.isEndDate) {
             bi.lblEndDate.setVisibility(View.GONE);
@@ -540,7 +548,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String weekNo = "";
         String monthOfYear = "";
         String nextRun = "";
-        boolean isEndDate = false;//bi.cbEndDate.isChecked() ? false : true;
+        boolean isEndDate = bi.cbEndDate.isChecked() ? true : false;
         String reminderDate = "";
         int interval = !reminder.equals("") ? Integer.valueOf(reminder) : 0;
         String isSend = "";
@@ -597,8 +605,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         if (endDate.equalsIgnoreCase("")) {
             endDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         }
-        String sDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
-        String eDate = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+
+        String[] _sDate = startDate.split("T");
+        String[] _eDate = endDate.split("T");
+        String sDate = GH.getInstance().formatter(_sDate[0] + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+        String eDate = GH.getInstance().formatter(_eDate[0] + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
 
         String id = "1";
         String agentIds = agentIdsString;
@@ -620,7 +631,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String weekNo = "";
         String monthOfYear = "";
         String nextRun = "";
-        boolean isEndDate = false;//bi.cbEndDate.isChecked() ? false : true;
+        boolean isEndDate = bi.cbEndDate.isChecked() ? true : false;
         String reminderDate = "";
         int interval = !reminder.equals("") ? Integer.valueOf(reminder) : 0;
         String isSend = "";
@@ -667,8 +678,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             String jsonObjectString = obj.toString();
             Log.d("json", jsonObjectString);
 
-            presenter.updateTask(id, agentIds, leadStringID, isAssignNow, monthType, scheduleID, name, desc, scheduleRecurID, type, datedFrom, datedto, recurDay, recureWeek, noOfWeek,
-                    dayOfWeek, dayOfMonth, weekNo, monthOfYear, nextRun, isEndDate, reminderDate, interval, isSend, viaReminder, propertyId, propertyAddress);
+            presenter.updateTask(jsonObjectString);
         }
     }
 
@@ -726,17 +736,17 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
             String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
             currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
-            time1 = new SimpleDateFormat("HH:mm:ss").parse(startTime);
-            time2 = new SimpleDateFormat("HH:mm:ss").parse(endTime);
+            time1 = new SimpleDateFormat("hh:mm:ss").parse(startTime);
+            time2 = new SimpleDateFormat("hh:mm:ss").parse(endTime);
             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 
-            Log.d("dates","start date "+date1+"\nend date "+date2+"\ncurrent date "+currentDate+"\n start time "+time1+"\n end time "+time2+"\n current time "+currentTime);
+            Log.d("dates", "start date " + date1 + "\nend date " + date2 + "\ncurrent date " + currentDate + "\n start time " + time1 + "\n end time " + time2 + "\n current time " + currentTime);
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (!bi.cbEndDate.isChecked() || !reoccur.equals("1")) {
+        if (!bi.cbEndDate.isChecked()) {
 
             if (date2.compareTo(date1) < 0) {
                 ToastUtils.showToast(context, "Start date cannot be less than end date");
@@ -745,12 +755,25 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
 
         }
+        if (!reoccur.equals("1")) {
+
+            if (!bi.cbEndDate.isChecked()) {
+                if (date2.compareTo(date1) < 0) {
+                    ToastUtils.showToast(context, "Start date cannot be less than end date");
+                    bi.tvEndDate.requestFocus();
+                    return false;
+                }
+            }
+
+        }
         if (!reoccur.equals("1") && endDate.compareTo(startDate) == 0) {
 
-            if (date2.compareTo(date1) < 0) {
-                ToastUtils.showToast(context, "Start date cannot be less than end date");
-                bi.tvEndDate.requestFocus();
-                return false;
+            if (!bi.cbEndDate.isChecked()) {
+                if (date2.compareTo(date1) < 0) {
+                    ToastUtils.showToast(context, "Start date cannot be less than end date");
+                    bi.tvEndDate.requestFocus();
+                    return false;
+                }
             }
             if (date2.compareTo(date1) == 0 && date1.compareTo(currentDate) == 0) {
 
@@ -776,10 +799,25 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
         } else {
 
-            if (time2.before(time1)) {
-                ToastUtils.showToast(context, "End time cannot be less than start time");
-                bi.tvStartTime.requestFocus();
-                return false;
+            if (date2.compareTo(date1) == 0) {
+                if (time2.before(time1)) {
+                    ToastUtils.showToast(context, "End time cannot be less than start time");
+                    bi.tvStartTime.requestFocus();
+                    return false;
+                }
+                if (time1.before(currentTime)) {
+                    ToastUtils.showToast(context, "Start time cannot be less than current time");
+                    bi.tvStartTime.requestFocus();
+                    return false;
+                }
+            }else {
+                if(date1.compareTo(currentDate) ==0){
+                    if (time1.before(currentTime)) {
+                        ToastUtils.showToast(context, "Start time cannot be less than current time");
+                        bi.tvStartTime.requestFocus();
+                        return false;
+                    }
+                }
             }
         }
 
