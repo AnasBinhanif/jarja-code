@@ -71,7 +71,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
     String leadID = "", agentIdsString = "", tagsIdsString = "", dripIdsString = "";
 
-    String bday = "", sBday = "", anniversary = "";
+    String bday = "", sBday = "", anniversary = "", spouseBday = "";
     boolean isUpdate = false;
     GetLead.LeadList leadModel;
 
@@ -120,14 +120,24 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             if (leadModel.dateOfBirth == null || leadModel.dateOfBirth.equals("") || leadModel.dateOfBirth.equals("")) {
                 bi.edtBday.setText("");
             } else {
-                String bday = GH.getInstance().formatter(leadModel.dateOfBirth, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-                bi.edtBday.setText(bday);
+                String _bday = GH.getInstance().formatter(leadModel.dateOfBirth, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+                bi.edtBday.setText(_bday);
+                bday = leadModel.dateOfBirth;
+
             }
             if (leadModel.dateOfMarriage == null || leadModel.dateOfMarriage.equals("") || leadModel.dateOfMarriage.equals("")) {
                 bi.edtAnniversary.setText("");
             } else {
                 String anniv = GH.getInstance().formatter(leadModel.dateOfMarriage, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
                 bi.edtAnniversary.setText(anniv);
+                anniversary = leadModel.dateOfMarriage;
+            }
+            if (leadModel.spouseBirthday == null || leadModel.spouseBirthday.equals("") || leadModel.spouseBirthday.equals("")) {
+                bi.edtSpouseBday.setText("");
+            } else {
+                String bday = GH.getInstance().formatter(leadModel.spouseBirthday, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+                bi.edtSpouseBday.setText(bday);
+                sBday = leadModel.spouseBirthday;
             }
             bi.edtAddress1.setText(leadModel.street);
             bi.edtCity1.setText(leadModel.city);
@@ -500,6 +510,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String dateOfBirth = bday.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : bday;
         boolean isBirthDayNotify = bi.chkBdayNotify.isChecked() ? true : false;
         String dateOfMarriage = anniversary.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : anniversary;
+        String spouseMarriage = sBday.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : sBday;
         boolean isAnniversaryNotify = bi.chkAnnivNotify.isChecked() ? true : false;
         String leadAgentIDs = agentIdsString;//selectedIdsList.size() == 0 ? "" : agentIdsString ;
         String allAgentIds = agentIdsString;//agentModel == null ? "" : String.valueOf(agentModel.getId());
@@ -576,6 +587,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 obj.put("dateOfBirth", dateOfBirth);
                 obj.put("isBirthDayNotify", isBirthDayNotify);
                 obj.put("dateOfMarriage", dateOfMarriage);
+                obj.put("spouseBirthday", spouseMarriage);
                 obj.put("isAnniversaryNotify", isAnniversaryNotify);
                 obj.put("leadAgentIDs", leadAgentIDs);
                 obj.put("allAgentIds", allAgentIds);
@@ -625,6 +637,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String dateOfBirth = bday.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : bday;
         boolean isBirthDayNotify = bi.chkBdayNotify.isChecked() ? true : false;
         String dateOfMarriage = anniversary.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : anniversary;
+        String spouseMarriage = sBday.equals("") ? dateFormatter.format(Calendar.getInstance().getTime()) : sBday;
         boolean isAnniversaryNotify = bi.chkAnnivNotify.isChecked() ? true : false;
         String leadAgentIDs = agentIdsString;//selectedIdsList.size() == 0 ? "" : agentIdsString ;
         String allAgentIds = agentIdsString;//agentModel == null ? "" : String.valueOf(agentModel.getId());
@@ -701,6 +714,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 obj.put("dateOfBirth", dateOfBirth);
                 obj.put("isBirthDayNotify", isBirthDayNotify);
                 obj.put("dateOfMarriage", dateOfMarriage);
+                obj.put("spouseBirthday", spouseMarriage);
                 obj.put("isAnniversaryNotify", isAnniversaryNotify);
                 obj.put("leadAgentIDs", leadAgentIDs);
                 obj.put("allAgentIds", allAgentIds);

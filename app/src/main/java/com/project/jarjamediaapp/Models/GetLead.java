@@ -19,7 +19,7 @@ public class GetLead implements Serializable {
     public String message;
 
 
-    public class Data implements Serializable{
+    public class Data implements Serializable {
 
         @SerializedName("message")
         @Expose
@@ -32,7 +32,7 @@ public class GetLead implements Serializable {
         public LeadList leadList;
     }
 
-    public class AgentsList implements Serializable{
+    public class AgentsList implements Serializable {
 
         @SerializedName("assignAgentsID")
         @Expose
@@ -54,8 +54,7 @@ public class GetLead implements Serializable {
         public Boolean isPrimaryAgent;
     }
 
-    public class LeadDripCompaignList implements Serializable
-    {
+    public class LeadDripCompaignList implements Serializable {
 
         @SerializedName("dripCompaignID")
         @Expose
@@ -69,8 +68,7 @@ public class GetLead implements Serializable {
 
     }
 
-    public class LeadTaskList implements Serializable
-    {
+    public class LeadTaskList implements Serializable {
 
         @SerializedName("id")
         @Expose
@@ -85,7 +83,7 @@ public class GetLead implements Serializable {
 
     }
 
-    public class LeadList implements Serializable{
+    public class LeadList implements Serializable {
 
         @SerializedName("leadID")
         @Expose
@@ -234,6 +232,9 @@ public class GetLead implements Serializable {
         @SerializedName("dateOfMarriage")
         @Expose
         public String dateOfMarriage;
+        @SerializedName("spouseBirthday")
+        @Expose
+        public String spouseBirthday;
         @SerializedName("batchNo")
         @Expose
         public String batchNo;

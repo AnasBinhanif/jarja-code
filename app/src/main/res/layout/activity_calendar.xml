@@ -52,7 +52,7 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="5dp"
                     android:includeFontPadding="false"
-                    android:text="@string/upcoming_appointments"
+                    android:text="@string/appointment"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_16sdp"
                     android:textStyle="bold" />

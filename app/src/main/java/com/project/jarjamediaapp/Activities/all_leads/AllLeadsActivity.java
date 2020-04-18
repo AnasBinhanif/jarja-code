@@ -39,7 +39,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     ActivityAllleadsBinding bi;
     Context context = AllLeadsActivity.this;
     AllLeadsPresenter presenter;
-    ArrayList<GetAllLeads.LeadsList> leadsList = new ArrayList<>();
+    ArrayList<GetAllLeads.LeadsList> leadsList ;
     ArrayList<GetPropertyLeads.LeadsList> propertyleadsList = new ArrayList<>();
     String mSearchQuery = "", propertyID = "";
     String resultSetType = "All";
@@ -90,11 +90,14 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
+        leadsList.clear();
        handleIntent();
     }
 
     @Override
     public void initViews() {
+
+        leadsList = new ArrayList<>();
         bi.edtSearch.onActionViewExpanded();
         bi.edtSearch.clearFocus();
         bi.edtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

@@ -174,7 +174,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getCalendarTaskDetail(GH.getInstance().getAuthorization(), calendarId, startDateTime);
 
         } else {
-            _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getCalendarAppointmentDetail(GH.getInstance().getAuthorization(), calendarId,startDateTime);
+            _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getCalendarAppointmentDetail(GH.getInstance().getAuthorization(), calendarId, startDateTime);
         }
         _call.enqueue(new Callback<CalendarDetailModel>() {
             @Override
@@ -290,31 +290,33 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             tvTime = dialog.findViewById(R.id.tvTime);
             tvNotes = dialog.findViewById(R.id.tvNotes);
 
-            String sDateTime = addHour(calendarDetailModel.getDatedFrom(), 5);
-            String eDateTime = addHour(calendarDetailModel.getDatedTo(), 5);
+            if (calendarDetailModel.getDatedTo() != null && calendarDetailModel.getDatedFrom() != null) {
 
-            String[] startTime = sDateTime.split("T");
-            String[] endTime = eDateTime.split("T");
-
-
-            tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
-            if (calendarDetailModel.isAllDay) {
-                tvTime.setText("All Day");
-            } else {
-                tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss") + " - " + GH.getInstance().formatter(endTime[1], "hh:mm:ss a", "HH:mm:ss"));
+                String sDateTime = addHour(calendarDetailModel.getDatedFrom(), 5);
+                String[] startTime = sDateTime.split("T");
+                String eDateTime = addHour(calendarDetailModel.getDatedTo(), 5);
+                String[] endTime = eDateTime.split("T");
+                if (calendarDetailModel.isAllDay) {
+                    tvTime.setText("All Day");
+                } else {
+                    tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss") + " - " + GH.getInstance().formatter(endTime[1], "hh:mm:ss a", "HH:mm:ss"));
+                }
+                tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd"));
             }
+            tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
             tvLocation.setText(calendarDetailModel.getLocation() != null ? calendarDetailModel.getLocation() : "");
-            tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd"));
             tvLead.setText(calendarDetailModel.getLeadName() != null ? calendarDetailModel.getLeadName() : "");
 
-            if (calendarDetailModel != null && calendarDetailModel.getAgentList().size() > 0) {
+            if (calendarDetailModel.getAgentList() != null) {
 
-                ArrayList<String> arrayList = new ArrayList<>();
-                for (int i = 0; i < calendarDetailModel.getAgentList().size(); i++) {
-                    arrayList.add(calendarDetailModel.getAgentList().get(i).getAgentName());
+                if (calendarDetailModel.getAgentList().size() > 0) {
+                    ArrayList<String> arrayList = new ArrayList<>();
+                    for (int i = 0; i < calendarDetailModel.getAgentList().size(); i++) {
+                        arrayList.add(calendarDetailModel.getAgentList().get(i).getAgentName());
+                    }
+                    String agentNames = TextUtils.join(" , ", arrayList);
+                    tvAgents.setText(agentNames);
                 }
-                String agentNames = TextUtils.join(" , ", arrayList);
-                tvAgents.setText(agentNames);
             }
 
             // need data from api
@@ -384,18 +386,23 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
         tvClose = dialog.findViewById(R.id.tvClose);
 
         try {
-            tvEventDetail.setPaintFlags(tvEventDetail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            String[] startTime = calendarDetailModel.getStartTime().split("T");
-            String[] endTime = calendarDetailModel.getEndTime().split("T");
-            tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
-            if (calendarDetailModel.isAllDay != null && calendarDetailModel.isAllDay) {
-                tvTime.setText("All Day");
-            } else {
-                tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss") + " - " + GH.getInstance().formatter(endTime[1], "hh:mm:ss a", "HH:mm:ss"));
+            if (calendarDetailModel != null) {
+                tvEventDetail.setPaintFlags(tvEventDetail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                if (calendarDetailModel.getStartTime() != null && calendarDetailModel.getEndTime() != null) {
+                    String[] startTime = calendarDetailModel.getStartTime().split("T");
+                    String[] endTime = calendarDetailModel.getEndTime().split("T");
+                    tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
+                    if (calendarDetailModel.isAllDay != null && calendarDetailModel.isAllDay) {
+                        tvTime.setText("All Day");
+                    } else {
+                        tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss") + " - " + GH.getInstance().formatter(endTime[1], "hh:mm:ss a", "HH:mm:ss"));
+                    }
+                    tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd"));
+                }
+
+                tvAttendeesCount.setText("0");
+                tvDetail.setText(calendarDetailModel.getDescription() != null ? calendarDetailModel.getDescription() : "");
             }
-            tvAttendeesCount.setText("0");
-            tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd"));
-            tvDetail.setText(calendarDetailModel.getDescription() != null ? calendarDetailModel.getDescription() : "");
 
             Button btnCancel = dialog.findViewById(R.id.btnCancel);
             Button btnEdit = dialog.findViewById(R.id.btnEdit);

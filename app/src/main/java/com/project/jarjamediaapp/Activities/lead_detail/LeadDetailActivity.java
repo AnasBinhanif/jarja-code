@@ -363,12 +363,12 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             mDialog.setCancelable(true);
             mDialog.setContentView(R.layout.dialog_compose_message);
 
-            atvPhone = dialog.findViewById(R.id.atvPhoneNumber);
+            atvPhone = mDialog.findViewById(R.id.atvPhoneNumber);
             atvPhone.setText(phoneNo + "");
-            mAtvMessage = dialog.findViewById(R.id.atvMessage);
-            _close = dialog.findViewById(R.id.tvClose);
-            btnSend = dialog.findViewById(R.id.btnClose);
-            btnCancel = dialog.findViewById(R.id.btnCancel);
+            mAtvMessage = mDialog.findViewById(R.id.atvMessage);
+            tvClose = mDialog.findViewById(R.id.tvClose);
+            btnSendEmail = mDialog.findViewById(R.id.btnSendEmail);
+            btnCancel = mDialog.findViewById(R.id.btnCancel);
 
             btnSendEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -381,14 +381,14 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             btnCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog.dismiss();
+                    mDialog.dismiss();
                 }
             });
 
             tvClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog.dismiss();
+                    mDialog.dismiss();
                 }
             });
 

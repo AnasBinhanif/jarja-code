@@ -99,7 +99,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         switch (view.getId()) {
             case R.id.tvStartDate:
-                GH.getInstance().hideKeyboard(context,AddCalendarTaskActivity.this);
+                GH.getInstance().hideKeyboard(context, AddCalendarTaskActivity.this);
                 if (bi.tvStartDate.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
                 }
@@ -107,9 +107,10 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                     calendarEditInstance(1);
                 }
                 showDateDialog(bi.tvStartDate);
+                removeFocus();
                 break;
             case R.id.tvStartTime:
-                GH.getInstance().hideKeyboard(context,AddCalendarTaskActivity.this);
+                GH.getInstance().hideKeyboard(context, AddCalendarTaskActivity.this);
                 if (bi.tvStartTime.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
                 }
@@ -117,6 +118,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                     calendarEditInstance(2);
                 }
                 showTimeDialog(bi.tvStartTime);
+                removeFocus();
                 break;
             case R.id.btnSave:
                 callAddCalendarTask();
@@ -125,9 +127,17 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 finish();
                 break;
             case R.id.cbAllDay:
+                removeFocus();
                 allDay();
                 break;
         }
+    }
+
+    private void removeFocus() {
+
+        bi.atvEventTitle.clearFocus();
+        bi.atvDescription.clearFocus();
+
     }
 
     private void calendarInstance() {
@@ -154,7 +164,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                     month = Integer.parseInt(formattedDate[1]);
                     day = Integer.parseInt(formattedDate[2]);
                     month = month - 1;
-                    newCalendar.set(year,month, day);
+                    newCalendar.set(year, month, day);
                 }
                 break;
                 case 3: {

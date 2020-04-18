@@ -420,6 +420,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.tvName.setText(taskDetail.data.firstName);
         bi.atvType.setText(taskDetail.data.type);
         bi.atvType.setText(taskDetail.data.type, false);
+        reoccur = String.valueOf(taskDetail.data.scheduleRecurID);
+        Log.d("recur", reoccur);
         bi.atvRecur.setText(taskDetail.data.recur, false);
         bi.atvAddProperty.setText(taskDetail.data.address);
 
@@ -459,6 +461,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             bi.cbEndDate.setChecked(false);
             bi.cbEndDate.setVisibility(View.GONE);
         }
+
         bi.atvReminder.setText(hashMapReminder.get(Integer.valueOf(reminder)), false);
         if (Integer.valueOf(reminder) > 0) {
             bi.atvVia.setText(via, false);
@@ -486,7 +489,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     agentIdsString = agentIdsString + "," + name.agentIDEncrypted;
                 }
             }
+
+            bi.tvStartDate.setEnabled(false);
         }
+
     }
 
     private String addHour(String myTime, int number) {
@@ -697,12 +703,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             bi.tvStartTime.requestFocus();
             return false;
         }
-
-        if (!reoccur.equals("1") && !bi.cbEndDate.isChecked() && Methods.isEmpty(bi.tvEndDate)) {
-            ToastUtils.showToast(context, R.string.error_end_date);
-            bi.tvName.requestFocus();
-            return false;
-        }
         if (Methods.isEmpty(bi.tvStartTime)) {
             ToastUtils.showToast(context, R.string.error_start_time);
             bi.tvStartTime.requestFocus();
@@ -714,37 +714,36 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             bi.tvEndTime.requestFocus();
             return false;
         }
-
-        Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null, currentDate = null;
-        String date = "", time = "";
-        if (!bi.cbEndDate.isChecked()) {
-
-            try {
-                date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
-                date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
-                if (date2.compareTo(date1) < 0) {
-                    ToastUtils.showToast(context, "Start date cannot be less than end date");
-                    bi.tvEndDate.requestFocus();
-                    return false;
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+        if (!reoccur.equals("1") && !bi.cbEndDate.isChecked() && Methods.isEmpty(bi.tvEndDate)) {
+            ToastUtils.showToast(context, R.string.error_end_date);
+            bi.tvName.requestFocus();
+            return false;
         }
 
+        Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null, currentDate = null;
         try {
             date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
             date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
-            time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+            String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
             currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
             time1 = new SimpleDateFormat("HH:mm:ss").parse(startTime);
             time2 = new SimpleDateFormat("HH:mm:ss").parse(endTime);
-            date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 
+            Log.d("dates","start date "+date1+"\nend date "+date2+"\ncurrent date "+currentDate+"\n start time "+time1+"\n end time "+time2+"\n current time "+currentTime);
 
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+        if (!bi.cbEndDate.isChecked() || !reoccur.equals("1")) {
+
+            if (date2.compareTo(date1) < 0) {
+                ToastUtils.showToast(context, "Start date cannot be less than end date");
+                bi.tvEndDate.requestFocus();
+                return false;
+            }
+
         }
         if (!reoccur.equals("1") && endDate.compareTo(startDate) == 0) {
 
@@ -767,27 +766,18 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 }
             } else if (date2.compareTo(date1) != 0) {
 
-                if (date.compareTo(startDate) == 0) {
+                if (date1.compareTo(currentDate) == 0) {
                     if (time1.before(currentTime)) {
                         ToastUtils.showToast(context, "Start time cannot be less than current time");
                         bi.tvStartTime.requestFocus();
                         return false;
                     }
                 }
-                if (time2.before(time1)) {
-                    ToastUtils.showToast(context, "End time cannot be less than start time");
-                    bi.tvStartTime.requestFocus();
-                    return false;
-                }
             }
         } else {
+
             if (time2.before(time1)) {
                 ToastUtils.showToast(context, "End time cannot be less than start time");
-                bi.tvStartTime.requestFocus();
-                return false;
-            }
-            if (time1.before(currentTime)) {
-                ToastUtils.showToast(context, "Start time cannot be less than current time");
                 bi.tvStartTime.requestFocus();
                 return false;
             }
