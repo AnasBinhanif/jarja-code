@@ -921,14 +921,14 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         String datedTo = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
 
         try {
-            date1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(datedFrom);
-            date2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(datedTo);
+            date1 = new SimpleDateFormat("yyyy-MM-dd").parse(datedFrom);
+            date2 = new SimpleDateFormat("yyyy-MM-dd").parse(datedTo);
             String time = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
             currentTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(time);
             time1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(datedFrom);
             time2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(datedTo);
-            String date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
-            currentDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(date);
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 
             if (date2.compareTo(date1) < 0) {
                 ToastUtils.showToast(context, "Start date cannot be less than end date");
