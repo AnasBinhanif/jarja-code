@@ -742,14 +742,14 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String eDate = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
 
         try {
-            date1 = new SimpleDateFormat("yyyy-MM-dd").parse(sDate);
-            date2 = new SimpleDateFormat("yyyy-MM-dd").parse(eDate);
-            String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
-            currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
-            time1 = new SimpleDateFormat("HH:mm:ss").parse(GH.getInstance().formatter(sDate, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
-            time2 = new SimpleDateFormat("HH:mm:ss").parse(GH.getInstance().formatter(eDate, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
-            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-            currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+            date1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(sDate);
+            date2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(eDate);
+            String time = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
+            currentTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(time);
+            time1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(sDate);
+            time2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(eDate);
+            String date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
+            currentDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(date);
 
             Log.d("dates", "start date " + date1 + "\nend date " + date2 + "\ncurrent date " + currentDate + "\n start time " + time1 + "\n end time " + time2 + "\n current time " + currentTime);
 
