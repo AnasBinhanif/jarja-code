@@ -299,23 +299,26 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         encryptedAppointmentId = modelData.getEncrypted_LeadAppointmentID();
         leadId = String.valueOf(modelData.getEncryptedLeadID());
         bi.tvName.setText((modelData.getLeadName() != null ? modelData.getLeadName() : ""));
+        bi.tvName.setEnabled(false);
         bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
 
-        String sDateTime = addHour(modelData.getDatedFrom(), 5);
-        String eDateTime = addHour(modelData.getDatedTo(), 5);
+        if (modelData.getDatedFrom() != null && modelData.getDatedTo() != null) {
+          
+            String sDateTime = addHour(modelData.getDatedFrom(), 5);
+            String eDateTime = addHour(modelData.getDatedTo(), 5);
 
-        startDate = GH.getInstance().formatter(sDateTime, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-        endDate = GH.getInstance().formatter(eDateTime, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-        startTime = GH.getInstance().formatter(sDateTime, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
-        endTime = GH.getInstance().formatter(eDateTime, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+            startDate = GH.getInstance().formatter(sDateTime, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+            endDate = GH.getInstance().formatter(eDateTime, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+            startTime = GH.getInstance().formatter(sDateTime, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+            endTime = GH.getInstance().formatter(eDateTime, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
 
-
-        bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(sDateTime) : "");
-        bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(sDateTime) : "");
-        bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(eDateTime) : "");
-        bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(eDateTime) : "");
+            bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(sDateTime) : "");
+            bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(sDateTime) : "");
+            bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(eDateTime) : "");
+            bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(eDateTime) : "");
+        }
 
         if (arrayListReminderValue != null && arrayListReminderValue.size() > 0) {
             reminder = String.valueOf(modelData.getInterval());
@@ -359,6 +362,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         leadId = modelData.getLeadID();
         leadAppointmentId = modelData.getLeadAppoinmentID();
         bi.tvName.setText((modelData.getVtCRMLeadCustom().getFirstName() != null ? modelData.getVtCRMLeadCustom().getFirstName() : "") + " " + (modelData.getVtCRMLeadCustom().getLastName() != null ? modelData.getVtCRMLeadCustom().getLastName() : ""));
+        bi.tvName.setEnabled(false);
         bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
@@ -813,7 +817,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 try {
                     obj.put("location", location);
                     obj.put("isCompleted", isCompleted);
-                  //  obj.put("appointmentDate", "");
+                    //  obj.put("appointmentDate", "");
                     obj.put("leadStringID", leadStringID);
                     obj.put("orderBy", orderBy);
                     obj.put("startTime", startTime);
@@ -959,7 +963,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     bi.tvStartTime.requestFocus();
                     return false;
                 }
-            }else if (date2.compareTo(date1) == 0 ) {
+            } else if (date2.compareTo(date1) == 0) {
 
                 if (time2.before(time1)) {
                     ToastUtils.showToast(context, "End time cannot be less than start time");
@@ -980,7 +984,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     }
                 }
             }
-            if(!isEdit){
+            if (!isEdit) {
                 if (time1.before(currentTime)) {
                     ToastUtils.showToast(context, "Start time cannot be less than current time");
                     bi.tvStartTime.requestFocus();

@@ -121,7 +121,8 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                             bf = false;
                         }
                     } else {
-                        ToastUtils.showToast(context, "Pipeline Data Not Found");
+                        imgInitial.setVisibility(View.GONE);
+                        tvInitial.setVisibility(View.VISIBLE);
                     }
 
                     return Unit.INSTANCE;

@@ -307,6 +307,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         bi.atvReminder.setOnItemClickListener((parent, view, position, id) -> {
 
+            clearFocus();
             presenter.getVia();
             reminder = arrayListReminderValue.get(position);
             if (bi.atvReminder.getText().toString().contains("None")) {
@@ -339,6 +340,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                clearFocus();
                 via = arrayListViaValue.get(position);
             }
         });
@@ -361,6 +363,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                clearFocus();
                 type = arrayListViaValue.get(position);
             }
         });
@@ -387,6 +391,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         bi.atvRecur.setOnItemClickListener((parent, view, position, id) -> {
 
+            clearFocus();
             reoccur = arrayListViaText.get(position);
             if (position != 0) {
                 bi.lnEndDate.setVisibility(View.VISIBLE);
@@ -1023,6 +1028,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         bi.atvAddProperty.clearFocus();
         bi.atvDescription.clearFocus();
+        bi.tvName.clearFocus();
     }
 
     private void showAgentDialog() {

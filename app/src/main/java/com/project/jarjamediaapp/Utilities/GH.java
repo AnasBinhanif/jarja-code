@@ -148,6 +148,20 @@ public class GH {
         return formattedDate;
     }
 
+    public String getCurrentDate() {
+
+        String formattedDate = "";
+        try {
+            Date c = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat("MMM dd yyyy");
+            formattedDate = df.format(c);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return formattedDate;
+
+    }
+
     public String formatTime(String dateString) {
 
         Date date;

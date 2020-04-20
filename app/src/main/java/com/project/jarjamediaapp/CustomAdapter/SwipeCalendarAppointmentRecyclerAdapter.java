@@ -186,7 +186,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                     if (calendarDetailModel.getStatus().equals("Success")) {
 
                         if (type != null && !type.equalsIgnoreCase("") && type.equalsIgnoreCase("Task")) {
-                            showDialogForCalendarTaskDetail(context, calendarDetailModel.getData().getList());
+                            showDialogForCalendarTaskDetail(context, calendarDetailModel.getData());
                         } else {
                             showDialogForCalendarAppointmentDetail(context, calendarDetailModel.getData().getCalendarData());
                         }
@@ -369,7 +369,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
     }
 
-    private void showDialogForCalendarTaskDetail(Context context, CalendarDetailModel.Data.CalendarList calendarDetailModel) {
+    private void showDialogForCalendarTaskDetail(Context context, CalendarDetailModel.Data calendarDetailModel) {
 
         final Dialog dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);

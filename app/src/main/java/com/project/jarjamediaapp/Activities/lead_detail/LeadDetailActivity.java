@@ -460,7 +460,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
             case R.id.rlTransaction2:
 
-                if (currentStage2!=null) {
+                if (currentStage1!=null) {
                     Intent intentT2 = new Intent(context, TransactionActivity.class);
                     intentT2.putExtra("title", title);
                     intentT2.putExtra("leadID", leadID);
@@ -689,6 +689,9 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     @Override
     public void updateUI(GetLeadTransactionStage response) {
 
+        Paris.style(bi.btnTransaction1).apply(R.style.TabButtonYellowLeft);
+        Paris.style(bi.btnTransaction2).apply(R.style.TabButtonTranparentRight);
+
         transactionPipeline = new ArrayList<>();
         transactionOneListModel = new ArrayList<>();
         transactionTwoListModel = new ArrayList<>();
@@ -718,7 +721,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         if (transactionTwoListModel != null) {
 
             bi.tvStep2.setText(transactionTwoListModel.get(transactionTwoListModel.size() - 1).currentStage);
-            bi.tvDate2.setText(transactionTwoListModel.get(transactionTwoListModel.size() - 1).date);
+            bi.tvDate2.setText(transactionTwoListModel.get(transactionTwoListModel.size() - 1).date != null ?transactionTwoListModel.get(transactionTwoListModel.size() - 1).date : GH.getInstance().getCurrentDate());
 
             currentStage2 = transactionTwoListModel.get(transactionTwoListModel.size() - 1).currentStage;
             transLeadID2 = transactionTwoListModel.get(transactionTwoListModel.size() - 1).encrypted_LeadDetailID;

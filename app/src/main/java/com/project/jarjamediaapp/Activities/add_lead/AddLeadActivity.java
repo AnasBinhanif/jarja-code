@@ -803,6 +803,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         bi.spnSource.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+
                 source = String.valueOf(getLeadSourceList.get(position).sourceID);
             }
         });
@@ -942,21 +943,27 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         switch (view.getId()) {
 
             case R.id.edtAgent:
+                clearFocus();
                 showAgentDialog();
                 break;
             case R.id.edtTags:
+                clearFocus();
                 showTagsDialog();
                 break;
             case R.id.edtBday:
+                clearFocus();
                 showDateDialog(bi.edtBday, "bday");
                 break;
             case R.id.edtSpouseBday:
+                clearFocus();
                 showDateDialog(bi.edtSpouseBday, "sBday");
                 break;
             case R.id.edtAnniversary:
+                clearFocus();
                 showDateDialog(bi.edtAnniversary, "anniv");
                 break;
             case R.id.edtDripCompaign:
+                clearFocus();
                 showDripDialog();
                 break;
             case R.id.btnSave:
@@ -967,6 +974,27 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 }
                 break;
         }
+    }
+
+    private void clearFocus(){
+
+        bi.edtFName.clearFocus();
+        bi.edtLName.clearFocus();
+        bi.edtSName.clearFocus();
+        bi.edtCompany.clearFocus();
+        bi.edtPhone.clearFocus();
+        bi.edtEmail.clearFocus();
+        bi.edtAddress1.clearFocus();
+        bi.edtAddress2.clearFocus();
+        bi.edtCity1.clearFocus();
+        bi.edtCity2.clearFocus();
+        bi.edtState1.clearFocus();
+        bi.edtState2.clearFocus();
+        bi.edtPostalCode1.clearFocus();
+        bi.edtPostalCode2.clearFocus();
+        bi.edtCountry.clearFocus();
+        bi.edtNotes.clearFocus();
+
     }
 
 }

@@ -40,7 +40,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     boolean allDay, markComplete;
     boolean isEdit;
     String calendarId = "";
-    CalendarDetailModel.Data.CalendarList calendarDetailModel;
+    CalendarDetailModel.Data calendarDetailModel;
 
     int month, year, day, mHour, mMinute;
     Calendar newCalendar;
