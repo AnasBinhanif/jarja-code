@@ -510,7 +510,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     private String addHour(String myTime, int number) {
         try {
-            SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss a");
+            SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
             Date d = df.parse(myTime);
             Calendar cal = Calendar.getInstance();
             cal.setTime(d);
