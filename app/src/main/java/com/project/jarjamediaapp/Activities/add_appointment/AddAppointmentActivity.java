@@ -308,8 +308,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         startDate = GH.getInstance().formatter(sDateTime, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
         endDate = GH.getInstance().formatter(eDateTime, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-        startTime = GH.getInstance().formatter(sDateTime, "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
-        endTime = GH.getInstance().formatter(eDateTime, "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+        startTime = GH.getInstance().formatter(sDateTime, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+        endTime = GH.getInstance().formatter(eDateTime, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
 
 
         bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(sDateTime) : "");
@@ -368,8 +368,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         startDate = GH.getInstance().formatter(sDateTime, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
         endDate = GH.getInstance().formatter(eDateTime, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-        startTime = GH.getInstance().formatter(sDateTime, "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
-        endTime = GH.getInstance().formatter(eDateTime, "h:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+        startTime = GH.getInstance().formatter(sDateTime, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+        endTime = GH.getInstance().formatter(eDateTime, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
 
 
         bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(sDateTime) : "");
@@ -912,13 +912,17 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         }
 
         Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null, currentDate = null;
+
+        String datedFrom = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+        String datedTo = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+
         try {
-            date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
-            date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
-            String time = new SimpleDateFormat("hh:mm:ss").format(new Date());
-            currentTime = new SimpleDateFormat("hh:mm:ss").parse(time);
-            time1 = new SimpleDateFormat("hh:mm:ss").parse(startTime);
-            time2 = new SimpleDateFormat("hh:mm:ss").parse(endTime);
+            date1 = new SimpleDateFormat("yyyy-MM-dd").parse(datedFrom);
+            date2 = new SimpleDateFormat("yyyy-MM-dd").parse(datedTo);
+            String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+            currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
+            time1 = new SimpleDateFormat("HH:mm:ss").parse(GH.getInstance().formatter(datedFrom, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+            time2 = new SimpleDateFormat("HH:mm:ss").parse(GH.getInstance().formatter(datedTo, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 

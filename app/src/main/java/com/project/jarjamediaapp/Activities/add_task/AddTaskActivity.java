@@ -435,17 +435,17 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String sDateTime = addHour(taskDetail.data.startDate, 5);
         String eDateTime = addHour(taskDetail.data.endDate, 5);
 
-        startDate = GH.getInstance().formatter(sDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy hh:mm:ss a");
-        endDate = GH.getInstance().formatter(eDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy hh:mm:ss a");
+        startDate = GH.getInstance().formatter(sDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy HH:mm:ss a");
+        endDate = GH.getInstance().formatter(eDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy HH:mm:ss a");
 
-        String sDate = GH.getInstance().formatter(sDateTime, "MM-dd-yyyy", "MM/dd/yyyy hh:mm:ss a");
-        String eDate = GH.getInstance().formatter(eDateTime, "MM-dd-yyyy", "MM/dd/yyyy hh:mm:ss a");
+        String sDate = GH.getInstance().formatter(sDateTime, "MM-dd-yyyy", "MM/dd/yyyy HH:mm:ss a");
+        String eDate = GH.getInstance().formatter(eDateTime, "MM-dd-yyyy", "MM/dd/yyyy HH:mm:ss a");
 
-        startTime = GH.getInstance().formatter(sDateTime, "HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
-        endTime = GH.getInstance().formatter(eDateTime, "HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
+        startTime = GH.getInstance().formatter(sDateTime, "HH:mm:ss", "MM/dd/yyyy HH:mm:ss a");
+        endTime = GH.getInstance().formatter(eDateTime, "HH:mm:ss", "MM/dd/yyyy HH:mm:ss a");
 
-        String sTime = GH.getInstance().formatter(sDateTime, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
-        String eTime = GH.getInstance().formatter(eDateTime, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
+        String sTime = GH.getInstance().formatter(sDateTime, "hh:mm a", "MM/dd/yyyy HH:mm:ss a");
+        String eTime = GH.getInstance().formatter(eDateTime, "hh:mm a", "MM/dd/yyyy HH:mm:ss a");
 
         bi.tvStartDate.setText(sDate);
         bi.tvEndDate.setText(eDate);
@@ -463,7 +463,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             bi.tvEndDate.setVisibility(View.GONE);
             bi.cbEndDate.setChecked(true);
             bi.cbEndDate.setVisibility(View.VISIBLE);
-        } else {
+        } else if(!taskDetail.data.recur.equals("One Time")){
             bi.lblEndDate.setVisibility(View.VISIBLE);
             bi.tvEndDate.setVisibility(View.VISIBLE);
             bi.cbEndDate.setChecked(false);
@@ -505,7 +505,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     private String addHour(String myTime, int number) {
         try {
-            SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
+            SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss a");
             Date d = df.parse(myTime);
             Calendar cal = Calendar.getInstance();
             cal.setTime(d);
@@ -535,6 +535,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         if (endDate.equalsIgnoreCase("")) {
             endDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         }
+
         String sDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
         String eDate = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
 
@@ -731,13 +732,17 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         }
 
         Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null, currentDate = null;
+
+        String sDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+        String eDate = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+
         try {
-            date1 = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
-            date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+            date1 = new SimpleDateFormat("yyyy-MM-dd").parse(sDate);
+            date2 = new SimpleDateFormat("yyyy-MM-dd").parse(eDate);
             String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
             currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
-            time1 = new SimpleDateFormat("hh:mm:ss").parse(startTime);
-            time2 = new SimpleDateFormat("hh:mm:ss").parse(endTime);
+            time1 = new SimpleDateFormat("HH:mm:ss").parse(GH.getInstance().formatter(sDate, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+            time2 = new SimpleDateFormat("HH:mm:ss").parse(GH.getInstance().formatter(eDate, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 
@@ -746,7 +751,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (!bi.cbEndDate.isChecked()) {
+        if (!bi.cbEndDate.isChecked() && !reoccur.equals("1")) {
 
             if (date2.compareTo(date1) < 0) {
                 ToastUtils.showToast(context, "Start date cannot be less than end date");
@@ -766,7 +771,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
 
         }
-        if (!reoccur.equals("1") && endDate.compareTo(startDate) == 0) {
+        if (!reoccur.equals("1") && eDate.compareTo(sDate) == 0) {
 
             if (!bi.cbEndDate.isChecked()) {
                 if (date2.compareTo(date1) < 0) {
