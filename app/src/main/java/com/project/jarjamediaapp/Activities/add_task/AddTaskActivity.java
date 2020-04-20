@@ -510,7 +510,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     private String addHour(String myTime, int number) {
         try {
-            SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss a");
+            SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
             Date d = df.parse(myTime);
             Calendar cal = Calendar.getInstance();
             cal.setTime(d);
@@ -744,10 +744,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         try {
             date1 = new SimpleDateFormat("yyyy-MM-dd").parse(sDate);
             date2 = new SimpleDateFormat("yyyy-MM-dd").parse(eDate);
-            String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
-            currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
-            time1 = new SimpleDateFormat("HH:mm:ss").parse(GH.getInstance().formatter(sDate, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
-            time2 = new SimpleDateFormat("HH:mm:ss").parse(GH.getInstance().formatter(eDate, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+            String time = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
+            currentTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(time);
+            time1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(sDate);
+            time2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(eDate);
             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 

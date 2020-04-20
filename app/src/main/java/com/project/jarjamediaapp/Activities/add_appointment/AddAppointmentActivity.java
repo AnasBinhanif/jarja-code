@@ -924,10 +924,10 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         try {
             date1 = new SimpleDateFormat("yyyy-MM-dd").parse(datedFrom);
             date2 = new SimpleDateFormat("yyyy-MM-dd").parse(datedTo);
-            String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
-            currentTime = new SimpleDateFormat("HH:mm:ss").parse(time);
-            time1 = new SimpleDateFormat("HH:mm:ss").parse(GH.getInstance().formatter(datedFrom, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
-            time2 = new SimpleDateFormat("HH:mm:ss").parse(GH.getInstance().formatter(datedTo, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+            String time = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
+            currentTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(time);
+            time1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(datedFrom);
+            time2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(datedTo);
             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 
@@ -974,7 +974,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             } else if (date2.compareTo(date1) != 0) {
 
                 String startDate = this.startDate;
-                SimpleDateFormat simpleDate1 = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat simpleDate1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                 String date = simpleDate1.format(new Date());
 
                 if (date.compareTo(startDate) == 0) {
