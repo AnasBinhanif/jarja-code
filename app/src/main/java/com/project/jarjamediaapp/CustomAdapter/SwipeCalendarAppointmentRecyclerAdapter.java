@@ -21,7 +21,8 @@ import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Activities.add_calendar_task.AddCalendarTaskActivity;
 import com.project.jarjamediaapp.Activities.calendar.CalendarModel;
-import com.project.jarjamediaapp.Activities.calendarDetail.CalendarDetailModel;
+import com.project.jarjamediaapp.Activities.calendarDetail.CalendarAppointmentDetailModel;
+import com.project.jarjamediaapp.Activities.calendarDetail.CalendarTaskDetailModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -52,7 +53,8 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
     int pos;
     List<CalendarModel.Data> mData;
     CalendarModel.Data modelData;
-    Call<CalendarDetailModel> _call;
+    Call<CalendarAppointmentDetailModel> _call;
+    Call<CalendarTaskDetailModel> _cCall;
     Call<BaseResponse> call;
 
     public SwipeCalendarAppointmentRecyclerAdapter(Context context, Activity activity, List<CalendarModel.Data> data) {
@@ -166,32 +168,25 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
         });
     }
 
-    private void viewCalendarAppointmentOrTaskDetail(String calendarId, String type, String startDateTime) {
+    private void viewCalendarAppointmentDetail(String calendarId, String startDateTime) {
 
         GH.getInstance().ShowProgressDialog(activity);
 
-        if (type != null && !type.equalsIgnoreCase("") && type.equalsIgnoreCase("Task")) {
-            _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getCalendarTaskDetail(GH.getInstance().getAuthorization(), calendarId, startDateTime);
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getCalendarAppointmentDetail(GH.getInstance().getAuthorization(), calendarId, startDateTime);
 
-        } else {
-            _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getCalendarAppointmentDetail(GH.getInstance().getAuthorization(), calendarId, startDateTime);
-        }
-        _call.enqueue(new Callback<CalendarDetailModel>() {
+        _call.enqueue(new Callback<CalendarAppointmentDetailModel>() {
             @Override
-            public void onResponse(Call<CalendarDetailModel> call, Response<CalendarDetailModel> response) {
+            public void onResponse(Call<CalendarAppointmentDetailModel> call, Response<CalendarAppointmentDetailModel> response) {
                 GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
-                    CalendarDetailModel calendarDetailModel = response.body();
-                    if (calendarDetailModel.getStatus().equals("Success")) {
+                    CalendarAppointmentDetailModel calendarAppointmentDetailModel = response.body();
+                    if (calendarAppointmentDetailModel.getStatus().equals("Success")) {
 
-                        if (type != null && !type.equalsIgnoreCase("") && type.equalsIgnoreCase("Task")) {
-                            showDialogForCalendarTaskDetail(context, calendarDetailModel.getData());
-                        } else {
-                            showDialogForCalendarAppointmentDetail(context, calendarDetailModel.getData().getCalendarData());
-                        }
+                        showDialogForCalendarAppointmentDetail(context, calendarAppointmentDetailModel.getData().getCalendarData());
+
                     } else {
-                        ToastUtils.showToast(context, calendarDetailModel.getMessage());
+                        ToastUtils.showToast(context, calendarAppointmentDetailModel.getMessage());
                     }
                 } else {
 
@@ -201,7 +196,42 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             }
 
             @Override
-            public void onFailure(Call<CalendarDetailModel> call, Throwable t) {
+            public void onFailure(Call<CalendarAppointmentDetailModel> call, Throwable t) {
+                GH.getInstance().HideProgressDialog();
+                ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
+            }
+        });
+    }
+
+    private void viewCalendarTaskDetail(String calendarId, String startDateTime) {
+
+        GH.getInstance().ShowProgressDialog(activity);
+
+        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getCalendarTaskDetail(GH.getInstance().getAuthorization(), calendarId, startDateTime);
+
+        _cCall.enqueue(new Callback<CalendarTaskDetailModel>() {
+            @Override
+            public void onResponse(Call<CalendarTaskDetailModel> call, Response<CalendarTaskDetailModel> response) {
+                GH.getInstance().HideProgressDialog();
+                if (response.isSuccessful()) {
+
+                    CalendarTaskDetailModel calendarTaskDetailModel = response.body();
+                    if (calendarTaskDetailModel.getStatus().equals("Success")) {
+
+                        showDialogForCalendarTaskDetail(context, calendarTaskDetailModel.getData());
+
+                    } else {
+                        ToastUtils.showToast(context, calendarTaskDetailModel.getMessage());
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    ToastUtils.showToast(context, error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CalendarTaskDetailModel> call, Throwable t) {
                 GH.getInstance().HideProgressDialog();
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
             }
@@ -247,7 +277,12 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                 public void onClick(View v) {
 
                     modelData = mData.get(getAdapterPosition());
-                    viewCalendarAppointmentOrTaskDetail(modelData.getCalendarId(), modelData.getCalendarType(), modelData.getStart());
+                    if (modelData.getCalendarType() != null && !modelData.getCalendarType().equalsIgnoreCase("") && modelData.getCalendarType().equalsIgnoreCase("Task")) {
+                        viewCalendarTaskDetail(modelData.getCalendarId(), modelData.getStart());
+                    } else {
+                        viewCalendarAppointmentDetail(modelData.getCalendarId(), modelData.getStart());
+                    }
+
 
                 }
             });
@@ -271,7 +306,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
     }
 
-    private void showDialogForCalendarAppointmentDetail(Context context, CalendarDetailModel.Data.CalendarData calendarDetailModel) {
+    private void showDialogForCalendarAppointmentDetail(Context context, CalendarAppointmentDetailModel.Data.CalendarData calendarDetailModel) {
 
         try {
 
@@ -301,7 +336,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                 } else {
                     tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss") + " - " + GH.getInstance().formatter(endTime[1], "hh:mm:ss a", "HH:mm:ss"));
                 }
-                tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-mm-dd"));
+                tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd"));
             }
             tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
             tvLocation.setText(calendarDetailModel.getLocation() != null ? calendarDetailModel.getLocation() : "");
@@ -319,7 +354,6 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                 }
             }
 
-            // need data from api
             tvDetail.setText(calendarDetailModel.getDesc() != null ? calendarDetailModel.getDesc() : "");
             tvNotes.setText(calendarDetailModel.getNote() != null ? calendarDetailModel.getNote() : "");
 
@@ -332,18 +366,12 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                 public void onClick(View v) {
 
                     dialog.dismiss();
-                    if (calendarDetailModel.getCalendarType() == null) {
-                        // data and calendar id will be passed in intent
-                        context.startActivity(new Intent(context, AddAppointmentActivity.class)
-                                .putExtra("from", "6")
-                                .putExtra("calendarId", modelData.getCalendarId())
-                                .putExtra("modelData", calendarDetailModel));
-                    } else {
-                        context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
-                                .putExtra("isEdit", true)
-                                .putExtra("calendarId", calendarDetailModel.getGmailCalenderId())
-                                .putExtra("modelData", calendarDetailModel));
-                    }
+                    // data and calendar id will be passed in intent
+                    context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                            .putExtra("from", "6")
+                            .putExtra("calendarId", modelData.getCalendarId())
+                            .putExtra("modelData", calendarDetailModel));
+
                 }
             });
 
@@ -369,7 +397,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
     }
 
-    private void showDialogForCalendarTaskDetail(Context context, CalendarDetailModel.Data calendarDetailModel) {
+    private void showDialogForCalendarTaskDetail(Context context, CalendarTaskDetailModel.Data calendarDetailModel) {
 
         final Dialog dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
@@ -413,18 +441,12 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
                     dialog.dismiss();
                     if (calendarDetailModel != null) {
-                        if (calendarDetailModel.getCalendarType().equals("Event")) {
-                            // data and calendar id will be passed in intent
-                            context.startActivity(new Intent(context, AddAppointmentActivity.class)
-                                    .putExtra("from", "6")
-                                    .putExtra("calendarId", calendarDetailModel.getCalendarEventID())
-                                    .putExtra("modelData", calendarDetailModel));
-                        } else {
-                            context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
-                                    .putExtra("isEdit", true)
-                                    .putExtra("calendarId", calendarDetailModel.getCalendarEventID())
-                                    .putExtra("modelData", calendarDetailModel));
-                        }
+
+                        context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
+                                .putExtra("isEdit", true)
+                                .putExtra("calendarId", calendarDetailModel.getCalendarEventID())
+                                .putExtra("modelData", calendarDetailModel));
+
                     }
                 }
             });

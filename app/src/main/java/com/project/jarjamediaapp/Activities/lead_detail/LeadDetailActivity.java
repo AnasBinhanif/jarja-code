@@ -373,7 +373,11 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             btnSendEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    String message = mAtvMessage.getText().toString();
+                    if (!message.equalsIgnoreCase(""))
+                        presenter.sendMessageContent(phoneNo, message, leadID);
+                    else
+                        showLongToastMessage("Please enter message body");
 
                 }
             });
@@ -401,7 +405,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     private void callDialer(String phoneNo) {
         if (UserPermissions.isPhonePermissionGranted(LeadDetailActivity.this)) {
 
-            if ( phoneNo == null || phoneNo.equals("") || phoneNo.equals("null")) {
+            if (phoneNo == null || phoneNo.equals("") || phoneNo.equals("null")) {
                 ToastUtils.showToast(context, "No Primary Phone Found");
             } else {
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
@@ -446,7 +450,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
             case R.id.rlTransaction1:
 
-                if (currentStage1!=null) {
+                if (currentStage1 != null) {
                     Intent intentT1 = new Intent(context, TransactionActivity.class);
                     intentT1.putExtra("title", title);
                     intentT1.putExtra("leadID", leadID);
@@ -460,7 +464,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
             case R.id.rlTransaction2:
 
-                if (currentStage1!=null) {
+                if (currentStage1 != null) {
                     Intent intentT2 = new Intent(context, TransactionActivity.class);
                     intentT2.putExtra("title", title);
                     intentT2.putExtra("leadID", leadID);
@@ -721,7 +725,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         if (transactionTwoListModel != null) {
 
             bi.tvStep2.setText(transactionTwoListModel.get(transactionTwoListModel.size() - 1).currentStage);
-            bi.tvDate2.setText(transactionTwoListModel.get(transactionTwoListModel.size() - 1).date != null ?transactionTwoListModel.get(transactionTwoListModel.size() - 1).date : GH.getInstance().getCurrentDate());
+            bi.tvDate2.setText(transactionTwoListModel.get(transactionTwoListModel.size() - 1).date != null ? transactionTwoListModel.get(transactionTwoListModel.size() - 1).date : GH.getInstance().getCurrentDate());
 
             currentStage2 = transactionTwoListModel.get(transactionTwoListModel.size() - 1).currentStage;
             transLeadID2 = transactionTwoListModel.get(transactionTwoListModel.size() - 1).encrypted_LeadDetailID;
@@ -765,11 +769,10 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             }
             _to = arrayList.toArray(new String[searchLeadListItems.size()]);
         }
-        if (!cc.equals(""))
-        {
-            if (!isValidEmail(cc.toString())){
-                ToastUtils.showToast(context,"Invalid Email in Cc");
-            }else{
+        if (!cc.equals("")) {
+            if (!isValidEmail(cc.toString())) {
+                ToastUtils.showToast(context, "Invalid Email in Cc");
+            } else {
                 if (isValidate()) {
                     if (multipartFile != null) {
                         presenter.uploadFile(multipartFile, _from);
@@ -778,10 +781,10 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     }
                 }
             }
-        }else if (!bcc.equals("")){
-            if (!isValidEmail(bcc.toString())){
-                ToastUtils.showToast(context,"Invalid Email in Bcc");
-            }else{
+        } else if (!bcc.equals("")) {
+            if (!isValidEmail(bcc.toString())) {
+                ToastUtils.showToast(context, "Invalid Email in Bcc");
+            } else {
                 if (isValidate()) {
                     if (multipartFile != null) {
                         presenter.uploadFile(multipartFile, _from);
@@ -790,7 +793,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     }
                 }
             }
-        }else {
+        } else {
             if (isValidate()) {
                 if (multipartFile != null) {
                     presenter.uploadFile(multipartFile, _from);

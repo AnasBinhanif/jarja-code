@@ -30,7 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
-import com.project.jarjamediaapp.Activities.calendarDetail.CalendarDetailModel;
+import com.project.jarjamediaapp.Activities.calendarDetail.CalendarAppointmentDetailModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -85,7 +85,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     boolean isEdit;
     String fromId = "";
     ArrayList<String> arrayListReminderValue, arrayListReminderText;
-    CalendarDetailModel.Data.CalendarData calendarData;
+    CalendarAppointmentDetailModel.Data.CalendarData calendarData;
     String timedFrom = "", timedTo = "", datedFrom = "", datedTo = "";
     int month, year, day, _month, _year, _day, mHour, mMinute;
     Calendar newCalendar;
@@ -294,9 +294,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         }
     }
 
-    private void prePopulateData(CalendarDetailModel.Data.CalendarData modelData) {
+    private void prePopulateData(CalendarAppointmentDetailModel.Data.CalendarData modelData) {
 
-        encryptedAppointmentId = modelData.getEncrypted_LeadAppointmentID();
+        encryptedAppointmentId = modelData.getEncryptedLeadAppoinmentID();
         leadId = String.valueOf(modelData.getEncryptedLeadID());
         bi.tvName.setText((modelData.getLeadName() != null ? modelData.getLeadName() : ""));
         bi.tvName.setEnabled(false);
@@ -305,7 +305,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
 
         if (modelData.getDatedFrom() != null && modelData.getDatedTo() != null) {
-          
+
             String sDateTime = addHour(modelData.getDatedFrom(), 5);
             String eDateTime = addHour(modelData.getDatedTo(), 5);
 
@@ -832,6 +832,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     obj.put("agentIds", agentsID);
                     obj.put("endTime", endTime);
                     obj.put("desc", desc);
+                    obj.put("viaReminder", via);
                     obj.put("isSend", isSend);
                     obj.put("calendarType", "Event");
                     obj.put("agentsStringIDs", agentIdsString);

@@ -4,7 +4,8 @@ import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
 import com.project.jarjamediaapp.Activities.add_task.GetTaskDetail;
 import com.project.jarjamediaapp.Activities.calendar.CalendarModel;
-import com.project.jarjamediaapp.Activities.calendarDetail.CalendarDetailModel;
+import com.project.jarjamediaapp.Activities.calendarDetail.CalendarAppointmentDetailModel;
+import com.project.jarjamediaapp.Activities.calendarDetail.CalendarTaskDetailModel;
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
 import com.project.jarjamediaapp.Activities.lead_detail.LeadDetailModel;
 import com.project.jarjamediaapp.Activities.listing_info.ListingInfoModel;
@@ -419,7 +420,7 @@ public interface ApiMethods {
     @Headers("Content-Type: application/json")
     @POST("Tasks/UpdateTaskNew")
     Call<BaseResponse> UpdateTask(@Header("Authorization") String authorization,
-                               @Body String body);
+                                  @Body String body);
 
     @Headers("Content-Type: application/json")
     @POST("Lead/AddNewLead")
@@ -650,14 +651,14 @@ public interface ApiMethods {
                                           @Query("year") String year);
 
     @GET("Calender/GetCalendartAppointmentPreview")
-    Call<CalendarDetailModel> getCalendarAppointmentDetail(@Header("Authorization") String authorization,
-                                                           @Query("CalendarId") String calendarId,
-                                                           @Query("dtStart") String dtStart);
+    Call<CalendarAppointmentDetailModel> getCalendarAppointmentDetail(@Header("Authorization") String authorization,
+                                                                      @Query("CalendarId") String calendarId,
+                                                                      @Query("dtStart") String dtStart);
 
     @GET("Calender/GetCalendarTaskPreview")
-    Call<CalendarDetailModel> getCalendarTaskDetail(@Header("Authorization") String authorization,
-                                                    @Query("CalendarId") String calendarId,
-                                                    @Query("dtStart") String dtStart);
+    Call<CalendarTaskDetailModel> getCalendarTaskDetail(@Header("Authorization") String authorization,
+                                                        @Query("CalendarId") String calendarId,
+                                                        @Query("dtStart") String dtStart);
 
     @POST("Calender/DeleteCalendarAppointment")
     Call<BaseResponse> deleteCalendarAppointment(@Header("Authorization") String authorization,

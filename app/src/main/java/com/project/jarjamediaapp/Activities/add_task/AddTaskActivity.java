@@ -468,7 +468,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             bi.tvEndDate.setVisibility(View.GONE);
             bi.cbEndDate.setChecked(true);
             bi.cbEndDate.setVisibility(View.VISIBLE);
-        } else if(!taskDetail.data.recur.equals("One Time")){
+        } else if (!taskDetail.data.recur.equals("One Time")) {
             bi.lblEndDate.setVisibility(View.VISIBLE);
             bi.tvEndDate.setVisibility(View.VISIBLE);
             bi.cbEndDate.setChecked(false);
@@ -820,8 +820,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     bi.tvStartTime.requestFocus();
                     return false;
                 }
-            }else {
-                if(date1.compareTo(currentDate) ==0){
+            } else {
+                if (date1.compareTo(currentDate) == 0) {
                     if (time1.before(currentTime)) {
                         ToastUtils.showToast(context, "Start time cannot be less than current time");
                         bi.tvStartTime.requestFocus();
@@ -1029,6 +1029,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvAddProperty.clearFocus();
         bi.atvDescription.clearFocus();
         bi.tvName.clearFocus();
+        bi.atvNameTask.clearFocus();
     }
 
     private void showAgentDialog() {
@@ -1043,6 +1044,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
                         //will return list of selected IDS
+
+                        clearFocus();
                         selectedIdsList = new ArrayList<>();
                         selectedIdsList = selectedIds;
                         if (bi.lnAgent.getChildCount() > 0) {
@@ -1094,6 +1097,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     public void showSearchDialog(Context context) {
 
+        clearFocus();
         final Dialog dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.custom_search_dialog);
@@ -1130,6 +1134,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     private void showSearchLeadDialog(Dialog dialog) {
 
+        clearFocus();
         MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
                 .title("Select Leads") //setting title for dialog
                 .titleSize(25)
@@ -1140,6 +1145,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
                         //will return list of selected IDS
+                        clearFocus();
                         selectedIdsListLead = new ArrayList<>();
                         selectedIdsListLead = selectedIds;
                         if (bi.lnLead.getChildCount() > 0) {

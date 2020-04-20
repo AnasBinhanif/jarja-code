@@ -12,7 +12,7 @@ import android.widget.TimePicker;
 
 import androidx.databinding.DataBindingUtil;
 
-import com.project.jarjamediaapp.Activities.calendarDetail.CalendarDetailModel;
+import com.project.jarjamediaapp.Activities.calendarDetail.CalendarTaskDetailModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.R;
@@ -40,7 +40,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     boolean allDay, markComplete;
     boolean isEdit;
     String calendarId = "";
-    CalendarDetailModel.Data calendarDetailModel;
+    CalendarTaskDetailModel.Data calendarDetailModel;
 
     int month, year, day, mHour, mMinute;
     Calendar newCalendar;
@@ -78,7 +78,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 bi.tvStartTime.setVisibility(View.VISIBLE);
                 bi.lblStartTime.setVisibility(View.VISIBLE);
             }
-            //   bi.cbMarkComplete.setChecked(calendarDetailModel.isCompleted != null ? calendarDetailModel.isCompleted : false);
+            bi.cbMarkComplete.setChecked(calendarDetailModel.isComplete);
 
         } else {
             calendarId = "";
