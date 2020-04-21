@@ -4,6 +4,9 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -75,9 +78,10 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     boolean isUpdate = false;
     GetLead.LeadList leadModel;
 
-    String source = "";
+    int source=0;
     int timeFrame, leadType;
-
+    boolean mFormatting; // this is a flag which prevents the  stack overflow.
+    int mAfter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,7 +174,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 int pos = getLeadSourceNameList.indexOf(leadModel.source);
                 if (pos >= 0) {
 
-                    source = leadModel.source;
+                    source =getLeadSourceList.get(pos).sourceID;
                     bi.spnSource.setText(leadModel.source);
                 }
 
@@ -257,9 +261,9 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                     // selectedIdsList.add(Integer.valueOf(name.agentID));
                     selectedDripIdsList.add(name.dripCompaignID);
                     if (dripIdsString.equals("")) {
-                        dripIdsString = name.encryptedID;
+                        dripIdsString = String.valueOf(name.dripCompaignID);
                     } else {
-                        dripIdsString = dripIdsString + "," + name.encryptedID;
+                        dripIdsString = dripIdsString + "," + String.valueOf(name.dripCompaignID);
                     }
                 }
             }
@@ -305,6 +309,39 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         bi.edtSpouseBday.setOnClickListener(this);
         bi.edtAnniversary.setOnClickListener(this);
         bi.edtDripCompaign.setOnClickListener(this);
+
+        bi.edtPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                mAfter  =   after;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!mFormatting) {
+                    mFormatting = true;
+                    // using US or RU formatting...
+                    if(mAfter!=0) // in case back space ain't clicked...
+                    {
+                        String num =s.toString();
+                        String data = PhoneNumberUtils.formatNumber(num, "US");
+                        if(data!=null)
+                        {
+                            s.clear();
+                            s.append(data);
+                            Log.i("Number", data);//8 (999) 123-45-67 or +7 999 123-45-67
+                        }
+
+                    }
+                    mFormatting = false;
+                }
+            }
+        });
     }
 
     private void initSpinners() {
@@ -523,7 +560,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String city = bi.edtCity1.getText().toString();
         String state = bi.edtState1.getText().toString();
         String description = bi.edtNotes.getText().toString();
-        String source = this.source;
+        int source = this.source;
         String county = bi.edtCountry.getText().toString();
         int timeFrameId = this.timeFrame;
         String state2 = bi.edtState2.getText().toString();
@@ -567,6 +604,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             ToastUtils.showToast(context, getString(R.string.errSinglePiece));
         } else if (selectedIdsList.size() == 0) {
             ToastUtils.showToast(context, getString(R.string.errSelectAgent));
+        }else if (!cellPhone.equals("") && bi.edtPhone.getText().length()<14) {
+            ToastUtils.showToast(context,"Invalid CellPhone");
         } else if (!zipcode.equals("") && zipcode.trim().length() < 5) {
             ToastUtils.showToast(context, "Postal code cannot be less than 5");
         } else if (!zipcode2.equals("") && zipcode2.trim().length() < 5) {
@@ -650,7 +689,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         String city = bi.edtCity1.getText().toString();
         String state = bi.edtState1.getText().toString();
         String description = bi.edtNotes.getText().toString();
-        String source = this.source;
+        int source = this.source;
         String county = bi.edtCountry.getText().toString();
         int timeFrameId = this.timeFrame;
         String state2 = bi.edtState2.getText().toString();
@@ -804,7 +843,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
 
-                source = String.valueOf(getLeadSourceList.get(position).sourceID);
+                source = getLeadSourceList.get(position).sourceID;
             }
         });
         presenter.GetLeadTagList();

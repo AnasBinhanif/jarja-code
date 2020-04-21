@@ -343,13 +343,18 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             tvLead.setText(calendarDetailModel.getLeadName() != null ? calendarDetailModel.getLeadName() : "");
 
             if (calendarDetailModel.getAgentList() != null) {
-
+                String agentNames ="";
                 if (calendarDetailModel.getAgentList().size() > 0) {
                     ArrayList<String> arrayList = new ArrayList<>();
                     for (int i = 0; i < calendarDetailModel.getAgentList().size(); i++) {
-                        arrayList.add(calendarDetailModel.getAgentList().get(i).getAgentName());
+                        //arrayList.add(calendarDetailModel.getAgentList().get(i).getAgentName());
+                        if (agentNames.equals("")) {
+                            agentNames = calendarDetailModel.getAgentList().get(i).getAgentName();
+                        } else {
+                            agentNames = agentNames + "," + calendarDetailModel.getAgentList().get(i).getAgentName();
+                        }
                     }
-                    String agentNames = TextUtils.join(" , ", arrayList);
+                 //   String agentNames = TextUtils.join(" , ", arrayList);
                     tvAgents.setText(agentNames);
                 }
             }

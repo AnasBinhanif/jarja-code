@@ -422,9 +422,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvRecur.setText(taskDetail.data.recur, false);
         if (taskDetail.data.recur.equals("One Time")) {
             bi.tvEndDate.setVisibility(View.GONE);
+            bi.lnEndDate.setVisibility(View.GONE);
             bi.lblEndDate.setVisibility(View.GONE);
         } else {
             bi.tvEndDate.setVisibility(View.VISIBLE);
+            bi.lnEndDate.setVisibility(View.VISIBLE);
             bi.lblEndDate.setVisibility(View.VISIBLE);
         }
         bi.atvAddProperty.setText(taskDetail.data.address);
@@ -494,6 +496,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
 
             bi.tvStartDate.setEnabled(false);
+            bi.tvEndDate.setEnabled(false);
+            bi.cbEndDate.setEnabled(false);
         }
 
     }

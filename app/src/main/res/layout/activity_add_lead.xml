@@ -105,9 +105,10 @@
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:imeOptions="actionNext"
+                        android:maxLength="14"
                         android:layout_height="wrap_content"
                         android:hint="@string/cell_phone"
-                        android:inputType="number" />
+                        android:inputType="phone" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
