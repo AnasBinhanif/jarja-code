@@ -758,6 +758,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     bi.tvEndDate.requestFocus();
                     return false;
                 }
+                if (time2.before(time1)) {
+                    ToastUtils.showToast(context, "End time cannot be less than start time");
+                    bi.tvStartDate.requestFocus();
+                    return false;
+                }
             }
 
         }
@@ -952,6 +957,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 } else {
                     endDate = dateFormatter.format(newCalendar.getTime());
                 }
+                textView.setText(dateFormatter2.format(newCalendar.getTime()));
+
 
                 if (isStart) {
                     if (bi.tvStartDate.getText().toString().equalsIgnoreCase("")) {
@@ -966,8 +973,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                         calendarEditInstance(4);
                     }
                 }
-
                 showTimeDialog(textView,dateFormatter2.format(newCalendar.getTime()), isStart);
+
                // textView.setText();
             }
 
@@ -995,7 +1002,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     endTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
                     time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
                 }
-                textView.setText(date+" "+time);
+                textView.setText(textView.getText().toString()+" "+time);
             }
         }, mHour, mMinute, false);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
