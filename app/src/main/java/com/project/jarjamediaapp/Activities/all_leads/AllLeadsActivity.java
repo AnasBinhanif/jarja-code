@@ -91,6 +91,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     protected void onResume() {
         super.onResume();
         leadsList.clear();
+        page = 0;
        handleIntent();
     }
 
