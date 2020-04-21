@@ -109,12 +109,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.btnSave.setOnClickListener(this);
         bi.atvType.setOnClickListener(this);
         bi.atvRecur.setOnClickListener(this);
-        bi.tvEndTime.setOnClickListener(this);
         bi.tvEndDate.setOnClickListener(this);
         bi.btnCancel.setOnClickListener(this);
         bi.tvAssignTo.setOnClickListener(this);
         bi.tvStartDate.setOnClickListener(this);
-        bi.tvStartTime.setOnClickListener(this);
         bi.atvReminder.setOnClickListener(this);
 
         bi.cbEndDate.setOnCheckedChangeListener((compoundButton, b) -> {
@@ -155,11 +153,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 bi.tvName.setEnabled(false);
                 isEdit = true;
 
-                bi.tvStartTime.setEnabled(false);
                 bi.atvRecur.setEnabled(false);
-                bi.tvStartTime.setClickable(false);
                 bi.atvRecur.setClickable(false);
-                bi.tvStartTime.setFocusableInTouchMode(false);
                 bi.atvRecur.setFocusableInTouchMode(false);
                 // hit api for task detail
 
@@ -181,11 +176,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 leadId = "";
                 taskId = getIntent().getStringExtra("taskId");
 
-                bi.tvStartTime.setEnabled(false);
                 bi.atvRecur.setEnabled(false);
-                bi.tvStartTime.setClickable(false);
                 bi.atvRecur.setClickable(false);
-                bi.tvStartTime.setFocusableInTouchMode(false);
                 bi.atvRecur.setFocusableInTouchMode(false);
                 int whichTasks = getIntent().getIntExtra("whichTasks", 1);
                 switch (whichTasks) {
@@ -452,10 +444,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String sTime = GH.getInstance().formatter(sDateTime, "hh:mm a", "MM/dd/yyyy HH:mm:ss a");
         String eTime = GH.getInstance().formatter(eDateTime, "hh:mm a", "MM/dd/yyyy HH:mm:ss a");
 
-        bi.tvStartDate.setText(sDate);
-        bi.tvEndDate.setText(eDate);
-        bi.tvStartTime.setText(sTime);
-        bi.tvEndTime.setText(eTime);
+        bi.tvStartDate.setText(sDate +" "+sTime);
+        bi.tvEndDate.setText(eDate+" "+eTime);
         type = taskDetail.data.type;
         scheduleId = taskDetail.data.scheduleID;
         searchLeadIdsString = taskDetail.data.leadEncryptedId;
@@ -539,6 +529,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         if (endDate.equalsIgnoreCase("")) {
             endDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+            endTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
         }
 
         String sDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
@@ -716,20 +707,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         if (Methods.isEmpty(bi.tvStartDate)) {
             ToastUtils.showToast(context, R.string.error_start_date);
-            bi.tvStartTime.requestFocus();
-            return false;
-        }
-        if (Methods.isEmpty(bi.tvStartTime)) {
-            ToastUtils.showToast(context, R.string.error_start_time);
-            bi.tvStartTime.requestFocus();
+            bi.tvStartDate.requestFocus();
             return false;
         }
 
-        if (Methods.isEmpty(bi.tvEndTime)) {
-            ToastUtils.showToast(context, R.string.error_end_time);
-            bi.tvEndTime.requestFocus();
-            return false;
-        }
         if (!reoccur.equals("1") && !bi.cbEndDate.isChecked() && Methods.isEmpty(bi.tvEndDate)) {
             ToastUtils.showToast(context, R.string.error_end_date);
             bi.tvName.requestFocus();
@@ -786,15 +767,14 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 }
             }
             if (date2.compareTo(date1) == 0 && date1.compareTo(currentDate) == 0) {
-
                 if (time2.before(time1)) {
                     ToastUtils.showToast(context, "End time cannot be less than start time");
-                    bi.tvStartTime.requestFocus();
+                    bi.tvStartDate.requestFocus();
                     return false;
                 }
                 if (time1.before(currentTime)) {
                     ToastUtils.showToast(context, "Start time cannot be less than current time");
-                    bi.tvStartTime.requestFocus();
+                    bi.tvStartDate.requestFocus();
                     return false;
                 }
             } else if (date2.compareTo(date1) != 0) {
@@ -802,7 +782,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 if (date1.compareTo(currentDate) == 0) {
                     if (time1.before(currentTime)) {
                         ToastUtils.showToast(context, "Start time cannot be less than current time");
-                        bi.tvStartTime.requestFocus();
+                        bi.tvStartDate.requestFocus();
                         return false;
                     }
                 }
@@ -810,21 +790,17 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         } else {
 
             if (date2.compareTo(date1) == 0) {
-                if (time2.before(time1)) {
-                    ToastUtils.showToast(context, "End time cannot be less than start time");
-                    bi.tvStartTime.requestFocus();
-                    return false;
-                }
+
                 if (time1.before(currentTime)) {
                     ToastUtils.showToast(context, "Start time cannot be less than current time");
-                    bi.tvStartTime.requestFocus();
+                    bi.tvStartDate.requestFocus();
                     return false;
                 }
             } else {
                 if (date1.compareTo(currentDate) == 0) {
                     if (time1.before(currentTime)) {
                         ToastUtils.showToast(context, "Start time cannot be less than current time");
-                        bi.tvStartTime.requestFocus();
+                        bi.tvStartDate.requestFocus();
                         return false;
                     }
                 }
@@ -922,24 +898,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 }
                 showDateDialog(bi.tvEndDate, false);
                 break;
-            case R.id.tvStartTime:
-                clearFocus();
-                if (bi.tvStartTime.getText().toString().equalsIgnoreCase("")) {
-                    calendarInstance();
-                } else {
-                    calendarEditInstance(3);
-                }
-                showTimeDialog(bi.tvStartTime, true);
-                break;
-            case R.id.tvEndTime:
-                clearFocus();
-                if (bi.tvEndTime.getText().toString().equalsIgnoreCase("")) {
-                    calendarInstance();
-                } else {
-                    calendarEditInstance(4);
-                }
-                showTimeDialog(bi.tvEndTime, false);
-                break;
             case R.id.tvAssignTo:
                 clearFocus();
                 showAgentDialog();
@@ -990,7 +948,23 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 } else {
                     endDate = dateFormatter.format(newCalendar.getTime());
                 }
-                textView.setText(dateFormatter2.format(newCalendar.getTime()));
+
+                if (isStart) {
+                    if (bi.tvStartDate.getText().toString().equalsIgnoreCase("")) {
+                        calendarInstance();
+                    } else {
+                        calendarEditInstance(3);
+                    }
+                }else{
+                    if (bi.tvEndDate.getText().toString().equalsIgnoreCase("")) {
+                        calendarInstance();
+                    } else {
+                        calendarEditInstance(4);
+                    }
+                }
+
+                showTimeDialog(textView,dateFormatter2.format(newCalendar.getTime()), isStart);
+               // textView.setText();
             }
 
         }, year, month, day);
@@ -999,7 +973,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         StartTime.show();
     }
 
-    private void showTimeDialog(TextView textView, boolean isStart) {
+    private void showTimeDialog(TextView textView,String date, boolean isStart) {
 
         TimePickerDialog mTimePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -1017,7 +991,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     endTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
                     time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
                 }
-                textView.setText(time);
+                textView.setText(date+" "+time);
             }
         }, mHour, mMinute, false);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
