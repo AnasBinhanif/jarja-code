@@ -123,6 +123,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                     } else {
                         imgInitial.setVisibility(View.GONE);
                         tvInitial.setVisibility(View.VISIBLE);
+                        tvName.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                     }
 
                     return Unit.INSTANCE;
