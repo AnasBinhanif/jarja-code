@@ -84,7 +84,8 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     @Override
     public void updateAppointmentUI(GetAppointmentsModel response) {
 
-        appointmentList = response.getData().getData();
+        appointmentList.addAll(response.getData().getData());
+        //appointmentList = response.getData().getData();
 
         if(!isFromActivity){
             totalPages = response.getData().getTotalRecordCount() != null ? response.getData().getTotalRecordCount() : 0;
@@ -97,9 +98,12 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         } else {
             bi.tvNoRecordFound.setVisibility(View.GONE);
             bi.rvAppointments.setVisibility(View.VISIBLE);
-            swipeAppointmentRecyclerAdapter = new SwipeAppointmentRecyclerAdapter(context, getActivity(), appointmentList, isFromActivity, false);
-            bi.rvAppointments.setAdapter(swipeAppointmentRecyclerAdapter);
-
+            if (swipeAppointmentRecyclerAdapter==null) {
+                swipeAppointmentRecyclerAdapter = new SwipeAppointmentRecyclerAdapter(context, getActivity(), appointmentList, isFromActivity, false);
+                bi.rvAppointments.setAdapter(swipeAppointmentRecyclerAdapter);
+            }else{
+                swipeAppointmentRecyclerAdapter.notifyDataSetChanged();
+            }
         }
 
     }

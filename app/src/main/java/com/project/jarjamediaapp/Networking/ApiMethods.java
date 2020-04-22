@@ -700,6 +700,12 @@ public interface ApiMethods {
             @Field("isCompleted") boolean isCompleted,
             @Field("calendarType") String calendarType);
 
+    @Headers("Content-Type: application/json")
+    @POST("Calender/EditAppoinmentTaskCalender")
+    Call<BaseResponse> updateAppointmentTaskByCalendar(
+            @Header("Authorization") String authorization,
+            @Body String body);
+
     @FormUrlEncoded
     @POST("Calender/EditAppoinmentTaskCalender")
     Call<BaseResponse> updateAppointmentTaskByCalendar(
@@ -712,7 +718,6 @@ public interface ApiMethods {
             @Field("desc") String desc,
             @Field("isAppointmentFixed") boolean isAppointmentFixed,
             @Field("isAppointmentAttend") boolean isAppointmentAttend,
-            @Field("appointmentDate") String appointmentDate,
             @Field("datedFrom") String datedFrom,
             @Field("datedTo") String datedTo,
             @Field("isAllDay") boolean isAllDay,
@@ -724,10 +729,7 @@ public interface ApiMethods {
             @Field("startTime") String startTime,
             @Field("endTime") String endTime,
             @Field("isCompleted") boolean isCompleted,
-            @Field("calendarType") String calendarType,
-            @Field("isGmailApptActive") boolean isGmailAppActive,
-            @Field("gmailCalenderId") String gmailCalendarId,
-            @Field("encrypted_LeadAppoinmentID") String encryptedLeadAppointmentId);
+            @Field("calendarType") String calendarType);
 
     @GET("Lead/GetLeadDocDetail")
     Call<DocumentModel> getDocumentByLeadId(@Header("Authorization") String authorization,

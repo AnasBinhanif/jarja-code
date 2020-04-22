@@ -91,11 +91,14 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
             bi.rvTasks.setVisibility(View.GONE);
 
         } else {
-            swipeTasksRecyclerAdapter = new SwipeTasksRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, taskType.equalsIgnoreCase("future") ? true : false);
-            bi.rvTasks.setAdapter(swipeTasksRecyclerAdapter);
             bi.tvNoRecordFound.setVisibility(View.GONE);
             bi.rvTasks.setVisibility(View.VISIBLE);
-
+            if (swipeTasksRecyclerAdapter==null) {
+                swipeTasksRecyclerAdapter = new SwipeTasksRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, taskType.equalsIgnoreCase("future") ? true : false);
+                bi.rvTasks.setAdapter(swipeTasksRecyclerAdapter);
+            }else{
+                swipeTasksRecyclerAdapter.notifyDataSetChanged();
+            }
         }
 
     }

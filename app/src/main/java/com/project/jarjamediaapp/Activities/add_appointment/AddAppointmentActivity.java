@@ -375,7 +375,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         startTime = GH.getInstance().formatter(sDateTime, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
         endTime = GH.getInstance().formatter(eDateTime, "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
 
-
         bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(sDateTime) : "");
         bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(sDateTime) : "");
         bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(eDateTime) : "");
@@ -839,7 +838,34 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            } else {
+            } else if (fromId.equals("6")){
+
+                try {
+                    obj.put("location", location);
+                    obj.put("isCompleted", isCompleted);
+                    obj.put("leadStringID", leadStringID);
+                    obj.put("orderBy", orderBy);
+                    obj.put("startTime", startTime);
+                    obj.put("interval", interval);
+                    obj.put("datedTo", datedTo);
+                    obj.put("eventTitle", eventTitle);
+                    obj.put("isAppointmentAttend", isAppointmentAttend);
+                    obj.put("isAppointmentFixed", isAppointmentFixed);
+                    obj.put("leadAppoinmentID", leadAppointmentID);
+                    obj.put("datedFrom", datedFrom);
+                    obj.put("isAllDay", isAllDay);
+                    obj.put("agentIds", agentsID);
+                    obj.put("endTime", endTime);
+                    obj.put("desc", desc);
+                    obj.put("viaReminder", via);
+                    obj.put("isSend", isSend);
+                    obj.put("calendarType", "Event");
+                    obj.put("agentsStringIDs", agentIdsString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }else{
                 try {
                     obj.put("location", location);
                     obj.put("isCompleted", isCompleted);
@@ -876,6 +902,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             } else if (fromId.equals("5")) {
                 presenter.addAppointment(jsonObjectString, fromId);
             } else if (from.equals("1")) {
+                presenter.addAppointment(jsonObjectString, fromId);
+            } else if (from.equals("6")) {
                 presenter.addAppointment(jsonObjectString, fromId);
             } else if (fromId.equalsIgnoreCase("4") || fromId.equalsIgnoreCase("2")) {
                 presenter.addAppointment(jsonObjectString, fromId);

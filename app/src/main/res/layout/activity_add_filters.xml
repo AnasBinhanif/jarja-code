@@ -209,6 +209,41 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@string/Pipeline"
+                        android:textSize="14dp"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@color/colorGreyText"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/edtPipeline"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:hint="@string/nothing_selected"
+                        android:paddingLeft="12dp"
+                        android:gravity="center|left"
+                        android:textColor="@color/colorTitle"
+                        android:textColorHint="@color/colorTitle"
+                        android:layout_marginTop="5dp"
+                        android:textSize="14dp"
+                        android:background="@drawable/bg_edt_dark" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fillViewport="true">
+
+                        <LinearLayout
+                            android:id="@+id/lnPipeline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
+
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/lead_score_without_colon"
                         android:textSize="14dp"
                         android:layout_marginTop="15dp"
@@ -275,28 +310,6 @@
                         android:textSize="14dp"
                         android:background="@drawable/bg_edt_dark" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/Pipeline"
-                        android:textSize="14dp"
-                        android:layout_marginTop="15dp"
-                        android:textColor="@color/colorGreyText"
-                        android:textStyle="bold" />
-
-                    <com.jaredrummler.materialspinner.MaterialSpinner
-                        android:id="@+id/spnPipeline"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:hint="@string/Pipeline"
-                        android:paddingLeft="12dp"
-                        android:gravity="center|left"
-                        app:ms_hint="@string/Pipeline"
-                        android:textColor="@color/colorTitle"
-                        android:textColorHint="@color/colorTitle"
-                        android:layout_marginTop="5dp"
-                        android:textSize="14dp"
-                        android:background="@drawable/bg_edt_dark" />
 
                     <TextView
                         android:layout_width="wrap_content"

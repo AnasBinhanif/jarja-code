@@ -84,7 +84,7 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
     public void updateUI(GetFollowUpsModel response) {
 
         totalPages = response.getData().getFollowCount();
-        followUpsList = response.getData().getFollowUpsList();
+        followUpsList.addAll(response.getData().getFollowUpsList());
         if (followUpsList.size() == 0) {
 
             bi.tvNoRecordFound.setVisibility(View.VISIBLE);
@@ -128,7 +128,7 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
     }
 
     private void initViews() {
-
+        followUpsList = new ArrayList<>();
         isFromActivity = this.getArguments().getBoolean("isFromActivity");
         if (isFromActivity) {
             leadID = this.getArguments().getString("leadID");

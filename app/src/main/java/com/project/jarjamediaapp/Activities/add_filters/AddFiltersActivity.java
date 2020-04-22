@@ -59,6 +59,11 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     ArrayList<MultiSelectModel> getLeadTagModelListselected = new ArrayList<>();
     ArrayList<Integer> selectedTagIdsList = new ArrayList<>();
 
+    ArrayList<GetPipeline.Data> getPipelineList;
+    ArrayList<MultiSelectModel> getPipelineModelList;
+    ArrayList<MultiSelectModel> getPipelineModelListselected = new ArrayList<>();
+    ArrayList<Integer> selectedPipelineIdsList = new ArrayList<>();
+
     ArrayList<GetLeadTypeList.Data> getLeadTypeList;
     ArrayList<MultiSelectModel> getLeadTypeModelList;
     ArrayList<MultiSelectModel> getLeadTypeModelListselected = new ArrayList<>();
@@ -78,13 +83,10 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     ArrayList<GetLastLogin.Data> getGetLastLoginList;
     ArrayList<String> getGetLastLoginNames;
 
-    ArrayList<GetPipeline.Data> getGetPipelineList;
-    ArrayList<String> getGetPipelineNames;
-
     MultiSelectModel tagModel, agentModel, dripModel;
 
     String priceTo = "", priceFrom = "",dateTo = "", dateFrom = "";
-    String agentIdsString = "", tagsIdsString = "", dripIdsString = "", sourceIdsString = "", typeIdsString = "";
+    String agentIdsString = "", tagsIdsString = "", pipelineIdsString="",dripIdsString = "", sourceIdsString = "", typeIdsString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +113,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     }
 
     private void initSpinners() {
-        bi.spnPipeline.setBackground(getDrawable(R.drawable.bg_edt_dark));
         bi.spnLastLogin.setBackground(getDrawable(R.drawable.bg_edt_dark));
         bi.spnLastTouch.setBackground(getDrawable(R.drawable.bg_edt_dark));
         bi.spnLeadScore.setBackground(getDrawable(R.drawable.bg_edt_dark));
@@ -134,6 +135,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         bi.edtType.setOnClickListener(this);
         bi.edtLeadScore.setOnClickListener(this);
         bi.edtAssignedTo.setOnClickListener(this);
+        bi.edtPipeline.setOnClickListener(this);
         bi.edtPriceRange.setOnClickListener(this);
         bi.edtDripCompaigns.setOnClickListener(this);
         bi.btnSaveAndSearch.setOnClickListener(this);
@@ -201,6 +203,65 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
             multiSelectDialog.multiSelectList(getLeadTagModelList);
         } else {
             multiSelectDialog.multiSelectList(getLeadTagModelList);
+        }
+        multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
+    }
+
+    private void showPipelineDialog() {
+
+        MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
+                .title("Select Pipeline") //setting title for dialog
+                .titleSize(25)
+                .positiveText("Done")
+                .negativeText("Cancel")
+                .setMinSelectionLimit(1)
+                .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
+                        //will return list of selected IDS
+                        selectedPipelineIdsList = new ArrayList<>();
+                        selectedPipelineIdsList = selectedIds;
+
+
+                        if (bi.lnPipeline.getChildCount() > 0) {
+                            bi.lnPipeline.removeAllViews();
+                        }
+
+                        pipelineIdsString = "";
+                        getPipelineModelListselected = new ArrayList<>();
+                        for (int i = 0; i < selectedNames.size(); i++) {
+
+                            getPipelineModelListselected.add(new MultiSelectModel(selectedIds.get(i), selectedNames.get(i)));
+
+                            if (pipelineIdsString.equals("")) {
+                                pipelineIdsString = String.valueOf(selectedIds.get(i));
+                            } else {
+                                pipelineIdsString = pipelineIdsString + "," + i;
+                            }
+
+                            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                            TextView textView = child.findViewById(R.id.txtDynamic);
+                            textView.setText(selectedNames.get(i));
+                            bi.lnPipeline.addView(child);
+                        }
+                        //tagModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
+                        Log.e("DataString", dataString);
+                    }
+
+                    @Override
+                    public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+                    }
+
+                    @Override
+                    public void onCancel() {
+                    }
+                });
+
+        if (selectedPipelineIdsList.size() != 0) {
+            multiSelectDialog.preSelectIDsList(selectedPipelineIdsList);
+            multiSelectDialog.multiSelectList(getPipelineModelList);
+        } else {
+            multiSelectDialog.multiSelectList(getPipelineModelList);
         }
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
@@ -452,6 +513,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         easyPreference.remove("pipelineID").save();
         easyPreference.remove("notes").save();
         easyPreference.remove("leadID").save();
+        easyPreference.save();
 
         retrieveFilters();
     }
@@ -469,7 +531,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         String dripCompaignID = dripIdsString + "";
         String lastTouch = getGetLastTouchList.get(bi.spnLastTouch.getSelectedIndex()).value + "";
         String lastLogin = getGetLastLoginList.get(bi.spnLastLogin.getSelectedIndex()).value + "";
-        String pipelineID = getGetPipelineList.get(bi.spnPipeline.getSelectedIndex()).id + "";
+        String pipelineID = pipelineIdsString + "";
         String sourceID = sourceIdsString + "";
         String fromDate = "";
         String toDate = "";
@@ -622,16 +684,41 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
             bi.lnDrip.removeAllViews();
         }
 
+        ArrayList<LinkedTreeMap> pipelineIDS = easyPreference.getObject("pipelineID", ArrayList.class);
+        if (pipelineIDS != null) {
+            pipelineIdsString = "";
+            for (LinkedTreeMap d : pipelineIDS) {
+                selectedDripIdsList.add(Integer.valueOf(Double.valueOf(d.get("id").toString()).intValue()));
+
+                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                TextView textView = child.findViewById(R.id.txtDynamic);
+                textView.setText(d.get("name").toString());
+                bi.lnPipeline.addView(child);
+
+                if (pipelineIdsString.equals("")) {
+                    pipelineIdsString = d.get("id").toString();
+                } else {
+                    pipelineIdsString = pipelineIdsString + "," + d.get("id").toString();
+                }
+
+                getPipelineModelListselected.add(new MultiSelectModel(Integer.valueOf(Double.valueOf(d.get("id").toString()).intValue()),
+                        d.get("name").toString()));
+            }
+        } else {
+            selectedPipelineIdsList = new ArrayList<>();
+            bi.lnPipeline.removeAllViews();
+        }
+
         int leadScoreID = easyPreference.getInt("leadScoreID", 0);
         int lastTouchID = easyPreference.getInt("lastTouchID", 0);
         int lastLoginID = easyPreference.getInt("lastLoginID", 0);
-        int pipelineID = easyPreference.getInt("pipelineID", 0);
+        //int pipelineID = easyPreference.getInt("pipelineID", 0);
         String notes = easyPreference.getString("notes", "");
         String leadID = easyPreference.getString("leadID", "");
         String priceTos = easyPreference.getString("priceTo", "");
         String priceFroms = easyPreference.getString("priceFrom", "");
 
-        bi.spnPipeline.setSelectedIndex(pipelineID);
+        //bi.spnPipeline.setSelectedIndex(pipelineID);
         bi.spnLeadScore.setSelectedIndex(leadScoreID);
         bi.spnLastTouch.setSelectedIndex(lastTouchID);
         bi.spnLastLogin.setSelectedIndex(lastLoginID);
@@ -663,7 +750,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         easyPreference.addInt("leadScoreID", bi.spnLeadScore.getSelectedIndex()).save();
         easyPreference.addInt("lastTouchID", bi.spnLastTouch.getSelectedIndex()).save();
         easyPreference.addInt("lastLoginID", bi.spnLastLogin.getSelectedIndex()).save();
-        easyPreference.addInt("pipelineID", bi.spnPipeline.getSelectedIndex()).save();
+        easyPreference.addObject("pipelineID", getPipelineModelListselected).save();
         easyPreference.addString("notes", bi.edtNotes.getText().toString() + "").save();
         easyPreference.addString("leadID", bi.edtLeadID.getText().toString() + "").save();
         easyPreference.addString("priceTo", priceTo + "").save();
@@ -796,13 +883,12 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     @Override
     public void updateUI(GetPipeline response) {
 
-        getGetPipelineList = new ArrayList<>();
-        getGetPipelineNames = new ArrayList<>();
-        getGetPipelineList = response.data;
-        for (GetPipeline.Data model : getGetPipelineList) {
-            getGetPipelineNames.add(model.name);
+        getPipelineList = new ArrayList<>();
+        getPipelineModelList = new ArrayList<>();
+        getPipelineList = response.data;
+        for (GetPipeline.Data model : getPipelineList) {
+            getPipelineModelList.add(new MultiSelectModel(model.id, model.name));
         }
-        bi.spnPipeline.setItems(getGetPipelineNames);
     }
 
     @Override
@@ -890,6 +976,9 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                 break;
             case R.id.edtLeadScore:
                 showSourceDialog();
+                break;
+            case R.id.edtPipeline:
+                showPipelineDialog();
                 break;
             case R.id.edtType:
                 showTypeDialog();

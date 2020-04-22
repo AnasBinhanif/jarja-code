@@ -83,6 +83,10 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
         } else if (fromid.equalsIgnoreCase("4") || fromid.equalsIgnoreCase("2")) {
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateAppointment(GH.getInstance().getAuthorization(),
                     prefix);
+        }else if (fromid.equalsIgnoreCase("6")){
+            _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),
+                    prefix);
+
         } else {
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddAppointment(GH.getInstance().getAuthorization(),
                     prefix);
@@ -250,9 +254,8 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
 
             // for update calendar appointment
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),
-                    leadStringID, agentsStringIDs, encryptedAppointmentId, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
-                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted, "Event", true,
-                    "", encryptedAppointmentId);
+                    leadStringID, agentsStringIDs, encryptedAppointmentId, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, datedFrom,
+                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted, "Event");
 
         } else if (fromId.equalsIgnoreCase("3")) {
 
