@@ -85,6 +85,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = AddLeadActivity.this;
 
         bi = DataBindingUtil.setContentView(this, R.layout.activity_add_lead);
         presenter = new AddLeadPresenter(this);
@@ -916,7 +917,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         for (GetLeadDripCampaignList.Data model : getLeadDripCampaignList) {
             getLeadDripCampaignModelList.add(new MultiSelectModel(model.dripCompaignID, model.name));
         }
-        GH.getInstance().ShowProgressDialog(context);
+        GH.getInstance().ShowProgressDialog(AddLeadActivity.this);
         addTimer();
     }
 

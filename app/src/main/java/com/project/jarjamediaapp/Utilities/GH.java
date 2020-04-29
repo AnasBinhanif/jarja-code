@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.Utilities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
@@ -26,7 +27,7 @@ public class GH {
 
     private static final GH ourInstance = new GH();
     public KProgressHUD hud;
-    AppCompatDialog progressDialog;
+    ProgressDialog progressDialog;
 
     public static GH getInstance() {
         return ourInstance;
@@ -81,7 +82,7 @@ public class GH {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_NAME.name(), "");
     }
 
-    public void ShowProgressDialog(Context context) {
+  /*  public void ShowProgressDialog(Context context) {
 
         if (hud != null && hud.isShowing()) {
             hud.dismiss();
@@ -98,26 +99,25 @@ public class GH {
             hud.dismiss();
         }
 
-    }
+    }*/
 
-    /*public void ShowProgressDialog(Activity activity) {
+    public void ShowProgressDialog(Activity activity) {
         if (activity == null || activity.isFinishing()) {
             return;
         }
         if (progressDialog != null && progressDialog.isShowing()) {
         } else {
-            progressDialog = new AppCompatDialog(activity);
+            progressDialog = new ProgressDialog(activity);
             progressDialog.setCancelable(false);
-            progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            progressDialog.setContentView(R.layout.progress_dialog);
+            progressDialog.setMessage("Please Wait....");
             progressDialog.show();
 
         }
-        final ImageView img_loading_frame = progressDialog.findViewById(R.id.ivGifJM);
-        Glide.with(activity).load(R.drawable.jm_loader).into(img_loading_frame);
-    }*/
+       /* final ImageView img_loading_frame = progressDialog.findViewById(R.id.ivGifJM);
+        Glide.with(activity).load(R.drawable.jm_loader).into(img_loading_frame);*/
+    }
 
-    /*public void HideProgressDialog() {
+    public void HideProgressDialog() {
         try {
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
@@ -129,7 +129,7 @@ public class GH {
             this.progressDialog = null;
         }
 
-    }*/
+    }
 
     public String formatDate(String dateString) {
 

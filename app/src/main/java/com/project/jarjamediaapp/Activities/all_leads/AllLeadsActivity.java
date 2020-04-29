@@ -43,7 +43,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     ArrayList<GetAllLeads.LeadsList> leadsList;
     ArrayList<GetPropertyLeads.LeadsList> propertyleadsList = new ArrayList<>();
     String mSearchQuery = "", propertyID = "";
-    String resultSetType = "All";
+    String resultSetType = "New Leads";
     Intent data = null;
     LinearLayoutManager linearLayoutManager;
     int page = 0;
@@ -209,7 +209,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         String firstNameAsc = "";
         String lastNameAsc = "";
         String emailAddressAsc = "";
-        String registeredDateAsc = "";
+        boolean registeredDateAsc = false;
         String lastLoginedInAsc = "";
         String lastLoginedCountAsc = "";
         String lastTouchedInAsc = "";

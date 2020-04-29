@@ -122,7 +122,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         String firstNameAsc = "";
         String lastNameAsc = "";
         String emailAddressAsc = "";
-        String registeredDateAsc = "";
+        boolean registeredDateAsc = false;
         String lastLoginedInAsc = "";
         String lastLoginedCountAsc = "";
         String lastTouchedInAsc = "";
@@ -137,7 +137,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         String activitiesFavoriteAsc = "";
         String isSaveSearch = "false";
         String isFilterClear = "false";
-        String resultSetType = "All";
+        String resultSetType = "New Leads";
         String pageNo = "0";
         String pageSize = "25";
 

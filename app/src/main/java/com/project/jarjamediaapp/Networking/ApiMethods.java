@@ -474,7 +474,7 @@ public interface ApiMethods {
             @Field("firstNameAsc") String firstNameAsc,
             @Field("lastNameAsc") String lastNameAsc,
             @Field("emailAddressAsc") String emailAddressAsc,
-            @Field("registeredDateAsc") String registeredDateAsc,
+            @Field("registeredDateAsc") boolean registeredDateAsc,
             @Field("lastLoginedInAsc") String lastLoginedInAsc,
             @Field("lastLoginedCountAsc") String lastLoginedCountAsc,
             @Field("lastTouchedInAsc") String lastTouchedInAsc,
@@ -489,7 +489,7 @@ public interface ApiMethods {
             @Field("activitiesFavoriteAsc") String activitiesFavoriteAsc,
             @Field("isSaveSearch") String isSaveSearch,
             @Field("isFilterClear") String isFilterClear,
-            @Field("resultSetType") String resultSetType,
+            @Field("ResultSetType") String resultSetType,
             @Field("pageNo") String pageNo,
             @Field("pageSize") String pageSize
     );
@@ -538,7 +538,7 @@ public interface ApiMethods {
             @Field("firstNameAsc") String firstNameAsc,
             @Field("lastNameAsc") String lastNameAsc,
             @Field("emailAddressAsc") String emailAddressAsc,
-            @Field("registeredDateAsc") String registeredDateAsc,
+            @Field("registeredDateAsc") boolean registeredDateAsc,
             @Field("lastLoginedInAsc") String lastLoginedInAsc,
             @Field("lastLoginedCountAsc") String lastLoginedCountAsc,
             @Field("lastTouchedInAsc") String lastTouchedInAsc,
@@ -553,7 +553,7 @@ public interface ApiMethods {
             @Field("activitiesFavoriteAsc") String activitiesFavoriteAsc,
             @Field("isSaveSearch") String isSaveSearch,
             @Field("isFilterClear") String isFilterClear,
-            @Field("resultSetType") String resultSetType,
+            @Field("ResultSetType") String resultSetType,
             @Field("pageNo") String pageNo,
             @Field("pageSize") String pageSize
     );
