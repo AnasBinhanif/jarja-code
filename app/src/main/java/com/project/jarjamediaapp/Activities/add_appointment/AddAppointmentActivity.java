@@ -5,9 +5,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -838,7 +836,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            } else if (fromId.equals("6")){
+            } else if (fromId.equals("6")) {
 
                 try {
                     obj.put("location", location);
@@ -865,7 +863,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     e.printStackTrace();
                 }
 
-            }else{
+            } else {
                 try {
                     obj.put("location", location);
                     obj.put("isCompleted", isCompleted);
@@ -1070,24 +1068,27 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
 
-        edtQuery.addTextChangedListener(new TextWatcher() {
+        edtQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-            }
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    int length = edtQuery.getText().length();
+                    try {
+                        if (length > 0)
+                            getLeadByText(edtQuery.getText().toString(), dialog);
 
-            }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                getLeadByText(editable.toString(), dialog);
-
+                    return true;
+                }
+                return false;
             }
         });
+
 
         dialog.show();
     }
@@ -1153,11 +1154,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     private void getLeadByText(String query, Dialog dialog) {
 
+        showProgressBar();
         Call<GetLeadTitlesModel> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadTitlesModel(GH.getInstance().getAuthorization(), query);
         _callToday.enqueue(new Callback<GetLeadTitlesModel>() {
             @Override
             public void onResponse(Call<GetLeadTitlesModel> call, Response<GetLeadTitlesModel> response) {
+                hideProgressBar();
                 GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
@@ -1182,6 +1185,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
             @Override
             public void onFailure(Call<GetLeadTitlesModel> call, Throwable t) {
+                hideProgressBar();
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
             }
         });

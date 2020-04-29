@@ -80,10 +80,15 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
         if (mData != null && 0 <= position && position < mData.size()) {
 
             modelData = mData.get(position);
-
+            String date="";
+            if (modelData.getStart()!=null || modelData.getStart().equalsIgnoreCase("Null")
+                    || !modelData.getStart().equals("")) {
+                String start[] = modelData.getStart().split("/");
+                    date = start[1];
+            }
             holder.tvTitle.setText(modelData.getTitle() != null ? modelData.getTitle() : "");
-            holder.tvCount.setText(modelData.getCount() != null ? String.valueOf(modelData.getCount()) : "0");
-
+            //holder.tvCount.setText(modelData.getCount() != null ? String.valueOf(modelData.getCount()) : "0");
+            holder.tvCount.setText(date);
 
             holder.swipeLayout.setSwipeListener(new SwipeRevealLayout.SwipeListener() {
                 @Override
@@ -334,9 +339,9 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                 if (calendarDetailModel.isAllDay) {
                     tvTime.setText("All Day");
                 } else {
-                    tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss") + " - " + GH.getInstance().formatter(endTime[1], "hh:mm:ss a", "HH:mm:ss"));
+                    tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm a", "HH:mm:ss") + " - " + GH.getInstance().formatter(endTime[1], "hh:mm a", "HH:mm:ss"));
                 }
-                tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd"));
+                tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE, MMM dd, yyyy", "yyyy-MM-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE, MMM dd, yyyy", "yyyy-MM-dd"));
             }
             tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
             tvLocation.setText(calendarDetailModel.getLocation() != null ? calendarDetailModel.getLocation() : "");

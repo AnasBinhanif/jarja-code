@@ -777,7 +777,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     public String formattedTime(String time) {
 
         try {
-            final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.getDefault());
+            final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault());
             final Date dateObj = sdf.parse(time);
             return new SimpleDateFormat("MM-dd-yyyy  hh:mm a", Locale.getDefault()).format(dateObj);
 

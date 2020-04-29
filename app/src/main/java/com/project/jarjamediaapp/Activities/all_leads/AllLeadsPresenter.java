@@ -65,6 +65,46 @@ public class AllLeadsPresenter extends BasePresenter<AllLeadsContract.View> impl
     }
 
     @Override
+    public void SearchLead(int pageNo, String query) {
+
+
+        _view.showProgressBar();
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).SearchLead(GH.getInstance().getAuthorization(),
+                pageNo,query);
+        _call.enqueue(new Callback<GetAllLeads>() {
+            @Override
+            public void onResponse(Call<GetAllLeads> call, Response<GetAllLeads> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetAllLeads getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetAllLeads> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
     public void getAllLeads(String leadID, String spouseName, String email, String company, String phone, String address, String city,
                             String state, String county, String zip, String countryID, String propertyType, String timeFrameID, String preApproval,
                             String houseToSell, String agentID, String leadTypeID, String leadScoreMin, String leadScoreMax, String tagsID,

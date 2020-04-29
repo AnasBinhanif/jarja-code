@@ -494,6 +494,12 @@ public interface ApiMethods {
             @Field("pageSize") String pageSize
     );
 
+    @GET("Lead/SearchLead")
+    Call<GetAllLeads> SearchLead(
+            @Header("Authorization") String authorization,
+            @Query("PageNo") int PageNo,
+            @Query("Search") String Search);
+
     @FormUrlEncoded
     @POST("Lead/GetAllLead")
     Call<GetAllLeads> GetAllLead(

@@ -123,7 +123,7 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
                 .titleSize(25)
                 .positiveText("Done")
                 .negativeText("Cancel")
-                .setMinSelectionLimit(1)
+                .setMinSelectionLimit(0)
                 .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {

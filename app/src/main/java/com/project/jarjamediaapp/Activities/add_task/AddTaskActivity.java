@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -418,7 +420,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvNameTask.setText(taskDetail.data.name);
         bi.atvDescription.setText(taskDetail.data.description);
         bi.tvName.setText(taskDetail.data.firstName);
-        bi.atvType.setText(taskDetail.data.type);
+        //bi.atvType.setText(taskDetail.data.type);
         bi.atvType.setText(taskDetail.data.type, false);
         reoccur = String.valueOf(taskDetail.data.scheduleRecurID);
         Log.d("recur", reoccur);
@@ -1122,22 +1124,27 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
 
-        edtQuery.addTextChangedListener(new TextWatcher() {
+        edtQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+                    int length = edtQuery.getText().length();
+                    try {
+                        if (length > 0)
+                            getLeadByText(edtQuery.getText().toString(), dialog);
 
-                getLeadByText(editable.toString(), dialog);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
+                    return true;
+                }
+                return false;
             }
         });
+
 
         dialog.show();
     }

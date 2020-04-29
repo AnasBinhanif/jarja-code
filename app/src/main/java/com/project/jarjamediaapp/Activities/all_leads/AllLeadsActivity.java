@@ -4,10 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -39,7 +40,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     ActivityAllleadsBinding bi;
     Context context = AllLeadsActivity.this;
     AllLeadsPresenter presenter;
-    ArrayList<GetAllLeads.LeadsList> leadsList ;
+    ArrayList<GetAllLeads.LeadsList> leadsList;
     ArrayList<GetPropertyLeads.LeadsList> propertyleadsList = new ArrayList<>();
     String mSearchQuery = "", propertyID = "";
     String resultSetType = "All";
@@ -48,7 +49,8 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     int page = 0;
     int totalPages, type = 0;
     RecyclerAdapterUtil recyclerAdapterUtil;
-    boolean isLoading = false;
+    boolean isLoading = false, isFilter = false;
+    GetAllLeads modelGetAllLeads;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,31 +94,46 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         super.onResume();
         leadsList.clear();
         page = 0;
-       handleIntent();
+        if (bi.edtSearch.getText().toString().equals("")){
+            handleIntent();
+        }else{
+            leadsList = new ArrayList<>();
+            page = 0;
+            isFilter = true;
+            presenter.SearchLead(page, bi.edtSearch.getText().toString());
+        }
     }
 
     @Override
     public void initViews() {
 
         leadsList = new ArrayList<>();
-        bi.edtSearch.onActionViewExpanded();
-        bi.edtSearch.clearFocus();
-        bi.edtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        initPagination();
+        bi.edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                mSearchQuery = newText;
-                isLoading = true;
-                ArrayList<GetAllLeads.LeadsList> filteredlist = filter(leadsList, newText);
-                populateListData(filteredlist);
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+                    int length = bi.edtSearch.getText().length();
+                    try {
+                        if (length > 0) {
+                            leadsList = new ArrayList<>();
+                            page = 0;
+                            isFilter = true;
+                            presenter.SearchLead(page, bi.edtSearch.getText().toString());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return true;
+                }
                 return false;
             }
         });
-        initPagination();
+
+
     }
 
     private void initPagination() {
@@ -134,6 +151,10 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
                     Log.d("scroll", "last item");
                     if (!isLoading) {
+                        if (isFilter) {
+                            totalPages = modelGetAllLeads.data.noOfPages;
+                        }
+
                         if (totalPages > leadsList.size()) {
                             page++;
                             int pg = page * 25;
@@ -145,6 +166,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                             }
                             Log.d("scroll", "More to come");
                         }
+
                     }
                 }
             }
@@ -341,6 +363,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             bi.lnAllLeads.setVisibility(View.VISIBLE);
             bi.tvNoRecordFound.setVisibility(View.GONE);
             populateListData(leadsList);
+            modelGetAllLeads = response;
         }
     }
 

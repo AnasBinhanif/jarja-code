@@ -52,6 +52,9 @@ public class GetLead implements Serializable {
         @SerializedName("isPrimaryAgent")
         @Expose
         public Boolean isPrimaryAgent;
+        @SerializedName("agentPicture")
+        @Expose
+        public String agentPicture;
     }
 
     public class LeadDripCompaignList implements Serializable {

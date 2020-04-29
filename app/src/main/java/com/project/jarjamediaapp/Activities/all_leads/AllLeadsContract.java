@@ -33,6 +33,7 @@ public interface AllLeadsContract {
     interface Actions extends BaseContract.Actions {
 
         void GetPropertyLeads(String propertyID);
+        void SearchLead(int pageNo,String query);
         void getAllLeads(String leadID, String spouseName, String email, String company, String phone, String address, String city, String state,
                            String county, String zip, String countryID, String propertyType, String timeFrameID, String preApproval, String houseToSell,
                            String agentID, String leadTypeID, String leadScoreMin, String leadScoreMax, String tagsID, String priceMin, String priceMax,

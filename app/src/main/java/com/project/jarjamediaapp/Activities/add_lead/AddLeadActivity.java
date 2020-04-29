@@ -124,7 +124,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             if (leadModel.dateOfBirth == null || leadModel.dateOfBirth.equals("") || leadModel.dateOfBirth.equals("")) {
                 bi.edtBday.setText("");
             } else {
-                String _bday = GH.getInstance().formatter(leadModel.dateOfBirth, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+                String _bday = GH.getInstance().formatter(leadModel.dateOfBirth, "MM-dd-yyyy", "yyyy-MM-dd'T'HH:mm:ss");
                 bi.edtBday.setText(_bday);
                 bday = leadModel.dateOfBirth;
 
@@ -132,14 +132,14 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             if (leadModel.dateOfMarriage == null || leadModel.dateOfMarriage.equals("") || leadModel.dateOfMarriage.equals("")) {
                 bi.edtAnniversary.setText("");
             } else {
-                String anniv = GH.getInstance().formatter(leadModel.dateOfMarriage, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+                String anniv = GH.getInstance().formatter(leadModel.dateOfMarriage, "MM-dd-yyyy", "yyyy-MM-dd'T'HH:mm:ss");
                 bi.edtAnniversary.setText(anniv);
                 anniversary = leadModel.dateOfMarriage;
             }
             if (leadModel.spouseBirthday == null || leadModel.spouseBirthday.equals("") || leadModel.spouseBirthday.equals("")) {
                 bi.edtSpouseBday.setText("");
             } else {
-                String bday = GH.getInstance().formatter(leadModel.spouseBirthday, "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+                String bday = GH.getInstance().formatter(leadModel.spouseBirthday, "MM-dd-yyyy", "yyyy-MM-dd'T'HH:mm:ss");
                 bi.edtSpouseBday.setText(bday);
                 sBday = leadModel.spouseBirthday;
             }
@@ -938,7 +938,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     public void updateUI(Response<BaseResponse> response) {
         if (response.body().getStatus().equals("Success")) {
             if (isUpdate) {
-                ToastUtils.showToast(context, "Updated");
+                ToastUtils.showToast(context, "Updated Successfully");
             } else {
                 ToastUtils.showToast(context, "Added Successfully");
             }

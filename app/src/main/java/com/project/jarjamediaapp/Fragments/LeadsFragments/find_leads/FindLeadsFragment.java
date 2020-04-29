@@ -153,8 +153,8 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
         List<GetFindLeads> leadsList = new ArrayList<>();
 
-        leadsList.add(new GetFindLeads("New Leads", getLeadCountList.get(0).newLeadsCount));
         leadsList.add(new GetFindLeads("All Leads", getLeadCountList.get(0).allLeadsCount));
+        leadsList.add(new GetFindLeads("New Leads", getLeadCountList.get(0).newLeadsCount));
         leadsList.add(new GetFindLeads("Hot Leads", getLeadCountList.get(0).hotLeadsCount));
         leadsList.add(new GetFindLeads("Active Clients", getLeadCountList.get(0).activeLeadsCount));
         leadsList.add(new GetFindLeads("Under Contract", getLeadCountList.get(0).underContractLeadsCount));

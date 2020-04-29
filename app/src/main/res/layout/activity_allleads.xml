@@ -3,8 +3,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/colorWhite"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
 
         <include
             android:id="@+id/ep_toolbar"
@@ -12,44 +12,47 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <EditText
+            android:layout_below="@id/ep_toolbar"
+            android:id="@+id/edtSearch"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:inputType="textNoSuggestions|textVisiblePassword"
+            android:importantForAutofill="no"
+            android:background="@drawable/bg_search"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="10dp"
+            android:imeOptions="actionSearch"
+            android:gravity="center|left"
+            android:hint="@string/search"
+            android:paddingStart="12dp" />
 
         <TextView
             android:id="@+id/tvNoRecordFound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="No Record Found"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="25dp"
             android:textStyle="bold"
-            android:visibility="gone"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_centerInParent="true"/>
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/lnAllLeads"
             android:layout_width="match_parent"
-            android:visibility="visible"
             android:layout_height="match_parent"
-            android:layout_below="@id/ep_toolbar"
-            android:orientation="vertical">
-
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/edtSearch"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/bg_search"
-                android:paddingStart="12dp"
-                android:gravity="center|left"
-                android:drawablePadding="10dp"
-                android:drawableLeft="@drawable/ic_search"
-                android:queryHint="@string/search" />
+            android:layout_below="@id/edtSearch"
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewAllLeads"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_search"
                 android:layout_marginTop="2dp"
+                android:background="@drawable/bg_search"
                 android:nestedScrollingEnabled="false"
                 android:visibility="visible" />
 

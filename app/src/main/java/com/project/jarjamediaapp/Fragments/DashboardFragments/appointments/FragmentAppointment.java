@@ -36,7 +36,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     FragmentAppointmentBinding bi;
     AppointmentPresenter presenter;
     SwipeAppointmentRecyclerAdapter swipeAppointmentRecyclerAdapter;
-    boolean isFromActivity;
+    boolean isFromActivity, isTabClick = true;
     String leadID = "";
     List<GetAppointmentsModel.Data.Datum> appointmentList;
     List<GetAppointmentsModel.Data> leadAppointmentList;
@@ -87,7 +87,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         appointmentList.addAll(response.getData().getData());
         //appointmentList = response.getData().getData();
 
-        if(!isFromActivity){
+        if (!isFromActivity) {
             totalPages = response.getData().getTotalRecordCount() != null ? response.getData().getTotalRecordCount() : 0;
         }
         if (appointmentList.size() == 0) {
@@ -98,11 +98,13 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         } else {
             bi.tvNoRecordFound.setVisibility(View.GONE);
             bi.rvAppointments.setVisibility(View.VISIBLE);
-            if (swipeAppointmentRecyclerAdapter==null) {
+            if (isTabClick == true) {
                 swipeAppointmentRecyclerAdapter = new SwipeAppointmentRecyclerAdapter(context, getActivity(), appointmentList, isFromActivity, false);
                 bi.rvAppointments.setAdapter(swipeAppointmentRecyclerAdapter);
-            }else{
-                swipeAppointmentRecyclerAdapter.notifyDataSetChanged();
+            } else {
+                if (swipeAppointmentRecyclerAdapter != null) {
+                    swipeAppointmentRecyclerAdapter.notifyDataSetChanged();
+                }
             }
         }
 
@@ -184,6 +186,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                         if (totalPages > appointmentList.size()) {
                             page++;
                             try {
+                                isTabClick =false;
                                 hitApi();
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
@@ -214,6 +217,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
                 page = 1;
                 appointmentList.clear();
+                isTabClick =true;
                 buttonType = "T";
                 if (isFromActivity) {
                     presenter.getLeadTodayAppointments(leadID, page);
@@ -233,6 +237,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
             case R.id.btnUpcoming:
 
                 page = 1;
+                isTabClick =true;
                 appointmentList.clear();
                 buttonType = "U";
                 if (isFromActivity) {
@@ -257,6 +262,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
                 page = 1;
                 appointmentList.clear();
+                isTabClick =true;
                 buttonType = "P";
                 if (isFromActivity) {
 
@@ -346,6 +352,10 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         super.onResume();
 
         page = 1;
+        isTabClick =true;
+        if (appointmentList.size()!=0){
+            appointmentList.clear();
+        }
         hitApi();
     }
 }

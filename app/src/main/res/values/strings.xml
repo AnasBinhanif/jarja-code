@@ -9,7 +9,7 @@
     <string name="follow_up">Follow Ups</string>
     <string name="tasks">Tasks</string>
     <string name="today">Today</string>
-    <string name="Today_Agenda">TODAY AGENDA</string>
+    <string name="Today_Agenda">TODAY\'S AGENDA</string>
     <string name="upcoming">Upcoming</string>
     <string name="previous">Previous</string>
     <string name="search">Search</string>
@@ -19,7 +19,7 @@
     <string name="edit_appointment">Edit Appointment</string>
 
     <string name="edit">Edit</string>
-    <string name="_name_of_contact">Name Of Contact *</string>
+    <string name="_name_of_contact">Contact *</string>
     <string name="_agent">Agent *</string>
     <string name="_event_title">Event Title *</string>
     <string name="_description">Description *</string>
@@ -28,7 +28,7 @@
     <string name="_start_time">Start Time *</string>
     <string name="_end_time">End Time *</string>
     <string name="_reminder">Reminder *</string>
-    <string name="name_of_contact">Name Of Contact</string>
+    <string name="name_of_contact">Contact</string>
     <string name="agent">Agent</string>
     <string name="event_title">Event Title</string>
     <string name="event">Event</string>
@@ -48,7 +48,7 @@
     <string name="cancel">Cancel</string>
     <string name="select_begin">Select and Begin Typing</string>
     <string name="nothing_selected">Nothing Selected</string>
-    <string name="error_name">Please enter Name of Contact</string>
+    <string name="error_name">Please enter Contact</string>
     <string name="error_agent">Please enter Agent</string>
     <string name="error_title">Please enter Event title</string>
     <string name="error_description">Please enter Description</string>
@@ -59,8 +59,8 @@
 
     <!--- Add Task Activity -->
     <string name="add_task">Add Task</string>
-    <string name="name_of_task">Name The Task</string>
-    <string name="_name_of_task">Name The Task *</string>
+    <string name="name_of_task">Task</string>
+    <string name="_name_of_task">Task *</string>
     <string name="type">Type</string>
     <string name="_type">Type *</string>
     <string name="assign_to">Assign To</string>
@@ -99,7 +99,7 @@
     <string name="anniversary">Anniversary</string>
     <string name="company">Company</string>
     <string name="country">Country</string>
-    <string name="county">County</string>
+    <string name="county">Country</string>
     <string name="source">Source</string>
     <string name="time_fram">Time Frame</string>
     <string name="pre_approved">Pre-Approved</string>

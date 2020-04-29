@@ -22,6 +22,9 @@ public class GetAllLeads {
         @SerializedName("message")
         @Expose
         public Object message;
+        @SerializedName("noOfPages")
+        @Expose
+        public int noOfPages;
         @SerializedName("status")
         @Expose
         public Boolean status;

@@ -23,7 +23,7 @@
             android:layout_height="@dimen/_130sdp"
             android:layout_centerInParent="true"
             android:contentDescription="@string/no_img"
-            android:src="@drawable/logo_round" />
+            android:src="@drawable/logo_new" />
 
         <TextView
             android:layout_width="match_parent"

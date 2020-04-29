@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
 import com.airbnb.paris.Paris;
+import com.bumptech.glide.Glide;
 import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
 import com.project.jarjamediaapp.Activities.appointments.AppointmentActivity;
 import com.project.jarjamediaapp.Activities.followups.FollowupsActivity;
@@ -65,6 +66,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
@@ -435,7 +437,9 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 break;
 
             case R.id.imgCall:
-                callDialer(primaryPhoneNumber);
+                // callDialer(primaryPhoneNumber);
+
+
                 break;
 
             case R.id.imgEditLead:
@@ -598,6 +602,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetLead.AgentsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
 
             TextView tvName = (TextView) integerMap.get(R.id.tvAssignedToName);
+            CircleImageView imageView = (CircleImageView) integerMap.get(R.id.imgAssignedTo);
             tvName.setText(String.valueOf(allLeadsList.agentName));
 
             TextView tvIsPrimary = (TextView) integerMap.get(R.id.tvPrimary);
@@ -607,6 +612,19 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             } else {
                 tvIsPrimary.setVisibility(View.INVISIBLE);
             }
+
+            if (allLeadsList.agentPicture != null && !allLeadsList.agentPicture.equalsIgnoreCase("null")
+                    && !allLeadsList.agentPicture.equalsIgnoreCase("")) {
+
+                Glide.with(context)
+                        .load(allLeadsList.agentPicture)
+                        .into(imageView);
+            }else{
+                Glide.with(context)
+                        .load(getResources().getDrawable(R.drawable.avataer_male))
+                        .into(imageView);
+            }
+
 
             return Unit.INSTANCE;
         });

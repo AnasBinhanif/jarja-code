@@ -44,6 +44,7 @@
                 android:background="@drawable/bg_search"
                 android:hint="@string/name_of_contact"
                 android:importantForAutofill="no"
+                android:imeOptions="actionSearch"
                 android:inputType="textNoSuggestions|textVisiblePassword"
                 android:paddingLeft="12dp"
                 android:textSize="14dp" />

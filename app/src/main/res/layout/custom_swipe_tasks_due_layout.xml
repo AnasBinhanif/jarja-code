@@ -18,11 +18,11 @@
             android:layout_width="80dp"
             android:layout_height="match_parent"
             android:background="@color/colorBlue"
+            android:drawableTop="@drawable/ic_edit"
+            android:drawablePadding="-20dp"
             android:gravity="center"
             android:paddingTop="20dp"
-            android:drawablePadding="-20dp"
             android:text="Edit"
-            android:drawableTop="@drawable/ic_edit"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -30,10 +30,10 @@
             android:layout_width="80dp"
             android:layout_height="match_parent"
             android:background="@color/colorGreen"
+            android:drawableTop="@drawable/ic_done"
+            android:drawablePadding="-20dp"
             android:gravity="center"
             android:paddingTop="20dp"
-            android:drawablePadding="-20dp"
-            android:drawableTop="@drawable/ic_done"
             android:text="Done"
             android:textColor="@android:color/white" />
 
@@ -43,17 +43,17 @@
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/colorWhite"
-        android:visibility="visible"
-        android:layout_height="match_parent">
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"
             android:gravity="center|left"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/tvInitial"
@@ -62,8 +62,8 @@
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/round_initials_lead"
                 android:gravity="center"
-                android:textAllCaps="true"
                 android:text="BR"
+                android:textAllCaps="true"
                 android:textColor="@color/colorAccent"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -76,17 +76,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
-                    android:paddingRight="10dp"
-                    android:layout_toStartOf="@+id/imgCall"
+                    android:layout_toStartOf="@+id/tvTaskType"
                     android:gravity="left|center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingRight="10dp">
 
                     <TextView
                         android:id="@+id/tvName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryDark"
                         android:text="NAME NAME NAME NAME NAME NAME"
+                        android:textColor="@color/colorPrimaryDark"
                         android:textSize="16dp"
                         android:textStyle="bold" />
 
@@ -94,27 +94,30 @@
                         android:id="@+id/tvAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorGreyText"
-                        android:text="Address Address Address Address"
                         android:layout_marginTop="5dp"
+                        android:text="Address Address Address Address"
+                        android:textColor="@color/colorGreyText"
                         android:textSize="14dp"
                         android:textStyle="bold" />
 
 
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/imgCall"
+                <TextView
+                    android:id="@+id/tvTaskType"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_call" />
-            </RelativeLayout>
+                    android:layout_marginRight="15dp"
+                    android:text="Follow Up"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="13dp" />
 
+            </RelativeLayout>
 
         </LinearLayout>
 
     </FrameLayout>
+
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

@@ -71,10 +71,13 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
 
             GetTasksModel.Data.TaskList modelData = mData.get(position);
 
+            holder.tvTaskType.setText(modelData.type);
+
             holder.tvName.setText(modelData.name + " for " + modelData.agentName);
             holder.tvAddress.setText(modelData.firstName + " " + modelData.lastName);
 
             holder.tvInitial.setText(modelData.name.substring(0, 1));
+
 
             holder.frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -103,7 +106,6 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
                     view.getParent().requestDisallowInterceptTouchEvent(true);
                 }
             });
-
 
             // Use ViewBindHelper to restore and save the open/close state of the SwipeRevealView
             // put an unique string id as value, can be any string which uniquely define the data
@@ -173,7 +175,7 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
     private class ViewHolder extends RecyclerView.ViewHolder {
 
         private SwipeRevealLayout swipeLayout;
-        TextView tvName, tvAddress, tvEdit, tvDone, tvInitial;
+        TextView tvName, tvAddress, tvEdit, tvDone, tvInitial,tvTaskType;
         FrameLayout frameLayout;
 
         public ViewHolder(View itemView) {
@@ -187,6 +189,7 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
             tvDone = itemView.findViewById(R.id.tvDone);
             tvAddress = itemView.findViewById(R.id.tvAddress);
             tvInitial = itemView.findViewById(R.id.tvInitial);
+            tvTaskType = itemView.findViewById(R.id.tvTaskType);
         }
 
         public void bind() {

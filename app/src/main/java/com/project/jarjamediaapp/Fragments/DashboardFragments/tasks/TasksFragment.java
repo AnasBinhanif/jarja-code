@@ -37,7 +37,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     Context context;
     TasksPresenter presenter;
     SwipeTasksRecyclerAdapter swipeTasksRecyclerAdapter;
-    boolean isFromActivity;
+    boolean isFromActivity,isTabClick=true;
     String leadID = "";
     int page = 0;
     int totalPages;
@@ -93,11 +93,25 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
         } else {
             bi.tvNoRecordFound.setVisibility(View.GONE);
             bi.rvTasks.setVisibility(View.VISIBLE);
-            if (swipeTasksRecyclerAdapter==null) {
-                swipeTasksRecyclerAdapter = new SwipeTasksRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, taskType.equalsIgnoreCase("future") ? true : false);
-                bi.rvTasks.setAdapter(swipeTasksRecyclerAdapter);
-            }else{
-                swipeTasksRecyclerAdapter.notifyDataSetChanged();
+            if (isTabClick==true) {
+                switch (taskType){
+                    case "due":
+                        swipeTasksRecyclerAdapter = new SwipeTasksRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
+                        bi.rvTasks.setAdapter(swipeTasksRecyclerAdapter);
+                        break;
+                    case "overDue":
+                        swipeTasksRecyclerAdapter = new SwipeTasksRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
+                        bi.rvTasks.setAdapter(swipeTasksRecyclerAdapter);
+                        break;
+                    case "future":
+                        swipeTasksRecyclerAdapter = new SwipeTasksRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, true);
+                        bi.rvTasks.setAdapter(swipeTasksRecyclerAdapter);
+                        break;
+                }
+            } else {
+                if (swipeTasksRecyclerAdapter !=null) {
+                    swipeTasksRecyclerAdapter.notifyDataSetChanged();
+                }
             }
         }
 
@@ -126,6 +140,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                         if (totalPages > tasksList.size()) {
                             page++;
                             try {
+                                isTabClick=false;
                                 hitApi();
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
@@ -221,6 +236,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
             case R.id.btnTaskDue:
 
                 taskType = "due";
+                isTabClick = true;
                 tasksList.clear();
                 page = 0;
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonYellowLeft);
@@ -238,6 +254,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
             case R.id.btnTaskOverDue:
 
                 taskType = "overDue";
+                isTabClick = true;
                 tasksList.clear();
                 page = 0;
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonTranparentLeft);
@@ -255,6 +272,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
             case R.id.btnTaskFutureTask:
 
                 taskType = "future";
+                isTabClick = true;
                 tasksList.clear();
                 page = 0;
                 Paris.style(bi.btnTaskDue).apply(R.style.TabButtonTranparentLeft);
@@ -274,7 +292,10 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
         super.onResume();
 
         page = 0;
-        tasksList.clear();
+        if (tasksList.size() != 0) {
+            tasksList.clear();
+        }
+        isTabClick = true;
         hitApi();
 
     }

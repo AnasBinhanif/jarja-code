@@ -45,8 +45,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void setupViews() {
 
-        bi.atvEmail.setText("bunny@outlook.com");
-        bi.atvPassword.setText("admin");
+       /* bi.atvEmail.setText("bunny@outlook.com");
+        bi.atvPassword.setText("admin");*/
 
         bi.tvForgotPassword.setOnClickListener(this);
         bi.btnLogin.setOnClickListener(this);
