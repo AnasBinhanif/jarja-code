@@ -35,6 +35,7 @@
             android:paddingLeft="12dp"
             android:layout_marginTop="15dp"
             android:textSize="14dp"
+            android:inputType="textCapSentences"
             android:background="@drawable/bg_search" />
 
         <HorizontalScrollView

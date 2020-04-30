@@ -43,6 +43,7 @@
             android:layout_marginTop="10dp"
             android:singleLine="true"
             android:maxLength="25"
+            android:inputType="textCapSentences"
             android:background="@drawable/bg_search"
             android:hint="@string/name"
             android:paddingLeft="12dp"

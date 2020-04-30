@@ -378,6 +378,7 @@
                         android:textColorHint="@color/colorTitle"
                         android:layout_marginTop="5dp"
                         android:textSize="14dp"
+                        android:inputType="textCapSentences"
                         android:paddingRight="12dp"
                         android:background="@drawable/bg_edt_dark" />
 

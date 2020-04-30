@@ -57,6 +57,7 @@
                         android:layout_marginTop="5dp"
                         android:background="@drawable/bg_search"
                         android:hint="@string/name_of_contact"
+                        android:inputType="textCapSentences"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="@dimen/_11sdp" />
@@ -80,6 +81,7 @@
                     android:background="@drawable/bg_search"
                     android:hint="@string/nothing_selected"
                     android:padding="@dimen/_10sdp"
+                    android:inputType="textCapSentences"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_11sdp" />
 
@@ -111,6 +113,7 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_search"
                     android:hint="@string/event_title"
+                    android:inputType="textCapSentences"
                     android:imeOptions="actionNext"
                     android:padding="@dimen/_10sdp"
                     android:singleLine="true"
@@ -135,7 +138,7 @@
                     android:hint="@string/location"
                     android:imeActionLabel="@string/search"
                     android:imeOptions="actionNext"
-                    android:inputType="textPostalAddress"
+                    android:inputType="textCapSentences"
                     android:padding="@dimen/_10sdp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_11sdp" />
@@ -157,7 +160,7 @@
                     android:background="@drawable/bg_search"
                     android:gravity="start|top"
                     android:hint="@string/description"
-                    android:inputType="textMultiLine"
+                    android:inputType="textMultiLine|textCapSentences"
                     android:lines="4"
                     android:padding="@dimen/_10sdp"
                     android:textColor="@color/colorPrimaryDark"

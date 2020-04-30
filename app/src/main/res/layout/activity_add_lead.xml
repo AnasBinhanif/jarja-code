@@ -44,7 +44,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/first_name"
                         android:imeOptions="actionNext"
-                        android:inputType="textPersonName"
+                        android:inputType="textCapSentences"
                         android:singleLine="true" />
 
                     <TextView
@@ -59,7 +59,7 @@
                         android:imeOptions="actionNext"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
+                        android:inputType="textCapSentences"
                         android:singleLine="true"
                         android:hint="@string/last_name" />
 
@@ -76,7 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/spouse_name"
-                        android:inputType="textPersonName"
+                        android:inputType="textCapSentences"
                         android:singleLine="true"/>
 
                     <TextView
@@ -90,6 +90,7 @@
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:imeOptions="actionNext"
+                        android:inputType="textCapSentences"
                         android:layout_height="wrap_content"
                         android:hint="@string/company" />
 
@@ -200,7 +201,7 @@
                         android:layout_width="match_parent"
                         android:imeOptions="actionNext"
                         android:layout_height="wrap_content"
-                        android:inputType="textPostalAddress"
+                        android:inputType="textPostalAddress|textCapSentences"
                         android:singleLine="true"
                         android:hint="@string/street_address_1" />
 
@@ -216,6 +217,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:singleLine="true"
+                        android:inputType="textCapSentences"
                         android:imeOptions="actionNext"
                         android:hint="@string/city_1" />
 
@@ -230,6 +232,7 @@
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:singleLine="true"
+                        android:inputType="textCapSentences"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
                         android:hint="@string/state_1" />
@@ -264,7 +267,7 @@
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
                         android:singleLine="true"
-
+                        android:inputType="textCapSentences"
                         android:hint="@string/street_address_2" />
 
                     <TextView
@@ -279,6 +282,7 @@
                         android:layout_width="match_parent"
                         android:imeOptions="actionNext"
                         android:singleLine="true"
+                        android:inputType="textCapSentences"
                         android:layout_height="wrap_content"
                         android:hint="@string/city_2" />
 
@@ -295,6 +299,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
+                        android:inputType="textCapSentences"
                         android:imeOptions="actionNext"
                         android:hint="@string/state_2" />
 
@@ -326,6 +331,7 @@
                         style="@style/AutoCompleteStyle"
                         android:imeOptions="actionNext"
                         android:singleLine="true"
+                        android:inputType="textCapSentences"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/county" />
@@ -503,7 +509,7 @@
                         android:gravity="top"
                         android:imeOptions="actionDone"
                         android:hint="@string/add_notes"
-                        android:inputType="textMultiLine"
+                        android:inputType="textMultiLine|textCapSentences"
                         android:lines="5" />
 
                     <Button

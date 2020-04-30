@@ -49,7 +49,7 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_search"
                     android:hint="@string/name_of_task"
-                    android:inputType="textPersonName"
+                    android:inputType="textCapSentences"
                     android:padding="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColor="@color/colorPrimaryDark"
@@ -72,7 +72,7 @@
                     android:background="@drawable/bg_search"
                     android:gravity="top"
                     android:hint="@string/description"
-                    android:inputType="textMultiLine"
+                    android:inputType="textMultiLine|textCapSentences"
                     android:imeOptions="actionNext"
                     android:lines="4"
                     android:padding="@dimen/_10sdp"
@@ -100,6 +100,7 @@
                     android:gravity="center|start"
                     android:hint="@string/name_of_contact"
                     android:padding="@dimen/_10sdp"
+                    android:inputType="textCapSentences"
                     android:singleLine="true"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_11sdp" />
@@ -160,6 +161,7 @@
                     android:focusable="false"
                     android:padding="@dimen/_10sdp"
                     android:singleLine="true"
+                    android:inputType="textCapSentences"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_11sdp" />
 
@@ -332,6 +334,7 @@
                     android:hint="@string/property_address"
                     android:imeOptions="actionDone"
                     android:singleLine="true"
+                    android:inputType="textCapSentences"
                     android:padding="@dimen/_10sdp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_12sdp" />
@@ -367,7 +370,6 @@
                         android:textColor="@color/colorWhite" />
 
                 </LinearLayout>
-
 
             </LinearLayout>
 
