@@ -149,7 +149,9 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
                             ToastUtils.showToast(context, "No EncryptedID Found");
                         }
 
-                        presenter.assignTags(leadID, tagsIdsString);
+                        if (!tagsIdsString.equals("")) {
+                            presenter.assignTags(leadID, tagsIdsString);
+                        }
                     }
 
                     @Override
