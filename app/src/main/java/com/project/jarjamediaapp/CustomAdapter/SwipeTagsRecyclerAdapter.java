@@ -156,7 +156,7 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
                     BaseResponse getAppointmentsModel = response.body();
                     if (getAppointmentsModel.getStatus().equals("Success")) {
 
-                        ToastUtils.showToast(context, "Successfully Done");
+                        ToastUtils.showToast(context, "Removed Successfully");
                         TagsActivity.selectedTagIdsList.remove(mData.get(pos).tagID);
                         mData.remove(pos);
                         swipeRevealLayout.close(true);
