@@ -25,6 +25,7 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
     Call<GetLeadTransactionStage> _callGetLeadTransactionStage;
     Call<LeadDetailModel> _callLead;
     Call<UploadImageModel> _cCall;
+    Call<GetCallerId> _cTwilio;
 
     public LeadDetailPresenter(LeadDetailContract.View view) {
         super(view);
@@ -145,7 +146,6 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
 
     @Override
     public void getTransaction(String leadID) {
-
 
         _view.showProgressBar();
         _callGetLeadTransactionStage = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadTransactionStage(GH.getInstance().getAuthorization(), leadID);
@@ -305,7 +305,7 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
     public void sendMessageContent(String fromPhoneNumber, String message, String leadId) {
 
         _view.showProgressBar();
-        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).sendMessage(GH.getInstance().getAuthorization(), fromPhoneNumber,message,leadId);
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).sendMessage(GH.getInstance().getAuthorization(), fromPhoneNumber, message, leadId);
         call.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
@@ -338,6 +338,43 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
         });
 
 
+    }
+
+    @Override
+    public void getCallerId(String leadId) {
+
+        _view.showProgressBar();
+        _cTwilio = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getCallerId(GH.getInstance().getAuthorization(), leadId);
+        _cTwilio.enqueue(new Callback<GetCallerId>() {
+            @Override
+            public void onResponse(Call<GetCallerId> call, Response<GetCallerId> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetCallerId getCallerId = response.body();
+                    if (getCallerId.getStatus().equals("Success")) {
+
+                        _view.updateUIonCall(getCallerId);
+
+                    } else {
+
+                        _view.updateUIonFalse(getCallerId.getMessage());
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetCallerId> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
 
     }
 

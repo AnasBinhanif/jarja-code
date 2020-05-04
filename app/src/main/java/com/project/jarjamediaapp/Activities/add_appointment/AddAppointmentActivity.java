@@ -276,7 +276,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         }
     }
 
-
     private void setViewAndChildrenEnabled(View view, boolean enabled) {
         view.setEnabled(enabled);
         if (view instanceof ViewGroup) {
@@ -894,22 +893,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             String jsonObjectString = obj.toString();
             Log.d("json", jsonObjectString);
 
+            presenter.addAppointment(jsonObjectString, fromId);
 
-            if (fromId.equals("3")) {
-                presenter.addAppointment(jsonObjectString, fromId);
-            } else if (fromId.equals("5")) {
-                presenter.addAppointment(jsonObjectString, fromId);
-            } else if (from.equals("1")) {
-                presenter.addAppointment(jsonObjectString, fromId);
-            } else if (from.equals("6")) {
-                presenter.addAppointment(jsonObjectString, fromId);
-            } else if (fromId.equalsIgnoreCase("4") || fromId.equalsIgnoreCase("2")) {
-                presenter.addAppointment(jsonObjectString, fromId);
-            } else {
-                presenter.addAppointment(leadStringID, agentsID, leadAppointmentID, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend,
-                        appointmentDate, datedFrom, datedTo, isAllDay, interval, isSend, viaReminder, agentsID, orderBy, timedFrom, timedTo,
-                        isCompleted, fromId, calendarId, encryptedAppointmentId, "0");
-            }
 
         }
     }

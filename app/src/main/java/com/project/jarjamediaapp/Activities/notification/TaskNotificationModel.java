@@ -6,7 +6,7 @@ import com.project.jarjamediaapp.Base.BaseResponse;
 
 import java.util.List;
 
-public class NotificationModel extends BaseResponse {
+public class TaskNotificationModel extends BaseResponse {
 
     @SerializedName("data")
     @Expose
@@ -17,12 +17,6 @@ public class NotificationModel extends BaseResponse {
         @SerializedName("taskList")
         @Expose
         public List<TaskList> taskList = null;
-        @SerializedName("message")
-        @Expose
-        public Object message;
-        @SerializedName("status")
-        @Expose
-        public Boolean status;
 
         public class TaskList {
 
@@ -91,9 +85,13 @@ public class NotificationModel extends BaseResponse {
             }
         }
 
+        public List<TaskList> getTaskList() {
+            return taskList;
+        }
     }
 
     public Data getData() {
         return data;
     }
+
 }

@@ -30,6 +30,8 @@ public interface LeadDetailContract {
 
         void updateUIMessageSent(Response<BaseResponse> response);
 
+        void updateUIonCall(GetCallerId response);
+
         void updateUIonFalse(String message);
 
         void updateUIonError(String error);
@@ -65,6 +67,8 @@ public interface LeadDetailContract {
         void uploadFile(MultipartBody.Part file, String emailFrom);
 
         void sendMessageContent(String fromPhoneNumber, String message, String leadId);
+
+        void getCallerId(String leadId);
 
     }
 

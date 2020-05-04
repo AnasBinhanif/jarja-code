@@ -32,8 +32,10 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     ActivityNotificationBinding bi;
     Context context = NotificationActivity.this;
     NotificationPresenter presenter;
-    List<NotificationModel.Data.TaskList> notificationList;
-    RecyclerAdapterUtil recyclerAdapterUtil;
+    List<TaskNotificationModel.Data.TaskList> notificationListT;
+    List<AppointmentNotificationModel.Data> notificationListA;
+    List<FollowUpNotificationModel.Data> notificationListF;
+    RecyclerAdapterUtil recyclerAdapterUtilT, recyclerAdapterUtilA, recyclerAdapterUtilF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,29 +47,40 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         setToolBarTitle(bi.epToolbar.toolbar, "Notifications", true);
     }
 
-    private void populateListData() {
+    private void populateListDataT() {
 
         bi.rvNotifications.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
         bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
-        recyclerAdapterUtil = new RecyclerAdapterUtil(context, notificationList, R.layout.custom_notifications_layout);
-        recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail);
+        recyclerAdapterUtilT = new RecyclerAdapterUtil(context, notificationListT, R.layout.custom_notifications_layout);
+        recyclerAdapterUtilT.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail);
 
-        recyclerAdapterUtil.addOnDataBindListener((Function4<View, NotificationModel.Data.TaskList, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
+        recyclerAdapterUtilT.addOnDataBindListener((Function4<View, TaskNotificationModel.Data.TaskList, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
 
             try {
 
                 TextView tvName = (TextView) integerMap.get(R.id.tvName);
-                tvName.setText(data.getTaskName() != null ? data.getTaskName() : "");
+                tvName.setText(data.getTaskName() != null ? data.getTaskName() : "N/A");
 
-                TextView tvDesc = (TextView) integerMap.get(R.id.tvLeadName);
-                tvDesc.setText(data.getVtCRMLeadCustom().getFirstName() != null && data.getVtCRMLeadCustom().getLastName() != null ? data.getVtCRMLeadCustom().getFirstName() + " " + data.getVtCRMLeadCustom().getLastName() : "");
+                TextView tvLeadName = (TextView) integerMap.get(R.id.tvLeadName);
+
+                String firstName = data.getVtCRMLeadCustom().getFirstName();
+                String lastName = data.getVtCRMLeadCustom().getFirstName();
+                if (firstName != null && lastName != null) {
+                    tvLeadName.setText(firstName + " " + lastName);
+                } else if (firstName == null && lastName != null) {
+                    tvLeadName.setText(lastName);
+                } else if (firstName != null && lastName == null) {
+                    tvLeadName.setText(firstName);
+                } else if (firstName == null && lastName == null) {
+                    tvLeadName.setText("N/A");
+                }
 
                 TextView tvContact = (TextView) integerMap.get(R.id.tvContact);
-                tvContact.setText(data.getVtCRMLeadCustom().getPrimaryPhone() != null ? data.getVtCRMLeadCustom().getPrimaryPhone() : "");
+                tvContact.setText(data.getVtCRMLeadCustom().getPrimaryPhone() != null ? data.getVtCRMLeadCustom().getPrimaryPhone() : "N/A");
 
                 TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
-                tvEmail.setText(data.getVtCRMLeadCustom().getPrimaryEmail() != null ? data.getVtCRMLeadCustom().getPrimaryEmail() : "");
+                tvEmail.setText(data.getVtCRMLeadCustom().getPrimaryEmail() != null ? data.getVtCRMLeadCustom().getPrimaryEmail() : "N/A");
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -76,7 +89,92 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
             return Unit.INSTANCE;
         });
 
-        bi.rvNotifications.setAdapter(recyclerAdapterUtil);
+        bi.rvNotifications.setAdapter(recyclerAdapterUtilT);
+        bi.rvNotifications.setVisibility(View.VISIBLE);
+
+    }
+
+    private void populateListDataA() {
+
+        bi.rvNotifications.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
+        bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
+        recyclerAdapterUtilA = new RecyclerAdapterUtil(context, notificationListA, R.layout.custom_notifications_layout);
+        recyclerAdapterUtilA.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail);
+
+        recyclerAdapterUtilA.addOnDataBindListener((Function4<View, AppointmentNotificationModel.Data, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
+
+            try {
+
+                TextView tvName = (TextView) integerMap.get(R.id.tvName);
+                tvName.setText(data.getEventTitle() != null ? data.getEventTitle() : "N/A");
+
+                TextView tvLeadName = (TextView) integerMap.get(R.id.tvLeadName);
+
+                String firstName = data.getVtCRMLeadCustom().getFirstName();
+                String lastName = data.getVtCRMLeadCustom().getFirstName();
+                if (firstName != null && lastName != null) {
+                    tvLeadName.setText(firstName + " " + lastName);
+                } else if (firstName == null && lastName != null) {
+                    tvLeadName.setText(lastName);
+                } else if (firstName != null && lastName == null) {
+                    tvLeadName.setText(firstName);
+                } else if (firstName == null && lastName == null) {
+                    tvLeadName.setText("N/A");
+                }
+
+                TextView tvContact = (TextView) integerMap.get(R.id.tvContact);
+                tvContact.setText(data.getVtCRMLeadCustom().getPrimaryPhone() != null ? data.getVtCRMLeadCustom().getPrimaryPhone() : "N/A");
+
+                TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
+                tvEmail.setText(data.getVtCRMLeadCustom().getPrimaryEmail() != null ? data.getVtCRMLeadCustom().getPrimaryEmail() : "N/A");
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return Unit.INSTANCE;
+        });
+
+        bi.rvNotifications.setAdapter(recyclerAdapterUtilA);
+        bi.rvNotifications.setVisibility(View.VISIBLE);
+
+    }
+
+    private void populateListDataF() {
+
+        bi.rvNotifications.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
+        bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
+        recyclerAdapterUtilF = new RecyclerAdapterUtil(context, notificationListF, R.layout.custom_notifications_layout);
+        recyclerAdapterUtilF.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail);
+
+        recyclerAdapterUtilF.addOnDataBindListener((Function4<View, FollowUpNotificationModel.Data, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
+
+            try {
+
+                TextView tvName = (TextView) integerMap.get(R.id.tvName);
+                tvName.setText(data.getFollowUpsType() != null ? data.getFollowUpsType() : "N/A");
+
+                TextView tvLeadName = (TextView) integerMap.get(R.id.tvLeadName);
+                tvLeadName.setText(data.getLeadName() != null ? data.getLeadName() : "N/A");
+
+                TextView tvContact = (TextView) integerMap.get(R.id.tvContact);
+                tvContact.setText(data.getAddress() != null ? data.getAddress() : "N/A");
+
+                TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
+                tvEmail.setText(data.getDripType() != null ? data.getDripType() : "N/A");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return Unit.INSTANCE;
+        });
+
+        bi.rvNotifications.setAdapter(recyclerAdapterUtilF);
+        bi.rvNotifications.setVisibility(View.VISIBLE);
 
     }
 
@@ -117,11 +215,12 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     @Override
     public void initViews() {
 
-        notificationList = new ArrayList<>();
+        notificationListT = new ArrayList<>();
+        notificationListA = new ArrayList<>();
+        notificationListF = new ArrayList<>();
         bi.btnTasks.setOnClickListener(this);
         bi.btnAppointments.setOnClickListener(this);
         bi.btnFollowUps.setOnClickListener(this);
-        populateListData();
         presenter.getNotificationByTasks();
 
     }
@@ -172,12 +271,51 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     }
 
     @Override
-    public void updateUIList(NotificationModel.Data response) {
+    public void updateUIListT(List<TaskNotificationModel.Data.TaskList> response) {
 
-        notificationList.clear();
-        if (response.taskList.size() > 0) {
-            notificationList.addAll(response.taskList);
-            recyclerAdapterUtil.notifyDataSetChanged();
+        populateListDataT();
+        notificationListA.clear();
+        notificationListF.clear();
+        notificationListT.clear();
+        if (response.size() > 0) {
+            notificationListT.addAll(response);
+            recyclerAdapterUtilT.notifyDataSetChanged();
+            bi.rvNotifications.setVisibility(View.VISIBLE);
+            bi.tvMessage.setVisibility(View.GONE);
+        } else {
+            bi.rvNotifications.setVisibility(View.GONE);
+            bi.tvMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void updateUIListA(List<AppointmentNotificationModel.Data> response) {
+
+        populateListDataA();
+        notificationListA.clear();
+        notificationListF.clear();
+        notificationListT.clear();
+        if (response.size() > 0) {
+            notificationListA.addAll(response);
+            recyclerAdapterUtilA.notifyDataSetChanged();
+            bi.rvNotifications.setVisibility(View.VISIBLE);
+            bi.tvMessage.setVisibility(View.GONE);
+        } else {
+            bi.rvNotifications.setVisibility(View.GONE);
+            bi.tvMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void updateUIListF(List<FollowUpNotificationModel.Data> response) {
+
+        populateListDataF();
+        notificationListA.clear();
+        notificationListF.clear();
+        notificationListT.clear();
+        if (response.size() > 0) {
+            notificationListF.addAll(response);
+            recyclerAdapterUtilF.notifyDataSetChanged();
             bi.rvNotifications.setVisibility(View.VISIBLE);
             bi.tvMessage.setVisibility(View.GONE);
         } else {

@@ -289,8 +289,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         if (isValidate()) {
 
-            presenter.addUpdateCalendarAppointmentViaTask(leadAppointmentID, isAppointmentAttend, datedFrom, datedTo,
-                    allDay, markComplete, title, description, isGmailAppActive, calendarType, gmailCalendarId);
+            presenter.addUpdateCalendarAppointmentViaTask(jsonObjectString,isEdit);
 
         }
 

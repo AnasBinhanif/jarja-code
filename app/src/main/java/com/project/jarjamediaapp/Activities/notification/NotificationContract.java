@@ -4,13 +4,15 @@ import com.project.jarjamediaapp.Base.BaseContract;
 
 import java.util.List;
 
-import retrofit2.Response;
-
 public interface NotificationContract {
 
     interface View extends BaseContract.View {
 
-        void updateUIList(NotificationModel.Data response);
+        void updateUIListT(List<TaskNotificationModel.Data.TaskList> response);
+
+        void updateUIListA(List<AppointmentNotificationModel.Data> response);
+
+        void updateUIListF(List<FollowUpNotificationModel.Data> response);
 
     }
 

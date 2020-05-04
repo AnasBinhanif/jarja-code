@@ -304,10 +304,10 @@ public class VoiceActivity extends AppCompatActivity {
     }
 
 
-    private void makeCall(String toNumber) {
-        params.put("From", "(424) 320-6595");
-        params.put("callerid", "(424) 320-6595");
-        params.put("Called", toNumber);
+    private void makeCall(String toNumber, String fromNumber, String callerId) {
+        params.put("From", fromNumber);
+        params.put("callerid", callerId);
+        // params.put("Called", toNumber);
         params.put("To", toNumber);
         params.put("Direction", "outbound-dial");
         params.put("Type", "Phone");
@@ -562,11 +562,12 @@ public class VoiceActivity extends AppCompatActivity {
                         Log.d(TAG, "Access token: " + accessToken);
                         VoiceActivity.this.accessToken = accessToken;
                         String toNumber = getIntent().getStringExtra("to");
-                        makeCall(toNumber);
+                        String fromNumber = getIntent().getStringExtra("from");
+                        String callerId = getIntent().getStringExtra("callerId");
+                        makeCall(toNumber, fromNumber, callerId);
                         //registerForCallInvites();
                     } else {
-                        Snackbar.make(coordinatorLayout,
-                                "Error retrieving access token. Unable to make calls",
+                        Snackbar.make(coordinatorLayout, "Error retrieving access token. Unable to make calls",
                                 Snackbar.LENGTH_LONG).show();
                     }
                 });

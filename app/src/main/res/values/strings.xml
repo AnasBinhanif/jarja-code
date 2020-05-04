@@ -354,6 +354,7 @@
     <string name="recipient">Select Recipient</string>
 
     <string name="delete">Delete</string>
+    <string name="remove">Remove</string>
     <string name="total">Total Attendees</string>
     <string name="view_e_detail">View Event Details</string>
 

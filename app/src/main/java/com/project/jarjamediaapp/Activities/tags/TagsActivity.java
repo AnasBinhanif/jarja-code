@@ -149,9 +149,9 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
                             ToastUtils.showToast(context, "No EncryptedID Found");
                         }
 
-                        if (!tagsIdsString.equals("")) {
+                      //  if (!tagsIdsString.equals("")) {
                             presenter.assignTags(leadID, tagsIdsString);
-                        }
+                     //   }
                     }
 
                     @Override
@@ -171,7 +171,6 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
     @Override
     public void updateUI(Response<BaseResponse> response) {
         if (response.body().getStatus().equals("Success")) {
-            ToastUtils.showToast(context, "Assigned Successfully");
             presenter.getTags(leadID);
         }
     }

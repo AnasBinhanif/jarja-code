@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,6 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -80,11 +78,11 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
         if (mData != null && 0 <= position && position < mData.size()) {
 
             modelData = mData.get(position);
-            String date="";
-            if (modelData.getStart()!=null || modelData.getStart().equalsIgnoreCase("Null")
+            String date = "";
+            if (modelData.getStart() != null || modelData.getStart().equalsIgnoreCase("Null")
                     || !modelData.getStart().equals("")) {
                 String start[] = modelData.getStart().split("/");
-                    date = start[1];
+                date = start[1];
             }
             holder.tvTitle.setText(modelData.getTitle() != null ? modelData.getTitle() : "");
             //holder.tvCount.setText(modelData.getCount() != null ? String.valueOf(modelData.getCount()) : "0");
@@ -348,18 +346,15 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             tvLead.setText(calendarDetailModel.getLeadName() != null ? calendarDetailModel.getLeadName() : "");
 
             if (calendarDetailModel.getAgentList() != null) {
-                String agentNames ="";
+                String agentNames = "";
                 if (calendarDetailModel.getAgentList().size() > 0) {
-                    ArrayList<String> arrayList = new ArrayList<>();
                     for (int i = 0; i < calendarDetailModel.getAgentList().size(); i++) {
-                        //arrayList.add(calendarDetailModel.getAgentList().get(i).getAgentName());
                         if (agentNames.equals("")) {
                             agentNames = calendarDetailModel.getAgentList().get(i).getAgentName();
                         } else {
                             agentNames = agentNames + "," + calendarDetailModel.getAgentList().get(i).getAgentName();
                         }
                     }
-                 //   String agentNames = TextUtils.join(" , ", arrayList);
                     tvAgents.setText(agentNames);
                 }
             }
@@ -428,14 +423,13 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                 tvEventDetail.setPaintFlags(tvEventDetail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 if (calendarDetailModel.getStartTime() != null && calendarDetailModel.getEndTime() != null) {
                     String[] startTime = calendarDetailModel.getStartTime().split("T");
-                    String[] endTime = calendarDetailModel.getEndTime().split("T");
                     tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
                     if (calendarDetailModel.isAllDay != null && calendarDetailModel.isAllDay) {
                         tvTime.setText("All Day");
                     } else {
-                        tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss") + " - " + GH.getInstance().formatter(endTime[1], "hh:mm:ss a", "HH:mm:ss"));
+                        tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss"));
                     }
-                    tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd"));
+                    tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd"));
                 }
 
                 tvAttendeesCount.setText("0");

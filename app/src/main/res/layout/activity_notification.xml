@@ -12,96 +12,87 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <androidx.core.widget.NestedScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/ep_toolbar"
-            android:fillViewport="true">
+            android:orientation="vertical"
+            android:paddingTop="20dp">
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="20dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/_15sdp"
+                android:paddingEnd="@dimen/_15sdp"
+                android:weightSum="3">
 
                 <LinearLayout
-                    android:id="@+id/linearLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal"
-                    android:paddingStart="@dimen/_15sdp"
-                    android:paddingEnd="@dimen/_15sdp"
-                    android:weightSum="3">
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                    <Button
+                        android:id="@+id/btnTasks"
+                        style="@style/TabButtonYellowLeft"
+                        android:text="@string/tasks" />
+                </LinearLayout>
 
-                        <Button
-                            android:id="@+id/btnTasks"
-                            style="@style/TabButtonYellowLeft"
-                            android:text="@string/tasks" />
-                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_nostroke_transparent"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_nostroke_transparent"
-                        android:orientation="vertical">
+                    <Button
+                        android:id="@+id/btnAppointments"
+                        style="@style/TabButtonTranparentMiddle"
+                        android:text="@string/appointment" />
+                </LinearLayout>
 
-                        <Button
-                            android:id="@+id/btnAppointments"
-                            style="@style/TabButtonTranparentMiddle"
-                            android:text="@string/appointment" />
-                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_rightstroke_transparent"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_rightstroke_transparent"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/btnFollowUps"
-                            style="@style/TabButtonTranparentRight"
-                            android:text="@string/follow_up" />
-
-                    </LinearLayout>
-
+                    <Button
+                        android:id="@+id/btnFollowUps"
+                        style="@style/TabButtonTranparentRight"
+                        android:text="@string/follow_up" />
 
                 </LinearLayout>
 
 
-                <TextView
-                    android:id="@+id/tvMessage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorWhite"
-                    android:gravity="center"
-                    android:layout_margin="@dimen/_15sdp"
-                    android:visibility="gone"
-                    android:layout_centerInParent="true"
-                    android:text="No Record Found"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvNotifications"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_15sdp"
-                    android:nestedScrollingEnabled="false"
-                    android:visibility="gone" />
-
-
             </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/_15sdp"
+                android:background="@color/colorWhite"
+                android:gravity="center"
+                android:text="No Record Found"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvNotifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_15sdp"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 

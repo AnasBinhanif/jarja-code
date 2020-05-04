@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -21,7 +20,6 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -48,10 +46,10 @@ import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadDetails;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.Call.VoiceActivity;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
-import com.project.jarjamediaapp.Utilities.UserPermissions;
 import com.project.jarjamediaapp.databinding.ActivityLeadDetailBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 import com.vincent.filepicker.Constant;
@@ -404,19 +402,6 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         }
     }
 
-    private void callDialer(String phoneNo) {
-        if (UserPermissions.isPhonePermissionGranted(LeadDetailActivity.this)) {
-
-            if (phoneNo == null || phoneNo.equals("") || phoneNo.equals("null")) {
-                ToastUtils.showToast(context, "No Primary Phone Found");
-            } else {
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                    startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNo)));
-                }
-            }
-        }
-    }
-
     @Override
     public void onClick(View v) {
 
@@ -428,8 +413,6 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 } else {
                     presenter.getLeadRecipient(leadID);
                 }
-
-                //presenter.getLeadRecipient(leadID);
                 break;
 
             case R.id.imgMessage:
@@ -437,9 +420,11 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 break;
 
             case R.id.imgCall:
-                // callDialer(primaryPhoneNumber);
-
-
+                if (primaryPhoneNumber == null || primaryPhoneNumber.equals("") || primaryPhoneNumber.equals("null")) {
+                    ToastUtils.showToast(context, "No Primary Phone Found");
+                } else {
+                    presenter.getCallerId(leadID);
+                }
                 break;
 
             case R.id.imgEditLead:
@@ -619,7 +604,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 Glide.with(context)
                         .load(allLeadsList.agentPicture)
                         .into(imageView);
-            }else{
+            } else {
                 Glide.with(context)
                         .load(getResources().getDrawable(R.drawable.avataer_male))
                         .into(imageView);
@@ -877,6 +862,17 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
         mDialog.dismiss();
         ToastUtils.showToastLong(context, response.body().getMessage());
+
+    }
+
+    @Override
+    public void updateUIonCall(GetCallerId response) {
+
+        String numberFromApi = response.getData().getCallerID();
+        startActivity(new Intent(context, VoiceActivity.class)
+                .putExtra("to", primaryPhoneNumber)
+                .putExtra("from", numberFromApi)
+                .putExtra("callerId", numberFromApi));
 
     }
 

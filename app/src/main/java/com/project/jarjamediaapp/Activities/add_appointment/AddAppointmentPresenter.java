@@ -83,7 +83,7 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
         } else if (fromid.equalsIgnoreCase("4") || fromid.equalsIgnoreCase("2")) {
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateAppointment(GH.getInstance().getAuthorization(),
                     prefix);
-        }else if (fromid.equalsIgnoreCase("6")){
+        } else if (fromid.equalsIgnoreCase("6")) {
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),
                     prefix);
 
@@ -240,70 +240,6 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
             }
         });
 
-    }
-
-    @Override
-    public void addAppointment(String leadStringID, String agentsStringIDs, String leadAppointmentID, String eventTitle, String location,
-                               String desc, boolean isAppointmentFixed, boolean isAppointmentAttend, String appointmentDate, String datedFrom,
-                               String datedTo, boolean isAllDay, Integer interval, boolean isSend, String viaReminder, String agentIds, Integer orderBy,
-                               String startTime, String endTime, boolean isCompleted, String fromId, String calendarId, String encryptedAppointmentId, String leadId) {
-
-        _view.showProgressBar();
-
-        if (fromId.equalsIgnoreCase("6")) {
-
-            // for update calendar appointment
-            _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),
-                    leadStringID, agentsStringIDs, encryptedAppointmentId, eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, datedFrom,
-                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted, "Event");
-
-        } else if (fromId.equalsIgnoreCase("3")) {
-
-            // for add calendar appointment
-            _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addAppointmentByCalendar(GH.getInstance().getAuthorization(),
-                    leadStringID, agentsStringIDs, "0", eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
-                    datedTo, isAllDay, interval, isSend, agentIds, orderBy, startTime, endTime, isCompleted, "Event");
-
-        } else {
-
-            // add appointment by dashboard or lead id
-            _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddAppointment(GH.getInstance().getAuthorization(),
-                    leadStringID, agentsStringIDs, "0", eventTitle, location, desc, isAppointmentFixed, isAppointmentAttend, appointmentDate, datedFrom,
-                    datedTo, isAllDay, interval, isSend, viaReminder, agentIds, orderBy, startTime, endTime, isCompleted, leadId);
-        }
-
-        _callAddAppointment.enqueue(new Callback<BaseResponse>() {
-            @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-
-                Log.i("response", new Gson().toJson(response));
-
-                _view.hideProgressBar();
-                if (response.isSuccessful()) {
-
-                    BaseResponse getAppointmentsModel = response.body();
-                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
-
-                        _view.updateUI(response);
-
-                    } else {
-
-                        _view.updateUIonFalse(getAppointmentsModel.message);
-
-                    }
-                } else {
-
-                    ApiError error = ErrorUtils.parseError(response);
-                    _view.updateUIonError(error.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                _view.hideProgressBar();
-                _view.updateUIonFailure();
-            }
-        });
     }
 
     @Override

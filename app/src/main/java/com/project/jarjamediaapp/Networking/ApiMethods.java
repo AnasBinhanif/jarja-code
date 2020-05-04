@@ -7,10 +7,13 @@ import com.project.jarjamediaapp.Activities.calendar.CalendarModel;
 import com.project.jarjamediaapp.Activities.calendarDetail.CalendarAppointmentDetailModel;
 import com.project.jarjamediaapp.Activities.calendarDetail.CalendarTaskDetailModel;
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordModel;
+import com.project.jarjamediaapp.Activities.lead_detail.GetCallerId;
 import com.project.jarjamediaapp.Activities.lead_detail.LeadDetailModel;
 import com.project.jarjamediaapp.Activities.listing_info.ListingInfoModel;
 import com.project.jarjamediaapp.Activities.notes.DocumentModel;
-import com.project.jarjamediaapp.Activities.notification.NotificationModel;
+import com.project.jarjamediaapp.Activities.notification.AppointmentNotificationModel;
+import com.project.jarjamediaapp.Activities.notification.FollowUpNotificationModel;
+import com.project.jarjamediaapp.Activities.notification.TaskNotificationModel;
 import com.project.jarjamediaapp.Activities.open_houses.AddressDetailModel;
 import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
 import com.project.jarjamediaapp.Activities.open_houses.GetTimeFrameModel;
@@ -64,27 +67,19 @@ public interface ApiMethods {
 
     @FormUrlEncoded
     @POST("token")
-    Call<AccessCode> getToken(
-            @Field("UserName") String username,
-            @Field("Password") String password,
-            @Field("grant_type") String grantType
-    );
+    Call<AccessCode> getToken(@Field("UserName") String username,
+                              @Field("Password") String password,
+                              @Field("grant_type") String grantType);
 
     @FormUrlEncoded
     @POST("User/ForgetPassword")
-    Call<ForgotPasswordModel> fogetPassword(
-            @Field("email") String email
-    );
+    Call<ForgotPasswordModel> fogetPassword(@Field("email") String email);
 
     @GET("User/GetUserProfileData")
-    Call<GetUserProfile> getUserProfileData(
-            @Header("Authorization") String authorization
-    );
+    Call<GetUserProfile> getUserProfileData(@Header("Authorization") String authorization);
 
     @GET("User/GetUserPermission")
-    Call<GetUserPermission> GetUserPermission(
-            @Header("Authorization") String authorization
-    );
+    Call<GetUserPermission> GetUserPermission(@Header("Authorization") String authorization);
 
     @GET("Appointment/GetTodayAppointment")
     Call<GetAppointmentsModel> GetTodayAppointment(@Header("Authorization") String authorization,
@@ -100,11 +95,9 @@ public interface ApiMethods {
 
     @FormUrlEncoded
     @POST("Appointment/MarkComplete")
-    Call<BaseResponse> MarkComplete(
-            @Header("Authorization") String authorization,
-            @Field("encryptedLeadAppoinmentID") String leadAppoinmentID,
-            @Field("state") String state
-    );
+    Call<BaseResponse> MarkComplete(@Header("Authorization") String authorization,
+                                    @Field("encryptedLeadAppoinmentID") String leadAppoinmentID,
+                                    @Field("state") String state);
 
     @GET("FollowUp/GetDueFollowUps")
     Call<GetFollowUpsModel> GetFollowUpsDue(@Header("Authorization") String authorization,
@@ -138,52 +131,34 @@ public interface ApiMethods {
 
     @FormUrlEncoded
     @POST("Tasks/MarkComplete")
-    Call<BaseResponse> MarkTaskComplete(
-            @Header("Authorization") String authorization,
-            @Field("encrypted_TaskID") String reminderDI,
-            @Field("state") String state
-    );
+    Call<BaseResponse> MarkTaskComplete(@Header("Authorization") String authorization,
+                                        @Field("encrypted_TaskID") String reminderDI,
+                                        @Field("state") String state);
 
     @GET("Dashboard/GetLeadTitles")
-    Call<GetLeadTitlesModel> GetLeadTitlesModel(
-            @Header("Authorization") String authorization,
-            @Query("Name") String name
-    );
+    Call<GetLeadTitlesModel> GetLeadTitlesModel(@Header("Authorization") String authorization,
+                                                @Query("Name") String name);
 
     @GET("Dashboard/GetAgents")
-    Call<GetAgentsModel> GetAgents(
-            @Header("Authorization") String authorization
-    );
+    Call<GetAgentsModel> GetAgents(@Header("Authorization") String authorization);
 
     @GET("Dashboard/GetLeadTimeFrame")
-    Call<GetLeadTimeFrame> GetLeadTimeFrame(
-            @Header("Authorization") String authorization
-    );
+    Call<GetLeadTimeFrame> GetLeadTimeFrame(@Header("Authorization") String authorization);
 
     @GET("Lead/GetSources")
-    Call<GetLeadSource> GetLeadSource(
-            @Header("Authorization") String authorization
-    );
+    Call<GetLeadSource> GetLeadSource(@Header("Authorization") String authorization);
 
     @GET("Lead/GetLeadScore")
-    Call<GetLeadScore> GetLeadScore(
-            @Header("Authorization") String authorization
-    );
+    Call<GetLeadScore> GetLeadScore(@Header("Authorization") String authorization);
 
     @GET("Lead/GetLastTouch")
-    Call<GetLastTouch> GetLastTouch(
-            @Header("Authorization") String authorization
-    );
+    Call<GetLastTouch> GetLastTouch(@Header("Authorization") String authorization);
 
     @GET("Lead/GetLastLogin")
-    Call<GetLastLogin> GetLastLogin(
-            @Header("Authorization") String authorization
-    );
+    Call<GetLastLogin> GetLastLogin(@Header("Authorization") String authorization);
 
     @GET("Lead/GetPipeline")
-    Call<GetPipeline> GetPipeline(
-            @Header("Authorization") String authorization
-    );
+    Call<GetPipeline> GetPipeline(@Header("Authorization") String authorization);
 
     @GET("Lead/GetDueFollowUps")
     Call<GetFollowUpsModel> GetDueFollowUps(@Header("Authorization") String authorization,
@@ -226,24 +201,20 @@ public interface ApiMethods {
                                                               @Query("pageNumber") int page);
 
     @GET("Lead/GetLead")
-    Call<GetLead> GetLead(
-            @Header("Authorization") String authorization,
-            @Query("LeadID") String leadID
-    );
+    Call<GetLead> GetLead(@Header("Authorization") String authorization,
+                          @Query("LeadID") String leadID);
 
     @FormUrlEncoded
     @POST("Lead/AssignAgentToLead")
-    Call<BaseResponse> AssignAgentToLead(
-            @Header("Authorization") String authorization,
-            @Field("agentIds") String agentIds,
-            @Field("leadStringID") String leadStringID,
-            @Field("typeIndex") boolean typeIndex);
+    Call<BaseResponse> AssignAgentToLead(@Header("Authorization") String authorization,
+                                         @Field("agentIds") String agentIds,
+                                         @Field("leadStringID") String leadStringID,
+                                         @Field("typeIndex") boolean typeIndex);
 
     @Headers("Content-Type: application/json")
     @POST("Lead/AddPipeLineMark")
-    Call<BaseResponse> AddPipeLineMark(
-            @Header("Authorization") String authorization,
-            @Body String body);
+    Call<BaseResponse> AddPipeLineMark(@Header("Authorization") String authorization,
+                                       @Body String body);
 
     @POST("Lead/GetAgentCommissionByLeadDetail")
     Call<TransactionModel> getAgentCommissionViaLead(@Header("Authorization") String authorization,
@@ -257,115 +228,84 @@ public interface ApiMethods {
 
 
     @GET("Lead/GetLeadTransactionStage")
-    Call<GetLeadTransactionStage> GetLeadTransactionStage(
-            @Header("Authorization") String authorization,
-            @Query("LeadId") String leadID);
+    Call<GetLeadTransactionStage> GetLeadTransactionStage(@Header("Authorization") String authorization,
+                                                          @Query("LeadId") String leadID);
 
 
     @GET("Lead/GetSocialProfileDropdown")
-    Call<GetSocialProfileDropdown> GetSocialProfileDropdown(
-            @Header("Authorization") String authorization
-    );
+    Call<GetSocialProfileDropdown> GetSocialProfileDropdown(@Header("Authorization") String authorization);
 
     @GET("Lead/GetLeadSocialProfile")
-    Call<GetLeadSocialProfile> GetAllSocialProfiles(
-            @Header("Authorization") String authorization,
-            @Query("LeadID") String leadID
-    );
+    Call<GetLeadSocialProfile> GetAllSocialProfiles(@Header("Authorization") String authorization,
+                                                    @Query("LeadID") String leadID);
 
     @FormUrlEncoded
     @POST("Lead/AddSocialProfile")
-    Call<BaseResponse> AddSocialProfile(
-            @Header("Authorization") String authorization,
-            @Field("leadID") String leadID,
-            @Field("name") String name,
-            @Field("siteName") String siteName,
-            @Field("profilelink") String profilelink
-    );
+    Call<BaseResponse> AddSocialProfile(@Header("Authorization") String authorization,
+                                        @Field("leadID") String leadID,
+                                        @Field("name") String name,
+                                        @Field("siteName") String siteName,
+                                        @Field("profilelink") String profilelink);
 
     @GET("Lead/GetNoteDropDown")
-    Call<GetNoteDropDown> GetNoteDropDown(
-            @Header("Authorization") String authorization
-    );
+    Call<GetNoteDropDown> GetNoteDropDown(@Header("Authorization") String authorization);
 
     @GET("Lead/GetLeadNotes")
-    Call<GetLeadNotes> GetLeadNotes(
-            @Header("Authorization") String authorization,
-            @Query("EncryptedLeadID") String leadID
-    );
+    Call<GetLeadNotes> GetLeadNotes(@Header("Authorization") String authorization,
+                                    @Query("EncryptedLeadID") String leadID);
 
     @POST("Lead/EditNote")
-    Call<BaseResponse> EditNote(
-            @Header("Authorization") String authorization,
-            @Query("Encrypted_NoteID") String NoteID,
-            @Query("Encrypted_LeadStringID") String LeadID,
-            @Query("Description") String Description
-    );
+    Call<BaseResponse> EditNote(@Header("Authorization") String authorization,
+                                @Query("Encrypted_NoteID") String NoteID,
+                                @Query("Encrypted_LeadStringID") String LeadID,
+                                @Query("Description") String Description);
 
     @POST("Lead/Make_Lead_Note_Sticky")
-    Call<BaseResponse> Make_Lead_Note_Sticky(
-            @Header("Authorization") String authorization,
-            @Query("Encrypted_NoteID") String NoteID,
-            @Query("Encrypted_LeadStringID") String LeadID,
-            @Query("IsSticky") Boolean isSticky
-    );
+    Call<BaseResponse> Make_Lead_Note_Sticky(@Header("Authorization") String authorization,
+                                             @Query("Encrypted_NoteID") String NoteID,
+                                             @Query("Encrypted_LeadStringID") String LeadID,
+                                             @Query("IsSticky") Boolean isSticky);
 
     @FormUrlEncoded
     @POST("Lead/DeleteNote")
-    Call<BaseResponse> DeleteNote(
-            @Header("Authorization") String authorization,
-            @Field("noteID") String leadAppoinmentID
-    );
+    Call<BaseResponse> DeleteNote(@Header("Authorization") String authorization,
+                                  @Field("noteID") String leadAppoinmentID);
 
     @GET("Lead/GetTagListByLeadID")
-    Call<GetTagListByLeadID> GetTagListByLeadID(
-            @Header("Authorization") String authorization,
-            @Query("Encrypted_LeadID") String leadID
-    );
+    Call<GetTagListByLeadID> GetTagListByLeadID(@Header("Authorization") String authorization,
+                                                @Query("Encrypted_LeadID") String leadID);
 
     @POST("Lead/AssignTagsToLeads")
-    Call<BaseResponse> AssignTagsToLeads(
-            @Header("Authorization") String authorization,
-            @Query("Encrypted_LeadStringID") String leadID,
-            @Query("TagIds") String tagsId
-    );
+    Call<BaseResponse> AssignTagsToLeads(@Header("Authorization") String authorization,
+                                         @Query("Encrypted_LeadStringID") String leadID,
+                                         @Query("TagIds") String tagsId);
 
     @POST("Lead/DeleteLeadTag")
-    Call<BaseResponse> DeleteLeadTag(
-            @Header("Authorization") String authorization,
-            @Query("LeadId") String leadID,
-            @Query("LabelId") String tagsId
-    );
+    Call<BaseResponse> DeleteLeadTag(@Header("Authorization") String authorization,
+                                     @Query("LeadId") String leadID,
+                                     @Query("LabelId") String tagsId);
 
     @FormUrlEncoded
     @POST("Lead/AddNote")
-    Call<BaseResponse> AddNote(
-            @Header("Authorization") String authorization,
-            @Field("noteID") String noteID,
-            @Field("leadID") String leadID,
-            @Field("noteType") String noteType,
-            @Field("desc") String desc,
-            @Field("isSticky") String isSticky,
-            @Field("dated") String dated,
-            @Field("agentIDs") String agentIDs,
-            @Field("leadStringID") String leadStringID
-    );
+    Call<BaseResponse> AddNote(@Header("Authorization") String authorization,
+                               @Field("noteID") String noteID,
+                               @Field("leadID") String leadID,
+                               @Field("noteType") String noteType,
+                               @Field("desc") String desc,
+                               @Field("isSticky") String isSticky,
+                               @Field("dated") String dated,
+                               @Field("agentIDs") String agentIDs,
+                               @Field("leadStringID") String leadStringID);
 
 
     @GET("Dashboard/GetLeadDripCampaignList")
-    Call<GetLeadDripCampaignList> GetLeadDripCampaignList(
-            @Header("Authorization") String authorization
-    );
+    Call<GetLeadDripCampaignList> GetLeadDripCampaignList(@Header("Authorization") String authorization);
 
     @GET("Dashboard/GetLeadTagList")
-    Call<GetLeadTagList> GetLeadTagList(
-            @Header("Authorization") String authorization
-    );
+    Call<GetLeadTagList> GetLeadTagList(@Header("Authorization") String authorization);
 
     @GET("Dashboard/GetLeadTypeList")
-    Call<GetLeadTypeList> GetLeadTypeList(
-            @Header("Authorization") String authorization
-    );
+    Call<GetLeadTypeList> GetLeadTypeList(@Header("Authorization") String authorization);
 
     @Headers("Content-Type: application/json")
     @POST("Appointment/AddNew")
@@ -376,33 +316,6 @@ public interface ApiMethods {
     @POST("Appointment/Update")
     Call<BaseResponse> UpdateAppointment(@Header("Authorization") String authorization,
                                          @Body String body);
-
-    @FormUrlEncoded
-    @POST("Appointment/AddNew")
-    Call<BaseResponse> AddAppointment(
-            @Header("Authorization") String authorization,
-            @Field("leadStringID") String leadStringID,
-            @Field("agentIDsString") String agentsStringIDs,
-            @Field("leadAppoinmentID") String leadAppointmentID,
-            @Field("eventTitle") String eventTitle,
-            @Field("location") String location,
-            @Field("desc") String desc,
-            @Field("isAppointmentFixed") boolean isAppointmentFixed,
-            @Field("isAppointmentAttend") boolean isAppointmentAttend,
-            @Field("appointmentDate") String appointmentDate,
-            @Field("datedFrom") String datedFrom,
-            @Field("datedTo") String datedTo,
-            @Field("isAllDay") boolean isAllDay,
-            @Field("interval") Integer interval,
-            @Field("isSend") boolean isSend,
-            @Field("viaReminder") String viaReminder,
-            @Field("agentIds") String agentIds,
-            @Field("orderBy") Integer orderBy,
-            @Field("startTime") String startTime,
-            @Field("endTime") String endTime,
-            @Field("isCompleted") boolean isCompleted,
-            @Field("leadID") String leadID);
-
 
     @GET("Tasks/GetTasks")
     Call<GetTaskDetail> getTaskDetail(@Header("Authorization") String authorization,
@@ -424,139 +337,130 @@ public interface ApiMethods {
 
     @Headers("Content-Type: application/json")
     @POST("Lead/AddNewLead")
-    Call<BaseResponse> AddLead(
-            @Header("Authorization") String authorization,
-            @Body String body
-    );
+    Call<BaseResponse> AddLead(@Header("Authorization") String authorization,
+                               @Body String body);
 
     @Headers("Content-Type: application/json")
     @POST("Lead/Update")
-    Call<BaseResponse> UpdateLEad(
-            @Header("Authorization") String authorization,
-            @Body String body
-    );
+    Call<BaseResponse> UpdateLEad(@Header("Authorization") String authorization,
+                                  @Body String body);
 
     @FormUrlEncoded
     @POST("Lead/GetLeadCounts")
-    Call<GetLeadCounts> GetLeadCounts(
-            @Header("Authorization") String authorization,
-            @Field("leadID") String leadID,
-            @Field("spouseName") String spouseName,
-            @Field("email") String email,
-            @Field("company") String company,
-            @Field("phone") String phone,
-            @Field("address") String address,
-            @Field("city") String city,
-            @Field("state") String state,
-            @Field("county") String county,
-            @Field("zip") String zip,
-            @Field("countryID") String countryID,
-            @Field("propertyType") String propertyType,
-            @Field("timeFrameID") String timeFrameID,
-            @Field("preApproval") String preApproval,
-            @Field("houseToSell") String houseToSell,
-            @Field("agentID") String agentID,
-            @Field("leadTypeID") String leadTypeID,
-            @Field("leadScoreMin") String leadScoreMin,
-            @Field("leadScoreMax") String leadScoreMax,
-            @Field("tagsID") String tagsID,
-            @Field("priceMin") String priceMin,
-            @Field("priceMax") String priceMax,
-            @Field("notes") String notes,
-            @Field("dripCompaignID") String dripCompaignID,
-            @Field("lastTouch") String lastTouch,
-            @Field("lastLogin") String lastLogin,
-            @Field("pipelineID") String pipelineID,
-            @Field("sourceID") String sourceID,
-            @Field("fromDate") String fromDate,
-            @Field("toDate") String toDate,
-            @Field("searchBy") String searchBy,
-            @Field("firstNameAsc") String firstNameAsc,
-            @Field("lastNameAsc") String lastNameAsc,
-            @Field("emailAddressAsc") String emailAddressAsc,
-            @Field("registeredDateAsc") boolean registeredDateAsc,
-            @Field("lastLoginedInAsc") String lastLoginedInAsc,
-            @Field("lastLoginedCountAsc") String lastLoginedCountAsc,
-            @Field("lastTouchedInAsc") String lastTouchedInAsc,
-            @Field("conversationCellAsc") String conversationCellAsc,
-            @Field("conversationEmailAsc") String conversationEmailAsc,
-            @Field("conversationMsgAsc") String conversationMsgAsc,
-            @Field("priceAsc") String priceAsc,
-            @Field("cityAsc") String cityAsc,
-            @Field("timeFrameAsc") String timeFrameAsc,
-            @Field("activitiesSavedSearchAsc") String activitiesSavedSearchAsc,
-            @Field("activitiesViewAsc") String activitiesViewAsc,
-            @Field("activitiesFavoriteAsc") String activitiesFavoriteAsc,
-            @Field("isSaveSearch") String isSaveSearch,
-            @Field("isFilterClear") String isFilterClear,
-            @Field("ResultSetType") String resultSetType,
-            @Field("pageNo") String pageNo,
-            @Field("pageSize") String pageSize
-    );
+    Call<GetLeadCounts> GetLeadCounts(@Header("Authorization") String authorization,
+                                      @Field("leadID") String leadID,
+                                      @Field("spouseName") String spouseName,
+                                      @Field("email") String email,
+                                      @Field("company") String company,
+                                      @Field("phone") String phone,
+                                      @Field("address") String address,
+                                      @Field("city") String city,
+                                      @Field("state") String state,
+                                      @Field("county") String county,
+                                      @Field("zip") String zip,
+                                      @Field("countryID") String countryID,
+                                      @Field("propertyType") String propertyType,
+                                      @Field("timeFrameID") String timeFrameID,
+                                      @Field("preApproval") String preApproval,
+                                      @Field("houseToSell") String houseToSell,
+                                      @Field("agentID") String agentID,
+                                      @Field("leadTypeID") String leadTypeID,
+                                      @Field("leadScoreMin") String leadScoreMin,
+                                      @Field("leadScoreMax") String leadScoreMax,
+                                      @Field("tagsID") String tagsID,
+                                      @Field("priceMin") String priceMin,
+                                      @Field("priceMax") String priceMax,
+                                      @Field("notes") String notes,
+                                      @Field("dripCompaignID") String dripCompaignID,
+                                      @Field("lastTouch") String lastTouch,
+                                      @Field("lastLogin") String lastLogin,
+                                      @Field("pipelineID") String pipelineID,
+                                      @Field("sourceID") String sourceID,
+                                      @Field("fromDate") String fromDate,
+                                      @Field("toDate") String toDate,
+                                      @Field("searchBy") String searchBy,
+                                      @Field("firstNameAsc") String firstNameAsc,
+                                      @Field("lastNameAsc") String lastNameAsc,
+                                      @Field("emailAddressAsc") String emailAddressAsc,
+                                      @Field("registeredDateAsc") boolean registeredDateAsc,
+                                      @Field("lastLoginedInAsc") String lastLoginedInAsc,
+                                      @Field("lastLoginedCountAsc") String lastLoginedCountAsc,
+                                      @Field("lastTouchedInAsc") String lastTouchedInAsc,
+                                      @Field("conversationCellAsc") String conversationCellAsc,
+                                      @Field("conversationEmailAsc") String conversationEmailAsc,
+                                      @Field("conversationMsgAsc") String conversationMsgAsc,
+                                      @Field("priceAsc") String priceAsc,
+                                      @Field("cityAsc") String cityAsc,
+                                      @Field("timeFrameAsc") String timeFrameAsc,
+                                      @Field("activitiesSavedSearchAsc") String activitiesSavedSearchAsc,
+                                      @Field("activitiesViewAsc") String activitiesViewAsc,
+                                      @Field("activitiesFavoriteAsc") String activitiesFavoriteAsc,
+                                      @Field("isSaveSearch") String isSaveSearch,
+                                      @Field("isFilterClear") String isFilterClear,
+                                      @Field("ResultSetType") String resultSetType,
+                                      @Field("pageNo") String pageNo,
+                                      @Field("pageSize") String pageSize);
 
     @GET("Lead/SearchLead")
-    Call<GetAllLeads> SearchLead(
-            @Header("Authorization") String authorization,
-            @Query("PageNo") int PageNo,
-            @Query("Search") String Search);
+    Call<GetAllLeads> SearchLead(@Header("Authorization") String authorization,
+                                 @Query("PageNo") int PageNo,
+                                 @Query("Search") String Search);
 
     @FormUrlEncoded
     @POST("Lead/GetAllLead")
-    Call<GetAllLeads> GetAllLead(
-            @Header("Authorization") String authorization,
-            @Field("leadID") String leadID,
-            @Field("spouseName") String spouseName,
-            @Field("email") String email,
-            @Field("company") String company,
-            @Field("phone") String phone,
-            @Field("address") String address,
-            @Field("city") String city,
-            @Field("state") String state,
-            @Field("county") String county,
-            @Field("zip") String zip,
-            @Field("countryID") String countryID,
-            @Field("propertyType") String propertyType,
-            @Field("timeFrameID") String timeFrameID,
-            @Field("preApproval") String preApproval,
-            @Field("houseToSell") String houseToSell,
-            @Field("agentID") String agentID,
-            @Field("leadTypeID") String leadTypeID,
-            @Field("leadScoreMin") String leadScoreMin,
-            @Field("leadScoreMax") String leadScoreMax,
-            @Field("tagsID") String tagsID,
-            @Field("priceMin") String priceMin,
-            @Field("priceMax") String priceMax,
-            @Field("notes") String notes,
-            @Field("dripCompaignID") String dripCompaignID,
-            @Field("lastTouch") String lastTouch,
-            @Field("lastLogin") String lastLogin,
-            @Field("pipelineID") String pipelineID,
-            @Field("sourceID") String sourceID,
-            @Field("fromDate") String fromDate,
-            @Field("toDate") String toDate,
-            @Field("searchBy") String searchBy,
-            @Field("firstNameAsc") String firstNameAsc,
-            @Field("lastNameAsc") String lastNameAsc,
-            @Field("emailAddressAsc") String emailAddressAsc,
-            @Field("registeredDateAsc") boolean registeredDateAsc,
-            @Field("lastLoginedInAsc") String lastLoginedInAsc,
-            @Field("lastLoginedCountAsc") String lastLoginedCountAsc,
-            @Field("lastTouchedInAsc") String lastTouchedInAsc,
-            @Field("conversationCellAsc") String conversationCellAsc,
-            @Field("conversationEmailAsc") String conversationEmailAsc,
-            @Field("conversationMsgAsc") String conversationMsgAsc,
-            @Field("priceAsc") String priceAsc,
-            @Field("cityAsc") String cityAsc,
-            @Field("timeFrameAsc") String timeFrameAsc,
-            @Field("activitiesSavedSearchAsc") String activitiesSavedSearchAsc,
-            @Field("activitiesViewAsc") String activitiesViewAsc,
-            @Field("activitiesFavoriteAsc") String activitiesFavoriteAsc,
-            @Field("isSaveSearch") String isSaveSearch,
-            @Field("isFilterClear") String isFilterClear,
-            @Field("ResultSetType") String resultSetType,
-            @Field("pageNo") String pageNo,
-            @Field("pageSize") String pageSize
-    );
+    Call<GetAllLeads> GetAllLead(@Header("Authorization") String authorization,
+                                 @Field("leadID") String leadID,
+                                 @Field("spouseName") String spouseName,
+                                 @Field("email") String email,
+                                 @Field("company") String company,
+                                 @Field("phone") String phone,
+                                 @Field("address") String address,
+                                 @Field("city") String city,
+                                 @Field("state") String state,
+                                 @Field("county") String county,
+                                 @Field("zip") String zip,
+                                 @Field("countryID") String countryID,
+                                 @Field("propertyType") String propertyType,
+                                 @Field("timeFrameID") String timeFrameID,
+                                 @Field("preApproval") String preApproval,
+                                 @Field("houseToSell") String houseToSell,
+                                 @Field("agentID") String agentID,
+                                 @Field("leadTypeID") String leadTypeID,
+                                 @Field("leadScoreMin") String leadScoreMin,
+                                 @Field("leadScoreMax") String leadScoreMax,
+                                 @Field("tagsID") String tagsID,
+                                 @Field("priceMin") String priceMin,
+                                 @Field("priceMax") String priceMax,
+                                 @Field("notes") String notes,
+                                 @Field("dripCompaignID") String dripCompaignID,
+                                 @Field("lastTouch") String lastTouch,
+                                 @Field("lastLogin") String lastLogin,
+                                 @Field("pipelineID") String pipelineID,
+                                 @Field("sourceID") String sourceID,
+                                 @Field("fromDate") String fromDate,
+                                 @Field("toDate") String toDate,
+                                 @Field("searchBy") String searchBy,
+                                 @Field("firstNameAsc") String firstNameAsc,
+                                 @Field("lastNameAsc") String lastNameAsc,
+                                 @Field("emailAddressAsc") String emailAddressAsc,
+                                 @Field("registeredDateAsc") boolean registeredDateAsc,
+                                 @Field("lastLoginedInAsc") String lastLoginedInAsc,
+                                 @Field("lastLoginedCountAsc") String lastLoginedCountAsc,
+                                 @Field("lastTouchedInAsc") String lastTouchedInAsc,
+                                 @Field("conversationCellAsc") String conversationCellAsc,
+                                 @Field("conversationEmailAsc") String conversationEmailAsc,
+                                 @Field("conversationMsgAsc") String conversationMsgAsc,
+                                 @Field("priceAsc") String priceAsc,
+                                 @Field("cityAsc") String cityAsc,
+                                 @Field("timeFrameAsc") String timeFrameAsc,
+                                 @Field("activitiesSavedSearchAsc") String activitiesSavedSearchAsc,
+                                 @Field("activitiesViewAsc") String activitiesViewAsc,
+                                 @Field("activitiesFavoriteAsc") String activitiesFavoriteAsc,
+                                 @Field("isSaveSearch") String isSaveSearch,
+                                 @Field("isFilterClear") String isFilterClear,
+                                 @Field("ResultSetType") String resultSetType,
+                                 @Field("pageNo") String pageNo,
+                                 @Field("pageSize") String pageSize);
 
     @GET("Lead/GetPropertyLeads")
     Call<GetPropertyLeads> GetPropertyLeads(@Header("Authorization") String authorization,
@@ -588,13 +492,13 @@ public interface ApiMethods {
     Call<UploadImageModel> getNotificationCount(@Header("Authorization") String authorization);
 
     @GET("Notification/GetAppointmentNotification")
-    Call<NotificationModel> getNotificationByAppointments(@Header("Authorization") String authorization);
+    Call<AppointmentNotificationModel> getNotificationByAppointments(@Header("Authorization") String authorization);
 
     @GET("Notification/GetTaskNotification")
-    Call<NotificationModel> getNotificationByTasks(@Header("Authorization") String authorization);
+    Call<TaskNotificationModel> getNotificationByTasks(@Header("Authorization") String authorization);
 
-    @GET("Notification/GetFollowUpNotification")
-    Call<NotificationModel> getNotificationByFollowUps(@Header("Authorization") String authorization);
+    @GET("Notification/Get_FollowUp_Notification")
+    Call<FollowUpNotificationModel> getNotificationByFollowUps(@Header("Authorization") String authorization);
 
     @POST("Appointment/GetReminder")
     Call<AddAppointmentModel> getReminder(@Header("Authorization") String authorization);
@@ -642,6 +546,10 @@ public interface ApiMethods {
                                     @Field("attachFileLink") String fileUrl,
                                     @Field("lead_EncryptedID") String lead_EncryptedID);
 
+    @GET("Lead/GetLeadCallDetail")
+    Call<GetCallerId> getCallerId(@Header("Authorization") String authorization,
+                                  @Query("LeadID") String LeadID);
+
     @FormUrlEncoded
     @POST("Lead/SendLeadMessage")
     Call<BaseResponse> sendMessage(@Header("Authorization") String authorization,
@@ -677,65 +585,14 @@ public interface ApiMethods {
 
     @Headers("Content-Type: application/json")
     @POST("Calender/AddAppoinmentTaskCalender")
-    Call<BaseResponse> addAppointmentByCalendar(
-            @Header("Authorization") String authorization,
-            @Body String body);
-
-    @FormUrlEncoded
-    @POST("Calender/AddAppoinmentTaskCalender")
-    Call<BaseResponse> addAppointmentByCalendar(
-            @Header("Authorization") String authorization,
-            @Field("leadStringID") String leadStringID,
-            @Field("agentsStringIDs") String agentsStringIDs,
-            @Field("leadAppoinmentID") String leadAppointmentID,
-            @Field("eventTitle") String eventTitle,
-            @Field("location") String location,
-            @Field("desc") String desc,
-            @Field("isAppointmentFixed") boolean isAppointmentFixed,
-            @Field("isAppointmentAttend") boolean isAppointmentAttend,
-            @Field("appointmentDate") String appointmentDate,
-            @Field("datedFrom") String datedFrom,
-            @Field("datedTo") String datedTo,
-            @Field("isAllDay") boolean isAllDay,
-            @Field("interval") Integer interval,
-            @Field("isSend") boolean isSend,
-            @Field("agentIds") String agentIds,
-            @Field("orderBy") Integer orderBy,
-            @Field("startTime") String startTime,
-            @Field("endTime") String endTime,
-            @Field("isCompleted") boolean isCompleted,
-            @Field("calendarType") String calendarType);
+    Call<BaseResponse> addAppointmentByCalendar(@Header("Authorization") String authorization,
+                                                @Body String body);
 
     @Headers("Content-Type: application/json")
     @POST("Calender/EditAppoinmentTaskCalender")
-    Call<BaseResponse> updateAppointmentTaskByCalendar(
-            @Header("Authorization") String authorization,
-            @Body String body);
+    Call<BaseResponse> updateAppointmentTaskByCalendar(@Header("Authorization") String authorization,
+                                                       @Body String body);
 
-    @FormUrlEncoded
-    @POST("Calender/EditAppoinmentTaskCalender")
-    Call<BaseResponse> updateAppointmentTaskByCalendar(
-            @Header("Authorization") String authorization,
-            @Field("leadStringID") String leadStringID,
-            @Field("agentIDsString") String agentsStringIDs,
-            @Field("leadAppoinmentID") String leadAppointmentID,
-            @Field("eventTitle") String eventTitle,
-            @Field("location") String location,
-            @Field("desc") String desc,
-            @Field("isAppointmentFixed") boolean isAppointmentFixed,
-            @Field("isAppointmentAttend") boolean isAppointmentAttend,
-            @Field("datedFrom") String datedFrom,
-            @Field("datedTo") String datedTo,
-            @Field("isAllDay") boolean isAllDay,
-            @Field("interval") Integer interval,
-            @Field("isSend") boolean isSend,
-            @Field("viaReminder") String viaReminder,
-            @Field("agentIds") String agentIds,
-            @Field("orderBy") Integer orderBy,
-            @Field("startTime") String startTime,
-            @Field("endTime") String endTime,
-            @Field("isCompleted") boolean isCompleted,
-            @Field("calendarType") String calendarType);
 
     @GET("Lead/GetLeadDocDetail")
     Call<DocumentModel> getDocumentByLeadId(@Header("Authorization") String authorization,
@@ -750,22 +607,6 @@ public interface ApiMethods {
     Call<BaseResponse> uploadDocumentByLeadId(@Header("Authorization") String authorization,
                                               @Part MultipartBody.Part file,
                                               @Query("LeadID") String leadId);
-
-    @FormUrlEncoded
-    @POST("Calender/AddAppoinmentTaskCalender")
-    Call<BaseResponse> addUpdateCalendarAppointmentViaTask(
-            @Header("Authorization") String authorization,
-            @Field("leadAppoinmentID") Integer leadAppointmentID,
-            @Field("isAppointmentAttend") String isAppointmentAttend,
-            @Field("datedFrom") String datedFrom,
-            @Field("datedTo") String datedTo,
-            @Field("isAllDay") boolean isAllDay,
-            @Field("isCompleted") boolean isCompleted,
-            @Field("eventTitle") String eventTitle,
-            @Field("desc") String desc,
-            @Field("isGmailApptActive") boolean isGmailAppActive,
-            @Field("calendarType") String calendarType,
-            @Field("gmailCalenderId") String gmailCalendarId);
 
     @GET("Dashboard/GetLeadTimeFrame")
     Call<GetTimeFrameModel> getTimeFrame(@Header("Authorization") String authorization);

@@ -13,7 +13,9 @@ import retrofit2.Response;
 
 public class NotificationPresenter extends BasePresenter<NotificationContract.View> implements NotificationContract.Actions {
 
-    Call<NotificationModel> call;
+    Call<TaskNotificationModel> call;
+    Call<AppointmentNotificationModel> _call;
+    Call<FollowUpNotificationModel> _cCall;
 
     public NotificationPresenter(NotificationContract.View view) {
         super(view);
@@ -28,19 +30,19 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
 
         _view.showProgressBar();
         call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByTasks(GH.getInstance().getAuthorization());
-        call.enqueue(new Callback<NotificationModel>() {
+        call.enqueue(new Callback<TaskNotificationModel>() {
             @Override
-            public void onResponse(Call<NotificationModel> call, Response<NotificationModel> response) {
+            public void onResponse(Call<TaskNotificationModel> call, Response<TaskNotificationModel> response) {
 
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
-                    NotificationModel notificationModel = response.body();
-                    if (notificationModel.getStatus().equals("Success")) {
-                        _view.updateUIList(notificationModel.getData());
+                    TaskNotificationModel taskNotificationModel = response.body();
+                    if (taskNotificationModel.getStatus().equals("Success")) {
+                        _view.updateUIListT(taskNotificationModel.getData().getTaskList());
 
                     } else {
-                        _view.updateUIonFalse(notificationModel.getMessage());
+                        _view.updateUIonFalse(taskNotificationModel.getMessage());
                     }
                 } else {
 
@@ -50,7 +52,7 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
             }
 
             @Override
-            public void onFailure(Call<NotificationModel> call, Throwable t) {
+            public void onFailure(Call<TaskNotificationModel> call, Throwable t) {
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
@@ -62,17 +64,17 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
     public void getNotificationByAppointments() {
 
         _view.showProgressBar();
-        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByAppointments(GH.getInstance().getAuthorization());
-        call.enqueue(new Callback<NotificationModel>() {
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByAppointments(GH.getInstance().getAuthorization());
+        _call.enqueue(new Callback<AppointmentNotificationModel>() {
             @Override
-            public void onResponse(Call<NotificationModel> call, Response<NotificationModel> response) {
+            public void onResponse(Call<AppointmentNotificationModel> call, Response<AppointmentNotificationModel> response) {
 
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
-                    NotificationModel notificationModel = response.body();
+                    AppointmentNotificationModel notificationModel = response.body();
                     if (notificationModel.getStatus().equals("Success")) {
-                        _view.updateUIList(notificationModel.getData());
+                        _view.updateUIListA(notificationModel.getData());
 
                     } else {
                         _view.updateUIonFalse(notificationModel.getMessage());
@@ -85,7 +87,7 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
             }
 
             @Override
-            public void onFailure(Call<NotificationModel> call, Throwable t) {
+            public void onFailure(Call<AppointmentNotificationModel> call, Throwable t) {
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
@@ -97,17 +99,17 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
     public void getNotificationByFollowUps() {
 
         _view.showProgressBar();
-        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByFollowUps(GH.getInstance().getAuthorization());
-        call.enqueue(new Callback<NotificationModel>() {
+        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByFollowUps(GH.getInstance().getAuthorization());
+        _cCall.enqueue(new Callback<FollowUpNotificationModel>() {
             @Override
-            public void onResponse(Call<NotificationModel> call, Response<NotificationModel> response) {
+            public void onResponse(Call<FollowUpNotificationModel> call, Response<FollowUpNotificationModel> response) {
 
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
-                    NotificationModel notificationModel = response.body();
+                    FollowUpNotificationModel notificationModel = response.body();
                     if (notificationModel.getStatus().equals("Success")) {
-                        _view.updateUIList(notificationModel.getData());
+                        _view.updateUIListF(notificationModel.getData());
 
                     } else {
                         _view.updateUIonFalse(notificationModel.getMessage());
@@ -120,7 +122,7 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
             }
 
             @Override
-            public void onFailure(Call<NotificationModel> call, Throwable t) {
+            public void onFailure(Call<FollowUpNotificationModel> call, Throwable t) {
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
