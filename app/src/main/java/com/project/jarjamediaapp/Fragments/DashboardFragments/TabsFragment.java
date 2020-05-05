@@ -28,11 +28,7 @@ public class TabsFragment extends BaseFragment {
     Context context;
     TabLayout tabLayout;
     ViewPager viewPager;
-    private MenuItem jobMatchesMenuItem;
-    private AppCompatImageView matchesActionView;
-    View view;
-    AlertDialog.Builder alertDialogBuilder;
-    AlertDialog alertDialog;
+    private Menu menu;
 
     public TabsFragment() {
         // Required empty public constructor
@@ -83,9 +79,9 @@ public class TabsFragment extends BaseFragment {
     private void setupViewPager(ViewPager viewPager) {
 
         final ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(FragmentAppointment.newInstance(getResources().getString(R.string.dashboard),"",false), getResources().getString(R.string.appointment));
-        adapter.addFragment(FollowUpFragment.newInstance(getResources().getString(R.string.dashboard),"",false), getResources().getString(R.string.follow_up));
-        adapter.addFragment(TasksFragment.newInstance(getResources().getString(R.string.dashboard),"",false), getResources().getString(R.string.tasks));
+        adapter.addFragment(FragmentAppointment.newInstance(getResources().getString(R.string.dashboard), "", false), getResources().getString(R.string.appointment));
+        adapter.addFragment(FollowUpFragment.newInstance(getResources().getString(R.string.dashboard), "", false), getResources().getString(R.string.follow_up));
+        adapter.addFragment(TasksFragment.newInstance(getResources().getString(R.string.dashboard), "", false), getResources().getString(R.string.tasks));
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -115,6 +111,7 @@ public class TabsFragment extends BaseFragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
+        this.menu = menu;
         getActivity().getMenuInflater().inflate(R.menu.home, menu);
         menu.findItem(R.id.action_notify).setVisible(true);
     }
@@ -122,8 +119,6 @@ public class TabsFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-
-
 
     }
 }

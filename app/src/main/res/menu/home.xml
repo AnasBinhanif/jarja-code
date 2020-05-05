@@ -5,6 +5,7 @@
     <item
         android:id="@+id/action_notify"
         android:title="Notification"
+        android:icon="@drawable/ic_notification"
         android:visible="false"
         app:showAsAction="always" />
 
@@ -13,7 +14,7 @@
         android:icon="@drawable/ic_search_white"
         android:title="Search Leads"
         android:visible="false"
-        app:actionViewClass="androoidx.appcompat.widget.SearchView" />
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
 
     <item
         android:id="@+id/action_add"

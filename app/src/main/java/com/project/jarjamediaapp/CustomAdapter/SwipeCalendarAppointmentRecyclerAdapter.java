@@ -337,9 +337,11 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                 if (calendarDetailModel.isAllDay) {
                     tvTime.setText("All Day");
                 } else {
-                    tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm a", "HH:mm:ss") + " - " + GH.getInstance().formatter(endTime[1], "hh:mm a", "HH:mm:ss"));
+                    tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm a", "HH:mm:ss") + " - " +
+                            GH.getInstance().formatter(endTime[1], "hh:mm a", "HH:mm:ss"));
                 }
-                tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE, MMM dd, yyyy", "yyyy-MM-dd") + " - " + GH.getInstance().formatter(endTime[0], "EEE, MMM dd, yyyy", "yyyy-MM-dd"));
+                tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE, MMM dd, yyyy", "yyyy-MM-dd") + " - " +
+                        GH.getInstance().formatter(endTime[0], "EEE, MMM dd, yyyy", "yyyy-MM-dd"));
             }
             tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
             tvLocation.setText(calendarDetailModel.getLocation() != null ? calendarDetailModel.getLocation() : "");
