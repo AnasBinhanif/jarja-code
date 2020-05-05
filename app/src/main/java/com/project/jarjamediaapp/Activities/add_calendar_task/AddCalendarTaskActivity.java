@@ -260,7 +260,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         Integer leadAppointmentID = 0;
         String isAppointmentAttend = "false";
         String datedFrom = startDate;
-        String datedTo = startDate;
+        String datedTo = "";
         boolean isGmailAppActive = true;
         String calendarType = "Task";
         String gmailCalendarId = this.calendarId;
@@ -268,17 +268,32 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put("isCompleted", markComplete);
-            obj.put("datedTo", datedTo);
-            obj.put("eventTitle", title);
-            obj.put("isAppointmentAttend", isAppointmentAttend);
-            obj.put("leadAppoinmentID", leadAppointmentID);
-            obj.put("datedFrom", datedFrom);
-            obj.put("isAllDay", allDay);
-            obj.put("desc", description);
-            obj.put("gmailCalenderId", gmailCalendarId);
-            obj.put("isGmailApptActive", isGmailAppActive);
-            obj.put("calendarType", calendarType);
+
+            if(isEdit) {
+                obj.put("isCompleted", markComplete);
+                obj.put("datedTo", datedTo);
+                obj.put("eventTitle", title);
+                obj.put("isAppointmentAttend", isAppointmentAttend);
+                obj.put("leadAppoinmentID", leadAppointmentID);
+                obj.put("datedFrom", datedFrom);
+                obj.put("isAllDay", allDay);
+                obj.put("desc", description);
+                obj.put("gmailCalenderId", gmailCalendarId);
+                obj.put("isGmailApptActive", isGmailAppActive);
+                obj.put("calendarType", calendarType);
+            }else {
+                obj.put("isCompleted", markComplete);
+                obj.put("datedTo", datedTo);
+                obj.put("eventTitle", title);
+                obj.put("isAppointmentAttend", isAppointmentAttend);
+                obj.put("leadAppoinmentID", leadAppointmentID);
+                obj.put("datedFrom", datedFrom);
+                obj.put("isAllDay", allDay);
+                obj.put("desc", description);
+                obj.put("isGmailApptActive", isGmailAppActive);
+                obj.put("calendarType", calendarType);
+            }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
