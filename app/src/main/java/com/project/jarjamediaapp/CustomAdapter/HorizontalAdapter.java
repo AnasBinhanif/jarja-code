@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +62,8 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
     Call<GetTimeFrameModel> _call;
     boolean _preQual = false, _withAgent = false, _houseSell = false;
     int pos;
+    boolean mFormatting; // this is a flag which prevents the  stack overflow.
+    int mAfter;
 
     public HorizontalAdapter(Context context, List<GetAllOpenHousesModel.Data.OpenHouse> data, String openHouseType) {
 
@@ -219,6 +224,39 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         arrayList.add("Yes");
         arrayList.add("No");
         arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, arrayList);
+
+        atvPhoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                mAfter  =   after;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!mFormatting) {
+                    mFormatting = true;
+                    // using US or RU formatting...
+                    if(mAfter!=0) // in case back space ain't clicked...
+                    {
+                        String num =s.toString();
+                        String data = PhoneNumberUtils.formatNumber(num, "US");
+                        if(data!=null)
+                        {
+                            s.clear();
+                            s.append(data);
+                            Log.i("Number", data);//8 (999) 123-45-67 or +7 999 123-45-67
+                        }
+
+                    }
+                    mFormatting = false;
+                }
+            }
+        });
 
         atvPlan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -422,6 +460,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                     BaseResponse baseResponse = response.body();
                     if (baseResponse.getStatus().equals("Success")) {
                         dialog.dismiss();
+                        ToastUtils.showToast(context, baseResponse.message);
                         ((OpenHousesActivity) context).hitApiForRefresh(pos);
                     } else {
                         ToastUtils.showToast(context, baseResponse.message);

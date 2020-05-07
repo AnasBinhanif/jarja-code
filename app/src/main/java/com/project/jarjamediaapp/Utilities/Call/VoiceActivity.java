@@ -91,6 +91,8 @@ public class VoiceActivity extends AppCompatActivity {
     RegistrationListener registrationListener = registrationListener();
     Call.Listener callListener = callListener();
 
+    String toNumber = "", fromNumber = "", callerId = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -303,11 +305,9 @@ public class VoiceActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-
     private void makeCall(String toNumber, String fromNumber, String callerId) {
         params.put("From", fromNumber);
         params.put("callerid", callerId);
-        // params.put("Called", toNumber);
         params.put("To", toNumber);
         params.put("Direction", "outbound-dial");
         params.put("Type", "Phone");
@@ -326,10 +326,9 @@ public class VoiceActivity extends AppCompatActivity {
             EditText token = ((AlertDialog) dialog).findViewById(R.id.token);
             //accessToken = token.getText().toString();
 
-            params.put("From", "(424) 320-6595");
-            params.put("callerid", "(424) 320-6595");
-            params.put("Called", contact.getText().toString());
-            params.put("To", contact.getText().toString());
+            params.put("From", fromNumber);
+            params.put("callerid", callerId);
+            params.put("To", toNumber);
             params.put("Direction", "outbound-dial");
             params.put("Type", "Phone");
 

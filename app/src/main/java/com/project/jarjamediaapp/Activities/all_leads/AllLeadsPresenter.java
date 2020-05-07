@@ -105,27 +105,10 @@ public class AllLeadsPresenter extends BasePresenter<AllLeadsContract.View> impl
     }
 
     @Override
-    public void getAllLeads(String leadID, String spouseName, String email, String company, String phone, String address, String city,
-                            String state, String county, String zip, String countryID, String propertyType, String timeFrameID, String preApproval,
-                            String houseToSell, String agentID, String leadTypeID, String leadScoreMin, String leadScoreMax, String tagsID,
-                            String priceMin, String priceMax, String notes, String dripCompaignID, String lastTouch, String lastLogin,
-                            String pipelineID, String sourceID, String fromDate, String toDate, String searchBy, String firstNameAsc,
-                            String lastNameAsc, String emailAddressAsc, boolean registeredDateAsc, String lastLoginedInAsc, String lastLoginedCountAsc,
-                            String lastTouchedInAsc, String conversationCellAsc, String conversationEmailAsc, String conversationMsgAsc,
-                            String priceAsc, String cityAsc, String timeFrameAsc, String activitiesSavedSearchAsc, String activitiesViewAsc,
-                            String activitiesFavoriteAsc, String isSaveSearch, String isFilterClear, String resultSetType, String pageNo,
-                            String pageSize) {
+    public void getAllLeads(String data) {
 
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetAllLead(GH.getInstance().getAuthorization(),
-                leadID, spouseName, email, company, phone, address, city, state, county, zip, countryID, propertyType, timeFrameID,
-                preApproval, houseToSell, agentID, leadTypeID, leadScoreMin, leadScoreMax, tagsID, priceMin, priceMax,
-                notes, dripCompaignID, lastTouch, lastLogin, pipelineID, sourceID, fromDate,
-                toDate, searchBy, firstNameAsc, lastNameAsc, emailAddressAsc, registeredDateAsc,
-                lastLoginedInAsc, lastLoginedCountAsc, lastTouchedInAsc, conversationCellAsc, conversationEmailAsc,
-                conversationMsgAsc, priceAsc, cityAsc, timeFrameAsc, activitiesSavedSearchAsc,
-                activitiesViewAsc, activitiesFavoriteAsc, isSaveSearch, isFilterClear, resultSetType,
-                pageNo, pageSize);
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetAllLead(GH.getInstance().getAuthorization(), data);
         _call.enqueue(new Callback<GetAllLeads>() {
             @Override
             public void onResponse(Call<GetAllLeads> call, Response<GetAllLeads> response) {

@@ -575,7 +575,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
         JSONObject emailObject = new JSONObject();
         try {
-            emailObject.put("email", primaryEmail);
+            emailObject.put("email", "");
             emailObject.put("isNotify", true);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
@@ -704,7 +704,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
         JSONObject emailObject = new JSONObject();
         try {
-            emailObject.put("email", primaryEmail);
+            emailObject.put("email", "");
             emailObject.put("isNotify", true);
         } catch (JSONException e) {
             // TODO Auto-generated catch block

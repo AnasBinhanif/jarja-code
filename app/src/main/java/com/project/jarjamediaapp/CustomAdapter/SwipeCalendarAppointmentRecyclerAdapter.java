@@ -81,7 +81,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             String date = "";
             if (modelData.getStart() != null || modelData.getStart().equalsIgnoreCase("Null")
                     || !modelData.getStart().equals("")) {
-                String start[] = modelData.getStart().split("/");
+                String start[] = modelData.getStart().split("-");
                 date = start[1];
             }
             holder.tvTitle.setText(modelData.getTitle() != null ? modelData.getTitle() : "");
@@ -273,6 +273,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                 modelData = mData.get(getAdapterPosition());
                 deleteCalendarAppointmentOrTaskDetail(modelData.getCalendarId(), modelData.getCalendarType(), swipeLayout);
 
+
             });
 
             frameLayout.setOnClickListener(new View.OnClickListener() {
@@ -428,9 +429,9 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                     tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
                     if (calendarDetailModel.isAllDay != null && calendarDetailModel.isAllDay) {
                         tvTime.setText("All Day");
-                    } else {
+                    }  /*else {
                         tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss"));
-                    }
+                    }*/
                     tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd"));
                 }
 

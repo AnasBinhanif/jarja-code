@@ -13,19 +13,19 @@
             android:layout_height="wrap_content" />
 
         <EditText
-            android:layout_below="@id/ep_toolbar"
             android:id="@+id/edtSearch"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_below="@id/ep_toolbar"
             android:layout_marginTop="5dp"
-            android:inputType="textNoSuggestions|textVisiblePassword"
-            android:importantForAutofill="no"
             android:background="@drawable/bg_search"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="10dp"
-            android:imeOptions="actionSearch"
             android:gravity="center|left"
             android:hint="@string/search"
+            android:imeOptions="actionSearch"
+            android:importantForAutofill="no"
+            android:inputType="textNoSuggestions|textVisiblePassword"
             android:paddingStart="12dp" />
 
         <TextView

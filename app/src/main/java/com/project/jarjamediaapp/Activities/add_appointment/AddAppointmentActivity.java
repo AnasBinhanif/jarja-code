@@ -770,7 +770,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         String desc = bi.atvDescription.getText().toString() + "";
 
         boolean isAllDay = bi.cbAllDay.isChecked() ? true : false;
-        String viaReminder = via.equals("") ? "" : via;
+        String viaReminder = via == null || via.equals("") ? "" : via;
 
         if (bi.cbAllDay.isChecked()) {
             timedFrom = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
@@ -786,7 +786,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         datedFrom = GH.getInstance().formatter(startDate + " " + timedFrom, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
         datedTo = GH.getInstance().formatter(endDate + " " + timedTo, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
 
-        Integer interval = !reminder.equalsIgnoreCase("") ? Integer.parseInt(reminder) : 0;
+        Integer interval = reminder!= null && !reminder.equalsIgnoreCase("")&& !reminder.equalsIgnoreCase("null") ? Integer.parseInt(reminder) : 0;
         Integer orderBy = 0;
         boolean isCompleted = false;
         String leadAppointmentID = leadAppointmentId != null ? leadAppointmentId : "0";
@@ -831,7 +831,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     obj.put("viaReminder", via);
                     obj.put("isSend", isSend);
                     obj.put("calendarType", "Event");
-                    obj.put("agentsStringIDs", agentIdsString);
+                    obj.put("agentIDsString", agentIdsString);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -857,7 +857,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     obj.put("viaReminder", via);
                     obj.put("isSend", isSend);
                     obj.put("calendarType", "Event");
-                    obj.put("agentsStringIDs", agentIdsString);
+                    obj.put("agentIDsString", agentIdsString);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

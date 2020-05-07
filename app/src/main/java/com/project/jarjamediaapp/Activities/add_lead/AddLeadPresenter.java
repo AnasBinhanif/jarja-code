@@ -289,7 +289,7 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
 
                     } else {
 
-                        _view.updateUIonFalse(getAppointmentsModel.message);
+                        _view.updateUIonFalse(getAppointmentsModel.getMessage());
 
                     }
                 } else {
@@ -311,7 +311,7 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
     public void updateLead(String body) {
 
         _view.showProgressBar();
-        _callUpdateLead = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateLEad(GH.getInstance().getAuthorization(),
+        _callUpdateLead = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateLead(GH.getInstance().getAuthorization(),
                 body);
 
         _callUpdateLead.enqueue(new Callback<BaseResponse>() {

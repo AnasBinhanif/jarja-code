@@ -664,16 +664,16 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             bi.tvID.setText(getLeadListData.leadID);
             String firstName = getLeadListData.firstName;
             String lastName = getLeadListData.lastName;
-            if (firstName != null && lastName != null) {
+            if (firstName != null && lastName != null && !firstName.equalsIgnoreCase("") && !lastName.equalsIgnoreCase("")) {
                 bi.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
                 bi.tvName.setText(firstName + " " + lastName);
-            } else if (firstName == null && lastName != null) {
+            } else if (firstName == null || firstName.equalsIgnoreCase("") && lastName != null && !lastName.equalsIgnoreCase("")) {
                 bi.tvInitial.setText("-" + lastName.substring(0, 1));
                 bi.tvName.setText(lastName);
-            } else if (firstName != null && lastName == null) {
+            } else if (firstName != null && !firstName.equalsIgnoreCase("") && lastName == null || lastName.equalsIgnoreCase("")) {
                 bi.tvInitial.setText(firstName.substring(0, 1) + "-");
                 bi.tvName.setText(firstName);
-            } else if (firstName == null && lastName == null) {
+            } else if (firstName == null || firstName.equalsIgnoreCase("") && lastName == null || lastName.equalsIgnoreCase("")) {
                 bi.tvInitial.setText("-" + "-");
                 bi.tvName.setText("");
             }

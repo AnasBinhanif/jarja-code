@@ -113,9 +113,10 @@
             android:background="@drawable/bg_search"
             android:hint="@string/phone"
             android:imeOptions="actionDone"
-            android:inputType="number"
+            android:inputType="phone"
             android:padding="@dimen/_10sdp"
             android:singleLine="true"
+            android:maxLength="14"
             android:textSize="@dimen/_11sdp" />
 
         <TextView

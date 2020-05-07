@@ -76,13 +76,6 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
     private void showMonthYearPicker() {
 
-        //Set default values
-        calendar = Calendar.getInstance();
-        yearSelected = calendar.get(Calendar.YEAR);
-        monthSelected = (calendar.get(Calendar.MONTH) + 1);
-        daySelected = calendar.get(Calendar.DAY_OF_MONTH);
-        bi.calendarView.setSelectedDate(CalendarDay.from(yearSelected, (monthSelected - 1), daySelected));
-
         String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
         String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
         presenter.getCalendarEvents(GH.getInstance().getCalendarAgentId(), month, year);
@@ -97,6 +90,13 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void initViews() {
+
+        //Set default values
+        calendar = Calendar.getInstance();
+        yearSelected = calendar.get(Calendar.YEAR);
+        monthSelected = (calendar.get(Calendar.MONTH) + 1);
+        daySelected = calendar.get(Calendar.DAY_OF_MONTH);
+        bi.calendarView.setSelectedDate(CalendarDay.from(yearSelected, (monthSelected - 1), daySelected));
 
         bi.calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
@@ -275,7 +275,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         if (dataList != null && dataList.size() > 0) {
             for (int i = 0; i < dataList.size(); i++) {
                 String[] formatString = dataList.get(i).getStart().split(" ");
-                markedDates.add(Integer.valueOf(GH.getInstance().formatter(formatString[0], "d", "mm/dd/yyyy")));
+                markedDates.add(Integer.valueOf(GH.getInstance().formatter(formatString[0], "d", "mm-dd-yyyy")));
 
             }
         }

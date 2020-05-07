@@ -26,6 +26,9 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAllleadsBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +54,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     RecyclerAdapterUtil recyclerAdapterUtil;
     boolean isLoading = false, isFilter = false;
     GetAllLeads modelGetAllLeads;
+    boolean registeredDateAsc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +63,6 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         bi = DataBindingUtil.setContentView(this, R.layout.activity_allleads);
         presenter = new AllLeadsPresenter(this);
         presenter.initScreen();
-        setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.leads), true);
 
     }
 
@@ -76,10 +79,11 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                 resultSetType = getIntent().getStringExtra("resultType");
                 data = getIntent().getParcelableExtra("bundle");
                 totalPages = getIntent().getIntExtra("totalPages", 0);
-
                 callGetAllLeads(data, String.valueOf(page));
+                setToolBarTitle(bi.epToolbar.toolbar, resultSetType, true);
                 break;
             case 1:
+                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.leads), true);
                 propertyID = getIntent().getStringExtra("propertyID");
                 callPropertyLeadList();
                 break;
@@ -94,9 +98,9 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         super.onResume();
         leadsList.clear();
         page = 0;
-        if (bi.edtSearch.getText().toString().equals("")){
+        if (bi.edtSearch.getText().toString().equals("")) {
             handleIntent();
-        }else{
+        } else {
             leadsList = new ArrayList<>();
             page = 0;
             isFilter = true;
@@ -209,7 +213,11 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         String firstNameAsc = "";
         String lastNameAsc = "";
         String emailAddressAsc = "";
-        boolean registeredDateAsc = false;
+        if (resultSetType != null && resultSetType.equalsIgnoreCase("New Leads")) {
+            registeredDateAsc = false;
+        }else {
+            registeredDateAsc = true;
+        }
         String lastLoginedInAsc = "";
         String lastLoginedCountAsc = "";
         String lastTouchedInAsc = "";
@@ -228,11 +236,68 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         String resultType = resultSetType;
         String pageSize = "25";
 
-        presenter.getAllLeads(leadID, spouseName, email, company, phone, address, city, state, county, zip, countryID, propertyType, timeFrameID, preApproval,
-                houseToSell, agentID, leadTypeID, leadScoreMin, leadScoreMax, tagsID, priceMin, priceMax, notes, dripCompaignID, lastTouch, lastLogin, pipelineID,
-                sourceID, fromDate, toDate, searchBy, firstNameAsc, lastNameAsc, emailAddressAsc, registeredDateAsc, lastLoginedInAsc, lastLoginedCountAsc,
-                lastTouchedInAsc, conversationCellAsc, conversationEmailAsc, conversationMsgAsc, priceAsc, cityAsc, timeFrameAsc, activitiesSavedSearchAsc,
-                activitiesViewAsc, activitiesFavoriteAsc, isSaveSearch, isFilterClear, resultType, pageNo, pageSize);
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("spouseName", spouseName);
+            obj.put("address", address);
+            obj.put("houseToSell", houseToSell);
+            obj.put("conversationCellAsc", conversationCellAsc);
+            obj.put("leadID", leadID);
+            obj.put("cityAsc", city);
+            obj.put("state", state);
+            obj.put("company", company);
+            obj.put("zip", zip);
+            obj.put("propertyType", propertyType);
+            obj.put("leadScoreMin", leadScoreMin);
+            obj.put("lastLogin", lastLogin);
+            obj.put("lastLoginedCountAsc", lastLoginedCountAsc);
+            obj.put("conversationMsgAsc", conversationMsgAsc);
+            obj.put("activitiesViewAsc", activitiesViewAsc);
+            obj.put("dripCompaignID", dripCompaignID);
+            obj.put("activitiesSavedSearchAsc", activitiesSavedSearchAsc);
+            obj.put("phone", phone);
+            obj.put("county", county);
+            obj.put("lastLoginedInAsc", lastLoginedInAsc);
+            obj.put("lastTouch", lastTouch);
+            obj.put("timeFrameID", timeFrameID);
+            obj.put("notes", notes);
+            obj.put("lastNameAsc", lastNameAsc);
+            obj.put("preApproval", preApproval);
+            obj.put("leadTypeID", leadTypeID);
+            obj.put("agentID", agentID);
+            obj.put("tagsID", tagsID);
+            obj.put("firstNameAsc", firstNameAsc);
+            obj.put("searchBy", searchBy);
+            obj.put("isSaveSearch", isSaveSearch);
+            obj.put("priceAsc", priceAsc);
+            obj.put("emailAddressAsc", emailAddressAsc);
+            obj.put("leadScoreMax", leadScoreMax);
+            obj.put("resultSetType", resultSetType);
+            obj.put("city", city);
+            obj.put("activitiesFavoriteAsc", activitiesFavoriteAsc);
+            obj.put("email", email);
+            obj.put("sourceID", sourceID);
+            obj.put("registeredDateAsc", registeredDateAsc);
+            obj.put("isFilterClear", isFilterClear);
+            obj.put("pageSize", pageSize);
+            obj.put("countryID", countryID);
+            obj.put("priceMin", priceMin);
+            obj.put("priceMax", priceMax);
+            obj.put("timeFrameAsc", timeFrameAsc);
+            obj.put("lastTouchedInAsc", lastTouchedInAsc);
+            obj.put("pipelineID", pipelineID);
+            obj.put("conversationEmailAsc", conversationEmailAsc);
+            obj.put("pageNo", pageNo);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String jsonObjectString = obj.toString();
+        Log.d("json", jsonObjectString);
+
+
+        presenter.getAllLeads(jsonObjectString);
 
     }
 
@@ -261,7 +326,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                 tvPhone.setText(allLeadsList.primaryPhone);
                 tvEmail.setText(allLeadsList.primaryEmail);
 
-                tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1));
+                tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1)+"");
 
                 return Unit.INSTANCE;
             });
