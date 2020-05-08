@@ -55,6 +55,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     Button btnSave, btnCancel;
     RecyclerView rvAgentCommission;
     List<TransactionModel.Data> dataList;
+    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                     ImageView imgInitial = (ImageView) integerMap.get(R.id.imgInitial);
 
                     if (bf) {
+                        count++;
                         tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
                         imgInitial.setVisibility(View.VISIBLE);
                         tvInitial.setVisibility(View.GONE);
@@ -132,7 +134,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         bi.recyclerViewTransaction.setAdapter(recyclerAdapterUtil);
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetLeadTransactionStage.PipeLine, Integer, Unit>)
-                (viewComplainList, integer) -> {
+                (viewComplainList, position) -> {
 
                     String jsonObjectString = "";
                     pipelineID = String.valueOf(viewComplainList.id);
@@ -144,11 +146,17 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         presentationID = "2";
                     }
 
-                    jsonObjectString = "{\"presentationID\": \"" + presentationID + "\"," +
-                            " \"encrypted_LeadDetailID\": \"" + leadDetailId +
-                            "\", \"pipelineID\":\"" + pipelineID + "\"}";
-                    Log.d("json", jsonObjectString);
-                    presenter.addPipelineMark(jsonObjectString);
+                    if (position > count - 1) {
+                        jsonObjectString = "{\"presentationID\": \"" + presentationID + "\"," +
+                                " \"encrypted_LeadDetailID\": \"" + leadDetailId +
+                                "\", \"pipelineID\":\"" + pipelineID + "\"}";
+                        Log.d("json", jsonObjectString);
+
+                        presenter.addPipelineMark(jsonObjectString);
+                    } else {
+                        showLongToastMessage("Pipeline cannot be reverted");
+                    }
+
 
                     return Unit.INSTANCE;
                 });

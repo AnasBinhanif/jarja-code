@@ -78,10 +78,11 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     boolean isUpdate = false;
     GetLead.LeadList leadModel;
 
-    int source=0;
+    int source = 0;
     int timeFrame, leadType;
     boolean mFormatting; // this is a flag which prevents the  stack overflow.
     int mAfter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,7 +176,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 int pos = getLeadSourceNameList.indexOf(leadModel.source);
                 if (pos >= 0) {
 
-                    source =getLeadSourceList.get(pos).sourceID;
+                    source = getLeadSourceList.get(pos).sourceID;
                     bi.spnSource.setText(leadModel.source);
                 }
 
@@ -314,7 +315,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         bi.edtPhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                mAfter  =   after;
+                mAfter = after;
             }
 
             @Override
@@ -327,12 +328,11 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 if (!mFormatting) {
                     mFormatting = true;
                     // using US or RU formatting...
-                    if(mAfter!=0) // in case back space ain't clicked...
+                    if (mAfter != 0) // in case back space ain't clicked...
                     {
-                        String num =s.toString();
+                        String num = s.toString();
                         String data = PhoneNumberUtils.formatNumber(num, "US");
-                        if(data!=null)
-                        {
+                        if (data != null) {
                             s.clear();
                             s.append(data);
                             Log.i("Number", data);//8 (999) 123-45-67 or +7 999 123-45-67
@@ -605,8 +605,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             ToastUtils.showToast(context, getString(R.string.errSinglePiece));
         } else if (selectedIdsList.size() == 0) {
             ToastUtils.showToast(context, getString(R.string.errSelectAgent));
-        }else if (!cellPhone.equals("") && bi.edtPhone.getText().length()<14) {
-            ToastUtils.showToast(context,"Invalid CellPhone");
+        } else if (!cellPhone.equals("") && bi.edtPhone.getText().length() < 14) {
+            ToastUtils.showToast(context, "Invalid Cell Phone");
         } else if (!zipcode.equals("") && zipcode.trim().length() < 5) {
             ToastUtils.showToast(context, "Postal code cannot be less than 5");
         } else if (!zipcode2.equals("") && zipcode2.trim().length() < 5) {
@@ -734,12 +734,13 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             ToastUtils.showToast(context, getString(R.string.errSinglePiece));
         } else if (selectedIdsList.size() == 0) {
             ToastUtils.showToast(context, getString(R.string.errSelectAgent));
+        }else if (!cellPhone.equals("") && bi.edtPhone.getText().length() < 14) {
+            ToastUtils.showToast(context, "Invalid Cell Phone");
         } else if (!zipcode.equals("") && zipcode.trim().length() < 5) {
             ToastUtils.showToast(context, "Postal code cannot be less than 5");
         } else if (!zipcode2.equals("") && zipcode2.trim().length() < 5) {
             ToastUtils.showToast(context, "Postal code cannot be less than 5");
         } else {
-
 
             JSONObject obj = new JSONObject();
 
@@ -1016,7 +1017,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         }
     }
 
-    private void clearFocus(){
+    private void clearFocus() {
 
         bi.edtFName.clearFocus();
         bi.edtLName.clearFocus();

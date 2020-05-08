@@ -142,6 +142,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
         List<GetLeadDetails> leadsList = new ArrayList<>();
 
+        leadsList.add(new GetLeadDetails("Edit Lead"));
         leadsList.add(new GetLeadDetails("Follow Ups"));
         leadsList.add(new GetLeadDetails("Social Profiles"));
         leadsList.add(new GetLeadDetails("Listing Info"));
@@ -172,65 +173,53 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             switch (position) {
 
                 case 0:
+                    Intent intent = new Intent(context, AddLeadActivity.class);
+                    intent.putExtra("Lead", getLeadListData);
+                    context.startActivity(intent);
+                    break;
+                case 1:
                     Map<String, String> followMap = new HashMap<>();
                     followMap.put("leadID", leadID);
                     switchActivityWithIntentString(FollowupsActivity.class, (HashMap<String, String>) followMap);
-
                     break;
-
-                case 1:
-
+                case 2:
                     Map<String, String> socialMap = new HashMap<>();
                     socialMap.put("leadID", leadID);
                     switchActivityWithIntentString(Social_ProfilesActivity.class, (HashMap<String, String>) socialMap);
-
                     break;
-
-                case 2:
-
+                case 3:
                     Map<String, String> map = new HashMap<>();
                     map.put("title", getString(R.string.listing_info));
                     map.put("leadID", leadID);
                     switchActivityWithIntentString(ListingInfoActivity.class, (HashMap<String, String>) map);
-
                     break;
-
-                case 3:
+                case 4:
                     Map<String, String> map1 = new HashMap<>();
                     map1.put("title", getString(R.string.buying_info));
                     map1.put("leadID", leadID);
                     switchActivityWithIntentString(ListingInfoActivity.class, (HashMap<String, String>) map1);
-
                     break;
-
-                case 4:
+                case 5:
                     Map<String, String> tagMap = new HashMap<>();
                     tagMap.put("leadID", leadID);
                     switchActivityWithIntentString(TagsActivity.class, (HashMap<String, String>) tagMap);
-
                     break;
-                case 5:
-
+                case 6:
                     Map<String, String> appointMap = new HashMap<>();
                     appointMap.put("leadID", leadID);
                     appointMap.put("leadName", getLeadListData.firstName + " " + getLeadListData.lastName);
                     switchActivityWithIntentString(AppointmentActivity.class, (HashMap<String, String>) appointMap);
-
-
                     break;
-
-                case 6:
+                case 7:
                     Map<String, String> noteMap = new HashMap<>();
                     noteMap.put("leadID", leadID);
                     switchActivityWithIntentString(NotesActivity.class, (HashMap) noteMap);
-
                     break;
-                case 7:
+                case 8:
                     Map<String, String> taskMap = new HashMap<>();
                     taskMap.put("leadID", leadID);
                     taskMap.put("leadName", getLeadListData.firstName + " " + getLeadListData.lastName);
                     switchActivityWithIntentString(TasksActivity.class, (HashMap<String, String>) taskMap);
-
                     break;
 
             }
@@ -426,17 +415,9 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     presenter.getCallerId(leadID);
                 }
                 break;
-
-            case R.id.imgEditLead:
-                Intent intent = new Intent(context, AddLeadActivity.class);
-                intent.putExtra("Lead", getLeadListData);
-                context.startActivity(intent);
-                break;
-
             case R.id.fbAssignedTo:
                 showAgentDialog();
                 break;
-
             case R.id.rlTransaction1:
 
                 if (currentStage1 != null) {
@@ -574,7 +555,6 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         bi.imgCall.setOnClickListener(this);
         bi.imgEmail.setOnClickListener(this);
         bi.imgMessage.setOnClickListener(this);
-        bi.imgEditLead.setOnClickListener(this);
     }
 
     private void populateListData(ArrayList<GetLead.AgentsList> leadsList, String primaryPhone) {
@@ -664,19 +644,34 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             bi.tvID.setText(getLeadListData.leadID);
             String firstName = getLeadListData.firstName;
             String lastName = getLeadListData.lastName;
-            if (firstName != null && lastName != null && !firstName.equalsIgnoreCase("") && !lastName.equalsIgnoreCase("")) {
-                bi.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
-                bi.tvName.setText(firstName + " " + lastName);
-            } else if (firstName == null || firstName.equalsIgnoreCase("") && lastName != null && !lastName.equalsIgnoreCase("")) {
-                bi.tvInitial.setText("-" + lastName.substring(0, 1));
-                bi.tvName.setText(lastName);
-            } else if (firstName != null && !firstName.equalsIgnoreCase("") && lastName == null || lastName.equalsIgnoreCase("")) {
-                bi.tvInitial.setText(firstName.substring(0, 1) + "-");
-                bi.tvName.setText(firstName);
-            } else if (firstName == null || firstName.equalsIgnoreCase("") && lastName == null || lastName.equalsIgnoreCase("")) {
+            try {
+
+                if (firstName != null && !firstName.equalsIgnoreCase("")) {
+
+                    if (lastName != null && !lastName.equalsIgnoreCase("")) {
+                        bi.tvInitial.setText(firstName.substring(0, 1) + " " + lastName.substring(0, 1));
+                        bi.tvName.setText(firstName + " " + lastName);
+                    } else {
+                        bi.tvInitial.setText(firstName.substring(0, 1) + "-");
+                        bi.tvName.setText(firstName);
+                    }
+
+                } else {
+
+                    if (lastName != null && !lastName.equalsIgnoreCase("")) {
+                        bi.tvInitial.setText("-" + " " + lastName.substring(0, 1));
+                        bi.tvName.setText("-" + " " + lastName);
+                    } else {
+                        bi.tvInitial.setText("-" + "-");
+                        bi.tvName.setText(firstName);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
                 bi.tvInitial.setText("-" + "-");
                 bi.tvName.setText("");
             }
+
             bi.tvScore.setText(getLeadListData.leadScore);
         } else {
             bi.scLeadDetail.setVisibility(View.GONE);
