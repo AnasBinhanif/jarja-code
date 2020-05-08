@@ -112,8 +112,6 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         if (getIntent().getExtras() != null) {
 
             leadModel = (GetLead.LeadList) getIntent().getExtras().getSerializable("Lead");
-
-            isUpdate = true;
             bi.btnSave.setText("Update");
             leadID = leadModel.leadStringID;
             bi.edtFName.setText(leadModel.firstName);
@@ -606,7 +604,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         } else if (selectedIdsList.size() == 0) {
             ToastUtils.showToast(context, getString(R.string.errSelectAgent));
         } else if (!cellPhone.equals("") && bi.edtPhone.getText().length() < 14) {
-            ToastUtils.showToast(context, "Invalid Cell Phone");
+            ToastUtils.showToast(context, "Invalid phone number");
         } else if (!zipcode.equals("") && zipcode.trim().length() < 5) {
             ToastUtils.showToast(context, "Postal code cannot be less than 5");
         } else if (!zipcode2.equals("") && zipcode2.trim().length() < 5) {
@@ -734,8 +732,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             ToastUtils.showToast(context, getString(R.string.errSinglePiece));
         } else if (selectedIdsList.size() == 0) {
             ToastUtils.showToast(context, getString(R.string.errSelectAgent));
-        }else if (!cellPhone.equals("") && bi.edtPhone.getText().length() < 14) {
-            ToastUtils.showToast(context, "Invalid Cell Phone");
+        } else if (!cellPhone.equals("") && bi.edtPhone.getText().length() < 14) {
+            ToastUtils.showToast(context, "Invalid phone number");
         } else if (!zipcode.equals("") && zipcode.trim().length() < 5) {
             ToastUtils.showToast(context, "Postal code cannot be less than 5");
         } else if (!zipcode2.equals("") && zipcode2.trim().length() < 5) {
@@ -918,21 +916,14 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         for (GetLeadDripCampaignList.Data model : getLeadDripCampaignList) {
             getLeadDripCampaignModelList.add(new MultiSelectModel(model.dripCompaignID, model.name));
         }
-        GH.getInstance().ShowProgressDialog(AddLeadActivity.this);
-        addTimer();
-    }
 
-    private void addTimer() {
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Do something after 100ms
-                GH.getInstance().HideProgressDialog();
-                initData();
-            }
-        }, 3000);
+        isUpdate = getIntent().getBooleanExtra("isEdit", false);
+        if (isUpdate) {
+            GH.getInstance().HideProgressDialog();
+            initData();
+        } else {
+            GH.getInstance().HideProgressDialog();
+        }
 
     }
 

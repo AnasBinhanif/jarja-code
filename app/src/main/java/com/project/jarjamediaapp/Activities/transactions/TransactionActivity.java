@@ -123,9 +123,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                             bf = false;
                         }
                     } else {
-                        imgInitial.setVisibility(View.GONE);
-                        tvInitial.setVisibility(View.VISIBLE);
-                        tvName.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                        bf = false;
                     }
 
                     return Unit.INSTANCE;
@@ -154,7 +152,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
                         presenter.addPipelineMark(jsonObjectString);
                     } else {
-                        showLongToastMessage("Pipeline cannot be reverted");
+                        showLongToastMessage("Sorry, you cannot revert pipeline.");
                     }
 
 

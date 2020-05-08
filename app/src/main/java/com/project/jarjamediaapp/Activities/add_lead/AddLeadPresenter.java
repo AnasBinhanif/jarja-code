@@ -238,8 +238,6 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
             @Override
             public void onResponse(Call<GetLeadDripCampaignList> call, Response<GetLeadDripCampaignList> response) {
 
-                _view.hideProgressBar();
-
                 if (response.isSuccessful()) {
 
                     GetLeadDripCampaignList getAppointmentsModel = response.body();
@@ -249,11 +247,13 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
 
                     } else {
 
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }

@@ -175,6 +175,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 case 0:
                     Intent intent = new Intent(context, AddLeadActivity.class);
                     intent.putExtra("Lead", getLeadListData);
+                    intent.putExtra("isEdit",true);
                     context.startActivity(intent);
                     break;
                 case 1:
