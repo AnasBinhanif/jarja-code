@@ -73,7 +73,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     public void onError(Throwable throwable) {
                         //Log.d("Response", "onError: " + throwable.toString());
                         GH.getInstance().HideProgressDialog();
-                        ToastUtils.showToastLong(context, "The user name or password is incorrect");
+                        ToastUtils.showToastLong(context, "Invalid Username or Password");
                     }
                 }));
     }
@@ -114,11 +114,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             return false;
         }
         if (!Validator.isEmailValid(email)) {
-            showToastMessage("Please enter valid email");
+            showToastMessage("Invalid Email ");
             bi.atvEmail.requestFocus();
             return false;
         }
         return true;
+
     }
 
     @Override
@@ -159,4 +160,5 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         GH.getInstance().HideProgressDialog();
     }
+
 }
