@@ -226,6 +226,10 @@ public class CalendarTaskDetailModel extends BaseResponse implements Parcelable 
             return startTime;
         }
 
+        public void setStartTime(String startTime) {
+            this.startTime = startTime;
+        }
+
         public String getEndTime() {
             return endTime;
         }

@@ -67,9 +67,9 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
             bi.atvDescription.setText(calendarDetailModel.getDescription() != null ? calendarDetailModel.getDescription() : "");
 
             startDate = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-            startTime = GH.getInstance().formatter(calendarDetailModel.getEndTime(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+            startTime = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
             bi.tvStartDate.setText(GH.getInstance().formatDate(calendarDetailModel.getStartTime()) != null ? GH.getInstance().formatDate(calendarDetailModel.getStartTime()) : "");
-            bi.tvStartTime.setText(GH.getInstance().formatTime(calendarDetailModel.getEndTime()) != null ? GH.getInstance().formatTime(calendarDetailModel.getEndTime()) : "");
+            bi.tvStartTime.setText(GH.getInstance().formatTime(calendarDetailModel.getStartTime()) != null ? GH.getInstance().formatTime(calendarDetailModel.getStartTime()) : "");
             bi.cbAllDay.setChecked(calendarDetailModel.isAllDay != null ? calendarDetailModel.isAllDay : false);
             if (bi.cbAllDay.isChecked()) {
                 bi.tvStartTime.setVisibility(View.GONE);

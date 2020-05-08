@@ -256,8 +256,11 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
             bi.rvEvents.setAdapter(swipeCalendarAppointmentRecyclerAdapter);
             bi.rvEvents.setVisibility(View.VISIBLE);
             bi.tvMessage.setVisibility(View.GONE);
-            getMarkedEvents();
-
+            try {
+                getMarkedEvents();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
 
             bi.rvEvents.setVisibility(View.GONE);
@@ -274,8 +277,8 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
         if (dataList != null && dataList.size() > 0) {
             for (int i = 0; i < dataList.size(); i++) {
-                String[] formatString = dataList.get(i).getStart().split(" ");
-                markedDates.add(Integer.valueOf(GH.getInstance().formatter(formatString[0], "d", "mm-dd-yyyy")));
+                String formatString = dataList.get(i).getStart();
+                markedDates.add(Integer.valueOf(GH.getInstance().formatter(formatString, "d", "yyyy-MM-dd'T'HH:mm:ss")));
 
             }
         }

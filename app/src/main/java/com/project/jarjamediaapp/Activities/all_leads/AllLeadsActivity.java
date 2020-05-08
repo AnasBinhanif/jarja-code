@@ -213,11 +213,6 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         String firstNameAsc = "";
         String lastNameAsc = "";
         String emailAddressAsc = "";
-        if (resultSetType != null && resultSetType.equalsIgnoreCase("New Leads")) {
-            registeredDateAsc = false;
-        }else {
-            registeredDateAsc = true;
-        }
         String lastLoginedInAsc = "";
         String lastLoginedCountAsc = "";
         String lastTouchedInAsc = "";
@@ -233,7 +228,6 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         String isSaveSearch = "false";
         String isFilterClear = "false";
         String pageNo = pgNo;
-        String resultType = resultSetType;
         String pageSize = "25";
 
         JSONObject obj = new JSONObject();
@@ -277,7 +271,11 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             obj.put("activitiesFavoriteAsc", activitiesFavoriteAsc);
             obj.put("email", email);
             obj.put("sourceID", sourceID);
-            obj.put("registeredDateAsc", registeredDateAsc);
+            if (resultSetType != null && resultSetType.equalsIgnoreCase("New Leads")) {
+                obj.put("registeredDateAsc", false);
+            }else {
+                obj.put("registeredDateAsc", null);
+            }
             obj.put("isFilterClear", isFilterClear);
             obj.put("pageSize", pageSize);
             obj.put("countryID", countryID);

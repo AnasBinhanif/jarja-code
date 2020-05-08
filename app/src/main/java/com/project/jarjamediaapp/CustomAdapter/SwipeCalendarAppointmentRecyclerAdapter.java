@@ -81,11 +81,9 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             String date = "";
             if (modelData.getStart() != null || modelData.getStart().equalsIgnoreCase("Null")
                     || !modelData.getStart().equals("")) {
-                String start[] = modelData.getStart().split("-");
-                date = start[1];
+                date = GH.getInstance().formatter(modelData.getStart(), "dd", "yyyy-MM-dd'T'HH:mm:ss");
             }
             holder.tvTitle.setText(modelData.getTitle() != null ? modelData.getTitle() : "");
-            //holder.tvCount.setText(modelData.getCount() != null ? String.valueOf(modelData.getCount()) : "0");
             holder.tvCount.setText(date);
 
             holder.swipeLayout.setSwipeListener(new SwipeRevealLayout.SwipeListener() {
@@ -424,17 +422,20 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
         try {
             if (calendarDetailModel != null) {
                 tvEventDetail.setPaintFlags(tvEventDetail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
                 if (calendarDetailModel.getStartTime() != null && calendarDetailModel.getEndTime() != null) {
-                    String[] startTime = calendarDetailModel.getStartTime().split("T");
-                    tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
+
+                    String sDateTime = addHour(calendarDetailModel.getStartTime(), 5);
+                    calendarDetailModel.setStartTime(sDateTime);
+                    String[] startTime = sDateTime.split("T");
                     if (calendarDetailModel.isAllDay != null && calendarDetailModel.isAllDay) {
                         tvTime.setText("All Day");
-                    }  /*else {
+                    }  else {
                         tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss"));
-                    }*/
+                    }
                     tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd"));
                 }
-
+                tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
                 tvAttendeesCount.setText("0");
                 tvDetail.setText(calendarDetailModel.getDescription() != null ? calendarDetailModel.getDescription() : "");
             }
