@@ -228,7 +228,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         atvPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                mAfter  =   after;
+                mAfter = after;
             }
 
             @Override
@@ -241,12 +241,11 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                 if (!mFormatting) {
                     mFormatting = true;
                     // using US or RU formatting...
-                    if(mAfter!=0) // in case back space ain't clicked...
+                    if (mAfter != 0) // in case back space ain't clicked...
                     {
-                        String num =s.toString();
+                        String num = s.toString();
                         String data = PhoneNumberUtils.formatNumber(num, "US");
-                        if(data!=null)
-                        {
+                        if (data != null) {
                             s.clear();
                             s.append(data);
                             Log.i("Number", data);//8 (999) 123-45-67 or +7 999 123-45-67
@@ -499,6 +498,12 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         }
         if (Methods.isEmpty(atvPhoneNumber)) {
             ToastUtils.showToast(context, "Please enter phone number");
+            atvPhoneNumber.requestFocus();
+            return false;
+        }
+        if (!atvPhoneNumber.getText().toString().equalsIgnoreCase("") &&
+                atvPhoneNumber.getText().toString().length() < 14) {
+            ToastUtils.showToast(context, "Please enter valid phone number");
             atvPhoneNumber.requestFocus();
             return false;
         }

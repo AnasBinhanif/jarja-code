@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -46,7 +47,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
-    implementation'com.squareup.retrofit2:converter-scalars:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
     // UI Component
     implementation 'com.kaopiz:kprogresshud:1.1.0'
     // Custom Size for fonts and dimensions
@@ -75,6 +76,7 @@ dependencies {
     implementation 'com.github.prolificinteractive:material-calendarview:1.4.2'
     // Multi picker
     implementation 'com.vincent.filepicker:MultiTypeFilePicker:1.0.8'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

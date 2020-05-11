@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 
-import androidx.appcompat.app.AppCompatDialog;
-
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.project.jarjamediaapp.Models.GetUserPermission;
@@ -47,7 +45,8 @@ public class GH {
         AUTHORIZATION,
         AGENT_ID_CALENDAR,
         USER_NAME,
-        USER_PERMISSIONS
+        USER_PERMISSIONS,
+        FIREBASE_TOEKN
 
     }
 
@@ -65,13 +64,8 @@ public class GH {
 
     }
 
-
     public boolean isLoggedIn() {
         return EasyPreference.with(ProjectApplication.getInstance()).getBoolean(KEYS.IS_LOGGED_IN.name(), false);
-    }
-
-    public String getUserID() {
-        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_ID.name(), "");
     }
 
     public String getCalendarAgentId() {
@@ -80,6 +74,10 @@ public class GH {
 
     public String getUserName() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_NAME.name(), "");
+    }
+
+    public String getFirebaseToken() {
+        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.FIREBASE_TOEKN.name(), "");
     }
 
   /*  public void ShowProgressDialog(Context context) {

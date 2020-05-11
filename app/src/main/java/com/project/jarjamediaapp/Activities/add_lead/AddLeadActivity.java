@@ -28,6 +28,7 @@ import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
 import com.project.jarjamediaapp.Models.GetLeadTypeList;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddLeadBinding;
 
@@ -605,6 +606,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             ToastUtils.showToast(context, getString(R.string.errSelectAgent));
         } else if (!cellPhone.equals("") && bi.edtPhone.getText().length() < 14) {
             ToastUtils.showToast(context, "Invalid phone number");
+        } else if (!primaryEmail.equals("") && Methods.isInValidEmail(bi.edtEmail)) {
+            ToastUtils.showToast(context, "Invalid email");
         } else if (!zipcode.equals("") && zipcode.trim().length() < 5) {
             ToastUtils.showToast(context, "Postal code cannot be less than 5");
         } else if (!zipcode2.equals("") && zipcode2.trim().length() < 5) {
@@ -734,6 +737,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             ToastUtils.showToast(context, getString(R.string.errSelectAgent));
         } else if (!cellPhone.equals("") && bi.edtPhone.getText().length() < 14) {
             ToastUtils.showToast(context, "Invalid phone number");
+        } else if (!primaryEmail.equals("") && Methods.isInValidEmail(bi.edtEmail)) {
+            ToastUtils.showToast(context, "Invalid email");
         } else if (!zipcode.equals("") && zipcode.trim().length() < 5) {
             ToastUtils.showToast(context, "Postal code cannot be less than 5");
         } else if (!zipcode2.equals("") && zipcode2.trim().length() < 5) {
