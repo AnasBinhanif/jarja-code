@@ -203,6 +203,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         // 4 from Update Appointment
         // 5 from Add Appointment
         // 6 for Update Calendar Appointment
+        // 7 for
 
         fromId = getIntent().getStringExtra("from");
         switch (fromId) {
@@ -270,7 +271,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 GetAppointmentsModel.Data.Datum modelData = getIntent().getParcelableExtra("models");
                 prePopulateData(modelData);
                 setViewAndChildrenEnabled(bi.appointParent, false);
-                bi.lnBottom.setVisibility(View.GONE);
+               // bi.lnBottom.setVisibility(View.GONE);
             }
             break;
         }
