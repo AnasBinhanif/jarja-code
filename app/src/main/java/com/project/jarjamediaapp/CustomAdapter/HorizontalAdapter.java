@@ -109,7 +109,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
 
             Log.d("date22", holder.tvStartDateTime.getText().toString() + " " + holder.tvEndDateTime.getText().toString());
 
-            holder.tvAddress.setText(data.get(position).getStreetName() + " , " + data.get(position).getCity());
+            holder.tvAddress.setText(data.get(position).getStreetName() + "," + data.get(position).getCity());
             holder.tvCityPostal.setText(data.get(position).getState());
             holder.tvLeadsCount.setText(data.get(position).getLeadCount() != 0 ? "Leads " + data.get(position).getLeadCount() : "Leads 0");
             String image = data.get(position).getImgURL();
@@ -361,6 +361,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                ((OpenHousesActivity) context).hitApiForRefresh(pos);
             }
         });
 
@@ -458,9 +459,9 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
 
                     BaseResponse baseResponse = response.body();
                     if (baseResponse.getStatus().equals("Success")) {
-                        dialog.dismiss();
+                        // clear data
+                        clearData();
                         ToastUtils.showToast(context, baseResponse.message);
-                        ((OpenHousesActivity) context).hitApiForRefresh(pos);
                     } else {
                         ToastUtils.showToast(context, baseResponse.message);
                     }
@@ -514,6 +515,20 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         }*/
 
         return true;
+    }
+
+    private void clearData(){
+
+        atvFirstName.setText("");
+        atvLastName.setText("");
+        atvPhoneNumber.setText("");
+        atvEmail.setText("");
+        atvPlan.setText("");
+        atvApprove.setText("");
+        atvSell.setText("");
+        atvPay.setText("");
+        atvDeal.setText("");
+
     }
 
 }

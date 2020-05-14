@@ -166,6 +166,7 @@
 
     <!--- Notes Activity -->
     <string name="documents">Documents</string>
+    <string name="add_file">Add File</string>
     <string name="add_documents">Add Documents</string>
     <string name="add_notes">Add Notes</string>
 

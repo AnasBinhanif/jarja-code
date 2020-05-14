@@ -12,96 +12,83 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/ep_toolbar"
-            android:background="@color/colorGrey_light">
+            android:background="@color/colorGrey_light"
+            android:orientation="vertical">
 
-            <androidx.core.widget.NestedScrollView
+            <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/_15sdp"
+                android:paddingEnd="@dimen/_15sdp"
+                android:weightSum="2">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/linearLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:baselineAligned="false"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/_15sdp"
-                        android:paddingEnd="@dimen/_15sdp"
-                        android:weightSum="2">
+                    <Button
+                        android:id="@+id/btnNotes"
+                        style="@style/TabButtonYellowLeft"
+                        android:text="@string/notes" />
+                </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_rightstroke_transparent"
+                    android:orientation="vertical">
 
-                            <Button
-                                android:id="@+id/btnNotes"
-                                style="@style/TabButtonYellowLeft"
-                                android:text="@string/notes" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_rightstroke_transparent"
-                            android:orientation="vertical">
-
-                            <Button
-                                android:id="@+id/btnDocuments"
-                                style="@style/TabButtonTranparentRight"
-                                android:text="@string/documents" />
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tvNoRecordFound"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="No Record Found"
-                        android:textSize="25dp"
-                        android:textStyle="bold"
-                        android:gravity="center"
-                        android:visibility="gone"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:layout_centerInParent="true"/>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerViewNotes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:nestedScrollingEnabled="false"
-                        android:visibility="gone" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerViewDocuments"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:nestedScrollingEnabled="false"
-                        android:visibility="gone" />
+                    <Button
+                        android:id="@+id/btnDocuments"
+                        style="@style/TabButtonTranparentRight"
+                        android:text="@string/documents" />
 
                 </LinearLayout>
 
-            </androidx.core.widget.NestedScrollView>
 
-        </RelativeLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvNoRecordFound"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="No Record Found"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewDocuments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 

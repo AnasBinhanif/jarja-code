@@ -82,6 +82,7 @@
                 android:id="@+id/fileType"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
+                android:padding="10dp"
                 android:contentDescription="@string/ef_msg_empty_images"
                 android:src="@drawable/ic_document" />
 
@@ -94,7 +95,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_12ssp" />
 
         </LinearLayout>
 

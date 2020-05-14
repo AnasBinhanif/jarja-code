@@ -72,12 +72,22 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
             GetTasksModel.Data.TaskList modelData = mData.get(position);
 
             holder.tvTaskType.setText(modelData.type);
-
             holder.tvName.setText(modelData.name + " for " + modelData.agentName);
             holder.tvAddress.setText(modelData.firstName + " " + modelData.lastName);
 
-            holder.tvInitial.setText(modelData.name.substring(0, 1));
-
+            String firstName = modelData.firstName;
+            String lastName = modelData.lastName;
+            if (firstName.equals("null") || firstName.equals("")) {
+                firstName = "-";
+            }
+            if (lastName.equals("null") || lastName.equals("")) {
+                lastName = "-";
+            }
+            try {
+                holder.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             holder.frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -175,7 +185,7 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
     private class ViewHolder extends RecyclerView.ViewHolder {
 
         private SwipeRevealLayout swipeLayout;
-        TextView tvName, tvAddress, tvEdit, tvDone, tvInitial,tvTaskType;
+        TextView tvName, tvAddress, tvEdit, tvDone, tvInitial, tvTaskType;
         FrameLayout frameLayout;
 
         public ViewHolder(View itemView) {
@@ -206,71 +216,83 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
             tvEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    userPermission = GH.getInstance().getUserPermissions();
-                    if (userPermission.data.dashboard.get(2).value) {
-
-                        pos = getAdapterPosition();
-                        String leadID = mData.get(pos).leadID;
-                        String taskID = mData.get(pos).taskID;
-                        String scheduleID = mData.get(pos).scheduleID;
-                        if (isEditByLead) {
-
-                            swipeLayout.close(true);
-                            if (!isFutureTask) {
-                                if (taskID == null || taskID.equals("null") || taskID.equals("")) {
-                                    Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    context.startActivity(new Intent(context, AddTaskActivity.class)
-                                            .putExtra("from", "3")
-                                            .putExtra("whichTasks", 1)
-                                            .putExtra("taskId", taskID));
-                                }
-                            } else {
-
-                                if (scheduleID == null || scheduleID.equals("null") || scheduleID.equals("")) {
-                                    Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
-                                } else {
-
-                                    context.startActivity(new Intent(context, AddTaskActivity.class)
-                                            .putExtra("from", "3")
-                                            .putExtra("whichTasks", 3)
-                                            .putExtra("taskId", scheduleID));
-                                }
-                            }
-                        } else {
-
-                            swipeLayout.close(true);
-                            if (!isFutureTask) {
-                                if (taskID == null || taskID.equals("null") || taskID.equals("")) {
-                                    Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    context.startActivity(new Intent(context, AddTaskActivity.class)
-                                            .putExtra("from", "3")
-                                            .putExtra("whichTasks", 1)
-                                            .putExtra("taskId", taskID));
-                                }
-                            } else {
-
-                                if (scheduleID == null || scheduleID.equals("null") || scheduleID.equals("")) {
-                                    Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
-                                } else {
-
-                                    context.startActivity(new Intent(context, AddTaskActivity.class)
-                                            .putExtra("from", "3")
-                                            .putExtra("whichTasks", 3)
-                                            .putExtra("taskId", scheduleID));
-                                }
-
-
-                            }
-                        }
-                    } else {
-
-                        ToastUtils.showToast(context, context.getString(R.string.dashboard_EditTask));
-                    }
+                    pos = getAdapterPosition();
+                    editTask(pos, swipeLayout);
+                }
+            });
+            frameLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pos = getAdapterPosition();
+                    editTask(pos, swipeLayout);
                 }
             });
 
+        }
+    }
+
+    private void editTask(int pos, SwipeRevealLayout swipeLayout) {
+        userPermission = GH.getInstance().getUserPermissions();
+        if (userPermission.data.dashboard.get(2).value) {
+
+            String leadID = mData.get(pos).leadID;
+            String taskID = mData.get(pos).taskID;
+            String scheduleID = mData.get(pos).scheduleID;
+            if (isEditByLead) {
+                swipeLayout.close(true);
+                if (!isFutureTask) {
+                    if (taskID == null || taskID.equals("null") || taskID.equals("")) {
+                        Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                    } else {
+                        context.startActivity(new Intent(context, AddTaskActivity.class)
+                                .putExtra("from", "3")
+                                .putExtra("whichTasks", 1)
+                                .putExtra("leadID", leadID)
+                                .putExtra("taskId", taskID));
+                    }
+                } else {
+
+                    if (scheduleID == null || scheduleID.equals("null") || scheduleID.equals("")) {
+                        Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                    } else {
+
+                        context.startActivity(new Intent(context, AddTaskActivity.class)
+                                .putExtra("from", "3")
+                                .putExtra("whichTasks", 3)
+                                .putExtra("leadID", leadID)
+                                .putExtra("taskId", scheduleID));
+                    }
+                }
+            } else {
+
+                swipeLayout.close(true);
+                if (!isFutureTask) {
+                    if (taskID == null || taskID.equals("null") || taskID.equals("")) {
+                        Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                    } else {
+                        context.startActivity(new Intent(context, AddTaskActivity.class)
+                                .putExtra("from", "3")
+                                .putExtra("whichTasks", 1)
+                                .putExtra("taskId", taskID));
+                    }
+                } else {
+
+                    if (scheduleID == null || scheduleID.equals("null") || scheduleID.equals("")) {
+                        Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
+                    } else {
+
+                        context.startActivity(new Intent(context, AddTaskActivity.class)
+                                .putExtra("from", "3")
+                                .putExtra("whichTasks", 3)
+                                .putExtra("taskId", scheduleID));
+                    }
+
+
+                }
+            }
+        } else {
+
+            ToastUtils.showToast(context, context.getString(R.string.dashboard_EditTask));
         }
     }
 

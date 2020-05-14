@@ -69,23 +69,29 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
 
             GetFollowUpsModel.Data.FollowUpsList modelData = mData.get(position);
 
-            String firstName = modelData.leadName + "";
-            String summary = modelData.summary + "";
 
-            if (firstName.equals("null") || firstName.equals("")) {
-                firstName = "-";
-            }
-           /* if (lastName.equals("null") || lastName.equals("")) {
-                lastName = "-";
-            }*/
+            String summary = modelData.summary + "";
             if (summary.equals("null") || summary.equals("")) {
                 summary = "-";
             }
-
-            holder.tvName.setText(firstName);
             holder.tvAddress.setText(summary);
+            try {
 
-            holder.tvInitial.setText(firstName.substring(0, 1));
+                holder.tvName.setText(modelData.leadName + "");
+                String[] name = modelData.leadName.split(" ");
+                String firstName = name[0];
+                String lastName = name[1];
+                if (firstName.equals("null") || firstName.equals("")) {
+                    firstName = "-";
+                }
+                if (lastName.equals("null") || lastName.equals("")) {
+                    lastName = "-";
+                }
+                holder.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
 
             holder.frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -83,7 +83,7 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
                 String createdDate = dateTime[0] + " " + dateTime[1].substring(0, 5);
                 String createdTime = dateTime[1].substring(0, 5);
 
-                holder.tvDateTime.setText(createdDate + "");
+                holder.tvDateTime.setText(GH.getInstance().formatter(createdDate, "dd-MM-yyyy", "yyyy-MM-dd HH:mm") + "");
                 holder.tvTime.setText(createdTime + "");
             } else {
                 holder.tvDateTime.setText("");

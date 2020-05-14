@@ -189,21 +189,27 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
     public void updateUIListDocuments(DocumentModel response) {
 
         // on api success response call this method
-        swipeDocumentRecyclerAdapter = new SwipeDocumentRecyclerAdapter(context, NotesActivity.this, response.getData());
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewDocuments.getContext(), 1);
-        bi.recyclerViewDocuments.setLayoutManager(mLayoutManager);
-        bi.recyclerViewDocuments.setItemAnimator(new DefaultItemAnimator());
-        bi.recyclerViewDocuments.addItemDecoration(dividerItemDecoration);
-        bi.recyclerViewDocuments.setAdapter(swipeDocumentRecyclerAdapter);
-        bi.recyclerViewDocuments.setVisibility(View.VISIBLE);
-        bi.recyclerViewNotes.setVisibility(View.GONE);
+        if (response.getData().size() > 0) {
+            swipeDocumentRecyclerAdapter = new SwipeDocumentRecyclerAdapter(context, NotesActivity.this, response.getData());
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewDocuments.getContext(), 1);
+            bi.recyclerViewDocuments.setLayoutManager(mLayoutManager);
+            bi.recyclerViewDocuments.setItemAnimator(new DefaultItemAnimator());
+            bi.recyclerViewDocuments.addItemDecoration(dividerItemDecoration);
+            bi.recyclerViewDocuments.setAdapter(swipeDocumentRecyclerAdapter);
+            bi.recyclerViewDocuments.setVisibility(View.VISIBLE);
+            bi.recyclerViewNotes.setVisibility(View.GONE);
+            bi.tvNoRecordFound.setVisibility(View.GONE);
+        } else {
+            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+        }
 
     }
 
     @Override
     public void updateUIListAfterAddDoc(BaseResponse response) {
 
+        showLongToastMessage("Document added successfully");
         presenter.getDocumentByLeadId(leadID);
 
     }
