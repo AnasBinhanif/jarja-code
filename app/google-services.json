@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "177525736103",
+    "firebase_url": "https://jarjamediaapp-4c815.firebaseio.com",
+    "project_id": "jarjamediaapp-4c815",
+    "storage_bucket": "jarjamediaapp-4c815.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177525736103:android:15354d280f81e24d4fd182",
+        "android_client_info": {
+          "package_name": "com.project.jarjamediaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177525736103-llhl4bdjt6653ckpamnjfp8f33gvvc46.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.jarjamediaapp",
+            "certificate_hash": "8b7a5a942c02737bdc1ccdaccfe63b8f65d303eb"
+          }
+        },
+        {
+          "client_id": "177525736103-qlvq4pmet0ooqcvggb1o114ipv5n1bk2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQcHpeiy4yFcOaE4w19xGsxMQtatQ4NkM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177525736103-qlvq4pmet0ooqcvggb1o114ipv5n1bk2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
