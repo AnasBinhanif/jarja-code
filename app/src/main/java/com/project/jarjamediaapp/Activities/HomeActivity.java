@@ -180,8 +180,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void onResume() {
-        super.onResume();
 
+        super.onResume();
+        try {
+            navigationView.getMenu().getItem(0).setChecked(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

@@ -83,6 +83,8 @@ dependencies {
     //caLL Twilio
     implementation 'com.twilio:voice-android:5.0.2'
     implementation 'com.koushikdutta.ion:ion:2.1.8'
+    // Date Picker
+    implementation 'com.github.drawers:SpinnerDatePicker:2.0.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
 
 }

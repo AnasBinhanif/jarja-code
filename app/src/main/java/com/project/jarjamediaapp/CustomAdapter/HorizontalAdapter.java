@@ -94,20 +94,11 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         // Data binding
         try {
 
-            String[] startDateTime = data.get(position).getOpenHouseDate().split("T");
-            String[] endDateTime = data.get(position).getOpenHouseEndDate().split("T");
+            String startDateTime = data.get(position).getOpenHouseDate();
+            String endDateTime = data.get(position).getOpenHouseEndDate();
 
-            Log.d("date22", startDateTime[1] + " " + endDateTime[1]);
-
-            String finalStartDateTime = startDateTime[0] + " " + GH.getInstance().addFiveHours(startDateTime[1]);
-            String finalEndDateTime = endDateTime[0] + " " + GH.getInstance().addFiveHours(endDateTime[1]);
-
-            Log.d("date22", finalStartDateTime + " " + finalStartDateTime);
-
-            holder.tvStartDateTime.setText(GH.getInstance().formatter(finalStartDateTime, "MM-dd-yyyy hh:mm a", "yyyy-MM-dd HH:mm:ss"));
-            holder.tvEndDateTime.setText(GH.getInstance().formatter(finalEndDateTime, "MM-dd-yyyy hh:mm a", "yyyy-MM-dd HH:mm:ss"));
-
-            Log.d("date22", holder.tvStartDateTime.getText().toString() + " " + holder.tvEndDateTime.getText().toString());
+            holder.tvStartDateTime.setText(GH.getInstance().formatter(startDateTime, "MM-dd-yyyy hh:mm a", "yyyy-MM-dd'T'HH:mm:ss"));
+            holder.tvEndDateTime.setText(GH.getInstance().formatter(endDateTime, "MM-dd-yyyy hh:mm a", "yyyy-MM-dd'T'HH:mm:ss"));
 
             holder.tvAddress.setText(data.get(position).getStreetName() + "," + data.get(position).getCity());
             holder.tvCityPostal.setText(data.get(position).getState());

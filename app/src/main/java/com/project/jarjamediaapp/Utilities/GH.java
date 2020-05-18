@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.ProjectApplication;
+import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import java.io.File;
 import java.text.ParseException;
@@ -250,22 +251,5 @@ public class GH {
 
     }
 
-    public String addFiveHours(String time) {
-
-        String addedTime = "";
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-            Date date = sdf.parse(time);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            calendar.add(Calendar.HOUR, 5);
-            SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm:ss");
-            addedTime = sdf1.format(calendar.getTime());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return addedTime;
-    }
 
 }

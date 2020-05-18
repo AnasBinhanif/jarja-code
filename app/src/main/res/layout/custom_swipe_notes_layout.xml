@@ -111,7 +111,6 @@
                         android:layout_centerVertical="true"
                         android:drawableLeft="@drawable/ic_calendar"
                         android:drawablePadding="5dp"
-                        android:text="12/31/2020 04:30PM"
                         android:textColor="@color/colorGreyTextDark"
                         android:textSize="14dp" />
 
@@ -123,7 +122,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Note For : Hamza, Owais"
                     android:textColor="@color/colorGreyText"
                     android:textStyle="bold" />
 
@@ -143,7 +141,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
                     android:textColor="@color/colorGreyText" />
 
                 <TextView
@@ -152,7 +149,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="right"
-                    android:text="05:41 PM"
                     android:textColor="@color/colorGreyText" />
 
             </LinearLayout>

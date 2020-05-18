@@ -103,10 +103,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     public void initViews() {
 
         presenter.getAgentNames();
-        presenter.getReminder();
-        presenter.getVia();
-        presenter.getType();
-        presenter.getRecur();
 
         bi.atvVia.setOnClickListener(this);
         bi.tvName.setOnClickListener(this);
@@ -288,6 +284,9 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     @Override
     public void updateUIListForReminders(AddAppointmentModel response) {
 
+        if(from.equalsIgnoreCase("1") || from.equalsIgnoreCase("4")){
+            hideProgressBar();
+        }
         arrayListReminderText = new ArrayList<>();
         arrayListReminderValue = new ArrayList<>();
 
@@ -436,20 +435,17 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         }
         bi.atvAddProperty.setText(taskDetail.data.address);
 
-        String sDateTime = addHour(taskDetail.data.startDate, 5);
-        String eDateTime = addHour(taskDetail.data.endDate, 5);
+        startDate = GH.getInstance().formatter(taskDetail.data.startDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy hh:mm:ss a");
+        endDate = GH.getInstance().formatter(taskDetail.data.endDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy hh:mm:ss a");
 
-        startDate = GH.getInstance().formatter(sDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy hh:mm:ss a");
-        endDate = GH.getInstance().formatter(eDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy hh:mm:ss a");
+        String sDate = GH.getInstance().formatter(taskDetail.data.startDate, "MM-dd-yyyy", "MM/dd/yyyy hh:mm:ss a");
+        String eDate = GH.getInstance().formatter(taskDetail.data.endDate, "MM-dd-yyyy", "MM/dd/yyyy hh:mm:ss a");
 
-        String sDate = GH.getInstance().formatter(sDateTime, "MM-dd-yyyy", "MM/dd/yyyy hh:mm:ss a");
-        String eDate = GH.getInstance().formatter(eDateTime, "MM-dd-yyyy", "MM/dd/yyyy hh:mm:ss a");
+        startTime = GH.getInstance().formatter(taskDetail.data.startDate, "HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
+        endTime = GH.getInstance().formatter(taskDetail.data.endDate, "HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
 
-        startTime = GH.getInstance().formatter(sDateTime, "HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
-        endTime = GH.getInstance().formatter(eDateTime, "HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
-
-        String sTime = GH.getInstance().formatter(sDateTime, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
-        String eTime = GH.getInstance().formatter(eDateTime, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
+        String sTime = GH.getInstance().formatter(taskDetail.data.startDate, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
+        String eTime = GH.getInstance().formatter(taskDetail.data.endDate, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
 
         bi.tvStartDate.setText(sDate + " " + sTime);
         bi.tvEndDate.setText(eDate + " " + eTime);
@@ -506,22 +502,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
            /* bi.tvEndDate.setEnabled(false);
             bi.cbEndDate.setEnabled(false);*/
         }
-
-    }
-
-    private String addHour(String myTime, int number) {
-        try {
-            SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
-            Date d = df.parse(myTime);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(d);
-            cal.add(Calendar.HOUR, number);
-            String newTime = df.format(cal.getTime());
-            return newTime;
-        } catch (ParseException e) {
-            System.out.println(" Parsing Exception");
-        }
-        return null;
 
     }
 
@@ -1294,8 +1274,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
             @Override
             public void onFailure(Call<GetLeadTitlesModel> call, Throwable t) {
+
                 hideProgressBar();
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
+
             }
         });
     }

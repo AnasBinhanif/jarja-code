@@ -31,10 +31,6 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -292,22 +288,6 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
         }
     }
 
-    private String addHour(String myTime, int number) {
-        try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            Date d = df.parse(myTime);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(d);
-            cal.add(Calendar.HOUR, number);
-            String newTime = df.format(cal.getTime());
-            return newTime;
-        } catch (ParseException e) {
-            System.out.println(" Parsing Exception");
-        }
-        return null;
-
-    }
-
     private void showDialogForCalendarAppointmentDetail(Context context, CalendarAppointmentDetailModel.Data.CalendarData calendarDetailModel) {
 
         try {
@@ -329,10 +309,8 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
             if (calendarDetailModel.getDatedTo() != null && calendarDetailModel.getDatedFrom() != null) {
 
-                String sDateTime = addHour(calendarDetailModel.getDatedFrom(), 5);
-                String[] startTime = sDateTime.split("T");
-                String eDateTime = addHour(calendarDetailModel.getDatedTo(), 5);
-                String[] endTime = eDateTime.split("T");
+                String[] startTime = calendarDetailModel.getDatedFrom().split("T");
+                String[] endTime = calendarDetailModel.getDatedTo().split("T");
                 if (calendarDetailModel.isAllDay) {
                     tvTime.setText("All Day");
                 } else {
@@ -425,12 +403,11 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
                 if (calendarDetailModel.getStartTime() != null && calendarDetailModel.getEndTime() != null) {
 
-                    String sDateTime = addHour(calendarDetailModel.getStartTime(), 5);
-                    calendarDetailModel.setStartTime(sDateTime);
-                    String[] startTime = sDateTime.split("T");
+                    calendarDetailModel.setStartTime(calendarDetailModel.getStartTime());
+                    String[] startTime = calendarDetailModel.getStartTime().split("T");
                     if (calendarDetailModel.isAllDay != null && calendarDetailModel.isAllDay) {
                         tvTime.setText("All Day");
-                    }  else {
+                    } else {
                         tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss"));
                     }
                     tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd"));
