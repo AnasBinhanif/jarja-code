@@ -8,9 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -209,8 +207,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         // 4 from Update Appointment
         // 5 from Add Appointment
         // 6 for Update Calendar Appointment
-        // 7 for Update Appointment
-
         fromId = getIntent().getStringExtra("from");
         switch (fromId) {
             case "1": {
@@ -218,8 +214,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 bi.lblAppointment.setText(getString(R.string.add_appointment));
                 leadId = getIntent().getStringExtra("leadID");
                 leadName = getIntent().getStringExtra("leadName");
-                bi.tvName.setText(leadName);
-                bi.tvName.setEnabled(false);
             }
             break;
             case "2": {
@@ -227,10 +221,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 bi.lblAppointment.setText(getString(R.string.edit_appointment));
                 leadId = getIntent().getStringExtra("leadID");
                 leadName = getIntent().getStringExtra("leadName");
-                bi.tvName.setText(leadName);
-                bi.tvName.setEnabled(false);
                 isEdit = true;
-                GetAppointmentsModel.Data.Datum modelData = getIntent().getParcelableExtra("model");
+                GetAppointmentsModel.Data.Datum modelData = getIntent().getParcelableExtra("models");
                 prePopulateData(modelData);
 
             }
@@ -238,14 +230,11 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             case "3":
                 break;
             case "5": {
-                bi.tvName.setEnabled(true);
                 setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_appointment), true);
                 bi.lblAppointment.setText(getString(R.string.add_appointment));
             }
             break;
             case "4": {
-
-                bi.tvName.setEnabled(false);
                 isEdit = true;
                 setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
                 bi.lblAppointment.setText(getString(R.string.edit_appointment));
@@ -256,7 +245,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             break;
             case "6": {
 
-                bi.tvName.setEnabled(true);
                 isEdit = true;
                 setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
                 bi.lblAppointment.setText(getString(R.string.edit_appointment));
@@ -271,29 +259,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     ToastUtils.showToast(context, "No Data Found");
                 }
 
-            }
-            break;
-            case "7": {
-
-                bi.lnName.setEnabled(false);
-                bi.lnName.setClickable(false);
-                bi.lnName.setFocusableInTouchMode(false);
-                bi.lnName.setFocusable(false);
-                bi.tvName.setEnabled(false);
-                bi.tvName.setClickable(false);
-                bi.tvName.setFocusableInTouchMode(false);
-                bi.tvName.setFocusable(false);
-                bi.lnBottom.setVisibility(View.GONE);
-                setViewAndChildrenEnabled(bi.lnParent,false);
-                isEdit = false;
-                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.appointment), true);
-                bi.lblAppointment.setText(getString(R.string.appointment));
-                GetAppointmentsModel.Data.Datum modelData = getIntent().getParcelableExtra("models");
-                try {
-                    prePopulateData(modelData);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
             break;
         }
@@ -313,6 +278,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         encryptedAppointmentId = modelData.getEncryptedLeadAppoinmentID();
         leadId = String.valueOf(modelData.getEncryptedLeadID());
         bi.tvName.setText((modelData.getLeadName() != null ? modelData.getLeadName() : ""));
+        if (fromId.equalsIgnoreCase("2") || fromId.equalsIgnoreCase("4") ||
+                fromId.equalsIgnoreCase("6")) {
+            bi.tvName.setEnabled(false);
+        } else {
+            bi.tvName.setEnabled(true);
+            bi.tvName.setHint("Contact");
+        }
         bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
@@ -372,7 +344,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         leadId = modelData.getLeadID();
         leadAppointmentId = modelData.getLeadAppoinmentID();
         bi.tvName.setText((modelData.getVtCRMLeadCustom().getFirstName() != null ? modelData.getVtCRMLeadCustom().getFirstName() : "") + " " + (modelData.getVtCRMLeadCustom().getLastName() != null ? modelData.getVtCRMLeadCustom().getLastName() : ""));
-        if (fromId.equalsIgnoreCase("2")) {
+        if (fromId.equalsIgnoreCase("2") || fromId.equalsIgnoreCase("4") ||
+                fromId.equalsIgnoreCase("6")) {
             bi.tvName.setEnabled(false);
         } else {
             bi.tvName.setEnabled(true);

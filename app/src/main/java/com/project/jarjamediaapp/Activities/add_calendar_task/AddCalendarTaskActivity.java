@@ -68,8 +68,10 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
             startDate = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
             startTime = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+            if (!calendarDetailModel.isAllDay) {
+                bi.tvStartTime.setText(GH.getInstance().formatTime(calendarDetailModel.getStartTime()) != null ? GH.getInstance().formatTime(calendarDetailModel.getStartTime()) : "");
+            }
             bi.tvStartDate.setText(GH.getInstance().formatDate(calendarDetailModel.getStartTime()) != null ? GH.getInstance().formatDate(calendarDetailModel.getStartTime()) : "");
-            bi.tvStartTime.setText(GH.getInstance().formatTime(calendarDetailModel.getStartTime()) != null ? GH.getInstance().formatTime(calendarDetailModel.getStartTime()) : "");
             bi.cbAllDay.setChecked(calendarDetailModel.isAllDay != null ? calendarDetailModel.isAllDay : false);
             if (bi.cbAllDay.isChecked()) {
                 bi.tvStartTime.setVisibility(View.GONE);
@@ -214,7 +216,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
                 int month = monthOfYear + 1;
                 startDate = year + "-" + month + "-" + dayOfMonth;
-                textView.setText(dayOfMonth + "-" + month + "-" + year);
+                textView.setText(month + "-" + dayOfMonth + "-" + year);
 
             }
         }, year, month, day);
@@ -269,7 +271,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         try {
 
-            if(isEdit) {
+            if (isEdit) {
                 obj.put("isCompleted", markComplete);
                 obj.put("datedTo", datedTo);
                 obj.put("eventTitle", title);
@@ -281,7 +283,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 obj.put("gmailCalenderId", gmailCalendarId);
                 obj.put("isGmailApptActive", isGmailAppActive);
                 obj.put("calendarType", calendarType);
-            }else {
+            } else {
                 obj.put("isCompleted", markComplete);
                 obj.put("datedTo", datedTo);
                 obj.put("eventTitle", title);
@@ -304,7 +306,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         if (isValidate()) {
 
-            presenter.addUpdateCalendarAppointmentViaTask(jsonObjectString,isEdit);
+            presenter.addUpdateCalendarAppointmentViaTask(jsonObjectString, isEdit);
 
         }
 
@@ -314,8 +316,15 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         if (Methods.isEmpty(bi.tvStartDate)) {
             ToastUtils.showToast(context, R.string.error_start_date);
-            bi.tvStartTime.requestFocus();
+            bi.tvStartDate.requestFocus();
             return false;
+        }
+        if (!bi.cbAllDay.isChecked()) {
+            if (Methods.isEmpty(bi.tvStartTime)) {
+                ToastUtils.showToast(context, R.string.error_start_time);
+                bi.tvStartTime.requestFocus();
+                return false;
+            }
         }
 
         return true;

@@ -120,10 +120,17 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
                             pos = position;
                             String leadID = mData.get(pos).leadAppoinmentID;
                             GetAppointmentsModel.Data.Datum modelData = mData.get(pos);
-                            context.startActivity(new Intent(context, AddAppointmentActivity.class)
-                                    .putExtra("leadID", leadID)
-                                    .putExtra("from", "7")
-                                    .putExtra("models", modelData));
+                            if (isEditByLead) {
+                                context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                                        .putExtra("leadID", leadID)
+                                        .putExtra("from", "2")
+                                        .putExtra("models", modelData));
+                            } else {
+                                context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                                        .putExtra("leadID", leadID)
+                                        .putExtra("from", "4")
+                                        .putExtra("models", modelData));
+                            }
 
                         } else {
                             ToastUtils.showToast(context, context.getString(R.string.dashboard_ViewEditAppoint));
@@ -200,7 +207,7 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
                         context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                 .putExtra("leadID", leadID)
                                 .putExtra("from", "2")
-                                .putExtra("model", modelData));
+                                .putExtra("models", modelData));
                     } else {
                         swipeLayout.close(true);
                         context.startActivity(new Intent(context, AddAppointmentActivity.class)
