@@ -138,6 +138,7 @@
                         android:layout_marginTop="15dp"
                         android:layout_weight="1"
                         android:text="@string/all_day"
+                        android:checked="true"
                         android:textColor="@color/kprogresshud_default_color" />
 
                     <CheckBox

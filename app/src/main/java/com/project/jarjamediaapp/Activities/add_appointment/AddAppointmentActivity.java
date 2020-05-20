@@ -906,11 +906,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 bi.tvEndDate.requestFocus();
                 return false;
             }
-            if (currentDate.compareTo(date1) < 0) {
-                ToastUtils.showToast(context, "Start date cannot be less than current date");
-                bi.tvStartDate.requestFocus();
-                return false;
-            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
