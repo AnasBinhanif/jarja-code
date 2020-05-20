@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -89,6 +91,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     int month, year, day, _month, _year, _day, mHour, mMinute;
     Calendar newCalendar;
     boolean isStart;
+
+    protected boolean enabled = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,7 +245,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             break;
             case "4": {
 
-                bi.tvName.setEnabled(true);
+                bi.tvName.setEnabled(false);
                 isEdit = true;
                 setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
                 bi.lblAppointment.setText(getString(R.string.edit_appointment));
@@ -271,8 +275,17 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             break;
             case "7": {
 
-                bi.tvName.setEnabled(true);
-                isEdit = true;
+                bi.lnName.setEnabled(false);
+                bi.lnName.setClickable(false);
+                bi.lnName.setFocusableInTouchMode(false);
+                bi.lnName.setFocusable(false);
+                bi.tvName.setEnabled(false);
+                bi.tvName.setClickable(false);
+                bi.tvName.setFocusableInTouchMode(false);
+                bi.tvName.setFocusable(false);
+                bi.lnBottom.setVisibility(View.GONE);
+                setViewAndChildrenEnabled(bi.lnParent,false);
+                isEdit = false;
                 setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.appointment), true);
                 bi.lblAppointment.setText(getString(R.string.appointment));
                 GetAppointmentsModel.Data.Datum modelData = getIntent().getParcelableExtra("models");
@@ -286,18 +299,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         }
     }
 
-    private void setViewAndChildrenEnabled(View view, boolean enabled) {
+
+    private void setViewAndChildrenEnabled(LinearLayout view, boolean enabled) {
         view.setEnabled(enabled);
-        if (view instanceof ViewGroup) {
-            ViewGroup viewGroup = (ViewGroup) view;
-            for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                View child = viewGroup.getChildAt(i);
-                if (child instanceof ViewGroup) {
-                    setViewAndChildrenEnabled(child, enabled);
-                } else {
-                    child.setEnabled(enabled);
-                }
-            }
+        for (int i = 0; i < view.getChildCount(); i++) {
+            View child = view.getChildAt(i);
+            child.setEnabled(false);
         }
     }
 
@@ -432,7 +439,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         switch (view.getId()) {
             case R.id.tvName:
-                clearFocus();
+                //clearFocus();
                 showSearchDialog(context);
                 break;
             case R.id.tvAgent:
@@ -708,7 +715,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         new SpinnerDatePickerDialogBuilder().context(AddAppointmentActivity.this)
                 .callback(AddAppointmentActivity.this)
                 .showTitle(true)
-                .defaultDate(year,month,day)
+                .defaultDate(year, month, day)
                 .build()
                 .show();
 
@@ -926,7 +933,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 bi.tvEndDate.requestFocus();
                 return false;
             }
-            if(currentDate.compareTo(date1) < 0){
+            if (currentDate.compareTo(date1) < 0) {
                 ToastUtils.showToast(context, "Start date cannot be less than current date");
                 bi.tvStartDate.requestFocus();
                 return false;

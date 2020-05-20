@@ -38,6 +38,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.koushikdutta.ion.Ion;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.GH;
 import com.twilio.voice.Call;
 import com.twilio.voice.CallException;
 import com.twilio.voice.CallInvite;
@@ -78,6 +79,7 @@ public class VoiceActivity extends AppCompatActivity {
     private CoordinatorLayout coordinatorLayout;
     private FloatingActionButton callActionFab;
     private FloatingActionButton hangupActionFab;
+    private FloatingActionButton speakerActionFab;
     private FloatingActionButton holdActionFab;
     private FloatingActionButton muteActionFab;
     private Chronometer chronometer;
@@ -88,6 +90,7 @@ public class VoiceActivity extends AppCompatActivity {
     private Call activeCall;
     private int activeCallNotificationId;
 
+    private boolean enabled = false;
     RegistrationListener registrationListener = registrationListener();
     Call.Listener callListener = callListener();
 
@@ -109,6 +112,7 @@ public class VoiceActivity extends AppCompatActivity {
         callActionFab = findViewById(R.id.call_action_fab);
         hangupActionFab = findViewById(R.id.hangup_action_fab);
         holdActionFab = findViewById(R.id.hold_action_fab);
+        speakerActionFab = findViewById(R.id.speaker_action_fab);
         muteActionFab = findViewById(R.id.mute_action_fab);
         chronometer = findViewById(R.id.chronometer);
 
@@ -116,6 +120,7 @@ public class VoiceActivity extends AppCompatActivity {
         hangupActionFab.setOnClickListener(hangupActionFabClickListener());
         holdActionFab.setOnClickListener(holdActionFabClickListener());
         muteActionFab.setOnClickListener(muteActionFabClickListener());
+        speakerActionFab.setOnClickListener(speakerActionFabClickListener());
 
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -124,7 +129,10 @@ public class VoiceActivity extends AppCompatActivity {
          * Needed for setting/abandoning audio focus during a call
          */
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setSpeakerphoneOn(true);
+        audioManager.setSpeakerphoneOn(false);
+        int maxVolumeMusic = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, maxVolumeMusic, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+        audioManager.setMode(AudioManager.STREAM_VOICE_CALL);
 
         /*
          * Enable changing the volume using the up/down keys during a conversation
@@ -269,6 +277,7 @@ public class VoiceActivity extends AppCompatActivity {
         hangupActionFab.show();
         holdActionFab.show();
         muteActionFab.show();
+        speakerActionFab.show();
         chronometer.setVisibility(View.VISIBLE);
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
@@ -284,6 +293,7 @@ public class VoiceActivity extends AppCompatActivity {
         holdActionFab.setBackgroundTintList(ColorStateList
                 .valueOf(ContextCompat.getColor(this, R.color.colorAccent)));
         muteActionFab.hide();
+        speakerActionFab.hide();
         hangupActionFab.hide();
         chronometer.setVisibility(View.INVISIBLE);
         chronometer.stop();
@@ -368,6 +378,20 @@ public class VoiceActivity extends AppCompatActivity {
         return v -> {
             alertDialog = createCallDialog(callClickListener(), cancelCallClickListener(), VoiceActivity.this);
             alertDialog.show();
+        };
+    }
+
+    private View.OnClickListener speakerActionFabClickListener() {
+        return v -> {
+            if (enabled) {
+                enabled = false;
+                audioManager.setSpeakerphoneOn(false);
+                speakerActionFab.setImageDrawable(ContextCompat.getDrawable(VoiceActivity.this, R.drawable.ic_multimedia_off));
+            }else{
+                enabled= true;
+                audioManager.setSpeakerphoneOn(true);
+                speakerActionFab.setImageDrawable(ContextCompat.getDrawable(VoiceActivity.this, R.drawable.ic_music_and_multimedia));
+            }
         };
     }
 
@@ -554,6 +578,7 @@ public class VoiceActivity extends AppCompatActivity {
      * Get an access token from your Twilio access token server
      */
     private void retrieveAccessToken() {
+        GH.getInstance().ShowProgressDialog(this);
         Ion.with(this).load(TWILIO_ACCESS_TOKEN_SERVER_URL)
                 .asString()
                 .setCallback((e, accessToken) -> {
@@ -565,9 +590,11 @@ public class VoiceActivity extends AppCompatActivity {
                         String callerId = getIntent().getStringExtra("callerId");
                         makeCall(toNumber, fromNumber, callerId);
                         //registerForCallInvites();
+                        GH.getInstance().HideProgressDialog();
                     } else {
                         Snackbar.make(coordinatorLayout, "Error retrieving access token. Unable to make calls",
                                 Snackbar.LENGTH_LONG).show();
+                        GH.getInstance().HideProgressDialog();
                     }
                 });
     }

@@ -20,6 +20,7 @@
             android:fillViewport="true">
 
             <LinearLayout
+                android:id="@+id/lnParent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_10sdp"
@@ -46,6 +47,7 @@
                     android:textStyle="bold" />
 
                 <LinearLayout
+                    android:id="@+id/lnName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">

@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -198,6 +199,15 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             break;
         }
     }
+
+    private void setViewAndChildrenEnabled(LinearLayout view, boolean enabled) {
+        view.setEnabled(enabled);
+        for (int i = 0; i < view.getChildCount(); i++) {
+            View child = view.getChildAt(i);
+            child.setEnabled(false);
+        }
+    }
+
 
     private void calendarInstance() {
 
