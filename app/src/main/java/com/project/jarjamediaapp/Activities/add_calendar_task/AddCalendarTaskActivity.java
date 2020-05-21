@@ -220,7 +220,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
                         int month = monthOfYear + 1;
                         startDate = year + "-" + month + "-" + dayOfMonth;
-                        textView.setText(dayOfMonth + "-" + month + "-" + year);
+                        textView.setText(month + "-" + dayOfMonth + "-" + year);
                     }
                 })
                 .showTitle(true)
@@ -228,28 +228,6 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 .minDate(year, month, day)
                 .build()
                 .show();
-
-    }
-
-    private void showDateDialog(TextView textView) {
-
-        final Calendar newCalendar = Calendar.getInstance();
-        DatePickerDialog StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int years, int monthOfYear, int dayOfMonth) {
-
-                year = years;
-                month = monthOfYear;
-                day = dayOfMonth;
-                newCalendar.set(year, month, day);
-
-                int month = monthOfYear + 1;
-                startDate = year + "-" + month + "-" + dayOfMonth;
-                textView.setText(month + "-" + dayOfMonth + "-" + year);
-
-            }
-        }, year, month, day);
-        StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-        StartTime.show();
 
     }
 

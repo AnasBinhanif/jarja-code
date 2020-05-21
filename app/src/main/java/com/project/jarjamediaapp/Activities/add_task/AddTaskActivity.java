@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -114,8 +115,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.tvAssignTo.setOnClickListener(this);
         bi.tvStartDate.setOnClickListener(this);
         bi.atvReminder.setOnClickListener(this);
-        loadTitle();
 
+        setSupportActionBar(bi.epToolbar.toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        loadTitle();
 
         bi.cbEndDate.setOnCheckedChangeListener((compoundButton, b) -> {
 
@@ -269,7 +273,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             child.setEnabled(false);
         }
     }
-
 
     private void calendarInstance() {
 
@@ -1061,50 +1064,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     }
 
-    private void showDateDialog(TextView textView, boolean isStart) {
-
-        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-        DatePickerDialog StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int years, int monthOfYear, int dayOfMonth) {
-
-                year = years;
-                month = monthOfYear;
-                day = dayOfMonth;
-                newCalendar.set(year, month, day);
-
-                if (isStart) {
-                    startDate = dateFormatter.format(newCalendar.getTime());
-                } else {
-                    endDate = dateFormatter.format(newCalendar.getTime());
-                }
-                textView.setText(dateFormatter2.format(newCalendar.getTime()));
-
-
-                if (isStart) {
-                    if (bi.tvStartDate.getText().toString().equalsIgnoreCase("")) {
-                        calendarInstance();
-                    } else {
-                        calendarEditInstance(3);
-                    }
-                } else {
-                    if (bi.tvEndDate.getText().toString().equalsIgnoreCase("")) {
-                        calendarInstance();
-                    } else {
-                        calendarEditInstance(4);
-                    }
-                }
-                showTimeDialog(textView, dateFormatter2.format(newCalendar.getTime()), isStart);
-
-                // textView.setText();
-            }
-
-        }, year, month, day);
-        newCalendar.set(year, month, day);
-        StartTime.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-        StartTime.show();
-    }
-
     private void showTimeDialog(TextView textView, String date, boolean isStart) {
 
         TimePickerDialog mTimePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
@@ -1410,6 +1369,17 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

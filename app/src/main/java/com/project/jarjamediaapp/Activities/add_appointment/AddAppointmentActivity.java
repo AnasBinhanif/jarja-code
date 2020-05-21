@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -117,6 +118,10 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.tvAgent.setOnClickListener(this);
         bi.tvName.setOnClickListener(this);
         bi.cbAllDay.setOnClickListener(this);
+
+        setSupportActionBar(bi.epToolbar.toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
         loadTitle();
 
         bi.atvLocation.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -142,7 +147,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     }
 
-    private void loadTitle(){
+    private void loadTitle() {
         // 1 from Add Appointment by Lead Id
         // 3 from Add Calendar Appointment
         // 5 from Add Appointment
@@ -237,6 +242,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             case "1": {
                 leadId = getIntent().getStringExtra("leadID");
                 leadName = getIntent().getStringExtra("leadName");
+                bi.tvName.setText(leadName+"");
+                bi.tvName.setEnabled(false);
             }
             break;
             case "2": {
@@ -269,7 +276,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             break;
         }
     }
-
 
     private void setViewAndChildrenEnabled(LinearLayout view, boolean enabled) {
         view.setEnabled(enabled);
@@ -695,7 +701,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 .callback(AddAppointmentActivity.this)
                 .showTitle(true)
                 .defaultDate(year, month, day)
-                .minDate(year,month,day)
+                .minDate(year, month, day)
                 .build()
                 .show();
 
@@ -1120,10 +1126,10 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
                         nameList = new ArrayList<>();
                         nameList.addAll(getAppointmentsModel.data);
-                        if (nameList.size()!=0) {
+                        if (nameList.size() != 0) {
                             setRecyclerSearch(dialog);
-                        }else{
-                            ToastUtils.showToast(context,"No Result Found");
+                        } else {
+                            ToastUtils.showToast(context, "No Result Found");
                         }
 
                     } else {
@@ -1180,4 +1186,16 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         dialog.dismiss();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }
