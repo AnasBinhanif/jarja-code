@@ -117,6 +117,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.tvAgent.setOnClickListener(this);
         bi.tvName.setOnClickListener(this);
         bi.cbAllDay.setOnClickListener(this);
+        loadTitle();
 
         bi.atvLocation.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -139,6 +140,30 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
         });
 
+    }
+
+    private void loadTitle(){
+        // 1 from Add Appointment by Lead Id
+        // 3 from Add Calendar Appointment
+        // 5 from Add Appointment
+        // 2 from Update Appointment Lead Id
+        // 4 from Update Appointment
+        // 6 for Update Calendar Appointment
+        fromId = getIntent().getStringExtra("from");
+        switch (fromId) {
+            case "1":
+            case "3":
+            case "5": {
+                bi.epToolbar.toolbar.setTitle(getString(R.string.add_appointment));
+            }
+            break;
+            case "2":
+            case "4":
+            case "6": {
+                bi.epToolbar.toolbar.setTitle(getString(R.string.edit_appointment));
+            }
+            break;
+        }
     }
 
     private void calendarInstance() {
@@ -210,44 +235,26 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         fromId = getIntent().getStringExtra("from");
         switch (fromId) {
             case "1": {
-                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_appointment), true);
-                bi.lblAppointment.setText(getString(R.string.add_appointment));
                 leadId = getIntent().getStringExtra("leadID");
                 leadName = getIntent().getStringExtra("leadName");
             }
             break;
             case "2": {
-                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
-                bi.lblAppointment.setText(getString(R.string.edit_appointment));
                 leadId = getIntent().getStringExtra("leadID");
                 leadName = getIntent().getStringExtra("leadName");
                 isEdit = true;
                 GetAppointmentsModel.Data.Datum modelData = getIntent().getParcelableExtra("models");
                 prePopulateData(modelData);
-
-            }
-            break;
-            case "3":
-                break;
-            case "5": {
-                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_appointment), true);
-                bi.lblAppointment.setText(getString(R.string.add_appointment));
             }
             break;
             case "4": {
                 isEdit = true;
-                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
-                bi.lblAppointment.setText(getString(R.string.edit_appointment));
                 GetAppointmentsModel.Data.Datum modelData = getIntent().getParcelableExtra("models");
                 prePopulateData(modelData);
-
             }
             break;
             case "6": {
-
                 isEdit = true;
-                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
-                bi.lblAppointment.setText(getString(R.string.edit_appointment));
                 calendarData = getIntent().getParcelableExtra("modelData");
                 if (calendarData != null) {
                     try {
@@ -258,7 +265,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 } else {
                     ToastUtils.showToast(context, "No Data Found");
                 }
-
             }
             break;
         }

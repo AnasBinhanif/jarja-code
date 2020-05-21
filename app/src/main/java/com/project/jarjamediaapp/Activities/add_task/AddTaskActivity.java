@@ -6,8 +6,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -96,7 +94,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi = DataBindingUtil.setContentView(this, R.layout.activity_add_task);
         presenter = new AddTaskPresenter(this);
         presenter.initScreen();
-        setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_task), true);
 
     }
 
@@ -127,6 +124,25 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
 
         });
+
+        // 1 from Add Task by Lead Id
+        // 2 from Update Task Lead Id
+        // 3 from Update Task
+        // 4 from Add Task
+        String id = getIntent().getStringExtra("from");
+        from = id;
+        switch (id) {
+            case "1":
+            case "4": {
+                bi.epToolbar.toolbar.setTitle(getString(R.string.add_task));
+            }
+            break;
+            case "2":
+            case "3": {
+                bi.epToolbar.toolbar.setTitle(getString(R.string.update_task));
+            }
+            break;
+        }
 
     }
 
@@ -294,7 +310,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     @Override
     public void updateUIListForReminders(AddAppointmentModel response) {
 
-        if(from.equalsIgnoreCase("1") || from.equalsIgnoreCase("4")){
+        if (from.equalsIgnoreCase("1") || from.equalsIgnoreCase("4")) {
             hideProgressBar();
         }
         arrayListReminderText = new ArrayList<>();

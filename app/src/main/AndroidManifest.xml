@@ -44,6 +44,7 @@
         <activity
             android:name=".Activities.add_appointment.AddAppointmentActivity"
             android:screenOrientation="portrait"
+            android:label="@string/add_appointment"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Activities.add_calendar_task.AddCalendarTaskActivity"
