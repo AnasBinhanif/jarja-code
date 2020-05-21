@@ -155,7 +155,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
         call.enqueue(new Callback<AddAppointmentModel>() {
             @Override
             public void onResponse(Call<AddAppointmentModel> call, Response<AddAppointmentModel> response) {
-
+                _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     AddAppointmentModel getAppointmentsModel = response.body();
@@ -166,13 +166,13 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
                     } else {
 
-                        _view.hideProgressBar();
+
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
-                    _view.hideProgressBar();
+
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }

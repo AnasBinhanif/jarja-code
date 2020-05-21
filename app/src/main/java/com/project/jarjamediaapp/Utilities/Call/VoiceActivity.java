@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.Utilities.Call;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
@@ -9,11 +10,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -96,6 +102,11 @@ public class VoiceActivity extends AppCompatActivity {
 
     String toNumber = "", fromNumber = "", callerId = "";
 
+    SensorManager mySensorManager;
+    Sensor myProximitySensor;
+    PowerManager.WakeLock wl;
+
+    @SuppressLint("InvalidWakeLockTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +145,22 @@ public class VoiceActivity extends AppCompatActivity {
         audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, maxVolumeMusic, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
         audioManager.setMode(AudioManager.STREAM_VOICE_CALL);
 
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wl = pm.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, "CHESS");
+        mySensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        myProximitySensor = mySensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        if (myProximitySensor == null) {
+            Snackbar.make(coordinatorLayout, "Sensor Not Found",
+                    Snackbar.LENGTH_LONG).show();
+        } else {
+            mySensorManager.registerListener(proximitySensorEventListener,
+                    myProximitySensor,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+
+
         /*
          * Enable changing the volume using the up/down keys during a conversation
          */
@@ -151,6 +178,54 @@ public class VoiceActivity extends AppCompatActivity {
             requestPermissionForMicrophone();
         } else {
             retrieveAccessToken();
+        }
+    }
+
+
+    SensorEventListener proximitySensorEventListener
+            = new SensorEventListener() {
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            // TODO Auto-generated method stub
+            onSensorChange(event);
+        }
+    };
+
+    @SuppressLint("InvalidWakeLockTag")
+    public void onSensorChange(SensorEvent event) {
+        WindowManager.LayoutParams params = this.getWindow().getAttributes();
+        if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+/*
+            if (event.values[0] == 0) {
+                params.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+                params.screenBrightness = 0;
+                Log.d("Sensor","Near");
+                getWindow().setAttributes(params);
+            } else {
+                params.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+                params.screenBrightness = -1f;
+                getWindow().setAttributes(params);
+            }*/
+
+            if (event.values[0] == 0) {
+                wl.acquire();
+            }else{
+                if (wl.isHeld()) {
+                    wl.release();
+                }
+
+            }
+           /* try {
+                Thread.sleep(30 * 1000); // 30 seconds
+            } catch (Exception e) {
+            } finally {
+                wl.release();
+            }*/
         }
     }
 
@@ -387,8 +462,8 @@ public class VoiceActivity extends AppCompatActivity {
                 enabled = false;
                 audioManager.setSpeakerphoneOn(false);
                 speakerActionFab.setImageDrawable(ContextCompat.getDrawable(VoiceActivity.this, R.drawable.ic_multimedia_off));
-            }else{
-                enabled= true;
+            } else {
+                enabled = true;
                 audioManager.setSpeakerphoneOn(true);
                 speakerActionFab.setImageDrawable(ContextCompat.getDrawable(VoiceActivity.this, R.drawable.ic_music_and_multimedia));
             }

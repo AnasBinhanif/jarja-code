@@ -245,7 +245,7 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
                         Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
                     } else {
                         context.startActivity(new Intent(context, AddTaskActivity.class)
-                                .putExtra("from", "3")
+                                .putExtra("from", "5")
                                 .putExtra("whichTasks", 1)
                                 .putExtra("leadID", leadID)
                                 .putExtra("taskId", taskID));
@@ -257,7 +257,7 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
                     } else {
 
                         context.startActivity(new Intent(context, AddTaskActivity.class)
-                                .putExtra("from", "3")
+                                .putExtra("from", "5")
                                 .putExtra("whichTasks", 3)
                                 .putExtra("leadID", leadID)
                                 .putExtra("taskId", scheduleID));

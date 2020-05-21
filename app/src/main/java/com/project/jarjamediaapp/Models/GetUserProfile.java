@@ -47,6 +47,14 @@ public class GetUserProfile {
             public String getEncryptedAgentID() {
                 return encryptedAgentID;
             }
+
+            public String getAgentName() {
+                return agentName;
+            }
+
+            public int getAgentID() {
+                return agentID;
+            }
         }
 
         public AgentData getAgentData() {

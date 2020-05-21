@@ -695,6 +695,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 .callback(AddAppointmentActivity.this)
                 .showTitle(true)
                 .defaultDate(year, month, day)
+                .minDate(year,month,day)
                 .build()
                 .show();
 
@@ -1012,7 +1013,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         });
 
 
-        tvTitle.setText("Name of Contact");
+        tvTitle.setText("Contact");
         edtQuery.requestFocus();
         if (edtQuery.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -1119,7 +1120,11 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
                         nameList = new ArrayList<>();
                         nameList.addAll(getAppointmentsModel.data);
-                        setRecyclerSearch(dialog);
+                        if (nameList.size()!=0) {
+                            setRecyclerSearch(dialog);
+                        }else{
+                            ToastUtils.showToast(context,"No Result Found");
+                        }
 
                     } else {
 

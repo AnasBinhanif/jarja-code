@@ -20,6 +20,7 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddCalendarTaskBinding;
+import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -108,7 +109,8 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 if (isEdit) {
                     calendarEditInstance(1);
                 }
-                showDateDialog(bi.tvStartDate);
+                //showDateDialog(bi.tvStartDate);
+                showSpinnerDateDialog(bi.tvStartDate);
                 removeFocus();
                 break;
             case R.id.tvStartTime:
@@ -201,6 +203,32 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
             ToastUtils.showToast(context, response.body().getMessage() != null ? response.body().getMessage() : "");
             finish();
         }
+    }
+
+
+    private void showSpinnerDateDialog(TextView textView) {
+
+        final Calendar newCalendar = Calendar.getInstance();
+        new SpinnerDatePickerDialogBuilder().context(context)
+                .callback(new com.tsongkha.spinnerdatepicker.DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(com.tsongkha.spinnerdatepicker.DatePicker view, int years, int monthOfYear, int dayOfMonth) {
+                        year = years;
+                        month = monthOfYear;
+                        day = dayOfMonth;
+                        newCalendar.set(year, month, day);
+
+                        int month = monthOfYear + 1;
+                        startDate = year + "-" + month + "-" + dayOfMonth;
+                        textView.setText(dayOfMonth + "-" + month + "-" + year);
+                    }
+                })
+                .showTitle(true)
+                .defaultDate(year, month, day)
+                .minDate(year, month, day)
+                .build()
+                .show();
+
     }
 
     private void showDateDialog(TextView textView) {

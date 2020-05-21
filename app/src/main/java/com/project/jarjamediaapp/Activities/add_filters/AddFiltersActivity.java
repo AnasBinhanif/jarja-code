@@ -33,8 +33,13 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddFiltersBinding;
+import com.tsongkha.spinnerdatepicker.DatePicker;
+import com.tsongkha.spinnerdatepicker.DatePickerDialog;
+import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import retrofit2.Response;
 
@@ -85,8 +90,12 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
     MultiSelectModel tagModel, agentModel, dripModel;
 
-    String priceTo = "", priceFrom = "",dateTo = "", dateFrom = "";
-    String agentIdsString = "", tagsIdsString = "", pipelineIdsString="",dripIdsString = "", sourceIdsString = "", typeIdsString = "";
+    String priceTo = "", priceFrom = "", dateTo = "", dateFrom = "";
+    String agentIdsString = "", tagsIdsString = "", pipelineIdsString = "", dripIdsString = "", sourceIdsString = "", typeIdsString = "";
+
+    int month, year, day, mHour, mMinute;
+    Calendar newCalendar;
+    String startDate = "", endDate = "", startTime = "", endTime = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +118,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         initSpinners();
         initListeners();
         initCallsData();
+        calendarInstance();
         retrieveFilters();
     }
 
@@ -141,6 +151,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         bi.btnSaveAndSearch.setOnClickListener(this);
         bi.btnSearch.setOnClickListener(this);
         bi.btnClear.setOnClickListener(this);
+        bi.edtDateRange.setOnClickListener(this);
     }
 
     private void showTagsDialog() {
@@ -513,7 +524,26 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         easyPreference.remove("pipelineID").save();
         easyPreference.remove("notes").save();
         easyPreference.remove("leadID").save();
+        easyPreference.remove("dateTo").save();
+        easyPreference.remove("dateFrom").save();
         easyPreference.save();
+
+        searchListItemsselected = new ArrayList<>();
+        getLeadTypeModelListselected = new ArrayList<>();
+        getLeadSourceNameListselected = new ArrayList<>();
+        getLeadTagModelListselected = new ArrayList<>();
+        getLeadDripCampaignModelListselected = new ArrayList<>();
+        getLeadSourceNameListselected = new ArrayList<>();
+        priceTo = "";
+        priceFrom = "";
+        dateTo = "";
+        dateFrom = "";
+        agentIdsString = "";
+        tagsIdsString = "";
+        typeIdsString = "";
+        sourceIdsString = "";
+        dripIdsString = "";
+        pipelineIdsString = "";
 
         retrieveFilters();
     }
@@ -533,8 +563,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         String lastLogin = getGetLastLoginList.get(bi.spnLastLogin.getSelectedIndex()).value + "";
         String pipelineID = pipelineIdsString + "";
         String sourceID = sourceIdsString + "";
-        String fromDate = "";
-        String toDate = "";
+        String fromDate = startDate;
+        String toDate = endDate;
 
         Intent intent = new Intent();
         intent.putExtra("leadID", leadID);
@@ -717,6 +747,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         String leadID = easyPreference.getString("leadID", "");
         String priceTos = easyPreference.getString("priceTo", "");
         String priceFroms = easyPreference.getString("priceFrom", "");
+        String dateTos = easyPreference.getString("dateTo", "");
+        String dateFroms = easyPreference.getString("dateFrom", "");
 
         //bi.spnPipeline.setSelectedIndex(pipelineID);
         bi.spnLeadScore.setSelectedIndex(leadScoreID);
@@ -732,11 +764,23 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         price = priceTos + price;
         bi.edtPriceRange.setText(price);
 
+        dateTos = dateTos.equals("") ? "max" : dateTos;
+        dateFroms = dateFroms.equals("") ? "min" : dateFroms;
+        String date = dateFroms + " to " + dateTos;
+        bi.edtDateRange.setText(date);
+
         priceTos = priceTos.equals("0") ? "" : priceTos;
         priceFroms = priceFroms.equals("max") ? "" : priceFroms;
         priceTo = priceTos;
         priceFrom = priceFroms;
 
+        dateTos = dateTos.equals("max") ? "" : dateTos;
+        dateFroms = dateFroms.equals("min") ? "" : dateFroms;
+        dateTo = dateTos;
+        dateFrom = dateFroms;
+
+        startDate = dateFrom.equals("") ? "" : GH.getInstance().formatter(dateFrom, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM-dd-yyyy");
+        endDate = dateTo.equals("") ? "" :GH.getInstance().formatter(dateTo, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM-dd-yyyy");
 
     }
 
@@ -755,6 +799,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         easyPreference.addString("leadID", bi.edtLeadID.getText().toString() + "").save();
         easyPreference.addString("priceTo", priceTo + "").save();
         easyPreference.addString("priceFrom", priceFrom + "").save();
+        easyPreference.addString("dateTo", dateTo + "").save();
+        easyPreference.addString("dateFrom", dateFrom + "").save();
 
         searchFilters();
     }
@@ -777,7 +823,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
             priceTo = edtPriceTo.getText().toString().equals("") ? "0" : edtPriceTo.getText().toString();
             priceFrom = edtPriceFrom.getText().toString().equals("") ? "max" : edtPriceFrom.getText().toString();
             priceFrom = priceFrom.equals("0") ? "max" : priceFrom;
-
 
             String price = priceFrom.equals("") ? "" : " to " + priceFrom;
             price = priceTo + price;
@@ -804,19 +849,81 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         tvDateTO.setText(dateTo);
         tvDateFrom.setText(dateFrom);
 
+        tvDateTO.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                showSpinnerDateDialog(tvDateTO,true);
+            }
+        });
+        tvDateFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSpinnerDateDialog(tvDateFrom,false);
+            }
+        });
+
         Button btnSave = dialog.findViewById(R.id.btnSave);
         btnSave.setOnClickListener(v -> {
 
-            /*String price = priceFrom.equals("") ? "" : " to " + priceFrom;
-            price = priceTo + price;
+            dateTo = tvDateTO.getText().toString().equals("") ? "max" : tvDateTO.getText().toString();
+            dateFrom = tvDateFrom.getText().toString().equals("") ? "min" : tvDateFrom.getText().toString();
+            //dateFrom = dateFrom.equals("min") ? "min" : dateFrom;
 
-            bi.edtPriceRange.setText(price);
-            priceFrom = priceFrom.equals("max") ? "" : priceFrom;
-            dialog.dismiss();*/
+            String date =  dateFrom + " to " + dateTo;
+            //date = date + dateTo;
+
+            bi.edtDateRange.setText(date);
+            dateFrom = dateFrom.equals("min") ? "" : dateFrom;
+            dateTo = dateFrom.equals("max") ? "" : dateTo;
+            dialog.dismiss();
 
         });
 
         dialog.show();
+
+    }
+
+    private void calendarInstance() {
+
+        newCalendar = Calendar.getInstance();
+        year = newCalendar.get(Calendar.YEAR);
+        month = newCalendar.get(Calendar.MONTH);
+        day = newCalendar.get(Calendar.DAY_OF_MONTH);
+        mHour = newCalendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = newCalendar.get(Calendar.MINUTE);
+    }
+
+
+    private void showSpinnerDateDialog(TextView textView, boolean isStart) {
+        calendarInstance();
+        new SpinnerDatePickerDialogBuilder().context(context)
+                .callback(new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int _year, int monthOfYear, int dayOfMonth) {
+
+                        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
+                        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+                        year = _year;
+                        month = monthOfYear;
+                        day = dayOfMonth;
+                        newCalendar.set(year, month, day);
+
+                        if (isStart) {
+                            startDate = dateFormatter.format(newCalendar.getTime());
+                            textView.setText(dateFormatter2.format(newCalendar.getTime()));
+                        } else {
+                            endDate = dateFormatter.format(newCalendar.getTime());
+                            textView.setText(dateFormatter2.format(newCalendar.getTime()));
+                        }
+                    }
+                })
+                .showTitle(true)
+                .defaultDate(year, month, day)
+                .build()
+                .show();
 
     }
 
@@ -985,6 +1092,9 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                 break;
             case R.id.edtPriceRange:
                 showPriceRangeDialog(context);
+                break;
+            case R.id.edtDateRange:
+                showDateRangeDialog(context);
                 break;
             case R.id.btnSaveAndSearch:
                 saveAndSearchFilters();

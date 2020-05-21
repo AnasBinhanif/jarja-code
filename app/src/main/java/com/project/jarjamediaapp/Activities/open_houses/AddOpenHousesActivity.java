@@ -12,9 +12,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -43,6 +40,7 @@ import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.Utilities.UserPermissions;
 import com.project.jarjamediaapp.databinding.CustomOpenHouseDialogBinding;
+import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -244,7 +242,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             public void onClick(View v) {
 
                 clearFocus();
-                DateDialog(context, bi.atvOpenHouseStartDate, true, "1");
+                ///DateDialog(context, bi.atvOpenHouseStartDate, true, "1");
+                showSpinnerDateDialog(context, bi.atvOpenHouseStartDate, true, "1");
             }
         });
 
@@ -253,7 +252,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             public void onClick(View v) {
 
                 clearFocus();
-                DateDialog(context, bi.atvOpenHouseEndDate, true, "2");
+                //DateDialog(context, bi.atvOpenHouseEndDate, true, "2");
+                showSpinnerDateDialog(context, bi.atvOpenHouseEndDate, true, "2");
             }
         });
 
@@ -692,6 +692,45 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             compressedImage = null;
         }
         return compressedImage;
+    }
+
+    private void showSpinnerDateDialog(final Context context, final EditText tvDateTime, boolean disablePastDates, String type) {
+
+        Calendar cal = Calendar.getInstance();
+        Date date = new Date();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, 0); // add 10 days
+
+
+        if (disablePastDates) {
+
+            new SpinnerDatePickerDialogBuilder().context(context)
+                    .callback(new com.tsongkha.spinnerdatepicker.DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(com.tsongkha.spinnerdatepicker.DatePicker view, int years, int monthOfYear, int dayOfMonth) {
+                            showTimePicker(years, monthOfYear, dayOfMonth, tvDateTime, type);
+                        }
+                    })
+                    .showTitle(true)
+                    .defaultDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))
+                    .minDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))
+                    .build()
+                    .show();
+        } else {
+
+            new SpinnerDatePickerDialogBuilder().context(context)
+                    .callback(new com.tsongkha.spinnerdatepicker.DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(com.tsongkha.spinnerdatepicker.DatePicker view, int years, int monthOfYear, int dayOfMonth) {
+                            showTimePicker(years, monthOfYear, dayOfMonth, tvDateTime, type);
+                        }
+                    })
+                    .showTitle(true)
+                    .defaultDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))
+                    .build()
+                    .show();
+        }
+
     }
 
     public void DateDialog(final Context context, final EditText tvDateTime, boolean disablePastDates, String type) {

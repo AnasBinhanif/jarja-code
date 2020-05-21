@@ -120,7 +120,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     GetUserProfile getUserProfile = response.body();
                     if (response.body().status.equals("Success")) {
 
+                        easyPreference.addInt(GH.KEYS.AGENT_ID_INT.name(), getUserProfile.data.getAgentData().getAgentID()).save();
                         easyPreference.addString(GH.KEYS.AGENT_ID_CALENDAR.name(), getUserProfile.data.getAgentData().getEncryptedAgentID()).save();
+                        easyPreference.addString(GH.KEYS.AGENT_NAME.name(), getUserProfile.data.getAgentData().getAgentName()).save();
                         AppConstants.Keys.UserID = getUserProfile.data.userProfile.userID;
 
                         String fullName = getUserProfile.data.userProfile.firstName + " " + getUserProfile.data.userProfile.lastName;

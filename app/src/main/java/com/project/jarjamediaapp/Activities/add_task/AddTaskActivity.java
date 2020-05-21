@@ -39,6 +39,7 @@ import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddTaskBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
+import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,6 +87,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     String from = "";
     Calendar newCalendar;
     boolean fromUpdate = false;
+    boolean isStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.tvAssignTo.setOnClickListener(this);
         bi.tvStartDate.setOnClickListener(this);
         bi.atvReminder.setOnClickListener(this);
+        loadTitle();
+
 
         bi.cbEndDate.setOnCheckedChangeListener((compoundButton, b) -> {
 
@@ -144,6 +148,28 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             break;
         }
 
+    }
+
+    private void loadTitle(){
+        // 1 from Add Appointment by Lead Id
+        // 3 from Add Calendar Appointment
+        // 5 from Add Appointment
+        // 2 from Update Appointment Lead Id
+        // 4 from Update Appointment
+        // 6 for Update Calendar Appointment
+       String fromId = getIntent().getStringExtra("from");
+        switch (fromId) {
+            case "1":
+            case "3": {
+                bi.epToolbar.toolbar.setTitle(getString(R.string.add_task));
+            }
+            break;
+            case "2":
+            case "4": {
+                bi.epToolbar.toolbar.setTitle(getString(R.string.update_task));
+            }
+            break;
+        }
     }
 
     private void checkIntent() {
@@ -211,6 +237,26 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 bi.tvName.setEnabled(true);
                 leadId = "";
                 isEdit = true;
+            }
+            break;
+            case "5": {
+                bi.tvName.setEnabled(false);
+                isEdit = true;
+                leadId = "";
+                taskId = getIntent().getStringExtra("taskId");
+                setViewAndChildrenEnabled(bi.lnParent,false);
+                bi.atvRecur.setEnabled(false);
+                bi.atvRecur.setClickable(false);
+                bi.atvRecur.setFocusableInTouchMode(false);
+                int whichTasks = getIntent().getIntExtra("whichTasks", 1);
+                switch (whichTasks) {
+                    case 1:
+                        presenter.getTaskDetail(taskId);
+                        break;
+                    case 3:
+                        presenter.getFutureTaskDetail(taskId);
+                        break;
+                }
             }
             break;
         }
@@ -284,6 +330,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     @Override
     public void updateUI(GetAgentsModel response) {
 
+        String id = getIntent().getStringExtra("from");
+
         agentList = new ArrayList<>();
         searchListItems = new ArrayList<>();
         agentList = response.data;
@@ -291,17 +339,17 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             searchListItems.add(new MultiSelectModel(model.agentID, model.agentName, model.encryptedAgentID));
         }
 
-        if (from.equals("1") || from.equals("4")) {
+        if (id.equals("1") || id.equals("4")) {
 
             View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
             TextView textView = child.findViewById(R.id.txtDynamic);
-            textView.setText(String.valueOf(agentList.get(0).agentName));
+            textView.setText(GH.getInstance().getAgentName());
             bi.lnAgent.addView(child);
-            selectedIdsList.add(agentList.get(0).agentID);
+            selectedIdsList.add(GH.getInstance().getAgentID());
             if (agentIdsString.equals("")) {
-                agentIdsString = agentList.get(0).encryptedAgentID;
+                agentIdsString = GH.getInstance().getCalendarAgentId();
             } else {
-                agentIdsString = agentIdsString + "," + agentList.get(0).encryptedAgentID;
+                agentIdsString = agentIdsString + "," + GH.getInstance().getCalendarAgentId();
             }
 
         }
@@ -325,6 +373,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListReminderText);
         bi.atvReminder.setAdapter(arrayAdapter);
+
+        checkIntent();
 
         bi.atvReminder.setOnItemClickListener((parent, view, position, id) -> {
 
@@ -422,7 +472,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
 
         });
-        checkIntent();
+
         if (from.equals("1") || from.equals("4")) {
             bi.atvRecur.setText(arrayListViaValue.get(0), false);
             reoccur = arrayListViaText.get(0);
@@ -472,6 +522,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         String sTime = GH.getInstance().formatter(taskDetail.data.startDate, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
         String eTime = GH.getInstance().formatter(taskDetail.data.endDate, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
+
+
 
         bi.tvStartDate.setText(sDate + " " + sTime);
         bi.tvEndDate.setText(eDate + " " + eTime);
@@ -918,7 +970,9 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 } else {
                     calendarEditInstance(1);
                 }
-                showDateDialog(bi.tvStartDate, true);
+                //showDateDialog(bi.tvStartDate, true);
+                showSpinnerDateDialog(bi.tvStartDate, true);
+
                 break;
             case R.id.tvEndDate:
                 clearFocus();
@@ -927,7 +981,9 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 } else {
                     calendarEditInstance(2);
                 }
-                showDateDialog(bi.tvEndDate, false);
+                //showDateDialog(bi.tvEndDate, false);
+                showSpinnerDateDialog(bi.tvEndDate, false);
+
                 break;
             case R.id.tvAssignTo:
                 clearFocus();
@@ -960,6 +1016,49 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 recur();
                 break;
         }
+    }
+
+    private void showSpinnerDateDialog(TextView textView, boolean isStart) {
+
+        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        new SpinnerDatePickerDialogBuilder().context(context)
+                .callback(new com.tsongkha.spinnerdatepicker.DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(com.tsongkha.spinnerdatepicker.DatePicker view, int years, int monthOfYear, int dayOfMonth) {
+                        year = years;
+                        month = monthOfYear;
+                        day = dayOfMonth;
+                        newCalendar.set(year, month, day);
+                        if (isStart) {
+                            startDate = dateFormatter.format(newCalendar.getTime());
+                        } else {
+                            endDate = dateFormatter.format(newCalendar.getTime());
+                        }
+                        textView.setText(dateFormatter2.format(newCalendar.getTime()));
+
+                        if (isStart) {
+                            if (bi.tvStartDate.getText().toString().equalsIgnoreCase("")) {
+                                calendarInstance();
+                            } else {
+                                calendarEditInstance(3);
+                            }
+                        } else {
+                            if (bi.tvEndDate.getText().toString().equalsIgnoreCase("")) {
+                                calendarInstance();
+                            } else {
+                                calendarEditInstance(4);
+                            }
+                        }
+                        showTimeDialog(textView, dateFormatter2.format(newCalendar.getTime()), isStart);
+                    }
+                })
+                .showTitle(true)
+                .defaultDate(year, month-1, day)
+                .minDate(year, month, day)
+                .build()
+                .show();
+
     }
 
     private void showDateDialog(TextView textView, boolean isStart) {
@@ -1124,7 +1223,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         TextView tvTitle = dialog.findViewById(R.id.tvTitle);
         recyclerSearch = dialog.findViewById(R.id.recyclerSearch);
 
-        tvTitle.setText("Name of Contact");
+        tvTitle.setText("Contact");
         edtQuery.requestFocus();
         if (edtQuery.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -1278,10 +1377,15 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
                         nameList = new ArrayList<>();
                         nameList.addAll(getAppointmentsModel.data);
-                        searchListItemsLead = new ArrayList<>();
-                        //setRecyclerSearch(dialog);
-                        for (GetLeadTitlesModel.Data data : nameList) {
-                            searchListItemsLead.add(new MultiSelectModel(data.decryptedLeadID, data.name, data.leadID));
+
+                        if (nameList.size()!=0) {
+                            searchListItemsLead = new ArrayList<>();
+                            //setRecyclerSearch(dialog);
+                            for (GetLeadTitlesModel.Data data : nameList) {
+                                searchListItemsLead.add(new MultiSelectModel(data.decryptedLeadID, data.name, data.leadID));
+                            }
+                        }else{
+                            ToastUtils.showToast(context,"No Result Found");
                         }
 
                         showSearchLeadDialog(dialog);

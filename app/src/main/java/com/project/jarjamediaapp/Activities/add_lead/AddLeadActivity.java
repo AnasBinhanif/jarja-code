@@ -30,6 +30,7 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddLeadBinding;
+import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -792,6 +793,36 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         }
     }
 
+
+    private void showSpinnerDateDialog(TextView textView, String whichBday) {
+
+        final Calendar newCalendar = Calendar.getInstance();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
+        new SpinnerDatePickerDialogBuilder().context(context)
+                .callback(new com.tsongkha.spinnerdatepicker.DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(com.tsongkha.spinnerdatepicker.DatePicker view, int years, int monthOfYear, int dayOfMonth) {
+                        Calendar newDate = Calendar.getInstance();
+                        newDate.set(years, monthOfYear, dayOfMonth);
+
+                        if (whichBday.equals("bday")) {
+                            bday = dateFormatter.format(newDate.getTime());
+                        } else if (whichBday.equals("sBday")) {
+                            sBday = dateFormatter.format(newDate.getTime());
+                        } else if (whichBday.equals("anniv")) {
+                            anniversary = dateFormatter.format(newDate.getTime());
+                        }
+                        textView.setText(dateFormatter2.format(newDate.getTime()));
+                    }
+                })
+                .showTitle(true)
+                .defaultDate(newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH))
+                .build()
+                .show();
+
+    }
+
     private void showDateDialog(TextView textView, String whichBday) {
 
         final Calendar newCalendar = Calendar.getInstance();
@@ -986,15 +1017,18 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 break;
             case R.id.edtBday:
                 clearFocus();
-                showDateDialog(bi.edtBday, "bday");
+                //showDateDialog(bi.edtBday, "bday");
+                showSpinnerDateDialog(bi.edtBday, "bday");
                 break;
             case R.id.edtSpouseBday:
                 clearFocus();
-                showDateDialog(bi.edtSpouseBday, "sBday");
+                //showDateDialog(bi.edtSpouseBday, "sBday");
+                showSpinnerDateDialog(bi.edtSpouseBday, "sBday");
                 break;
             case R.id.edtAnniversary:
                 clearFocus();
-                showDateDialog(bi.edtAnniversary, "anniv");
+                //showDateDialog(bi.edtAnniversary, "anniv");
+                showSpinnerDateDialog(bi.edtAnniversary, "anniv");
                 break;
             case R.id.edtDripCompaign:
                 clearFocus();
