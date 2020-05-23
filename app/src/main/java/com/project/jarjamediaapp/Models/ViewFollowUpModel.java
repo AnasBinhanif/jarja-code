@@ -52,6 +52,9 @@ public class ViewFollowUpModel {
         @SerializedName("sendTime")
         @Expose
         public String sendTime;
+        @SerializedName("sendDateTime")
+        @Expose
+        public String sendDateTime;
         @SerializedName("sentType")
         @Expose
         public String sentType;

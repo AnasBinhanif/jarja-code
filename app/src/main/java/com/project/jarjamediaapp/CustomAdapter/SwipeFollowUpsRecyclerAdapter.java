@@ -96,6 +96,8 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
             holder.frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    viewDetail(mData.get(pos).dripDetailID, holder.swipeLayout);
                 }
             });
 
@@ -178,10 +180,10 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
         });
     }
 
-    private void viewDetail(String leadID,SwipeRevealLayout swipeRevealLayout) {
+    private void viewDetail(String dripDetailId, SwipeRevealLayout swipeRevealLayout) {
         GH.getInstance().ShowProgressDialog(activity);
         Call<ViewFollowUpModel> _callToday;
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), leadID);
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId);
         _callToday.enqueue(new Callback<ViewFollowUpModel>() {
             @Override
             public void onResponse(Call<ViewFollowUpModel> call, Response<ViewFollowUpModel> response) {
@@ -196,8 +198,9 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
                         String note = getDetails.data.viewDPCStep.message;
                         String title = getDetails.data.viewDPCStep.subject;
                         String senType = getDetails.data.viewDPCStep.sentType;
+                        String dateTime = getDetails.data.viewDPCStep.sendDateTime;
                         swipeRevealLayout.close(true);
-                        showViewFollowUpDialog(context, wait, title, time, note,senType);
+                        showViewFollowUpDialog(context, wait, title, dateTime, time, note, senType);
 
                     } else {
 
@@ -219,24 +222,33 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
         });
     }
 
-    public void showViewFollowUpDialog(Context context, String wait, String title, String time, String note,String sentType) {
+    public void showViewFollowUpDialog(Context context, String wait, String title, String dateTime, String time, String note, String sentType) {
 
         TextView edtWait, edtTitle, edtTime, edtNote;
         final Dialog dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
-        if(sentType == null){
-            dialog.setContentView(R.layout.custom_view_followup_dialog);
+
+
+        if (sentType != null && sentType.equalsIgnoreCase("Wait")) {
+            dialog.setContentView(R.layout.custom_view_followup_wait_dialog);
+
+            edtNote = (TextView) dialog.findViewById(R.id.edtNote);
+            edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
+            edtTime = (TextView) dialog.findViewById(R.id.edtTime);
             edtWait = (TextView) dialog.findViewById(R.id.edtWait);
             edtWait.setText(wait);
-        }else {
-            dialog.setContentView(R.layout.custom_view_followup_wait_dialog);
+            edtTime.setText(time);
+
+        } else {
+
+            dialog.setContentView(R.layout.custom_view_followup_dialog);
+            edtNote = (TextView) dialog.findViewById(R.id.edtNote);
+            edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
+            edtTime = (TextView) dialog.findViewById(R.id.edtTime);
+            edtTime.setText(GH.getInstance().formatter(dateTime,"MM-dd-yyyy hh:mm a","yyyy-MM-dd'T'HH:mm:ss"));
+
         }
 
-        edtTime = (TextView) dialog.findViewById(R.id.edtTime);
-        edtNote = (TextView) dialog.findViewById(R.id.edtNote);
-        edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
-
-        edtTime.setText(time);
         edtNote.setText(note);
         edtTitle.setText(title);
 
@@ -283,7 +295,7 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
 
             tvView.setOnClickListener(v -> {
                 pos = getAdapterPosition();
-                viewDetail(mData.get(pos).dripDetailID,swipeLayout);
+                viewDetail(mData.get(pos).dripDetailID, swipeLayout);
             });
         }
     }
