@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/swipe_layout"
+    android:id="@+id/rlParent"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="50dp"
     app:dragEdge="right"
     app:mode="normal">
 
@@ -14,7 +14,7 @@
         android:layout_marginLeft="20dp"
         android:paddingRight="10dp"
         android:gravity="left|center"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tvName"
@@ -22,10 +22,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorGreyTextDark"
             android:text="NAME NAME "
-            android:textSize="16dp"
-            android:drawablePadding="5dp"
+            android:textSize="14dp"
             android:textStyle="bold" />
-
 
     </LinearLayout>
 

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -18,14 +19,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
+import com.project.jarjamediaapp.Activities.search_activity.SearchResultsActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.CustomAdapter.SearchResultAdapter;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetLeadTitlesModel;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -930,6 +934,43 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         }
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 06) {
+            if (resultCode == RESULT_OK) {
+
+                ArrayList<Integer> idList = data.getIntegerArrayListExtra("idList");
+                ArrayList<String> nameList = data.getStringArrayListExtra("nameList");
+                ArrayList<String> encryptedList = data.getStringArrayListExtra("encryptedList");
+
+                if (idList != null && idList.size() != 0) {
+
+                    if (bi.lnLead.getChildCount() > 0) {
+                        bi.lnLead.removeAllViews();
+                    }
+
+                    searchLeadIdsString = "";
+                    for (int i =0;i<idList.size();i++) {
+
+                        View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                        TextView textView = child.findViewById(R.id.txtDynamic);
+                        textView.setText(nameList.get(i));
+                        bi.lnLead.addView(child);
+
+                        if (searchLeadIdsString.equals("")) {
+                            searchLeadIdsString = encryptedList.get(i);
+                        } else {
+                            searchLeadIdsString = searchLeadIdsString + "," + encryptedList.get(i);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void onClick(View view) {
 
@@ -937,7 +978,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         switch (view.getId()) {
             case R.id.tvName:
                 clearFocus();
-                showSearchDialog(context);
+                //showSearchDialog(context);
+                Intent i = new Intent(AddTaskActivity.this, SearchResultsActivity.class);
+                i.putExtra("fromAppoint", false);
+                startActivityForResult(i, 06);
+
                 break;
             case R.id.tvStartDate:
                 clearFocus();
@@ -1078,7 +1123,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         bi.atvAddProperty.clearFocus();
         bi.atvDescription.clearFocus();
-        bi.tvName.clearFocus();
+        //bi.tvName.clearFocus();
         bi.atvNameTask.clearFocus();
     }
 
@@ -1257,6 +1302,12 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         if (response.body().getStatus().equals("Success")) {
             ToastUtils.showToast(context, response.body().getMessage());
+            if (SearchResultAdapter.selectedIDs!=null && SearchResultAdapter.selectedIDs.size()!=0)
+            {
+                SearchResultAdapter.selectedIDs.clear();
+                SearchResultAdapter.selectedNames.clear();
+                SearchResultAdapter.selectedEncryted.clear();
+            }
             finish();
         }
     }

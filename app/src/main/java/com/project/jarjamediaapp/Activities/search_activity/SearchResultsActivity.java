@@ -1,17 +1,21 @@
 package com.project.jarjamediaapp.Activities.search_activity;
 
-import android.app.Dialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.abdeveloper.library.MultiSelectModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.CustomAdapter.SearchResultAdapter;
 import com.project.jarjamediaapp.Models.GetLeadTitlesModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -21,9 +25,15 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivitySearchResultsBinding;
+import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function2;
+import kotlin.jvm.functions.Function4;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,6 +43,11 @@ public class SearchResultsActivity extends BaseActivity implements SearchResults
     ActivitySearchResultsBinding bi;
     Context context = SearchResultsActivity.this;
     SearchResultsPresenter presenter;
+
+    RecyclerAdapterUtil recyclerAdapterUtil;
+    ArrayList<GetLeadTitlesModel.Data> nameList = new ArrayList<>();
+
+    boolean fromAppoint ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,18 +61,105 @@ public class SearchResultsActivity extends BaseActivity implements SearchResults
 
     @Override
     public void onClick(View v) {
-
     }
 
     @Override
     public void initViews() {
 
+        fromAppoint = getIntent().getBooleanExtra("fromAppoint",true);
+
+        if (fromAppoint)
+        {
+            bi.btnSave.setVisibility(View.GONE);
+        }else{
+            bi.btnSave.setVisibility(View.VISIBLE);
+        }
+
+        bi.btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent();
+                intent.putIntegerArrayListExtra("idList",SearchResultAdapter.selectedIDs);
+                intent.putStringArrayListExtra("nameList",SearchResultAdapter.selectedNames);
+                intent.putStringArrayListExtra("encryptedList",SearchResultAdapter.selectedEncryted);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+
+        bi.edtQuery.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                int length = bi.edtQuery.getText().length();
+                try {
+                    if (length > 0)
+                        getLeadByText(bi.edtQuery.getText().toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    private void getLeadByText(String query) {
+
+        Call<GetLeadTitlesModel> _callToday;
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadTitlesModel(GH.getInstance().getAuthorization(), query);
+        _callToday.enqueue(new Callback<GetLeadTitlesModel>() {
+            @Override
+            public void onResponse(Call<GetLeadTitlesModel> call, Response<GetLeadTitlesModel> response) {
+
+                GH.getInstance().HideProgressDialog();
+                if (response.isSuccessful()) {
+
+                    GetLeadTitlesModel getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        nameList = new ArrayList<>();
+                        nameList.addAll(getAppointmentsModel.data);
+                        if (nameList.size() != 0) {
+                            setRecyclerSearch();
+                        } else {
+                            ToastUtils.showToast(context, "No Result Found");
+                        }
+                    } else {
+                        ToastUtils.showToast(context, getAppointmentsModel.message);
+                    }
+                } else {
+                    ApiError error = ErrorUtils.parseError(response);
+                    ToastUtils.showToast(context, error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetLeadTitlesModel> call, Throwable t) {
+                ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
+            }
+        });
+    }
+
+
+    private void setRecyclerSearch() {
+
+        bi.recyclerSearch.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        bi.recyclerSearch.setItemAnimator(new DefaultItemAnimator());
+        bi.recyclerSearch.addItemDecoration(new DividerItemDecoration(bi.recyclerSearch.getContext(), 1));
+        bi.recyclerSearch.setAdapter(new SearchResultAdapter(SearchResultsActivity.this,nameList,fromAppoint));
     }
 
     @Override
     public void updateUI(Response<BaseResponse> response) {
-
-
     }
 
     @Override
@@ -90,6 +192,5 @@ public class SearchResultsActivity extends BaseActivity implements SearchResults
 
         GH.getInstance().HideProgressDialog();
     }
-
 
 }

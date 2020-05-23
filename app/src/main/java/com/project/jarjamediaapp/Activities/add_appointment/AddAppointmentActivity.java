@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -28,7 +30,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
+import com.project.jarjamediaapp.Activities.add_filters.AddFiltersActivity;
 import com.project.jarjamediaapp.Activities.calendarDetail.CalendarAppointmentDetailModel;
+import com.project.jarjamediaapp.Activities.search_activity.SearchResultsActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -419,13 +423,28 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 05) {
+            if (resultCode == RESULT_OK) {
+                bi.tvName.setText(data.getStringExtra("leadName"));
+                leadId =data.getStringExtra("leadID");
+            }
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         super.onClick(view);
 
         switch (view.getId()) {
             case R.id.tvName:
                 //clearFocus();
-                showSearchDialog(context);
+                //showSearchDialog(context);
+                Intent i = new Intent(AddAppointmentActivity.this, SearchResultsActivity.class);
+                i.putExtra("fromAppoint",true);
+                startActivityForResult(i, 05);
                 break;
             case R.id.tvAgent:
                 clearFocus();
