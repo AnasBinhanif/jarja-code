@@ -100,8 +100,8 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
             holder.tvStartDateTime.setText(GH.getInstance().formatter(startDateTime, "MM-dd-yyyy hh:mm a", "yyyy-MM-dd'T'HH:mm:ss"));
             holder.tvEndDateTime.setText(GH.getInstance().formatter(endDateTime, "MM-dd-yyyy hh:mm a", "yyyy-MM-dd'T'HH:mm:ss"));
 
-            holder.tvAddress.setText(data.get(position).getStreetName() + "," + data.get(position).getCity());
-            holder.tvCityPostal.setText(data.get(position).getState());
+            holder.tvAddress.setText(data.get(position).getStreetName());
+            holder.tvCityPostal.setText(data.get(position).getCity()+" , "+data.get(position).getState());
             holder.tvLeadsCount.setText(data.get(position).getLeadCount() != 0 ? "Leads " + data.get(position).getLeadCount() : "Leads 0");
             String image = data.get(position).getImgURL();
             if (!image.equalsIgnoreCase("")) {
