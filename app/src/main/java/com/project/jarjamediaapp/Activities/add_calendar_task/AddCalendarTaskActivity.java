@@ -225,7 +225,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 })
                 .showTitle(true)
                 .defaultDate(year, month, day)
-                .minDate(year, month, day)
+                .minDate(newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),newCalendar.get(Calendar.DAY_OF_MONTH))
                 .build()
                 .show();
 

@@ -1,11 +1,14 @@
 package com.project.jarjamediaapp.Activities.social_profiles;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,7 +23,6 @@ import com.bumptech.glide.Glide;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
-import com.project.jarjamediaapp.Models.GetAllSocialProfiles;
 import com.project.jarjamediaapp.Models.GetLeadSocialProfile;
 import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
 import com.project.jarjamediaapp.R;
@@ -136,7 +138,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
 
             String url = allsocialprofiles.profilelink;
-            if (url.startsWith("http")||url.startsWith("HTTP")) {
+            if (url.startsWith("http") || url.startsWith("HTTP")) {
                 openWebPage(url);
             } else if (url.startsWith("www") || url.startsWith("WWW")) {
                 url = "http://" + url;
@@ -144,7 +146,6 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
             } else {
                 ToastUtils.showToast(context, "No Profile Found / Incorrect Profile Url");
             }
-
 
 
             return Unit.INSTANCE;
@@ -172,6 +173,22 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
         spnSIte.setBackground(getDrawable(R.drawable.bg_search));
         spnSIte.setItems(getSocialProfileDropdownNames);
 
+        spnSIte.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                edtName.clearFocus();
+                edtProfileLink.clearFocus();
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                if (imm.isAcceptingText()) {
+                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                }
+
+                return false;
+            }
+        });
+
         Button btnSave = dialog.findViewById(R.id.btnSave);
         btnSave.setOnClickListener(v -> {
 
@@ -180,10 +197,9 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
             String profilelink = edtProfileLink.getText().toString() + "";
             if (name.equals("") || profilelink.equals("")) {
                 ToastUtils.showToast(context, "Please Fill all the fields");
-            } else if (!android.util.Patterns.WEB_URL.matcher(profilelink).matches()){
+            } else if (!android.util.Patterns.WEB_URL.matcher(profilelink).matches()) {
                 ToastUtils.showToast(context, "Invalid Profile Link");
-            }else
-            {
+            } else {
                 presenter.addSocialProfile(leadID, name, siteName, profilelink);
             }
         });

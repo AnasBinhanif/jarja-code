@@ -133,25 +133,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         });
 
-        // 1 from Add Task by Lead Id
-        // 2 from Update Task Lead Id
-        // 3 from Update Task
-        // 4 from Add Task
-        String id = getIntent().getStringExtra("from");
-        from = id;
-        switch (id) {
-            case "1":
-            case "4": {
-                bi.epToolbar.toolbar.setTitle(getString(R.string.add_task));
-            }
-            break;
-            case "2":
-            case "3": {
-                bi.epToolbar.toolbar.setTitle(getString(R.string.update_task));
-            }
-            break;
-        }
-
     }
 
     private void loadTitle(){
@@ -165,12 +146,12 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         switch (fromId) {
             case "1":
             case "3": {
-                bi.epToolbar.toolbar.setTitle(getString(R.string.add_task));
+                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_task), true);
             }
             break;
             case "2":
             case "4": {
-                bi.epToolbar.toolbar.setTitle(getString(R.string.update_task));
+                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.update_task), true);
             }
             break;
         }
@@ -1023,6 +1004,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     private void showSpinnerDateDialog(TextView textView, boolean isStart) {
 
+        Calendar cal = Calendar.getInstance();
         SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         new SpinnerDatePickerDialogBuilder().context(context)
@@ -1058,7 +1040,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 })
                 .showTitle(true)
                 .defaultDate(year, month-1, day)
-                .minDate(year, month, day)
+                .minDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
                 .build()
                 .show();
 

@@ -147,7 +147,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     }
 
-    private void loadTitle() {
+    private void loadTitle(){
         // 1 from Add Appointment by Lead Id
         // 3 from Add Calendar Appointment
         // 5 from Add Appointment
@@ -159,13 +159,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             case "1":
             case "3":
             case "5": {
-                bi.epToolbar.toolbar.setTitle(getString(R.string.add_appointment));
+                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_appointment), true);
             }
             break;
             case "2":
             case "4":
             case "6": {
-                bi.epToolbar.toolbar.setTitle(getString(R.string.edit_appointment));
+                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
             }
             break;
         }
@@ -697,11 +697,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     private void showSpinnerDateDialog() {
 
+        Calendar cal = Calendar.getInstance();
         new SpinnerDatePickerDialogBuilder().context(AddAppointmentActivity.this)
                 .callback(AddAppointmentActivity.this)
                 .showTitle(true)
                 .defaultDate(year, month, day)
-                .minDate(year, month, day)
+                .minDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
                 .build()
                 .show();
 
@@ -1126,10 +1127,10 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
                         nameList = new ArrayList<>();
                         nameList.addAll(getAppointmentsModel.data);
-                        if (nameList.size() != 0) {
+                        if (nameList.size()!=0) {
                             setRecyclerSearch(dialog);
-                        } else {
-                            ToastUtils.showToast(context, "No Result Found");
+                        }else{
+                            ToastUtils.showToast(context,"No Result Found");
                         }
 
                     } else {

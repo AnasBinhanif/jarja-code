@@ -526,6 +526,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         easyPreference.remove("leadID").save();
         easyPreference.remove("dateTo").save();
         easyPreference.remove("dateFrom").save();
+        easyPreference.remove("priceTo").save();
+        easyPreference.remove("priceFrom").save();
         easyPreference.save();
 
         searchListItemsselected = new ArrayList<>();
@@ -585,6 +587,30 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         setResult(RESULT_OK, intent);
         finish();
 
+    }
+
+    private void saveAndSearchFilters() {
+
+        easyPreference.addObject("agentIDs", searchListItemsselected).save();
+        easyPreference.addObject("typeIDs", getLeadTypeModelListselected).save();
+        easyPreference.addObject("sourceIDs", getLeadSourceNameListselected).save();
+        easyPreference.addObject("tagIDs", getLeadTagModelListselected).save();
+        easyPreference.addObject("dripIDs", getLeadDripCampaignModelListselected).save();
+        easyPreference.addInt("leadScoreID", bi.spnLeadScore.getSelectedIndex()).save();
+        easyPreference.addInt("lastTouchID", bi.spnLastTouch.getSelectedIndex()).save();
+        easyPreference.addInt("lastLoginID", bi.spnLastLogin.getSelectedIndex()).save();
+        easyPreference.addObject("pipelineID", getPipelineModelListselected).save();
+        easyPreference.addString("notes", bi.edtNotes.getText().toString() + "").save();
+        easyPreference.addString("leadID", bi.edtLeadID.getText().toString() + "").save();
+        easyPreference.addString("priceTo", priceTo + "").save();
+        easyPreference.addString("priceFrom", priceFrom + "").save();
+        easyPreference.addString("dateTo", dateTo + "").save();
+        easyPreference.addString("dateFrom", dateFrom + "").save();
+
+        String st = startDate;
+        String et = endDate;
+
+        searchFilters();
     }
 
     private void retrieveFilters() {
@@ -784,27 +810,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
     }
 
-    private void saveAndSearchFilters() {
-
-        easyPreference.addObject("agentIDs", searchListItemsselected).save();
-        easyPreference.addObject("typeIDs", getLeadTypeModelListselected).save();
-        easyPreference.addObject("sourceIDs", getLeadSourceNameListselected).save();
-        easyPreference.addObject("tagIDs", getLeadTagModelListselected).save();
-        easyPreference.addObject("dripIDs", getLeadDripCampaignModelListselected).save();
-        easyPreference.addInt("leadScoreID", bi.spnLeadScore.getSelectedIndex()).save();
-        easyPreference.addInt("lastTouchID", bi.spnLastTouch.getSelectedIndex()).save();
-        easyPreference.addInt("lastLoginID", bi.spnLastLogin.getSelectedIndex()).save();
-        easyPreference.addObject("pipelineID", getPipelineModelListselected).save();
-        easyPreference.addString("notes", bi.edtNotes.getText().toString() + "").save();
-        easyPreference.addString("leadID", bi.edtLeadID.getText().toString() + "").save();
-        easyPreference.addString("priceTo", priceTo + "").save();
-        easyPreference.addString("priceFrom", priceFrom + "").save();
-        easyPreference.addString("dateTo", dateTo + "").save();
-        easyPreference.addString("dateFrom", dateFrom + "").save();
-
-        searchFilters();
-    }
-
     public void showPriceRangeDialog(Context context) {
 
         Dialog dialog = new Dialog(context, R.style.Dialog);
@@ -846,21 +851,23 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         TextView tvDateTO = dialog.findViewById(R.id.tvDateTO);
         TextView tvDateFrom = dialog.findViewById(R.id.tvDateFrom);
 
-        tvDateTO.setText(dateTo);
-        tvDateFrom.setText(dateFrom);
+        String datedTo = dateTo.equals("") ? "max" : dateTo;
+        String datedFrom = dateFrom.equals("") ? "min" : dateFrom;
+        tvDateTO.setText(datedTo);
+        tvDateFrom.setText(datedFrom);
 
         tvDateTO.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-                showSpinnerDateDialog(tvDateTO,true);
+                showSpinnerDateDialog(tvDateTO,false);
             }
         });
         tvDateFrom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSpinnerDateDialog(tvDateFrom,false);
+                showSpinnerDateDialog(tvDateFrom,true);
             }
         });
 
