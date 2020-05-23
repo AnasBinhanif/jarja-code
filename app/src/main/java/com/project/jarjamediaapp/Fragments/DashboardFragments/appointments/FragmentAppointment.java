@@ -119,7 +119,9 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
             }
         }
         if (buttonType.equalsIgnoreCase("T") && onResume) {
-            getNotificationCount();
+            if (!isFromActivity) {
+                getNotificationCount();
+            }
         } else {
             hideProgressBar();
         }
@@ -131,6 +133,13 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         bi.tvNoRecordFound.setVisibility(View.VISIBLE);
         bi.rvAppointments.setVisibility(View.GONE);
         ToastUtils.showToastLong(context, message);
+        if (buttonType.equalsIgnoreCase("T") && onResume) {
+            if (!isFromActivity) {
+                getNotificationCount();
+            }
+        } else {
+            hideProgressBar();
+        }
 
     }
 

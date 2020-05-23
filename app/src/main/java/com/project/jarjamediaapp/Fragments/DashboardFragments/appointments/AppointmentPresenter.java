@@ -52,7 +52,6 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
 
                     } else {
 
-                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
