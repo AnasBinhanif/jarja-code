@@ -178,7 +178,7 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
         });
     }
 
-    private void viewDetail(String leadID) {
+    private void viewDetail(String leadID,SwipeRevealLayout swipeRevealLayout) {
         GH.getInstance().ShowProgressDialog(activity);
         Call<ViewFollowUpModel> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), leadID);
@@ -195,7 +195,9 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
                         String time = getDetails.data.viewDPCStep.sendTime;
                         String note = getDetails.data.viewDPCStep.message;
                         String title = getDetails.data.viewDPCStep.subject;
-                        showViewFollowUpDialog(context, wait, title, time, note);
+                        String senType = getDetails.data.viewDPCStep.sentType;
+                        swipeRevealLayout.close(true);
+                        showViewFollowUpDialog(context, wait, title, time, note,senType);
 
                     } else {
 
@@ -217,19 +219,23 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
         });
     }
 
-    public void showViewFollowUpDialog(Context context, String wait, String title, String time, String note) {
+    public void showViewFollowUpDialog(Context context, String wait, String title, String time, String note,String sentType) {
 
+        TextView edtWait, edtTitle, edtTime, edtNote;
         final Dialog dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
-        dialog.setContentView(R.layout.custom_viewfollowup_dialog);
-        TextView edtWait, edtTitle, edtTime, edtNote;
+        if(sentType == null){
+            dialog.setContentView(R.layout.custom_view_followup_dialog);
+            edtWait = (TextView) dialog.findViewById(R.id.edtWait);
+            edtWait.setText(wait);
+        }else {
+            dialog.setContentView(R.layout.custom_view_followup_wait_dialog);
+        }
 
-        edtWait = (TextView) dialog.findViewById(R.id.edtWait);
         edtTime = (TextView) dialog.findViewById(R.id.edtTime);
         edtNote = (TextView) dialog.findViewById(R.id.edtNote);
         edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
 
-        edtWait.setText(wait);
         edtTime.setText(time);
         edtNote.setText(note);
         edtTitle.setText(title);
@@ -277,7 +283,7 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
 
             tvView.setOnClickListener(v -> {
                 pos = getAdapterPosition();
-                viewDetail(mData.get(pos).dripDetailID);
+                viewDetail(mData.get(pos).dripDetailID,swipeLayout);
             });
         }
     }

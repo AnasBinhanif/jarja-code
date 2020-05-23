@@ -275,7 +275,6 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
             @Override
             public void onResponse(Call<GetTaskDetail> call, Response<GetTaskDetail> response) {
 
-                _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetTaskDetail getTaskDetail = response.body();
@@ -286,11 +285,13 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
                     } else {
 
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getTaskDetail.message);
 
                     }
                 } else {
 
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }

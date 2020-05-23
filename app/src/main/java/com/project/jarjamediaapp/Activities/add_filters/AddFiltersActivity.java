@@ -851,16 +851,9 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         TextView tvDateTO = dialog.findViewById(R.id.tvDateTO);
         TextView tvDateFrom = dialog.findViewById(R.id.tvDateFrom);
 
-        String datedTo = dateTo.equals("") ? "max" : dateTo;
-        String datedFrom = dateFrom.equals("") ? "min" : dateFrom;
-        tvDateTO.setText(datedTo);
-        tvDateFrom.setText(datedFrom);
-
         tvDateTO.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 showSpinnerDateDialog(tvDateTO,false);
             }
         });

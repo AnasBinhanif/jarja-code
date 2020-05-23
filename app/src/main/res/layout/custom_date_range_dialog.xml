@@ -27,7 +27,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_search"
             android:gravity="center|left"
-            android:text="min"
+            android:hint="From"
             android:inputType="number"
             android:paddingLeft="12dp"
             android:textSize="14dp" />
@@ -49,7 +49,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_search"
             android:gravity="center|left"
-            android:hint="max"
+            android:hint="To"
             android:singleLine="true"
             android:inputType="number"
             android:paddingLeft="12dp"

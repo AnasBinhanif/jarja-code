@@ -229,7 +229,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
             case R.id.fbAddTask:
 
                 Map<String, String> map = new HashMap<>();
-                map.put("from", "4");
+                map.put("from", "1");
                 switchActivityWithIntentString(context, AddTaskActivity.class, (HashMap<String, String>) map);
                 break;
 

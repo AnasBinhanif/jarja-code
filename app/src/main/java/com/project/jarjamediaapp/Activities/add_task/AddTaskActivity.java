@@ -1,6 +1,5 @@
 package com.project.jarjamediaapp.Activities.add_task;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -14,7 +13,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -65,6 +63,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     RecyclerAdapterUtil recyclerAdapterUtil;
     RecyclerView recyclerSearch;
+
+    GetTaskDetail taskDetail;
 
     ArrayList<String> arrayListViaText = new ArrayList<>();
     ArrayList<String> arrayListViaValue = new ArrayList<>();
@@ -135,26 +135,23 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     }
 
-    private void loadTitle(){
-        // 1 from Add Appointment by Lead Id
-        // 3 from Add Calendar Appointment
-        // 5 from Add Appointment
-        // 2 from Update Appointment Lead Id
-        // 4 from Update Appointment
-        // 6 for Update Calendar Appointment
-       String fromId = getIntent().getStringExtra("from");
+    private void loadTitle() {
+
+        String fromId = getIntent().getStringExtra("from");
         switch (fromId) {
             case "1":
-            case "3": {
-                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_task), true);
+            case "4": {
+                bi.epToolbar.toolbar.setTitle(getString(R.string.add_task));
             }
             break;
             case "2":
-            case "4": {
-                setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.update_task), true);
+            case "3":
+            case "5": {
+                bi.epToolbar.toolbar.setTitle(getString(R.string.update_task));
             }
             break;
         }
+
     }
 
     private void checkIntent() {
@@ -199,7 +196,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
             break;
             case "3": {
-                bi.tvName.setEnabled(true);
+                bi.tvName.setEnabled(false);
                 isEdit = true;
                 leadId = "";
                 taskId = getIntent().getStringExtra("taskId");
@@ -229,7 +226,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 isEdit = true;
                 leadId = "";
                 taskId = getIntent().getStringExtra("taskId");
-                setViewAndChildrenEnabled(bi.lnParent,false);
+                setViewAndChildrenEnabled(bi.lnParent, false);
                 bi.atvRecur.setEnabled(false);
                 bi.atvRecur.setClickable(false);
                 bi.atvRecur.setFocusableInTouchMode(false);
@@ -476,6 +473,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     private void retrieveData(GetTaskDetail taskDetail) {
 
+        this.taskDetail = taskDetail;
         bi.atvNameTask.setText(taskDetail.data.name);
         bi.atvDescription.setText(taskDetail.data.description);
         bi.tvName.setText(taskDetail.data.firstName);
@@ -506,8 +504,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         String sTime = GH.getInstance().formatter(taskDetail.data.startDate, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
         String eTime = GH.getInstance().formatter(taskDetail.data.endDate, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
-
-
 
         bi.tvStartDate.setText(sDate + " " + sTime);
         bi.tvEndDate.setText(eDate + " " + eTime);
@@ -558,13 +554,9 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     agentIdsString = agentIdsString + "," + name.agentIDEncrypted;
                 }
             }
-
             bi.tvStartDate.setEnabled(false);
-            bi.tvName.setEnabled(false);
-           /* bi.tvEndDate.setEnabled(false);
-            bi.cbEndDate.setEnabled(false);*/
         }
-
+        hideProgressBar();
     }
 
     private void callAddTask() {
@@ -1039,8 +1031,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     }
                 })
                 .showTitle(true)
-                .defaultDate(year, month-1, day)
-                .minDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
+                .defaultDate(year, month - 1, day)
+                .minDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))
                 .build()
                 .show();
 
@@ -1319,14 +1311,14 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                         nameList = new ArrayList<>();
                         nameList.addAll(getAppointmentsModel.data);
 
-                        if (nameList.size()!=0) {
+                        if (nameList.size() != 0) {
                             searchListItemsLead = new ArrayList<>();
                             //setRecyclerSearch(dialog);
                             for (GetLeadTitlesModel.Data data : nameList) {
                                 searchListItemsLead.add(new MultiSelectModel(data.decryptedLeadID, data.name, data.leadID));
                             }
-                        }else{
-                            ToastUtils.showToast(context,"No Result Found");
+                        } else {
+                            ToastUtils.showToast(context, "No Result Found");
                         }
 
                         showSearchLeadDialog(dialog);

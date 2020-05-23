@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -163,7 +164,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         });
     }
 
-
     @Override
     public void onBackPressed() {
 
@@ -299,49 +299,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
-    private void getNotificationCount() {
-
-        Call<UploadImageModel> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
-                getNotificationCount(GH.getInstance().getAuthorization());
-        _call.enqueue(new Callback<UploadImageModel>() {
-            @Override
-            public void onResponse(Call<UploadImageModel> call, Response<UploadImageModel> response) {
-
-                if (response.isSuccessful()) {
-
-                    UploadImageModel getUserProfile = response.body();
-                    if (getUserProfile.status.equals("Success")) {
-                        hideProgressBar();
-                        if (getUserProfile.getData() != null && !getUserProfile.getData().equalsIgnoreCase(""))
-                            item.setIcon(buildCounterDrawable(Integer.parseInt(getUserProfile.getData()), R.drawable.ic_notification));
-
-                    } else {
-
-                        hideProgressBar();
-                        Toast.makeText(context, getUserProfile.message, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-
-                    hideProgressBar();
-                    ApiError error = ErrorUtils.parseError(response);
-                    if (error.message().contains("Authorization has been denied for this request")) {
-                        ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
-                        logout();
-                    } else {
-                        ToastUtils.showToastLong(context, error.message());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UploadImageModel> call, Throwable t) {
-
-                hideProgressBar();
-                ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
-            }
-        });
-    }
-
     private void getUserPermissions() {
 
         Call<GetUserPermission> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
@@ -350,12 +307,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             @Override
             public void onResponse(Call<GetUserPermission> call, Response<GetUserPermission> response) {
 
+                hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetUserPermission getUserProfile = response.body();
                     if (getUserProfile.status.equals("Success")) {
 
-                        getNotificationCount();
                         Gson gson = new Gson();
                         String jsonText = gson.toJson(getUserProfile);
                         easyPreference.addString(GH.KEYS.USER_PERMISSIONS.name(), jsonText).save();
@@ -363,12 +320,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         if (getUserProfile.data.dashboard.get(0).value) {
                             onNavigationItemSelected(navigationView.getMenu().getItem(0));
                         } else {
-                            hideProgressBar();
+
                             ToastUtils.showToast(context, getString(R.string.dashboard_ViewDashboard));
                         }
 
                     } else {
-                        hideProgressBar();
+
                         Toast.makeText(context, getUserProfile.message, Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -440,15 +397,18 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         return new BitmapDrawable(getResources(), bitmap);
     }
 
-
     public void showProgressBar() {
 
         GH.getInstance().ShowProgressDialog(HomeActivity.this);
     }
 
-
     public void hideProgressBar() {
 
         GH.getInstance().HideProgressDialog();
     }
+
+    public void updateNotificationCount(int count){
+        item.setIcon(buildCounterDrawable(count, R.drawable.ic_notification));
+    }
+
 }

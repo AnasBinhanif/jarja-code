@@ -43,7 +43,6 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
             @Override
             public void onResponse(Call<GetAppointmentsModel> call, Response<GetAppointmentsModel> response) {
 
-                _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetAppointmentsModel getAppointmentsModel = response.body();
@@ -53,11 +52,13 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
 
                     } else {
 
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -14,12 +15,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.paris.Paris;
+import com.project.jarjamediaapp.Activities.HomeActivity;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
+import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BaseFragment;
 import com.project.jarjamediaapp.CustomAdapter.SwipeAppointmentRecyclerAdapter;
 import com.project.jarjamediaapp.Fragments.FragmentLifeCycle;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetUserPermission;
+import com.project.jarjamediaapp.Networking.ApiError;
+import com.project.jarjamediaapp.Networking.ApiMethods;
+import com.project.jarjamediaapp.Networking.ErrorUtils;
+import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -29,6 +36,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FragmentAppointment extends BaseFragment implements FragmentLifeCycle, AppointmentContract.View, View.OnClickListener {
 
@@ -44,6 +55,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     String buttonType = "T";
     int page = 1;
     int totalPages;
+    boolean onResume;
 
     public FragmentAppointment() {
         // Required empty public constructor
@@ -85,7 +97,6 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     public void updateAppointmentUI(GetAppointmentsModel response) {
 
         appointmentList.addAll(response.getData().getData());
-        //appointmentList = response.getData().getData();
 
         if (!isFromActivity) {
             totalPages = response.getData().getTotalRecordCount() != null ? response.getData().getTotalRecordCount() : 0;
@@ -107,7 +118,11 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                 }
             }
         }
-
+        if (buttonType.equalsIgnoreCase("T") && onResume) {
+            getNotificationCount();
+        } else {
+            hideProgressBar();
+        }
     }
 
     @Override
@@ -186,7 +201,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                         if (totalPages > appointmentList.size()) {
                             page++;
                             try {
-                                isTabClick =false;
+                                isTabClick = false;
                                 hitApi();
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
@@ -217,12 +232,14 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
                 page = 1;
                 appointmentList.clear();
-                isTabClick =true;
+                isTabClick = true;
                 buttonType = "T";
                 if (isFromActivity) {
                     presenter.getLeadTodayAppointments(leadID, page);
                 } else {
                     if (userPermission.data.dashboard.get(6).value) {
+
+                        onResume = false;
                         presenter.getTodayAppointments(page);
                     } else {
                         ToastUtils.showToast(context, getString(R.string.dashboard_ViewEditAppoint));
@@ -237,7 +254,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
             case R.id.btnUpcoming:
 
                 page = 1;
-                isTabClick =true;
+                isTabClick = true;
                 appointmentList.clear();
                 buttonType = "U";
                 if (isFromActivity) {
@@ -262,7 +279,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
                 page = 1;
                 appointmentList.clear();
-                isTabClick =true;
+                isTabClick = true;
                 buttonType = "P";
                 if (isFromActivity) {
 
@@ -326,6 +343,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
             switch (buttonType) {
                 case "T": {
                     if (userPermission.data.dashboard.get(6).value) {
+
                         presenter.getTodayAppointments(page);
                     } else {
                         ToastUtils.showToast(context, getString(R.string.dashboard_ViewEditAppoint));
@@ -351,11 +369,55 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     public void onResume() {
         super.onResume();
 
+        onResume = true;
         page = 1;
-        isTabClick =true;
-        if (appointmentList.size()!=0){
+        isTabClick = true;
+        if (appointmentList.size() != 0) {
             appointmentList.clear();
         }
         hitApi();
     }
+
+    private void getNotificationCount() {
+
+        Call<UploadImageModel> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
+                getNotificationCount(GH.getInstance().getAuthorization());
+        _call.enqueue(new Callback<UploadImageModel>() {
+            @Override
+            public void onResponse(Call<UploadImageModel> call, Response<UploadImageModel> response) {
+
+                hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    UploadImageModel getUserProfile = response.body();
+                    if (getUserProfile.status.equals("Success")) {
+                        hideProgressBar();
+                        if (getUserProfile.getData() != null && !getUserProfile.getData().equalsIgnoreCase("")) {
+                            ((HomeActivity) context).updateNotificationCount(Integer.parseInt(getUserProfile.getData()));
+                        }
+                    } else {
+
+                        Toast.makeText(context, getUserProfile.message, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    if (error.message().contains("Authorization has been denied for this request")) {
+                        ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+                        logout();
+                    } else {
+                        ToastUtils.showToastLong(context, error.message());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UploadImageModel> call, Throwable t) {
+
+                hideProgressBar();
+                ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+            }
+        });
+    }
+
 }
