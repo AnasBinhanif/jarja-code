@@ -461,11 +461,11 @@ public class VoiceActivity extends AppCompatActivity {
             if (enabled) {
                 enabled = false;
                 audioManager.setSpeakerphoneOn(false);
-                speakerActionFab.setImageDrawable(ContextCompat.getDrawable(VoiceActivity.this, R.drawable.ic_multimedia_off));
+                applyFabState(speakerActionFab,enabled);
             } else {
                 enabled = true;
                 audioManager.setSpeakerphoneOn(true);
-                speakerActionFab.setImageDrawable(ContextCompat.getDrawable(VoiceActivity.this, R.drawable.ic_music_and_multimedia));
+                applyFabState(speakerActionFab,enabled);
             }
         };
     }
