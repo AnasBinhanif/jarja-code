@@ -1,16 +1,11 @@
 package com.project.jarjamediaapp.Networking;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.project.jarjamediaapp.Utilities.AppConstants;
-import com.project.jarjamediaapp.Utilities.LogUtils;
-import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import java.util.concurrent.TimeUnit;
 

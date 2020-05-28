@@ -31,8 +31,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.github.bosphere.android-filelogger:filelogger:1.0.7'
-
     implementation project(":library")
 
     implementation 'androidx.appcompat:appcompat:1.1.0'

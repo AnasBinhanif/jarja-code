@@ -456,7 +456,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     private void showTypeDialog() {
 
         MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
-                .title("Select Lead Sources") //setting title for dialog
+                .title("Select Lead Types") //setting title for dialog
                 .titleSize(25)
                 .positiveText("Done")
                 .negativeText("Cancel")

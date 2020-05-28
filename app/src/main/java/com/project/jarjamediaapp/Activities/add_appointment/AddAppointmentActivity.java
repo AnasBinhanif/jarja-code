@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
-import com.project.jarjamediaapp.Activities.add_filters.AddFiltersActivity;
 import com.project.jarjamediaapp.Activities.calendarDetail.CalendarAppointmentDetailModel;
 import com.project.jarjamediaapp.Activities.search_activity.SearchResultsActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
@@ -121,6 +120,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.tvEndTime.setOnClickListener(this);
         bi.tvAgent.setOnClickListener(this);
         bi.tvName.setOnClickListener(this);
+        bi.imgClearName.setOnClickListener(this);
         bi.cbAllDay.setOnClickListener(this);
 
         setSupportActionBar(bi.epToolbar.toolbar);
@@ -151,7 +151,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     }
 
-    private void loadTitle(){
+    private void loadTitle() {
         // 1 from Add Appointment by Lead Id
         // 3 from Add Calendar Appointment
         // 5 from Add Appointment
@@ -246,7 +246,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             case "1": {
                 leadId = getIntent().getStringExtra("leadID");
                 leadName = getIntent().getStringExtra("leadName");
-                bi.tvName.setText(leadName+"");
+                bi.tvName.setText(leadName + "");
                 bi.tvName.setEnabled(false);
             }
             break;
@@ -429,7 +429,11 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         if (requestCode == 05) {
             if (resultCode == RESULT_OK) {
                 bi.tvName.setText(data.getStringExtra("leadName"));
-                leadId =data.getStringExtra("leadID");
+                leadId = data.getStringExtra("leadID");
+
+                if (!leadId.equals("")) {
+                    bi.imgClearName.setVisibility(View.VISIBLE);
+                }
             }
         }
     }
@@ -443,8 +447,16 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 //clearFocus();
                 //showSearchDialog(context);
                 Intent i = new Intent(AddAppointmentActivity.this, SearchResultsActivity.class);
-                i.putExtra("fromAppoint",true);
+                i.putExtra("fromAppoint", true);
                 startActivityForResult(i, 05);
+
+                break;
+            case R.id.imgClearName:
+
+                leadId = "";
+                bi.tvName.setText("");
+                bi.imgClearName.setVisibility(View.GONE);
+
                 break;
             case R.id.tvAgent:
                 clearFocus();
@@ -721,7 +733,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 .callback(AddAppointmentActivity.this)
                 .showTitle(true)
                 .defaultDate(year, month, day)
-                .minDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
+                .minDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))
                 .build()
                 .show();
 
@@ -1146,10 +1158,10 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
                         nameList = new ArrayList<>();
                         nameList.addAll(getAppointmentsModel.data);
-                        if (nameList.size()!=0) {
+                        if (nameList.size() != 0) {
                             setRecyclerSearch(dialog);
-                        }else{
-                            ToastUtils.showToast(context,"No Result Found");
+                        } else {
+                            ToastUtils.showToast(context, "No Result Found");
                         }
 
                     } else {

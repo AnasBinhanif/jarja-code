@@ -44,7 +44,8 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     FindLeadsPresenter presenter;
     ArrayList<GetLeadCounts.LeadsCount> getLeadCountList;
     Intent bundle = null;
-    int totalPages =0;
+    int totalPages = 0;
+
     public FindLeadsFragment() {
         // Required empty public constructor
     }
@@ -105,8 +106,10 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         String houseToSell = "";
         String agentID = bundle != null ? bundle.getStringExtra("agentID") : "";
         String leadTypeID = bundle != null ? bundle.getStringExtra("leadTypeID") : "";
-        String leadScoreMin = "";
-        String leadScoreMax = bundle != null ? bundle.getStringExtra("leadScoreMax") : "";
+        String leadScore = bundle != null ? bundle.getStringExtra("leadScoreMax") : "";
+        String leadScores[] = !leadScore.equals("") ? leadScore.split("-") : null;
+        String leadScoreMin = leadScores != null ? leadScores[0] : "";
+        String leadScoreMax = leadScores != null ? leadScores[1] : "";
         String tagsID = bundle != null ? bundle.getStringExtra("tagsID") : "";
         String priceMin = bundle != null ? bundle.getStringExtra("priceMin") : "";
         String priceMax = bundle != null ? bundle.getStringExtra("priceMax") : "";

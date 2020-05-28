@@ -23,8 +23,8 @@
                 android:id="@+id/lnParent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="@dimen/_10sdp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -38,19 +38,30 @@
                     android:id="@+id/lnName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:background="@drawable/bg_search"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
                     <TextView
                         android:id="@+id/tvName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/bg_search"
+                        android:layout_weight="0.5"
                         android:hint="@string/name_of_contact"
                         android:inputType="textCapSentences"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="@dimen/_11sdp" />
+
+                    <ImageView
+                        android:id="@+id/imgClearName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_weight="2.5"
+                        android:src="@drawable/ic_close_dg" />
 
                 </LinearLayout>
 
@@ -70,8 +81,8 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_search"
                     android:hint="@string/nothing_selected"
-                    android:padding="@dimen/_10sdp"
                     android:inputType="textCapSentences"
+                    android:padding="@dimen/_10sdp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_11sdp" />
 
@@ -103,8 +114,8 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_search"
                     android:hint="@string/event_title"
-                    android:inputType="textCapSentences"
                     android:imeOptions="actionNext"
+                    android:inputType="textCapSentences"
                     android:padding="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColor="@color/colorPrimaryDark"
