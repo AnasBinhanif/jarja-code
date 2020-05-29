@@ -1,12 +1,10 @@
 package com.project.jarjamediaapp.Activities.add_calendar_task;
 
-import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -225,7 +223,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 })
                 .showTitle(true)
                 .defaultDate(year, month, day)
-                .minDate(newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH),newCalendar.get(Calendar.DAY_OF_MONTH))
+                .minDate(newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH))
                 .build()
                 .show();
 
@@ -344,12 +342,12 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     @Override
     public void updateUIonError(String error) {
 
-        if (error.contains("Authorization has been denied for this request")) {
+        /*if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
-        } else {
-            ToastUtils.showToastLong(context, error);
-        }
+        } else {*/
+        ToastUtils.showToastLong(context, error);
+
     }
 
     @Override

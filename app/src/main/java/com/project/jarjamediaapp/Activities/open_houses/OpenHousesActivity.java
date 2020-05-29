@@ -314,12 +314,11 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     @Override
     public void _updateUIonError(String error) {
 
-        if (error.contains("Authorization has been denied for this request")) {
+       /* if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
-        } else {
+        } else {*/
             ToastUtils.showToastLong(context, error);
-        }
 
     }
 
@@ -340,14 +339,8 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     @Override
     public void updateUIonError(String error) {
 
-        if (error.contains("Authorization has been denied for this request")) {
-            ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
-            logout();
-        } else {
             bi.rvOpenHouse.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
-        }
-
     }
 
     @Override

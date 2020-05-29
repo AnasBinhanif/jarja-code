@@ -146,12 +146,12 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     @Override
     public void updateUIonError(String error) {
 
-        if (error.contains("Authorization has been denied for this request")) {
+        /*if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
-        } else {
+        } else {*/
             ToastUtils.showToastLong(context, error);
-        }
+
     }
 
     @Override
@@ -411,12 +411,12 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                 } else {
 
                     ApiError error = ErrorUtils.parseError(response);
-                    if (error.message().contains("Authorization has been denied for this request")) {
+                    /*if (error.message().contains("Authorization has been denied for this request")) {
                         ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
                         logout();
-                    } else {
+                    } else {*/
                         ToastUtils.showToastLong(context, error.message());
-                    }
+
                 }
             }
 

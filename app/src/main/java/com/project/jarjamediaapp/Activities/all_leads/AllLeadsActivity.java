@@ -196,8 +196,10 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         String houseToSell = "";
         String agentID = bundle != null ? bundle.getStringExtra("agentID") : "";
         String leadTypeID = bundle != null ? bundle.getStringExtra("leadTypeID") : "";
-        String leadScoreMin = "";
-        String leadScoreMax = bundle != null ? bundle.getStringExtra("leadScoreMax") : "";
+        String leadScore = bundle != null ? bundle.getStringExtra("leadScoreMax") : "";
+        String leadScores[] = !leadScore.equals("") ? leadScore.split("-") : null;
+        String leadScoreMin = leadScores != null ? leadScores[0] : "";
+        String leadScoreMax = leadScores != null ? leadScores[1] : "";
         String tagsID = bundle != null ? bundle.getStringExtra("tagsID") : "";
         String priceMin = bundle != null ? bundle.getStringExtra("priceMin") : "";
         String priceMax = bundle != null ? bundle.getStringExtra("priceMax") : "";
@@ -262,6 +264,9 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             obj.put("tagsID", tagsID);
             obj.put("firstNameAsc", firstNameAsc);
             obj.put("searchBy", searchBy);
+            obj.put("cityAsc", cityAsc);
+            obj.put("fromDate", fromDate);
+            obj.put("toDate", toDate);
             obj.put("isSaveSearch", isSaveSearch);
             obj.put("priceAsc", priceAsc);
             obj.put("emailAddressAsc", emailAddressAsc);
@@ -458,12 +463,12 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void updateUIonError(String error) {
 
-        if (error.contains("Authorization has been denied for this request")) {
+       /* if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
-        } else {
+        } else {*/
             ToastUtils.showToastLong(context, error);
-        }
+
     }
 
     @Override

@@ -182,12 +182,12 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
 
     @Override
     public void updateUIonError(String error) {
-        if (error.contains("Authorization has been denied for this request")) {
+       /* if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
-        } else {
+        } else {*/
             ToastUtils.showToastLong(context, error);
-        }
+
     }
 
     @Override

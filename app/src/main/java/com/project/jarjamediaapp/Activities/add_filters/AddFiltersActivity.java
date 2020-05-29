@@ -119,7 +119,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         initListeners();
         initCallsData();
         calendarInstance();
-        retrieveFilters();
     }
 
     private void initSpinners() {
@@ -1031,6 +1030,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         for (GetLeadDripCampaignList.Data model : getLeadDripCampaignList) {
             getLeadDripCampaignModelList.add(new MultiSelectModel(model.dripCompaignID, model.name));
         }
+        retrieveFilters();
     }
 
     @Override
@@ -1044,12 +1044,12 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
     @Override
     public void updateUIonError(String error) {
-        if (error.contains("Authorization has been denied for this request")) {
+       /* if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
-        } else {
+        } else {*/
             ToastUtils.showToastLong(context, error);
-        }
+
     }
 
     @Override

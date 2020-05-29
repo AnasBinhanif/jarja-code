@@ -946,24 +946,27 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 ArrayList<String> nameList = data.getStringArrayListExtra("nameList");
                 ArrayList<String> encryptedList = data.getStringArrayListExtra("encryptedList");
 
-                if (idList != null && idList.size() != 0) {
+                if (idList != null) {
 
                     if (bi.lnLead.getChildCount() > 0) {
                         bi.lnLead.removeAllViews();
                     }
 
                     searchLeadIdsString = "";
-                    for (int i =0;i<idList.size();i++) {
+                    if (idList.size() != 0) {
 
-                        View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
-                        TextView textView = child.findViewById(R.id.txtDynamic);
-                        textView.setText(nameList.get(i));
-                        bi.lnLead.addView(child);
+                        for (int i = 0; i < idList.size(); i++) {
 
-                        if (searchLeadIdsString.equals("")) {
-                            searchLeadIdsString = encryptedList.get(i);
-                        } else {
-                            searchLeadIdsString = searchLeadIdsString + "," + encryptedList.get(i);
+                            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                            TextView textView = child.findViewById(R.id.txtDynamic);
+                            textView.setText(nameList.get(i));
+                            bi.lnLead.addView(child);
+
+                            if (searchLeadIdsString.equals("")) {
+                                searchLeadIdsString = encryptedList.get(i);
+                            } else {
+                                searchLeadIdsString = searchLeadIdsString + "," + encryptedList.get(i);
+                            }
                         }
                     }
                 }
@@ -1302,8 +1305,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         if (response.body().getStatus().equals("Success")) {
             ToastUtils.showToast(context, response.body().getMessage());
-            if (SearchResultAdapter.selectedIDs!=null && SearchResultAdapter.selectedIDs.size()!=0)
-            {
+            if (SearchResultAdapter.selectedIDs != null && SearchResultAdapter.selectedIDs.size() != 0) {
                 SearchResultAdapter.selectedIDs.clear();
                 SearchResultAdapter.selectedNames.clear();
                 SearchResultAdapter.selectedEncryted.clear();
@@ -1320,12 +1322,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     @Override
     public void updateUIonError(String error) {
 
-        if (error.contains("Authorization has been denied for this request")) {
+       /* if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
-        } else {
-            ToastUtils.showToastLong(context, error);
-        }
+        } else {*/
+        ToastUtils.showToastLong(context, error);
     }
 
     @Override

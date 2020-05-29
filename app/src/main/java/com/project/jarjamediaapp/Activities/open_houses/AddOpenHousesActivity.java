@@ -513,12 +513,11 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     @Override
     public void _updateUIonError(String error) {
 
-        if (error.contains("Authorization has been denied for this request")) {
+       /* if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
-        } else {
-            ToastUtils.showToastLong(context, error);
-        }
+        } else {*/
+        ToastUtils.showToastLong(context, error);
 
     }
 
@@ -536,12 +535,11 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     @Override
     public void updateUIonError(String error) {
 
-        if (error.contains("Authorization has been denied for this request")) {
+       /* if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
-        } else {
-            ToastUtils.showToastLong(context, error);
-        }
+        } else {*/
+        ToastUtils.showToastLong(context, error);
 
     }
 

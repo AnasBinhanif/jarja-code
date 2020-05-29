@@ -147,12 +147,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
 
-                    if (error.message().contains("Authorization has been denied for this request")) {
+                    /*if (error.message().contains("Authorization has been denied for this request")) {
                         ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
                         logout();
-                    } else {
+                    } else {*/
                         ToastUtils.showToastLong(context, error.message());
-                    }
                 }
             }
 
@@ -331,12 +330,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 } else {
                     hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
-                    if (error.message().contains("Authorization has been denied for this request")) {
+                    /*if (error.message().contains("Authorization has been denied for this request")) {
                         ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
                         logout();
-                    } else {
+                    } else {*/
                         ToastUtils.showToastLong(context, error.message());
-                    }
+
                 }
             }
 

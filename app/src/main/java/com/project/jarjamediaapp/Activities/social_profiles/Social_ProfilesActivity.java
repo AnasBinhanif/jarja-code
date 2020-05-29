@@ -237,12 +237,11 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
     @Override
     public void updateUIonError(String error) {
 
-        if (error.contains("Authorization has been denied for this request")) {
+        /*if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
-        } else {
-            ToastUtils.showToastLong(context, error);
-        }
+        } else {*/
+        ToastUtils.showToastLong(context, error);
     }
 
     @Override

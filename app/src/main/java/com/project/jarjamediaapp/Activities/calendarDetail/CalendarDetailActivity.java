@@ -60,13 +60,12 @@ public class CalendarDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void updateUIonFalse(String message) {
 
-        if (message.contains("Authorization has been denied for this request")) {
+        /*if (message.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
-        } else {
+        } else {*/
             bi.rvEvents.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
-        }
 
     }
 

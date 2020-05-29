@@ -242,13 +242,12 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     @Override
     public void updateUIonError(String error) {
 
-        if (error.contains("Authorization has been denied for this request")) {
+        /*if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
-        } else {
+        } else {*/
             bi.rvNotifications.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
-        }
 
     }
 
