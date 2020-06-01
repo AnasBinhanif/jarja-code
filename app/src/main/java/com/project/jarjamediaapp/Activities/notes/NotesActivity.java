@@ -122,9 +122,16 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
                 if (resultCode == RESULT_OK) {
                     ArrayList<ImageFile> arrayListData = data.getParcelableArrayListExtra(Constant.RESULT_PICK_IMAGE);
                     new ImageCompression().execute(arrayListData.get(0).getPath());
+
                 }
                 break;
+            case Constant.REQUEST_CODE_TAKE_IMAGE:
+                if (resultCode == RESULT_OK) {
+                    ArrayList<ImageFile> arrayListData = data.getParcelableArrayListExtra(Constant.RESULT_PICK_IMAGE);
+                    new ImageCompression().execute(arrayListData.get(0).getPath());
 
+                }
+                break;
             case Constant.REQUEST_CODE_PICK_FILE:
                 if (resultCode == RESULT_OK) {
                     ArrayList<NormalFile> arrayListData = data.getParcelableArrayListExtra(Constant.RESULT_PICK_FILE);
@@ -308,7 +315,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
     public void onCameraClick() {
 
         bottomDialog.dismiss();
-       // accessCamera();
+        accessCamera();
     }
 
     @Override
@@ -326,7 +333,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
         if (EasyPermissions.hasPermissions(context, perms)) {
             // Already have permission, do the thing
             Intent imageIntent = new Intent(context, ImagePickActivity.class);
-            imageIntent.putExtra(IS_NEED_CAMERA, true);
+            imageIntent.putExtra(IS_NEED_CAMERA, false);
             imageIntent.putExtra(Constant.MAX_NUMBER, 1);
             startActivityForResult(imageIntent, Constant.REQUEST_CODE_PICK_IMAGE);
 

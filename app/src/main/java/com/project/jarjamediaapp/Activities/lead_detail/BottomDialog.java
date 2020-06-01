@@ -55,14 +55,14 @@ public class BottomDialog extends BottomSheetDialogFragment {
                 }
             }
         });
-        /*bi.llCamera.setOnClickListener(new View.OnClickListener() {
+        bi.llCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mCLickHandleMultipleClickEvents != null) {
                     mCLickHandleMultipleClickEvents.onCameraClick();
                 }
             }
-        });*/
+        });
         bi.llDocuments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

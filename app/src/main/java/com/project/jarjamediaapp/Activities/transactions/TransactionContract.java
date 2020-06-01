@@ -3,6 +3,7 @@ package com.project.jarjamediaapp.Activities.transactions;
 import com.google.gson.JsonObject;
 import com.project.jarjamediaapp.Base.BaseContract;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,6 +21,8 @@ public interface TransactionContract {
         void addAgentCommission(Response<BaseResponse> response);
 
         void getAgentCommission(Response<TransactionModel> response);
+
+        void updateUI(GetLeadTransactionStage response);
 
         void updateUIonFalse(String message);
 
@@ -40,6 +43,8 @@ public interface TransactionContract {
     interface Actions extends BaseContract.Actions {
 
         void addPipelineMark(String body);
+
+        void getTransaction(String leadID);
 
         void addAgentCommission(String data);
 

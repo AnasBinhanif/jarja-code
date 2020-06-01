@@ -47,11 +47,14 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     Context context = TransactionActivity.this;
     TransactionPresenter presenter;
     ArrayList<GetLeadTransactionStage.PipeLine> transactionPipeline = new ArrayList<>();
+    ArrayList<GetLeadTransactionStage.LeadTransactionOne> transactionOneListModel = new ArrayList<>();
+    ArrayList<GetLeadTransactionStage.LeadTransactionTwo> transactionTwoListModel = new ArrayList<>();
     String currentPipeline = "", markedPipeline = "";
     boolean bf = true;
     String leadID = "", title = "", pipelineID = "", presentationID = "", leadDetailId = "", agentStringId = "";
     RecyclerAdapterUtil recyclerAdapterUtil, raCommission;
     Dialog dialog;
+    int transaction=1;
     Button btnSave, btnCancel;
     RecyclerView rvAgentCommission;
     List<TransactionModel.Data> dataList;
@@ -105,9 +108,23 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                     ImageView imgInitial = (ImageView) integerMap.get(R.id.imgInitial);
 
                     if (bf) {
+                        if (transaction==1){
+                            if (transactionOneListModel.size()>count)
+                            {
+                                String date = GH.getInstance().formatter(transactionOneListModel.get(count).date,"MM/dd/yyyy","MMM d yyyy h:mma");
+                                tvDate.setText(date);
+                            }
+                        }else{
+                            if (transactionTwoListModel.size()>count)
+                            {
+                                String date = GH.getInstance().formatter(transactionTwoListModel.get(count).date,"MM/dd/yyyy","MMM d yyyy h:mma");
+                                tvDate.setText(date);
+                            }
+                        }
                         count++;
                         tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
                         imgInitial.setVisibility(View.VISIBLE);
+                        tvDate.setVisibility(View.VISIBLE);
                         tvInitial.setVisibility(View.GONE);
                     } else {
                         tvName.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -119,6 +136,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         if (allLeadsList.pipeline.contains(currentPipeline)) {
                             tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
                             imgInitial.setVisibility(View.VISIBLE);
+                            tvDate.setVisibility(View.VISIBLE);
                             tvInitial.setVisibility(View.GONE);
                             bf = false;
                         }
@@ -143,8 +161,8 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                     } else if (title.contains("Transaction 2")) {
                         presentationID = "2";
                     }
-
-                    if (position > count - 1) {
+                    int c = count - 1;
+                    if (position + 1  > c) {
                         jsonObjectString = "{\"presentationID\": \"" + presentationID + "\"," +
                                 " \"encrypted_LeadDetailID\": \"" + leadDetailId +
                                 "\", \"pipelineID\":\"" + pipelineID + "\"}";
@@ -170,6 +188,13 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         currentPipeline = intent.getStringExtra("currentStage");
         transactionPipeline = (ArrayList<GetLeadTransactionStage.PipeLine>) intent.getExtras().getSerializable("Pipeline");
 
+        Bundle args = intent.getBundleExtra("BUNDLE");
+         transaction = intent.getIntExtra("tansaction",1);
+        if (transaction==1) {
+            transactionOneListModel = (ArrayList<GetLeadTransactionStage.LeadTransactionOne>) args.getSerializable("ARRAYLIST");
+        }else{
+            transactionTwoListModel = (ArrayList<GetLeadTransactionStage.LeadTransactionTwo>) args.getSerializable("ARRAYLIST");
+        }
     }
 
     @Override
@@ -177,21 +202,8 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
         if (response.body().getStatus().equals("Success")) {
             //ToastUtils.showToast(context, "Assigned Successfully");
-            bf = true;
-            currentPipeline = markedPipeline;
-            recyclerAdapterUtil.notifyDataSetChanged();
-            populateListData();
-            if (pipelineID.equalsIgnoreCase("11")) {
-                if (dialog != null) {
-                    if (dialog.isShowing()) {
-                        dialog.dismiss();
-                    } else {
-                        showAgentCommissionDialog();
-                    }
-                } else {
-                    showAgentCommissionDialog();
-                }
-            }
+            presenter.getTransaction(leadID);
+
         }
 
     }
@@ -257,6 +269,35 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
         } else {
             ToastUtils.showToast(context, "No agents found");
+        }
+
+    }
+
+    @Override
+    public void updateUI(GetLeadTransactionStage response) {
+
+
+        transactionOneListModel = new ArrayList<>();
+        transactionTwoListModel = new ArrayList<>();
+
+        transactionOneListModel = response.data.leadTransactionOne;
+        transactionTwoListModel = response.data.leadTransactionTwo;
+
+        count=0;
+        bf = true;
+        currentPipeline = markedPipeline;
+        recyclerAdapterUtil.notifyDataSetChanged();
+        populateListData();
+        if (pipelineID.equalsIgnoreCase("11")) {
+            if (dialog != null) {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                } else {
+                    showAgentCommissionDialog();
+                }
+            } else {
+                showAgentCommissionDialog();
+            }
         }
 
     }

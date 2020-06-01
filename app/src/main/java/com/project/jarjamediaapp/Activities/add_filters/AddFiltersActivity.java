@@ -614,6 +614,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
     private void retrieveFilters() {
 
+        showProgressBar();
+
         ArrayList<LinkedTreeMap> agentIDs = easyPreference.getObject("agentIDs", ArrayList.class);
         if (agentIDs != null) {
             agentIdsString = "";
@@ -807,6 +809,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         startDate = dateFrom.equals("") ? "" : GH.getInstance().formatter(dateFrom, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM-dd-yyyy");
         endDate = dateTo.equals("") ? "" :GH.getInstance().formatter(dateTo, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM-dd-yyyy");
 
+
+        hideProgressBar();
     }
 
     public void showPriceRangeDialog(Context context) {

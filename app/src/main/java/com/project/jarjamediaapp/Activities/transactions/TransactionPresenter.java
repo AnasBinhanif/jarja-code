@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Activities.transactions;
 
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
@@ -16,6 +17,7 @@ public class TransactionPresenter extends BasePresenter<TransactionContract.View
 
     Call<BaseResponse> _call;
     Call<TransactionModel> call;
+    Call<GetLeadTransactionStage> _callGetLeadTransactionStage;
 
     public TransactionPresenter(TransactionContract.View view) {
         super(view);
@@ -58,6 +60,42 @@ public class TransactionPresenter extends BasePresenter<TransactionContract.View
             }
         });
 
+    }
+
+    @Override
+    public void getTransaction(String leadID) {
+        _view.showProgressBar();
+        _callGetLeadTransactionStage = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadTransactionStage(GH.getInstance().getAuthorization(), leadID);
+        _callGetLeadTransactionStage.enqueue(new Callback<GetLeadTransactionStage>() {
+            @Override
+            public void onResponse(Call<GetLeadTransactionStage> call, Response<GetLeadTransactionStage> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetLeadTransactionStage getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetLeadTransactionStage> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
     }
 
     @Override

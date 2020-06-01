@@ -59,6 +59,7 @@ import com.vincent.filepicker.filter.entity.ImageFile;
 import com.vincent.filepicker.filter.entity.NormalFile;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -424,10 +425,14 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 if (currentStage1 != null) {
                     Intent intentT1 = new Intent(context, TransactionActivity.class);
                     intentT1.putExtra("title", title);
+                    intentT1.putExtra("tansaction", 1);
                     intentT1.putExtra("leadID", leadID);
                     intentT1.putExtra("leadDetailId", transLeadID1);
                     intentT1.putExtra("currentStage", currentStage1);
                     intentT1.putExtra("Pipeline", transactionPipeline);
+                    Bundle args = new Bundle();
+                    args.putSerializable("ARRAYLIST",(Serializable)transactionOneListModel);
+                    intentT1.putExtra("BUNDLE",args);
                     startActivity(intentT1);
                 }
 
@@ -439,9 +444,13 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     Intent intentT2 = new Intent(context, TransactionActivity.class);
                     intentT2.putExtra("title", title);
                     intentT2.putExtra("leadID", leadID);
+                    intentT2.putExtra("tansaction", 2);
                     intentT2.putExtra("leadDetailId", transLeadID2);
                     intentT2.putExtra("currentStage", currentStage2);
                     intentT2.putExtra("Pipeline", transactionPipeline);
+                    Bundle args = new Bundle();
+                    args.putSerializable("ARRAYLIST",(Serializable)transactionTwoListModel);
+                    intentT2.putExtra("BUNDLE",args);
                     startActivity(intentT2);
                 }
 
