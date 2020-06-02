@@ -23,6 +23,9 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/ic_launcher"
         android:theme="@style/AppTheme"
+        android:allowBackup="false"
+        tools:replace="android:allowBackup"
+        android:fullBackupOnly="false"
         android:usesCleartextTraffic="true">
 
         <activity

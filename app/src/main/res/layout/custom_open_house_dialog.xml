@@ -171,6 +171,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_search"
                     android:hint="@string/zip_postal"
+                    android:digits="0123456789"
                     android:imeOptions="actionSearch"
                     android:inputType="number"
                     android:padding="@dimen/_10sdp"

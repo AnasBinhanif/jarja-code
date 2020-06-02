@@ -71,6 +71,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
     File actualImage;
     File compressedImage;
     MultipartBody.Part multipartFile = null;
+    int perm = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,7 +218,6 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
     public void updateUIListAfterAddDoc(BaseResponse response) {
 
         showLongToastMessage("Document added successfully");
-        presenter.getDocumentByLeadId(leadID);
 
     }
 
@@ -281,9 +281,18 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
                 switchActivityWithIntentString(AddNotesActivity.class, (HashMap) noteMap);
             } else {
 
-                bottomDialog = BottomDialog.getInstance();
-                bottomDialog.setClickHandleEvents(NotesActivity.this);
-                bottomDialog.show(getSupportFragmentManager(), "Select File");
+                String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                if (EasyPermissions.hasPermissions(context, perms)) {
+                    // Already have permission, do the thing
+                    bottomDialog = BottomDialog.getInstance();
+                    bottomDialog.setClickHandleEvents(NotesActivity.this);
+                    bottomDialog.show(getSupportFragmentManager(), "Select File");
+                } else {
+                    // Do not have permissions, request them now
+                    EasyPermissions.requestPermissions(this, getString(R.string.permission_message),
+                            RC_CAMERA_AND_STORAGE, perms);
+                }
+
 
             }
 
@@ -329,6 +338,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
     @AfterPermissionGranted(RC_CAMERA_AND_STORAGE)
     private void oPenGallery() {
 
+        perm = 2;
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(context, perms)) {
             // Already have permission, do the thing
@@ -347,6 +357,8 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
 
     @AfterPermissionGranted(RC_CAMERA_ONLY)
     private void accessCamera() {
+
+        perm = 1;
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(context, perms)) {
             // Already have permission, do the thing
@@ -364,7 +376,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
 
     @AfterPermissionGranted(RC_CAMERA_AND_STORAGE)
     private void accessDocuments() {
-
+        perm = 3;
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(context, perms)) {
             // Already have permission, do the thing
@@ -382,6 +394,10 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
 
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+
+        bottomDialog = BottomDialog.getInstance();
+        bottomDialog.setClickHandleEvents(NotesActivity.this);
+        bottomDialog.show(getSupportFragmentManager(), "Select File");
     }
 
     @Override

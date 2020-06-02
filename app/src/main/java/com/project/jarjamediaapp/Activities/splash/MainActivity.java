@@ -44,11 +44,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void run() {
 
-                if (GH.getInstance().getAuthorization()==null || GH.getInstance().getAuthorization().equals(""))
+                if (GH.getInstance().getAuthorization() != null && !GH.getInstance().getAuthorization().equals(""))
                 {
-                    switchActivity(LoginActivity.class);
-                }else{
                     switchActivity(HomeActivity.class);
+                }else{
+                    switchActivity(LoginActivity.class);
                 }
 
                 finish();

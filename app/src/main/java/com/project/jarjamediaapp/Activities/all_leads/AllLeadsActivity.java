@@ -96,7 +96,9 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        leadsList.clear();
+        if (leadsList != null && leadsList.size() != 0) {
+            leadsList.clear();
+        }
         page = 0;
         if (bi.edtSearch.getText().toString().equals("")) {
             handleIntent();
@@ -278,7 +280,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             obj.put("sourceID", sourceID);
             if (resultSetType != null && resultSetType.equalsIgnoreCase("New Leads")) {
                 obj.put("registeredDateAsc", false);
-            }else {
+            } else {
                 obj.put("registeredDateAsc", null);
             }
             obj.put("isFilterClear", isFilterClear);
@@ -310,35 +312,38 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
     private void populateListData(ArrayList<GetAllLeads.LeadsList> leadsList) {
 
-        if (page == 0) {
-            linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-            bi.recyclerViewAllLeads.setLayoutManager(linearLayoutManager);
-            bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
-            bi.recyclerViewAllLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewAllLeads.getContext(), 1));
-            recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
-            recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail, R.id.tvInitial);
+        if (leadsList != null && leadsList.size() != 0) {
+            if (page == 0) {
+                linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+                bi.recyclerViewAllLeads.setLayoutManager(linearLayoutManager);
+                bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
+                bi.recyclerViewAllLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewAllLeads.getContext(), 1));
+                recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
+                recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail, R.id.tvInitial);
 
-            recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetAllLeads.LeadsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
+                recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetAllLeads.LeadsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
 
-                TextView tvName = (TextView) integerMap.get(R.id.tvName);
-                TextView tvPhone = (TextView) integerMap.get(R.id.tvPhone);
-                TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
-                TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
+                    TextView tvName = (TextView) integerMap.get(R.id.tvName);
+                    TextView tvPhone = (TextView) integerMap.get(R.id.tvPhone);
+                    TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
+                    TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
 
-                tvName.setText(allLeadsList.firstName + " " + allLeadsList.lastName);
-                tvPhone.setText(allLeadsList.primaryPhone);
-                tvEmail.setText(allLeadsList.primaryEmail);
+                    tvName.setText(allLeadsList.firstName + " " + allLeadsList.lastName);
+                    tvPhone.setText(allLeadsList.primaryPhone);
+                    tvEmail.setText(allLeadsList.primaryEmail);
 
-                tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1)+"");
+                    tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1) + "");
 
-                return Unit.INSTANCE;
-            });
+                    return Unit.INSTANCE;
+                });
 
-            bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
-            isLoading = false;
-        } else {
-            isLoading = false;
-            recyclerAdapterUtil.notifyDataSetChanged();
+                bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
+                isLoading = false;
+            } else {
+                isLoading = false;
+                recyclerAdapterUtil.notifyDataSetChanged();
+            }
+
         }
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetAllLeads.LeadsList, Integer, Unit>) (viewComplainList, integer) -> {
@@ -355,35 +360,37 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
     private void populatePropertyListData(ArrayList<GetPropertyLeads.LeadsList> leadsList) {
 
-        if (page == 0) {
-            linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-            bi.recyclerViewAllLeads.setLayoutManager(linearLayoutManager);
-            bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
-            bi.recyclerViewAllLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewAllLeads.getContext(), 1));
-            recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
-            recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail, R.id.tvInitial);
+        if (leadsList != null && leadsList.size() != 0) {
+            if (page == 0) {
+                linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+                bi.recyclerViewAllLeads.setLayoutManager(linearLayoutManager);
+                bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
+                bi.recyclerViewAllLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewAllLeads.getContext(), 1));
+                recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
+                recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail, R.id.tvInitial);
 
-            recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetPropertyLeads.LeadsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
+                recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetPropertyLeads.LeadsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
 
-                TextView tvName = (TextView) integerMap.get(R.id.tvName);
-                TextView tvPhone = (TextView) integerMap.get(R.id.tvPhone);
-                TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
-                TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
+                    TextView tvName = (TextView) integerMap.get(R.id.tvName);
+                    TextView tvPhone = (TextView) integerMap.get(R.id.tvPhone);
+                    TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
+                    TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
 
-                tvName.setText(allLeadsList.firstName + " " + allLeadsList.lastName);
-                tvPhone.setText(allLeadsList.primaryPhone);
-                tvEmail.setText(allLeadsList.primaryEmail);
+                    tvName.setText(allLeadsList.firstName + " " + allLeadsList.lastName);
+                    tvPhone.setText(allLeadsList.primaryPhone);
+                    tvEmail.setText(allLeadsList.primaryEmail);
 
-                tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1));
+                    tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1));
 
-                return Unit.INSTANCE;
-            });
+                    return Unit.INSTANCE;
+                });
 
-            bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
-            isLoading = false;
-        } else {
-            isLoading = false;
-            recyclerAdapterUtil.notifyDataSetChanged();
+                bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
+                isLoading = false;
+            } else {
+                isLoading = false;
+                recyclerAdapterUtil.notifyDataSetChanged();
+            }
         }
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetPropertyLeads.LeadsList, Integer, Unit>) (viewComplainList, integer) -> {
@@ -467,7 +474,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
         } else {*/
-            ToastUtils.showToastLong(context, error);
+        ToastUtils.showToastLong(context, error);
 
     }
 

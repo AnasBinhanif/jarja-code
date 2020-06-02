@@ -284,6 +284,7 @@ public class NotesPresenter extends BasePresenter<NotesContract.View> implements
                     if (documentModel.getStatus().equalsIgnoreCase("Success")) {
 
                         _view.updateUIListAfterAddDoc(documentModel);
+                        getDocumentByLeadId(leadId);
 
                     } else {
 

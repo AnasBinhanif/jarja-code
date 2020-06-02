@@ -719,7 +719,10 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             bi.rlTransaction1.setVisibility(View.VISIBLE);
 
             bi.tvStep1.setText(transactionOneListModel.get(transactionOneListModel.size() - 1).currentStage);
-            bi.tvDate1.setText(transactionOneListModel.get(transactionOneListModel.size() - 1).date);
+
+            String rpDate = transactionOneListModel.get(transactionOneListModel.size() - 1).date != null ? transactionOneListModel.get(transactionOneListModel.size() - 1).date : "";
+            String date = !rpDate.equals("") ? GH.getInstance().formatter(rpDate, "MM/dd/yyyy", "MMM d yyyy h:mma") : "";
+            bi.tvDate1.setText(date);
 
             currentStage1 = transactionOneListModel.get(transactionOneListModel.size() - 1).currentStage;
             transLeadID1 = transactionOneListModel.get(transactionOneListModel.size() - 1).encrypted_LeadDetailID;
@@ -733,7 +736,10 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         if (transactionTwoListModel != null) {
 
             bi.tvStep2.setText(transactionTwoListModel.get(transactionTwoListModel.size() - 1).currentStage);
-            bi.tvDate2.setText(transactionTwoListModel.get(transactionTwoListModel.size() - 1).date != null ? transactionTwoListModel.get(transactionTwoListModel.size() - 1).date : GH.getInstance().getCurrentDate());
+
+            String rpDate = transactionTwoListModel.get(transactionTwoListModel.size() - 1).date != null ? transactionTwoListModel.get(transactionTwoListModel.size() - 1).date : "";
+            String date = !rpDate.equals("") ? GH.getInstance().formatter(rpDate, "MM/dd/yyyy", "MMM d yyyy h:mma") : "";
+            bi.tvDate2.setText(date);
 
             currentStage2 = transactionTwoListModel.get(transactionTwoListModel.size() - 1).currentStage;
             transLeadID2 = transactionTwoListModel.get(transactionTwoListModel.size() - 1).encrypted_LeadDetailID;

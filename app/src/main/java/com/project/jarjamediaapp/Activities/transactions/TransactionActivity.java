@@ -54,7 +54,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     String leadID = "", title = "", pipelineID = "", presentationID = "", leadDetailId = "", agentStringId = "";
     RecyclerAdapterUtil recyclerAdapterUtil, raCommission;
     Dialog dialog;
-    int transaction=1;
+    int transaction = 1;
     Button btnSave, btnCancel;
     RecyclerView rvAgentCommission;
     List<TransactionModel.Data> dataList;
@@ -108,17 +108,20 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                     ImageView imgInitial = (ImageView) integerMap.get(R.id.imgInitial);
 
                     if (bf) {
-                        if (transaction==1){
-                            if (transactionOneListModel.size()>count)
-                            {
-                                String date = GH.getInstance().formatter(transactionOneListModel.get(count).date,"MM/dd/yyyy","MMM d yyyy h:mma");
-                                tvDate.setText(date);
+                        if (transaction == 1) {
+                            if (transactionOneListModel.size() != 0) {
+                                if (transactionOneListModel.size() > count) {
+                                    String date = GH.getInstance().formatter(transactionOneListModel.get(count).date, "MM/dd/yyyy", "MMM d yyyy h:mma");
+                                    tvDate.setText(date);
+                                }
                             }
-                        }else{
-                            if (transactionTwoListModel.size()>count)
-                            {
-                                String date = GH.getInstance().formatter(transactionTwoListModel.get(count).date,"MM/dd/yyyy","MMM d yyyy h:mma");
-                                tvDate.setText(date);
+                        } else {
+                            if (transactionTwoListModel.size() != 0) {
+                                if (transactionTwoListModel.size() > count) {
+                                    String rpDate = transactionTwoListModel.get(count).date != null ? transactionTwoListModel.get(count).date : "";
+                                    String date = !rpDate.equals("") ? GH.getInstance().formatter(rpDate, "MM/dd/yyyy", "MMM d yyyy h:mma") : "";
+                                    tvDate.setText(date);
+                                }
                             }
                         }
                         count++;
@@ -136,6 +139,17 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         if (allLeadsList.pipeline.contains(currentPipeline)) {
                             tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
                             imgInitial.setVisibility(View.VISIBLE);
+                            if (transaction == 1) {
+                                String rpDate = transactionOneListModel != null ? transactionOneListModel.get(integer).date : "";
+                                String date = !rpDate.equals("") ? GH.getInstance().formatter(rpDate, "MM/dd/yyyy", "MMM d yyyy h:mma") : "";
+                                tvDate.setText(date);
+                            } else {
+                                String rpDate = transactionTwoListModel != null ? transactionTwoListModel.get(integer).date : "";
+                                String date = !rpDate.equals("") ? GH.getInstance().formatter(rpDate, "MM/dd/yyyy", "MMM d yyyy h:mma") : "";
+                                tvDate.setText(date);
+
+                            }
+
                             tvDate.setVisibility(View.VISIBLE);
                             tvInitial.setVisibility(View.GONE);
                             bf = false;
@@ -150,11 +164,11 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         bi.recyclerViewTransaction.setAdapter(recyclerAdapterUtil);
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetLeadTransactionStage.PipeLine, Integer, Unit>)
-                (viewComplainList, position) -> {
+                (allLeadsList, integer) -> {
 
                     String jsonObjectString = "";
-                    pipelineID = String.valueOf(viewComplainList.id);
-                    markedPipeline = viewComplainList.pipeline;
+                    pipelineID = String.valueOf(allLeadsList.id);
+                    markedPipeline = allLeadsList.pipeline;
 
                     if (title.contains("Transaction 1")) {
                         presentationID = "1";
@@ -162,7 +176,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         presentationID = "2";
                     }
                     int c = count - 1;
-                    if (position + 1  > c) {
+                    if (integer + 1 > c) {
                         jsonObjectString = "{\"presentationID\": \"" + presentationID + "\"," +
                                 " \"encrypted_LeadDetailID\": \"" + leadDetailId +
                                 "\", \"pipelineID\":\"" + pipelineID + "\"}";
@@ -189,10 +203,10 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         transactionPipeline = (ArrayList<GetLeadTransactionStage.PipeLine>) intent.getExtras().getSerializable("Pipeline");
 
         Bundle args = intent.getBundleExtra("BUNDLE");
-         transaction = intent.getIntExtra("tansaction",1);
-        if (transaction==1) {
+        transaction = intent.getIntExtra("tansaction", 1);
+        if (transaction == 1) {
             transactionOneListModel = (ArrayList<GetLeadTransactionStage.LeadTransactionOne>) args.getSerializable("ARRAYLIST");
-        }else{
+        } else {
             transactionTwoListModel = (ArrayList<GetLeadTransactionStage.LeadTransactionTwo>) args.getSerializable("ARRAYLIST");
         }
     }
@@ -283,7 +297,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         transactionOneListModel = response.data.leadTransactionOne;
         transactionTwoListModel = response.data.leadTransactionTwo;
 
-        count=0;
+        count = 0;
         bf = true;
         currentPipeline = markedPipeline;
         recyclerAdapterUtil.notifyDataSetChanged();

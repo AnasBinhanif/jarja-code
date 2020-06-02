@@ -65,13 +65,20 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
             bi.atvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
             bi.atvDescription.setText(calendarDetailModel.getDescription() != null ? calendarDetailModel.getDescription() : "");
 
-            startDate = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-            startTime = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
-            if (!calendarDetailModel.isAllDay) {
-                bi.tvStartTime.setText(GH.getInstance().formatTime(calendarDetailModel.getStartTime()) != null ? GH.getInstance().formatTime(calendarDetailModel.getStartTime()) : "");
+            startDate = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "yyyy-MM-dd", "MM/dd/yyyy HH:mm:ss aaa");
+            startTime = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "HH:mm:ss", "MM/dd/yyyy HH:mm:ss aaa");
+
+            if (calendarDetailModel.isAllDay != null && !calendarDetailModel.isAllDay) {
+                bi.tvStartTime.setText(startTime);
+            }else{
+                bi.tvStartTime.setVisibility(View.GONE);
             }
-            bi.tvStartDate.setText(GH.getInstance().formatDate(calendarDetailModel.getStartTime()) != null ? GH.getInstance().formatDate(calendarDetailModel.getStartTime()) : "");
+
+            String dt = !startDate.equals("") ? GH.getInstance().formatter(startDate, "MM/dd/yyyy", "yyyy-MM-dd") : "";
+            bi.tvStartDate.setText(dt);
+
             bi.cbAllDay.setChecked(calendarDetailModel.isAllDay != null ? calendarDetailModel.isAllDay : false);
+
             if (bi.cbAllDay.isChecked()) {
                 bi.tvStartTime.setVisibility(View.GONE);
                 bi.lblStartTime.setVisibility(View.GONE);
@@ -79,7 +86,9 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 bi.tvStartTime.setVisibility(View.VISIBLE);
                 bi.lblStartTime.setVisibility(View.VISIBLE);
             }
-            bi.cbMarkComplete.setChecked(calendarDetailModel.isComplete);
+            if (calendarDetailModel.isComplete != null) {
+                bi.cbMarkComplete.setChecked(calendarDetailModel.isComplete);
+            }
 
         } else {
             calendarId = "";
@@ -202,7 +211,6 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
             finish();
         }
     }
-
 
     private void showSpinnerDateDialog(TextView textView) {
 
