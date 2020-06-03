@@ -46,6 +46,7 @@ import com.project.jarjamediaapp.Models.GetTagListByLeadID;
 import com.project.jarjamediaapp.Models.GetTasksModel;
 import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.Models.GetUserProfile;
+import com.project.jarjamediaapp.Models.UpgradeSocialProfile;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 
@@ -237,6 +238,10 @@ public interface ApiMethods {
 
     @GET("Lead/GetLeadSocialProfile")
     Call<GetLeadSocialProfile> GetAllSocialProfiles(@Header("Authorization") String authorization,
+                                                    @Query("LeadID") String leadID);
+
+    @POST("Lead/UpgradeSocialProfile")
+    Call<UpgradeSocialProfile> UpgradeSocialProfile(@Header("Authorization") String authorization,
                                                     @Query("LeadID") String leadID);
 
     @FormUrlEncoded

@@ -6,6 +6,7 @@ import com.project.jarjamediaapp.Models.GetAllSocialProfiles;
 import com.project.jarjamediaapp.Models.GetLastTouch;
 import com.project.jarjamediaapp.Models.GetLeadSocialProfile;
 import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
+import com.project.jarjamediaapp.Models.UpgradeSocialProfile;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
@@ -19,6 +20,7 @@ import retrofit2.Response;
 public class Social_ProfilesPresenter extends BasePresenter<Social_ProfilesContract.View> implements Social_ProfilesContract.Actions {
 
     Call<GetLeadSocialProfile> _call;
+    Call<UpgradeSocialProfile> _callUpgradeSocialProfile;
     Call<BaseResponse> _callAddSocialProfile;
     Call<GetSocialProfileDropdown> _callGetSocialProfileDropdown;
 
@@ -100,6 +102,46 @@ public class Social_ProfilesPresenter extends BasePresenter<Social_ProfilesContr
                 _view.updateUIonFailure();
             }
         });
+
+    }
+
+    @Override
+    public void upgradeSocialProfile(String leadId) {
+
+        _view.showProgressBar();
+        _callUpgradeSocialProfile = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpgradeSocialProfile(GH.getInstance().getAuthorization()
+                ,leadId);
+        _callUpgradeSocialProfile.enqueue(new Callback<UpgradeSocialProfile>() {
+            @Override
+            public void onResponse(Call<UpgradeSocialProfile> call, Response<UpgradeSocialProfile> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    UpgradeSocialProfile getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        _view.updateUI(getAppointmentsModel);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpgradeSocialProfile> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
 
     }
 

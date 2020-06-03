@@ -25,6 +25,7 @@ import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetLeadSocialProfile;
 import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
+import com.project.jarjamediaapp.Models.UpgradeSocialProfile;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -46,6 +47,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
     Social_ProfilesPresenter presenter;
 
     ArrayList<GetLeadSocialProfile.Data> getAllSocialProfiles;
+    ArrayList<UpgradeSocialProfile.LeadSocialProfileList> getUpgradedSocialProfile;
     ArrayList<GetSocialProfileDropdown.Data> getSocialProfileDropdown;
     ArrayList<String> getSocialProfileDropdownNames;
     String leadID = "";
@@ -72,6 +74,9 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
             case R.id.btnAdd:
                 showAddProfileDialog(context);
                 break;
+            case R.id.btnUpgrade:
+                presenter.upgradeSocialProfile(leadID);
+                break;
         }
     }
 
@@ -81,6 +86,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
         presenter.getAllSocialProfiles(leadID);
         presenter.getSocialProfileDropdown();
         bi.btnAdd.setOnClickListener(this);
+        bi.btnUpgrade.setOnClickListener(this);
     }
 
 
@@ -113,6 +119,23 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
     }
 
+    @Override
+    public void updateUI(UpgradeSocialProfile response) {
+
+        getUpgradedSocialProfile = new ArrayList<>();
+        getUpgradedSocialProfile = response.data.leadSocialProfileList;
+
+        if (getUpgradedSocialProfile.size() == 0) {
+            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+            bi.recyclerViewSocialProfiles.setVisibility(View.GONE);
+        } else {
+            bi.tvNoRecordFound.setVisibility(View.GONE);
+            bi.recyclerViewSocialProfiles.setVisibility(View.VISIBLE);
+            populateUpgradedListData();
+        }
+
+    }
+
     private void populateListData() {
 
         bi.recyclerViewSocialProfiles.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
@@ -135,6 +158,46 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
         bi.recyclerViewSocialProfiles.setAdapter(recyclerAdapterUtil);
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetLeadSocialProfile.Data, Integer, Unit>) (allsocialprofiles, integer) -> {
+
+
+            String url = allsocialprofiles.profilelink;
+            if (url.startsWith("http") || url.startsWith("HTTP")) {
+                openWebPage(url);
+            } else if (url.startsWith("www") || url.startsWith("WWW")) {
+                url = "http://" + url;
+                openWebPage(url);
+            } else {
+                ToastUtils.showToast(context, "No Profile Found / Incorrect Profile Url");
+            }
+
+
+            return Unit.INSTANCE;
+        });
+
+    }
+
+    private void populateUpgradedListData() {
+
+        bi.recyclerViewSocialProfiles.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        bi.recyclerViewSocialProfiles.setItemAnimator(new DefaultItemAnimator());
+        bi.recyclerViewSocialProfiles.addItemDecoration(new DividerItemDecoration(bi.recyclerViewSocialProfiles.getContext(), 1));
+        RecyclerAdapterUtil recyclerAdapterUtil = new RecyclerAdapterUtil(context, getUpgradedSocialProfile, R.layout.custom_social_profiles);
+        recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvViewProfile, R.id.imgSocial);
+
+        recyclerAdapterUtil.addOnDataBindListener((Function4<View, UpgradeSocialProfile.LeadSocialProfileList, Integer, Map<Integer, ? extends View>, Unit>) (view, allsocialprofiles, integer, integerMap) -> {
+
+            TextView tvName = (TextView) integerMap.get(R.id.tvName);
+            tvName.setText(allsocialprofiles.name);
+
+            ImageView imgSocial = (ImageView) integerMap.get(R.id.imgSocial);
+            Glide.with(context).load(allsocialprofiles.imagelink).into(imgSocial);
+
+            return Unit.INSTANCE;
+        });
+
+        bi.recyclerViewSocialProfiles.setAdapter(recyclerAdapterUtil);
+
+        recyclerAdapterUtil.addOnClickListener((Function2<UpgradeSocialProfile.LeadSocialProfileList, Integer, Unit>) (allsocialprofiles, integer) -> {
 
 
             String url = allsocialprofiles.profilelink;

@@ -49,6 +49,9 @@ public class CalendarTaskDetailModel extends BaseResponse implements Parcelable 
         public String calendarEventID;
         @SerializedName("userCalenderID")
         @Expose
+        public String gmailCalenderId;
+        @SerializedName("gmailCalenderId")
+        @Expose
         public String userCalenderID;
         @SerializedName("userID")
         @Expose

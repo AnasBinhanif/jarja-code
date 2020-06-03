@@ -401,16 +401,16 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             if (calendarDetailModel != null) {
                 tvEventDetail.setPaintFlags(tvEventDetail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-                if (calendarDetailModel.getStartTime() != null && calendarDetailModel.getEndTime() != null) {
+                if (calendarDetailModel.startTime != null && calendarDetailModel.startTime != null) {
 
-                    calendarDetailModel.setStartTime(calendarDetailModel.getStartTime());
-                    String[] startTime = calendarDetailModel.getStartTime().split("T");
+                    calendarDetailModel.setStartTime(calendarDetailModel.startTime);
+                    String[] startTime = calendarDetailModel.getStartTime().split(" ");
                     if (calendarDetailModel.isAllDay != null && calendarDetailModel.isAllDay) {
                         tvTime.setText("All Day");
                     } else {
-                        tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm:ss a", "HH:mm:ss"));
+                        tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm", "HH:mm:ss")+" "+startTime[2]);
                     }
-                    tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE,MMM dd,yyyy", "yyyy-MM-dd"));
+                    tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE, MMM dd, yyyy", "MM/dd/yyyy"));
                 }
                 tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
                 tvAttendeesCount.setText("0");
@@ -429,7 +429,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
                         context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
                                 .putExtra("isEdit", true)
-                                .putExtra("calendarId", calendarDetailModel.getCalendarEventID())
+                                .putExtra("calendarId", calendarDetailModel.userCalenderID)
                                 .putExtra("modelData", calendarDetailModel));
 
                     }

@@ -116,15 +116,16 @@
                     android:layout_height="wrap_content"
                     android:text="@string/one_time"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/_13sdp" />
+                    android:textSize="13dp" />
 
                 <TextView
                     android:id="@+id/tvTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lead"
+                    android:layout_marginTop="5dp"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/_14sdp"
+                    android:textSize="14dp"
                     android:textStyle="bold" />
 
 
@@ -142,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/lead"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/_14sdp"
+                    android:textSize="14dp"
                     android:textStyle="bold" />
 
 

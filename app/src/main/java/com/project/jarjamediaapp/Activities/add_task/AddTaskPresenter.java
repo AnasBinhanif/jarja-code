@@ -270,6 +270,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
     @Override
     public void getTaskDetail(String taskId) {
 
+        _view.showProgressBar();
         apiCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getTaskDetail(GH.getInstance().getAuthorization(), taskId);
         apiCall.enqueue(new Callback<GetTaskDetail>() {
             @Override
@@ -316,7 +317,6 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
             @Override
             public void onResponse(Call<GetTaskDetail> call, Response<GetTaskDetail> response) {
 
-                _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetTaskDetail getTaskDetail = response.body();

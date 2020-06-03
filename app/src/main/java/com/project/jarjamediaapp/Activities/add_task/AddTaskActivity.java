@@ -343,7 +343,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     @Override
     public void updateUIListForReminders(AddAppointmentModel response) {
 
-        if (from.equalsIgnoreCase("1") || from.equalsIgnoreCase("4")) {
+        if (from.equals("1") || from.equals("4")) {
             hideProgressBar();
         }
         arrayListReminderText = new ArrayList<>();
@@ -560,6 +560,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
             bi.tvStartDate.setEnabled(false);
         }
+
         hideProgressBar();
     }
 

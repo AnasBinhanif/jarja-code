@@ -51,7 +51,7 @@
                     android:drawableLeft="@drawable/ic_add_black"
                     android:drawablePadding="10dp"
                     android:paddingLeft="20dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:paddingRight="20dp"
                     android:text="@string/upgrade_social_profile"
                     android:textAllCaps="false"

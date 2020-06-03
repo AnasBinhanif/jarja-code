@@ -290,6 +290,19 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void updateUI(GetLeadTransactionStage response) {
 
+        if (pipelineID.equalsIgnoreCase("11")) {
+            if (dialog != null) {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                } else {
+                    showAgentCommissionDialog();
+                }
+            } else {
+                showAgentCommissionDialog();
+            }
+        }else{
+            hideProgressBar();
+        }
 
         transactionOneListModel = new ArrayList<>();
         transactionTwoListModel = new ArrayList<>();
@@ -302,21 +315,11 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         currentPipeline = markedPipeline;
         recyclerAdapterUtil.notifyDataSetChanged();
         populateListData();
-        if (pipelineID.equalsIgnoreCase("11")) {
-            if (dialog != null) {
-                if (dialog.isShowing()) {
-                    dialog.dismiss();
-                } else {
-                    showAgentCommissionDialog();
-                }
-            } else {
-                showAgentCommissionDialog();
-            }
-        }
-
     }
 
     private void showAgentCommissionDialog() {
+
+        presenter.getAgentCommission(leadID, leadDetailId);
 
         dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
@@ -360,7 +363,6 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                 dialog.cancel();
             }
         });
-        presenter.getAgentCommission(leadID, leadDetailId);
 
     }
 

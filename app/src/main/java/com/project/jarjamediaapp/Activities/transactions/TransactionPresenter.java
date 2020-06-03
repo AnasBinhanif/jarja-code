@@ -33,7 +33,6 @@ public class TransactionPresenter extends BasePresenter<TransactionContract.View
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
 
-                _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
@@ -70,7 +69,6 @@ public class TransactionPresenter extends BasePresenter<TransactionContract.View
             @Override
             public void onResponse(Call<GetLeadTransactionStage> call, Response<GetLeadTransactionStage> response) {
 
-                _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetLeadTransactionStage getAppointmentsModel = response.body();

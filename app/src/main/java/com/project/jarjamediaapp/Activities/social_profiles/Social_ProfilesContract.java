@@ -4,6 +4,7 @@ import com.project.jarjamediaapp.Base.BaseContract;
 import com.project.jarjamediaapp.Models.GetAllSocialProfiles;
 import com.project.jarjamediaapp.Models.GetLeadSocialProfile;
 import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
+import com.project.jarjamediaapp.Models.UpgradeSocialProfile;
 
 public interface Social_ProfilesContract {
 
@@ -14,6 +15,8 @@ public interface Social_ProfilesContract {
         void updateUI(GetLeadSocialProfile response);
 
         void updateUI(GetSocialProfileDropdown response);
+
+        void updateUI(UpgradeSocialProfile response);
 
         void updateUIonFalse(String message);
 
@@ -35,6 +38,8 @@ public interface Social_ProfilesContract {
         void getSocialProfileDropdown();
 
         void getAllSocialProfiles(String leadId);
+
+        void upgradeSocialProfile(String leadId);
 
         void addSocialProfile(String leadId, String name, String siteName, String profilelink);
 
