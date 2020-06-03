@@ -168,6 +168,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         from = id;
         switch (id) {
             case "1": {
+                hideProgressBar();
                 searchLeadIdsString = getIntent().getStringExtra("leadID");
                 leadName = getIntent().getStringExtra("leadName");
                 bi.tvName.setText(leadName);
@@ -220,6 +221,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
             break;
             case "4": {
+                hideProgressBar();
                 bi.tvName.setEnabled(true);
                 leadId = "";
                 isEdit = true;
@@ -364,7 +366,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvReminder.setOnItemClickListener((parent, view, position, id) -> {
 
             clearFocus();
-            presenter.getVia();
+
             reminder = arrayListReminderValue.get(position);
             if (bi.atvReminder.getText().toString().contains("None")) {
                 bi.atvVia.setVisibility(View.GONE);

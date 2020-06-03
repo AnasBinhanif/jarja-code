@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +30,6 @@ import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
 import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
 import com.project.jarjamediaapp.Activities.open_houses.OpenHousesActivity;
-import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Fragments.DashboardFragments.TabsFragment;
 import com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads.FindLeadsFragment;
@@ -72,7 +70,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     String picPath = "";
     MenuItem item;
     CircleImageView navHeaderImageView;
-    TextView navHeaderTextView;
+    TextView navHeaderTextView, tvInitial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +98,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         View headerView = navigationView.getHeaderView(0);
         navHeaderTextView = (TextView) headerView.findViewById(R.id.header_title);
+        tvInitial = (TextView) headerView.findViewById(R.id.tvInitial);
         navHeaderImageView = (CircleImageView) headerView.findViewById(R.id.imageView);
 
         getUserProfileData();
@@ -126,16 +125,31 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         easyPreference.addString(GH.KEYS.AGENT_NAME.name(), getUserProfile.data.getAgentData().getAgentName()).save();
                         AppConstants.Keys.UserID = getUserProfile.data.userProfile.userID;
 
+                        String firstName = getUserProfile.data.userProfile.firstName + "";
+                        String lastName = getUserProfile.data.userProfile.lastName + "";
                         String fullName = getUserProfile.data.userProfile.firstName + " " + getUserProfile.data.userProfile.lastName;
                         easyPreference.addString(GH.KEYS.USER_NAME.name(), fullName).save();
                         navHeaderTextView.setText(fullName);
 
                         picPath = getUserProfile.data.userProfile.picPath;
+                        if (picPath != null && !picPath.equals("")) {
+                            Glide.with(context)
+                                    .load(picPath)
+                                    .into(navHeaderImageView);
+                        } else {
+                            if (firstName.equals("null") || firstName.equals("")) {
+                                firstName = "-";
+                            }
 
-                        Glide.with(context)
-                                .load(picPath)
-                                .into(navHeaderImageView);
+                            if (lastName.equals("null") || lastName.equals("")) {
+                                lastName = "-";
+                            }
 
+                            tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
+
+                            navHeaderImageView.setVisibility(View.GONE);
+                            tvInitial.setVisibility(View.VISIBLE);
+                        }
                         getUserPermissions();
 
                     } else {
@@ -151,7 +165,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
                         logout();
                     } else {*/
-                        ToastUtils.showToastLong(context, error.message());
+                    ToastUtils.showToastLong(context, error.message());
                 }
             }
 
@@ -334,7 +348,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
                         logout();
                     } else {*/
-                        ToastUtils.showToastLong(context, error.message());
+                    ToastUtils.showToastLong(context, error.message());
 
                 }
             }
@@ -406,7 +420,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         GH.getInstance().HideProgressDialog();
     }
 
-    public void updateNotificationCount(int count){
+    public void updateNotificationCount(int count) {
         item.setIcon(buildCounterDrawable(count, R.drawable.ic_notification));
     }
 

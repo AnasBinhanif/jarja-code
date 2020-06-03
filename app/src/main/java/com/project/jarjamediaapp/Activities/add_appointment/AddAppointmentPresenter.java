@@ -135,7 +135,7 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
             @Override
             public void onResponse(Call<GetLocationModel> call, Response<GetLocationModel> response) {
 
-                _view.hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     GetLocationModel getAppointmentsModel = response.body();
@@ -150,7 +150,7 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
 
                     }
                 } else {
-
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -173,7 +173,7 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
             @Override
             public void onResponse(Call<AddAppointmentModel> call, Response<AddAppointmentModel> response) {
 
-                _view.hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     AddAppointmentModel getAppointmentsModel = response.body();
@@ -181,14 +181,14 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
                     if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
 
                         _view.updateUIListForReminders(getAppointmentsModel);
-
+                        getVia();
                     } else {
 
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
-
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }

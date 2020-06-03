@@ -6,10 +6,10 @@
     android:background="@drawable/menu_background"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -20,8 +20,22 @@
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:src="@drawable/avataer_male"
+        android:visibility="visible"
         app:civ_border_color="@color/colorPrimary"
         app:civ_border_width="@dimen/_1sdp" />
+
+    <TextView
+        android:id="@+id/tvInitial"
+        android:layout_width="@dimen/_75sdp"
+        android:layout_height="@dimen/_75sdp"
+        android:layout_gravity="center"
+        android:background="@drawable/round_initials_nav"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:visibility="gone"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/_20sdp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/header_title"
@@ -31,9 +45,9 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/nav_header_title"
         android:textAlignment="center"
-        android:textSize="@dimen/_14sdp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/colorWhite"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textSize="@dimen/_14sdp" />
 
     <TextView
         android:id="@+id/header_email"

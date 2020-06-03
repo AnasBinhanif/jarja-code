@@ -262,17 +262,17 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         title = bi.atvEventTitle.getText().toString();
         description = bi.atvDescription.getText().toString() + "";
         allDay = bi.cbAllDay.isChecked() ? true : false;
-        markComplete = bi.cbAllDay.isChecked() ? true : false;
+        markComplete = bi.cbMarkComplete.isChecked() ? true : false;
 
         if (bi.cbAllDay.isChecked() || startTime.equalsIgnoreCase("")) {
 
-            startTime = new SimpleDateFormat("HH:mm:ss.SSS'Z'", Locale.getDefault()).format(new Date());
+            startTime = new SimpleDateFormat("hh:mm:ss.SSS'Z'", Locale.getDefault()).format(new Date());
 
         }
         startDate = GH.getInstance().formatApiDateTime(startDate + "T" + startTime);
 
         Integer leadAppointmentID = 0;
-        String isAppointmentAttend = "false";
+        boolean isAppointmentAttend = false;
         String datedFrom = startDate;
         String datedTo = "";
         boolean isGmailAppActive = true;

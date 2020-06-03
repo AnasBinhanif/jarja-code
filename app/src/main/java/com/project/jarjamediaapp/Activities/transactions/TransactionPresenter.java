@@ -46,7 +46,7 @@ public class TransactionPresenter extends BasePresenter<TransactionContract.View
 
                     }
                 } else {
-
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -82,7 +82,7 @@ public class TransactionPresenter extends BasePresenter<TransactionContract.View
 
                     }
                 } else {
-
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }

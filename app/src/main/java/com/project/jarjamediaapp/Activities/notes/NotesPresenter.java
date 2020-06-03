@@ -277,7 +277,6 @@ public class NotesPresenter extends BasePresenter<NotesContract.View> implements
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
 
-                _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     BaseResponse documentModel = response.body();
@@ -292,7 +291,7 @@ public class NotesPresenter extends BasePresenter<NotesContract.View> implements
 
                     }
                 } else {
-
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }

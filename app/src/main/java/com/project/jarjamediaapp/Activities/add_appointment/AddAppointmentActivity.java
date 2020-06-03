@@ -587,8 +587,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             searchListItems.add(new MultiSelectModel(model.agentID, model.agentName, model.encryptedAgentID));
         }
         presenter.getReminder();
-        if (isEdit)
-            presenter.getVia();
+
     }
 
     @Override
@@ -608,7 +607,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 GH.getInstance().hideKeyboard(context, AddAppointmentActivity.this);
-                presenter.getVia();
                 reminder = arrayListReminderValue.get(position);
                 if (bi.atvReminder.getText().toString().contains("None")) {
                     bi.atvVia.setVisibility(View.GONE);
