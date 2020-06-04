@@ -114,14 +114,14 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
-                filterDateData(date.getDay());
+                filterDateData(date.getDay(),date.getMonth(),date.getYear());
 
             }
         });
 
     }
 
-    private void filterDateData(int day) {
+    private void filterDateData(int day,int month,int year) {
 
         dataArrayList = new ArrayList<>();
         for (int i = 0; i < dataList.size(); i++) {
@@ -131,7 +131,14 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
             }
         }
         if (dataArrayList.size() > 0) {
-            context.startActivity(new Intent(context, CalendarDetailActivity.class).putExtra("listData", (Serializable) dataArrayList));
+            context.startActivity(
+                    new Intent(context, CalendarDetailActivity.class)
+                            .putExtra("listData", (Serializable) dataArrayList)
+                            .putExtra("day",day)
+                            .putExtra("month",month)
+                            .putExtra("year",year)
+
+            );
         } else {
             ToastUtils.showToastLong(context, "No data found");
         }

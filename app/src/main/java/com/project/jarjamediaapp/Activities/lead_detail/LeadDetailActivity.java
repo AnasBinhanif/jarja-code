@@ -126,6 +126,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     TextView _close;
     MultiAutoCompleteTextView mAtvMessage;
     Button btnSend, btnCancel;
+    int perm = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -951,9 +952,16 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     }
 
-    @AfterPermissionGranted(RC_CAMERA_AND_STORAGE)
-    private void oPenGallery() {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    private void oPenGallery() {
+        perm = 2;
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(context, perms)) {
             // Already have permission, do the thing
@@ -970,8 +978,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         }
     }
 
-    @AfterPermissionGranted(RC_CAMERA_ONLY)
     private void accessCamera() {
+        perm = 1;
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(context, perms)) {
             // Already have permission, do the thing
@@ -983,13 +991,12 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, getString(R.string.permission_message),
-                    RC_CAMERA_ONLY, perms);
+                    RC_CAMERA_AND_STORAGE, perms);
         }
     }
 
-    @AfterPermissionGranted(RC_CAMERA_AND_STORAGE)
     private void accessDocuments() {
-
+        perm = 3;
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(context, perms)) {
             // Already have permission, do the thing
@@ -1001,12 +1008,24 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, getString(R.string.permission_message),
-                    RC_CAMERA_ONLY, perms);
+                    RC_CAMERA_AND_STORAGE, perms);
         }
     }
 
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+
+        switch (perm) {
+            case 1:
+                accessCamera();
+                break;
+            case 2:
+                oPenGallery();
+                break;
+            case 3:
+                accessDocuments();
+                break;
+        }
     }
 
     @Override

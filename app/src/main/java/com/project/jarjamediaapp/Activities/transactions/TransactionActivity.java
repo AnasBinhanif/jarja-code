@@ -87,6 +87,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
     private void populateListData() {
 
+        count=0;
         bi.recyclerViewTransaction.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.recyclerViewTransaction.setItemAnimator(new DefaultItemAnimator());
         bi.recyclerViewTransaction.addItemDecoration(new DividerItemDecoration(bi.recyclerViewTransaction.getContext(), 1));
@@ -124,7 +125,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                                 }
                             }
                         }
-                        count++;
+                        count = count+1;
                         tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
                         imgInitial.setVisibility(View.VISIBLE);
                         tvDate.setVisibility(View.VISIBLE);
@@ -176,6 +177,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         presentationID = "2";
                     }
                     int c = count - 1;
+
                     if (integer + 1 > c) {
                         jsonObjectString = "{\"presentationID\": \"" + presentationID + "\"," +
                                 " \"encrypted_LeadDetailID\": \"" + leadDetailId +
@@ -183,7 +185,8 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         Log.d("json", jsonObjectString);
 
                         presenter.addPipelineMark(jsonObjectString);
-                    } else {
+
+                    }else {
                         showLongToastMessage("Sorry, you cannot revert pipeline.");
                     }
 
@@ -228,7 +231,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         ToastUtils.showToast(context, response.body().getMessage());
         if (dialog != null) {
             if (dialog.isShowing()) {
-                dialog.dismiss();
+                presenter.getTransaction(leadID);
             }
         } else {
             presenter.getAgentCommission(leadID, leadDetailId);
@@ -294,6 +297,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
             if (dialog != null) {
                 if (dialog.isShowing()) {
                     dialog.dismiss();
+                    hideProgressBar();
                 } else {
                     showAgentCommissionDialog();
                 }

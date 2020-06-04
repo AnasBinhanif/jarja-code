@@ -421,12 +421,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 clearFocus();
                 type = arrayListViaValue.get(position);
             }
         });
-
         bi.atvType.setText(arrayListViaText.get(0), false);
         type = arrayListViaValue.get(0);
     }
@@ -483,8 +481,13 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvNameTask.setText(taskDetail.data.name);
         bi.atvDescription.setText(taskDetail.data.description);
         bi.tvName.setText(taskDetail.data.firstName);
-        //bi.atvType.setText(taskDetail.data.type);
         bi.atvType.setText(taskDetail.data.type, false);
+        bi.atvType.setClickable(true);
+        bi.atvType.setEnabled(true);
+        bi.atvReminder.setClickable(true);
+        bi.atvReminder.setEnabled(true);
+        bi.atvVia.setClickable(true);
+        bi.atvVia.setEnabled(true);
         reoccur = String.valueOf(taskDetail.data.scheduleRecurID);
         Log.d("recur", reoccur);
         bi.atvRecur.setText(taskDetail.data.recur, false);

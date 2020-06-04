@@ -60,7 +60,6 @@ import id.zelory.compressor.Compressor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Response;
 
@@ -79,6 +78,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     File compressedImage;
     int viewId;
     String openHouseType = "upcoming";
+    int perm = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -562,9 +562,9 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         accessCamera();
     }
 
-    @AfterPermissionGranted(RC_CAMERA_AND_STORAGE)
-    private void oPenGallery() {
 
+    private void oPenGallery() {
+        perm = 2;
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(context, perms)) {
             // Already have permission, do the thing
@@ -591,8 +591,9 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         }
     }
 
-    @AfterPermissionGranted(RC_CAMERA_ONLY)
+
     private void accessCamera() {
+        perm = 1;
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(context, perms)) {
             // Already have permission, do the thing
@@ -601,12 +602,22 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, getString(R.string.permission_message),
-                    RC_CAMERA_ONLY, perms);
+                    RC_CAMERA_AND_STORAGE, perms);
         }
     }
 
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+
+        switch (perm) {
+            case 1:
+                accessCamera();
+                break;
+            case 2:
+                oPenGallery();
+                break;
+        }
+
     }
 
     @Override

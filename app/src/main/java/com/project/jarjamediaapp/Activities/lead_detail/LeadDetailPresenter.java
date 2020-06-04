@@ -274,7 +274,7 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
             @Override
             public void onResponse(Call<UploadImageModel> call, Response<UploadImageModel> response) {
 
-                _view.hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     UploadImageModel openHousesModel = response.body();
@@ -282,7 +282,7 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
                         _view.updateUIAfterFileUpload(response);
 
                     } else {
-
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(openHousesModel.getMessage());
                     }
                 } else {

@@ -76,7 +76,6 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
             @Override
             public void onResponse(Call<AddAppointmentModel> call, Response<AddAppointmentModel> response) {
 
-
                 if (response.isSuccessful()) {
 
                     AddAppointmentModel getAppointmentsModel = response.body();
@@ -166,7 +165,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
                     } else {
 
-
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
@@ -206,7 +205,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
                         _view.updateUIListForVia(getAppointmentsModel);
                         getReminder();
                     } else {
-
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
@@ -326,12 +325,12 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
                         _view.updateTaskDetail(getTaskDetail);
 
                     } else {
-
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getTaskDetail.message);
 
                     }
                 } else {
-
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }

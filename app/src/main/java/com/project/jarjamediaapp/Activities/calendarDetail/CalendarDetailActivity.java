@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.Activities.calendarDetail;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -19,6 +20,8 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityCalendarDetailBinding;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Response;
@@ -30,6 +33,9 @@ public class CalendarDetailActivity extends BaseActivity implements View.OnClick
     CalendarDetailPresenter presenter;
     SwipeCalendarAppointmentRecyclerAdapter swipeCalendarAppointmentRecyclerAdapter;
     List<CalendarModel.Data> dataList;
+    ArrayList<CalendarModel.Data> dataArrayList;
+    ArrayList<Integer> markedDates;
+    int day,monthSelected,yearSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,9 @@ public class CalendarDetailActivity extends BaseActivity implements View.OnClick
     public void initViews() {
 
         dataList = (List<CalendarModel.Data>) getIntent().getSerializableExtra("listData");
+        day = getIntent().getIntExtra("day",0);
+        monthSelected = getIntent().getIntExtra("month",0);
+        yearSelected = getIntent().getIntExtra("year",0);
         if (dataList != null && dataList.size() > 0)
             updateUIList(dataList);
 
@@ -120,4 +129,49 @@ public class CalendarDetailActivity extends BaseActivity implements View.OnClick
 
     }
 
+    @Override
+    protected void onResume() {
+        String month = GH.getInstance().formatter(String.valueOf(monthSelected+1), "m", "mm");
+        String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
+        presenter.getCalendarEvents(GH.getInstance().getCalendarAgentId(), String.valueOf(month),String.valueOf(year));
+        super.onResume();
+    }
+
+    @Override
+    public void updateUIList(CalendarModel calendarModel) {
+
+        markedDates= new ArrayList<>();
+        dataList = new ArrayList<>();
+        dataList = calendarModel.getData();
+        if (dataList != null && dataList.size() > 0) {
+            for (int i = 0; i < dataList.size(); i++) {
+                String formatString = dataList.get(i).getStart();
+                markedDates.add(Integer.valueOf(GH.getInstance().formatter(formatString, "d", "yyyy-MM-dd'T'HH:mm:ss")));
+
+            }
+        }
+
+        filterDateData(day);
+
+
+    }
+
+    private void filterDateData(int day) {
+
+        dataArrayList = new ArrayList<>();
+        for (int i = 0; i < dataList.size(); i++) {
+            int _day = markedDates.get(i);
+            if (day == _day) {
+                dataArrayList.add(dataList.get(i));
+            }
+        }
+        if (dataArrayList.size() > 0) {
+
+            updateUIList(dataArrayList);
+
+        } else {
+            ToastUtils.showToastLong(context, "No data found");
+        }
+
+    }
 }

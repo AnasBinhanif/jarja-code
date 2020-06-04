@@ -41,7 +41,7 @@ public class TransactionPresenter extends BasePresenter<TransactionContract.View
                         _view.updateUI(response);
 
                     } else {
-
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
@@ -105,7 +105,7 @@ public class TransactionPresenter extends BasePresenter<TransactionContract.View
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
 
-                _view.hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
@@ -114,12 +114,12 @@ public class TransactionPresenter extends BasePresenter<TransactionContract.View
                         _view.addAgentCommission(response);
 
                     } else {
-
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
-
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
