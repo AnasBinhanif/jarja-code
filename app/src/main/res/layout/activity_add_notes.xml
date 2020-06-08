@@ -129,7 +129,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="15dp"
-                            android:text="Select name"
+                            android:text="Assign Agent"
                             android:textColor="@color/colorBlack"
                             android:textSize="14dp"
                             android:textStyle="bold" />
@@ -143,7 +143,7 @@
                             android:background="@drawable/bg_search"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:hint="Select name"
+                            android:hint="Assign Agent"
                             android:inputType="textCapSentences"
                             android:paddingLeft="12dp"
                             android:textSize="14dp" />

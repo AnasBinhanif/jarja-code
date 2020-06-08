@@ -118,7 +118,7 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
     private void showAgentDialog() {
 
         MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
-                .title("Select Agents") //setting title for dialog
+                .title("Assign Agent") //setting title for dialog
                 .titleSize(25)
                 .positiveText("Done")
                 .negativeText("Cancel")

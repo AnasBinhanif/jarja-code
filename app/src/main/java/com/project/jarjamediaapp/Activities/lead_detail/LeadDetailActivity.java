@@ -660,7 +660,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 if (firstName != null && !firstName.equalsIgnoreCase("")) {
 
                     if (lastName != null && !lastName.equalsIgnoreCase("")) {
-                        bi.tvInitial.setText(firstName.substring(0, 1) + " " + lastName.substring(0, 1));
+                        bi.tvInitial.setText(firstName.substring(0, 1) + "" + lastName.substring(0, 1));
                         bi.tvName.setText(firstName + " " + lastName);
                     } else {
                         bi.tvInitial.setText(firstName.substring(0, 1) + "-");

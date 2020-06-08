@@ -278,7 +278,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             newCalendar = Calendar.getInstance();
             switch (id) {
                 case 1: {
-                    String[] formattedDate = startDate.split("-");
+                    String[] date = startDate.split("T");
+                    String[] formattedDate = date[0].split("-");
                     year = Integer.parseInt(formattedDate[0]);
                     month = Integer.parseInt(formattedDate[1]);
                     day = Integer.parseInt(formattedDate[2]);
@@ -287,11 +288,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 }
                 break;
                 case 2: {
-                    String[] formattedDate = endDate.split("-");
+                    String[] date = endDate.split("T");
+                    String[] formattedDate = date[0].split("-");
                     year = Integer.parseInt(formattedDate[0]);
-                    month = Integer.parseInt(formattedDate[1]);
+                    month = Integer.parseInt(formattedDate[1]) - 1;
                     day = Integer.parseInt(formattedDate[2]);
-                    month = month - 1;
                     newCalendar.set(year, month, day);
                 }
                 break;

@@ -2,8 +2,11 @@ package com.project.jarjamediaapp.Activities.social_profiles;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -33,6 +36,7 @@ import com.project.jarjamediaapp.databinding.ActivitySocialProfilesBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import kotlin.Unit;
@@ -164,7 +168,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
             if (url.startsWith("http") || url.startsWith("HTTP")) {
                 openWebPage(url);
             } else if (url.startsWith("www") || url.startsWith("WWW")) {
-                url = "http://" + url;
+               // url = "http://" + url;
                 openWebPage(url);
             } else {
                 ToastUtils.showToast(context, "No Profile Found / Incorrect Profile Url");
@@ -204,7 +208,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
             if (url.startsWith("http") || url.startsWith("HTTP")) {
                 openWebPage(url);
             } else if (url.startsWith("www") || url.startsWith("WWW")) {
-                url = "http://" + url;
+               // url = "http://" + url;
                 openWebPage(url);
             } else {
                 ToastUtils.showToast(context, "No Profile Found / Incorrect Profile Url");
