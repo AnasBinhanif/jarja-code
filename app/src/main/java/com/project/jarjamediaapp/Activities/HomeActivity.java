@@ -1,6 +1,8 @@
 package com.project.jarjamediaapp.Activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -265,10 +267,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 title = getResources().getString(R.string.task);
                 break;
             case R.id.nav_logout:
-                fragment = null;
-                easyPreference.clearAll().save();
-                switchActivity(LoginActivity.class);
-                finish();
+
+                logout();
                 break;
 
             default:
@@ -277,6 +277,48 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         if (fragment != null) {
             ReplaceFragment(fragment, title, shouldAnimate, addToStack);
         }
+    }
+
+
+    public void logout() {
+
+        AlertDialog alertDialog1;
+        alertDialog1 = new AlertDialog.Builder(
+                HomeActivity.this).create();
+
+        // Setting Dialog Title
+        alertDialog1.setTitle("Alert");
+
+        // Setting Dialog Message
+        alertDialog1.setMessage("\nAre You Sure! You Want To Logout ?");
+
+        // Setting Icon to Dialog
+        // alertDialog1.setIcon(R.drawable.tick);
+
+        // Setting OK Button
+        alertDialog1.setButton("YES", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to execute after dialog
+                // closed
+                fragment = null;
+                easyPreference.clearAll().save();
+                switchActivity(LoginActivity.class);
+                finish();
+            }
+        });
+
+        alertDialog1.setButton2("NO", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to execute after dialog
+                // closed
+                alertDialog1.dismiss();
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog1.show();
     }
 
     public void ReplaceFragment(Fragment fragment, String title, boolean shouldAnimate, boolean addToStack) {

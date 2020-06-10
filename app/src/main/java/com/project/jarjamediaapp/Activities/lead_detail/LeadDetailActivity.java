@@ -73,7 +73,6 @@ import kotlin.jvm.functions.Function4;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Response;
 
@@ -127,6 +126,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     MultiAutoCompleteTextView mAtvMessage;
     Button btnSend, btnCancel;
     int perm = 0;
+    boolean back = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +177,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 case 0:
                     Intent intent = new Intent(context, AddLeadActivity.class);
                     intent.putExtra("Lead", getLeadListData);
-                    intent.putExtra("isEdit",true);
+                    intent.putExtra("isEdit", true);
                     context.startActivity(intent);
                     break;
                 case 1:
@@ -432,8 +432,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     intentT1.putExtra("currentStage", currentStage1);
                     intentT1.putExtra("Pipeline", transactionPipeline);
                     Bundle args = new Bundle();
-                    args.putSerializable("ARRAYLIST",(Serializable)transactionOneListModel);
-                    intentT1.putExtra("BUNDLE",args);
+                    args.putSerializable("ARRAYLIST", (Serializable) transactionOneListModel);
+                    intentT1.putExtra("BUNDLE", args);
                     startActivity(intentT1);
                 }
 
@@ -450,8 +450,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     intentT2.putExtra("currentStage", currentStage2);
                     intentT2.putExtra("Pipeline", transactionPipeline);
                     Bundle args = new Bundle();
-                    args.putSerializable("ARRAYLIST",(Serializable)transactionTwoListModel);
-                    intentT2.putExtra("BUNDLE",args);
+                    args.putSerializable("ARRAYLIST", (Serializable) transactionTwoListModel);
+                    intentT2.putExtra("BUNDLE", args);
                     startActivity(intentT2);
                 }
 
@@ -459,6 +459,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
             case R.id.btnActions:
 
+                back = true;
                 bi.lnActions.setVisibility(View.VISIBLE);
                 bi.recyclerLeadDetails.setVisibility(View.GONE);
                 Paris.style(bi.btnActions).apply(R.style.TabButtonYellowLeft);
@@ -468,6 +469,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
             case R.id.btnDetails:
 
+                back = false;
                 bi.lnActions.setVisibility(View.GONE);
                 bi.recyclerLeadDetails.setVisibility(View.VISIBLE);
                 Paris.style(bi.btnDetails).apply(R.style.TabButtonYellowRight);
@@ -612,6 +614,20 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             return Unit.INSTANCE;
         });
 
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (back) {
+            super.onBackPressed();
+        } else {
+            back = true;
+            bi.lnActions.setVisibility(View.VISIBLE);
+            bi.recyclerLeadDetails.setVisibility(View.GONE);
+            Paris.style(bi.btnActions).apply(R.style.TabButtonYellowLeft);
+            Paris.style(bi.btnDetails).apply(R.style.TabButtonTranparentRight);
+        }
     }
 
     @Override
@@ -912,7 +928,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
         } else {*/
-            ToastUtils.showToastLong(context, error);
+        ToastUtils.showToastLong(context, error);
     }
 
     @Override

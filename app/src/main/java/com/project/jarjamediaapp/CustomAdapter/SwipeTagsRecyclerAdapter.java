@@ -1,7 +1,9 @@
 package com.project.jarjamediaapp.CustomAdapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.project.jarjamediaapp.Activities.HomeActivity;
+import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Activities.tags.TagsActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetTagListByLeadID;
@@ -134,13 +138,53 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
             tvDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    deleteTag();
+                }
+            });
+        }
+
+        public void deleteTag() {
+
+            AlertDialog alertDialog1;
+            alertDialog1 = new AlertDialog.Builder(
+                    context).create();
+
+            // Setting Dialog Title
+            alertDialog1.setTitle("Alert");
+
+            // Setting Dialog Message
+            alertDialog1.setMessage("\nAre You Sure! You Want To Delete This Tag ?");
+
+            // Setting Icon to Dialog
+            // alertDialog1.setIcon(R.drawable.tick);
+
+            // Setting OK Button
+            alertDialog1.setButton("YES", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    // Write your code here to execute after dialog
+                    // closed
                     pos = getAdapterPosition();
                     String noteID = mData.get(pos).encryptedTagID;
                     callDeleteTag(noteID, leadID, swipeLayout);
                 }
             });
+
+            alertDialog1.setButton2("NO", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    // Write your code here to execute after dialog
+                    // closed
+                    alertDialog1.dismiss();
+                }
+            });
+
+            // Showing Alert Message
+            alertDialog1.show();
         }
     }
+
+
 
     private void callDeleteTag(String encryptedNoteID, String leadID, SwipeRevealLayout swipeRevealLayout) {
         GH.getInstance().ShowProgressDialog(activity);

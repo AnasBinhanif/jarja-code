@@ -20,12 +20,12 @@
             android:text="Primary"
             android:visibility="invisible"
             android:textColor="@color/colorGreyTextDark"
-            android:textSize="14dp" />
+            android:textSize="12dp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgAssignedTo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginTop="5dp"
             android:src="@drawable/avataer_male"
             app:civ_border_color="@color/colorYellow"
@@ -38,7 +38,7 @@
             android:layout_marginTop="5dp"
             android:text="Humza Shahid"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="16dp"
+            android:textSize="14dp"
             android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>
