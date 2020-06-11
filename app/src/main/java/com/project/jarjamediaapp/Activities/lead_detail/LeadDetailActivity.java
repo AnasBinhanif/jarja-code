@@ -699,6 +699,14 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 bi.tvName.setText("");
             }
 
+            if (getLeadListData.scoreColor.equals("green")) {
+                bi.tvScore.setTextColor(getResources().getColor(R.color.colorScoreGreen));
+            } else if (getLeadListData.scoreColor.equals("red")) {
+                bi.tvScore.setTextColor(getResources().getColor(R.color.colorScoreRed));
+            } else if (getLeadListData.scoreColor.equals("blue")) {
+                bi.tvScore.setTextColor(getResources().getColor(R.color.colorScoreBlue));
+            }
+
             bi.tvScore.setText(getLeadListData.leadScore);
         } else {
             bi.scLeadDetail.setVisibility(View.GONE);
@@ -1187,6 +1195,4 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         }
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
-
-
 }

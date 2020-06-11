@@ -456,7 +456,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             } else {
                 bi.lnEndDate.setVisibility(View.GONE);
             }
-
         });
 
         if (from.equals("1") || from.equals("4")) {

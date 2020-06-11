@@ -63,10 +63,10 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
             if (selectedIDs.contains(model.decryptedLeadID)) {
                 holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
-            }else{
+            } else {
                 holder.itemView.setBackgroundColor(Color.TRANSPARENT);
             }
-        }else{
+        } else {
             holder.itemView.setBackgroundColor(Color.TRANSPARENT);
         }
     }
@@ -126,7 +126,4 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             }
         }
     }
-
-
 }
-

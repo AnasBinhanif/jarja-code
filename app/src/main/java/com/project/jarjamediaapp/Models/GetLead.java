@@ -130,6 +130,9 @@ public class GetLead implements Serializable {
         @SerializedName("sendWelcomeEmail")
         @Expose
         public Boolean sendWelcomeEmail;
+        @SerializedName("scoreColor")
+        @Expose
+        public String scoreColor;
         @SerializedName("isDeleted")
         @Expose
         public Boolean isDeleted;
@@ -303,6 +306,4 @@ public class GetLead implements Serializable {
         public String timeFrameName;
 
     }
-
-
 }
