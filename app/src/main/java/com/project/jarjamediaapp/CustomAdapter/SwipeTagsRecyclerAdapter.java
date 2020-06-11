@@ -153,7 +153,7 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
             alertDialog1.setTitle("Alert");
 
             // Setting Dialog Message
-            alertDialog1.setMessage("\nAre You Sure! You Want To Delete This Tag ?");
+            alertDialog1.setMessage("\nAre You Sure! You Want To Remove This Tag ?");
 
             // Setting Icon to Dialog
             // alertDialog1.setIcon(R.drawable.tick);

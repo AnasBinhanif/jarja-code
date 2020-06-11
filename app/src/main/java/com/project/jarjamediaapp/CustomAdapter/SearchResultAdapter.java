@@ -62,7 +62,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         if (selectedIDs.size() != 0) {
 
             if (selectedIDs.contains(model.decryptedLeadID)) {
-                holder.itemView.setBackgroundColor(Color.LTGRAY);
+                holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
             }else{
                 holder.itemView.setBackgroundColor(Color.TRANSPARENT);
             }

@@ -388,7 +388,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     ApiError error = ErrorUtils.parseError(response);
                     /*if (error.message().contains("Authorization has been denied for this request")) {
                         ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
-                        logout();
+                        logout();`
                     } else {*/
                     ToastUtils.showToastLong(context, error.message());
 
@@ -432,10 +432,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         if (count == 0) {
             View counterTextPanel = view.findViewById(R.id.counterValuePanel);
             counterTextPanel.setVisibility(View.GONE);
-        } else if (count < 10 && count > 0) {
-
-            textView.setText("0" + count);
         } else {
+
             textView.setText("" + count);
         }
 
