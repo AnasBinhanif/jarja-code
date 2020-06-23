@@ -486,5 +486,4 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
 
         }
     }
-
 }

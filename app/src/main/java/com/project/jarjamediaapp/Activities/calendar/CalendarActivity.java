@@ -52,6 +52,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     int yearSelected, monthSelected, daySelected;
     SwipeCalendarAppointmentRecyclerAdapter swipeCalendarAppointmentRecyclerAdapter;
     List<CalendarModel.Data> dataList;
+    List<CalendarModel.Data> currentDateList;
     ArrayList<Integer> markedDates;
     ArrayList<CalendarLabel> markedDatesFormatter;
     ArrayList<CalendarModel.Data> dataArrayList;
@@ -114,14 +115,14 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
-                filterDateData(date.getDay(),date.getMonth(),date.getYear());
+                filterDateData(date.getDay(), date.getMonth(), date.getYear());
 
             }
         });
 
     }
 
-    private void filterDateData(int day,int month,int year) {
+    private void filterDateData(int day, int month, int year) {
 
         dataArrayList = new ArrayList<>();
         for (int i = 0; i < dataList.size(); i++) {
@@ -131,14 +132,21 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
             }
         }
         if (dataArrayList.size() > 0) {
-            context.startActivity(
+            /*context.startActivity(
                     new Intent(context, CalendarDetailActivity.class)
                             .putExtra("listData", (Serializable) dataArrayList)
-                            .putExtra("day",day)
-                            .putExtra("month",month)
-                            .putExtra("year",year)
-
-            );
+                            .putExtra("day", day)
+                            .putExtra("month", month)
+                            .putExtra("year", year));*/
+            swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, CalendarActivity.this, dataArrayList);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.rvEvents.getContext(), 1);
+            bi.rvEvents.setLayoutManager(mLayoutManager);
+            bi.rvEvents.setItemAnimator(new DefaultItemAnimator());
+            bi.rvEvents.addItemDecoration(dividerItemDecoration);
+            bi.rvEvents.setAdapter(swipeCalendarAppointmentRecyclerAdapter);
+            bi.rvEvents.setVisibility(View.VISIBLE);
+            bi.tvMessage.setVisibility(View.GONE);
         } else {
             ToastUtils.showToastLong(context, "No data found");
         }
@@ -247,9 +255,28 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     public void updateUIList(CalendarModel response) {
 
         if (response.data.size() > 0) {
-
+            dataList= new ArrayList<>();
+            currentDateList = new ArrayList<>();
             dataList = response.getData();
-            swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, CalendarActivity.this, response.getData());
+            for (int i = 0; i < response.getData().size(); i++) {
+
+                if (response.getData().get(i).getStart() != null || response.getData().get(i).getStart().equalsIgnoreCase("Null")
+                        || !response.getData().get(i).getStart().equals("")) {
+                    String date = GH.getInstance().formatter(response.getData().get(i).getStart(), "dd", "yyyy-MM-dd'T'HH:mm:ss");
+
+                    calendar = Calendar.getInstance();
+                    daySelected = calendar.get(Calendar.DAY_OF_MONTH);
+
+                    if (date.equals(String.valueOf(daySelected))) {
+
+                        currentDateList.add(response.getData().get(i));
+
+                    }
+                }
+
+            }
+
+            swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, CalendarActivity.this, currentDateList);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.rvEvents.getContext(), 1);
             bi.rvEvents.setLayoutManager(mLayoutManager);

@@ -2,11 +2,8 @@ package com.project.jarjamediaapp.Activities.social_profiles;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -36,7 +33,6 @@ import com.project.jarjamediaapp.databinding.ActivitySocialProfilesBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import kotlin.Unit;
@@ -55,8 +51,8 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
     ArrayList<GetSocialProfileDropdown.Data> getSocialProfileDropdown;
     ArrayList<String> getSocialProfileDropdownNames;
     String leadID = "";
-
     Dialog dialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,15 +123,18 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
     public void updateUI(UpgradeSocialProfile response) {
 
         getUpgradedSocialProfile = new ArrayList<>();
-        getUpgradedSocialProfile = response.data.leadSocialProfileList;
 
-        if (getUpgradedSocialProfile.size() == 0) {
-            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
-            bi.recyclerViewSocialProfiles.setVisibility(View.GONE);
-        } else {
-            bi.tvNoRecordFound.setVisibility(View.GONE);
-            bi.recyclerViewSocialProfiles.setVisibility(View.VISIBLE);
-            populateUpgradedListData();
+        if (response.data != null) {
+            getUpgradedSocialProfile = response.data.leadSocialProfileList;
+
+            if (getUpgradedSocialProfile.size() == 0) {
+                bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+                bi.recyclerViewSocialProfiles.setVisibility(View.GONE);
+            } else {
+                bi.tvNoRecordFound.setVisibility(View.GONE);
+                bi.recyclerViewSocialProfiles.setVisibility(View.VISIBLE);
+                populateUpgradedListData();
+            }
         }
 
     }
@@ -168,7 +167,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
             if (url.startsWith("http") || url.startsWith("HTTP")) {
                 openWebPage(url);
             } else if (url.startsWith("www") || url.startsWith("WWW")) {
-               // url = "http://" + url;
+                // url = "http://" + url;
                 openWebPage(url);
             } else {
                 ToastUtils.showToast(context, "No Profile Found / Incorrect Profile Url");
@@ -208,7 +207,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
             if (url.startsWith("http") || url.startsWith("HTTP")) {
                 openWebPage(url);
             } else if (url.startsWith("www") || url.startsWith("WWW")) {
-               // url = "http://" + url;
+                // url = "http://" + url;
                 openWebPage(url);
             } else {
                 ToastUtils.showToast(context, "No Profile Found / Incorrect Profile Url");
@@ -253,6 +252,36 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
                 }
 
                 return false;
+            }
+        });
+
+        spnSIte.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (hasFocus) {
+
+                    edtName.clearFocus();
+                    edtName.setFocusable(false);
+                    edtProfileLink.setFocusable(false);
+                    edtProfileLink.clearFocus();
+
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    if (imm.isAcceptingText()) {
+                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    }
+
+                } else {
+                    edtName.clearFocus();
+                    edtName.setFocusable(true);
+                    edtProfileLink.setFocusable(true);
+                    edtProfileLink.clearFocus();
+
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    if (imm.isAcceptingText()) {
+                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    }
+                }
             }
         });
 

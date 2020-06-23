@@ -5,13 +5,14 @@ import com.google.gson.annotations.SerializedName;
 import com.project.jarjamediaapp.Base.BaseResponse;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CalendarModel extends BaseResponse implements Serializable {
 
     @SerializedName("data")
     @Expose
-    public List<Data> data = null;
+    public ArrayList<Data> data = null;
 
     public class Data implements Serializable {
 
@@ -157,7 +158,7 @@ public class CalendarModel extends BaseResponse implements Serializable {
         }
     }
 
-    public List<Data> getData() {
+    public ArrayList<Data> getData() {
         return data;
     }
 

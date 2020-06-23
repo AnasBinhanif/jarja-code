@@ -134,10 +134,10 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
     @Override
     public void initViews() {
 
-        populateListData();
         handleIntent(getIntent());
         bi.btnTransaction1.setOnClickListener(this);
         bi.btnTransaction2.setOnClickListener(this);
+        populateListData();
     }
 
     @Override
@@ -232,7 +232,7 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
             }
 
         }
-        recyclerAdapterUtil.notifyDataSetChanged();
+        bi.recyclerViewListingInfo.setAdapter(recyclerAdapterUtil);
 
 
     }
