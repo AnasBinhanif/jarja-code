@@ -315,7 +315,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
     public void updateUI(Response<BaseResponse> response) {
 
         if (response.body().getStatus().equalsIgnoreCase("Success")) {
-            ToastUtils.showToast(context, "Added Successfully");
+            ToastUtils.showToast(context, response.body().message);
             if (dialog != null) {
                 dialog.dismiss();
                 presenter.getAllSocialProfiles(leadID);

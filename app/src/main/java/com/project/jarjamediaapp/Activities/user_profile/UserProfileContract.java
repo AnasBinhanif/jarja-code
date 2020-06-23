@@ -4,12 +4,15 @@ import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
 import com.project.jarjamediaapp.Base.BaseContract;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
+import com.project.jarjamediaapp.Models.GetUserProfile;
 
 public interface UserProfileContract {
 
     interface View extends BaseContract.View {
 
         void updateUIonFalse(String message);
+
+        void updateUI(GetUserProfile getUserProfile);
 
         void updateUIonError(String error);
 
@@ -28,6 +31,7 @@ public interface UserProfileContract {
     interface Actions extends BaseContract.Actions {
 
         void initScreen();
+        void getUserProfile();
 
     }
 

@@ -128,15 +128,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         easyPreference.addInt(GH.KEYS.AGENT_ID_INT.name(), getUserProfile.data.getAgentData().getAgentID()).save();
                         easyPreference.addString(GH.KEYS.AGENT_ID_CALENDAR.name(), getUserProfile.data.getAgentData().getEncryptedAgentID()).save();
                         easyPreference.addString(GH.KEYS.AGENT_NAME.name(), getUserProfile.data.getAgentData().getAgentName()).save();
-                        AppConstants.Keys.UserID = getUserProfile.data.userProfile.userID;
+                        AppConstants.Keys.UserID = getUserProfile.data.userProfileData.userID;
 
-                        String firstName = getUserProfile.data.userProfile.firstName + "";
-                        String lastName = getUserProfile.data.userProfile.lastName + "";
-                        String fullName = getUserProfile.data.userProfile.firstName + " " + getUserProfile.data.userProfile.lastName;
+                        String firstName = getUserProfile.data.userProfileData.firstName + "";
+                        String lastName = getUserProfile.data.userProfileData.lastName + "";
+                        String fullName = getUserProfile.data.userProfileData.firstName + " " + getUserProfile.data.userProfileData.lastName;
                         easyPreference.addString(GH.KEYS.USER_NAME.name(), fullName).save();
                         navHeaderTextView.setText(fullName);
 
-                        picPath = getUserProfile.data.userProfile.picPath;
+                        picPath = getUserProfile.data.userProfileData.picPath;
                         if (picPath != null && !picPath.equals("")) {
                             Glide.with(context)
                                     .load(picPath)
