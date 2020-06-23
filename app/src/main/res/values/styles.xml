@@ -20,7 +20,6 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-
     <style name="TabButtonTranparentLeft">
         <!--  <item name="android:fontFamily">@font/poppins_light</item>-->
         <item name="android:background">@drawable/bg_leftstroke_transparent</item>
@@ -109,7 +108,6 @@
         <item name="android:layout_marginTop">@dimen/_5sdp</item>
         <item name="android:background">@drawable/bg_search</item>
     </style>
-
 
     <style name="Dialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
         <item name="android:windowFrame">@null</item>

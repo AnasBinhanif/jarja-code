@@ -16,6 +16,7 @@
 
     <!--- Add Appointment Activity -->
     <string name="add_appointment">Add Appointment</string>
+    <string name="my_profile">My Profile</string>
     <string name="edit_appointment">Edit Appointment</string>
 
     <string name="edit">Edit</string>
@@ -56,6 +57,9 @@
     <string name="error_end_date">Please select End date</string>
     <string name="error_reminder">Please select Reminder</string>
     <string name="error_via">Please select Via</string>
+
+
+
 
     <!--- Add Task Activity -->
     <string name="add_task">Add Task</string>

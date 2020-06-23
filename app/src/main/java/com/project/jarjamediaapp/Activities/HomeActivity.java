@@ -26,13 +26,16 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
 import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
 import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
 import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
 import com.project.jarjamediaapp.Activities.open_houses.OpenHousesActivity;
+import com.project.jarjamediaapp.Activities.user_profile.UserProfileActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
+import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Fragments.DashboardFragments.TabsFragment;
 import com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads.FindLeadsFragment;
 import com.project.jarjamediaapp.Interfaces.UpdateTitle;
@@ -262,12 +265,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 fragment = null;
                 switchActivity(OpenHousesActivity.class);
                 break;
-            case R.id.nav_tasks:
+            case R.id.nav_profile:
                 fragment = null;
-                title = getResources().getString(R.string.task);
+                title = "Profile";
+                switchActivity(UserProfileActivity.class);
                 break;
             case R.id.nav_logout:
-
                 logout();
                 break;
 
@@ -302,9 +305,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 // Write your code here to execute after dialog
                 // closed
                 fragment = null;
-                easyPreference.clearAll().save();
-                switchActivity(LoginActivity.class);
-                finish();
+
+                UnAuthenticateUser(FirebaseInstanceId.getInstance().getToken(), "FCM");
+
             }
         });
 
@@ -464,4 +467,37 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         item.setIcon(buildCounterDrawable(count, R.drawable.ic_notification));
     }
 
+    private void UnAuthenticateUser(String deviceToken, String network) {
+        showProgressBar();
+        Call<BaseResponse> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UnAuthanticate_UserDevice(GH.getInstance().getAuthorization(), deviceToken, network);
+        _call.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+                hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
+                        easyPreference.clearAll().save();
+                        switchActivity(LoginActivity.class);
+                        finish();
+
+                    } else {
+                        ToastUtils.showToastLong(context, getAppointmentsModel.message);
+                    }
+                } else {
+                    ApiError error = ErrorUtils.parseError(response);
+                    ToastUtils.showToastLong(context, error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                hideProgressBar();
+                ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+            }
+        });
+    }
 }

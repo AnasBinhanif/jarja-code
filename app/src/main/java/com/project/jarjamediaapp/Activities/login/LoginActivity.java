@@ -7,11 +7,15 @@ import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.project.jarjamediaapp.Activities.HomeActivity;
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
+import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Networking.ApiError;
+import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.CallbackInterface;
+import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 import com.project.jarjamediaapp.Networking.RetrofitCallback;
@@ -23,6 +27,8 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.Utilities.Validator;
 import com.project.jarjamediaapp.databinding.ActivityLoginBinding;
 
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener, LoginContract.View {
@@ -60,13 +66,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 new RetrofitCallback<>(new CallbackInterface<AccessCode>() {
                     @Override
                     public void onSuccess(AccessCode response) {
-                        GH.getInstance().HideProgressDialog();
                         //MyLog.d("Response", "onSuccess: " + response.toString());
                         Log.d("token", response.accessToken + "");
 
                         easyPreference.addString(GH.KEYS.AUTHORIZATION.name(), "bearer" + " " + response.accessToken).save();
-                        switchActivity(HomeActivity.class);
-                        finish();
+                        userAuthenticate(FirebaseInstanceId.getInstance().getToken(),"FCM");
                     }
 
                     @Override
@@ -76,6 +80,42 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         ToastUtils.showToastLong(context, "Invalid Username or Password");
                     }
                 }));
+    }
+
+    private void userAuthenticate(String deviceToken, String network) {
+
+        Call<BaseResponse> _call=NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Authanticate_UserDevice(GH.getInstance().getAuthorization(),deviceToken,network);
+                _call.enqueue(new Callback<BaseResponse>() {
+                    @Override
+                    public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+                       hideProgressBar();
+                        if (response.isSuccessful()) {
+
+                            BaseResponse getAppointmentsModel = response.body();
+                            if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
+                                switchActivity(HomeActivity.class);
+                                finish();
+
+                            } else {
+
+                                updateUIonFalse(getAppointmentsModel.message);
+
+                            }
+                        } else {
+
+                            ApiError error = ErrorUtils.parseError(response);
+                            updateUIonError(error);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<BaseResponse> call, Throwable t) {
+                       hideProgressBar();
+                       updateUIonFailure();
+                    }
+                });
     }
 
     @Override
@@ -140,7 +180,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void updateUIonError(ApiError error) {
-
+        ToastUtils.showToastLong(context, error.message());
     }
 
     @Override

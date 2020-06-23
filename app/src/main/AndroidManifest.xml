@@ -107,6 +107,9 @@
             android:name=".Activities.notification.NotificationActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".Activities.user_profile.UserProfileActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".Activities.calendarDetail.CalendarDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -134,7 +137,8 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <service android:name=".Firebase.MyFirebaseMessagingService">
+        <service android:name=".Firebase.MyFirebaseMessagingService"
+            android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
