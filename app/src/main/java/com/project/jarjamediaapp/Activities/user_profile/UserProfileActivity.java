@@ -27,7 +27,8 @@ import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Response;
 
-public class UserProfileActivity extends BaseActivity implements UserProfileContract.View, View.OnClickListener, EasyPermissions.PermissionCallbacks {
+public class UserProfileActivity extends BaseActivity implements UserProfileContract.View, View.OnClickListener,
+        EasyPermissions.PermissionCallbacks {
 
     ActivityUserProfileBinding bi;
     Context context = UserProfileActivity.this;
