@@ -18,6 +18,8 @@ public interface UserProfileContract {
 
         void updateUI(GetTwilioNumber getUserProfile);
 
+        void updateUI(BaseResponse getUserProfile);
+
         void updateUIonError(String error);
 
         void updateUIonFailure();
@@ -37,7 +39,10 @@ public interface UserProfileContract {
         void initScreen();
         void getUserProfile();
         void getTwilioNumber();
-        void updateUserProfile();
+        void updateUserProfile(String userId, String state, String licenseNo, String picName, String companyAddress, String agentType,
+                               String zipCode, String streetAddress, String title, String countryId, String forwardedNumber,
+                               String leadDistributionMessageEnabled, String emailAddress, String company, String lastName, String tmzone,
+                               String picGuid, String phone, String city);
 
     }
 

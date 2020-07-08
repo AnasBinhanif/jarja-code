@@ -92,11 +92,28 @@ public interface ApiMethods {
     Call<BaseResponse> UnAuthanticate_UserDevice(@Header("Authorization") String authorization,
                                                @Query("DeviceToken") String deviceToken,
                                                @Query("network_protocol") String network_protocol);
-
-    @GET("Lead/UpdateProfileInfo")
+    @FormUrlEncoded
+    @POST("Lead/UpdateProfileInfo")
     Call<BaseResponse> UpdateProfileInfo(@Header("Authorization") String authorization,
-                                                 @Query("DeviceToken") String deviceToken,
-                                                 @Query("network_protocol") String network_protocol);
+                                         @Field("userId") String userId,
+                                         @Field("state") String state,
+                                         @Field("licenseNo") String licenseNo,
+                                         @Field("picName") String picName,
+                                         @Field("companyAddress") String companyAddress,
+                                         @Field("agentType") String agentType,
+                                         @Field("zipCode") String zipCode,
+                                         @Field("streetAddress") String streetAddress,
+                                         @Field("title") String title,
+                                         @Field("countryId") String countryId,
+                                         @Field("forwardedNumber") String forwardedNumber,
+                                         @Field("leadDistributionMessageEnabled") String leadDistributionMessageEnabled,
+                                         @Field("emailAddress") String emailAddress,
+                                         @Field("company") String company,
+                                         @Field("lastName") String lastName,
+                                         @Field("tmzone") String tmzone,
+                                         @Field("picGuid") String picGuid,
+                                         @Field("phone") String phone,
+                                         @Field("city") String city);
 
     @GET("User/GetUserPermission")
     Call<GetUserPermission> GetUserPermission(@Header("Authorization") String authorization);

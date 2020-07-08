@@ -27,6 +27,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
 
     Call<GetUserProfile> _call;
     Call<GetTwilioNumber> _callGetTwilioNumber;
+    Call<BaseResponse> _callUpdateUserProfile;
 
     @Override
     public void getUserProfile() {
@@ -99,7 +100,45 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
     }
 
     @Override
-    public void updateUserProfile() {
+    public void updateUserProfile(String userId, String state, String licenseNo, String picName, String companyAddress, String agentType,
+                                  String zipCode, String streetAddress, String title, String countryId, String forwardedNumber,
+                                  String leadDistributionMessageEnabled, String emailAddress, String company, String lastName, String tmzone,
+                                  String picGuid, String phone, String city) {
+
+        _view.showProgressBar();
+        _callUpdateUserProfile = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
+                UpdateProfileInfo(GH.getInstance().getAuthorization(), userId, state, licenseNo, picName, companyAddress, agentType,
+                        zipCode, streetAddress, title, countryId, forwardedNumber,
+                        leadDistributionMessageEnabled, emailAddress, company, lastName, tmzone,
+                        picGuid, phone, city);
+
+        _callUpdateUserProfile.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse getUserProfile = response.body();
+                    if (response.body().status.equals("Success")) {
+
+                        _view.updateUI(getUserProfile);
+
+                    } else {
+
+                        _view.updateUIonFalse(getUserProfile.message);
+                    }
+                } else {
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
 
     }
 }
