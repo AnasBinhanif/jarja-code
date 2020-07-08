@@ -5,6 +5,7 @@ import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
 import com.project.jarjamediaapp.Base.BaseContract;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
+import com.project.jarjamediaapp.Models.GetTwilioNumber;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 
 public interface UserProfileContract {
@@ -15,7 +16,7 @@ public interface UserProfileContract {
 
         void updateUI(GetUserProfile getUserProfile);
 
-        void updateUI(BaseResponse getUserProfile);
+        void updateUI(GetTwilioNumber getUserProfile);
 
         void updateUIonError(String error);
 

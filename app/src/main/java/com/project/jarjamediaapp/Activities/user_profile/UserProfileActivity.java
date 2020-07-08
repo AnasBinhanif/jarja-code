@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -16,20 +14,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
+import com.bumptech.glide.Glide;
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetTwilioNumber;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityUserProfileBinding;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
@@ -82,10 +79,11 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     }
 
     @Override
-    public void updateUI(BaseResponse getUserProfile) {
+    public void updateUI(GetTwilioNumber getUserProfile) {
 
-
-
+        if (!getUserProfile.data.equals("")) {
+            bi.atvVirtual.setText(getUserProfile.data);
+        }
     }
 
     private void populateData(GetUserProfile getUserProfile) {
@@ -108,6 +106,11 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         bi.atvZip.setText(userProfileData.zipcode + "");
         bi.atvTimeZone.setText("");
         bi.atvCompanyAddress.setText(userProfileData.companyAddress + "");
+
+        if (!userProfileData.picPath.equals("")) {
+            Glide.with(this).load(userProfileData.picPath).into(bi.imgProfilePic);
+        }
+
     }
 
     private void oPenGallery() {
@@ -171,7 +174,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
                 oPenGallery();
                 break;
             case R.id.btnAdd:
-
+                presenter.getTwilioNumber();
                 break;
             case R.id.atvPassword:
                 switchActivity(ChangePassword.class);

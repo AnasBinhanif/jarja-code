@@ -44,6 +44,7 @@ import com.project.jarjamediaapp.Models.GetPropertyLeads;
 import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
 import com.project.jarjamediaapp.Models.GetTagListByLeadID;
 import com.project.jarjamediaapp.Models.GetTasksModel;
+import com.project.jarjamediaapp.Models.GetTwilioNumber;
 import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.Models.UpgradeSocialProfile;
@@ -79,8 +80,8 @@ public interface ApiMethods {
     @GET("User/GetUserProfileData")
     Call<GetUserProfile> getUserProfileData(@Header("Authorization") String authorization);
 
-    @GET("User/GetTwilioPhoneNumber")
-    Call<BaseResponse> getTwilioNumber(@Header("Authorization") String authorization);
+    @GET("Lead/GetTwilioPhoneNumber")
+    Call<GetTwilioNumber> getTwilioNumber(@Header("Authorization") String authorization);
 
     @GET("User/Authanticate_UserDevice")
     Call<BaseResponse> Authanticate_UserDevice(@Header("Authorization") String authorization,

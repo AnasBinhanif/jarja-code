@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Activities.user_profile;
 
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetTwilioNumber;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -25,7 +26,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
     }
 
     Call<GetUserProfile> _call;
-    Call<BaseResponse> _callGetTwilioNumber;
+    Call<GetTwilioNumber> _callGetTwilioNumber;
 
     @Override
     public void getUserProfile() {
@@ -68,13 +69,13 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
         _view.showProgressBar();
         _callGetTwilioNumber = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 getTwilioNumber(GH.getInstance().getAuthorization());
-        _callGetTwilioNumber.enqueue(new Callback<BaseResponse>() {
+        _callGetTwilioNumber.enqueue(new Callback<GetTwilioNumber>() {
             @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+            public void onResponse(Call<GetTwilioNumber> call, Response<GetTwilioNumber> response) {
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
-                    BaseResponse getUserProfile = response.body();
+                    GetTwilioNumber getUserProfile = response.body();
                     if (response.body().status.equals("Success")) {
 
                         _view.updateUI(getUserProfile);
@@ -90,7 +91,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
             }
 
             @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
+            public void onFailure(Call<GetTwilioNumber> call, Throwable t) {
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
