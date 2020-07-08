@@ -76,14 +76,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     MenuItem item;
     CircleImageView navHeaderImageView;
     TextView navHeaderTextView, tvInitial;
+    public static boolean onClick = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         context = HomeActivity.this;
-
         initViews();
+
 
     }
 
@@ -134,6 +135,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         String lastName = getUserProfile.data.userProfileData.lastName + "";
                         String fullName = getUserProfile.data.userProfileData.firstName + " " + getUserProfile.data.userProfileData.lastName;
                         easyPreference.addString(GH.KEYS.USER_NAME.name(), fullName).save();
+                        easyPreference.addString(GH.KEYS.USER_ID.name(), getUserProfile.data.userProfileData.userID).save();
                         navHeaderTextView.setText(fullName);
 
                         picPath = getUserProfile.data.userProfileData.picPath;

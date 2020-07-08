@@ -57,6 +57,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     int totalPages;
     boolean onResume;
 
+
     public FragmentAppointment() {
         // Required empty public constructor
     }
@@ -231,10 +232,12 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
             case R.id.fbAddAppoint:
 
-                Map<String, String> map = new HashMap<>();
-                map.put("from", "5");
-                switchActivityWithIntentString(context, AddAppointmentActivity.class, (HashMap<String, String>) map);
-
+                if (HomeActivity.onClick) {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("from", "5");
+                    switchActivityWithIntentString(context, AddAppointmentActivity.class, (HashMap<String, String>) map);
+                    HomeActivity.onClick=false;
+                }
                 break;
 
             case R.id.btnToday:

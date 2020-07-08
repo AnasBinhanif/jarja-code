@@ -89,6 +89,10 @@ public class GH {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_NAME.name(), "");
     }
 
+    public String getUserID() {
+        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_ID.name(), "");
+    }
+
     public String getFirebaseToken() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.FIREBASE_TOEKN.name(), "");
     }

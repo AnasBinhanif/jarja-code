@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.Activities.user_profile;
 
 import com.project.jarjamediaapp.Base.BasePresenter;
+import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -24,6 +25,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
     }
 
     Call<GetUserProfile> _call;
+    Call<BaseResponse> _callGetTwilioNumber;
 
     @Override
     public void getUserProfile() {
@@ -58,5 +60,45 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
                 _view.updateUIonFailure();
             }
         });
+    }
+
+    @Override
+    public void getTwilioNumber() {
+
+        _view.showProgressBar();
+        _callGetTwilioNumber = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
+                getTwilioNumber(GH.getInstance().getAuthorization());
+        _callGetTwilioNumber.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse getUserProfile = response.body();
+                    if (response.body().status.equals("Success")) {
+
+                        _view.updateUI(getUserProfile);
+
+                    } else {
+
+                        _view.updateUIonFalse(getUserProfile.message);
+                    }
+                } else {
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+    }
+
+    @Override
+    public void updateUserProfile() {
+
     }
 }

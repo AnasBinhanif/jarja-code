@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
+import com.project.jarjamediaapp.Activities.HomeActivity;
 import com.project.jarjamediaapp.Activities.calendarDetail.CalendarAppointmentDetailModel;
 import com.project.jarjamediaapp.Activities.search_activity.SearchResultsActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
@@ -77,7 +78,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     RecyclerView recyclerSearch;
     ArrayList<String> reminderList = new ArrayList<>();
     ArrayList<GetAgentsModel.Data> agentList;
-    ArrayList<MultiSelectModel> searchListItems;
+    ArrayList<MultiSelectModel> searchListItems = new ArrayList<>();
     ArrayList<Integer> selectedIdsList = new ArrayList<>();
     ArrayList<GetLeadTitlesModel.Data> nameList = new ArrayList<>();
     String startDate = "", endDate = "", startTime = "", endTime = "";
@@ -103,25 +104,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi = DataBindingUtil.setContentView(this, R.layout.activity_add_appointment);
         presenter = new AddAppointmentPresenter(this);
         presenter.initScreen();
-
     }
 
     @Override
     public void initViews() {
 
         presenter.getAgentNames();
-        bi.btnSave.setOnClickListener(this);
-        bi.btnCancel.setOnClickListener(this);
-        bi.atvReminder.setOnClickListener(this);
-        bi.atvVia.setOnClickListener(this);
-        bi.tvStartDate.setOnClickListener(this);
-        bi.tvStartTime.setOnClickListener(this);
-        bi.tvEndDate.setOnClickListener(this);
-        bi.tvEndTime.setOnClickListener(this);
-        bi.tvAgent.setOnClickListener(this);
-        bi.tvName.setOnClickListener(this);
-        bi.imgClearName.setOnClickListener(this);
-        bi.cbAllDay.setOnClickListener(this);
 
         setSupportActionBar(bi.epToolbar.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -588,6 +576,18 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         }
         presenter.getReminder();
 
+        bi.btnSave.setOnClickListener(this);
+        bi.btnCancel.setOnClickListener(this);
+        bi.atvReminder.setOnClickListener(this);
+        bi.atvVia.setOnClickListener(this);
+        bi.tvStartDate.setOnClickListener(this);
+        bi.tvStartTime.setOnClickListener(this);
+        bi.tvEndDate.setOnClickListener(this);
+        bi.tvEndTime.setOnClickListener(this);
+        bi.tvAgent.setOnClickListener(this);
+        bi.tvName.setOnClickListener(this);
+        bi.imgClearName.setOnClickListener(this);
+        bi.cbAllDay.setOnClickListener(this);
     }
 
     @Override
@@ -1228,4 +1228,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        HomeActivity.onClick = true;
+    }
 }

@@ -79,6 +79,9 @@ public interface ApiMethods {
     @GET("User/GetUserProfileData")
     Call<GetUserProfile> getUserProfileData(@Header("Authorization") String authorization);
 
+    @GET("User/GetTwilioPhoneNumber")
+    Call<BaseResponse> getTwilioNumber(@Header("Authorization") String authorization);
+
     @GET("User/Authanticate_UserDevice")
     Call<BaseResponse> Authanticate_UserDevice(@Header("Authorization") String authorization,
                                                @Query("DeviceToken") String deviceToken,
@@ -299,6 +302,12 @@ public interface ApiMethods {
     Call<BaseResponse> DeleteLeadTag(@Header("Authorization") String authorization,
                                      @Query("LeadId") String leadID,
                                      @Query("LabelId") String tagsId);
+
+    @POST("Lead/UpdateUser_Password")
+    Call<BaseResponse> UpdatePassword(@Header("Authorization") String authorization,
+                                     @Query("userid") String userID,
+                                     @Query("OldPassword") String oldPassword,
+                                      @Query("Password") String password);
 
     @FormUrlEncoded
     @POST("Lead/AddNote")

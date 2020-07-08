@@ -4,7 +4,11 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -14,6 +18,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.features.ReturnMode;
+import com.esafirm.imagepicker.model.Image;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetUserProfile;
@@ -22,6 +27,9 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityUserProfileBinding;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
@@ -57,7 +65,8 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
         bi.btnAdd.setOnClickListener(this);
         bi.btnUpdate.setOnClickListener(this);
-        bi.tvSelectPictures.setOnClickListener(this);
+        bi.atvPassword.setOnClickListener(this);
+        bi.imgProfilePic.setOnClickListener(this);
     }
 
     @Override
@@ -69,6 +78,13 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     public void updateUI(GetUserProfile getUserProfile) {
 
         populateData(getUserProfile);
+
+    }
+
+    @Override
+    public void updateUI(BaseResponse getUserProfile) {
+
+
 
     }
 
@@ -151,10 +167,14 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         super.onClick(view);
         switch (view.getId()) {
 
-            case R.id.tvSelectPictures:
+            case R.id.imgProfilePic:
                 oPenGallery();
                 break;
             case R.id.btnAdd:
+
+                break;
+            case R.id.atvPassword:
+                switchActivity(ChangePassword.class);
                 break;
             case R.id.btnUpdate:
                 break;
@@ -166,6 +186,13 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null) {
 
+            if (data != null) {
+
+                Image image = ImagePicker.getFirstImageOrNull(data);
+                Bitmap myBitmap = BitmapFactory.decodeFile(image.getPath());
+                bi.imgProfilePic.setImageBitmap(myBitmap);
+
+            }
         }
     }
 

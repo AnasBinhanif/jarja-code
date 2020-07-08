@@ -3,6 +3,7 @@ package com.project.jarjamediaapp.Activities.user_profile;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
 import com.project.jarjamediaapp.Base.BaseContract;
+import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 
@@ -13,6 +14,8 @@ public interface UserProfileContract {
         void updateUIonFalse(String message);
 
         void updateUI(GetUserProfile getUserProfile);
+
+        void updateUI(BaseResponse getUserProfile);
 
         void updateUIonError(String error);
 
@@ -32,6 +35,8 @@ public interface UserProfileContract {
 
         void initScreen();
         void getUserProfile();
+        void getTwilioNumber();
+        void updateUserProfile();
 
     }
 

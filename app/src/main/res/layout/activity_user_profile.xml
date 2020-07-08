@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
 
@@ -26,50 +27,23 @@
                 android:orientation="vertical"
                 android:padding="@dimen/_10sdp">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgProfilePic"
+                    android:layout_width="@dimen/_75sdp"
+                    android:layout_height="@dimen/_75sdp"
                     android:layout_gravity="center"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
-
-                    <TextView
-                        android:id="@+id/tvRemovePictures"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:background="@drawable/aa_edit_border_black"
-                        android:drawableEnd="@drawable/ic_close"
-                        android:drawablePadding="5dp"
-                        android:gravity="center"
-                        android:padding="@dimen/_5sdp"
-                        android:text="@string/file_name"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/_12sdp"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/tvSelectPictures"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:drawableStart="@drawable/ic_select_image"
-                        android:drawablePadding="5dp"
-                        android:gravity="center"
-                        android:padding="@dimen/_5sdp"
-                        android:text="@string/select_picture"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/_12sdp"
-                        android:textStyle="bold"
-                        android:visibility="visible" />
-
-                </RelativeLayout>
+                    android:contentDescription="@string/nav_header_desc"
+                    android:paddingTop="@dimen/nav_header_vertical_spacing"
+                    android:src="@drawable/profile_placeholder"
+                    android:visibility="visible"
+                    app:civ_border_color="@color/colorPrimaryDark"
+                    app:civ_border_width="@dimen/_1sdp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/name"
+                    android:layout_marginTop="10dp"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -209,7 +183,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/password"
+                    android:text="@string/change_password"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -220,8 +194,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_search"
-                    android:hint="@string/password"
+                    android:hint="@string/change_password"
                     android:imeOptions="actionNext"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:inputType="textPassword"
                     android:padding="@dimen/_10sdp"
                     android:textColor="@color/colorPrimaryDark"
