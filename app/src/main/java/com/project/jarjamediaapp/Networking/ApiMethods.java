@@ -93,6 +93,11 @@ public interface ApiMethods {
                                                @Query("DeviceToken") String deviceToken,
                                                @Query("network_protocol") String network_protocol);
 
+    @GET("Lead/UpdateProfileInfo")
+    Call<BaseResponse> UpdateProfileInfo(@Header("Authorization") String authorization,
+                                                 @Query("DeviceToken") String deviceToken,
+                                                 @Query("network_protocol") String network_protocol);
+
     @GET("User/GetUserPermission")
     Call<GetUserPermission> GetUserPermission(@Header("Authorization") String authorization);
 
