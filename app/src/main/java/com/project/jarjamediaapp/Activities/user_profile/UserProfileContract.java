@@ -5,6 +5,8 @@ import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
 import com.project.jarjamediaapp.Base.BaseContract;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
+import com.project.jarjamediaapp.Models.GetCountries;
+import com.project.jarjamediaapp.Models.GetTimeZoneList;
 import com.project.jarjamediaapp.Models.GetTwilioNumber;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 
@@ -19,6 +21,10 @@ public interface UserProfileContract {
         void updateUI(GetTwilioNumber getUserProfile);
 
         void updateUI(BaseResponse getUserProfile);
+
+        void updateUI(GetTimeZoneList getUserProfile);
+
+        void updateUI(GetCountries getUserProfile);
 
         void updateUIonError(String error);
 
@@ -38,6 +44,8 @@ public interface UserProfileContract {
 
         void initScreen();
         void getUserProfile();
+        void getTimeZoneList();
+        void getCountries();
         void getTwilioNumber();
         void updateUserProfile(String userId, String state, String licenseNo, String picName, String companyAddress, String agentType,
                                String zipCode, String streetAddress, String title, String countryId, String forwardedNumber,

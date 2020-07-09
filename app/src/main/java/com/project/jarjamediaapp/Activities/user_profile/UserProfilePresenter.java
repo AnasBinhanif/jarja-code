@@ -2,6 +2,8 @@ package com.project.jarjamediaapp.Activities.user_profile;
 
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetCountries;
+import com.project.jarjamediaapp.Models.GetTimeZoneList;
 import com.project.jarjamediaapp.Models.GetTwilioNumber;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -28,11 +30,12 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
     Call<GetUserProfile> _call;
     Call<GetTwilioNumber> _callGetTwilioNumber;
     Call<BaseResponse> _callUpdateUserProfile;
+    Call<GetTimeZoneList> _callGetTimeZoneList;
+    Call<GetCountries> _callGetCountries;
 
     @Override
     public void getUserProfile() {
 
-        _view.showProgressBar();
         _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 getUserProfileData(GH.getInstance().getAuthorization());
         _call.enqueue(new Callback<GetUserProfile>() {
@@ -62,6 +65,82 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
                 _view.updateUIonFailure();
             }
         });
+    }
+
+    @Override
+    public void getTimeZoneList() {
+
+        _callGetTimeZoneList = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
+                GetTimeZoneList(GH.getInstance().getAuthorization());
+        _callGetTimeZoneList.enqueue(new Callback<GetTimeZoneList>() {
+            @Override
+            public void onResponse(Call<GetTimeZoneList> call, Response<GetTimeZoneList> response) {
+
+                if (response.isSuccessful()) {
+
+                    GetTimeZoneList getUserProfile = response.body();
+                    if (response.body().status.equals("Success")) {
+
+                        _view.updateUI(getUserProfile);
+
+                    } else {
+
+                        _view.hideProgressBar();
+                        _view.updateUIonFalse(getUserProfile.message);
+                    }
+                } else {
+                    _view.hideProgressBar();
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTimeZoneList> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void getCountries() {
+
+
+        _view.showProgressBar();
+        _callGetCountries = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
+                GetCountries(GH.getInstance().getAuthorization());
+        _callGetCountries.enqueue(new Callback<GetCountries>() {
+            @Override
+            public void onResponse(Call<GetCountries> call, Response<GetCountries> response) {
+
+                if (response.isSuccessful()) {
+
+                    GetCountries getUserProfile = response.body();
+                    if (response.body().status.equals("Success")) {
+
+                        _view.updateUI(getUserProfile);
+
+                    } else {
+
+                        _view.hideProgressBar();
+                        _view.updateUIonFalse(getUserProfile.message);
+                    }
+                } else {
+                    _view.hideProgressBar();
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetCountries> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
     }
 
     @Override

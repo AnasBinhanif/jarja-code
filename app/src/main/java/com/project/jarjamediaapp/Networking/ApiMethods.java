@@ -23,6 +23,7 @@ import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetAllLeads;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
+import com.project.jarjamediaapp.Models.GetCountries;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
 import com.project.jarjamediaapp.Models.GetLastLogin;
 import com.project.jarjamediaapp.Models.GetLastTouch;
@@ -44,6 +45,7 @@ import com.project.jarjamediaapp.Models.GetPropertyLeads;
 import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
 import com.project.jarjamediaapp.Models.GetTagListByLeadID;
 import com.project.jarjamediaapp.Models.GetTasksModel;
+import com.project.jarjamediaapp.Models.GetTimeZoneList;
 import com.project.jarjamediaapp.Models.GetTwilioNumber;
 import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.Models.GetUserProfile;
@@ -82,6 +84,12 @@ public interface ApiMethods {
 
     @GET("Lead/GetTwilioPhoneNumber")
     Call<GetTwilioNumber> getTwilioNumber(@Header("Authorization") String authorization);
+
+    @GET("User/GetTimeZoneList")
+    Call<GetTimeZoneList> GetTimeZoneList(@Header("Authorization") String authorization);
+
+    @GET("Lead/GetCountries")
+    Call<GetCountries> GetCountries(@Header("Authorization") String authorization);
 
     @GET("User/Authanticate_UserDevice")
     Call<BaseResponse> Authanticate_UserDevice(@Header("Authorization") String authorization,

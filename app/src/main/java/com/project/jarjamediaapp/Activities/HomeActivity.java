@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,9 +25,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
 import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
@@ -84,8 +88,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         setContentView(R.layout.activity_home);
         context = HomeActivity.this;
         initViews();
-
-
     }
 
     private void initViews() {
@@ -109,7 +111,56 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         getUserProfileData();
 
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            //To do//
+                            return;
+                        }
+                        // Get the Instance ID token//
+                        String token = task.getResult().getToken();
+                        Log.d("FCM TOKEN",token);
+                       // userAuthenticate(FirebaseInstanceId.getInstance().getToken(),"FCM");
+                    }
+                });
 
+    }
+
+
+    private void userAuthenticate(String deviceToken, String network) {
+
+        Call<BaseResponse> _call=NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Authanticate_UserDevice(GH.getInstance().getAuthorization(),deviceToken,network);
+        _call.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+                hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
+
+                    } else {
+
+                        Toast.makeText(context, getAppointmentsModel.message, Toast.LENGTH_SHORT).show();
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    ToastUtils.showToastLong(context, error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                hideProgressBar();
+                ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+            }
+        });
     }
 
     private void getUserProfileData() {

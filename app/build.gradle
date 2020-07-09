@@ -87,5 +87,8 @@ dependencies {
     // Date Picker
     implementation 'com.github.drawers:SpinnerDatePicker:2.0.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    //Add FCM//
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
 
 }

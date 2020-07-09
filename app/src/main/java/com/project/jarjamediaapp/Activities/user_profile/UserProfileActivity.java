@@ -9,6 +9,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +22,8 @@ import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetCountries;
+import com.project.jarjamediaapp.Models.GetTimeZoneList;
 import com.project.jarjamediaapp.Models.GetTwilioNumber;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.R;
@@ -27,17 +31,24 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityUserProfileBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Response;
 
-public class UserProfileActivity extends BaseActivity implements UserProfileContract.View, View.OnClickListener,
-        EasyPermissions.PermissionCallbacks {
+public class UserProfileActivity extends BaseActivity implements UserProfileContract.View, View.OnClickListener, EasyPermissions.PermissionCallbacks {
 
     ActivityUserProfileBinding bi;
     Context context = UserProfileActivity.this;
     UserProfilePresenter presenter;
+    String timeZone = "";
+    boolean isTimeZoneClicked = false,isCountries = false;
+    int countryID;
+    ArrayList<Integer> arrayListCountryID = new ArrayList<>();
+    ArrayList<String> arrayListCountryName = new ArrayList<>();
+    ArrayList<String> arrayListStandardName = new ArrayList<>();
+    ArrayList<String> arrayListDisplayName = new ArrayList<>();
 
     private final int RC_CAMERA_AND_STORAGE = 100;
 
@@ -55,7 +66,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     public void initViews() {
 
         initListeners();
-        presenter.getUserProfile();
+        presenter.getCountries();
     }
 
     private void initListeners() {
@@ -63,6 +74,8 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         bi.btnAdd.setOnClickListener(this);
         bi.btnUpdate.setOnClickListener(this);
         bi.atvPassword.setOnClickListener(this);
+        bi.atvCountry.setOnClickListener(this);
+        bi.atvTimeZone.setOnClickListener(this);
         bi.imgProfilePic.setOnClickListener(this);
     }
 
@@ -86,6 +99,66 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         }
     }
 
+    @Override
+    public void updateUI(BaseResponse getUserProfile) {
+
+    }
+
+    @Override
+    public void updateUI(GetTimeZoneList response) {
+
+        presenter.getUserProfile();
+
+        arrayListStandardName = new ArrayList<>();
+        arrayListDisplayName = new ArrayList<>();
+
+        for (int i = 0; i < response.data.size(); i++) {
+
+            arrayListDisplayName.add(response.data.get(i).displayName);
+            arrayListStandardName.add(response.data.get(i).standardName);
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListDisplayName);
+        bi.atvTimeZone.setAdapter(arrayAdapter);
+
+        bi.atvTimeZone.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                isTimeZoneClicked = false;
+                timeZone = arrayListStandardName.get(position);
+            }
+        });
+
+
+    }
+
+    @Override
+    public void updateUI(GetCountries response) {
+
+        presenter.getTimeZoneList();
+
+         arrayListCountryID = new ArrayList<>();
+         arrayListCountryName = new ArrayList<>();
+        
+        for (int i = 0; i < response.data.size(); i++) {
+
+            arrayListCountryID.add(response.data.get(i).id);
+            arrayListCountryName.add(response.data.get(i).countryName);
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListCountryName);
+        bi.atvCountry.setAdapter(arrayAdapter);
+
+        bi.atvCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                isCountries = false;
+                countryID = arrayListCountryID.get(position);
+            }
+        });
+
+    }
+
     private void populateData(GetUserProfile getUserProfile) {
 
         GetUserProfile.UserProfile userProfileData = getUserProfile.data.userProfileData;
@@ -100,11 +173,11 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         bi.atvForwarder.setText(userProfileData.forwardedNumber + "");
         bi.atvCompany.setText(userProfileData.company + "");
         bi.atvStreetAddress.setText(userProfileData.streetAddress + "");
-        bi.atvCountry.setText("");
+        bi.atvCountry.setText(arrayListCountryName.get(arrayListCountryID.indexOf(userProfileData.countryID)),false);
         bi.atvState.setText(userProfileData.state + "");
         bi.atvCity.setText(userProfileData.city + "");
         bi.atvZip.setText(userProfileData.zipcode + "");
-        bi.atvTimeZone.setText("");
+        bi.atvTimeZone.setText(arrayListDisplayName.get(arrayListStandardName.indexOf(userProfileData.tmzone)),false);
         bi.atvCompanyAddress.setText(userProfileData.companyAddress + "");
 
         if (!userProfileData.picPath.equals("")) {
@@ -179,6 +252,12 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
             case R.id.atvPassword:
                 switchActivity(ChangePassword.class);
                 break;
+            case R.id.atvTimeZone:
+                time_zone();
+                break;
+            case R.id.atvCountry:
+                country();
+                break;
             case R.id.btnUpdate:
                 break;
         }
@@ -208,5 +287,27 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
 
+    }
+
+    private void time_zone() {
+
+        if (!isTimeZoneClicked) {
+            bi.atvTimeZone.showDropDown();
+            isTimeZoneClicked = true;
+        } else {
+            isTimeZoneClicked = false;
+            bi.atvTimeZone.dismissDropDown();
+        }
+    }
+
+    private void country() {
+
+        if (!isCountries) {
+            bi.atvCountry.showDropDown();
+            isCountries = true;
+        } else {
+            isCountries = false;
+            bi.atvCountry.dismissDropDown();
+        }
     }
 }
