@@ -257,6 +257,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         super.onResume();
         try {
             navigationView.getMenu().getItem(0).setChecked(true);
+            getUserProfileData();
         } catch (Exception e) {
             e.printStackTrace();
         }

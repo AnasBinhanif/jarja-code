@@ -1,17 +1,20 @@
 package com.project.jarjamediaapp.Activities.user_profile;
 
+import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetCountries;
 import com.project.jarjamediaapp.Models.GetTimeZoneList;
 import com.project.jarjamediaapp.Models.GetTwilioNumber;
 import com.project.jarjamediaapp.Models.GetUserProfile;
+import com.project.jarjamediaapp.Models.Upload_ProfileImage;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.Utilities.GH;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,6 +31,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
     }
 
     Call<GetUserProfile> _call;
+    Call<Upload_ProfileImage> _cCall;
     Call<GetTwilioNumber> _callGetTwilioNumber;
     Call<BaseResponse> _callUpdateUserProfile;
     Call<GetTimeZoneList> _callGetTimeZoneList;
@@ -146,7 +150,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
     @Override
     public void getTwilioNumber() {
 
-        _view.showProgressBar();
+            _view.showProgressBar();
         _callGetTwilioNumber = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 getTwilioNumber(GH.getInstance().getAuthorization());
         _callGetTwilioNumber.enqueue(new Callback<GetTwilioNumber>() {
@@ -179,14 +183,51 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
     }
 
     @Override
-    public void updateUserProfile(String userId, String state, String licenseNo, String picName, String companyAddress, String agentType,
-                                  String zipCode, String streetAddress, String title, String countryId, String forwardedNumber,
-                                  String leadDistributionMessageEnabled, String emailAddress, String company, String lastName, String tmzone,
+    public void uploadImage(MultipartBody.Part file) {
+
+        _view.showProgressBar();
+        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Upload_ProfileImage(GH.getInstance().getAuthorization(),file,"image");
+
+        _cCall.enqueue(new Callback<Upload_ProfileImage>() {
+            @Override
+            public void onResponse(Call<Upload_ProfileImage> call, Response<Upload_ProfileImage> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    Upload_ProfileImage openHousesModel = response.body();
+                    if (response.body().status.equals("Success")) {
+
+                        _view.updateUI(openHousesModel);
+
+                    } else {
+                        _view.updateUIonFalse(openHousesModel.message);
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Upload_ProfileImage> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
+    public void updateUserProfile(String firstName, String state, String licenseNo, String picName, String companyAddress, String agentType,
+                                  String zipCode, String streetAddress, String title, int countryId, String forwardedNumber,
+                                  boolean leadDistributionMessageEnabled, String emailAddress, String company, String lastName, String tmzone,
                                   String picGuid, String phone, String city) {
 
         _view.showProgressBar();
         _callUpdateUserProfile = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
-                UpdateProfileInfo(GH.getInstance().getAuthorization(), userId, state, licenseNo, picName, companyAddress, agentType,
+                UpdateProfileInfo(GH.getInstance().getAuthorization(), firstName, state, licenseNo, picName, companyAddress, agentType,
                         zipCode, streetAddress, title, countryId, forwardedNumber,
                         leadDistributionMessageEnabled, emailAddress, company, lastName, tmzone,
                         picGuid, phone, city);

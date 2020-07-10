@@ -35,12 +35,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
 
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                sendNotificationForOreo(title, message, HomeActivity.class);
-            } else {
-                sendNotification(title, message, HomeActivity.class);
-            }
             if (GH.getInstance().isLoggedIn()) {
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    sendNotificationForOreo(title, message, HomeActivity.class);
+                } else {
+                    sendNotification(title, message, HomeActivity.class);
+                }
 
             }
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());

@@ -50,6 +50,7 @@ import com.project.jarjamediaapp.Models.GetTwilioNumber;
 import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.Models.GetUserProfile;
 import com.project.jarjamediaapp.Models.UpgradeSocialProfile;
+import com.project.jarjamediaapp.Models.Upload_ProfileImage;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 
@@ -103,7 +104,7 @@ public interface ApiMethods {
     @FormUrlEncoded
     @POST("Lead/UpdateProfileInfo")
     Call<BaseResponse> UpdateProfileInfo(@Header("Authorization") String authorization,
-                                         @Field("userId") String userId,
+                                         @Field("firstName") String userId,
                                          @Field("state") String state,
                                          @Field("licenseNo") String licenseNo,
                                          @Field("picName") String picName,
@@ -112,9 +113,9 @@ public interface ApiMethods {
                                          @Field("zipCode") String zipCode,
                                          @Field("streetAddress") String streetAddress,
                                          @Field("title") String title,
-                                         @Field("countryId") String countryId,
+                                         @Field("countryId") int countryId,
                                          @Field("forwardedNumber") String forwardedNumber,
-                                         @Field("leadDistributionMessageEnabled") String leadDistributionMessageEnabled,
+                                         @Field("leadDistributionMessageEnabled") boolean leadDistributionMessageEnabled,
                                          @Field("emailAddress") String emailAddress,
                                          @Field("company") String company,
                                          @Field("lastName") String lastName,
@@ -479,6 +480,12 @@ public interface ApiMethods {
     Call<UploadImageModel> uploadFileToServer(@Header("Authorization") String authorization,
                                               @Part MultipartBody.Part file,
                                               @Query("image") String image);
+
+    @Multipart
+    @POST("Lead/Upload_ProfileImage")
+    Call<Upload_ProfileImage> Upload_ProfileImage(@Header("Authorization") String authorization,
+                                                  @Part MultipartBody.Part file,
+                                                  @Query("image") String image);
 
     @Multipart
     @POST("Lead/UploadEmailDoc")

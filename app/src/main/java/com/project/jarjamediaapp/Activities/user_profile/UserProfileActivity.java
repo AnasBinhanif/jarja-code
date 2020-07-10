@@ -7,7 +7,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,14 +32,21 @@ import com.project.jarjamediaapp.Models.GetCountries;
 import com.project.jarjamediaapp.Models.GetTimeZoneList;
 import com.project.jarjamediaapp.Models.GetTwilioNumber;
 import com.project.jarjamediaapp.Models.GetUserProfile;
+import com.project.jarjamediaapp.Models.Upload_ProfileImage;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityUserProfileBinding;
 
+import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.zelory.compressor.Compressor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Response;
 
@@ -42,15 +55,19 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     ActivityUserProfileBinding bi;
     Context context = UserProfileActivity.this;
     UserProfilePresenter presenter;
-    String timeZone = "";
-    boolean isTimeZoneClicked = false,isCountries = false;
+    String timeZone = "", imagePath = "", agentType = "", picName = "", picGuid = "";
+    boolean isTimeZoneClicked = false, isCountries = false, isImagePicked = false;
     int countryID;
+    File actualImage, compressedImage;
     ArrayList<Integer> arrayListCountryID = new ArrayList<>();
     ArrayList<String> arrayListCountryName = new ArrayList<>();
     ArrayList<String> arrayListStandardName = new ArrayList<>();
     ArrayList<String> arrayListDisplayName = new ArrayList<>();
 
     private final int RC_CAMERA_AND_STORAGE = 100;
+
+    boolean mFormatting,mFormattingF;
+    int mAfter,mAfterF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +94,70 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         bi.atvCountry.setOnClickListener(this);
         bi.atvTimeZone.setOnClickListener(this);
         bi.imgProfilePic.setOnClickListener(this);
+
+        bi.atvPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                mAfter = after;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!mFormatting) {
+                    mFormatting = true;
+                    // using US or RU formatting...
+                    if (mAfter != 0) // in case back space ain't clicked...
+                    {
+                        String num = s.toString();
+                        String data = PhoneNumberUtils.formatNumber(num, "US");
+                        if (data != null) {
+                            s.clear();
+                            s.append(data);
+                            Log.i("Number", data);//8 (999) 123-45-67 or +7 999 123-45-67
+                        }
+
+                    }
+                    mFormatting = false;
+                }
+            }
+        });
+
+        bi.atvForwarder.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                mAfterF = after;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!mFormattingF) {
+                    mFormattingF = true;
+                    // using US or RU formatting...
+                    if (mAfterF != 0) // in case back space ain't clicked...
+                    {
+                        String num = s.toString();
+                        String data = PhoneNumberUtils.formatNumber(num, "US");
+                        if (data != null) {
+                            s.clear();
+                            s.append(data);
+                            Log.i("Number", data);//8 (999) 123-45-67 or +7 999 123-45-67
+                        }
+
+                    }
+                    mFormattingF = false;
+                }
+            }
+        });
     }
 
     @Override
@@ -102,6 +183,8 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     @Override
     public void updateUI(BaseResponse getUserProfile) {
 
+        isImagePicked = false;
+        ToastUtils.showToast(context, getUserProfile.message);
     }
 
     @Override
@@ -137,9 +220,9 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
         presenter.getTimeZoneList();
 
-         arrayListCountryID = new ArrayList<>();
-         arrayListCountryName = new ArrayList<>();
-        
+        arrayListCountryID = new ArrayList<>();
+        arrayListCountryName = new ArrayList<>();
+
         for (int i = 0; i < response.data.size(); i++) {
 
             arrayListCountryID.add(response.data.get(i).id);
@@ -159,6 +242,16 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
     }
 
+    @Override
+    public void updateUI(Upload_ProfileImage getUserProfile) {
+
+        picName = getUserProfile.data.picName;
+        picGuid = getUserProfile.data.picGuid;
+        imagePath = getUserProfile.data.picLink;
+        updateProfile();
+    }
+
+
     private void populateData(GetUserProfile getUserProfile) {
 
         GetUserProfile.UserProfile userProfileData = getUserProfile.data.userProfileData;
@@ -168,21 +261,52 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         bi.atvLicesnse.setText(userProfileData.license + "");
         bi.atvEmail.setText(userProfileData.email + "");
         bi.atvPhone.setText(userProfileData.phone + "");
-        bi.atvPassword.setText("");
         bi.atvVirtual.setText("");
         bi.atvForwarder.setText(userProfileData.forwardedNumber + "");
         bi.atvCompany.setText(userProfileData.company + "");
         bi.atvStreetAddress.setText(userProfileData.streetAddress + "");
-        bi.atvCountry.setText(arrayListCountryName.get(arrayListCountryID.indexOf(userProfileData.countryID)),false);
+        bi.atvCountry.setText(arrayListCountryName.get(arrayListCountryID.indexOf(userProfileData.countryID)), false);
         bi.atvState.setText(userProfileData.state + "");
         bi.atvCity.setText(userProfileData.city + "");
         bi.atvZip.setText(userProfileData.zipcode + "");
-        bi.atvTimeZone.setText(arrayListDisplayName.get(arrayListStandardName.indexOf(userProfileData.tmzone)),false);
+        bi.atvTimeZone.setText(arrayListDisplayName.get(arrayListStandardName.indexOf(userProfileData.tmzone)), false);
         bi.atvCompanyAddress.setText(userProfileData.companyAddress + "");
+        countryID = userProfileData.countryID;
+        timeZone = userProfileData.tmzone;
+        agentType = userProfileData.agentType;
+        picGuid = userProfileData.picGuid;
+        picName = userProfileData.picName;
+        imagePath = userProfileData.picPath;
 
         if (!userProfileData.picPath.equals("")) {
             Glide.with(this).load(userProfileData.picPath).into(bi.imgProfilePic);
         }
+
+    }
+
+    private void updateProfile() {
+
+        String fname = bi.atvFirstName.getText().toString();
+        String lname = bi.atvLastName.getText().toString();
+        String title = bi.atvTitle.getText().toString();
+        String license = bi.atvLicesnse.getText().toString();
+        String email = bi.atvEmail.getText().toString();
+        String phone = bi.atvPhone.getText().toString();
+        String vNumber = bi.atvVirtual.getText().toString();
+        String fNumber = bi.atvForwarder.getText().toString();
+        String company = bi.atvCompany.getText().toString();
+        String street = bi.atvStreetAddress.getText().toString();
+        //bi.atvCountry.setText(arrayListCountryName.get(arrayListCountryID.indexOf(userProfileData.countryID)),false);
+        String state = bi.atvState.getText().toString();
+        String city = bi.atvCity.getText().toString();
+        String zip = bi.atvZip.getText().toString();
+        //bi.atvTimeZone.setText(arrayListDisplayName.get(arrayListStandardName.indexOf(userProfileData.tmzone)),false);
+        String companyAddress = bi.atvCompanyAddress.getText().toString();
+        String timezone = timeZone;
+        int country = countryID;
+
+        presenter.updateUserProfile(fname, state, license, picName, companyAddress, agentType, zip, street, title, countryID, fNumber,
+                false, email, company, lname, timeZone, picGuid, phone, city);
 
     }
 
@@ -259,6 +383,13 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
                 country();
                 break;
             case R.id.btnUpdate:
+
+                if (isImagePicked) {
+                    new ImageCompression(UserProfileActivity.this).execute(imagePath);
+                } else {
+                    updateProfile();
+                }
+
                 break;
         }
     }
@@ -273,6 +404,8 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
                 Image image = ImagePicker.getFirstImageOrNull(data);
                 Bitmap myBitmap = BitmapFactory.decodeFile(image.getPath());
                 bi.imgProfilePic.setImageBitmap(myBitmap);
+                imagePath = image.getPath();
+                isImagePicked = true;
 
             }
         }
@@ -287,6 +420,70 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
 
+    }
+
+    private class ImageCompression extends AsyncTask<String, Void, File> {
+
+
+        private WeakReference<UserProfileActivity> activityReference;
+
+        // only retain a weak reference to the activity
+        ImageCompression(UserProfileActivity context) {
+            activityReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected File doInBackground(String... params) {
+            return ImageCompression(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(File result) {
+            Log.d("Test", "onPreExecute: " + "" + result);
+
+            UserProfileActivity activity = activityReference.get();
+            if (activity == null || activity.isFinishing()) return;
+
+            Uri uri = Uri.fromFile(result);
+            String type1 = GH.getInstance().getMimeType(context, uri);
+            MediaType mediaType = MediaType.parse(type1);
+            MultipartBody.Part file = null;
+            if (result != null && actualImage != null) {
+                RequestBody requestFile = RequestBody.create(mediaType, result);
+                file = MultipartBody.Part.createFormData("file", result.getName(), requestFile);
+                try {
+                    presenter.uploadImage(file);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Log.d("Test", "onPreExecute: " + "");
+            showProgressBar();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+
+    }
+
+    private File ImageCompression(String filePath) {
+
+        actualImage = new File(filePath);
+        Log.i("imageCompresser", "Original image file size: " + actualImage.length());
+        try {
+            String compressedFileName = System.currentTimeMillis() + ".jpg";
+            compressedImage = new Compressor(this).compressToFile(actualImage, compressedFileName);
+            Log.i("imageCompresser", "Compressed image file size: " + compressedImage.length());
+        } catch (Exception e) {
+            e.printStackTrace();
+            compressedImage = null;
+        }
+        return compressedImage;
     }
 
     private void time_zone() {
@@ -310,4 +507,5 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
             bi.atvCountry.dismissDropDown();
         }
     }
+
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -61,6 +62,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
         bi = DataBindingUtil.setContentView(this, R.layout.activity_social_profiles);
         presenter = new Social_ProfilesPresenter(this);
         leadID = getIntent().getStringExtra("leadID");
+        Log.d("LEAD ID ", leadID);
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.social_profiles), true);
 
@@ -164,11 +166,12 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
 
             String url = allsocialprofiles.profilelink;
+            String siteName = allsocialprofiles.siteName;
             if (url.startsWith("http") || url.startsWith("HTTP")) {
-                openWebPage(url);
+                openWebPage(url, siteName);
             } else if (url.startsWith("www") || url.startsWith("WWW")) {
                 // url = "http://" + url;
-                openWebPage(url);
+                openWebPage(url, siteName);
             } else {
                 ToastUtils.showToast(context, "No Profile Found / Incorrect Profile Url");
             }
@@ -204,11 +207,12 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
 
             String url = allsocialprofiles.profilelink;
+            String siteName = allsocialprofiles.siteName;
             if (url.startsWith("http") || url.startsWith("HTTP")) {
-                openWebPage(url);
+                openWebPage(url, siteName);
             } else if (url.startsWith("www") || url.startsWith("WWW")) {
                 // url = "http://" + url;
-                openWebPage(url);
+                openWebPage(url, siteName);
             } else {
                 ToastUtils.showToast(context, "No Profile Found / Incorrect Profile Url");
             }
@@ -219,12 +223,58 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
     }
 
-    public void openWebPage(String url) {
-        Uri webpage = Uri.parse(url);
+    public void openWebPage(String url, String siteName) {
+        Uri webpage = null;
+        if (url.contains("/")) {
+            String urlSplit[]  = url.split("/");
+            String userName = urlSplit[urlSplit.length - 1];
+
+            switch (siteName) {
+
+                case "Facebook":
+                    webpage = Uri.parse("fb://profile?app_scoped_user_id=" + userName);
+                    break;
+                case "Twitter":
+                    webpage = Uri.parse("twitter://user?screen_name=" + userName);
+                    break;
+                case "LinkedIn":
+                    webpage = Uri.parse("linkedin://profile?id=" + userName);
+                    break;
+                case "Gravatar":
+                    webpage = Uri.parse(url);
+                    break;
+                case "GooglePlus":
+                    webpage = Uri.parse("gplus://plus.google.com/" + userName);
+                    break;
+                case "Klout":
+                    webpage = Uri.parse(url);
+                    break;
+                case "Vimeo":
+                    webpage = Uri.parse(url);
+                    break;
+                case "Instagram":
+                    webpage = Uri.parse("instagram://user?username=" + userName);
+                    break;
+                case "Snapchat":
+                    webpage = Uri.parse("snapchat://add/" + userName);
+                    break;
+                case "Youtube":
+                    webpage = Uri.parse("youtube://www.youtube.com/user/" + userName);
+                    break;
+                default:
+                    webpage = Uri.parse(url);
+                    break;
+            }
+
+        }else{
+            webpage = Uri.parse(url);
+        }
+
         Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
+
     }
 
     public void showAddProfileDialog(Context context) {
