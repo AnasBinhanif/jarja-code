@@ -465,7 +465,42 @@
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_11sdp" />
 
+                <!-- added cancel button here-->
                 <LinearLayout
+                    android:id="@+id/lnBottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="30dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <Button
+                        android:id="@+id/btnUpdate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:background="@color/colorGreen"
+                        android:text="Update"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorWhite" />
+
+                    <Button
+                        android:id="@+id/btnCancel"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:background="@color/colorRed"
+                        android:text="@string/cancel"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorWhite" />
+
+                </LinearLayout>
+
+
+             <!--   <LinearLayout
                     android:id="@+id/lnBottom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -484,7 +519,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/colorWhite" />
 
-                </LinearLayout>
+                </LinearLayout>-->
 
             </LinearLayout>
 

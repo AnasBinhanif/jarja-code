@@ -255,12 +255,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onResume() {
 
         super.onResume();
-        try {
+        // this logics create double loading of data and progress bar
+       /* try {
             navigationView.getMenu().getItem(0).setChecked(true);
             getUserProfileData();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 

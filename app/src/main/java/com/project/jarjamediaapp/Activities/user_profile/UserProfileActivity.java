@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.inputmethodservice.Keyboard;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
@@ -94,6 +96,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         bi.atvCountry.setOnClickListener(this);
         bi.atvTimeZone.setOnClickListener(this);
         bi.imgProfilePic.setOnClickListener(this);
+        bi.btnCancel.setOnClickListener(this);
 
         bi.atvPhone.addTextChangedListener(new TextWatcher() {
             @Override
@@ -185,6 +188,8 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
         isImagePicked = false;
         ToastUtils.showToast(context, getUserProfile.message);
+        // for redirect to dashboard screen
+        finish();
     }
 
     @Override
@@ -305,8 +310,17 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         String timezone = timeZone;
         int country = countryID;
 
-        presenter.updateUserProfile(fname, state, license, picName, companyAddress, agentType, zip, street, title, countryID, fNumber,
-                false, email, company, lname, timeZone, picGuid, phone, city);
+        if(fname.equals("") || lname.equals("")){
+
+            ToastUtils.showToast(context, "first name and last name is required");
+
+        }else {
+
+            presenter.updateUserProfile(fname, state, license, picName, companyAddress, agentType, zip, street, title, countryID, fNumber,
+                    false, email, company, lname, timeZone, picGuid, phone, city);
+        }
+
+
 
     }
 
@@ -378,9 +392,16 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
                 break;
             case R.id.atvTimeZone:
                 time_zone();
+                // click on drop down so softkeyboard hide
+                hideSoftKeyboard();
                 break;
             case R.id.atvCountry:
                 country();
+                // click on drop down so softkeyboard hide
+               hideSoftKeyboard();
+                break;
+            case R.id.btnCancel:
+                finish();
                 break;
             case R.id.btnUpdate:
 
@@ -508,4 +529,10 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         }
     }
 
+  /*  @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+
+    }*/
 }

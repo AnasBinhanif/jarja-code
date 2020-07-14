@@ -243,6 +243,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
 
                         _view.updateUI(getUserProfile);
 
+
                     } else {
 
                         _view.updateUIonFalse(getUserProfile.message);

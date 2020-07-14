@@ -501,6 +501,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 break;
             case R.id.btnCancel:
                 finish();
+                // this line of code added here for homeactiviy components click after finish activty
+                HomeActivity.onClick=true;
                 break;
             case R.id.cbAllDay:
                 allDay();
@@ -562,6 +564,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 ToastUtils.showToast(context, "Added Successfully");
             }
             finish();
+            // this line of code added here for homeactiviy components click after finish activty
+            HomeActivity.onClick=true;
         }
     }
 

@@ -66,7 +66,9 @@ public class ChangePassword extends BaseActivity {
         String confPassword = bi.atvConfirmPassword.getText().toString();
         String userID = GH.getInstance().getUserID();
 
-        if (oldPassword.equals("") || newPassword.equals("") || oldPassword.equals("")){
+        // changes here two times added oldPassword check
+        // change to confirm password
+        if (oldPassword.equals("") || newPassword.equals("") || confPassword.equals("")){
             ToastUtils.showToast(context,"Please fill all the fields");
         }else if (newPassword.equals(confPassword)){
             changePasswordAPI(userID,oldPassword,newPassword);
@@ -91,6 +93,8 @@ public class ChangePassword extends BaseActivity {
                     if (response.body().status.equals("Success")) {
 
                         ToastUtils.showToast(context, getUserProfile.message);
+                        // finish activity after succesfully updation.
+                        finish();
 
                     } else {
 
