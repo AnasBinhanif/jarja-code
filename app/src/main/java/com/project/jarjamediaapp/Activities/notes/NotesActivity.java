@@ -38,6 +38,8 @@ import com.vincent.filepicker.activity.NormalFilePickActivity;
 import com.vincent.filepicker.filter.entity.ImageFile;
 import com.vincent.filepicker.filter.entity.NormalFile;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,7 +84,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
         leadID = getIntent().getStringExtra("leadID");
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.notes), true);
-        arrayListData = new ArrayList<UploadFilesModel>();
+        arrayListData = new ArrayList<>();
 
     }
 
@@ -122,6 +124,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
             case Constant.REQUEST_CODE_PICK_IMAGE:
                 if (resultCode == RESULT_OK) {
                     ArrayList<ImageFile> arrayListData = data.getParcelableArrayListExtra(Constant.RESULT_PICK_IMAGE);
+                    assert arrayListData != null;
                     new ImageCompression().execute(arrayListData.get(0).getPath());
 
                 }
@@ -208,6 +211,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
             bi.recyclerViewDocuments.setVisibility(View.VISIBLE);
             bi.recyclerViewNotes.setVisibility(View.GONE);
             bi.tvNoRecordFound.setVisibility(View.GONE);
+
         } else {
             bi.tvNoRecordFound.setVisibility(View.VISIBLE);
         }
@@ -327,7 +331,7 @@ public class NotesActivity extends BaseActivity implements NotesContract.View, E
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, @NotNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         // Forward results to EasyPermissions

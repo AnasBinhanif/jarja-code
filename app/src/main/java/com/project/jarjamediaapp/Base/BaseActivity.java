@@ -87,7 +87,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         // Set up touch listener for non-text box views to hide keyboard.
         if (!(view instanceof EditText)) {
             view.setOnTouchListener((v, event) -> {
-                hideSoftKeyboard();
+                hideSoftKeyboard(getCurrentFocus());
                 return false;
             });
         }
@@ -109,9 +109,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    public void hideSoftKeyboard() {
+    // passing specific view to hide the keyboard
+    public void hideSoftKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public void switchActivity(Class<? extends BaseActivity> activity) {

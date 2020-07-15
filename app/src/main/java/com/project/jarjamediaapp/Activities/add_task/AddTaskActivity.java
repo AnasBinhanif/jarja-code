@@ -1032,6 +1032,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             case R.id.atvReminder:
                 clearFocus();
                 reminder();
+                hideSoftKeyboard(bi.atvReminder);
                 break;
             case R.id.atvVia:
                 clearFocus();
@@ -1040,10 +1041,12 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             case R.id.atvType:
                 clearFocus();
                 type();
+                hideSoftKeyboard(bi.atvType);
                 break;
             case R.id.atvRecur:
                 clearFocus();
                 recur();
+                hideSoftKeyboard(bi.atvRecur);
                 break;
         }
     }

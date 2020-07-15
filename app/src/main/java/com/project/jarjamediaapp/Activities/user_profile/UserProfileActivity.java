@@ -350,6 +350,24 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
                     RC_CAMERA_AND_STORAGE, perms);
         }
     }
+    private void clearFocus() {
+
+        bi.atvFirstName.clearFocus();
+        bi.atvLastName.clearFocus();
+        //bi.tvName.clearFocus();
+        bi.atvPassword.clearFocus();
+        bi.atvCity.clearFocus();
+        bi.atvCompany.clearFocus();
+        bi.atvCompanyAddress.clearFocus();
+        bi.atvEmail.clearFocus();
+        bi.atvZip.clearFocus();
+        bi.atvState.clearFocus();
+        bi.atvStreetAddress.clearFocus();
+        bi.atvPhone.clearFocus();
+        bi.atvLicesnse.clearFocus();
+        bi.atvTitle.clearFocus();
+    }
+
 
     @Override
     public void updateUIonFalse(String message) {
@@ -391,14 +409,16 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
                 switchActivity(ChangePassword.class);
                 break;
             case R.id.atvTimeZone:
+                clearFocus();
                 time_zone();
                 // click on drop down so softkeyboard hide
-                hideSoftKeyboard();
+                hideSoftKeyboard(bi.atvTimeZone);
                 break;
             case R.id.atvCountry:
+                clearFocus();
                 country();
                 // click on drop down so softkeyboard hide
-               hideSoftKeyboard();
+               hideSoftKeyboard(bi.atvCountry);
                 break;
             case R.id.btnCancel:
                 finish();

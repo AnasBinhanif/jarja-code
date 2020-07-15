@@ -233,7 +233,8 @@ public class NotesPresenter extends BasePresenter<NotesContract.View> implements
     @Override
     public void getDocumentByLeadId(String leadId) {
 
-        _view.showProgressBar();
+        // hide progress bar for repeating
+     //   _view.showProgressBar();
         _callDoc = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getDocumentByLeadId(GH.getInstance().getAuthorization(), leadId);
         _callDoc.enqueue(new Callback<DocumentModel>() {
             @Override
@@ -246,6 +247,8 @@ public class NotesPresenter extends BasePresenter<NotesContract.View> implements
                     if (documentModel.getStatus().equalsIgnoreCase("Success")) {
 
                         _view.updateUIListDocuments(documentModel);
+                        // stop progress bar when file get from api
+                        _view.hideProgressBar();
 
                     } else {
 

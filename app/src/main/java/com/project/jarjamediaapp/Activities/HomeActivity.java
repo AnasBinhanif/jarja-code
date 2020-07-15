@@ -255,6 +255,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onResume() {
 
         super.onResume();
+
+        // when come from anyactivity to dashboard so highlighted the dash board item
+        navigationView.getMenu().getItem(0).setChecked(true);
         // this logics create double loading of data and progress bar
        /* try {
             navigationView.getMenu().getItem(0).setChecked(true);
@@ -270,6 +273,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         displayView(item);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
@@ -314,6 +318,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 fragment = null;
                 title = getResources().getString(R.string.calendar);
                 switchActivity(CalendarActivity.class);
+
                 break;
             case R.id.nav_open_house:
                 title = getResources().getString(R.string.openHouses);
@@ -372,6 +377,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 // Write your code here to execute after dialog
                 // closed
                 alertDialog1.dismiss();
+                // remove selection of logout
+                 navigationView.getMenu().getItem(0).setChecked(true);
             }
         });
 

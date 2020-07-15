@@ -525,6 +525,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     public void _updateUIonFailure() {
 
         ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+
+
     }
 
     @Override
@@ -541,11 +543,13 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         } else {*/
         ToastUtils.showToastLong(context, error);
 
+
     }
 
     @Override
     public void updateUIonFailure() {
         ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+
     }
 
     @Override

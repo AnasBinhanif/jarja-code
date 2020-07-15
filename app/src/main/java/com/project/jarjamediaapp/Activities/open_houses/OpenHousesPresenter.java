@@ -10,6 +10,7 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -123,6 +124,7 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
+
                     UploadImageModel openHousesModel = response.body();
                     if (response.body().getStatus().equals("Success")) {
                         _view.updateAfterUploadFile(response);
@@ -139,6 +141,8 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
 
             @Override
             public void onFailure(Call<UploadImageModel> call, Throwable t) {
+
+                Log.i("Hello",t.getMessage());
                 _view.hideProgressBar();
                 _view._updateUIonFailure();
             }

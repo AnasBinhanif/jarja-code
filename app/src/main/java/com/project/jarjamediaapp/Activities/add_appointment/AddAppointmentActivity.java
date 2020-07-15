@@ -230,6 +230,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         // 5 from Add Appointment
         // 6 for Update Calendar Appointment
         fromId = getIntent().getStringExtra("from");
+        assert fromId != null;
         switch (fromId) {
             case "1": {
                 leadId = getIntent().getStringExtra("leadID");
@@ -491,6 +492,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             case R.id.atvReminder:
                 clearFocus();
                 reminder();
+                hideSoftKeyboard(bi.atvReminder);
                 break;
             case R.id.atvVia:
                 clearFocus();
