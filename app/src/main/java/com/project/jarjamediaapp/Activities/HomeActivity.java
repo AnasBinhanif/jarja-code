@@ -165,7 +165,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void getUserProfileData() {
 
-        showProgressBar();
+      //  showProgressBar();
         Call<GetUserProfile> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 getUserProfileData(GH.getInstance().getAuthorization());
         _call.enqueue(new Callback<GetUserProfile>() {
@@ -211,12 +211,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         getUserPermissions();
 
                     } else {
-                        hideProgressBar();
+                    //    hideProgressBar();
                         Toast.makeText(context, getUserProfile.message, Toast.LENGTH_SHORT).show();
                     }
                 } else {
 
-                    hideProgressBar();
+                //    hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
 
                     /*if (error.message().contains("Authorization has been denied for this request")) {
@@ -229,7 +229,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
             @Override
             public void onFailure(Call<GetUserProfile> call, Throwable t) {
-                hideProgressBar();
+              //  hideProgressBar();
                 ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
             }
         });
@@ -256,8 +256,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         super.onResume();
 
-        // when come from anyactivity to dashboard so highlighted the dash board item
+        // when come from anyactivity to dashboard so highlighted the dash board item in navigation drawer
         navigationView.getMenu().getItem(0).setChecked(true);
+        getUserProfileData();
         // this logics create double loading of data and progress bar
        /* try {
             navigationView.getMenu().getItem(0).setChecked(true);
@@ -427,7 +428,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             @Override
             public void onResponse(Call<GetUserPermission> call, Response<GetUserPermission> response) {
 
-                hideProgressBar();
+                // comment the code for repeating progressbar when a ctivity on resume state
+           //    hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetUserPermission getUserProfile = response.body();
@@ -449,7 +451,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         Toast.makeText(context, getUserProfile.message, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    hideProgressBar();
+                    // comment the code for repeating progressbar when a ctivity on resume state
+                 //   hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     /*if (error.message().contains("Authorization has been denied for this request")) {
                         ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
@@ -461,8 +464,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             }
 
             @Override
-            public void onFailure(Call<GetUserPermission> call, Throwable t) {
-                hideProgressBar();
+            public void onFailure(Call<GetUserPermission> call, Throwable t) { hideProgressBar();
                 ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
             }
         });
@@ -530,6 +532,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void UnAuthenticateUser(String deviceToken, String network) {
+        // comment code here for repeating progress dialogue
         showProgressBar();
         Call<BaseResponse> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UnAuthanticate_UserDevice(GH.getInstance().getAuthorization(), deviceToken, network);
         _call.enqueue(new Callback<BaseResponse>() {

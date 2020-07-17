@@ -34,6 +34,7 @@ import com.project.jarjamediaapp.Activities.bottomsheet.BottomDialogFragment;
 import com.project.jarjamediaapp.Activities.bottomsheet.HandleClickEvents;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.Upload_ProfileImage;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
@@ -79,6 +80,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     int viewId;
     String openHouseType = "upcoming";
     int perm = 0;
+    GetAllOpenHousesModel.Data.OpenHouse openHouse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,41 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         presenter = new OpenHousesPresenter(this);
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_open_house), true);
+
+        if (getIntent().getExtras() != null) {
+
+            GetAllOpenHousesModel.Data.OpenHouse openHouse = (GetAllOpenHousesModel.Data.OpenHouse) getIntent().getExtras().getSerializable("editLeadsObj");
+            if (openHouse != null){
+
+                populateOpenHouseData(openHouse);
+            }
+        }
+
+
+
+
+
+
+    }
+
+    public void populateOpenHouseData(GetAllOpenHousesModel.Data.OpenHouse openHouse){
+
+        bi.atvCity.setText(openHouse.getCity());
+        bi.atvAddress.setText(openHouse.getStreetName());
+        bi.atvPrice.setText(openHouse.getListPrice());
+        bi.atvState.setText(openHouse.getState());
+        bi.atvOpenHouseStartDate.setText(openHouse.getOpenHouseDate());
+        bi.atvOpenHouseEndDate.setText(openHouse.getOpenHouseEndDate());
+
+        bi.tvRemovePictures.setVisibility(View.VISIBLE);
+        bi.tvRemovePictures.setText("Image uploaded");
+        bi.tvSelectPictures.setVisibility(View.GONE);
+
+        // changes in model UplaodImageModel to Upload_ProfileImage for api response
+        image = openHouse.getImgURL();
+
+      //  bi.atvZip.setText(openHouse.get);
+
     }
 
 
@@ -97,6 +134,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         UserPermissions.isCameraStorageLocationPermissionGranted(AddOpenHousesActivity.this);
 
         initListeners();
+
+
 
     }
 
@@ -421,14 +460,15 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
-    public void updateAfterUploadFile(Response<UploadImageModel> response) {
+    public void updateAfterUploadFile(Upload_ProfileImage response) {
 
         hideProgressBar();
         bi.tvRemovePictures.setVisibility(View.VISIBLE);
         bi.tvRemovePictures.setText("Image uploaded");
         bi.tvSelectPictures.setVisibility(View.GONE);
         ToastUtils.showToast(context, "Image uploaded");
-        image = response.body().getData();
+        // changes in model UplaodImageModel to Upload_ProfileImage for api response
+        image = response.data.picLink;
 
     }
 

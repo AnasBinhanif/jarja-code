@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.Activities.open_houses;
 
 import com.project.jarjamediaapp.Base.BaseContract;
+import com.project.jarjamediaapp.Models.Upload_ProfileImage;
 
 import okhttp3.MultipartBody;
 import retrofit2.Response;
@@ -11,7 +12,8 @@ public interface OpenHousesContract {
 
         void updateUIListForOpenHouses(Response<GetAllOpenHousesModel> response,int position);
 
-        void updateAfterUploadFile(Response<UploadImageModel> response);
+        // changes in model UplaodImageModel to Upload_ProfileImage for api response
+        void updateAfterUploadFile(Upload_ProfileImage response);
 
         void updateUIListForAddressDetail(AddressDetailModel.Data response);
 

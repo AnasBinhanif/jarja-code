@@ -109,7 +109,11 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     @Override
     public void initViews() {
 
+
+
         presenter.getAgentNames();
+
+        Log.i("MyToke","tok"+GH.getInstance().getFirebaseToken());
 
         setSupportActionBar(bi.epToolbar.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

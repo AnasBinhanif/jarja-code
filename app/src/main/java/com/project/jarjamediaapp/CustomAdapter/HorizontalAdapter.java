@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.project.jarjamediaapp.Activities.all_leads.AllLeadsActivity;
+import com.project.jarjamediaapp.Activities.open_houses.AddOpenHousesActivity;
 import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
 import com.project.jarjamediaapp.Activities.open_houses.GetTimeFrameModel;
 import com.project.jarjamediaapp.Activities.open_houses.OpenHousesActivity;
@@ -127,6 +128,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         private CardView cardView;
         private ImageView ivHouse;
         private TextView tvStartDateTime, tvEndDateTime, tvAddress, tvCityPostal, tvLeadsCount;
+        private Button btnEdit;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -140,6 +142,30 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
             tvAddress = itemView.findViewById(R.id.tvAddress);
             tvCityPostal = itemView.findViewById(R.id.tvCityPostal);
             tvLeadsCount = itemView.findViewById(R.id.tvLeadsCount);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
+
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+
+
+                @Override
+                public void onClick(View view) {
+
+
+                    if (openHouseType.equals("upcoming")) {
+                        GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
+
+                        // passing open house object to edit screen.
+                        Intent i = new Intent(context,AddOpenHousesActivity.class);
+                        i.putExtra("editLeadsObj",openHouse);
+
+                        context.startActivity(i);
+                    } else if (openHouseType.equals("past")) {
+
+                        GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
+                    }
+
+                }
+            });
 
             rl.setOnClickListener(new View.OnClickListener() {
                 @Override

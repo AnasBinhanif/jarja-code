@@ -52,23 +52,26 @@ public class AddFiltersPresenter extends BasePresenter<AddFiltersContract.View> 
             @Override
             public void onResponse(Call<GetAgentsModel> call, Response<GetAgentsModel> response) {
 
-                _view.hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     GetAgentsModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         _view.updateUI(getAppointmentsModel);
+                        _view.hideProgressBar();
 
                     } else {
 
                         _view.updateUIonFalse(getAppointmentsModel.message);
+                        _view.hideProgressBar();
 
                     }
                 } else {
 
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
+                    _view.hideProgressBar();
                 }
             }
 
@@ -89,23 +92,26 @@ public class AddFiltersPresenter extends BasePresenter<AddFiltersContract.View> 
             @Override
             public void onResponse(Call<GetLeadSource> call, Response<GetLeadSource> response) {
 
-                _view.hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     GetLeadSource getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         _view.updateUI(getAppointmentsModel);
+                        _view.hideProgressBar();
 
                     } else {
 
                         _view.updateUIonFalse(getAppointmentsModel.message);
+                        _view.hideProgressBar();
 
                     }
                 } else {
 
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
+                    _view.hideProgressBar();
                 }
             }
 
@@ -127,23 +133,26 @@ public class AddFiltersPresenter extends BasePresenter<AddFiltersContract.View> 
             @Override
             public void onResponse(Call<GetLeadScore> call, Response<GetLeadScore> response) {
 
-                _view.hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     GetLeadScore getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         _view.updateUI(getAppointmentsModel);
+                        _view.hideProgressBar();
 
                     } else {
 
                         _view.updateUIonFalse(getAppointmentsModel.message);
+                        _view.hideProgressBar();
 
                     }
                 } else {
 
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
+                    _view.hideProgressBar();
                 }
             }
 
@@ -173,16 +182,20 @@ public class AddFiltersPresenter extends BasePresenter<AddFiltersContract.View> 
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         _view.updateUI(getAppointmentsModel);
+                        _view.hideProgressBar();
 
                     } else {
 
                         _view.updateUIonFalse(getAppointmentsModel.message);
+                        _view.hideProgressBar();
+
 
                     }
                 } else {
 
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
+                    _view.hideProgressBar();
                 }
             }
 
@@ -211,16 +224,19 @@ public class AddFiltersPresenter extends BasePresenter<AddFiltersContract.View> 
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         _view.updateUI(getAppointmentsModel);
+                        _view.hideProgressBar();
 
                     } else {
 
                         _view.updateUIonFalse(getAppointmentsModel.message);
+                        _view.hideProgressBar();
 
                     }
                 } else {
 
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
+                    _view.hideProgressBar();
                 }
             }
 
@@ -249,16 +265,19 @@ public class AddFiltersPresenter extends BasePresenter<AddFiltersContract.View> 
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         _view.updateUI(getAppointmentsModel);
+                        _view.hideProgressBar();
 
                     } else {
 
                         _view.updateUIonFalse(getAppointmentsModel.message);
+                        _view.hideProgressBar();
 
                     }
                 } else {
 
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
+                    _view.hideProgressBar();
                 }
             }
 
@@ -287,16 +306,19 @@ public class AddFiltersPresenter extends BasePresenter<AddFiltersContract.View> 
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         _view.updateUI(getAppointmentsModel);
+                        _view.hideProgressBar();
 
                     } else {
 
                         _view.updateUIonFalse(getAppointmentsModel.message);
+                        _view.hideProgressBar();
 
                     }
                 } else {
 
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
+                    _view.hideProgressBar();
                 }
             }
 
@@ -325,16 +347,19 @@ public class AddFiltersPresenter extends BasePresenter<AddFiltersContract.View> 
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         _view.updateUI(getAppointmentsModel);
+                        _view.hideProgressBar();
 
                     } else {
 
                         _view.updateUIonFalse(getAppointmentsModel.message);
+                        _view.hideProgressBar();
 
                     }
                 } else {
 
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
+                    _view.hideProgressBar();
                 }
             }
 
@@ -363,16 +388,18 @@ public class AddFiltersPresenter extends BasePresenter<AddFiltersContract.View> 
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         _view.updateUI(getAppointmentsModel);
+                        _view.hideProgressBar();
 
                     } else {
 
                         _view.updateUIonFalse(getAppointmentsModel.message);
-
+                        _view.hideProgressBar();
                     }
                 } else {
 
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
+                    _view.hideProgressBar();
                 }
             }
 

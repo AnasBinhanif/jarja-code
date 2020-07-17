@@ -24,7 +24,7 @@
             <ImageView
                 android:id="@+id/ivHouse"
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
+                android:layout_height="300dp"
                 android:clickable="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/open_house" />
@@ -33,7 +33,7 @@
                 android:id="@+id/tvStartDateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16dp"
@@ -93,10 +93,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="5dp"
                 android:textColor="@color/colorAccent"
                 android:textSize="20dp"
                 android:textStyle="bold" />
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="5dp"
+                android:background="@color/colorGreen"
+                android:text="Edit"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:layout_marginBottom="10dp"
+                />
+
 
 
         </LinearLayout>

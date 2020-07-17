@@ -477,7 +477,7 @@ public interface ApiMethods {
 
     @Multipart
     @POST("Lead/UploadImage")
-    Call<UploadImageModel> uploadFileToServer(@Header("Authorization") String authorization,
+    Call<Upload_ProfileImage> uploadFileToServer(@Header("Authorization") String authorization,
                                               @Part MultipartBody.Part file,
                                               @Query("image") String image);
 

@@ -69,8 +69,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         //MyLog.d("Response", "onSuccess: " + response.toString());
                         Log.d("token", response.accessToken + "");
 
-                        easyPreference.addString(GH.KEYS.AUTHORIZATION.name(), "bearer" + " " + response.accessToken).save();
-                        userAuthenticate(FirebaseInstanceId.getInstance().getToken(),"FCM");
+                       // easyPreference.addString(GH.KEYS.AUTHORIZATION.name(), "bearer" + " " + response.accessToken).save();
+                        userAuthenticate(FirebaseInstanceId.getInstance().getToken(),"FCM","bearer" + " " + response.accessToken);
                     }
 
                     @Override
@@ -82,9 +82,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 }));
     }
 
-    private void userAuthenticate(String deviceToken, String network) {
+    private void userAuthenticate(String deviceToken, String network,String token) {
 
-        Call<BaseResponse> _call=NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Authanticate_UserDevice(GH.getInstance().getAuthorization(),deviceToken,network);
+        Call<BaseResponse> _call=NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Authanticate_UserDevice(token,deviceToken,network);
                 _call.enqueue(new Callback<BaseResponse>() {
                     @Override
                     public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
@@ -95,6 +95,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             BaseResponse getAppointmentsModel = response.body();
                             if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
 
+                                // when successfully authenticate then store access token
+                                easyPreference.addString(GH.KEYS.AUTHORIZATION.name(),token).save();
                                 switchActivity(HomeActivity.class);
                                 finish();
 

@@ -310,7 +310,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         String timezone = timeZone;
         int country = countryID;
 
-        if(fname.equals("") || lname.equals("")){
+        if(fname.trim().equals("") || lname.trim().equals("")){
 
             ToastUtils.showToast(context, "first name and last name is required");
 

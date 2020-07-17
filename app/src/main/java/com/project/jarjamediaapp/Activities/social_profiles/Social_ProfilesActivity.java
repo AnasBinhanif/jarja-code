@@ -1,9 +1,12 @@
 package com.project.jarjamediaapp.Activities.social_profiles;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +24,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+import com.project.jarjamediaapp.Activities.HomeActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetLeadSocialProfile;
@@ -223,6 +228,15 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
     }
 
+    public static boolean isPackageInstalled(String packageName, PackageManager packageManager) {
+        try {
+            return packageManager.getApplicationInfo(packageName, 0).enabled;
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
     public void openWebPage(String url, String siteName) {
         Uri webpage = null;
         if (url.contains("/")) {
@@ -232,37 +246,131 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
             switch (siteName) {
 
                 case "Facebook":
-                    webpage = Uri.parse("fb://profile?app_scoped_user_id=" + userName);
+
+                    boolean isFbInstalled = isPackageInstalled("com.facebook.katana", context.getPackageManager());
+
+                    if(isFbInstalled){
+
+                        webpage = Uri.parse("fb://profile?app_scoped_user_id=" + userName);
+                        openWebPageUrl(webpage);
+                    }else {
+
+                        openDialogueForWebUri(url);
+
+                    }
+
+                    // checking app is install or not in your phone
+
+
                     break;
                 case "Twitter":
-                    webpage = Uri.parse("twitter://user?screen_name=" + userName);
+                    boolean isTwitterInstalled = isPackageInstalled("com.twitter.android", context.getPackageManager());
+
+                    if(isTwitterInstalled){
+
+                        webpage = Uri.parse("twitter://user?screen_name=" + userName);
+
+                       openWebPageUrl(webpage);
+                    }else {
+
+                        openDialogueForWebUri(url);
+                       // webpage = Uri.parse(url);//Uri.parse("twitter://user?screen_name=" + userName);
+                    }
+
                     break;
                 case "LinkedIn":
-                    webpage = Uri.parse("linkedin://profile?id=" + userName);
+
+                    boolean isLindedInInstalled = isPackageInstalled("com.linkedin.android", context.getPackageManager());
+
+                    if(isLindedInInstalled){
+
+                        webpage = Uri.parse("linkedin://profile?id=" + userName);
+                        openWebPageUrl(webpage);
+                    }else {
+
+                        openDialogueForWebUri(url);
+
+                    }
+
                     break;
                 case "Gravatar":
                     webpage = Uri.parse(url);
+                    openWebPageUrl(webpage);
+
                     break;
                 case "GooglePlus":
-                    webpage = Uri.parse("gplus://plus.google.com/" + userName);
+
+                    boolean isGooglePlusInstalled = isPackageInstalled("com.googleplus.android", context.getPackageManager());
+
+                    if(isGooglePlusInstalled){
+
+                        webpage = Uri.parse("gplus://plus.google.com/" + userName);
+                        openWebPageUrl(webpage);
+                    }else {
+
+                        openDialogueForWebUri(url);
+
+                    }
+
                     break;
                 case "Klout":
                     webpage = Uri.parse(url);
+                    openWebPageUrl(webpage);
                     break;
                 case "Vimeo":
                     webpage = Uri.parse(url);
+                    openWebPageUrl(webpage);
                     break;
                 case "Instagram":
-                    webpage = Uri.parse("instagram://user?username=" + userName);
+
+                    boolean isInstagramInstalled = isPackageInstalled("com.instagram.android", context.getPackageManager());
+
+                    if(isInstagramInstalled){
+
+                        webpage = Uri.parse("instagram://user?username=" + userName);
+                        openWebPageUrl(webpage);
+                    }else {
+
+                        openDialogueForWebUri(url);
+
+                    }
+
+
                     break;
                 case "Snapchat":
-                    webpage = Uri.parse("snapchat://add/" + userName);
+
+                    boolean isSnapchatInstalled = isPackageInstalled("com.snapchat.android", context.getPackageManager());
+
+                    if(isSnapchatInstalled){
+
+                        webpage = Uri.parse("snapchat://add/" + userName);
+                        openWebPageUrl(webpage);
+                    }else {
+
+                        openDialogueForWebUri(url);
+
+                    }
+
                     break;
                 case "Youtube":
-                    webpage = Uri.parse("youtube://www.youtube.com/user/" + userName);
+
+                    boolean isYoutubeInstalled = isPackageInstalled("com.youtube.android", context.getPackageManager());
+
+                    if(isYoutubeInstalled){
+
+                        webpage = Uri.parse("youtube://www.youtube.com/user/" + userName);
+                        openWebPageUrl(webpage);
+                    }else {
+
+                        openDialogueForWebUri(url);
+
+                    }
+
                     break;
                 default:
                     webpage = Uri.parse(url);
+                    openWebPageUrl(webpage);
+
                     break;
             }
 
@@ -270,10 +378,10 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
             webpage = Uri.parse(url);
         }
 
-        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+      /*  Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
-        }
+        }*/
 
     }
 
@@ -287,7 +395,12 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
         EditText edtProfileLink = dialog.findViewById(R.id.edtProfileLink);
         MaterialSpinner spnSIte = dialog.findViewById(R.id.spnSite);
         spnSIte.setBackground(getDrawable(R.drawable.bg_search));
-        spnSIte.setItems(getSocialProfileDropdownNames);
+
+        if(getSocialProfileDropdownNames != null){
+
+            spnSIte.setItems(getSocialProfileDropdownNames);
+        }
+
 
         spnSIte.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -295,11 +408,15 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
                 edtName.clearFocus();
                 edtProfileLink.clearFocus();
+                hideSoftKeyboard(edtName);
+                hideSoftKeyboard(edtProfileLink);
 
-                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+
+                // cmment code here to stop to open softkeybard
+              /*  InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                 if (imm.isAcceptingText()) {
                     imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                }
+                }*/
 
                 return false;
             }
@@ -312,25 +429,29 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
                 if (hasFocus) {
 
                     edtName.clearFocus();
+
                     edtName.setFocusable(false);
                     edtProfileLink.setFocusable(false);
                     edtProfileLink.clearFocus();
 
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    // cmment code here to stop to open softkeybard
+                  /*  InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                     if (imm.isAcceptingText()) {
                         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                    }
+                    }*/
 
                 } else {
                     edtName.clearFocus();
                     edtName.setFocusable(true);
+
                     edtProfileLink.setFocusable(true);
                     edtProfileLink.clearFocus();
 
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    // cmment code here to stop to open softkeybard
+                   /* InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                     if (imm.isAcceptingText()) {
                         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                    }
+                    }*/
                 }
             }
         });
@@ -406,6 +527,58 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
     public void hideProgressBar() {
 
         GH.getInstance().HideProgressDialog();
+    }
+
+    public  void openWebPageUrl(Uri webPageUri){
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, webPageUri);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    public void openDialogueForWebUri(String uri){
+
+        AlertDialog alertDialog1;
+        alertDialog1 = new AlertDialog.Builder(
+                Social_ProfilesActivity.this).create();
+
+        // Setting Dialog Title
+        alertDialog1.setTitle("App no found!");
+
+        // Setting Dialog Message
+        alertDialog1.setMessage("\nDo you want to open profile on browser");
+
+        // Setting Icon to Dialog
+        // alertDialog1.setIcon(R.drawable.tick);
+
+        // Setting OK Button
+        alertDialog1.setButton("YES", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to execute after dialog
+                // closed
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+
+            }
+        });
+
+        alertDialog1.setButton2("NO", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to execute after dialog
+                // closed
+                alertDialog1.dismiss();
+                // remove selection of logout
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog1.show();
     }
 
 }

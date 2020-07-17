@@ -33,28 +33,46 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
 
-            if (GH.getInstance().isLoggedIn()) {
+
+        Log.i("remoteMessage",remoteMessage.toString());
+
+        try {
+            if (remoteMessage.getData().size() >  0) {
+
+                title = remoteMessage.getNotification().getTitle();
+                message = remoteMessage.getNotification().getBody();
+
+
+               /* title =  remoteMessage.getNotification().getTitle();//remoteMessage.getNotification().getTitle();//remoteMessage.getData().get("title");
+                message = "hello";remoteMessage.getData().get("body");*/
+
+               // not used in anywhere so comment this code
+              //  if (GH.getInstance().isLoggedIn()) {
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        sendNotificationForOreo(title, message, HomeActivity.class);
+                    } else {
+                        sendNotification(title, message, HomeActivity.class);
+                   }
+
+         //       }
+                Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+
+            }/*else if(remoteMessage.getData().size() > 0){
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     sendNotificationForOreo(title, message, HomeActivity.class);
                 } else {
                     sendNotification(title, message, HomeActivity.class);
                 }
+                Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            }
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
+            }*/
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
 
     private void sendNotification(String title, String messageBody, Class<? extends AppCompatActivity> activity) {
@@ -119,6 +137,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         easyPreference = EasyPreference.with(this);
         Log.d(TAG, "Refreshed token: " + token);
         easyPreference.addString(GH.KEYS.FIREBASE_TOEKN.name(), token + "").save();
+
+
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.

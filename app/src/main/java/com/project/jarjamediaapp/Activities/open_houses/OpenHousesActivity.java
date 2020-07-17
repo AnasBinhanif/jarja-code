@@ -42,6 +42,7 @@ import com.project.jarjamediaapp.Activities.bottomsheet.HandleClickEvents;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.CustomAdapter.HorizontalAdapter;
+import com.project.jarjamediaapp.Models.Upload_ProfileImage;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.CenterZoomLayoutManager;
 import com.project.jarjamediaapp.Utilities.GH;
@@ -194,13 +195,16 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         try {
 
             if (response.body().getData().openHouse.size() > 0) {
+
                 bi.rvOpenHouse.setLayoutManager(new CenterZoomLayoutManager(context, RecyclerView.HORIZONTAL, false));
                 bi.rvOpenHouse.setItemAnimator(new DefaultItemAnimator());
                 bi.rvOpenHouse.setAdapter(new HorizontalAdapter(context, response.body().getData().openHouse,openHouseType));
                 bi.rvOpenHouse.scrollToPosition(position);
                 bi.rvOpenHouse.setVisibility(View.VISIBLE);
                 bi.tvMessage.setVisibility(View.GONE);
+
             } else {
+
                 bi.rvOpenHouse.setVisibility(View.GONE);
                 bi.tvMessage.setVisibility(View.VISIBLE);
             }
@@ -212,14 +216,15 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
-    public void updateAfterUploadFile(Response<UploadImageModel> response) {
+    public void updateAfterUploadFile(Upload_ProfileImage response) {
 
         hideProgressBar();
         tvRemovePictures.setVisibility(View.VISIBLE);
         tvRemovePictures.setText("Image uploaded");
         tvSelectPictures.setVisibility(View.GONE);
         ToastUtils.showToast(context, "Image uploaded");
-        image = response.body().getData();
+        // changes in model UplaodImageModel to Upload_ProfileImage for api response
+        image = response.data.picLink;
 
     }
 
@@ -246,7 +251,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
                     }
                 }
                 break;
-                case R.id.atvCity: {
+                case R.id.btnEdit: {
 
                     ArrayList<String> arrayList = new ArrayList<>();
                     if (response.getCityFilter().size() > 0) {

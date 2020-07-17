@@ -5,6 +5,7 @@ import android.util.Log;
 import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.Upload_ProfileImage;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
@@ -21,7 +22,7 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
 
     Call<GetAllOpenHousesModel> call;
     Call<BaseResponse> _call;
-    Call<UploadImageModel> _cCall;
+    Call<Upload_ProfileImage> _cCall;
     Call<AddressDetailModel> callAddressDetail;
 
 
@@ -115,22 +116,27 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
     public void uploadImage(MultipartBody.Part file) {
 
         _view.showProgressBar();
+
+        Log.i("hello",GH.getInstance().getAuthorization());
+        // changes in model UplaodImageModel to Upload_ProfileImage for api response
         _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).uploadFileToServer(GH.getInstance().getAuthorization(),file,"image");
 
-        _cCall.enqueue(new Callback<UploadImageModel>() {
+        _cCall.enqueue(new Callback<Upload_ProfileImage>() {
             @Override
-            public void onResponse(Call<UploadImageModel> call, Response<UploadImageModel> response) {
+            public void onResponse(Call<Upload_ProfileImage> call, Response<Upload_ProfileImage> response) {
 
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
 
-                    UploadImageModel openHousesModel = response.body();
-                    if (response.body().getStatus().equals("Success")) {
-                        _view.updateAfterUploadFile(response);
+                    // changes in model UplaodImageModel to Upload_ProfileImage for api response
+                    Upload_ProfileImage openHousesModel = response.body();
+                    if (response.body().status.equals("Success")) {
+
+                        _view.updateAfterUploadFile(openHousesModel);
 
                     } else {
-                        _view._updateUIonFalse(openHousesModel.getMessage());
+                        _view._updateUIonFalse(openHousesModel.message);
                     }
                 } else {
 
@@ -140,7 +146,7 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
             }
 
             @Override
-            public void onFailure(Call<UploadImageModel> call, Throwable t) {
+            public void onFailure(Call<Upload_ProfileImage> call, Throwable t) {
 
                 Log.i("Hello",t.getMessage());
                 _view.hideProgressBar();

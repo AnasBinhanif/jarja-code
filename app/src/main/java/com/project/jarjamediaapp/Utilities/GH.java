@@ -5,9 +5,12 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Looper;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
+
+import androidx.annotation.UiThread;
 
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -16,6 +19,7 @@ import com.project.jarjamediaapp.ProjectApplication;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import java.io.File;
+import java.lang.invoke.MethodHandles;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -55,6 +59,7 @@ public class GH {
 
     public String getAuthorization() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.AUTHORIZATION.name(), null);
+
     }
 
     public GetUserPermission getUserPermissions() {
@@ -122,10 +127,18 @@ public class GH {
         }
         if (progressDialog != null && progressDialog.isShowing()) {
         } else {
-            progressDialog = new ProgressDialog(activity);
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage("Please Wait....");
-            progressDialog.show();
+
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog = new ProgressDialog(activity);
+                    progressDialog.setMessage("Please Wait....");
+                    progressDialog.setCancelable(false);
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.show();
+                }
+            });
+
 
         }
        /* final ImageView img_loading_frame = progressDialog.findViewById(R.id.ivGifJM);
@@ -136,6 +149,7 @@ public class GH {
         try {
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
+             //  Looper.myLooper().quit();
             }
         } catch (final Exception e) {
             // Handle or log or ignore

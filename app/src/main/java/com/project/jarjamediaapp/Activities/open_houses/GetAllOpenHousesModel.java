@@ -4,9 +4,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.project.jarjamediaapp.Base.BaseResponse;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GetAllOpenHousesModel extends BaseResponse {
+public class GetAllOpenHousesModel extends BaseResponse implements Serializable {
 
     @SerializedName("data")
     @Expose
@@ -36,7 +37,7 @@ public class GetAllOpenHousesModel extends BaseResponse {
         @Expose
         public Object upActive;
 
-        public class OpenHouse {
+        public class OpenHouse implements Serializable{
 
             @SerializedName("imgURL")
             @Expose

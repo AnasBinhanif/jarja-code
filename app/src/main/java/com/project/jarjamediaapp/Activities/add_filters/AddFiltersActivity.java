@@ -328,8 +328,15 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                 });
         if (selectedIdsList.size() != 0) {
             multiSelectDialog.preSelectIDsList(selectedIdsList);
-            multiSelectDialog.multiSelectList(searchListItems);
-        } else {
+
+            // for checking empty list to prevent crahses
+            if (searchListItems != null){
+
+                multiSelectDialog.multiSelectList(searchListItems);
+            }
+
+        } else if(searchListItems != null){
+            // for checking empty list to prevent crahses
             multiSelectDialog.multiSelectList(searchListItems);
         }
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
@@ -444,10 +451,20 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                 });
 
         if (selectedSourceNameIdsList.size() != 0) {
+
             multiSelectDialog.preSelectIDsList(selectedSourceNameIdsList);
-            multiSelectDialog.multiSelectList(getLeadSourceNameList);
+            if(getLeadSourceNameList != null){
+
+
+                multiSelectDialog.multiSelectList(getLeadSourceNameList);
+            }
+
         } else {
-            multiSelectDialog.multiSelectList(getLeadSourceNameList);
+            if(getLeadSourceNameList != null){
+                multiSelectDialog.multiSelectList(getLeadSourceNameList);
+            }
+
+
         }
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
@@ -502,10 +519,18 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                 });
 
         if (selectedSourceNameIdsList.size() != 0) {
-            multiSelectDialog.preSelectIDsList(getSelectedTypeIdsList);
-            multiSelectDialog.multiSelectList(getLeadTypeModelList);
+
+            if (getSelectedTypeIdsList != null){
+                multiSelectDialog.preSelectIDsList(getSelectedTypeIdsList);
+                multiSelectDialog.multiSelectList(getLeadTypeModelList);
+            }
+
         } else {
-            multiSelectDialog.multiSelectList(getLeadTypeModelList);
+
+            if(getLeadTypeModelList != null){
+                multiSelectDialog.multiSelectList(getLeadTypeModelList);
+            }
+
         }
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
