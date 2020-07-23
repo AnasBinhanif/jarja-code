@@ -43,6 +43,7 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -104,6 +105,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi = DataBindingUtil.setContentView(this, R.layout.activity_add_appointment);
         presenter = new AddAppointmentPresenter(this);
         presenter.initScreen();
+
+
+        // for testing
+        EasyPreference.Builder pref = new EasyPreference.Builder(context);
+        pref.addString(GH.KEYS.NOTIFICATIONTYPE.name(),"").save();
+
     }
 
     @Override

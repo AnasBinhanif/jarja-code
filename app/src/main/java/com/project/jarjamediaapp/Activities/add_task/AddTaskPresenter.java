@@ -32,7 +32,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
     @Override
     public void getAgentNames() {
 
-        _view.showProgressBar();
+      //  _view.showProgressBar();
         _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetAgents(GH.getInstance().getAuthorization());
         _call.enqueue(new Callback<GetAgentsModel>() {
             @Override
@@ -48,13 +48,13 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
                     } else {
 
-                        _view.hideProgressBar();
+                       // _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
-                    _view.hideProgressBar();
+                  //  _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -62,7 +62,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
             @Override
             public void onFailure(Call<GetAgentsModel> call, Throwable t) {
-                _view.hideProgressBar();
+               // _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
         });
@@ -86,12 +86,12 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
                         getRecur();
 
                     } else {
-                        _view.hideProgressBar();
+                     //   _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
-                    _view.hideProgressBar();
+                  //  _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -99,7 +99,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
             @Override
             public void onFailure(Call<AddAppointmentModel> call, Throwable t) {
-                _view.hideProgressBar();
+               // _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
         });
@@ -126,13 +126,13 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
                     } else {
 
-                        _view.hideProgressBar();
+                      //  _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
-                    _view.hideProgressBar();
+                   // _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -140,7 +140,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
             @Override
             public void onFailure(Call<AddAppointmentModel> call, Throwable t) {
-                _view.hideProgressBar();
+              //  _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
         });
@@ -165,13 +165,13 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
                     } else {
 
-                        _view.hideProgressBar();
+                      //  _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
-                    _view.hideProgressBar();
+                   // _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -179,7 +179,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
             @Override
             public void onFailure(Call<AddAppointmentModel> call, Throwable t) {
-                _view.hideProgressBar();
+               // _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
         });
@@ -189,7 +189,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
     @Override
     public void getVia() {
 
-        _view.showProgressBar();
+      //  _view.showProgressBar();
         call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getVia(GH.getInstance().getAuthorization());
         call.enqueue(new Callback<AddAppointmentModel>() {
             @Override
@@ -205,12 +205,12 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
                         _view.updateUIListForVia(getAppointmentsModel);
                         getReminder();
                     } else {
-                        _view.hideProgressBar();
+                    //    _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
-                    _view.hideProgressBar();
+                  //  _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -218,7 +218,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
 
             @Override
             public void onFailure(Call<AddAppointmentModel> call, Throwable t) {
-                _view.hideProgressBar();
+             //   _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
         });
@@ -310,6 +310,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
     public void getFutureTaskDetail(String scheduleID) {
 
 
+        _view.showProgressBar();
         apiCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class)
                 .getFutureTaskDetail(GH.getInstance().getAuthorization(), scheduleID);
         apiCall.enqueue(new Callback<GetTaskDetail>() {

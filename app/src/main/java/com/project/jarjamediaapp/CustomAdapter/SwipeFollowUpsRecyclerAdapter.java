@@ -3,6 +3,7 @@ package com.project.jarjamediaapp.CustomAdapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
 import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
@@ -23,6 +26,7 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
@@ -52,6 +56,14 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
         this.activity = activity;
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
+
+
+        // fro testing
+            if (GH.getInstance().getNotificationType().equals("followup")) {
+                viewDetail(mData.get(0).dripDetailID, null);
+            }
+
+
     }
 
     @Override
@@ -199,8 +211,17 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
                         String title = getDetails.data.viewDPCStep.subject;
                         String senType = getDetails.data.viewDPCStep.sentType;
                         String dateTime = getDetails.data.viewDPCStep.sendDateTime;
-                        swipeRevealLayout.close(true);
+
+                        if (swipeRevealLayout != null){
+
+                            swipeRevealLayout.close(true);
+                        }
+
                         showViewFollowUpDialog(context, wait, title, dateTime, time, note, senType);
+
+                        // for remove shared pref of notificationType
+                        EasyPreference.Builder pref = new EasyPreference.Builder(context);
+                        pref.addString(GH.KEYS.NOTIFICATIONTYPE.name(),"").save();
 
                     } else {
 

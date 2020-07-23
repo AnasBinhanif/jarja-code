@@ -97,13 +97,10 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             if (openHouse != null){
 
                 populateOpenHouseData(openHouse);
+                bi.btnSave.setText("Update");
+
             }
         }
-
-
-
-
-
 
     }
 
@@ -115,6 +112,9 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         bi.atvState.setText(openHouse.getState());
         bi.atvOpenHouseStartDate.setText(openHouse.getOpenHouseDate());
         bi.atvOpenHouseEndDate.setText(openHouse.getOpenHouseEndDate());
+
+        openHouseStartDate = openHouse.getOpenHouseDate();
+        openHouseEndDate = openHouse.getOpenHouseEndDate();
 
         bi.tvRemovePictures.setVisibility(View.VISIBLE);
         bi.tvRemovePictures.setText("Image uploaded");
@@ -324,34 +324,71 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             public void onClick(View v) {
                 // dismiss dialogue on api integration
 
-                address = bi.atvAddress.getText().toString();
-                listPrice = bi.atvPrice.getText().toString();
-                city = bi.atvCity.getText().toString();
-                state = bi.atvState.getText().toString();
-                zip = bi.atvZip.getText().toString();
+                if (bi.btnSave.getText() == "Update"){
 
-                if (isValidate()) {
+                    address = bi.atvAddress.getText().toString();
+                    listPrice = bi.atvPrice.getText().toString();
+                    city = bi.atvCity.getText().toString();
+                    state = bi.atvState.getText().toString();
+                    zip = bi.atvZip.getText().toString();
 
-                    JSONObject obj = new JSONObject();
-                    try {
-                        obj.put("listPrice", listPrice);
-                        obj.put("city", city);
-                        obj.put("address", address);
-                        obj.put("state", state);
-                        obj.put("zip", zip);
-                        obj.put("image", image);
-                        obj.put("openHouseDate", openHouseStartDate);
-                        obj.put("openHouseEndDate", openHouseEndDate);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                //    if (isValidate()) {
 
-                    String jsonObjectString = obj.toString();
-                    Log.d("json", jsonObjectString);
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("listPrice", listPrice);
+                            obj.put("city", city);
+                            obj.put("address", address);
+                            obj.put("state", state);
+                            obj.put("zip", zip);
+                            obj.put("image", image);
+                            obj.put("openHouseDate", openHouseStartDate);
+                            obj.put("openHouseEndDate", openHouseEndDate);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        String jsonObjectString = obj.toString();
+                        Log.d("json", jsonObjectString);
 
 
-                    presenter.addOpenHouse(jsonObjectString);
+                        presenter.addOpenHouse(jsonObjectString);
+                 //   }
+
+                }else {
+
+                        address = bi.atvAddress.getText().toString();
+                        listPrice = bi.atvPrice.getText().toString();
+                        city = bi.atvCity.getText().toString();
+                        state = bi.atvState.getText().toString();
+                        zip = bi.atvZip.getText().toString();
+
+                           if (isValidate()) {
+
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("listPrice", listPrice);
+                            obj.put("city", city);
+                            obj.put("address", address);
+                            obj.put("state", state);
+                            obj.put("zip", zip);
+                            obj.put("image", image);
+                            obj.put("openHouseDate", openHouseStartDate);
+                            obj.put("openHouseEndDate", openHouseEndDate);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        String jsonObjectString = obj.toString();
+                        Log.d("json", jsonObjectString);
+
+
+                        presenter.addOpenHouse(jsonObjectString);
+                          }
+
                 }
+
+
 
             }
         });

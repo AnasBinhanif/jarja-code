@@ -23,6 +23,7 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
@@ -44,6 +45,7 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
 
     GetUserPermission userPermission;
 
+
     public SwipeAppointmentRecyclerAdapter(Context context, Activity activity, List<GetAppointmentsModel.Data.Datum> data, boolean isEditByLead, boolean isPreviousAppoint) {
 
         mData = data;
@@ -53,6 +55,24 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
         this.isPreviousAppoint = isPreviousAppoint;
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
+
+
+
+            if (GH.getInstance().getNotificationType().equals("apointment")){
+
+
+                String leadID = mData.get(pos).leadAppoinmentID;
+                GetAppointmentsModel.Data.Datum modelData1 = mData.get(0);
+                context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                        .putExtra("leadID", leadID)
+                        .putExtra("from", "4")
+                        .putExtra("models", modelData1));
+
+
+            }
+
+
+
     }
 
     @Override
@@ -64,6 +84,8 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder h, final int position) {
         final ViewHolder holder = (ViewHolder) h;
+
+
 
         pos = position;
         if (mData != null && 0 <= position && position < mData.size()) {
@@ -107,6 +129,7 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
                     view.getParent().requestDisallowInterceptTouchEvent(true);
                 }
             });
+
 
 
             holder.frameLayout.setOnClickListener(new View.OnClickListener() {

@@ -58,6 +58,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     boolean onResume;
 
 
+
     public FragmentAppointment() {
         // Required empty public constructor
     }
@@ -116,6 +117,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
             } else {
                 if (swipeAppointmentRecyclerAdapter != null) {
                     swipeAppointmentRecyclerAdapter.notifyDataSetChanged();
+
                 }
             }
         }
@@ -174,6 +176,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
     @SuppressLint("RestrictedApi")
     private void initViews() {
+
 
         appointmentList = new ArrayList<>();
         isFromActivity = this.getArguments().getBoolean("isFromActivity");

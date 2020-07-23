@@ -1,17 +1,14 @@
 package com.project.jarjamediaapp.Fragments.DashboardFragments;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -22,6 +19,8 @@ import com.project.jarjamediaapp.Fragments.DashboardFragments.followups.FollowUp
 import com.project.jarjamediaapp.Fragments.DashboardFragments.tasks.TasksFragment;
 import com.project.jarjamediaapp.Fragments.FragmentLifeCycle;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 public class TabsFragment extends BaseFragment {
 
@@ -29,6 +28,8 @@ public class TabsFragment extends BaseFragment {
     TabLayout tabLayout;
     ViewPager viewPager;
     private Menu menu;
+
+
 
     public TabsFragment() {
         // Required empty public constructor
@@ -45,6 +46,8 @@ public class TabsFragment extends BaseFragment {
         Bundle args = new Bundle();
         args.putString("title", fragment_title);
         args.putInt("position", position);
+
+
         tabsFragment.setArguments(args);
         return tabsFragment;
     }
@@ -67,9 +70,14 @@ public class TabsFragment extends BaseFragment {
         super.onAttach(context);
         this.context = context;
 
+
     }
 
     private void initViews(View view) {
+
+
+      /*  String str = this.getArguments().getString("title");
+        ToastUtils.showToastLong(context,str);*/
         viewPager = view.findViewById(R.id.viewPager);
         setupViewPager(viewPager);
         tabLayout = view.findViewById(R.id.tabLayout);
@@ -82,7 +90,23 @@ public class TabsFragment extends BaseFragment {
         adapter.addFragment(FragmentAppointment.newInstance(getResources().getString(R.string.dashboard), "", false), getResources().getString(R.string.appointment));
         adapter.addFragment(FollowUpFragment.newInstance(getResources().getString(R.string.dashboard), "", false), getResources().getString(R.string.follow_up));
         adapter.addFragment(TasksFragment.newInstance(getResources().getString(R.string.dashboard), "", false), getResources().getString(R.string.tasks));
+
         viewPager.setAdapter(adapter);
+        // fro testing
+        if (GH.getInstance().getNotificationType().equals("followup")){
+
+
+            viewPager.setCurrentItem(1);
+
+
+        }else if(GH.getInstance().getNotificationType().equals("task")){
+
+            viewPager.setCurrentItem(2);
+
+        }
+
+
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -98,6 +122,7 @@ public class TabsFragment extends BaseFragment {
                 FragmentLifeCycle fragmentToShow = (FragmentLifeCycle) adapter.getItem(newPosition);
                 fragmentToShow.onResumeFragment();
                 currentPosition = newPosition;
+
             }
 
             @Override

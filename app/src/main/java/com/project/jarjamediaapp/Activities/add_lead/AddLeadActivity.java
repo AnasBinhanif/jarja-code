@@ -93,6 +93,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         presenter = new AddLeadPresenter(this);
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_lead), true);
+
     }
 
     @Override
@@ -106,11 +107,15 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         initSpinners();
         initListeners();
         initCallsData();
+        // calling for getting fast data
+        initData();
     }
 
     private void initData() {
 
+
         if (getIntent().getExtras() != null) {
+
 
             leadModel = (GetLead.LeadList) getIntent().getExtras().getSerializable("Lead");
             bi.btnSave.setText("Update");
@@ -296,6 +301,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     }
 
     private void initCallsData() {
+
 
         presenter.getAgentNames();
 

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.airbnb.paris.Paris;
+import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.R;
@@ -45,6 +46,25 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         presenter = new NotificationPresenter(this);
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, "Notifications", true);
+
+      /*  if (getIntent().getExtras() != null) {
+
+           String typeOfNotification = getIntent().getStringExtra("notificationType");
+
+           switch (typeOfNotification){
+               case "apointment":
+
+                   Paris.style(bi.btnTasks).apply(R.style.TabButtonTranparentLeft);
+                   Paris.style(bi.btnAppointments).apply(R.style.TabButtonYellowMiddle);
+                   Paris.style(bi.btnFollowUps).apply(R.style.TabButtonTranparentRight);
+                   presenter.getNotificationByAppointments();
+
+                   break;
+
+           }
+        }*/
+
+
     }
 
     private void populateListDataT() {

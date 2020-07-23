@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.telecom.CallAudioState;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -53,9 +54,7 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.AppConstants;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
-
 import java.util.ArrayList;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -81,6 +80,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     CircleImageView navHeaderImageView;
     TextView navHeaderTextView, tvInitial;
     public static boolean onClick = true;
+    private String notificationType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +89,45 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         setContentView(R.layout.activity_home);
         context = HomeActivity.this;
         initViews();
+
+
+        if (getIntent().getExtras() != null) {
+
+            String typeOfNotification = getIntent().getStringExtra("notificationType");
+
+            switch (typeOfNotification) {
+                case "apointment":
+
+                    notificationType = "apointment";
+
+                    easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
+
+                    break;
+
+                case "followup":
+
+
+                    notificationType = "followup";
+
+                    easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
+
+                    break;
+
+                case "task":
+
+
+                    notificationType = "task";
+
+                    easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
+
+                    break;
+
+            }
+        }else{
+
+            easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), "").save();
+        }
+
     }
 
     private void initViews() {
@@ -256,9 +296,16 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         super.onResume();
 
-        // when come from anyactivity to dashboard so highlighted the dash board item in navigation drawer
-        navigationView.getMenu().getItem(0).setChecked(true);
+        navigationView.getMenu().getItem(1).setChecked(true);
         getUserProfileData();
+        // when come from anyactivity to dashboard so highlighted the dash board item in navigation drawer
+        // and stop for repeating dialogue in dash board screen
+      //  getUserProfileData();
+     /*   navigationView.getMenu().getItem(0).setChecked(true);
+        getUserProfileData();*/
+
+      /*  navigationView.getMenu().getItem(0).setChecked(true);
+        getUserProfileData();*/
         // this logics create double loading of data and progress bar
        /* try {
             navigationView.getMenu().getItem(0).setChecked(true);
@@ -293,8 +340,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 if (userPermission.data.dashboard.get(0).value) {
                     title = getResources().getString(R.string.dashboard);
                     fragment = TabsFragment.newInstance(title, R.id.nav_dashboard);
+
                     addToStack = false;
                     shouldAnimate = true;
+
                 } else {
                     ToastUtils.showToast(context, getString(R.string.dashboard_ViewDashboard));
                 }
@@ -309,6 +358,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     addToStack = true;
                     shouldAnimate = true;
                     _menu.findItem(R.id.action_search).setVisible(false);
+
                 } else {
 
                     ToastUtils.showToast(context, getString(R.string.lead_ViewLeads));
@@ -379,7 +429,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 // closed
                 alertDialog1.dismiss();
                 // remove selection of logout
-                 navigationView.getMenu().getItem(0).setChecked(true);
+                 navigationView.getMenu().getItem(1).setChecked(true);
             }
         });
 
@@ -440,7 +490,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         easyPreference.addString(GH.KEYS.USER_PERMISSIONS.name(), jsonText).save();
 
                         if (getUserProfile.data.dashboard.get(0).value) {
-                            onNavigationItemSelected(navigationView.getMenu().getItem(0));
+                            onNavigationItemSelected(navigationView.getMenu().getItem(1));
                         } else {
 
                             ToastUtils.showToast(context, getString(R.string.dashboard_ViewDashboard));
@@ -565,4 +615,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
     }
+
+
 }

@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -61,6 +62,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     boolean isTimeZoneClicked = false, isCountries = false, isImagePicked = false;
     int countryID;
     File actualImage, compressedImage;
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[com]+";
     ArrayList<Integer> arrayListCountryID = new ArrayList<>();
     ArrayList<String> arrayListCountryName = new ArrayList<>();
     ArrayList<String> arrayListStandardName = new ArrayList<>();
@@ -70,6 +72,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
     boolean mFormatting,mFormattingF;
     int mAfter,mAfterF;
+    boolean isLeadDistributionMessageEnabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,14 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         bi.atvTimeZone.setOnClickListener(this);
         bi.imgProfilePic.setOnClickListener(this);
         bi.btnCancel.setOnClickListener(this);
+
+        bi.cbRecieve.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                isLeadDistributionMessageEnabled = b;
+            }
+        });
 
         bi.atvPhone.addTextChangedListener(new TextWatcher() {
             @Override
@@ -262,20 +273,83 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         GetUserProfile.UserProfile userProfileData = getUserProfile.data.userProfileData;
         bi.atvFirstName.setText(userProfileData.firstName + "");
         bi.atvLastName.setText(userProfileData.lastName + "");
-        bi.atvTitle.setText(userProfileData.title + "");
-        bi.atvLicesnse.setText(userProfileData.license + "");
-        bi.atvEmail.setText(userProfileData.email + "");
-        bi.atvPhone.setText(userProfileData.phone + "");
+
+        if (userProfileData.title == null){
+            bi.atvTitle.setText("");
+        }else {
+            bi.atvTitle.setText(userProfileData.title + "");
+        }
+        if (userProfileData.license == null){
+            bi.atvLicesnse.setText("");
+        }else {
+            bi.atvLicesnse.setText(userProfileData.license + "");
+        }
+        if (userProfileData.email == null){
+            bi.atvEmail.setText("");
+        }else {
+            bi.atvEmail.setText(userProfileData.email + "");
+        }
+
+        if (userProfileData.phone == null){
+            bi.atvPhone.setText("");
+        }else {
+            bi.atvPhone.setText(userProfileData.phone + "");
+        }
+
         bi.atvVirtual.setText("");
-        bi.atvForwarder.setText(userProfileData.forwardedNumber + "");
-        bi.atvCompany.setText(userProfileData.company + "");
-        bi.atvStreetAddress.setText(userProfileData.streetAddress + "");
+        if (userProfileData.forwardedNumber == null){
+            bi.atvForwarder.setText("");
+        }else {
+            bi.atvForwarder.setText(userProfileData.forwardedNumber + "");
+        }
+
+        if (userProfileData.company == null){
+            bi.atvCompany.setText("");
+        }else {
+            bi.atvCompany.setText(userProfileData.company + "");
+        }
+        if (userProfileData.streetAddress == null){
+            bi.atvStreetAddress.setText("");
+        }else {
+            bi.atvStreetAddress.setText(userProfileData.streetAddress + "");
+        }
         bi.atvCountry.setText(arrayListCountryName.get(arrayListCountryID.indexOf(userProfileData.countryID)), false);
-        bi.atvState.setText(userProfileData.state + "");
-        bi.atvCity.setText(userProfileData.city + "");
-        bi.atvZip.setText(userProfileData.zipcode + "");
-        bi.atvTimeZone.setText(arrayListDisplayName.get(arrayListStandardName.indexOf(userProfileData.tmzone)), false);
-        bi.atvCompanyAddress.setText(userProfileData.companyAddress + "");
+        if (userProfileData.state == null){
+            bi.atvState.setText("");
+        }else {
+            bi.atvState.setText(userProfileData.state + "");
+        }
+        if (userProfileData.city == null){
+            bi.atvCity.setText("");
+        }else {
+            bi.atvCity.setText(userProfileData.city + "");
+        }
+        if (userProfileData.zipcode == null){
+            bi.atvZip.setText("");
+        }else {
+            bi.atvZip.setText(userProfileData.zipcode + "");
+        }
+
+        if (userProfileData.tmzone != null && !userProfileData.tmzone.equals("")){
+
+            bi.atvTimeZone.setText(arrayListDisplayName.get(arrayListStandardName.indexOf(userProfileData.tmzone)), false);
+
+        }else {
+
+            bi.atvTimeZone.setText("");
+
+        }
+      //  bi.atvTimeZone.setText(arrayListDisplayName.get(arrayListStandardName.indexOf(userProfileData.tmzone)), false);
+        if (userProfileData.companyAddress == null){
+            bi.atvCompanyAddress.setText("");
+        }else {
+            bi.atvCompanyAddress.setText(userProfileData.companyAddress + "");
+        }
+
+        if (userProfileData.leadDistributionMessageEnabled){
+            bi.cbRecieve.setChecked(true);
+        }
+
         countryID = userProfileData.countryID;
         timeZone = userProfileData.tmzone;
         agentType = userProfileData.agentType;
@@ -310,14 +384,31 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         String timezone = timeZone;
         int country = countryID;
 
+
+
         if(fname.trim().equals("") || lname.trim().equals("")){
 
             ToastUtils.showToast(context, "first name and last name is required");
 
+        }else if(email.trim().equals("")){
+
+            ToastUtils.showToast(context, "email is required");
+
+        }else if(fNumber.length() < 10){
+
+            ToastUtils.showToast(context, "provide valid forwarded number");
+
+        }else if(!email.matches(emailPattern)){
+
+            ToastUtils.showToast(context, "provide valid email address");
+
+        } else if(phone.length() < 10){
+
+            ToastUtils.showToast(context, "provide valid phone number");
         }else {
 
             presenter.updateUserProfile(fname, state, license, picName, companyAddress, agentType, zip, street, title, countryID, fNumber,
-                    false, email, company, lname, timeZone, picGuid, phone, city);
+                    isLeadDistributionMessageEnabled, email, company, lname, timeZone, picGuid, phone, city);
         }
 
 
