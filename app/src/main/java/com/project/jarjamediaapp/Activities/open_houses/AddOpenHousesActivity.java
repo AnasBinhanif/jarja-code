@@ -80,6 +80,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     int viewId;
     String openHouseType = "upcoming";
     int perm = 0;
+    private int propertyId;
     GetAllOpenHousesModel.Data.OpenHouse openHouse;
 
     @Override
@@ -96,6 +97,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             GetAllOpenHousesModel.Data.OpenHouse openHouse = (GetAllOpenHousesModel.Data.OpenHouse) getIntent().getExtras().getSerializable("editLeadsObj");
             if (openHouse != null){
 
+                // for update payload
+                propertyId = openHouse.propertyId;
                 populateOpenHouseData(openHouse);
                 bi.btnSave.setText("Update");
 
@@ -338,6 +341,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                         try {
                             obj.put("listPrice", listPrice);
                             obj.put("city", city);
+                            obj.put("propertyId", propertyId);
                             obj.put("address", address);
                             obj.put("state", state);
                             obj.put("zip", zip);
@@ -475,8 +479,16 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     @Override
     public void updateUI(Response<BaseResponse> response) {
 
-        ToastUtils.showToastLong(context, "Open House Added Successfully");
-        finish();
+        if (bi.btnSave.getText() == "Update"){
+
+            ToastUtils.showToastLong(context, "Open House Updated Successfully");
+            finish();
+        }else {
+
+            ToastUtils.showToastLong(context, "Open House Added Successfully");
+            finish();
+        }
+
     }
 
     @Override

@@ -62,7 +62,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     boolean isTimeZoneClicked = false, isCountries = false, isImagePicked = false;
     int countryID;
     File actualImage, compressedImage;
-    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[com]+";
+    String emailPattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}";
     ArrayList<Integer> arrayListCountryID = new ArrayList<>();
     ArrayList<String> arrayListCountryName = new ArrayList<>();
     ArrayList<String> arrayListStandardName = new ArrayList<>();
@@ -99,7 +99,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         bi.atvCountry.setOnClickListener(this);
         bi.atvTimeZone.setOnClickListener(this);
         bi.imgProfilePic.setOnClickListener(this);
-        bi.btnCancel.setOnClickListener(this);
+     //   bi.btnCancel.setOnClickListener(this);
 
         bi.cbRecieve.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -182,7 +182,9 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     @Override
     public void updateUI(GetUserProfile getUserProfile) {
 
+
         populateData(getUserProfile);
+
 
     }
 
@@ -361,6 +363,8 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
             Glide.with(this).load(userProfileData.picPath).into(bi.imgProfilePic);
         }
 
+        GH.getInstance().HideProgressDialog();
+
     }
 
     private void updateProfile() {
@@ -394,7 +398,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
             ToastUtils.showToast(context, "email is required");
 
-        }else if(fNumber.length() < 10){
+        }else if(bi.atvForwarder.length() < 14){
 
             ToastUtils.showToast(context, "provide valid forwarded number");
 
@@ -402,7 +406,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
             ToastUtils.showToast(context, "provide valid email address");
 
-        } else if(phone.length() < 10){
+         } else if(bi.atvPhone.length() < 14){
 
             ToastUtils.showToast(context, "provide valid phone number");
         }else {
@@ -511,9 +515,9 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
                 // click on drop down so softkeyboard hide
                hideSoftKeyboard(bi.atvCountry);
                 break;
-            case R.id.btnCancel:
+            /*case R.id.btnCancel:
                 finish();
-                break;
+                break;*/
             case R.id.btnUpdate:
 
                 if (isImagePicked) {
@@ -640,10 +644,10 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         }
     }
 
-  /*  @Override
+    @Override
     public void onBackPressed() {
         finish();
         super.onBackPressed();
 
-    }*/
+    }
 }

@@ -86,10 +86,13 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
         } else if (fromid.equalsIgnoreCase("6")) {
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),
                     prefix);
+          //  Log.i("JsonPrefix",prefix);
 
         } else {
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddAppointment(GH.getInstance().getAuthorization(),
                     prefix);
+
+
         }
         _callAddAppointment.enqueue(new Callback<BaseResponse>() {
             @Override

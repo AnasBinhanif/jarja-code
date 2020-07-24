@@ -486,7 +486,7 @@
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_11sdp" />
 
-                <!-- added cancel button here-->
+              <!--  &lt;!&ndash; added cancel button here&ndash;&gt;
                 <LinearLayout
                     android:id="@+id/lnBottom"
                     android:layout_width="match_parent"
@@ -518,10 +518,10 @@
                         android:textAllCaps="false"
                         android:textColor="@color/colorWhite" />
 
-                </LinearLayout>
+                </LinearLayout>-->
 
 
-             <!--   <LinearLayout
+                <LinearLayout
                     android:id="@+id/lnBottom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -540,7 +540,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/colorWhite" />
 
-                </LinearLayout>-->
+                </LinearLayout>
 
             </LinearLayout>
 

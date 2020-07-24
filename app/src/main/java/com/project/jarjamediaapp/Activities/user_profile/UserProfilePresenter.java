@@ -40,12 +40,13 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
     @Override
     public void getUserProfile() {
 
+
         _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 getUserProfileData(GH.getInstance().getAuthorization());
         _call.enqueue(new Callback<GetUserProfile>() {
             @Override
             public void onResponse(Call<GetUserProfile> call, Response<GetUserProfile> response) {
-                _view.hideProgressBar();
+             ///   _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetUserProfile getUserProfile = response.body();
@@ -65,7 +66,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
 
             @Override
             public void onFailure(Call<GetUserProfile> call, Throwable t) {
-                _view.hideProgressBar();
+                //_view.hideProgressBar();
                 _view.updateUIonFailure();
             }
         });
@@ -89,11 +90,11 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
 
                     } else {
 
-                        _view.hideProgressBar();
+                      //  _view.hideProgressBar();
                         _view.updateUIonFalse(getUserProfile.message);
                     }
                 } else {
-                    _view.hideProgressBar();
+                 //   _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -101,7 +102,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
 
             @Override
             public void onFailure(Call<GetTimeZoneList> call, Throwable t) {
-                _view.hideProgressBar();
+               // _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
         });
@@ -110,7 +111,6 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
 
     @Override
     public void getCountries() {
-
 
         _view.showProgressBar();
         _callGetCountries = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
@@ -124,15 +124,16 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
                     GetCountries getUserProfile = response.body();
                     if (response.body().status.equals("Success")) {
 
+                     //   _view.hideProgressBar();
                         _view.updateUI(getUserProfile);
 
-                    } else {
 
+                    } else {
                         _view.hideProgressBar();
                         _view.updateUIonFalse(getUserProfile.message);
                     }
                 } else {
-                    _view.hideProgressBar();
+                   _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -150,13 +151,13 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
     @Override
     public void getTwilioNumber() {
 
-            _view.showProgressBar();
+     //   _view.showProgressBar();
         _callGetTwilioNumber = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 getTwilioNumber(GH.getInstance().getAuthorization());
         _callGetTwilioNumber.enqueue(new Callback<GetTwilioNumber>() {
             @Override
             public void onResponse(Call<GetTwilioNumber> call, Response<GetTwilioNumber> response) {
-                _view.hideProgressBar();
+              //  _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetTwilioNumber getUserProfile = response.body();
@@ -176,7 +177,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
 
             @Override
             public void onFailure(Call<GetTwilioNumber> call, Throwable t) {
-                _view.hideProgressBar();
+              //  _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
         });
