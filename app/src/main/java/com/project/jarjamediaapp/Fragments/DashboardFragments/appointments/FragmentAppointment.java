@@ -160,7 +160,12 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     @Override
     public void updateUIonFailure() {
 
-        ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+        try {
+            ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+        }catch (Exception e){
+            Log.i("Exception","Exception in Context");
+        }
+
 
     }
 

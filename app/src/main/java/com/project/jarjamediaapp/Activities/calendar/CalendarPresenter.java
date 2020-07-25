@@ -1,5 +1,7 @@
 package com.project.jarjamediaapp.Activities.calendar;
 
+import android.util.Log;
+
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -27,6 +29,7 @@ public class CalendarPresenter extends BasePresenter<CalendarContract.View> impl
         _call.enqueue(new Callback<CalendarModel>() {
             @Override
             public void onResponse(Call<CalendarModel> call, Response<CalendarModel> response) {
+
 
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {

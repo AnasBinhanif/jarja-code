@@ -11,6 +11,7 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -80,13 +81,14 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
         if (fromid.equals("3")) {
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addAppointmentByCalendar(GH.getInstance().getAuthorization(),
                     prefix);
+              Log.i("JsonPrefixCalender",prefix);
         } else if (fromid.equalsIgnoreCase("4") || fromid.equalsIgnoreCase("2")) {
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateAppointment(GH.getInstance().getAuthorization(),
                     prefix);
-        } else if (fromid.equalsIgnoreCase("6")) {
+            } else if (fromid.equalsIgnoreCase("6")) {
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(),
                     prefix);
-          //  Log.i("JsonPrefix",prefix);
+            Log.i("JsonPrefix",prefix);
 
         } else {
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).AddAppointment(GH.getInstance().getAuthorization(),
@@ -104,11 +106,13 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
                 if (response.isSuccessful()) {
 
                     BaseResponse getAppointmentsModel = response.body();
+
                     if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
 
                         _view.updateUI(response);
 
                     } else {
+
 
                         _view.updateUIonFalse(getAppointmentsModel.message);
 

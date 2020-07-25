@@ -284,6 +284,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         try {
 
             if (isEdit) {
+
                 obj.put("isCompleted", markComplete);
                 obj.put("datedTo", datedTo);
                 obj.put("eventTitle", title);
@@ -295,7 +296,9 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 obj.put("gmailCalenderId", gmailCalendarId);
                 obj.put("isGmailApptActive", isGmailAppActive);
                 obj.put("calendarType", calendarType);
+
             } else {
+
                 obj.put("isCompleted", markComplete);
                 obj.put("datedTo", datedTo);
                 obj.put("eventTitle", title);

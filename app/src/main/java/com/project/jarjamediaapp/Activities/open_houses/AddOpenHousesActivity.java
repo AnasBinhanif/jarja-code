@@ -113,6 +113,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         bi.atvAddress.setText(openHouse.getStreetName());
         bi.atvPrice.setText(openHouse.getListPrice());
         bi.atvState.setText(openHouse.getState());
+        bi.atvZip.setText(openHouse.getZipCode());
         bi.atvOpenHouseStartDate.setText(openHouse.getOpenHouseDate());
         bi.atvOpenHouseEndDate.setText(openHouse.getOpenHouseEndDate());
 

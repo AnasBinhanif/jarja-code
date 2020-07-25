@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +82,8 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             }
             holder.tvTitle.setText(modelData.getTitle() != null ? modelData.getTitle() : "");
             holder.tvCount.setText(date);
+
+
 
             holder.swipeLayout.setSwipeListener(new SwipeRevealLayout.SwipeListener() {
                 @Override
@@ -219,11 +222,13 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
                     } else {
                         ToastUtils.showToast(context, calendarTaskDetailModel.getMessage());
+
                     }
                 } else {
 
                     ApiError error = ErrorUtils.parseError(response);
                     ToastUtils.showToast(context, error.message());
+
                 }
             }
 
@@ -278,7 +283,9 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                     if (modelData.getCalendarType() != null && !modelData.getCalendarType().equalsIgnoreCase("") && modelData.getCalendarType().equalsIgnoreCase("Task")) {
                         viewCalendarTaskDetail(modelData.getCalendarId(), modelData.getStart());
                     } else {
+
                         viewCalendarAppointmentDetail(modelData.getCalendarId(), modelData.getStart());
+
                     }
 
 
@@ -350,6 +357,9 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                 public void onClick(View v) {
 
                     dialog.dismiss();
+
+
+                    Log.i("calenderId",modelData.getCalendarId());
                     // data and calendar id will be passed in intent
                     context.startActivity(new Intent(context, AddAppointmentActivity.class)
                             .putExtra("from", "6")
