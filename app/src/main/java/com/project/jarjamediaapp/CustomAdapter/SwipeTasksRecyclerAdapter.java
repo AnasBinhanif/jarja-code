@@ -24,6 +24,7 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
@@ -53,6 +54,13 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
         this.isEditByLead = isEditByLead;
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
+
+        // fro testing
+        if (GH.getInstance().getNotificationType().equals("task")) {
+
+            editTask(0, null);
+        }
+
 
     }
 
@@ -239,11 +247,16 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
             String taskID = mData.get(pos).taskID;
             String scheduleID = mData.get(pos).scheduleID;
             if (isEditByLead) {
-                swipeLayout.close(true);
+                if (swipeLayout != null){
+                    swipeLayout.close(true);
+                }
+
                 if (!isFutureTask) {
                     if (taskID == null || taskID.equals("null") || taskID.equals("")) {
                         Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
                     } else {
+
+
                         context.startActivity(new Intent(context, AddTaskActivity.class)
                                 .putExtra("from", "5")
                                 .putExtra("whichTasks", 1)
@@ -256,6 +269,7 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
                         Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();
                     } else {
 
+
                         context.startActivity(new Intent(context, AddTaskActivity.class)
                                 .putExtra("from", "5")
                                 .putExtra("whichTasks", 3)
@@ -265,7 +279,9 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
                 }
             } else {
 
-                swipeLayout.close(true);
+                if (swipeLayout != null){
+                    swipeLayout.close(true);
+                }
                 if (!isFutureTask) {
                     if (taskID == null || taskID.equals("null") || taskID.equals("")) {
                         Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();

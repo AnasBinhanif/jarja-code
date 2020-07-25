@@ -98,6 +98,8 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
                     }
                 } else {
 
+
+
                     ApiError error = ErrorUtils.parseError(response);
                     _view._updateUIonError(error.message());
                 }

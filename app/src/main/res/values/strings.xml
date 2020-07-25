@@ -219,9 +219,11 @@
     <string name="footer_text">Jarja Media 2020 , All Rights Reserved.</string>
     <string name="header_text">Marketing at the speed of Today</string>
     <string name="email">Email</string>
-    <string name="_email">Email*</string>
+    <string name="_email">Email *</string>
     <string name="password">Password</string>
     <string name="change_password">Change Password</string>
+    <string name="_change_password">Change Password *</string>
+
     <string name="login">LOGIN</string>
     <string name="forgot_password">FORGOT YOUR PASSWORD?</string>
 

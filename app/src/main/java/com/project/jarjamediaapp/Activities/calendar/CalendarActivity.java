@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -79,7 +80,10 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
         String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
         String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
+        Log.i("calenderAgentId",GH.getInstance().getCalendarAgentId()+"month"+month+"year"+year);
+
         presenter.getCalendarEvents(GH.getInstance().getCalendarAgentId(), month, year);
+
 
     }
 
@@ -254,6 +258,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void updateUIList(CalendarModel response) {
 
+
         if (response.data.size() > 0) {
             dataList= new ArrayList<>();
             currentDateList = new ArrayList<>();
@@ -270,6 +275,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                     if (date.equals(String.valueOf(daySelected))) {
 
                         currentDateList.add(response.getData().get(i));
+
 
                     }
                 }

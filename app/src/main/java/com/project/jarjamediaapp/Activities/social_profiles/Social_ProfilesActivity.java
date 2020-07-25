@@ -290,8 +290,8 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
                     break;
                 case "Gravatar":
-                    webpage = Uri.parse(url);
-                    openWebPageUrl(webpage);
+                   // webpage = Uri.parse(url);
+                    openDialogueForWebUri(url);
 
                     break;
                 case "GooglePlus":
@@ -310,12 +310,22 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
                     break;
                 case "Klout":
-                    webpage = Uri.parse(url);
-                    openWebPageUrl(webpage);
+
+                    openDialogueForWebUri(url);
+
                     break;
                 case "Vimeo":
-                    webpage = Uri.parse(url);
-                    openWebPageUrl(webpage);
+                    boolean isVimeoInstalled = isPackageInstalled("com.vimeo.android.videoapp", context.getPackageManager());
+
+                    if(isVimeoInstalled){
+
+                        webpage = Uri.parse("vimeo://profile?id=" + userName);
+                        openWebPageUrl(webpage);
+                    }else {
+
+                        openDialogueForWebUri(url);
+
+                    }
                     break;
                 case "Instagram":
 
@@ -323,8 +333,8 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
                     if(isInstagramInstalled){
 
-                        webpage = Uri.parse("instagram://user?username=" + userName);
-                        openWebPageUrl(webpage);
+                    //    webpage = Uri.parse("http://instagram.com/_u/USER");//Uri.parse("instagram://user?username=" + userName);
+                        openWebPageUrl(Uri.parse(url));
                     }else {
 
                         openDialogueForWebUri(url);
@@ -350,11 +360,13 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
                     break;
                 case "Youtube":
 
-                    boolean isYoutubeInstalled = isPackageInstalled("com.youtube.android", context.getPackageManager());
+                    boolean isYoutubeInstalled = isPackageInstalled("com.google.android.youtube", context.getPackageManager());
 
                     if(isYoutubeInstalled){
 
-                        webpage = Uri.parse("youtube://www.youtube.com/user/" + userName);
+
+                        // removing profile url becasue youtube need profile id or chanel id
+                        webpage =  Uri.parse("vnd.youtube://");//Uri.parse("youtube://www.youtube.com/user/" + userName);
                         openWebPageUrl(webpage);
                     }else {
 

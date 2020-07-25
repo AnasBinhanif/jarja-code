@@ -37,6 +37,7 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -102,6 +103,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         presenter = new AddTaskPresenter(this);
         presenter.initScreen();
 
+        // for testing
+        EasyPreference.Builder pref = new EasyPreference.Builder(context);
+        pref.addString(GH.KEYS.NOTIFICATIONTYPE.name(),"").save();
+
     }
 
     @Override
@@ -124,6 +129,9 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
         loadTitle();
+        // for testing
+        // populate fast data
+        checkIntent();
 
         bi.cbEndDate.setOnCheckedChangeListener((compoundButton, b) -> {
 
@@ -362,7 +370,9 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListReminderText);
         bi.atvReminder.setAdapter(arrayAdapter);
 
-        checkIntent();
+        // for testing
+        // remove for taking time to show data
+     //   checkIntent();
 
         bi.atvReminder.setOnItemClickListener((parent, view, position, id) -> {
 
@@ -426,7 +436,9 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 type = arrayListViaValue.get(position);
             }
         });
-        bi.atvType.setText(arrayListViaText.get(0), false);
+        // for testing
+        // this line remove because it replaces the api data
+      //  bi.atvType.setText(arrayListViaText.get(0), false);
         type = arrayListViaValue.get(0);
     }
 

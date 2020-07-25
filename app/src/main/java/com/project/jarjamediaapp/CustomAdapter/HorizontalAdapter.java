@@ -157,16 +157,17 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                         // passing open house object to edit screen.
                         Intent i = new Intent(context,AddOpenHousesActivity.class);
                         i.putExtra("editLeadsObj",openHouse);
-                        context.startActivity(i);
 
+                        context.startActivity(i);
                     } else if (openHouseType.equals("past")) {
 
                         GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
+
                         // passing open house object to edit screen.
                         Intent i = new Intent(context,AddOpenHousesActivity.class);
                         i.putExtra("editLeadsObj",openHouse);
-                        context.startActivity(i);
 
+                        context.startActivity(i);
                     }
 
                 }

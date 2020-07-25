@@ -43,6 +43,7 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -104,6 +105,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi = DataBindingUtil.setContentView(this, R.layout.activity_add_appointment);
         presenter = new AddAppointmentPresenter(this);
         presenter.initScreen();
+
+
+        // for testing
+        EasyPreference.Builder pref = new EasyPreference.Builder(context);
+        pref.addString(GH.KEYS.NOTIFICATIONTYPE.name(),"").save();
+
     }
 
     @Override
@@ -285,6 +292,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     private void prePopulateData(CalendarAppointmentDetailModel.Data.CalendarData modelData) {
 
         encryptedAppointmentId = modelData.getEncryptedLeadAppoinmentID();
+
         leadId = String.valueOf(modelData.getEncryptedLeadID());
         bi.tvName.setText((modelData.getLeadName() != null ? modelData.getLeadName() : ""));
         if (fromId.equalsIgnoreCase("2") || fromId.equalsIgnoreCase("4") ||
@@ -843,6 +851,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     obj.put("viaReminder", via);
                     obj.put("isSend", isSend);
                     obj.put("calendarType", "Event");
+                   // Log.i("gmailCalenderId","0");
                     obj.put("agentIDsString", agentIdsString);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -860,7 +869,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     obj.put("eventTitle", eventTitle);
                     obj.put("isAppointmentAttend", isAppointmentAttend);
                     obj.put("isAppointmentFixed", isAppointmentFixed);
-                    obj.put("leadAppoinmentID", leadAppointmentID);
+                    obj.put("leadAppoinmentID", encryptedAppointmentId);
                     obj.put("datedFrom", datedFrom);
                     obj.put("isAllDay", isAllDay);
                     obj.put("agentIds", agentsID);
@@ -869,6 +878,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     obj.put("viaReminder", via);
                     obj.put("isSend", isSend);
                     obj.put("calendarType", "Event");
+                    obj.put("gmailCalenderId",calendarData.gmailCalenderId);
                     obj.put("agentIDsString", agentIdsString);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -1120,11 +1130,14 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     @Override
     public void updateUIonFalse(String message) {
+
+
         ToastUtils.showToastLong(context, message);
     }
 
     @Override
     public void updateUIonError(String error) {
+
 
         /*if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");

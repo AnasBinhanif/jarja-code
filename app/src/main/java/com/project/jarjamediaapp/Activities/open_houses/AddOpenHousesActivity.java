@@ -80,6 +80,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     int viewId;
     String openHouseType = "upcoming";
     int perm = 0;
+    private int propertyId;
     GetAllOpenHousesModel.Data.OpenHouse openHouse;
 
     @Override
@@ -96,14 +97,13 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             GetAllOpenHousesModel.Data.OpenHouse openHouse = (GetAllOpenHousesModel.Data.OpenHouse) getIntent().getExtras().getSerializable("editLeadsObj");
             if (openHouse != null){
 
+                // for update payload
+                propertyId = openHouse.propertyId;
                 populateOpenHouseData(openHouse);
+                bi.btnSave.setText("Update");
+
             }
         }
-
-
-
-
-
 
     }
 
@@ -113,8 +113,12 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         bi.atvAddress.setText(openHouse.getStreetName());
         bi.atvPrice.setText(openHouse.getListPrice());
         bi.atvState.setText(openHouse.getState());
+        bi.atvZip.setText(openHouse.getZipCode());
         bi.atvOpenHouseStartDate.setText(openHouse.getOpenHouseDate());
         bi.atvOpenHouseEndDate.setText(openHouse.getOpenHouseEndDate());
+
+        openHouseStartDate = openHouse.getOpenHouseDate();
+        openHouseEndDate = openHouse.getOpenHouseEndDate();
 
         bi.tvRemovePictures.setVisibility(View.VISIBLE);
         bi.tvRemovePictures.setText("Image uploaded");
@@ -324,34 +328,72 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             public void onClick(View v) {
                 // dismiss dialogue on api integration
 
-                address = bi.atvAddress.getText().toString();
-                listPrice = bi.atvPrice.getText().toString();
-                city = bi.atvCity.getText().toString();
-                state = bi.atvState.getText().toString();
-                zip = bi.atvZip.getText().toString();
+                if (bi.btnSave.getText() == "Update"){
 
-                if (isValidate()) {
+                    address = bi.atvAddress.getText().toString();
+                    listPrice = bi.atvPrice.getText().toString();
+                    city = bi.atvCity.getText().toString();
+                    state = bi.atvState.getText().toString();
+                    zip = bi.atvZip.getText().toString();
 
-                    JSONObject obj = new JSONObject();
-                    try {
-                        obj.put("listPrice", listPrice);
-                        obj.put("city", city);
-                        obj.put("address", address);
-                        obj.put("state", state);
-                        obj.put("zip", zip);
-                        obj.put("image", image);
-                        obj.put("openHouseDate", openHouseStartDate);
-                        obj.put("openHouseEndDate", openHouseEndDate);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                //    if (isValidate()) {
 
-                    String jsonObjectString = obj.toString();
-                    Log.d("json", jsonObjectString);
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("listPrice", listPrice);
+                            obj.put("city", city);
+                            obj.put("propertyId", propertyId);
+                            obj.put("address", address);
+                            obj.put("state", state);
+                            obj.put("zip", zip);
+                            obj.put("image", image);
+                            obj.put("openHouseDate", openHouseStartDate);
+                            obj.put("openHouseEndDate", openHouseEndDate);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        String jsonObjectString = obj.toString();
+                        Log.d("json", jsonObjectString);
 
 
-                    presenter.addOpenHouse(jsonObjectString);
+                        presenter.addOpenHouse(jsonObjectString);
+                 //   }
+
+                }else {
+
+                        address = bi.atvAddress.getText().toString();
+                        listPrice = bi.atvPrice.getText().toString();
+                        city = bi.atvCity.getText().toString();
+                        state = bi.atvState.getText().toString();
+                        zip = bi.atvZip.getText().toString();
+
+                           if (isValidate()) {
+
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("listPrice", listPrice);
+                            obj.put("city", city);
+                            obj.put("address", address);
+                            obj.put("state", state);
+                            obj.put("zip", zip);
+                            obj.put("image", image);
+                            obj.put("openHouseDate", openHouseStartDate);
+                            obj.put("openHouseEndDate", openHouseEndDate);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        String jsonObjectString = obj.toString();
+                        Log.d("json", jsonObjectString);
+
+
+                        presenter.addOpenHouse(jsonObjectString);
+                          }
+
                 }
+
+
 
             }
         });
@@ -438,8 +480,16 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     @Override
     public void updateUI(Response<BaseResponse> response) {
 
-        ToastUtils.showToastLong(context, "Open House Added Successfully");
-        finish();
+        if (bi.btnSave.getText() == "Update"){
+
+            ToastUtils.showToastLong(context, "Open House Updated Successfully");
+            finish();
+        }else {
+
+            ToastUtils.showToastLong(context, "Open House Added Successfully");
+            finish();
+        }
+
     }
 
     @Override

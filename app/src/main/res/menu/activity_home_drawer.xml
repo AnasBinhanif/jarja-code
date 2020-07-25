@@ -5,6 +5,13 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_lead"
+            android:visible="true"
+            android:title="My Profile" />
+
         <item
             android:id="@+id/nav_dashboard"
             android:icon="@drawable/ic_dashboard"
@@ -25,11 +32,7 @@
             android:icon="@drawable/ic_open_house"
             app:actionViewClass="android.widget.TextView"
             android:title="@string/openHouses" />
-        <item
-            android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_lead"
-            android:visible="true"
-            android:title="My Profile" />
+
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout"

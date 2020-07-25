@@ -39,6 +39,8 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
     int page = 1;
     int totalPages;
     String taskType = "due";
+    // fro testing
+    LinearLayoutManager layoutManager;
 
     public FollowUpFragment() {
         // Required empty public constructor
@@ -93,9 +95,20 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
             bi.tvNoRecordFound.setVisibility(View.GONE);
             bi.rvFollowUp.setVisibility(View.VISIBLE);
-            swipeFollowUpsRecyclerAdapter.notifyDataSetChanged();
+            // fro testing
+         //   swipeFollowUpsRecyclerAdapter.notifyDataSetChanged();
 
         }
+
+        // for testing
+        layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        swipeFollowUpsRecyclerAdapter = new SwipeFollowUpsRecyclerAdapter(context, getActivity(), followUpsList);
+        bi.rvFollowUp.setAdapter(swipeFollowUpsRecyclerAdapter);
+        bi.rvFollowUp.setLayoutManager(layoutManager);
+        bi.rvFollowUp.setItemAnimator(new DefaultItemAnimator());
+
+        // fro testing
+        swipeFollowUpsRecyclerAdapter.notifyDataSetChanged();
 
     }
 
@@ -137,13 +150,15 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
         bi.btnFollowDue.setOnClickListener(this);
         bi.btnFollowOverDue.setOnClickListener(this);
 
+
         hitApi();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        // for testing
+      /*  LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         swipeFollowUpsRecyclerAdapter = new SwipeFollowUpsRecyclerAdapter(context, getActivity(), followUpsList);
         bi.rvFollowUp.setAdapter(swipeFollowUpsRecyclerAdapter);
         bi.rvFollowUp.setLayoutManager(layoutManager);
-        bi.rvFollowUp.setItemAnimator(new DefaultItemAnimator());
+        bi.rvFollowUp.setItemAnimator(new DefaultItemAnimator());*/
 
         bi.rvFollowUp.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

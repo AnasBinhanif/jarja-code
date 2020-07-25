@@ -1,5 +1,7 @@
 package com.project.jarjamediaapp.Activities.add_calendar_task;
 
+import android.util.Log;
+
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -31,8 +33,10 @@ public class AddCalendarTaskPresenter extends BasePresenter<AddCalendarTaskContr
 
         if (!isEdit) {
             call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addAppointmentByCalendar(GH.getInstance().getAuthorization(), jsonString);
+            Log.i("jsonPrefix",jsonString);
         } else {
             call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).updateAppointmentTaskByCalendar(GH.getInstance().getAuthorization(), jsonString);
+            Log.i("jsonPrefix",jsonString);
         }
         call.enqueue(new Callback<BaseResponse>() {
             @Override

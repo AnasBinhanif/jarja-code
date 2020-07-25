@@ -53,7 +53,8 @@ public class GH {
         AGENT_NAME,
         USER_NAME,
         USER_PERMISSIONS,
-        FIREBASE_TOEKN
+        FIREBASE_TOEKN,
+        NOTIFICATIONTYPE
 
     }
 
@@ -61,6 +62,15 @@ public class GH {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.AUTHORIZATION.name(), null);
 
     }
+    public String getNotificationType() {
+        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.NOTIFICATIONTYPE.name(), null);
+
+    }
+    public void addNotificationType(String notificationType){
+
+        EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.NOTIFICATIONTYPE.name(), notificationType);
+    }
+
 
     public GetUserPermission getUserPermissions() {
         Gson gson = new Gson();
@@ -101,6 +111,7 @@ public class GH {
     public String getFirebaseToken() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.FIREBASE_TOEKN.name(), "");
     }
+
 
   /*  public void ShowProgressDialog(Context context) {
 

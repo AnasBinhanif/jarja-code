@@ -70,6 +70,14 @@ public class GetAllOpenHousesModel extends BaseResponse implements Serializable 
             @Expose
             public String openHouseEndDate;
 
+            @SerializedName("zip")
+            @Expose
+            public String zip;
+
+            public String getZipCode() {
+                return zip;
+            }
+
             public String getImgURL() {
                 return imgURL;
             }

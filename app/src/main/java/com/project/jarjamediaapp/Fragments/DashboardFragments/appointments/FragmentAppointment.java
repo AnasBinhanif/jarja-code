@@ -58,6 +58,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     boolean onResume;
 
 
+
     public FragmentAppointment() {
         // Required empty public constructor
     }
@@ -116,6 +117,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
             } else {
                 if (swipeAppointmentRecyclerAdapter != null) {
                     swipeAppointmentRecyclerAdapter.notifyDataSetChanged();
+
                 }
             }
         }
@@ -158,7 +160,12 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     @Override
     public void updateUIonFailure() {
 
-        ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+        try {
+            ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+        }catch (Exception e){
+            Log.i("Exception","Exception in Context");
+        }
+
 
     }
 
@@ -174,6 +181,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
     @SuppressLint("RestrictedApi")
     private void initViews() {
+
 
         appointmentList = new ArrayList<>();
         isFromActivity = this.getArguments().getBoolean("isFromActivity");
