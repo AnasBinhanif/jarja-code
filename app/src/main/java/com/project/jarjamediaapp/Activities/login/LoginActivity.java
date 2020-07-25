@@ -69,7 +69,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         //MyLog.d("Response", "onSuccess: " + response.toString());
                         Log.d("token", response.accessToken + "");
 
-                       // easyPreference.addString(GH.KEYS.AUTHORIZATION.name(), "bearer" + " " + response.accessToken).save();
+                        // this lne of code should be on succes response
+                        easyPreference.addString(GH.KEYS.AUTHORIZATION.name(), "bearer" + " " + response.accessToken).save();
                         userAuthenticate(FirebaseInstanceId.getInstance().getToken(),"FCM","bearer" + " " + response.accessToken);
                     }
 
