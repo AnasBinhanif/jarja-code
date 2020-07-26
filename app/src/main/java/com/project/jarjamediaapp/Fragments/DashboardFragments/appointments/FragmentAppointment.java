@@ -81,6 +81,8 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         presenter = new AppointmentPresenter(this);
         presenter.initScreen();
 
+
+
         return bi.getRoot();
     }
 
@@ -128,6 +130,8 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         } else {
             hideProgressBar();
         }
+
+
     }
 
     @Override

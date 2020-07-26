@@ -1,13 +1,14 @@
 package com.project.jarjamediaapp.Activities;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.telecom.CallAudioState;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,7 +34,12 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
+import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
+import com.project.jarjamediaapp.Activities.add_appointment.Data;
+import com.project.jarjamediaapp.Activities.add_appointment.GetAppointmentByIDModel;
 import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
+import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
+import com.project.jarjamediaapp.Activities.add_task.GetTaskDetail;
 import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
 import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
@@ -46,6 +52,7 @@ import com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads.FindLeadsFr
 import com.project.jarjamediaapp.Interfaces.UpdateTitle;
 import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.Models.GetUserProfile;
+import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
@@ -54,7 +61,9 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.AppConstants;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
+
 import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -83,33 +92,35 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private String notificationType;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         context = HomeActivity.this;
+
         initViews();
 
 
         if (getIntent().getExtras() != null) {
 
             String typeOfNotification = getIntent().getStringExtra("notificationType");
+            String notificationID = getIntent().getStringExtra("notificationID");
 
             switch (typeOfNotification) {
                 case "apointment":
 
                     notificationType = "apointment";
 
-                    easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
+                   getAppointmentById(notificationID);
+                  //  easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
 
                     break;
 
                 case "followup":
 
 
-                    notificationType = "followup";
-
-                    easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
+                    getFolloUpDetailByID(notificationID);
 
                     break;
 
@@ -118,15 +129,24 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                     notificationType = "task";
 
-                    easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
+                   getTaskDetail(notificationID);
+
+                    break;
+                case "futureTask":
+
+
+                    notificationType = "futureTask";
+
+                    getFutureTaskDetail(notificationID);
 
                     break;
 
+
             }
-        }else{
+        }/*else{
 
             easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), "").save();
-        }
+        }*/
 
     }
 
@@ -614,6 +634,215 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
             }
         });
+    }
+
+    public void getAppointmentById(String appointmentID) {
+
+        Call<GetAppointmentByIDModel> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetAppointmentByID(GH.getInstance().getAuthorization(),appointmentID);
+        _call.enqueue(new Callback<GetAppointmentByIDModel>() {
+            @Override
+            public void onResponse(Call<GetAppointmentByIDModel> call, Response<GetAppointmentByIDModel> response) {
+
+                if (response.isSuccessful()) {
+
+                    GetAppointmentByIDModel getAppointmentsModel = response.body();
+
+                    if (getAppointmentsModel.getStatus().equals("Success")) {
+
+                        Data models = getAppointmentsModel.getData();
+                        context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                                .putExtra("leadID", models.getLeadID())
+                                .putExtra("from", "7")
+                                .putExtra("leadName",models.getEventTitle())
+                                .putExtra("models", models));
+                        //_view.updateUI(getAppointmentsModel);
+
+                    } else {
+
+                       /* _view.hideProgressBar();
+                        _view.updateUIonFalse(getAppointmentsModel.message);*/
+
+                    }
+                } else {
+
+//                    _view.hideProgressBar();
+//                    ApiError error = ErrorUtils.parseError(response);
+//                    _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetAppointmentByIDModel> call, Throwable t) {
+               /* _view.hideProgressBar();
+                _view.updateUIonFailure();*/
+            }
+        });
+    }
+
+    private void getFolloUpDetailByID(String dripDetailId) {
+
+        Call<ViewFollowUpModel> _callToday;
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId);
+        _callToday.enqueue(new Callback<ViewFollowUpModel>() {
+            @Override
+            public void onResponse(Call<ViewFollowUpModel> call, Response<ViewFollowUpModel> response) {
+                GH.getInstance().HideProgressDialog();
+                if (response.isSuccessful()) {
+
+                    ViewFollowUpModel getDetails = response.body();
+                    if (getDetails.status.equals("Success")) {
+
+                        GH.getInstance().HideProgressDialog();
+                        String wait = getDetails.data.viewDPCStep.wait;
+                        String time = getDetails.data.viewDPCStep.sendTime;
+                        String note = getDetails.data.viewDPCStep.message;
+                        String title = getDetails.data.viewDPCStep.subject;
+                        String senType = getDetails.data.viewDPCStep.sentType;
+                        String dateTime = getDetails.data.viewDPCStep.sendDateTime;
+
+                        showViewFollowUpDialog(context, wait, title, dateTime, time, note, senType);
+
+
+                    } else {
+
+                        ToastUtils.showToast(context, getDetails.message);
+                        GH.getInstance().HideProgressDialog();
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    ToastUtils.showToast(context, error.message());
+                    GH.getInstance().HideProgressDialog();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ViewFollowUpModel> call, Throwable t) {
+                GH.getInstance().HideProgressDialog();
+
+                ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
+            }
+        });
+    }
+
+    public void showViewFollowUpDialog(Context context, String wait, String title, String dateTime, String time, String note, String sentType) {
+
+        TextView edtWait, edtTitle, edtTime, edtNote;
+        final Dialog dialog = new Dialog(context, R.style.Dialog);
+        dialog.setCancelable(true);
+
+
+        if (sentType != null && sentType.equalsIgnoreCase("Wait")) {
+            dialog.setContentView(R.layout.custom_view_followup_wait_dialog);
+
+            edtNote = (TextView) dialog.findViewById(R.id.edtNote);
+            edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
+            edtTime = (TextView) dialog.findViewById(R.id.edtTime);
+            edtWait = (TextView) dialog.findViewById(R.id.edtWait);
+            edtWait.setText(wait);
+            edtTime.setText(time);
+
+        } else {
+
+            dialog.setContentView(R.layout.custom_view_followup_dialog);
+            edtNote = (TextView) dialog.findViewById(R.id.edtNote);
+            edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
+            edtTime = (TextView) dialog.findViewById(R.id.edtTime);
+            edtTime.setText(GH.getInstance().formatter(dateTime,"MM-dd-yyyy hh:mm a","yyyy-MM-dd'T'HH:mm:ss"));
+
+        }
+
+        edtNote.setText(note);
+        edtTitle.setText(title);
+
+        dialog.show();
+    }
+
+    public void getTaskDetail(String taskId) {
+
+
+        Call<GetTaskDetail> apiCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getTaskDetail(GH.getInstance().getAuthorization(), taskId);
+        apiCall.enqueue(new Callback<GetTaskDetail>() {
+            @Override
+            public void onResponse(Call<GetTaskDetail> call, Response<GetTaskDetail> response) {
+
+                if (response.isSuccessful()) {
+
+                    GetTaskDetail getTaskDetail = response.body();
+
+                    if (getTaskDetail.getStatus().equalsIgnoreCase("Success")) {
+
+                        context.startActivity(new Intent(context, AddTaskActivity.class)
+                                .putExtra("from", "5")
+                                .putExtra("whichTasks", 1)
+                                .putExtra("leadID", getTaskDetail.getData().leadID)
+                                .putExtra("taskId", taskId));
+                       // _view.updateTaskDetail(getTaskDetail);
+
+                    } else {
+
+                        ToastUtils.showToastLong(getApplicationContext(),getTaskDetail.message);
+                       /* _view.hideProgressBar();
+
+                        _view.updateUIonFalse(getTaskDetail.message);*/
+
+                    }
+                } else {
+
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    ToastUtils.showToastLong(getApplicationContext(),error.Message());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTaskDetail> call, Throwable t) {
+                ToastUtils.showToastLong(getApplicationContext(),t.getMessage());
+            }
+        });
+
+    }
+    public void getFutureTaskDetail(String scheduleID) {
+
+
+        Call<GetTaskDetail> apiCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class)
+                .getFutureTaskDetail(GH.getInstance().getAuthorization(), scheduleID);
+        apiCall.enqueue(new Callback<GetTaskDetail>() {
+            @Override
+            public void onResponse(Call<GetTaskDetail> call, Response<GetTaskDetail> response) {
+
+                if (response.isSuccessful()) {
+
+                    GetTaskDetail getTaskDetail = response.body();
+
+                    if (getTaskDetail.getStatus().equalsIgnoreCase("Success")) {
+
+
+                        context.startActivity(new Intent(context, AddTaskActivity.class)
+                                .putExtra("from", "5")
+                                .putExtra("whichTasks", 3)
+                                .putExtra("leadID", getTaskDetail.getData().leadID)
+                                .putExtra("taskId", scheduleID));
+
+                    } else {
+
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTaskDetail> call, Throwable t) {
+
+            }
+        });
+
     }
 
 

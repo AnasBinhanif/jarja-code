@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.Networking;
 
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
+import com.project.jarjamediaapp.Activities.add_appointment.GetAppointmentByIDModel;
 import com.project.jarjamediaapp.Activities.add_appointment.GetLocationModel;
 import com.project.jarjamediaapp.Activities.add_task.GetTaskDetail;
 import com.project.jarjamediaapp.Activities.calendar.CalendarModel;
@@ -130,6 +131,9 @@ public interface ApiMethods {
     @GET("Appointment/GetTodayAppointment")
     Call<GetAppointmentsModel> GetTodayAppointment(@Header("Authorization") String authorization,
                                                    @Query("pageNumber") int page);
+    @GET("Appointment/GetAppointmentByID")
+    Call<GetAppointmentByIDModel> GetAppointmentByID(@Header("Authorization") String authorization,
+                                                     @Query("EncryptedAppointmentID") String appointmentID);
 
     @GET("Appointment/GetPreviousAppointment")
     Call<GetAppointmentsModel> GetPreviousAppointment(@Header("Authorization") String authorization,
@@ -225,6 +229,7 @@ public interface ApiMethods {
     Call<GetAppointmentsModel> GetUpcomingAppointmentByLeadID(@Header("Authorization") String authorization,
                                                               @Query("Encrypted_LeadID") String leadID,
                                                               @Query("pageNumber") int page);
+
 
     @GET("Lead/GetLeadDueTasksNew")
     Call<GetTasksModel> GetLeadDueTasksNew(@Header("Authorization") String authorization,

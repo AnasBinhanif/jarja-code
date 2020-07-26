@@ -203,7 +203,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
                     if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
 
                         _view.updateUIListForVia(getAppointmentsModel);
-                        getReminder();
+                      //  getReminder();
                     } else {
                     //    _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);

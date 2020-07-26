@@ -43,7 +43,6 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
-import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -95,6 +94,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     int month, year, day, _month, _year, _day, mHour, mMinute;
     Calendar newCalendar;
     boolean isStart;
+    String gmailCalenderId;
 
     protected boolean enabled = true;
 
@@ -107,9 +107,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         presenter.initScreen();
 
 
-        // for testing
+      /*  // for testing
         EasyPreference.Builder pref = new EasyPreference.Builder(context);
-        pref.addString(GH.KEYS.NOTIFICATIONTYPE.name(),"").save();
+        pref.addString(GH.KEYS.NOTIFICATIONTYPE.name(),"").save();*/
 
     }
 
@@ -158,6 +158,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         // 4 from Update Appointment
         // 6 for Update Calendar Appointment
         fromId = getIntent().getStringExtra("from");
+        gmailCalenderId = getIntent().getStringExtra("gmailCalenderId");
         switch (fromId) {
             case "1":
             case "3":
@@ -167,6 +168,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             break;
             case "2":
             case "4":
+            case "7":
             case "6": {
                 setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.edit_appointment), true);
             }
@@ -261,8 +263,20 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             case "4": {
                 isEdit = true;
                 GetAppointmentsModel.Data.Datum modelData = getIntent().getParcelableExtra("models");
+
                 prePopulateData(modelData);
             }
+
+            break;
+            case "7": {
+                isEdit = true;
+                leadId = getIntent().getStringExtra("leadID");
+                leadName = getIntent().getStringExtra("leadName");
+                isEdit = true;
+                Data modelData = getIntent().getParcelableExtra("models");
+                prePopulateDataFromNotification(modelData);
+            }
+
             break;
             case "6": {
                 isEdit = true;
@@ -290,6 +304,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     }
 
     private void prePopulateData(CalendarAppointmentDetailModel.Data.CalendarData modelData) {
+
 
         encryptedAppointmentId = modelData.getEncryptedLeadAppoinmentID();
 
@@ -358,6 +373,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     private void prePopulateData(GetAppointmentsModel.Data.Datum modelData) {
 
+
         leadId = modelData.getLeadID();
         leadAppointmentId = modelData.getLeadAppoinmentID();
         bi.tvName.setText((modelData.getVtCRMLeadCustom().getFirstName() != null ? modelData.getVtCRMLeadCustom().getFirstName() : "") + " " + (modelData.getVtCRMLeadCustom().getLastName() != null ? modelData.getVtCRMLeadCustom().getLastName() : ""));
@@ -404,6 +420,73 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         bi.cbAllDay.setChecked(modelData.isAllDay);
         if (modelData.isAllDay) {
+            allDay();
+        }
+
+        if (modelData.getVtCRMLeadAppoinmentDetailCustom() != null && modelData.getVtCRMLeadAppoinmentDetailCustom().size() > 0) {
+            ArrayList<String> arrayList = new ArrayList<>();
+            selectedIdsList = new ArrayList<>();
+            for (int i = 0; i < modelData.getVtCRMLeadAppoinmentDetailCustom().size(); i++) {
+                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                TextView textView = child.findViewById(R.id.txtDynamic);
+                textView.setText(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getAgentName());
+                arrayList.add(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getAgentID());
+                bi.lnAgent.addView(child);
+                bi.lnAgent.setVisibility(View.VISIBLE);
+                selectedIdsList.add(modelData.getVtCRMLeadAppoinmentDetailCustom().get(i).getAgentDecryptedID());
+            }
+            agentIdsString = TextUtils.join(",", arrayList);
+        }
+    }
+
+    private void prePopulateDataFromNotification(Data modelData) {
+
+        leadId = modelData.getLeadID();
+        leadAppointmentId = modelData.getLeadAppoinmentID();
+        bi.tvName.setText((modelData.getVtCRMLeadCustom().getFirstName() != null ? modelData.getVtCRMLeadCustom().getFirstName() : "") + " " + (modelData.getVtCRMLeadCustom().getLastName() != null ? modelData.getVtCRMLeadCustom().getLastName() : ""));
+        if (fromId.equalsIgnoreCase("2") || fromId.equalsIgnoreCase("4") ||
+                fromId.equalsIgnoreCase("6")) {
+            bi.tvName.setEnabled(false);
+        } else {
+            bi.tvName.setEnabled(true);
+            bi.tvName.setHint("Contact");
+        }
+        bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
+        bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
+        bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
+
+        startDate = GH.getInstance().formatter(modelData.getDatedFrom(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+        endDate = GH.getInstance().formatter(modelData.getDatedTo(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+        startTime = GH.getInstance().formatter(modelData.getDatedFrom(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+        endTime = GH.getInstance().formatter(modelData.getDatedTo(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+
+        bi.tvStartDate.setText(GH.getInstance().formatDate(modelData.getDatedFrom()) != null ? GH.getInstance().formatDate(modelData.getDatedFrom()) : "");
+        bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(modelData.getDatedFrom()) : "");
+        bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(modelData.getDatedTo()) : "");
+        bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(modelData.getDatedTo()) : "");
+
+        if (arrayListReminderValue != null && arrayListReminderValue.size() > 0) {
+            reminder = String.valueOf(modelData.getInterval());
+            via = modelData.getViaReminder();
+            for (int position = 0; position < arrayListReminderValue.size(); position++) {
+                if (arrayListReminderValue.get(position).equalsIgnoreCase(reminder)) {
+                    bi.atvReminder.setText(arrayListReminderText.get(position));
+                }
+            }
+        }
+        bi.atvVia.setText(modelData.getViaReminder() != null ? modelData.getViaReminder() : "");
+        if (reminder != null && !reminder.equalsIgnoreCase("0")) {
+            bi.atvVia.setVisibility(View.VISIBLE);
+            bi.lblVia.setVisibility(View.VISIBLE);
+            via = modelData.getViaReminder();
+        } else {
+            bi.atvVia.setVisibility(View.GONE);
+            bi.lblVia.setVisibility(View.GONE);
+            via = "";
+        }
+
+        bi.cbAllDay.setChecked(modelData.getIsAllDay());
+        if (modelData.getIsAllDay()) {
             allDay();
         }
 
@@ -572,7 +655,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         if (response.body().getStatus().equalsIgnoreCase("Success")) {
 
-            if (fromId.equals("2") || fromId.equals("4") || fromId.equals("6")) {
+            if (fromId.equals("2") || fromId.equals("4") || fromId.equals("6") || fromId.equals("7")) {
                 ToastUtils.showToast(context, "Updated Successfully");
             } else {
                 ToastUtils.showToast(context, "Added Successfully");
@@ -695,6 +778,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                         //will return list of selected IDS
                         selectedIdsList = new ArrayList<>();
                         selectedIdsList = selectedIds;
+
                         if (bi.lnAgent.getChildCount() > 0) {
                             bi.lnAgent.removeAllViews();
                         }
@@ -829,6 +913,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
             JSONObject obj = new JSONObject();
 
+            // for calender appointment add
             if (fromId.equals("3")) {
                 try {
                     obj.put("location", location);
@@ -851,11 +936,14 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     obj.put("viaReminder", via);
                     obj.put("isSend", isSend);
                     obj.put("calendarType", "Event");
+                    obj.put("gmailCalenderId","");
                    // Log.i("gmailCalenderId","0");
                     obj.put("agentIDsString", agentIdsString);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                // for calender appointment update
             } else if (fromId.equals("6")) {
 
                 try {
@@ -884,7 +972,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     e.printStackTrace();
                 }
 
-            } else {
+                // for notification appointment update
+            } else if(fromId.equals("7")){
                 try {
                     obj.put("location", location);
                     obj.put("isCompleted", isCompleted);
@@ -906,6 +995,62 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     obj.put("isSend", isSend);
                     obj.put("viaReminder", via);
                     obj.put("leadID", "0");
+                    obj.put("agentIDsString", agentIdsString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else if(fromId.equals("4")){
+                try {
+                    obj.put("location", location);
+                    obj.put("isCompleted", isCompleted);
+                    obj.put("appointmentDate", "");
+                    obj.put("leadStringID", leadStringID);
+                    obj.put("orderBy", orderBy);
+                    obj.put("startTime", startTime);
+                    obj.put("interval", interval);
+                    obj.put("datedTo", datedTo);
+                    obj.put("eventTitle", eventTitle);
+                    obj.put("isAppointmentAttend", isAppointmentAttend);
+                    obj.put("isAppointmentFixed", isAppointmentFixed);
+                    obj.put("leadAppoinmentID", leadAppointmentID);
+                    obj.put("datedFrom", datedFrom);
+                    obj.put("isAllDay", isAllDay);
+                    obj.put("agentIds", agentsID);
+                    obj.put("endTime", endTime);
+                    obj.put("desc", desc);
+                    obj.put("isSend", isSend);
+                    obj.put("viaReminder", via);
+                    obj.put("leadID", "0");
+                    obj.put("gmailCalenderId", gmailCalenderId);
+                    obj.put("agentIDsString", agentIdsString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }else {
+
+                try {
+                    obj.put("location", location);
+                    obj.put("isCompleted", isCompleted);
+                    obj.put("appointmentDate", "");
+                    obj.put("leadStringID", leadStringID);
+                    obj.put("orderBy", orderBy);
+                    obj.put("startTime", startTime);
+                    obj.put("interval", interval);
+                    obj.put("datedTo", datedTo);
+                    obj.put("eventTitle", eventTitle);
+                    obj.put("isAppointmentAttend", isAppointmentAttend);
+                    obj.put("isAppointmentFixed", isAppointmentFixed);
+                    obj.put("leadAppoinmentID", leadAppointmentID);
+                    obj.put("datedFrom", datedFrom);
+                    obj.put("isAllDay", isAllDay);
+                    obj.put("agentIds", agentsID);
+                    obj.put("endTime", endTime);
+                    obj.put("desc", desc);
+                    obj.put("isSend", isSend);
+                    obj.put("viaReminder", via);
+                    obj.put("leadID", "0");
+                    obj.put("gmailCalenderId", "");
                     obj.put("agentIDsString", agentIdsString);
                 } catch (JSONException e) {
                     e.printStackTrace();

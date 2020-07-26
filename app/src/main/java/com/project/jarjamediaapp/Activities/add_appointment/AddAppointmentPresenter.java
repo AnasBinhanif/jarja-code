@@ -11,7 +11,6 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.Utilities.GH;
-import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,7 +81,7 @@ public class AddAppointmentPresenter extends BasePresenter<AddAppointmentContrac
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).addAppointmentByCalendar(GH.getInstance().getAuthorization(),
                     prefix);
               Log.i("JsonPrefixCalender",prefix);
-        } else if (fromid.equalsIgnoreCase("4") || fromid.equalsIgnoreCase("2")) {
+        } else if (fromid.equalsIgnoreCase("4") || fromid.equalsIgnoreCase("2") || fromid.equalsIgnoreCase("7")) {
             _callAddAppointment = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateAppointment(GH.getInstance().getAuthorization(),
                     prefix);
             } else if (fromid.equalsIgnoreCase("6")) {

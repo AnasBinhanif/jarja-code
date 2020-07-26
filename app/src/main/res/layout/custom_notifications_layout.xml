@@ -8,52 +8,71 @@
     app:dragEdge="right"
     app:mode="normal">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="20dp"
-        android:paddingRight="10dp"
-        android:gravity="left|center"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:cardElevation="3dp"
+        app:cardCornerRadius="5dp"
+        android:padding="8dp"
+        >
 
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="16dp"
-            android:drawablePadding="5dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvLeadName"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorGreyText"
-            android:layout_marginTop="5dp"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:paddingRight="10dp"
 
-        <TextView
-            android:id="@+id/tvContact"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorGreyText"
-            android:layout_marginTop="5dp"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+            android:gravity="left|center"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorGreyText"
-            android:layout_marginTop="5dp"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="16dp"
+                android:drawablePadding="5dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvLeadName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorGreyText"
+                android:layout_marginTop="5dp"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorGreyText"
+                android:layout_marginTop="5dp"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorGreyText"
+                android:layout_marginTop="5dp"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
 
-    </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+
 
 
 </RelativeLayout>

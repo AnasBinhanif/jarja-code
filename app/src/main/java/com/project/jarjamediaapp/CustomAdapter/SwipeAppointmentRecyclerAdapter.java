@@ -23,7 +23,6 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
-import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
@@ -56,9 +55,15 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
 
+       /* if(GH.getInstance().getNotificationType().equals("apointment")){
+
+            Log.i("indexOfList",""+mData.indexOf(GH.getInstance().getNotificationID()));
+            context.startActivity(new Intent(context,AddAppointmentActivity.class));
+
+        }*/
 
 
-            if (GH.getInstance().getNotificationType().equals("apointment")){
+           /* if (GH.getInstance().getNotificationType().equals("apointment")){
 
 
                 String leadID = mData.get(pos).leadAppoinmentID;
@@ -71,7 +76,7 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
 
             }
 
-
+*/
 
     }
 
@@ -143,15 +148,19 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
                             pos = position;
                             String leadID = mData.get(pos).leadAppoinmentID;
                             GetAppointmentsModel.Data.Datum modelData = mData.get(pos);
+                            String gmailCalenderId = mData.get(pos).gmailCalenderId;
                             if (isEditByLead) {
                                 context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                         .putExtra("leadID", leadID)
                                         .putExtra("from", "2")
+                                        .putExtra("gmailCalenderId",gmailCalenderId)
                                         .putExtra("models", modelData));
+
                             } else {
                                 context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                         .putExtra("leadID", leadID)
                                         .putExtra("from", "4")
+                                        .putExtra("gmailCalenderId",gmailCalenderId)
                                         .putExtra("models", modelData));
                             }
 

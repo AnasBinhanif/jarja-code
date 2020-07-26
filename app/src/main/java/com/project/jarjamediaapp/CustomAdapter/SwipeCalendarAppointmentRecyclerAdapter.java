@@ -295,7 +295,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
         }
     }
 
-    private void showDialogForCalendarAppointmentDetail(Context context, CalendarAppointmentDetailModel.Data.CalendarData calendarDetailModel) {
+    private void showDialogForCalendarAppointmentDetail(Context context, CalendarAppointmentDetailModel.Data.CalendarData calendarDetailModelForTask) {
 
         try {
 
@@ -314,11 +314,11 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             tvTime = dialog.findViewById(R.id.tvTime);
             tvNotes = dialog.findViewById(R.id.tvNotes);
 
-            if (calendarDetailModel.getDatedTo() != null && calendarDetailModel.getDatedFrom() != null) {
+            if (calendarDetailModelForTask.getDatedTo() != null && calendarDetailModelForTask.getDatedFrom() != null) {
 
-                String[] startTime = calendarDetailModel.getDatedFrom().split("T");
-                String[] endTime = calendarDetailModel.getDatedTo().split("T");
-                if (calendarDetailModel.isAllDay) {
+                String[] startTime = calendarDetailModelForTask.getDatedFrom().split("T");
+                String[] endTime = calendarDetailModelForTask.getDatedTo().split("T");
+                if (calendarDetailModelForTask.isAllDay) {
                     tvTime.setText("All Day");
                 } else {
                     tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm a", "HH:mm:ss") + " - " +
@@ -327,26 +327,26 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                 tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE, MMM dd, yyyy", "yyyy-MM-dd") + " - " +
                         GH.getInstance().formatter(endTime[0], "EEE, MMM dd, yyyy", "yyyy-MM-dd"));
             }
-            tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
-            tvLocation.setText(calendarDetailModel.getLocation() != null ? calendarDetailModel.getLocation() : "");
-            tvLead.setText(calendarDetailModel.getLeadName() != null ? calendarDetailModel.getLeadName() : "");
+            tvEventTitle.setText(calendarDetailModelForTask.getEventTitle() != null ? calendarDetailModelForTask.getEventTitle() : "");
+            tvLocation.setText(calendarDetailModelForTask.getLocation() != null ? calendarDetailModelForTask.getLocation() : "");
+            tvLead.setText(calendarDetailModelForTask.getLeadName() != null ? calendarDetailModelForTask.getLeadName() : "");
 
-            if (calendarDetailModel.getAgentList() != null) {
+            if (calendarDetailModelForTask.getAgentList() != null) {
                 String agentNames = "";
-                if (calendarDetailModel.getAgentList().size() > 0) {
-                    for (int i = 0; i < calendarDetailModel.getAgentList().size(); i++) {
+                if (calendarDetailModelForTask.getAgentList().size() > 0) {
+                    for (int i = 0; i < calendarDetailModelForTask.getAgentList().size(); i++) {
                         if (agentNames.equals("")) {
-                            agentNames = calendarDetailModel.getAgentList().get(i).getAgentName();
+                            agentNames = calendarDetailModelForTask.getAgentList().get(i).getAgentName();
                         } else {
-                            agentNames = agentNames + "," + calendarDetailModel.getAgentList().get(i).getAgentName();
+                            agentNames = agentNames + "," + calendarDetailModelForTask.getAgentList().get(i).getAgentName();
                         }
                     }
                     tvAgents.setText(agentNames);
                 }
             }
 
-            tvDetail.setText(calendarDetailModel.getDesc() != null ? calendarDetailModel.getDesc() : "");
-            tvNotes.setText(calendarDetailModel.getNote() != null ? calendarDetailModel.getNote() : "");
+            tvDetail.setText(calendarDetailModelForTask.getDesc() != null ? calendarDetailModelForTask.getDesc() : "");
+            tvNotes.setText(calendarDetailModelForTask.getNote() != null ? calendarDetailModelForTask.getNote() : "");
 
             tvClose = dialog.findViewById(R.id.tvClose);
             Button btnCancel = dialog.findViewById(R.id.btnCancel);
@@ -364,7 +364,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                     context.startActivity(new Intent(context, AddAppointmentActivity.class)
                             .putExtra("from", "6")
                             .putExtra("calendarId", modelData.getCalendarId())
-                            .putExtra("modelData", calendarDetailModel));
+                            .putExtra("modelData", calendarDetailModelForTask));
 
                 }
             });

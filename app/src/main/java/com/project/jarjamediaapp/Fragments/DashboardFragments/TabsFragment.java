@@ -19,8 +19,6 @@ import com.project.jarjamediaapp.Fragments.DashboardFragments.followups.FollowUp
 import com.project.jarjamediaapp.Fragments.DashboardFragments.tasks.TasksFragment;
 import com.project.jarjamediaapp.Fragments.FragmentLifeCycle;
 import com.project.jarjamediaapp.R;
-import com.project.jarjamediaapp.Utilities.GH;
-import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 public class TabsFragment extends BaseFragment {
 
@@ -92,7 +90,7 @@ public class TabsFragment extends BaseFragment {
         adapter.addFragment(TasksFragment.newInstance(getResources().getString(R.string.dashboard), "", false), getResources().getString(R.string.tasks));
 
         viewPager.setAdapter(adapter);
-        // fro testing
+      /*  // fro testing
         if (GH.getInstance().getNotificationType().equals("followup")){
 
 
@@ -103,7 +101,7 @@ public class TabsFragment extends BaseFragment {
 
             viewPager.setCurrentItem(2);
 
-        }
+        }*/
 
 
 

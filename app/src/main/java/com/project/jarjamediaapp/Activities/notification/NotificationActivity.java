@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.airbnb.paris.Paris;
-import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.R;
@@ -84,7 +83,9 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
                 TextView tvLeadName = (TextView) integerMap.get(R.id.tvLeadName);
 
-                String firstName = data.getVtCRMLeadCustom().getFirstName();
+                tvLeadName.setText(data.getDescription());
+
+               /* String firstName = data.getVtCRMLeadCustom().getFirstName();
                 String lastName = data.getVtCRMLeadCustom().getFirstName();
                 if (firstName != null && lastName != null) {
                     tvLeadName.setText(firstName + " " + lastName);
@@ -98,12 +99,26 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
                 TextView tvContact = (TextView) integerMap.get(R.id.tvContact);
                 tvContact.setText(data.getVtCRMLeadCustom().getPrimaryPhone() != null ? data.getVtCRMLeadCustom().getPrimaryPhone() : "N/A");
-
+*/
+                TextView tvContact = (TextView) integerMap.get(R.id.tvContact);
                 TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
-                tvEmail.setText(data.getVtCRMLeadCustom().getPrimaryEmail() != null ? data.getVtCRMLeadCustom().getPrimaryEmail() : "N/A");
+               if (data.getVtCRMLeadCustom() != null){
 
+
+                   tvContact.setText(data.getVtCRMLeadCustom().getPrimaryEmail() != null ? data.getVtCRMLeadCustom().getPrimaryEmail() : "N/A");
+
+               }else {
+                   tvContact.setText("N/A");
+
+               }
+
+              /*  TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
+                tvEmail.setText(data.getVtCRMLeadCustom().getPrimaryEmail() != null ? data.getVtCRMLeadCustom().getPrimaryEmail() : "N/A");
+*/
             } catch (Exception e) {
                 e.printStackTrace();
+
+                ToastUtils.showToastLong(context,"Exception");
             }
 
             return Unit.INSTANCE;
@@ -292,6 +307,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     @Override
     public void updateUIListT(List<TaskNotificationModel.Data.TaskList> response) {
 
+
         populateListDataT();
         notificationListA.clear();
         notificationListF.clear();
@@ -305,6 +321,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
             bi.rvNotifications.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
         }
+
     }
 
     @Override

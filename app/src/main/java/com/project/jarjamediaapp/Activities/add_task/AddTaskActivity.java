@@ -37,7 +37,6 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
-import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -103,14 +102,16 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         presenter = new AddTaskPresenter(this);
         presenter.initScreen();
 
-        // for testing
+        presenter.getReminder();
+        /*// for testing
         EasyPreference.Builder pref = new EasyPreference.Builder(context);
-        pref.addString(GH.KEYS.NOTIFICATIONTYPE.name(),"").save();
+        pref.addString(GH.KEYS.NOTIFICATIONTYPE.name(),"").save();*/
 
     }
 
     @Override
     public void initViews() {
+
 
         presenter.getAgentNames();
 
@@ -362,6 +363,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         for (int i = 0; i < response.getData().size(); i++) {
 
+
             arrayListReminderText.add(response.getData().get(i).getText());
             arrayListReminderValue.add(response.getData().get(i).getValue());
             hashMapReminder.put(Integer.valueOf(response.getData().get(i).getValue()), response.getData().get(i).getText());
@@ -369,6 +371,21 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListReminderText);
         bi.atvReminder.setAdapter(arrayAdapter);
+
+        if (bi.atvReminder.getText().equals("")){
+
+            try {
+
+                int index =  arrayListReminderValue.indexOf(String.valueOf(taskDetail.data.interval));
+                bi.atvReminder.setText(arrayListReminderText.get(index));
+
+            }catch (Exception e){
+
+                ToastUtils.showToastLong(context,"unable to load");
+            }
+        }
+
+
 
         // for testing
         // remove for taking time to show data
@@ -500,6 +517,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvReminder.setEnabled(true);
         bi.atvVia.setClickable(true);
         bi.atvVia.setEnabled(true);
+
         reoccur = String.valueOf(taskDetail.data.scheduleRecurID);
         Log.d("recur", reoccur);
         bi.atvRecur.setText(taskDetail.data.recur, false);
@@ -532,6 +550,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         scheduleId = taskDetail.data.scheduleID;
         searchLeadIdsString = taskDetail.data.leadEncryptedId;
         reminder = String.valueOf(taskDetail.data.interval);
+
         via = taskDetail.data.viaReminder;
 
 
@@ -686,7 +705,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String name = bi.atvNameTask.getText().toString() + "";
         String desc = bi.atvDescription.getText().toString() + "";
         int scheduleRecurID = !reoccur.equals("") ? Integer.valueOf(reoccur) : 0;
-        String type = this.type;
+        String type = bi.atvType.getText().toString();
         String datedFrom = sDate;
         String datedto = eDate;
         String recurDay = "";
@@ -1044,6 +1063,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             case R.id.atvReminder:
                 clearFocus();
                 reminder();
+                presenter.getReminder();
                 hideSoftKeyboard(bi.atvReminder);
                 break;
             case R.id.atvVia:

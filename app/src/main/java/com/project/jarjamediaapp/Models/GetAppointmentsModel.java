@@ -130,7 +130,7 @@ public class GetAppointmentsModel extends BaseResponse  {
             public Object isGmailApptActive;
             @SerializedName("gmailCalenderId")
             @Expose
-            public Object gmailCalenderId;
+            public String gmailCalenderId;
             @SerializedName("isDeleted")
             @Expose
             public Boolean isDeleted;
@@ -1167,11 +1167,11 @@ public class GetAppointmentsModel extends BaseResponse  {
                 this.isGmailApptActive = isGmailApptActive;
             }
 
-            public Object getGmailCalenderId() {
+            public String getGmailCalenderId() {
                 return gmailCalenderId;
             }
 
-            public void setGmailCalenderId(Object gmailCalenderId) {
+            public void setGmailCalenderId(String gmailCalenderId) {
                 this.gmailCalenderId = gmailCalenderId;
             }
 
