@@ -54,7 +54,8 @@ public class GH {
         USER_NAME,
         USER_PERMISSIONS,
         FIREBASE_TOEKN,
-        NOTIFICATIONTYPE
+        NOTIFICATIONTYPE,
+        NOTIFICATIONID
 
     }
 

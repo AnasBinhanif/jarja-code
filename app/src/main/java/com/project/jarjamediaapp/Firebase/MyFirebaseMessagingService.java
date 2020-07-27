@@ -44,6 +44,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 title = remoteMessage.getData().get("title");
                 message = remoteMessage.getData().get("body");
                 String notificationType = remoteMessage.getData().get("notification_type");
+                String notificationId =  remoteMessage.getData().get("NotificationID");
 
                 // Notification type for open activity
                 /*case 1 : task
@@ -56,30 +57,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                      case "1":
 
                          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                             sendNotificationForOreo(title, message, HomeActivity.class,"task");
+                             sendNotificationForOreo(title, message, HomeActivity.class,"task",notificationId);
                          } else {
-                             sendNotification(title, message, HomeActivity.class,"task");
+                             sendNotification(title, message, HomeActivity.class,"task",notificationId);
                          }
                          break;
                      case "2":
                          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                             sendNotificationForOreo(title, message, HomeActivity.class,"futureTask");
+                             sendNotificationForOreo(title, message, HomeActivity.class,"futureTask",notificationId);
                          } else {
-                             sendNotification(title, message, HomeActivity.class,"futureTask");
+                             sendNotification(title, message, HomeActivity.class,"futureTask",notificationId);
                          }
                          break;
                      case "3":
                          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                             sendNotificationForOreo(title, message, HomeActivity.class,"followup");
+                             sendNotificationForOreo(title, message, HomeActivity.class,"followup",notificationId);
                          } else {
-                             sendNotification(title, message, HomeActivity.class,"followup");
+                             sendNotification(title, message, HomeActivity.class,"followup",notificationId);
                          }
                      case "4":
 
                          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                             sendNotificationForOreo(title, message, HomeActivity.class,"apointment");
+                             sendNotificationForOreo(title, message, HomeActivity.class,"apointment",notificationId);
                          } else {
-                             sendNotification(title, message, HomeActivity.class,"apointment");
+                             sendNotification(title, message, HomeActivity.class,"apointment",notificationId);
                          }
                  }
 
@@ -115,10 +116,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
-    private void sendNotification(String title, String messageBody, Class<? extends AppCompatActivity> activity,String type) {
+    private void sendNotification(String title, String messageBody, Class<? extends AppCompatActivity> activity,String type,String notificationId) {
+
+        easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), type).save();
+        easyPreference.addString(GH.KEYS.NOTIFICATIONID.name(), notificationId).save();
 
         Intent intent = new Intent(this, activity);
-        intent.putExtra("notificationType",type);
+      /*  intent.putExtra("notificationType",type);
+        intent.putExtra("notificationId",notificationId);*/
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -137,10 +142,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void sendNotificationForOreo(String title, String messageBody, Class<? extends AppCompatActivity> activity, String type) {
+    private void sendNotificationForOreo(String title, String messageBody, Class<? extends AppCompatActivity> activity, String type,String notificationId) {
+
+        easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), type).save();
+        easyPreference.addString(GH.KEYS.NOTIFICATIONID.name(), notificationId).save();
 
         Intent intent = new Intent(this, activity);
-        intent.putExtra("notificationType",type);
+       /* intent.putExtra("notificationType",type);
+        intent.putExtra("notificationId",notificationId);*/
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

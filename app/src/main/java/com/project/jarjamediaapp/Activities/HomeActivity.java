@@ -91,9 +91,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         initViews();
 
 
-        if (getIntent().getExtras() != null) {
+      /*  if (getIntent().getExtras() != null) {
 
             String typeOfNotification = getIntent().getStringExtra("notificationType");
+            String notificationId = getIntent().getStringExtra("notificationId");
 
             switch (typeOfNotification) {
                 case "apointment":
@@ -101,6 +102,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     notificationType = "apointment";
 
                     easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
+                    easyPreference.addString(GH.KEYS.NOTIFICATIONID.name(), notificationId).save();
 
                     break;
 
@@ -110,6 +112,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     notificationType = "followup";
 
                     easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
+                    easyPreference.addString(GH.KEYS.NOTIFICATIONID.name(), notificationId).save();
 
                     break;
 
@@ -119,6 +122,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     notificationType = "task";
 
                     easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
+                    easyPreference.addString(GH.KEYS.NOTIFICATIONID.name(), notificationId).save();
 
                     break;
 
@@ -126,7 +130,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         }else{
 
             easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), "").save();
-        }
+        }*/
 
     }
 

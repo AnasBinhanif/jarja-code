@@ -56,21 +56,24 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
 
+        if (GH.getInstance().getNotificationType().equals("apointment")){
 
 
-            if (GH.getInstance().getNotificationType().equals("apointment")){
+        }
 
 
-                String leadID = mData.get(pos).leadAppoinmentID;
-                GetAppointmentsModel.Data.Datum modelData1 = mData.get(0);
-                context.startActivity(new Intent(context, AddAppointmentActivity.class)
-                        .putExtra("leadID", leadID)
-                        .putExtra("from", "4")
-                        .putExtra("models", modelData1));
+                  if (GH.getInstance().getNotificationType().equals("apointment")){
 
 
-            }
+            String leadID = mData.get(pos).leadAppoinmentID;
+            GetAppointmentsModel.Data.Datum modelData1 = mData.get(0);
+            context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                    .putExtra("leadID", leadID)
+                    .putExtra("from", "2")
+                    .putExtra("models", modelData1));
 
+
+        }
 
 
     }
