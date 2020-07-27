@@ -33,10 +33,17 @@ public class TaskNotificationModel extends BaseResponse {
             @Expose
             public String description;
 
+            @SerializedName("taskType")
+            @Expose
+            public String taskType;
+
             public String getDescription() {
                 return description;
             }
 
+            public String getTaskType() {
+                return taskType;
+            }
 
             @SerializedName("leadID")
             @Expose
