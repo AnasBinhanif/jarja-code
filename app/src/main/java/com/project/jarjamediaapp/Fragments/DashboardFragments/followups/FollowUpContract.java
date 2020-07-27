@@ -2,7 +2,6 @@
 package com.project.jarjamediaapp.Fragments.DashboardFragments.followups;
 
 
-import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
 
 public interface FollowUpContract {

@@ -1,6 +1,5 @@
 package com.project.jarjamediaapp.Activities.social_profiles;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -12,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,9 +22,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.jaredrummler.materialspinner.MaterialSpinner;
-import com.project.jarjamediaapp.Activities.HomeActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetLeadSocialProfile;
@@ -543,10 +539,19 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
     public  void openWebPageUrl(Uri webPageUri){
 
-        Intent intent = new Intent(Intent.ACTION_VIEW, webPageUri);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
+        try{
+
+            Intent intent = new Intent(Intent.ACTION_VIEW, webPageUri);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
+
+        }catch (Exception e){
+
+            ToastUtils.showToastLong(context,"Eception"+e.getMessage());
+
         }
+
     }
 
     public void openDialogueForWebUri(String uri){

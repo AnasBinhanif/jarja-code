@@ -29,6 +29,15 @@ public class TaskNotificationModel extends BaseResponse {
             @SerializedName("taskName")
             @Expose
             public String taskName;
+            @SerializedName("description")
+            @Expose
+            public String description;
+
+            public String getDescription() {
+                return description;
+            }
+
+
             @SerializedName("leadID")
             @Expose
             public Integer leadID;

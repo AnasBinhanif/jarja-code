@@ -5,21 +5,16 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
-import android.os.Looper;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
-
-import androidx.annotation.UiThread;
 
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.ProjectApplication;
-import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import java.io.File;
-import java.lang.invoke.MethodHandles;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -65,6 +60,10 @@ public class GH {
     }
     public String getNotificationType() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.NOTIFICATIONTYPE.name(), null);
+
+    }
+    public String getNotificationID() {
+        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.NOTIFICATIONID.name(), null);
 
     }
     public void addNotificationType(String notificationType){

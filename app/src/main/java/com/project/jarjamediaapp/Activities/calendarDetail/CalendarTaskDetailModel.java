@@ -59,7 +59,7 @@ public class CalendarTaskDetailModel extends BaseResponse implements Parcelable 
         @SerializedName("eventTitle")
         @Expose
         public String eventTitle;
-        @SerializedName("description")
+        @SerializedName("desc")
         @Expose
         public String description;
         @SerializedName("startTime")

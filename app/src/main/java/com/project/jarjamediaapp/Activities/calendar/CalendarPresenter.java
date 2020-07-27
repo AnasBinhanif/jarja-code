@@ -35,6 +35,10 @@ public class CalendarPresenter extends BasePresenter<CalendarContract.View> impl
                 if (response.isSuccessful()) {
 
                     CalendarModel calendarModel = response.body();
+                    Log.i("response",""+response.raw());
+                    Log.i("response",""+response.body().data);
+                    Log.i("response",""+response.body().getData());
+
 
                     if (calendarModel.getStatus().equalsIgnoreCase("Success")) {
 

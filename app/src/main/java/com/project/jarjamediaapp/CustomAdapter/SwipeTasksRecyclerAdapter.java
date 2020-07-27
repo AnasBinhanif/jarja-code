@@ -24,7 +24,6 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
-import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
@@ -55,11 +54,11 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
 
-        // fro testing
+     /*   // fro testing
         if (GH.getInstance().getNotificationType().equals("task")) {
 
             editTask(0, null);
-        }
+        }*/
 
 
     }

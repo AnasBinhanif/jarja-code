@@ -150,7 +150,8 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
     }
 
     @Override
-    public void getLeadDueTasks(String leadID, int page) {
+    public void
+    getLeadDueTasks(String leadID, int page) {
         _view.showProgressBar();
         _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadDueTasksNew(GH.getInstance().getAuthorization(), leadID, page);
         _call.enqueue(new Callback<GetTasksModel>() {

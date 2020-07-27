@@ -2,8 +2,6 @@ package com.project.jarjamediaapp.Activities.social_profiles;
 
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
-import com.project.jarjamediaapp.Models.GetAllSocialProfiles;
-import com.project.jarjamediaapp.Models.GetLastTouch;
 import com.project.jarjamediaapp.Models.GetLeadSocialProfile;
 import com.project.jarjamediaapp.Models.GetSocialProfileDropdown;
 import com.project.jarjamediaapp.Models.UpgradeSocialProfile;
@@ -159,6 +157,7 @@ public class Social_ProfilesPresenter extends BasePresenter<Social_ProfilesContr
 
                     BaseResponse getAppointmentsModel = response.body();
                     if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+
 
                         _view.updateUI(response);
 

@@ -6,7 +6,6 @@ import com.project.jarjamediaapp.Base.BaseResponse;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 public class CalendarModel extends BaseResponse implements Serializable {
 
@@ -22,6 +21,12 @@ public class CalendarModel extends BaseResponse implements Serializable {
         @SerializedName("title")
         @Expose
         public String title;
+        @SerializedName("desc")
+        @Expose
+        public String desc;
+        @SerializedName("description")
+        @Expose
+        public String description;
         @SerializedName("start")
         @Expose
         public String start;
@@ -76,6 +81,18 @@ public class CalendarModel extends BaseResponse implements Serializable {
         @SerializedName("type")
         @Expose
         public String type;
+
+        public String getDesc() {
+            return desc;
+        }
+
+
+
+        public String getDescription() {
+            return description;
+        }
+
+
 
         public String getCalendarId() {
             return id;
