@@ -266,10 +266,17 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         if (bi.cbAllDay.isChecked() || startTime.equalsIgnoreCase("")) {
 
-            startTime = new SimpleDateFormat("hh:mm:ss.SSS'Z'", Locale.getDefault()).format(new Date());
+            startTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+           // startDate = GH.getInstance().formatApiDateTime(startDate + "T" + startTime);
+            startDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
 
+            // startTime = new SimpleDateFormat("hh:mm:ss.SSS'Z'", Locale.getDefault()).format(new Date());
+
+        }else {
+
+            startDate = GH.getInstance().formatApiDateTime(startDate + "T" + startTime);
         }
-        startDate = GH.getInstance().formatApiDateTime(startDate + "T" + startTime);
+
 
         Integer leadAppointmentID = 0;
         boolean isAppointmentAttend = false;

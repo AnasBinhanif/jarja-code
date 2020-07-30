@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.Activities.splash;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -25,6 +26,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     Context context = MainActivity.this;
     MainPresenter presenter;
     long BASE_TIME_OUT = 3;
+    String typeOfNotification;
+    String notificationID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,51 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         bi = DataBindingUtil.setContentView(this, R.layout.activity_splash);
         presenter = new MainPresenter(this);
         presenter.initScreen();
+
+     /*   if (getIntent().getExtras() != null) {
+
+             typeOfNotification = getIntent().getStringExtra("notificationType");
+             notificationID = getIntent().getStringExtra("notificationID");
+
+             ToastUtils.showToastLong(context,""+typeOfNotification);
+
+         *//*   switch (typeOfNotification) {
+                case "apointment":
+
+                    notificationType = "apointment";
+
+                    getAppointmentById(notificationID);
+                    //  easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
+
+                    break;
+
+                case "followup":
+
+
+                    getFolloUpDetailByID(notificationID);
+
+                    break;
+
+                case "task":
+
+
+                    notificationType = "task";
+
+                    getTaskDetail(notificationID);
+
+                    break;
+                case "futureTask":
+
+
+                    notificationType = "futureTask";
+
+                    getFutureTaskDetail(notificationID);
+
+                    break;
+
+
+            }*//*
+        }*/
 
     }
 
@@ -46,7 +95,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                 if (GH.getInstance().getAuthorization() != null && !GH.getInstance().getAuthorization().equals(""))
                 {
-                    switchActivity(HomeActivity.class);
+
+                    if(getIntent().getExtras() != null){
+
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        intent.putExtra("notificationType",typeOfNotification);
+                        intent.putExtra("notificationID",notificationID);
+                    }else {
+
+                          switchActivity(HomeActivity.class);
+                    }
+
                 }else{
                     switchActivity(LoginActivity.class);
                 }

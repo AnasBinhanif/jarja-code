@@ -102,10 +102,22 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         initViews();
 
 
-        if (getIntent().getExtras() != null) {
+      //  if (getIntent().getExtras() != null) {
 
-            String typeOfNotification = getIntent().getStringExtra("notificationType");
-            String notificationID = getIntent().getStringExtra("notificationID");
+        if (GH.getInstance().getNotificationType() != null){
+
+            if (GH.getInstance().getNotificationType().equals("apointment")){
+
+                ToastUtils.showToastLong(context,GH.getInstance().getNotificationType());
+
+            }
+
+        }
+
+            String typeOfNotification = "";//getIntent().getStringExtra("notificationType");
+            String notificationID = "";//getIntent().getStringExtra("notificationID");
+
+            ToastUtils.showToastLong(context,"hello"+typeOfNotification);
 
             switch (typeOfNotification) {
                 case "apointment":
@@ -143,7 +155,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
 
             }
-        }/*else{
+     //  }
+       /*else{
 
             easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), "").save();
         }*/

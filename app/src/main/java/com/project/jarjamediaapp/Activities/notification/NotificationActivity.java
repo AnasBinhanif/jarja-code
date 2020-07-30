@@ -102,7 +102,10 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 */
                 TextView tvContact = (TextView) integerMap.get(R.id.tvContact);
                 TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
-               if (data.getVtCRMLeadCustom() != null){
+
+
+                tvContact.setText(data.getTaskType());
+              /* if (data.getVtCRMLeadCustom() != null){
 
 
                    tvContact.setText(data.getVtCRMLeadCustom().getPrimaryEmail() != null ? data.getVtCRMLeadCustom().getPrimaryEmail() : "N/A");
@@ -111,7 +114,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                    tvContact.setText("N/A");
 
                }
-
+*/
               /*  TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
                 tvEmail.setText(data.getVtCRMLeadCustom().getPrimaryEmail() != null ? data.getVtCRMLeadCustom().getPrimaryEmail() : "N/A");
 */

@@ -29,13 +29,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     EasyPreference.Builder easyPreference;
     Context context = MyFirebaseMessagingService.this;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         // Check if message contains a data payload.
 
 
-        Log.i("remoteMessage",remoteMessage.toString());
+        if (remoteMessage.getNotification() != null){
+
+            title = remoteMessage.getNotification().getTitle();
+            message = remoteMessage.getNotification().getBody();
+
+            // for testing
+            EasyPreference.Builder pref = new EasyPreference.Builder(context);
+            pref.addString(GH.KEYS.NOTIFICATIONTYPE.name(),"apointment").save();
+            sendNotificationForOreo(title, message, HomeActivity.class,"apointment","notificationId","click_action");
+
+
+
+
+        }
+
+
+
 
         try {
             if (remoteMessage.getData().size() >  0) {
@@ -44,6 +61,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 message = remoteMessage.getData().get("body");
                 String notificationType = remoteMessage.getData().get("notification_type");
                 String notificationId = remoteMessage.getData().get("NotificationID");
+
+                String click_action = remoteMessage.getNotification().getClickAction();
 
                 // Notification type for open activity
                 /*case 1 : task
@@ -56,28 +75,28 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                      case "1":
 
                          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                             sendNotificationForOreo(title, message, HomeActivity.class,"task",notificationId);
+                             sendNotificationForOreo(title, message, HomeActivity.class,"task",notificationId,click_action);
                          } else {
                              sendNotification(title, message, HomeActivity.class,"task",notificationId);
                          }
                          break;
                      case "2":
                          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                             sendNotificationForOreo(title, message, HomeActivity.class,"futureTask",notificationId);
+                             sendNotificationForOreo(title, message, HomeActivity.class,"futureTask",notificationId,click_action);
                          } else {
                              sendNotification(title, message, HomeActivity.class,"futureTask",notificationId);
                          }
                          break;
                      case "3":
                          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                             sendNotificationForOreo(title, message, HomeActivity.class,"followup",notificationId);
+                             sendNotificationForOreo(title, message, HomeActivity.class,"followup",notificationId,click_action);
                          } else {
                              sendNotification(title, message, HomeActivity.class,"followup",notificationId);
                          }
                      case "4":
 
                          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                             sendNotificationForOreo(title, message, HomeActivity.class,"apointment",notificationId);
+                             sendNotificationForOreo(title, message, HomeActivity.class,"apointment",notificationId,click_action);
                          } else {
                              sendNotification(title, message, HomeActivity.class,"apointment",notificationId);
                          }
@@ -141,11 +160,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void sendNotificationForOreo(String title, String messageBody, Class<? extends AppCompatActivity> activity, String type,String notificationId) {
+    private void sendNotificationForOreo(String title, String messageBody, Class<? extends AppCompatActivity> activity, String type,String notificationId,String clickAction) {
 
        /* easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), type).save();
         easyPreference.addString(GH.KEYS.NOTIFICATIONID.name(), notificationId).save();*/
-        Intent intent = new Intent(this, activity);
+       // Intent intent = new Intent(this, activity);
+        Intent intent = new Intent(getApplicationContext(), activity);
+
+       // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         intent.putExtra("notificationType",type);
         intent.putExtra("notificationID",notificationId);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);

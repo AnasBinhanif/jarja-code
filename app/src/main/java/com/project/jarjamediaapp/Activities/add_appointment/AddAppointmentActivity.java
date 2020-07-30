@@ -120,7 +120,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         presenter.getAgentNames();
 
-        Log.i("MyToke","tok"+GH.getInstance().getFirebaseToken());
+        Log.i("MyToke",GH.getInstance().getFirebaseToken());
 
         setSupportActionBar(bi.epToolbar.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -999,7 +999,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }else if(fromId.equals("4")){
+            }else if(fromId.equals("4") || fromId.equals("2")){
                 try {
                     obj.put("location", location);
                     obj.put("isCompleted", isCompleted);
