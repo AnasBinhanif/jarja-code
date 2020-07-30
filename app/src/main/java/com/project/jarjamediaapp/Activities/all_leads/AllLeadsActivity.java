@@ -21,6 +21,7 @@ import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAllLeads;
 import com.project.jarjamediaapp.Models.GetPropertyLeads;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAllleadsBinding;
@@ -63,6 +64,10 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         bi = DataBindingUtil.setContentView(this, R.layout.activity_allleads);
         presenter = new AllLeadsPresenter(this);
         presenter.initScreen();
+
+        // stop redirection to dashboard screen when click back button
+        EasyPreference.Builder pref = new EasyPreference.Builder(context);
+        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"leadsFragment").save();
 
     }
 

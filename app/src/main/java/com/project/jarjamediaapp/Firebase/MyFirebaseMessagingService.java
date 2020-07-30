@@ -1,26 +1,35 @@
 package com.project.jarjamediaapp.Firebase;
 
+import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.project.jarjamediaapp.Activities.HomeActivity;
+import com.project.jarjamediaapp.Activities.splash.MainActivity;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.ToastUtils;
+
+import java.util.List;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -35,15 +44,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
 
 
-        Log.i("remoteMessage",remoteMessage.toString());
+        Log.i("remoteMessage",remoteMessage.getNotification().getBody());
 
-        try {
+      //  try {
             if (remoteMessage.getData().size() >  0) {
 
                 title = remoteMessage.getData().get("title");
                 message = remoteMessage.getData().get("body");
                 String notificationType = remoteMessage.getData().get("notification_type");
                 String notificationId = remoteMessage.getData().get("NotificationID");
+
+
 
                 // Notification type for open activity
                 /*case 1 : task
@@ -56,62 +67,42 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                      case "1":
 
                          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                             sendNotificationForOreo(title, message, HomeActivity.class,"task",notificationId);
+                             sendNotificationForOreo(title, message, HomeActivity.class,notificationType,notificationId);
                          } else {
-                             sendNotification(title, message, HomeActivity.class,"task",notificationId);
+                             sendNotification(title, message, HomeActivity.class,notificationType,notificationId);
                          }
                          break;
                      case "2":
                          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                             sendNotificationForOreo(title, message, HomeActivity.class,"futureTask",notificationId);
+                             sendNotificationForOreo(title, message, HomeActivity.class,notificationType,notificationId);
                          } else {
-                             sendNotification(title, message, HomeActivity.class,"futureTask",notificationId);
+                             sendNotification(title, message, HomeActivity.class,notificationType,notificationId);
                          }
                          break;
                      case "3":
                          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                             sendNotificationForOreo(title, message, HomeActivity.class,"followup",notificationId);
+                             sendNotificationForOreo(title, message, HomeActivity.class,notificationType,notificationId);
                          } else {
-                             sendNotification(title, message, HomeActivity.class,"followup",notificationId);
+                             sendNotification(title, message, HomeActivity.class,notificationType,notificationId);
                          }
                      case "4":
 
                          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                             sendNotificationForOreo(title, message, HomeActivity.class,"apointment",notificationId);
+                             sendNotificationForOreo(title, message, HomeActivity.class,notificationType,notificationId);
                          } else {
-                             sendNotification(title, message, HomeActivity.class,"apointment",notificationId);
+                             sendNotification(title, message, HomeActivity.class,notificationType,notificationId);
                          }
                  }
 
 
-               /* title =  remoteMessage.getNotification().getTitle();//remoteMessage.getNotification().getTitle();//remoteMessage.getData().get("title");
-                message = "hello";remoteMessage.getData().get("body");*/
-
-               // not used in anywhere so comment this code
-              //  if (GH.getInstance().isLoggedIn()) {
-
-                 /*   if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        sendNotificationForOreo(title, message, HomeActivity.class);
-                    } else {
-                        sendNotification(title, message, HomeActivity.class);
-                   }*/
-
-         //       }
                 Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            }/*else if(remoteMessage.getData().size() > 0){
+            }
 
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    sendNotificationForOreo(title, message, HomeActivity.class);
-                } else {
-                    sendNotification(title, message, HomeActivity.class);
-                }
-                Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            }*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -123,7 +114,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.putExtra("notificationType",type);
         intent.putExtra("notificationID",notificationId);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
@@ -145,10 +136,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
        /* easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), type).save();
         easyPreference.addString(GH.KEYS.NOTIFICATIONID.name(), notificationId).save();*/
-        Intent intent = new Intent(this, activity);
+        Intent intent = new Intent(this,activity);
         intent.putExtra("notificationType",type);
         intent.putExtra("notificationID",notificationId);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+     //   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+       /* intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);*/
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+      /*  PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, HomeActivity.class), PendingIntent.FLAG_ONE_SHOT);*/
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -192,6 +189,31 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
     }
+
+   /* public boolean isAppIsInBackground(Context context) {
+        boolean isInBackground = true;
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+            List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
+            for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
+                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    for (String activeProcess : processInfo.pkgList) {
+                        if (activeProcess.equals(context.getPackageName())) {
+                            isInBackground = false;
+                        }
+                    }
+                }
+            }
+        } else {
+            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+            ComponentName componentInfo = taskInfo.get(0).topActivity;
+            if (componentInfo.getPackageName().equals(context.getPackageName())) {
+                isInBackground = false;
+            }
+        }
+
+        return isInBackground;
+    }*/
 
 
 }

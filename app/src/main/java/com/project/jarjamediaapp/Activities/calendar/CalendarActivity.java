@@ -22,6 +22,7 @@ import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.CustomAdapter.SwipeCalendarAppointmentRecyclerAdapter;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.EventDecorator;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -65,6 +66,9 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.calendar), true);
 
 
+        EasyPreference.Builder pref = new EasyPreference.Builder(context);
+        pref.addInt(GH.KEYS.CALENDERUPDATELIST.name(),-1).save();
+
 
     }
 
@@ -90,6 +94,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     protected void onResume() {
         super.onResume();
         showMonthYearPicker();
+
     }
 
     @Override
@@ -118,7 +123,11 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
+               /* String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
+                String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");*/
+
                 filterDateData(date.getDay(), date.getMonth(), date.getYear());
+
 
             }
         });
@@ -126,6 +135,16 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void filterDateData(int day, int month, int year) {
+
+        int pos = GH.getInstance().getCalenderListPos();
+
+        if(pos != -1){
+
+             dataList.remove(pos);
+
+            EasyPreference.Builder pref = new EasyPreference.Builder(context);
+            pref.addInt(GH.KEYS.CALENDERUPDATELIST.name(),-1).save();
+        }
 
         dataArrayList = new ArrayList<>();
         for (int i = 0; i < dataList.size(); i++) {
@@ -151,6 +170,8 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
             bi.rvEvents.setVisibility(View.VISIBLE);
             bi.tvMessage.setVisibility(View.GONE);
         } else {
+            bi.rvEvents.setVisibility(View.GONE);
+            bi.tvMessage.setVisibility(View.VISIBLE);
             ToastUtils.showToastLong(context, "No data found");
         }
 

@@ -132,7 +132,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         loadTitle();
         // for testing
         // populate fast data
-        checkIntent();
+      //  checkIntent();
 
         bi.cbEndDate.setOnCheckedChangeListener((compoundButton, b) -> {
 
@@ -372,7 +372,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListReminderText);
         bi.atvReminder.setAdapter(arrayAdapter);
 
-        if (bi.atvReminder.getText().equals("")){
+      /*  if (bi.atvReminder.getText().equals("")){
 
             try {
 
@@ -384,12 +384,12 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 ToastUtils.showToastLong(context,"unable to load");
             }
         }
-
+*/
 
 
         // for testing
         // remove for taking time to show data
-     //   checkIntent();
+        checkIntent();
 
         bi.atvReminder.setOnItemClickListener((parent, view, position, id) -> {
 
@@ -517,6 +517,16 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvReminder.setEnabled(true);
         bi.atvVia.setClickable(true);
         bi.atvVia.setEnabled(true);
+
+        if (arrayListReminderValue != null && arrayListReminderValue.size() > 0) {
+            reminder = String.valueOf(taskDetail.data.interval);
+
+            for (int position = 0; position < arrayListReminderValue.size(); position++) {
+                if (arrayListReminderValue.get(position).equalsIgnoreCase(reminder)) {
+                    bi.atvReminder.setText(arrayListReminderText.get(position));
+                }
+            }
+        }
 
         reoccur = String.valueOf(taskDetail.data.scheduleRecurID);
         Log.d("recur", reoccur);
@@ -952,12 +962,23 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     private void reminder() {
 
         if (!isReminderClicked) {
+
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListReminderText);
+            bi.atvReminder.setAdapter(arrayAdapter);
             bi.atvReminder.showDropDown();
             isReminderClicked = true;
         } else {
             isReminderClicked = false;
             bi.atvReminder.dismissDropDown();
         }
+
+      /*  if (!isReminderClicked) {
+            bi.atvReminder.showDropDown();
+            isReminderClicked = true;
+        } else {
+            isReminderClicked = false;
+            bi.atvReminder.dismissDropDown();
+        }*/
     }
 
     private void via() {
@@ -1063,7 +1084,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             case R.id.atvReminder:
                 clearFocus();
                 reminder();
-                presenter.getReminder();
+
                 hideSoftKeyboard(bi.atvReminder);
                 break;
             case R.id.atvVia:

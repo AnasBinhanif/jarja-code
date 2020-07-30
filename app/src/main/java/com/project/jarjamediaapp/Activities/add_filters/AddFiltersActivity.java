@@ -30,6 +30,7 @@ import com.project.jarjamediaapp.Models.GetLeadTagList;
 import com.project.jarjamediaapp.Models.GetLeadTypeList;
 import com.project.jarjamediaapp.Models.GetPipeline;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddFiltersBinding;
@@ -552,7 +553,25 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         easyPreference.remove("dateFrom").save();
         easyPreference.remove("priceTo").save();
         easyPreference.remove("priceFrom").save();
-        easyPreference.save();
+        // clear saved search and simple search
+        easyPreference.remove("saveAndSearch").save();
+        easyPreference.remove("search").save();
+
+        // for save search value remove
+        easyPreference.remove("agentID").save();
+        easyPreference.remove("leadTypeID").save();
+        easyPreference.remove("leadScoreMax").save();
+        easyPreference.remove("tagsID").save();
+        easyPreference.remove("priceMin").save();
+        easyPreference.remove("priceMax").save();
+        easyPreference.remove("dripCompaignID").save();
+        easyPreference.remove("lastTouch").save();
+        easyPreference.remove("lastLogin").save();
+        easyPreference.remove("pipelineID1").save();
+        easyPreference.remove("sourceID").save();
+        easyPreference.remove("fromDate").save();
+        easyPreference.remove("toDate").save();
+
 
         searchListItemsselected = new ArrayList<>();
         getLeadTypeModelListselected = new ArrayList<>();
@@ -570,6 +589,9 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         sourceIdsString = "";
         dripIdsString = "";
         pipelineIdsString = "";
+
+//        EasyPreference.Builder pref = new EasyPreference.Builder(context);
+//        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"leadsFragment").save();
 
         retrieveFilters();
     }
@@ -608,12 +630,22 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         intent.putExtra("sourceID", sourceID);
         intent.putExtra("fromDate", fromDate);
         intent.putExtra("toDate", toDate);
+
+        // stop redirection to dashboard screen when click back button
+        EasyPreference.Builder pref = new EasyPreference.Builder(context);
+        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"leadsFragment").save();
+
+        // for search bundle otherwise it is calling null
+        easyPreference.addString("search", "searchResult").save();
+
         setResult(RESULT_OK, intent);
         finish();
 
     }
 
     private void saveAndSearchFilters() {
+
+
 
         easyPreference.addObject("agentIDs", searchListItemsselected).save();
         easyPreference.addObject("typeIDs", getLeadTypeModelListselected).save();
@@ -630,6 +662,29 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         easyPreference.addString("priceFrom", priceFrom + "").save();
         easyPreference.addString("dateTo", dateTo + "").save();
         easyPreference.addString("dateFrom", dateFrom + "").save();
+
+        /*  save and serach showing data until user clear the filte */
+        // all fields here except notes and leadId
+
+        easyPreference.addString("saveAndSearch", "saveData").save();
+
+
+
+        easyPreference.addString("agentID", agentIdsString + "").save();
+        easyPreference.addString("leadTypeID", typeIdsString + "").save();
+        easyPreference.addString("leadScoreMax", getGetLeadScoreList.get(bi.spnLeadScore.getSelectedIndex()).value + "").save();
+        easyPreference.addString("tagsID", tagsIdsString + "").save();
+        easyPreference.addString("priceMin", priceTo.equals("0") ? "" : priceTo + "").save();
+        easyPreference.addString("priceMax", priceFrom.equals("0") ? "" : priceFrom + "").save();
+        easyPreference.addString("dripCompaignID", dripIdsString + "").save();
+        easyPreference.addString("lastTouch", getGetLastTouchList.get(bi.spnLastTouch.getSelectedIndex()).value + "").save();
+        easyPreference.addString("lastLogin", getGetLastLoginList.get(bi.spnLastLogin.getSelectedIndex()).value + "").save();
+        easyPreference.addString("pipelineID1", pipelineIdsString + "").save();
+        easyPreference.addString("sourceID", sourceIdsString + "").save();
+        easyPreference.addString("fromDate", startDate).save();
+        easyPreference.addString("toDate", endDate).save();
+
+
 
         String st = startDate;
         String et = endDate;
@@ -837,7 +892,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
         hideProgressBar();
     }
-
     public void showPriceRangeDialog(Context context) {
 
         Dialog dialog = new Dialog(context, R.style.Dialog);
@@ -869,7 +923,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         dialog.show();
 
     }
-
     public void showDateRangeDialog(Context context) {
 
         Dialog dialog = new Dialog(context, R.style.Dialog);
@@ -922,7 +975,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         mHour = newCalendar.get(Calendar.HOUR_OF_DAY);
         mMinute = newCalendar.get(Calendar.MINUTE);
     }
-
 
     private void showSpinnerDateDialog(TextView textView, boolean isStart) {
         calendarInstance();
@@ -1165,5 +1217,15 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        // for testing
+        // saving status of fragment other wise leads redirect to dash board
+        EasyPreference.Builder pref = new EasyPreference.Builder(context);
+        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"leadsFragment").save();
     }
 }
