@@ -194,9 +194,10 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                                         selectedEncyrptedIds.get(i)));
 
                                 if (tagsIdsString.equals("")) {
-                                    tagsIdsString = selectedEncyrptedIds.get(i);
+                                    tagsIdsString = selectedIds.get(i).toString();
                                 } else {
-                                    tagsIdsString = tagsIdsString + "," + selectedEncyrptedIds.get(i);
+                                   // tagsIdsString = tagsIdsString + "," + selectedEncyrptedIds.get(i);
+                                    tagsIdsString = tagsIdsString + "," + selectedIds.get(i);
                                 }
                             }
                         } else {

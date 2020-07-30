@@ -1,5 +1,7 @@
 package com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads;
 
+import android.util.Log;
+
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Models.GetLeadCounts;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -63,6 +65,10 @@ public class FindLeadsPresenter extends BasePresenter<FindLeadsContract.View> im
                 if (response.isSuccessful()) {
 
                     GetLeadCounts getLeadCountsModel = response.body();
+
+                    Log.i("GetLeadCounts",""+ response.body().data);
+                    Log.i("countstatus",""+ response.body().status);
+                    Log.i("countmessage",""+ response.body().message);
                     if (getLeadCountsModel.status.equals("Success")) {
 
                         _view.updateUI(getLeadCountsModel);

@@ -425,6 +425,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                         tvTime.setText("All Day");
                     } else {
                         tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm", "HH:mm:ss")+" "+startTime[2]);
+
                     }
                     tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE, MMM dd, yyyy", "MM/dd/yyyy"));
                 }

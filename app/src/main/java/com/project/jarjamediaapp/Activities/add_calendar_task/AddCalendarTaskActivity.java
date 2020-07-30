@@ -65,11 +65,19 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
             bi.atvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
             bi.atvDescription.setText(calendarDetailModel.getDescription() != null ? calendarDetailModel.getDescription() : "");
 
-//            startDate = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "yyyy-MM-dd", "MM/dd/yyyy HH:mm:ss aaa");
-//            startTime = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "HH:mm:ss", "MM/dd/yyyy HH:mm:ss aaa");
+            // for assCalenderTaskActivity
+            startDate = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "yyyy-MM-dd", "MM/dd/yyyy HH:mm:ss aaa");
+            startTime = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "HH:mm:ss", "MM/dd/yyyy HH:mm:ss aaa");
 
-            startDate = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-            startTime = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
+
+            // copy from addtaskActivity
+        /*    startDate = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy hh:mm:ss a");
+            startTime = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
+*/
+
+            // from addAppointmentActivity
+//            startDate = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+//            startTime = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
 
             String[] startTimeArray = calendarDetailModel.getStartTime().split(" ");
 
@@ -282,17 +290,19 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         if (bi.cbAllDay.isChecked() || startTime.equalsIgnoreCase("")) {
 
-           // startTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-            startTime = new SimpleDateFormat("hh:mm:ss.SSS'Z'", Locale.getDefault()).format(new Date());
-            startDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+            startTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+          //  startTime = new SimpleDateFormat("hh:mm:ss.SSS'Z'", Locale.getDefault()).format(new Date());
+          //  startDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
 
 
-        }else {
 
-        //    startDate = GH.getInstance().formatApiDateTime(startDate + "T" + startTime);
-            startDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+        }/*else {
 
-        }
+         //   startDate = GH.getInstance().formatApiDateTime(startDate + "T" + startTime);
+          //  startDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+
+        }*/
+        startDate = GH.getInstance().formatDateTime(startDate + "T" + startTime);
 
 
         Integer leadAppointmentID = 0;
