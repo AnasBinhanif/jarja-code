@@ -21,6 +21,7 @@ import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 import com.project.jarjamediaapp.Networking.RetrofitCallback;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.AppConstants;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -45,6 +46,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         bi = DataBindingUtil.setContentView(this, R.layout.activity_login);
         presenter = new LoginPresenter(this);
         presenter.initScreen();
+
+        // for testing
+        // save o start acivity other wise application crash due to null values
+        EasyPreference.Builder pref = new EasyPreference.Builder(context);
+        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"").save();
 
     }
 

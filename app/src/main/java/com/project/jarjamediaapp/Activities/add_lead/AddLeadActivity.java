@@ -26,6 +26,7 @@ import com.project.jarjamediaapp.Models.GetLeadTagList;
 import com.project.jarjamediaapp.Models.GetLeadTimeFrame;
 import com.project.jarjamediaapp.Models.GetLeadTypeList;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
@@ -93,6 +94,10 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         presenter = new AddLeadPresenter(this);
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.add_lead), true);
+
+        // stop redirection to dashboard screen when click back button
+        EasyPreference.Builder pref = new EasyPreference.Builder(context);
+        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"leadsFragment").save();
 
     }
 

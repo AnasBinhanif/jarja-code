@@ -50,7 +50,9 @@ public class GH {
         USER_PERMISSIONS,
         FIREBASE_TOEKN,
         NOTIFICATIONTYPE,
-        NOTIFICATIONID
+        NOTIFICATIONID,
+        FRAGMENTSTATUS,
+        CALENDERUPDATELIST
 
     }
 
@@ -60,6 +62,15 @@ public class GH {
     }
     public String getNotificationType() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.NOTIFICATIONTYPE.name(), null);
+
+    }
+    public int getCalenderListPos() {
+        return EasyPreference.with(ProjectApplication.getInstance()).getInt(KEYS.CALENDERUPDATELIST.name(), 0);
+
+    }
+
+    public String getFragmentStatus() {
+        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.FRAGMENTSTATUS.name(), null);
 
     }
     public String getNotificationID() {

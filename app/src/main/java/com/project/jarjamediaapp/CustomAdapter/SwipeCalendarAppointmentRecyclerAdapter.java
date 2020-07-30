@@ -29,6 +29,7 @@ import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
@@ -145,8 +146,13 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                         if (mData != null && mData.size() > 0) {
 
                             ToastUtils.showToast(context, calendarDetailModel.getMessage() + "");
+                          /*  mData.remove(pos);
+                            notifyItemRemoved(pos);
+                            notifyItemRangeChanged(pos, mData.size());*/
                             mData.remove(pos);
                             notifyDataSetChanged();
+                            EasyPreference.Builder pref = new EasyPreference.Builder(context);
+                            pref.addInt(GH.KEYS.CALENDERUPDATELIST.name(),pos).save();
                             swipeRevealLayout.close(true);
 
                         }
@@ -419,6 +425,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                         tvTime.setText("All Day");
                     } else {
                         tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm", "HH:mm:ss")+" "+startTime[2]);
+
                     }
                     tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE, MMM dd, yyyy", "MM/dd/yyyy"));
                 }

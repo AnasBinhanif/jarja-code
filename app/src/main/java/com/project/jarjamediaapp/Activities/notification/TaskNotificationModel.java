@@ -32,6 +32,7 @@ public class TaskNotificationModel extends BaseResponse {
             @SerializedName("description")
             @Expose
             public String description;
+
             @SerializedName("taskType")
             @Expose
             public String taskType;
@@ -43,7 +44,6 @@ public class TaskNotificationModel extends BaseResponse {
             public String getTaskType() {
                 return taskType;
             }
-
 
             @SerializedName("leadID")
             @Expose

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.gson.internal.LinkedTreeMap;
 import com.project.jarjamediaapp.Activities.add_filters.AddFiltersActivity;
 import com.project.jarjamediaapp.Activities.all_leads.AllLeadsActivity;
 import com.project.jarjamediaapp.Base.BaseFragment;
@@ -26,6 +27,8 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.FragmentFindleadsBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,20 +75,48 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     @Override
     public void onResume() {
         super.onResume();
-        callGetLeadCounts(bundle);
+
+        if (easyPreference.getString("saveAndSearch", "").equals("saveData")){
+
+                getSaveLeadsData();
+            }else if(bundle == null){
+                callGetLeadCounts(bundle);
+            }else if(easyPreference.getString("search", "").equals("searchResult")){
+
+                callGetLeadCounts(bundle);
+            }else {
+
+                bundle = null;
+                callGetLeadCounts(bundle);
+        }
+
     }
 
     @Override
     public void setupViews() {
 
         initViews();
-        callGetLeadCounts(bundle);
+
+        if (easyPreference.getString("saveAndSearch", "").equals("saveData")){
+
+            getSaveLeadsData();
+        }else if(bundle == null){
+            callGetLeadCounts(bundle);
+        }else if(easyPreference.getString("search", "").equals("searchResult")){
+
+            callGetLeadCounts(bundle);
+        }else {
+
+            bundle = null;
+            callGetLeadCounts(bundle);
+        }
     }
 
     private void initViews() {
 
         bi.tvFilter.setOnClickListener(this);
     }
+
 
     private void callGetLeadCounts(Intent bundle) {
 
@@ -240,7 +271,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
         } else {*/
-            ToastUtils.showToastLong(context, error);
+        ToastUtils.showToastLong(context, error);
 
     }
 
@@ -302,4 +333,60 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
             }
         }
     }
+
+    public void getSaveLeadsData(){
+
+
+
+        String leadID =  easyPreference.getString("leadID", "");
+        String agentID =  easyPreference.getString("agentID", "");
+        String leadTypeID =   easyPreference.getString("leadTypeID", "");
+        String leadScoreMax = easyPreference.getString("leadScoreMax", "");
+        String tagsID = easyPreference.getString("tagsID", "");
+        String priceMin =  easyPreference.getString("priceMin", "");
+        String priceMax =  easyPreference.getString("priceMax", "");
+        String notes = easyPreference.getString("notes", "");
+        String dripCompaignID = easyPreference.getString("dripCompaignID", "");
+        String lastTouch = easyPreference.getString("lastTouch", "");
+        String lastLogin = easyPreference.getString("lastLogin", "");
+        String pipelineID = easyPreference.getString("pipelineID1", "");
+        String sourceID = easyPreference.getString("sourceID", "");
+        String fromDate = easyPreference.getString("fromDate", "");
+        String toDate =  easyPreference.getString("toDate", "");
+
+
+        Intent intent = new Intent();
+        intent.putExtra("leadID", leadID);
+        intent.putExtra("agentID", agentID);
+        intent.putExtra("leadTypeID", leadTypeID);
+        intent.putExtra("leadScoreMax", leadScoreMax);
+        intent.putExtra("tagsID", tagsID);
+        intent.putExtra("priceMin", priceMin);
+        intent.putExtra("priceMax", priceMax);
+        intent.putExtra("notes", notes);
+        intent.putExtra("dripCompaignID", dripCompaignID);
+        intent.putExtra("lastTouch", lastTouch);
+        intent.putExtra("lastLogin", lastLogin);
+        intent.putExtra("pipelineID", pipelineID);
+        intent.putExtra("sourceID", sourceID);
+        intent.putExtra("fromDate", fromDate);
+        intent.putExtra("toDate", toDate);
+
+        // fro coming fom dashboard so it will call save bundle data
+        bundle = intent;
+        callGetLeadCounts(intent);
+
+    }
+
+ /*   public void getFilterObject() {
+
+        ArrayList<LinkedTreeMap> agentIDs = easyPreference.getObject("agentIDs", ArrayList.class);
+        if (agentIDs != null) {
+            String agentIdsString = "";
+            for (LinkedTreeMap d : agentIDs) {
+                selectedIdsList.add(Integer.valueOf(Double.valueOf(d.get("id").toString()).intValue()));
+
+            }
+        }
+    }*/
 }

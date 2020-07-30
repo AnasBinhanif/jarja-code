@@ -102,7 +102,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         presenter = new AddTaskPresenter(this);
         presenter.initScreen();
 
-
+        presenter.getReminder();
         /*// for testing
         EasyPreference.Builder pref = new EasyPreference.Builder(context);
         pref.addString(GH.KEYS.NOTIFICATIONTYPE.name(),"").save();*/
@@ -114,7 +114,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
 
         presenter.getAgentNames();
-        presenter.getReminder();
 
         bi.atvVia.setOnClickListener(this);
         bi.tvName.setOnClickListener(this);
@@ -373,7 +372,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListReminderText);
         bi.atvReminder.setAdapter(arrayAdapter);
 
-        /*if (bi.atvReminder.getText().equals("")){
+      /*  if (bi.atvReminder.getText().equals("")){
 
             try {
 
@@ -384,8 +383,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
                 ToastUtils.showToastLong(context,"unable to load");
             }
-        }*/
-
+        }
+*/
 
 
         // for testing
@@ -973,7 +972,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             bi.atvReminder.dismissDropDown();
         }
 
-       /* if (!isReminderClicked) {
+      /*  if (!isReminderClicked) {
             bi.atvReminder.showDropDown();
             isReminderClicked = true;
         } else {
@@ -1085,7 +1084,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             case R.id.atvReminder:
                 clearFocus();
                 reminder();
-              //  presenter.getReminder();
+
                 hideSoftKeyboard(bi.atvReminder);
                 break;
             case R.id.atvVia:
@@ -1470,6 +1469,5 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
 }

@@ -312,7 +312,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.tvName.setText((modelData.getLeadName() != null ? modelData.getLeadName() : ""));
         if (fromId.equalsIgnoreCase("2") || fromId.equalsIgnoreCase("4") ||
                 fromId.equalsIgnoreCase("6")) {
-            bi.tvName.setEnabled(false);
+          //  bi.tvName.setEnabled(false);
+            bi.tvName.setEnabled(true);
         } else {
             bi.tvName.setEnabled(true);
             bi.tvName.setHint("Contact");
@@ -371,7 +372,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         }
     }
 
-    private void prePopulateData(GetAppointmentsModel.Data.Datum modelData) {
+    private void prePopulateData(GetAppointmentsModel.Data.Datum modelData)
+    {
 
 
         leadId = modelData.getLeadID();
@@ -379,7 +381,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.tvName.setText((modelData.getVtCRMLeadCustom().getFirstName() != null ? modelData.getVtCRMLeadCustom().getFirstName() : "") + " " + (modelData.getVtCRMLeadCustom().getLastName() != null ? modelData.getVtCRMLeadCustom().getLastName() : ""));
         if (fromId.equalsIgnoreCase("2") || fromId.equalsIgnoreCase("4") ||
                 fromId.equalsIgnoreCase("6")) {
-            bi.tvName.setEnabled(false);
+         //   bi.tvName.setEnabled(false);
+            bi.tvName.setEnabled(true);
         } else {
             bi.tvName.setEnabled(true);
             bi.tvName.setHint("Contact");

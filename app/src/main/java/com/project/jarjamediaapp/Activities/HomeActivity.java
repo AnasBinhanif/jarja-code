@@ -2,9 +2,11 @@ package com.project.jarjamediaapp.Activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -25,6 +27,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -59,6 +62,7 @@ import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.AppConstants;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
@@ -90,6 +94,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     TextView navHeaderTextView, tvInitial;
     public static boolean onClick = true;
     private String notificationType;
+  //  LocalReceiver myReceiver;
 
 
 
@@ -101,6 +106,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         initViews();
 
+     //   myReceiver = new LocalReceiver();
 
       //  if (getIntent().getExtras() != null) {
 
@@ -119,8 +125,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
             ToastUtils.showToastLong(context,"hello"+typeOfNotification);
 
+
             switch (typeOfNotification) {
-                case "apointment":
+                case "4":
 
                     notificationType = "apointment";
 
@@ -129,14 +136,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                     break;
 
-                case "followup":
+                case "3":
 
 
                     getFolloUpDetailByID(notificationID);
 
                     break;
 
-                case "task":
+                case "1":
 
 
                     notificationType = "task";
@@ -144,7 +151,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                    getTaskDetail(notificationID);
 
                     break;
-                case "futureTask":
+                case "2":
 
 
                     notificationType = "futureTask";
@@ -322,6 +329,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onPause() {
         super.onPause();
+       // LocalBroadcastManager.getInstance(HomeActivity.this).unregisterReceiver(myReceiver);
     }
 
     @Override
@@ -329,8 +337,27 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         super.onResume();
 
-        navigationView.getMenu().getItem(1).setChecked(true);
-        getUserProfileData();
+
+        // checking condition when we coming from leads activity
+        if(GH.getInstance().getFragmentStatus() != null){
+            if (GH.getInstance().getFragmentStatus().equals("leadsFragment")){
+
+                // for testing
+                EasyPreference.Builder pref = new EasyPreference.Builder(context);
+                pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"").save();
+
+            }else {
+
+                navigationView.getMenu().getItem(1).setChecked(true);
+                getUserProfileData();
+            }
+
+        }
+
+
+
+//        IntentFilter filter = new IntentFilter("NOTIFICATION_LOCAL_BROADCAST");
+//        LocalBroadcastManager.getInstance(HomeActivity.this).registerReceiver(myReceiver, filter);
         // when come from anyactivity to dashboard so highlighted the dash board item in navigation drawer
         // and stop for repeating dialogue in dash board screen
       //  getUserProfileData();
@@ -348,6 +375,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         }*/
 
     }
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -483,10 +512,30 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         ft.replace(R.id.fragment_replacer, fragment, title);
         if (addToStack) {
             ft.addToBackStack(title);
+
         }
         fragments_added.add(title);
         ft.commitAllowingStateLoss();
     }
+   /* public void adddFragment(Fragment fragment, String title, boolean shouldAnimate, boolean addToStack) {
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction ft = manager.beginTransaction();
+        current_fragment_title = title;
+        if (shouldAnimate) {
+            ft.setCustomAnimations(android.R.anim.fade_in,
+                    android.R.anim.fade_out, android.R.anim.fade_in,
+                    android.R.anim.fade_out);
+        }
+        ft.add(R.id.fragment_replacer, fragment, title);
+        if (addToStack) {
+            ft.addToBackStack(title);
+
+        }
+        fragments_added.add(title);
+        ft.commitAllowingStateLoss();
+    }*/
+
 
     @Override
     public void updateToolBarTitle(String title) {
@@ -857,6 +906,18 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         });
 
     }
+   /* private void updateUI(Intent intent) {
+        // do what you need to do
+        ToastUtils.showToastLong(context,"Hello hello");
+        ToastUtils.showToastLong(context,""+intent.getStringExtra("notificationType"));
+    }
+
+    private class LocalReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateUI(intent);
+        }
+    }*/
 
 
 }

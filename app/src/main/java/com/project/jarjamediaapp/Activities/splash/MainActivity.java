@@ -1,9 +1,11 @@
 package com.project.jarjamediaapp.Activities.splash;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
@@ -14,6 +16,7 @@ import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivitySplashBinding;
@@ -26,8 +29,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     Context context = MainActivity.this;
     MainPresenter presenter;
     long BASE_TIME_OUT = 3;
-    String typeOfNotification;
-    String notificationID;
+    Object notificationType;
+    Object NotificationID;
 
 
     @Override
@@ -38,53 +41,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         presenter = new MainPresenter(this);
         presenter.initScreen();
 
-     /*   if (getIntent().getExtras() != null) {
+        if (getIntent().getExtras() != null) {
 
-             typeOfNotification = getIntent().getStringExtra("notificationType");
-             notificationID = getIntent().getStringExtra("notificationID");
+             notificationType = getIntent().getExtras().get("notification_type");
+             NotificationID = getIntent().getExtras().get("NotificationID");
+            Log.d("TAG", "Key: " + "notificationType" + " Value: " + notificationType);
+            Log.d("TAG", "Key: " + "NotificationID" + " Value: " + NotificationID);
 
-             ToastUtils.showToastLong(context,""+typeOfNotification);
+           /* for (String key : getIntent().getExtras().keySet()) {
+                Object value = getIntent().getExtras().get(key);
+                Log.d("TAG", "Key: " + key + " Value: " + value);
+            }*/
+        }
 
-         *//*   switch (typeOfNotification) {
-                case "apointment":
-
-                    notificationType = "apointment";
-
-                    getAppointmentById(notificationID);
-                    //  easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
-
-                    break;
-
-                case "followup":
-
-
-                    getFolloUpDetailByID(notificationID);
-
-                    break;
-
-                case "task":
-
-
-                    notificationType = "task";
-
-                    getTaskDetail(notificationID);
-
-                    break;
-                case "futureTask":
-
-
-                    notificationType = "futureTask";
-
-                    getFutureTaskDetail(notificationID);
-
-                    break;
-
-
-            }*//*
-        }*/
+        // for testing
+        // save o start acivity other wise application crash due to null values
+        EasyPreference.Builder pref = new EasyPreference.Builder(context);
+        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"").save();
 
     }
-
     public void splash(long baseTimeout) {
 
         BASE_TIME_OUT = baseTimeout * 1000;
@@ -93,20 +68,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void run() {
 
-                if (GH.getInstance().getAuthorization() != null && !GH.getInstance().getAuthorization().equals(""))
-                {
-
-                    if(getIntent().getExtras() != null){
-
-                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                        intent.putExtra("notificationType",typeOfNotification);
-                        intent.putExtra("notificationID",notificationID);
-                    }else {
-
-                          switchActivity(HomeActivity.class);
-                    }
-
-                }else{
+                if (GH.getInstance().getAuthorization() != null && !GH.getInstance().getAuthorization().equals("")) {
+                    Intent intent =  new Intent(getApplicationContext(),HomeActivity.class);
+                    intent.putExtra("notificationType",String.valueOf(notificationType));
+                    intent.putExtra("notificationID",String.valueOf(NotificationID));
+                    startActivity(intent);
+                   // switchActivity(HomeActivity.class);
+                } else {
                     switchActivity(LoginActivity.class);
                 }
 
@@ -164,4 +132,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         GH.getInstance().HideProgressDialog();
     }
 
+   /* public void updateData(String title,String message) {
+
+        ToastUtils.showToastLong(context, title);
+
+    }*/
+
+
+   /* @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+
+        super.onNewIntent(intent);
+
+        Log.d("Tag", "onNewIntent - starting");
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            for (String key : extras.keySet()) {
+                Object value = extras.get(key);
+                Log.d("Tag", "Extras received at onNewIntent:  Key: " + key + " Value: " + value);
+            }
+            String title = extras.getString("title");
+            String message = extras.getString("body");
+            if (message!=null && message.length()>0) {
+                getIntent().removeExtra("body");
+                updateData(title, message);
+            }
+        }
+    }*/
 }
