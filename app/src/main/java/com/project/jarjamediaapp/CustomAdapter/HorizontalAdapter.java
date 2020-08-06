@@ -41,6 +41,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -69,7 +71,9 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
     public HorizontalAdapter(Context context, List<GetAllOpenHousesModel.Data.OpenHouse> data, String openHouseType) {
 
         this.context = context;
-        this.data = data;
+        this.data =  data;
+       /* // reverse arraylist
+        Collections.reverse(this.data);*/
         this.openHouseType = openHouseType;
 
     }

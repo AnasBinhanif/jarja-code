@@ -147,12 +147,16 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         }
 
         dataArrayList = new ArrayList<>();
-        for (int i = 0; i < dataList.size(); i++) {
-            int _day = markedDates.get(i);
-            if (day == _day) {
-                dataArrayList.add(dataList.get(i));
+        if (dataList.size() > 0){
+
+            for (int i = 0; i < dataList.size(); i++) {
+                int _day = markedDates.get(i);
+                if (day == _day) {
+                    dataArrayList.add(dataList.get(i));
+                }
             }
         }
+
         if (dataArrayList.size() > 0) {
             /*context.startActivity(
                     new Intent(context, CalendarDetailActivity.class)
@@ -172,7 +176,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         } else {
             bi.rvEvents.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
-            ToastUtils.showToastLong(context, "No data found");
+          // ToastUtils.showToastLong(context, "No data found");
         }
 
     }
@@ -278,16 +282,18 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void updateUIList(CalendarModel response) {
 
-
+        dataList= new ArrayList<>();
         if (response.data.size() > 0) {
-            dataList= new ArrayList<>();
+
             currentDateList = new ArrayList<>();
             dataList = response.getData();
             for (int i = 0; i < response.getData().size(); i++) {
 
                 if (response.getData().get(i).getStart() != null || response.getData().get(i).getStart().equalsIgnoreCase("Null")
                         || !response.getData().get(i).getStart().equals("")) {
-                    String date = GH.getInstance().formatter(response.getData().get(i).getStart(), "dd", "yyyy-MM-dd'T'HH:mm:ss");
+                    // hide because of date "04" it change to "4"
+                  //  String date = GH.getInstance().formatter(response.getData().get(i).getStart(), "dd", "yyyy-MM-dd'T'HH:mm:ss");
+                    String date = GH.getInstance().formatter(response.getData().get(i).getStart(), "d", "yyyy-MM-dd'T'HH:mm:ss");
 
                     calendar = Calendar.getInstance();
                     daySelected = calendar.get(Calendar.DAY_OF_MONTH);

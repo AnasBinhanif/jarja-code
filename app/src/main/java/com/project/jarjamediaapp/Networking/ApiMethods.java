@@ -123,7 +123,9 @@ public interface ApiMethods {
                                          @Field("tmzone") String tmzone,
                                          @Field("picGuid") String picGuid,
                                          @Field("phone") String phone,
-                                         @Field("city") String city);
+                                         @Field("city") String city,
+                                         @Field("virtualNumber") String virtualNumber);
+
 
     @GET("User/GetUserPermission")
     Call<GetUserPermission> GetUserPermission(@Header("Authorization") String authorization);

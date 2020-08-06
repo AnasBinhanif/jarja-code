@@ -157,6 +157,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         // 2 from Update Appointment Lead Id
         // 4 from Update Appointment
         // 6 for Update Calendar Appointment
+        // 7 for push notification redirection when tap on notification and notification screen both same fro opening notification
         fromId = getIntent().getStringExtra("from");
         gmailCalenderId = getIntent().getStringExtra("gmailCalenderId");
         switch (fromId) {
@@ -242,6 +243,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         // 4 from Update Appointment
         // 5 from Add Appointment
         // 6 for Update Calendar Appointment
+        // 7 for push notification redirection when tap on notification and notification screen both same fro opening notification
         fromId = getIntent().getStringExtra("from");
         assert fromId != null;
         switch (fromId) {

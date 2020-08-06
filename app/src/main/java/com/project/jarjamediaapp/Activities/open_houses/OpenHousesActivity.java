@@ -199,7 +199,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
                 bi.rvOpenHouse.setLayoutManager(new CenterZoomLayoutManager(context, RecyclerView.HORIZONTAL, false));
                 bi.rvOpenHouse.setItemAnimator(new DefaultItemAnimator());
                 bi.rvOpenHouse.setAdapter(new HorizontalAdapter(context, response.body().getData().openHouse,openHouseType));
-                bi.rvOpenHouse.scrollToPosition(position);
+             //   bi.rvOpenHouse.scrollToPosition(position);
                 bi.rvOpenHouse.setVisibility(View.VISIBLE);
                 bi.tvMessage.setVisibility(View.GONE);
 

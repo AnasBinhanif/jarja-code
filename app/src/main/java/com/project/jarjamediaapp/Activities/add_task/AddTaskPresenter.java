@@ -1,5 +1,8 @@
 package com.project.jarjamediaapp.Activities.add_task;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
@@ -283,11 +286,13 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
                     if (getTaskDetail.getStatus().equalsIgnoreCase("Success")) {
 
                         _view.updateTaskDetail(getTaskDetail);
+                        Log.i("Hello","Success");
 
                     } else {
 
                         _view.hideProgressBar();
                         _view.updateUIonFalse(getTaskDetail.message);
+                        Log.i("Hello","not Success");
 
                     }
                 } else {
@@ -295,6 +300,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
                     _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
+                    Log.i("Hello","Error");
                 }
             }
 
@@ -302,6 +308,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskContract.View> implem
             public void onFailure(Call<GetTaskDetail> call, Throwable t) {
                 _view.hideProgressBar();
                 _view.updateUIonFailure();
+                Log.i("Hello","Failure");
             }
         });
 

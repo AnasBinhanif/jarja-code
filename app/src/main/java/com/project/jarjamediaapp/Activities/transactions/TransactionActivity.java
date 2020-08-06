@@ -187,7 +187,13 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         presenter.addPipelineMark(jsonObjectString);
 
                     }else {
-                        showLongToastMessage("Sorry, you cannot revert pipeline.");
+                        // enable revert pipeline
+                        jsonObjectString = "{\"presentationID\": \"" + presentationID + "\"," +
+                                " \"encrypted_LeadDetailID\": \"" + leadDetailId +
+                                "\", \"pipelineID\":\"" + pipelineID + "\"}";
+                        Log.d("json", jsonObjectString);
+                        presenter.addPipelineMark(jsonObjectString);
+                      //  showLongToastMessage("Sorry, you cannot revert pipeline.");
                     }
 
 

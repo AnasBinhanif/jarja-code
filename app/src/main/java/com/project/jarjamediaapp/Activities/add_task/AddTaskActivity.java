@@ -531,15 +531,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         reoccur = String.valueOf(taskDetail.data.scheduleRecurID);
         Log.d("recur", reoccur);
         bi.atvRecur.setText(taskDetail.data.recur, false);
-        if (taskDetail.data.recur.equals("One Time")) {
-            bi.tvEndDate.setVisibility(View.GONE);
-            bi.lnEndDate.setVisibility(View.GONE);
-            bi.lblEndDate.setVisibility(View.GONE);
-        } else {
-            bi.tvEndDate.setVisibility(View.VISIBLE);
-            bi.lnEndDate.setVisibility(View.VISIBLE);
-            bi.lblEndDate.setVisibility(View.VISIBLE);
-        }
+
         bi.atvAddProperty.setText(taskDetail.data.address);
 
         startDate = GH.getInstance().formatter(taskDetail.data.startDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy hh:mm:ss a");
@@ -554,8 +546,25 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         String sTime = GH.getInstance().formatter(taskDetail.data.startDate, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
         String eTime = GH.getInstance().formatter(taskDetail.data.endDate, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
 
-        bi.tvStartDate.setText(sDate + " " + sTime);
-        bi.tvEndDate.setText(eDate + " " + eTime);
+
+        if (taskDetail.data.recur.equals("One Time")) {
+            bi.tvEndDate.setVisibility(View.GONE);
+            bi.lnEndDate.setVisibility(View.GONE);
+            bi.lblEndDate.setVisibility(View.GONE);
+            // start date enable when it is one time
+            bi.tvStartDate.setEnabled(true);
+            // correct time update in edate and etime for start date
+            bi.tvStartDate.setText(eDate + " " + eTime);
+        } else {
+            bi.tvEndDate.setVisibility(View.VISIBLE);
+            bi.lnEndDate.setVisibility(View.VISIBLE);
+            bi.lblEndDate.setVisibility(View.VISIBLE);
+            bi.tvStartDate.setEnabled(false);
+            bi.tvStartDate.setText(sDate + " " + sTime);
+            bi.tvEndDate.setText(eDate + " " + eTime);
+        }
+
+
         type = taskDetail.data.type;
         scheduleId = taskDetail.data.scheduleID;
         searchLeadIdsString = taskDetail.data.leadEncryptedId;
@@ -604,7 +613,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     agentIdsString = agentIdsString + "," + name.agentIDEncrypted;
                 }
             }
-            bi.tvStartDate.setEnabled(false);
+           // bi.tvStartDate.setEnabled(false);
         }
 
         hideProgressBar();

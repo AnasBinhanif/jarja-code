@@ -58,7 +58,7 @@ public interface UserProfileContract {
         void updateUserProfile(String firstName, String state, String licenseNo, String picName, String companyAddress, String agentType,
                                String zipCode, String streetAddress, String title, int countryId, String forwardedNumber,
                                boolean leadDistributionMessageEnabled, String emailAddress, String company, String lastName, String tmzone,
-                               String picGuid, String phone, String city);
+                               String picGuid, String phone, String city,String virtualNumber);
 
     }
 

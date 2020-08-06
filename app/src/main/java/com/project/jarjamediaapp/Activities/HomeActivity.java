@@ -37,6 +37,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
+import com.koushikdutta.ion.builder.Builders;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Activities.add_appointment.Data;
 import com.project.jarjamediaapp.Activities.add_appointment.GetAppointmentByIDModel;
@@ -90,6 +91,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     Menu _menu;
     String picPath = "";
     MenuItem item;
+    MenuItem NavigationItem;
     CircleImageView navHeaderImageView;
     TextView navHeaderTextView, tvInitial;
     public static boolean onClick = true;
@@ -193,8 +195,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     }
                 });
 
-    }
 
+    }
 
     private void userAuthenticate(String deviceToken, String network) {
 
@@ -335,7 +337,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
             }else {
 
-                navigationView.getMenu().getItem(1).setChecked(true);
+            //    navigationView.getMenu().getItem(1).setChecked(true);
                 getUserProfileData();
             }
 
@@ -367,7 +369,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
         displayView(item);
+        NavigationItem = item;
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
@@ -388,7 +392,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 userPermission = GH.getInstance().getUserPermissions();
                 if (userPermission.data.dashboard.get(0).value) {
                     title = getResources().getString(R.string.dashboard);
-                    fragment = TabsFragment.newInstance(title, R.id.nav_dashboard);
+                    fragment = TabsFragment.newInstance(title,R.id.nav_dashboard);
 
                     addToStack = false;
                     shouldAnimate = true;
@@ -559,10 +563,20 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         easyPreference.addString(GH.KEYS.USER_PERMISSIONS.name(), jsonText).save();
 
                         if (getUserProfile.data.dashboard.get(0).value) {
-                            onNavigationItemSelected(navigationView.getMenu().getItem(1));
+
+                            // for just showing first time navigation first item not repeating
+                            if (GH.getInstance().getDashboardNavigationStatus()){
+
+                                onNavigationItemSelected(navigationView.getMenu().getItem(1));
+                                easyPreference.addBoolean(GH.KEYS.NAVIGATIONSTATUS.name(),false);
+                            }
+
+
+
+
                         } else {
 
-                            ToastUtils.showToast(context, getString(R.string.dashboard_ViewDashboard));
+                            ToastUtils.showToast(context,getString(R.string.dashboard_ViewDashboard));
                         }
 
                     } else {

@@ -281,6 +281,7 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
                 if (swipeLayout != null){
                     swipeLayout.close(true);
                 }
+                // from overdue task
                 if (!isFutureTask) {
                     if (taskID == null || taskID.equals("null") || taskID.equals("")) {
                         Toast.makeText(context, "Task ID Not Found", Toast.LENGTH_SHORT).show();

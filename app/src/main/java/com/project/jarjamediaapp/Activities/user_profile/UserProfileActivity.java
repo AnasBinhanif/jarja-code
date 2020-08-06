@@ -276,6 +276,8 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         bi.atvFirstName.setText(userProfileData.firstName + "");
         bi.atvLastName.setText(userProfileData.lastName + "");
 
+
+
         if (userProfileData.title == null){
             bi.atvTitle.setText("");
         }else {
@@ -298,7 +300,15 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
             bi.atvPhone.setText(userProfileData.phone + "");
         }
 
-        bi.atvVirtual.setText("");
+        if (userProfileData.twilioPhone == null){
+            bi.atvVirtual.setText("");
+        }else {
+
+            bi.atvVirtual.setText(userProfileData.twilioPhone + "");
+
+        }
+
+
         if (userProfileData.forwardedNumber == null){
             bi.atvForwarder.setText("");
         }else {
@@ -412,7 +422,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         }else {
 
             presenter.updateUserProfile(fname, state, license, picName, companyAddress, agentType, zip, street, title, countryID, fNumber,
-                    isLeadDistributionMessageEnabled, email, company, lname, timeZone, picGuid, phone, city);
+                    isLeadDistributionMessageEnabled, email, company, lname, timeZone, picGuid, phone, city,vNumber);
         }
 
 
