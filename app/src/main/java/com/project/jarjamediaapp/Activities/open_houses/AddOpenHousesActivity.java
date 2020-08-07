@@ -82,6 +82,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     int perm = 0;
     private int propertyId;
     GetAllOpenHousesModel.Data.OpenHouse openHouse;
+    String imageName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -378,6 +379,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                             obj.put("state", state);
                             obj.put("zip", zip);
                             obj.put("image", image);
+                            obj.put("imageName", imageName);
+                            obj.put("propertyId", 0);
                             obj.put("openHouseDate", openHouseStartDate);
                             obj.put("openHouseEndDate", openHouseEndDate);
                         } catch (JSONException e) {
@@ -519,6 +522,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         ToastUtils.showToast(context, "Image uploaded");
         // changes in model UplaodImageModel to Upload_ProfileImage for api response
         image = response.data.picLink;
+        imageName = response.data.picName;
+
 
     }
 

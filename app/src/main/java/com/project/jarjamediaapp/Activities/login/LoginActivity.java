@@ -1,6 +1,7 @@
 package com.project.jarjamediaapp.Activities.login;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -59,7 +60,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
        /* bi.atvEmail.setText("bunny@outlook.com");
         bi.atvPassword.setText("admin");*/
-
         bi.tvForgotPassword.setOnClickListener(this);
         bi.btnLogin.setOnClickListener(this);
 
@@ -103,6 +103,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                                 // when successfully authenticate then store access token
                                 easyPreference.addString(GH.KEYS.AUTHORIZATION.name(),token).save();
+                                easyPreference.addBoolean(GH.KEYS.NAVIGATIONSTATUS.name(),true).save();
                                 switchActivity(HomeActivity.class);
                                 finish();
 

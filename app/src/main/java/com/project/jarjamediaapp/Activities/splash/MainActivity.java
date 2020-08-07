@@ -69,6 +69,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public void run() {
 
                 if (GH.getInstance().getAuthorization() != null && !GH.getInstance().getAuthorization().equals("")) {
+
+                    easyPreference.addBoolean(GH.KEYS.NAVIGATIONSTATUS.name(),true).save();
                     Intent intent =  new Intent(getApplicationContext(),HomeActivity.class);
                     intent.putExtra("notificationType",String.valueOf(notificationType));
                     intent.putExtra("notificationID",String.valueOf(NotificationID));

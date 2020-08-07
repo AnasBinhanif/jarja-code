@@ -42,7 +42,7 @@ public class AppointmentNotificationModel extends BaseResponse {
             private String firstName;
             @SerializedName("lastName")
             @Expose
-            private Object lastName;
+            private String lastName;
             @SerializedName("primaryEmail")
             @Expose
             private String primaryEmail;
@@ -66,11 +66,11 @@ public class AppointmentNotificationModel extends BaseResponse {
                 this.firstName = firstName;
             }
 
-            public Object getLastName() {
+            public String getLastName() {
                 return lastName;
             }
 
-            public void setLastName(Object lastName) {
+            public void setLastName(String lastName) {
                 this.lastName = lastName;
             }
 

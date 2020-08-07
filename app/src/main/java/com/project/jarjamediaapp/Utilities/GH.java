@@ -52,7 +52,8 @@ public class GH {
         NOTIFICATIONTYPE,
         NOTIFICATIONID,
         FRAGMENTSTATUS,
-        CALENDERUPDATELIST
+        CALENDERUPDATELIST,
+        NAVIGATIONSTATUS
 
     }
 
@@ -121,6 +122,10 @@ public class GH {
 
     public String getFirebaseToken() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.FIREBASE_TOEKN.name(), "");
+    }
+
+    public boolean getDashboardNavigationStatus() {
+        return EasyPreference.with(ProjectApplication.getInstance()).getBoolean(KEYS.NAVIGATIONSTATUS.name(), false);
     }
 
 

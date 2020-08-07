@@ -961,6 +961,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
             dateTo = dateFrom.equals("max") ? "" : dateTo;
             dialog.dismiss();
 
+
         });
 
         dialog.show();

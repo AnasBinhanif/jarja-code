@@ -224,14 +224,14 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
     public void updateUserProfile(String firstName, String state, String licenseNo, String picName, String companyAddress, String agentType,
                                   String zipCode, String streetAddress, String title, int countryId, String forwardedNumber,
                                   boolean leadDistributionMessageEnabled, String emailAddress, String company, String lastName, String tmzone,
-                                  String picGuid, String phone, String city) {
+                                  String picGuid, String phone, String city,String virtualNumber) {
 
         _view.showProgressBar();
         _callUpdateUserProfile = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 UpdateProfileInfo(GH.getInstance().getAuthorization(), firstName, state, licenseNo, picName, companyAddress, agentType,
                         zipCode, streetAddress, title, countryId, forwardedNumber,
                         leadDistributionMessageEnabled, emailAddress, company, lastName, tmzone,
-                        picGuid, phone, city);
+                        picGuid, phone, city,virtualNumber);
 
         _callUpdateUserProfile.enqueue(new Callback<BaseResponse>() {
             @Override
