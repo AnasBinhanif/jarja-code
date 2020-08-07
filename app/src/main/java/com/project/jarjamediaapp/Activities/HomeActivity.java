@@ -2,11 +2,9 @@ package com.project.jarjamediaapp.Activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -27,7 +25,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -94,7 +91,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     TextView navHeaderTextView, tvInitial;
     public static boolean onClick = true;
     private String notificationType;
-  //  LocalReceiver myReceiver;
+    //  LocalReceiver myReceiver;
 
 
 
@@ -106,24 +103,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         initViews();
 
-     //   myReceiver = new LocalReceiver();
+        //   myReceiver = new LocalReceiver();
 
-      //  if (getIntent().getExtras() != null) {
+        if (getIntent().getExtras() != null) {
 
-        if (GH.getInstance().getNotificationType() != null){
-
-            if (GH.getInstance().getNotificationType().equals("apointment")){
-
-                ToastUtils.showToastLong(context,GH.getInstance().getNotificationType());
-
-            }
-
-        }
-
-            String typeOfNotification = "";//getIntent().getStringExtra("notificationType");
-            String notificationID = "";//getIntent().getStringExtra("notificationID");
-
-            ToastUtils.showToastLong(context,"hello"+typeOfNotification);
+            String typeOfNotification = getIntent().getStringExtra("notificationType");
+            String notificationID = getIntent().getStringExtra("notificationID");
 
 
             switch (typeOfNotification) {
@@ -131,8 +116,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                     notificationType = "apointment";
 
-                   getAppointmentById(notificationID);
-                  //  easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
+                    getAppointmentById(notificationID);
+                    //  easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), notificationType).save();
 
                     break;
 
@@ -148,7 +133,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                     notificationType = "task";
 
-                   getTaskDetail(notificationID);
+                    getTaskDetail(notificationID);
 
                     break;
                 case "2":
@@ -162,8 +147,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
 
             }
-     //  }
-       /*else{
+        }/*else{
 
             easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), "").save();
         }*/
@@ -202,7 +186,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         // Get the Instance ID token//
                         String token = task.getResult().getToken();
                         Log.d("FCM TOKEN",token);
-                       // userAuthenticate(FirebaseInstanceId.getInstance().getToken(),"FCM");
+                        // userAuthenticate(FirebaseInstanceId.getInstance().getToken(),"FCM");
                     }
                 });
 
@@ -245,7 +229,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void getUserProfileData() {
 
-      //  showProgressBar();
+        //  showProgressBar();
         Call<GetUserProfile> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 getUserProfileData(GH.getInstance().getAuthorization());
         _call.enqueue(new Callback<GetUserProfile>() {
@@ -291,12 +275,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         getUserPermissions();
 
                     } else {
-                    //    hideProgressBar();
+                        //    hideProgressBar();
                         Toast.makeText(context, getUserProfile.message, Toast.LENGTH_SHORT).show();
                     }
                 } else {
 
-                //    hideProgressBar();
+                    //    hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
 
                     /*if (error.message().contains("Authorization has been denied for this request")) {
@@ -309,7 +293,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
             @Override
             public void onFailure(Call<GetUserProfile> call, Throwable t) {
-              //  hideProgressBar();
+                //  hideProgressBar();
                 ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
             }
         });
@@ -329,7 +313,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onPause() {
         super.onPause();
-       // LocalBroadcastManager.getInstance(HomeActivity.this).unregisterReceiver(myReceiver);
+        // LocalBroadcastManager.getInstance(HomeActivity.this).unregisterReceiver(myReceiver);
     }
 
     @Override
@@ -360,7 +344,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 //        LocalBroadcastManager.getInstance(HomeActivity.this).registerReceiver(myReceiver, filter);
         // when come from anyactivity to dashboard so highlighted the dash board item in navigation drawer
         // and stop for repeating dialogue in dash board screen
-      //  getUserProfileData();
+        //  getUserProfileData();
      /*   navigationView.getMenu().getItem(0).setChecked(true);
         getUserProfileData();*/
 
@@ -491,7 +475,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 // closed
                 alertDialog1.dismiss();
                 // remove selection of logout
-                 navigationView.getMenu().getItem(1).setChecked(true);
+                navigationView.getMenu().getItem(1).setChecked(true);
             }
         });
 
@@ -561,7 +545,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             public void onResponse(Call<GetUserPermission> call, Response<GetUserPermission> response) {
 
                 // comment the code for repeating progressbar when a ctivity on resume state
-           //    hideProgressBar();
+                //    hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetUserPermission getUserProfile = response.body();
@@ -584,7 +568,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     }
                 } else {
                     // comment the code for repeating progressbar when a ctivity on resume state
-                 //   hideProgressBar();
+                    //   hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     /*if (error.message().contains("Authorization has been denied for this request")) {
                         ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
@@ -840,7 +824,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                                 .putExtra("whichTasks", 1)
                                 .putExtra("leadID", getTaskDetail.getData().leadID)
                                 .putExtra("taskId", taskId));
-                       // _view.updateTaskDetail(getTaskDetail);
+                        // _view.updateTaskDetail(getTaskDetail);
 
                     } else {
 

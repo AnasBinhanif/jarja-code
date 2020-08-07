@@ -528,18 +528,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
         }
 
-        reoccur = String.valueOf(taskDetail.data.scheduleRecurID);
-        Log.d("recur", reoccur);
-        bi.atvRecur.setText(taskDetail.data.recur, false);
-        if (taskDetail.data.recur.equals("One Time")) {
-            bi.tvEndDate.setVisibility(View.GONE);
-            bi.lnEndDate.setVisibility(View.GONE);
-            bi.lblEndDate.setVisibility(View.GONE);
-        } else {
-            bi.tvEndDate.setVisibility(View.VISIBLE);
-            bi.lnEndDate.setVisibility(View.VISIBLE);
-            bi.lblEndDate.setVisibility(View.VISIBLE);
-        }
+
         bi.atvAddProperty.setText(taskDetail.data.address);
 
         startDate = GH.getInstance().formatter(taskDetail.data.startDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy hh:mm:ss a");
@@ -551,14 +540,37 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         startTime = GH.getInstance().formatter(taskDetail.data.startDate, "HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
         endTime = GH.getInstance().formatter(taskDetail.data.endDate, "HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
 
+
         String sTime = GH.getInstance().formatter(taskDetail.data.startDate, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
         String eTime = GH.getInstance().formatter(taskDetail.data.endDate, "hh:mm a", "MM/dd/yyyy hh:mm:ss a");
 
-        bi.tvStartDate.setText(sDate + " " + sTime);
-        bi.tvEndDate.setText(eDate + " " + eTime);
+        reoccur = String.valueOf(taskDetail.data.scheduleRecurID);
+        Log.d("recur", reoccur);
+        bi.atvRecur.setText(taskDetail.data.recur, false);
+        if (taskDetail.data.recur.equals("One Time")) {
+            bi.tvEndDate.setVisibility(View.GONE);
+            bi.lnEndDate.setVisibility(View.GONE);
+            bi.lblEndDate.setVisibility(View.GONE);
+            bi.tvStartDate.setEnabled(true);
+
+            // showing eDate and eTime because when we update so eDate update an eTime
+            bi.tvStartDate.setText(eDate + " " + eTime);
+
+        } else {
+            bi.tvEndDate.setVisibility(View.VISIBLE);
+            bi.lnEndDate.setVisibility(View.VISIBLE);
+            bi.lblEndDate.setVisibility(View.VISIBLE);
+            bi.tvStartDate.setEnabled(false);
+            // when not onetime so we show start and end date
+            bi.tvStartDate.setText(sDate + " " + sTime);
+            bi.tvEndDate.setText(eDate + " " + eTime);
+        }
+       /* bi.tvStartDate.setText(sDate + " " + sTime);
+        bi.tvEndDate.setText(eDate + " " + eTime);*/
         type = taskDetail.data.type;
         scheduleId = taskDetail.data.scheduleID;
-        searchLeadIdsString = taskDetail.data.leadEncryptedId;
+     //   searchLeadIdsString = taskDetail.data.leadEncryptedId;
+        searchLeadIdsString = taskDetail.data.leadID;
         reminder = String.valueOf(taskDetail.data.interval);
 
         via = taskDetail.data.viaReminder;
@@ -604,7 +616,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     agentIdsString = agentIdsString + "," + name.agentIDEncrypted;
                 }
             }
-            bi.tvStartDate.setEnabled(false);
+
         }
 
         hideProgressBar();
@@ -703,9 +715,19 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         String[] _sDate = startDate.split("T");
         String[] _eDate = endDate.split("T");
+        // from update task
         String sDate = GH.getInstance().formatter(_sDate[0] + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
         String eDate = GH.getInstance().formatter(_eDate[0] + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
 
+      /* // from add task
+        String sDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+      //  String eDate1 = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+
+        String eDate = GH.getInstance().formatter(_eDate[0] + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+*/
+       /* String sDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+        String eDate = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+*/
         String id = "1";
         String agentIds = agentIdsString;
         String leadStringID = searchLeadIdsString != null ? searchLeadIdsString : "";
