@@ -26,6 +26,9 @@ public class TaskNotificationModel extends BaseResponse {
             @SerializedName("taskID")
             @Expose
             public Integer taskID;
+            @SerializedName("encryptedTaskID")
+            @Expose
+            public String encryptedTaskID;
             @SerializedName("taskName")
             @Expose
             public String taskName;
@@ -36,6 +39,14 @@ public class TaskNotificationModel extends BaseResponse {
             @SerializedName("taskType")
             @Expose
             public String taskType;
+
+            public String getEncryptedTaskID() {
+                return encryptedTaskID;
+            }
+
+            public void setEncryptedTaskID(String encryptedTaskID) {
+                this.encryptedTaskID = encryptedTaskID;
+            }
 
             public String getDescription() {
                 return description;

@@ -1,12 +1,11 @@
 package com.project.jarjamediaapp.Activities.notification;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -17,11 +16,14 @@ import com.airbnb.paris.Paris;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Activities.add_appointment.Data;
 import com.project.jarjamediaapp.Activities.add_appointment.GetAppointmentByIDModel;
-import com.project.jarjamediaapp.Activities.lead_detail.LeadDetailActivity;
+import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
+import com.project.jarjamediaapp.Activities.add_task.GetTaskDetail;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
-import com.project.jarjamediaapp.Models.GetAllLeads;
+import com.project.jarjamediaapp.Models.ViewFollowUpModel;
+import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
+import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
@@ -30,7 +32,6 @@ import com.project.jarjamediaapp.databinding.ActivityNotificationBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -119,6 +120,8 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
                 tvContact.setText(data.getTaskType());
 
+
+
              /*  if (data.getVtCRMLeadCustom() != null){
 
 
@@ -140,6 +143,17 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
             return Unit.INSTANCE;
         });
+
+           recyclerAdapterUtilT.addOnClickListener((Function2<TaskNotificationModel.Data.TaskList,Integer,Unit>) (viewComplainList, integer)-> {
+
+
+               getTaskDetail(viewComplainList.encryptedTaskID);
+
+
+
+          return Unit.INSTANCE;
+      });
+
 
         bi.rvNotifications.setAdapter(recyclerAdapterUtilT);
         bi.rvNotifications.setVisibility(View.VISIBLE);
@@ -190,16 +204,16 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         });
 
 
-    /*  recyclerAdapterUtilA.addOnClickListener((Function2<AppointmentNotificationModel.Data, Integer, Unit>) (viewComplainList, integer)-> {
+      recyclerAdapterUtilA.addOnClickListener((Function2<AppointmentNotificationModel.Data, Integer, Unit>) (viewComplainList, integer)-> {
 
 
-          getAppointmentById(viewComplainList.getVtCRMLeadCustom().getLeadID());
+          getAppointmentById(viewComplainList.getLeadAppoinmentID());
 
 
 
           return Unit.INSTANCE;
       });
-     */
+
 
         bi.rvNotifications.setAdapter(recyclerAdapterUtilA);
         bi.rvNotifications.setVisibility(View.VISIBLE);
@@ -233,6 +247,16 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            return Unit.INSTANCE;
+        });
+
+        recyclerAdapterUtilF.addOnClickListener((Function2<FollowUpNotificationModel.Data, Integer, Unit>) (viewComplainList, integer)-> {
+
+
+            getFolloUpDetailByID(viewComplainList.getDripDetailID());
+
+
 
             return Unit.INSTANCE;
         });
@@ -389,6 +413,52 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         }
     }
 
+    public void getTaskDetail(String taskId) {
+
+
+        Call<GetTaskDetail> apiCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getTaskDetail(GH.getInstance().getAuthorization(), taskId);
+        apiCall.enqueue(new Callback<GetTaskDetail>() {
+            @Override
+            public void onResponse(Call<GetTaskDetail> call, Response<GetTaskDetail> response) {
+
+                if (response.isSuccessful()) {
+
+                    GetTaskDetail getTaskDetail = response.body();
+
+                    if (getTaskDetail.getStatus().equalsIgnoreCase("Success")) {
+
+                        context.startActivity(new Intent(context, AddTaskActivity.class)
+                                .putExtra("from", "3")
+                                .putExtra("whichTasks", 1)
+                                .putExtra("leadID", getTaskDetail.getData().leadID)
+                                .putExtra("taskId", taskId));
+                        // _view.updateTaskDetail(getTaskDetail);
+
+                    } else {
+
+                        ToastUtils.showToastLong(getApplicationContext(),getTaskDetail.message);
+                       /* _view.hideProgressBar();
+
+                        _view.updateUIonFalse(getTaskDetail.message);*/
+
+                    }
+                } else {
+
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    ToastUtils.showToastLong(getApplicationContext(),error.Message());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTaskDetail> call, Throwable t) {
+                ToastUtils.showToastLong(getApplicationContext(),t.getMessage());
+            }
+        });
+
+    }
+
     public void getAppointmentById(String appointmentID) {
 
         Call<GetAppointmentByIDModel> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetAppointmentByID(GH.getInstance().getAuthorization(),appointmentID);
@@ -406,7 +476,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                         Data models = getAppointmentsModel.getData();
                         context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                 .putExtra("leadID", models.getLeadID())
-                                .putExtra("from", "7")
+                                .putExtra("from", "4")
                                 .putExtra("leadName",models.getEventTitle())
                                 .putExtra("models", models));
                         //_view.updateUI(getAppointmentsModel);
@@ -432,5 +502,85 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
             }
         });
     }
+    private void getFolloUpDetailByID(String dripDetailId) {
+
+        Call<ViewFollowUpModel> _callToday;
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId);
+        _callToday.enqueue(new Callback<ViewFollowUpModel>() {
+            @Override
+            public void onResponse(Call<ViewFollowUpModel> call, Response<ViewFollowUpModel> response) {
+                GH.getInstance().HideProgressDialog();
+                if (response.isSuccessful()) {
+
+                    ViewFollowUpModel getDetails = response.body();
+                    if (getDetails.status.equals("Success")) {
+
+                        GH.getInstance().HideProgressDialog();
+                        String wait = getDetails.data.viewDPCStep.wait;
+                        String time = getDetails.data.viewDPCStep.sendTime;
+                        String note = getDetails.data.viewDPCStep.message;
+                        String title = getDetails.data.viewDPCStep.subject;
+                        String senType = getDetails.data.viewDPCStep.sentType;
+                        String dateTime = getDetails.data.viewDPCStep.sendDateTime;
+
+                        showViewFollowUpDialog(context, wait, title, dateTime, time, note, senType);
+
+
+                    } else {
+
+                        ToastUtils.showToast(context, getDetails.message);
+                        GH.getInstance().HideProgressDialog();
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    ToastUtils.showToast(context, error.message());
+                    GH.getInstance().HideProgressDialog();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ViewFollowUpModel> call, Throwable t) {
+                GH.getInstance().HideProgressDialog();
+
+                ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
+            }
+        });
+    }
+
+    public void showViewFollowUpDialog(Context context, String wait, String title, String dateTime, String time, String note, String sentType) {
+
+        TextView edtWait, edtTitle, edtTime, edtNote;
+        final Dialog dialog = new Dialog(context, R.style.Dialog);
+        dialog.setCancelable(true);
+
+
+        if (sentType != null && sentType.equalsIgnoreCase("Wait")) {
+            dialog.setContentView(R.layout.custom_view_followup_wait_dialog);
+
+            edtNote = (TextView) dialog.findViewById(R.id.edtNote);
+            edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
+            edtTime = (TextView) dialog.findViewById(R.id.edtTime);
+            edtWait = (TextView) dialog.findViewById(R.id.edtWait);
+            edtWait.setText(wait);
+            edtTime.setText(time);
+
+        } else {
+
+            dialog.setContentView(R.layout.custom_view_followup_dialog);
+            edtNote = (TextView) dialog.findViewById(R.id.edtNote);
+            edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
+            edtTime = (TextView) dialog.findViewById(R.id.edtTime);
+            edtTime.setText(GH.getInstance().formatter(dateTime,"MM-dd-yyyy hh:mm a","yyyy-MM-dd'T'HH:mm:ss"));
+
+        }
+
+        edtNote.setText(note);
+        edtTitle.setText(title);
+
+        dialog.show();
+    }
+
 
 }

@@ -1004,6 +1004,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                // update appointmnet from dashboard
             }else if(fromId.equals("4") || fromId.equals("2")){
                 try {
                     obj.put("location", location);
@@ -1034,6 +1035,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
             }else {
 
+                // add appointment from dashboard
                 try {
                     obj.put("location", location);
                     obj.put("isCompleted", isCompleted);

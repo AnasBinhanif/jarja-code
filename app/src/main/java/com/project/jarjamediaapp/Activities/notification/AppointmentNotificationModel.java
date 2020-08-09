@@ -20,9 +20,20 @@ public class AppointmentNotificationModel extends BaseResponse {
         @SerializedName("eventID")
         @Expose
         private String eventID;
+        @SerializedName("leadAppoinmentID")
+        @Expose
+        private String leadAppoinmentID;
         @SerializedName("eventTitle")
         @Expose
         private String eventTitle;
+
+        public String getLeadAppoinmentID() {
+            return leadAppoinmentID;
+        }
+
+        public void setLeadAppoinmentID(String leadAppoinmentID) {
+            this.leadAppoinmentID = leadAppoinmentID;
+        }
 
         public VtCRMLeadCustom getVtCRMLeadCustom() {
             return vtCRMLeadCustom;

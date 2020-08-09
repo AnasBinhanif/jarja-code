@@ -343,6 +343,8 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 obj.put("desc", description);
                 obj.put("isGmailApptActive", isGmailAppActive);
                 obj.put("calendarType", calendarType);
+
+
             }
 
 
