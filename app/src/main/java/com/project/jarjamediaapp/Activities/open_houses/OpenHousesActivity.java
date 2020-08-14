@@ -226,6 +226,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         // changes in model UplaodImageModel to Upload_ProfileImage for api response
         image = response.data.picLink;
 
+
     }
 
     @Override

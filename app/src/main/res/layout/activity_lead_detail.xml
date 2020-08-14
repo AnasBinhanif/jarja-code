@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="No Record Found"
+            android:text="@string/no_records"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="25dp"
             android:textStyle="bold"

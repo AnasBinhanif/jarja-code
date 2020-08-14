@@ -45,6 +45,18 @@ public class FollowUpNotificationModel extends BaseResponse {
         @Expose
         private String followUpsType;
 
+        @SerializedName("isSeen")
+        @Expose
+        private Boolean isSeen;
+
+        public Boolean getIsSeen() {
+            return isSeen;
+        }
+
+        public void setIsSeen(Boolean isSeen) {
+            this.isSeen = isSeen;
+        }
+
         public String getLeadID() {
             return leadID;
         }

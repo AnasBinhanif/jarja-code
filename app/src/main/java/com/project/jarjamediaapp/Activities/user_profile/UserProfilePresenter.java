@@ -52,6 +52,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
                     GetUserProfile getUserProfile = response.body();
                     if (response.body().status.equals("Success")) {
 
+                       // _view.hideProgressBar();
                         _view.updateUI(getUserProfile);
 
                     } else {
@@ -121,16 +122,16 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
 
                 if (response.isSuccessful()) {
 
-                    GetCountries getUserProfile = response.body();
+                    GetCountries getCountries = response.body();
                     if (response.body().status.equals("Success")) {
 
                      //   _view.hideProgressBar();
-                        _view.updateUI(getUserProfile);
+                        _view.updateUI(getCountries);
 
 
                     } else {
                         _view.hideProgressBar();
-                        _view.updateUIonFalse(getUserProfile.message);
+                        _view.updateUIonFalse(getCountries.message);
                     }
                 } else {
                    _view.hideProgressBar();

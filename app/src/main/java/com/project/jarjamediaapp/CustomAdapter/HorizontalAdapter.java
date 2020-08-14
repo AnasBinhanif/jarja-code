@@ -72,8 +72,8 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
 
         this.context = context;
         this.data =  data;
-       /* // reverse arraylist
-        Collections.reverse(this.data);*/
+        // reverse arraylist
+        Collections.reverse(this.data);
         this.openHouseType = openHouseType;
 
     }

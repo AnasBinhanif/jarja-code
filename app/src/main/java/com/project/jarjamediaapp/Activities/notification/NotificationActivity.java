@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -51,6 +52,8 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     List<AppointmentNotificationModel.Data> notificationListA;
     List<FollowUpNotificationModel.Data> notificationListF;
     RecyclerAdapterUtil recyclerAdapterUtilT, recyclerAdapterUtilA, recyclerAdapterUtilF;
+    CardView cardviewNotification;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,11 +90,20 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
         bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
         recyclerAdapterUtilT = new RecyclerAdapterUtil(context, notificationListT, R.layout.custom_notifications_layout);
-        recyclerAdapterUtilT.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail);
+        recyclerAdapterUtilT.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail,R.id.cardview_notification);
 
         recyclerAdapterUtilT.addOnDataBindListener((Function4<View, TaskNotificationModel.Data.TaskList, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
 
             try {
+
+                if(!data.getIsSeen()){
+
+                    position = integer;
+                    cardviewNotification = (CardView) integerMap.get(R.id.cardview_notification);
+                    cardviewNotification.setCardBackgroundColor(getResources().getColor(R.color.colorYellow));
+
+                }
+
 
                 TextView tvName = (TextView) integerMap.get(R.id.tvName);
                 tvName.setText(data.getTaskName() != null ? data.getTaskName() : "N/A");
@@ -147,6 +159,16 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
            recyclerAdapterUtilT.addOnClickListener((Function2<TaskNotificationModel.Data.TaskList,Integer,Unit>) (viewComplainList, integer)-> {
 
 
+               if (position == integer){
+
+                   int backgroundColor = cardviewNotification.getCardBackgroundColor().getDefaultColor();
+                   if (backgroundColor == getResources().getColor(R.color.colorYellow)){
+
+                       cardviewNotification.setCardBackgroundColor(getResources().getColor(R.color.colorWhite));
+
+                   }
+               }
+
                getTaskDetail(viewComplainList.encryptedTaskID);
 
 
@@ -166,11 +188,22 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
         bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
         recyclerAdapterUtilA = new RecyclerAdapterUtil(context, notificationListA, R.layout.custom_notifications_layout);
-        recyclerAdapterUtilA.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail);
+        recyclerAdapterUtilA.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail,R.id.cardview_notification);
+
 
         recyclerAdapterUtilA.addOnDataBindListener((Function4<View, AppointmentNotificationModel.Data, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
 
             try {
+
+
+
+                if(!data.getIsSeen()){
+
+                    position = integer;
+                    cardviewNotification = (CardView) integerMap.get(R.id.cardview_notification);
+                    cardviewNotification.setCardBackgroundColor(getResources().getColor(R.color.colorYellow));
+
+                }
 
                 TextView tvName = (TextView) integerMap.get(R.id.tvName);
                 tvName.setText(data.getEventTitle() != null ? data.getEventTitle() : "N/A");
@@ -207,6 +240,17 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
       recyclerAdapterUtilA.addOnClickListener((Function2<AppointmentNotificationModel.Data, Integer, Unit>) (viewComplainList, integer)-> {
 
 
+          if (position == integer){
+
+              int backgroundColor = cardviewNotification.getCardBackgroundColor().getDefaultColor();
+              if (backgroundColor == getResources().getColor(R.color.colorYellow)){
+
+                  cardviewNotification.setCardBackgroundColor(getResources().getColor(R.color.colorWhite));
+
+              }
+          }
+
+
           getAppointmentById(viewComplainList.getLeadAppoinmentID());
 
 
@@ -226,11 +270,19 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
         bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
         recyclerAdapterUtilF = new RecyclerAdapterUtil(context, notificationListF, R.layout.custom_notifications_layout);
-        recyclerAdapterUtilF.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail);
+        recyclerAdapterUtilF.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail,R.id.cardview_notification);
 
         recyclerAdapterUtilF.addOnDataBindListener((Function4<View, FollowUpNotificationModel.Data, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
 
             try {
+
+                if(!data.getIsSeen()){
+
+                    position = integer;
+                    cardviewNotification = (CardView) integerMap.get(R.id.cardview_notification);
+                    cardviewNotification.setCardBackgroundColor(getResources().getColor(R.color.colorYellow));
+
+                }
 
                 TextView tvName = (TextView) integerMap.get(R.id.tvName);
                 tvName.setText(data.getFollowUpsType() != null ? data.getFollowUpsType() : "N/A");
@@ -253,6 +305,16 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
         recyclerAdapterUtilF.addOnClickListener((Function2<FollowUpNotificationModel.Data, Integer, Unit>) (viewComplainList, integer)-> {
 
+
+            if (position == integer){
+
+                int backgroundColor = cardviewNotification.getCardBackgroundColor().getDefaultColor();
+                if (backgroundColor == getResources().getColor(R.color.colorYellow)){
+
+                    cardviewNotification.setCardBackgroundColor(getResources().getColor(R.color.colorWhite));
+
+                }
+            }
 
             getFolloUpDetailByID(viewComplainList.getDripDetailID());
 
@@ -476,7 +538,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                         Data models = getAppointmentsModel.getData();
                         context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                 .putExtra("leadID", models.getLeadID())
-                                .putExtra("from", "4")
+                                .putExtra("from", "7")
                                 .putExtra("leadName",models.getEventTitle())
                                 .putExtra("models", models));
                         //_view.updateUI(getAppointmentsModel);

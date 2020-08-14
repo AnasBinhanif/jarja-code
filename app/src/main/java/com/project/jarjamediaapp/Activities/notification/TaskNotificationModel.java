@@ -40,6 +40,18 @@ public class TaskNotificationModel extends BaseResponse {
             @Expose
             public String taskType;
 
+            @SerializedName("isSeen")
+            @Expose
+            private Boolean isSeen;
+
+            public Boolean getIsSeen() {
+                return isSeen;
+            }
+
+            public void setIsSeen(Boolean isSeen) {
+                this.isSeen = isSeen;
+            }
+
             public String getEncryptedTaskID() {
                 return encryptedTaskID;
             }

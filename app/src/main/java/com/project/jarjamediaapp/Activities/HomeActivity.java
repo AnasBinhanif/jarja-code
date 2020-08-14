@@ -334,7 +334,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
             }else {
 
-            //    navigationView.getMenu().getItem(1).setChecked(true);
+                navigationView.getMenu().getItem(1).setChecked(true);
                 getUserProfileData();
             }
 
@@ -454,7 +454,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         alertDialog1.setTitle("Alert");
 
         // Setting Dialog Message
-        alertDialog1.setMessage("\nAre You Sure! You Want To Logout ?");
+        alertDialog1.setMessage("\nAre you sure you want to logout?");
 
         // Setting Icon to Dialog
         // alertDialog1.setIcon(R.drawable.tick);

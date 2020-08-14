@@ -188,6 +188,8 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
     }
 
+
+
     @Override
     public void updateUI(GetTwilioNumber getUserProfile) {
 
@@ -373,7 +375,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
             Glide.with(this).load(userProfileData.picPath).into(bi.imgProfilePic);
         }
 
-        GH.getInstance().HideProgressDialog();
+       GH.getInstance().HideProgressDialog();
 
     }
 
@@ -660,4 +662,6 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         super.onBackPressed();
 
     }
+
+
 }

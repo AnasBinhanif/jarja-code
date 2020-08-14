@@ -977,7 +977,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     e.printStackTrace();
                 }
 
-                // for notification appointment update
+                // both for notification popup and screen appointment update
             } else if(fromId.equals("7")){
                 try {
                     obj.put("location", location);

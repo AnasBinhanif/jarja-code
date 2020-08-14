@@ -308,6 +308,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     private void hitApi() {
 
         if (isFromActivity) {
+
             switch (taskType) {
                 case "due":
                     presenter.getLeadDueTasks(leadID, page);

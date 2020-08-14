@@ -26,6 +26,17 @@ public class AppointmentNotificationModel extends BaseResponse {
         @SerializedName("eventTitle")
         @Expose
         private String eventTitle;
+        @SerializedName("isSeen")
+        @Expose
+        private Boolean isSeen;
+
+        public Boolean getIsSeen() {
+            return isSeen;
+        }
+
+        public void setIsSeen(Boolean isSeen) {
+            this.isSeen = isSeen;
+        }
 
         public String getLeadAppoinmentID() {
             return leadAppoinmentID;

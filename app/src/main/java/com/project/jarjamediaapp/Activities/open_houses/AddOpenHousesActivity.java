@@ -69,7 +69,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     CustomOpenHouseDialogBinding bi;
     Context context = AddOpenHousesActivity.this;
     OpenHousesPresenter presenter;
-    String listPrice = "", city = "", address = "", state = "", zip = "", image = "", dateTimeToServer = "";
+    String listPrice = "", city = "", address = "", state = "", zip = "", image = "", dateTimeToServer = "", imageName = "";
     String timeS = "", timeE = "";
     String openHouseStartDate = "", openHouseEndDate = "", dateToServer = "", timeToServer = "";
     private BottomDialogFragment bottomDialogFragment;
@@ -82,7 +82,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     int perm = 0;
     private int propertyId;
     GetAllOpenHousesModel.Data.OpenHouse openHouse;
-    String imageName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,12 +121,23 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         openHouseStartDate = openHouse.getOpenHouseDate();
         openHouseEndDate = openHouse.getOpenHouseEndDate();
 
-        bi.tvRemovePictures.setVisibility(View.VISIBLE);
-        bi.tvRemovePictures.setText("Image uploaded");
-        bi.tvSelectPictures.setVisibility(View.GONE);
+        if (openHouse.getImgURL().equals("")){
+
+            bi.tvRemovePictures.setVisibility(View.GONE);
+            bi.tvSelectPictures.setVisibility(View.VISIBLE);
+            image = openHouse.getImgURL();
+        }else {
+
+            bi.tvRemovePictures.setVisibility(View.VISIBLE);
+            bi.tvRemovePictures.setText("Image uploaded");
+            bi.tvSelectPictures.setVisibility(View.GONE);
+            image = openHouse.getImgURL();
+        }
+
+
 
         // changes in model UplaodImageModel to Upload_ProfileImage for api response
-        image = openHouse.getImgURL();
+
 
       //  bi.atvZip.setText(openHouse.get);
 
@@ -318,6 +329,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
                 clearFocus();
                 image = "";
+
                 bi.tvRemovePictures.setVisibility(View.GONE);
                 bi.tvSelectPictures.setVisibility(View.VISIBLE);
 
@@ -348,8 +360,12 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                             obj.put("state", state);
                             obj.put("zip", zip);
                             obj.put("image", image);
+                            obj.put("imageName", imageName);
                             obj.put("openHouseDate", openHouseStartDate);
                             obj.put("openHouseEndDate", openHouseEndDate);
+                           // obj.put("imageName", "d71f5603-8016-44ea-b9ca-2cc6747107f71597140814171.jpg");
+
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -373,6 +389,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
                         JSONObject obj = new JSONObject();
                         try {
+
                             obj.put("listPrice", listPrice);
                             obj.put("city", city);
                             obj.put("address", address);
@@ -383,6 +400,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                             obj.put("propertyId", 0);
                             obj.put("openHouseDate", openHouseStartDate);
                             obj.put("openHouseEndDate", openHouseEndDate);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
