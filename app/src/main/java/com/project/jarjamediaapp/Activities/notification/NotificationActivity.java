@@ -21,6 +21,9 @@ import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
 import com.project.jarjamediaapp.Activities.add_task.GetTaskDetail;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.CustomAdapter.AppointmentNotificationRecyclerAdapter;
+import com.project.jarjamediaapp.CustomAdapter.FollowUpsNotificationRecyclerAdapter;
+import com.project.jarjamediaapp.CustomAdapter.TaskNotificatonRecyclerAdapter;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -34,11 +37,7 @@ import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function2;
-import kotlin.jvm.functions.Function4;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,6 +51,9 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     List<AppointmentNotificationModel.Data> notificationListA;
     List<FollowUpNotificationModel.Data> notificationListF;
     RecyclerAdapterUtil recyclerAdapterUtilT, recyclerAdapterUtilA, recyclerAdapterUtilF;
+    AppointmentNotificationRecyclerAdapter appointmentRecyclerviewAdapter;
+    TaskNotificatonRecyclerAdapter taskRecyclerviewAdapter;
+    FollowUpsNotificationRecyclerAdapter folloupsRecyclerviewAdapter;
     CardView cardviewNotification;
     int position;
 
@@ -89,10 +91,12 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         bi.rvNotifications.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
         bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
-        recyclerAdapterUtilT = new RecyclerAdapterUtil(context, notificationListT, R.layout.custom_notifications_layout);
-        recyclerAdapterUtilT.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail,R.id.cardview_notification);
 
-        recyclerAdapterUtilT.addOnDataBindListener((Function4<View, TaskNotificationModel.Data.TaskList, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
+        taskRecyclerviewAdapter = new TaskNotificatonRecyclerAdapter(context, (ArrayList<TaskNotificationModel.Data.TaskList>) notificationListT);
+      /*  recyclerAdapterUtilT = new RecyclerAdapterUtil(context, notificationListT, R.layout.custom_notifications_layout);
+        recyclerAdapterUtilT.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail,R.id.cardview_notification);
+*/
+       /* recyclerAdapterUtilT.addOnDataBindListener((Function4<View, TaskNotificationModel.Data.TaskList, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
 
             try {
 
@@ -112,7 +116,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
                 tvLeadName.setText(data.getDescription());
 
-               /* String firstName = data.getVtCRMLeadCustom().getFirstName();
+               *//* String firstName = data.getVtCRMLeadCustom().getFirstName();
                 String lastName = data.getVtCRMLeadCustom().getFirstName();
                 if (firstName != null && lastName != null) {
                     tvLeadName.setText(firstName + " " + lastName);
@@ -126,7 +130,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
                 TextView tvContact = (TextView) integerMap.get(R.id.tvContact);
                 tvContact.setText(data.getVtCRMLeadCustom().getPrimaryPhone() != null ? data.getVtCRMLeadCustom().getPrimaryPhone() : "N/A");
-*/
+*//*
                 TextView tvContact = (TextView) integerMap.get(R.id.tvContact);
                 TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
 
@@ -134,7 +138,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
 
 
-             /*  if (data.getVtCRMLeadCustom() != null){
+             *//*  if (data.getVtCRMLeadCustom() != null){
 
 
                    tvContact.setText(data.getVtCRMLeadCustom().getPrimaryEmail() != null ? data.getVtCRMLeadCustom().getPrimaryEmail() : "N/A");
@@ -142,11 +146,11 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                }else {
                    tvContact.setText("N/A");
 
-               }*/
+               }*//*
 
-              /*  TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
+              *//*  TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
                 tvEmail.setText(data.getVtCRMLeadCustom().getPrimaryEmail() != null ? data.getVtCRMLeadCustom().getPrimaryEmail() : "N/A");
-*/
+*//*
             } catch (Exception e) {
                 e.printStackTrace();
 
@@ -176,8 +180,10 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
           return Unit.INSTANCE;
       });
 
+*/
+        bi.rvNotifications.setAdapter(taskRecyclerviewAdapter);
 
-        bi.rvNotifications.setAdapter(recyclerAdapterUtilT);
+        taskRecyclerviewAdapter.notifyDataSetChanged();
         bi.rvNotifications.setVisibility(View.VISIBLE);
 
     }
@@ -187,8 +193,10 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         bi.rvNotifications.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
         bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
-        recyclerAdapterUtilA = new RecyclerAdapterUtil(context, notificationListA, R.layout.custom_notifications_layout);
+        appointmentRecyclerviewAdapter = new AppointmentNotificationRecyclerAdapter(context, (ArrayList<AppointmentNotificationModel.Data>) notificationListA);
+       /* recyclerAdapterUtilA = new RecyclerAdapterUtil(context, notificationListA, R.layout.custom_notifications_layout);
         recyclerAdapterUtilA.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail,R.id.cardview_notification);
+
 
 
         recyclerAdapterUtilA.addOnDataBindListener((Function4<View, AppointmentNotificationModel.Data, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
@@ -258,8 +266,10 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
           return Unit.INSTANCE;
       });
 
+*/
+        bi.rvNotifications.setAdapter(appointmentRecyclerviewAdapter);
 
-        bi.rvNotifications.setAdapter(recyclerAdapterUtilA);
+        appointmentRecyclerviewAdapter.notifyDataSetChanged();
         bi.rvNotifications.setVisibility(View.VISIBLE);
 
     }
@@ -269,11 +279,11 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         bi.rvNotifications.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
         bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
-        recyclerAdapterUtilF = new RecyclerAdapterUtil(context, notificationListF, R.layout.custom_notifications_layout);
-        recyclerAdapterUtilF.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail,R.id.cardview_notification);
+        folloupsRecyclerviewAdapter = new FollowUpsNotificationRecyclerAdapter(context, (ArrayList<FollowUpNotificationModel.Data>) notificationListF);
+      /*  recyclerAdapterUtilF = new RecyclerAdapterUtil(context, notificationListF, R.layout.custom_notifications_layout);
+        recyclerAdapterUtilF.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail,R.id.cardview_notification);*/
 
-
-        recyclerAdapterUtilF.addOnDataBindListener((Function4<View, FollowUpNotificationModel.Data, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
+      /*  recyclerAdapterUtilF.addOnDataBindListener((Function4<View, FollowUpNotificationModel.Data, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
 
             try {
 
@@ -323,10 +333,10 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
             return Unit.INSTANCE;
         });
+*/
 
-
-
-        bi.rvNotifications.setAdapter(recyclerAdapterUtilF);
+        bi.rvNotifications.setAdapter(folloupsRecyclerviewAdapter);
+        folloupsRecyclerviewAdapter.notifyDataSetChanged();
         bi.rvNotifications.setVisibility(View.VISIBLE);
 
     }
@@ -338,6 +348,9 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
             case R.id.btnTasks:
 
+                notificationListA.clear();
+                notificationListT.clear();
+                notificationListF.clear();
                 Paris.style(bi.btnTasks).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnAppointments).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnFollowUps).apply(R.style.TabButtonTranparentRight);
@@ -347,6 +360,9 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
             case R.id.btnAppointments:
 
+                notificationListA.clear();
+                notificationListT.clear();
+                notificationListF.clear();
                 Paris.style(bi.btnTasks).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnAppointments).apply(R.style.TabButtonYellowMiddle);
                 Paris.style(bi.btnFollowUps).apply(R.style.TabButtonTranparentRight);
@@ -355,6 +371,10 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                 break;
 
             case R.id.btnFollowUps:
+
+                notificationListA.clear();
+                notificationListT.clear();
+                notificationListF.clear();
 
                 Paris.style(bi.btnTasks).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnAppointments).apply(R.style.TabButtonTranparentMiddle);
@@ -425,16 +445,16 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     @Override
     public void updateUIListT(List<TaskNotificationModel.Data.TaskList> response) {
 
-
-        populateListDataT();
-        notificationListA.clear();
+       /* notificationListA.clear();
         notificationListF.clear();
-        notificationListT.clear();
+        notificationListT.clear();*/
         if (response.size() > 0) {
             notificationListT.addAll(response);
-            recyclerAdapterUtilT.notifyDataSetChanged();
+
             bi.rvNotifications.setVisibility(View.VISIBLE);
             bi.tvMessage.setVisibility(View.GONE);
+            populateListDataT();
+
         } else {
             bi.rvNotifications.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
@@ -445,15 +465,18 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     @Override
     public void updateUIListA(List<AppointmentNotificationModel.Data> response) {
 
-        populateListDataA();
-        notificationListA.clear();
+
+      /*  notificationListA.clear();
         notificationListF.clear();
-        notificationListT.clear();
+        notificationListT.clear();*/
         if (response.size() > 0) {
             notificationListA.addAll(response);
-            recyclerAdapterUtilA.notifyDataSetChanged();
+
             bi.rvNotifications.setVisibility(View.VISIBLE);
             bi.tvMessage.setVisibility(View.GONE);
+            populateListDataA();
+
+
         } else {
             bi.rvNotifications.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
@@ -463,15 +486,15 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     @Override
     public void updateUIListF(List<FollowUpNotificationModel.Data> response) {
 
-        populateListDataF();
-        notificationListA.clear();
+
+       /* notificationListA.clear();
         notificationListF.clear();
-        notificationListT.clear();
+        notificationListT.clear();*/
         if (response.size() > 0) {
             notificationListF.addAll(response);
-            recyclerAdapterUtilF.notifyDataSetChanged();
             bi.rvNotifications.setVisibility(View.VISIBLE);
             bi.tvMessage.setVisibility(View.GONE);
+            populateListDataF();
         } else {
             bi.rvNotifications.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
