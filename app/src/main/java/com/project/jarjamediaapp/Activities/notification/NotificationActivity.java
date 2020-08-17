@@ -272,6 +272,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         recyclerAdapterUtilF = new RecyclerAdapterUtil(context, notificationListF, R.layout.custom_notifications_layout);
         recyclerAdapterUtilF.addViewsList(R.id.tvName, R.id.tvLeadName, R.id.tvContact, R.id.tvEmail,R.id.cardview_notification);
 
+
         recyclerAdapterUtilF.addOnDataBindListener((Function4<View, FollowUpNotificationModel.Data, Integer, Map<Integer, ? extends View>, Unit>) (view, data, integer, integerMap) -> {
 
             try {
@@ -322,6 +323,8 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
             return Unit.INSTANCE;
         });
+
+
 
         bi.rvNotifications.setAdapter(recyclerAdapterUtilF);
         bi.rvNotifications.setVisibility(View.VISIBLE);
