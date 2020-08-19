@@ -55,7 +55,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 String notificationId = remoteMessage.getData().get("NotificationID");
 
 
-
                 // Notification type for open activity
                 /*case 1 : task
                 * case 2 : futureTask

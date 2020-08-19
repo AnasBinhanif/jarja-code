@@ -10,127 +10,224 @@ public class TaskNotificationModel extends BaseResponse {
 
     @SerializedName("data")
     @Expose
-    public Data data;
+    private Data data;
+
+
+    public Data getData() {
+        return data;
+    }
+
+    public void setData(Data data) {
+        this.data = data;
+    }
 
     public class Data {
 
         @SerializedName("taskList")
         @Expose
-        public List<TaskList> taskList = null;
-
-        public class TaskList {
-
-            @SerializedName("vt_CRM_Lead_Custom")
-            @Expose
-            public VtCRMLeadCustom vtCRMLeadCustom;
-            @SerializedName("taskID")
-            @Expose
-            public Integer taskID;
-            @SerializedName("encryptedTaskID")
-            @Expose
-            public String encryptedTaskID;
-            @SerializedName("taskName")
-            @Expose
-            public String taskName;
-            @SerializedName("description")
-            @Expose
-            public String description;
-
-            @SerializedName("taskType")
-            @Expose
-            public String taskType;
-
-            @SerializedName("isSeen")
-            @Expose
-            private Boolean isSeen;
-
-            public Boolean getIsSeen() {
-                return isSeen;
-            }
-
-            public void setIsSeen(Boolean isSeen) {
-                this.isSeen = isSeen;
-            }
-
-            public String getEncryptedTaskID() {
-                return encryptedTaskID;
-            }
-
-            public void setEncryptedTaskID(String encryptedTaskID) {
-                this.encryptedTaskID = encryptedTaskID;
-            }
-
-            public String getDescription() {
-                return description;
-            }
-
-            public String getTaskType() {
-                return taskType;
-            }
-
-            @SerializedName("leadID")
-            @Expose
-            public Integer leadID;
-
-            public class VtCRMLeadCustom {
-
-                @SerializedName("leadID")
-                @Expose
-                public String leadID;
-                @SerializedName("firstName")
-                @Expose
-                public String firstName;
-                @SerializedName("lastName")
-                @Expose
-                public String lastName;
-                @SerializedName("primaryEmail")
-                @Expose
-                public String primaryEmail;
-                @SerializedName("primaryPhone")
-                @Expose
-                public String primaryPhone;
-
-                public String getFirstName() {
-                    return firstName;
-                }
-
-                public String getLastName() {
-                    return lastName;
-                }
-
-                public String getPrimaryEmail() {
-                    return primaryEmail;
-                }
-
-                public String getPrimaryPhone() {
-                    return primaryPhone;
-                }
-            }
-
-            public VtCRMLeadCustom getVtCRMLeadCustom() {
-                return vtCRMLeadCustom;
-            }
-
-            public Integer getTaskID() {
-                return taskID;
-            }
-
-            public String getTaskName() {
-                return taskName;
-            }
-
-            public Integer getLeadID() {
-                return leadID;
-            }
-        }
+        private List<TaskList> taskList = null;
+        @SerializedName("taskCount")
+        @Expose
+        private Integer taskCount;
 
         public List<TaskList> getTaskList() {
             return taskList;
         }
+
+        public void setTaskList(List<TaskList> taskList) {
+            this.taskList = taskList;
+        }
+
+        public Integer getTaskCount() {
+            return taskCount;
+        }
+
+        public void setTaskCount(Integer taskCount) {
+            this.taskCount = taskCount;
+        }
+
+    }
+    public class TaskList {
+
+        @SerializedName("taskID")
+        @Expose
+        private Integer taskID;
+        @SerializedName("encryptedTaskID")
+        @Expose
+        private String encryptedTaskID;
+        @SerializedName("taskName")
+        @Expose
+        private String taskName;
+        @SerializedName("scheduleID")
+        @Expose
+        private Integer scheduleID;
+        @SerializedName("taskType")
+        @Expose
+        private String taskType;
+        @SerializedName("description")
+        @Expose
+        private String description;
+        @SerializedName("assignTime")
+        @Expose
+        private String assignTime;
+        @SerializedName("createdDate")
+        @Expose
+        private String createdDate;
+        @SerializedName("isDone")
+        @Expose
+        private Object isDone;
+        @SerializedName("doneDate")
+        @Expose
+        private Object doneDate;
+        @SerializedName("isSeen")
+        @Expose
+        private Boolean isSeen;
+        @SerializedName("isPostPonned")
+        @Expose
+        private Object isPostPonned;
+        @SerializedName("postPonnedMinutes")
+        @Expose
+        private Object postPonnedMinutes;
+        @SerializedName("dumiDate")
+        @Expose
+        private Object dumiDate;
+        @SerializedName("crmid")
+        @Expose
+        private Integer crmid;
+        @SerializedName("vt_CRM_Schedule")
+        @Expose
+        private Object vtCRMSchedule;
+
+        public Integer getTaskID() {
+            return taskID;
+        }
+
+        public void setTaskID(Integer taskID) {
+            this.taskID = taskID;
+        }
+
+        public String getEncryptedTaskID() {
+            return encryptedTaskID;
+        }
+
+        public void setEncryptedTaskID(String encryptedTaskID) {
+            this.encryptedTaskID = encryptedTaskID;
+        }
+
+        public String getTaskName() {
+            return taskName;
+        }
+
+        public void setTaskName(String taskName) {
+            this.taskName = taskName;
+        }
+
+        public Integer getScheduleID() {
+            return scheduleID;
+        }
+
+        public void setScheduleID(Integer scheduleID) {
+            this.scheduleID = scheduleID;
+        }
+
+        public String getTaskType() {
+            return taskType;
+        }
+
+        public void setTaskType(String taskType) {
+            this.taskType = taskType;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getAssignTime() {
+            return assignTime;
+        }
+
+        public void setAssignTime(String assignTime) {
+            this.assignTime = assignTime;
+        }
+
+        public String getCreatedDate() {
+            return createdDate;
+        }
+
+        public void setCreatedDate(String createdDate) {
+            this.createdDate = createdDate;
+        }
+
+        public Object getIsDone() {
+            return isDone;
+        }
+
+        public void setIsDone(Object isDone) {
+            this.isDone = isDone;
+        }
+
+        public Object getDoneDate() {
+            return doneDate;
+        }
+
+        public void setDoneDate(Object doneDate) {
+            this.doneDate = doneDate;
+        }
+
+        public Boolean getIsSeen() {
+            return isSeen;
+        }
+
+        public void setIsSeen(Boolean isSeen) {
+            this.isSeen = isSeen;
+        }
+
+        public Object getIsPostPonned() {
+            return isPostPonned;
+        }
+
+        public void setIsPostPonned(Object isPostPonned) {
+            this.isPostPonned = isPostPonned;
+        }
+
+        public Object getPostPonnedMinutes() {
+            return postPonnedMinutes;
+        }
+
+        public void setPostPonnedMinutes(Object postPonnedMinutes) {
+            this.postPonnedMinutes = postPonnedMinutes;
+        }
+
+        public Object getDumiDate() {
+            return dumiDate;
+        }
+
+        public void setDumiDate(Object dumiDate) {
+            this.dumiDate = dumiDate;
+        }
+
+        public Integer getCrmid() {
+            return crmid;
+        }
+
+        public void setCrmid(Integer crmid) {
+            this.crmid = crmid;
+        }
+
+        public Object getVtCRMSchedule() {
+            return vtCRMSchedule;
+        }
+
+        public void setVtCRMSchedule(Object vtCRMSchedule) {
+            this.vtCRMSchedule = vtCRMSchedule;
+        }
+
     }
 
-    public Data getData() {
-        return data;
-    }
+
 
 }

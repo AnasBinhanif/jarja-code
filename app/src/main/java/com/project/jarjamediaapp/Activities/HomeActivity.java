@@ -125,7 +125,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                 case "3":
 
-
+                    notificationType = "followups";
                     getFolloUpDetailByID(notificationID);
 
                     break;
@@ -149,10 +149,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
 
             }
-        }/*else{
+        }
 
-            easyPreference.addString(GH.KEYS.NOTIFICATIONTYPE.name(), "").save();
-        }*/
 
     }
 
@@ -815,7 +813,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         edtNote.setText(note);
         edtTitle.setText(title);
-
         dialog.show();
     }
 

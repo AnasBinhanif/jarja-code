@@ -26,10 +26,10 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
     }
 
     @Override
-    public void getNotificationByTasks() {
+    public void getNotificationByTasks(int page) {
 
         _view.showProgressBar();
-        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByTasks(GH.getInstance().getAuthorization());
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByTasks(GH.getInstance().getAuthorization(),page);
         call.enqueue(new Callback<TaskNotificationModel>() {
             @Override
             public void onResponse(Call<TaskNotificationModel> call, Response<TaskNotificationModel> response) {
@@ -39,7 +39,7 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
 
                     TaskNotificationModel taskNotificationModel = response.body();
                     if (taskNotificationModel.getStatus().equals("Success")) {
-                        _view.updateUIListT(taskNotificationModel.getData().getTaskList());
+                        _view.updateUIListT(taskNotificationModel.getData().getTaskList(),taskNotificationModel.getData().getTaskCount());
 
                     } else {
                         _view.updateUIonFalse(taskNotificationModel.getMessage());
@@ -61,10 +61,10 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
     }
 
     @Override
-    public void getNotificationByAppointments() {
+    public void getNotificationByAppointments(int page) {
 
         _view.showProgressBar();
-        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByAppointments(GH.getInstance().getAuthorization());
+        _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByAppointments(GH.getInstance().getAuthorization(),page);
         _call.enqueue(new Callback<AppointmentNotificationModel>() {
             @Override
             public void onResponse(Call<AppointmentNotificationModel> call, Response<AppointmentNotificationModel> response) {
@@ -73,8 +73,10 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
                 if (response.isSuccessful()) {
 
                     AppointmentNotificationModel notificationModel = response.body();
+
+
                     if (notificationModel.getStatus().equals("Success")) {
-                        _view.updateUIListA(notificationModel.getData());
+                        _view.updateUIListA(notificationModel.getData().getFollowUpsList(),notificationModel.getData().getFollowCount());
 
                     } else {
                         _view.updateUIonFalse(notificationModel.getMessage());
@@ -96,10 +98,10 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
     }
 
     @Override
-    public void getNotificationByFollowUps() {
+    public void getNotificationByFollowUps(int page) {
 
         _view.showProgressBar();
-        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByFollowUps(GH.getInstance().getAuthorization());
+        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByFollowUps(GH.getInstance().getAuthorization(),page);
         _cCall.enqueue(new Callback<FollowUpNotificationModel>() {
             @Override
             public void onResponse(Call<FollowUpNotificationModel> call, Response<FollowUpNotificationModel> response) {
@@ -109,7 +111,7 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
 
                     FollowUpNotificationModel notificationModel = response.body();
                     if (notificationModel.getStatus().equals("Success")) {
-                        _view.updateUIListF(notificationModel.getData());
+                        _view.updateUIListF(notificationModel.getData().getFollowUpsList(),notificationModel.getData().getFollowCount());
 
                     } else {
                         _view.updateUIonFalse(notificationModel.getMessage());

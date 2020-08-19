@@ -8,11 +8,11 @@ public interface NotificationContract {
 
     interface View extends BaseContract.View {
 
-        void updateUIListT(List<TaskNotificationModel.Data.TaskList> response);
+        void updateUIListT(List<TaskNotificationModel.TaskList> response,Integer taskNotificationCount);
 
-        void updateUIListA(List<AppointmentNotificationModel.Data> response);
+        void updateUIListA(List<AppointmentNotificationModel.FollowUpsList> response,Integer appointmentNotificationCount);
 
-        void updateUIListF(List<FollowUpNotificationModel.Data> response);
+        void updateUIListF(List<FollowUpNotificationModel.FollowUpsList> response,Integer foolowupsNotificationCount);
 
     }
 
@@ -22,11 +22,11 @@ public interface NotificationContract {
  	*/
     interface Actions extends BaseContract.Actions {
 
-        void getNotificationByTasks();
+        void getNotificationByTasks(int page);
 
-        void getNotificationByAppointments();
+        void getNotificationByAppointments(int page);
 
-        void getNotificationByFollowUps();
+        void getNotificationByFollowUps(int page);
 
         void initScreen();
 

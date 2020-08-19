@@ -31,10 +31,10 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
 
     final LayoutInflater inflater;
     Context context;
-    ArrayList<AppointmentNotificationModel.Data> data;
+    ArrayList<AppointmentNotificationModel.FollowUpsList> data;
 
 
-    public AppointmentNotificationRecyclerAdapter(Context context, ArrayList<AppointmentNotificationModel.Data> data) {
+    public AppointmentNotificationRecyclerAdapter(Context context, ArrayList<AppointmentNotificationModel.FollowUpsList> data) {
         this.context = context;
         this.data = data;
         inflater = LayoutInflater.from(context);
@@ -53,7 +53,7 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 
-        final AppointmentNotificationModel.Data notificationObj  = data.get(position);
+        final AppointmentNotificationModel.FollowUpsList notificationObj  = data.get(position);
 
         if(!notificationObj.getIsSeen()){
 

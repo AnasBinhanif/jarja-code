@@ -510,13 +510,13 @@ public interface ApiMethods {
     Call<UploadImageModel> getNotificationCount(@Header("Authorization") String authorization);
 
     @GET("Notification/GetAppointmentNotification")
-    Call<AppointmentNotificationModel> getNotificationByAppointments(@Header("Authorization") String authorization);
+    Call<AppointmentNotificationModel> getNotificationByAppointments(@Header("Authorization") String authorization, @Query("pageNumber") int page);
 
     @GET("Notification/GetTaskNotification")
-    Call<TaskNotificationModel> getNotificationByTasks(@Header("Authorization") String authorization);
+    Call<TaskNotificationModel> getNotificationByTasks(@Header("Authorization") String authorization,@Query("Pageno") int page);
 
     @GET("Notification/Get_FollowUp_Notification")
-    Call<FollowUpNotificationModel> getNotificationByFollowUps(@Header("Authorization") String authorization);
+    Call<FollowUpNotificationModel> getNotificationByFollowUps(@Header("Authorization") String authorization, @Query("Pageno") int page);
 
     @POST("Appointment/GetReminder")
     Call<AddAppointmentModel> getReminder(@Header("Authorization") String authorization);

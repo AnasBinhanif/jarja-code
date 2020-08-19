@@ -324,7 +324,7 @@
 
     <!-- Open House -->
     <string name="view">View</string>
-    <string name="no_records">No records found</string>
+    <string name="no_records">No record(s) found</string>
     <string name="upcoming_open_house">Upcoming</string>
     <string name="past_open_house">Past</string>
 

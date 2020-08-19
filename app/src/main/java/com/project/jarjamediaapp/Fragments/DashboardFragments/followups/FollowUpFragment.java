@@ -176,7 +176,9 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
                         if (totalPages > followUpsList.size()) {
                             page++;
                             try {
+
                                 hitApi();
+
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
                             }

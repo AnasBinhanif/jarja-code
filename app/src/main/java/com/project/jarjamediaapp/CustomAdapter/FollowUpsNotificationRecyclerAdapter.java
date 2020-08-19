@@ -32,10 +32,10 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
 
     final LayoutInflater inflater;
     Context context;
-    ArrayList<FollowUpNotificationModel.Data> data;
+    ArrayList<FollowUpNotificationModel.FollowUpsList> data;
 
 
-    public FollowUpsNotificationRecyclerAdapter(Context context, ArrayList<FollowUpNotificationModel.Data> data) {
+    public FollowUpsNotificationRecyclerAdapter(Context context, ArrayList<FollowUpNotificationModel.FollowUpsList> data) {
         this.context = context;
         this.data = data;
         inflater = LayoutInflater.from(context);
@@ -54,16 +54,14 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
     @Override
     public void onBindViewHolder(@NonNull final FollowUpsNotificationRecyclerAdapter.MyViewHolder holder, final int position) {
 
-        final FollowUpNotificationModel.Data notificationObj  = data.get(position);
+        final FollowUpNotificationModel.FollowUpsList notificationObj  = data.get(position);
 
-        if(!notificationObj.getIsSeen()){
 
+        if(notificationObj.getIsSeen() == null || !notificationObj.getIsSeen()){
 
             holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorYellow));
 
         }
-
-
 
         holder.tvName.setText(notificationObj.getFollowUpsType() != null ? notificationObj.getFollowUpsType() : "N/A");
 

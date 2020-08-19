@@ -33,10 +33,10 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
 
     final LayoutInflater inflater;
     Context context;
-    ArrayList<TaskNotificationModel.Data.TaskList> data;
+    ArrayList<TaskNotificationModel.TaskList> data;
 
 
-    public TaskNotificatonRecyclerAdapter(Context context, ArrayList<TaskNotificationModel.Data.TaskList> data) {
+    public TaskNotificatonRecyclerAdapter(Context context, ArrayList<TaskNotificationModel.TaskList> data) {
         this.context = context;
         this.data = data;
         inflater = LayoutInflater.from(context);
@@ -55,7 +55,7 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
     @Override
     public void onBindViewHolder(@NonNull final TaskNotificatonRecyclerAdapter.MyViewHolder holder, final int position) {
 
-        final TaskNotificationModel.Data.TaskList notificationObj  = data.get(position);
+        final TaskNotificationModel.TaskList notificationObj  = data.get(position);
 
         if(!notificationObj.getIsSeen()){
 
@@ -84,7 +84,7 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
 
 
                 }
-                getTaskDetail(notificationObj.encryptedTaskID);
+                getTaskDetail(notificationObj.getEncryptedTaskID());
             }
         });
 

@@ -10,9 +10,46 @@ public class FollowUpNotificationModel extends BaseResponse {
 
     @SerializedName("data")
     @Expose
-    private List<Data> data = null;
+    private Data data;
+
+
+    public Data getData() {
+        return data;
+    }
+
+    public void setData(Data data) {
+        this.data = data;
+    }
+
 
     public class Data {
+
+        @SerializedName("followCount")
+        @Expose
+        private Integer followCount;
+        @SerializedName("followUpsList")
+        @Expose
+        private List<FollowUpsList> followUpsList = null;
+
+        public Integer getFollowCount() {
+            return followCount;
+        }
+
+        public void setFollowCount(Integer followCount) {
+            this.followCount = followCount;
+        }
+
+        public List<FollowUpsList> getFollowUpsList() {
+            return followUpsList;
+        }
+
+        public void setFollowUpsList(List<FollowUpsList> followUpsList) {
+            this.followUpsList = followUpsList;
+        }
+
+    }
+
+    public class FollowUpsList {
 
         @SerializedName("leadID")
         @Expose
@@ -35,6 +72,9 @@ public class FollowUpNotificationModel extends BaseResponse {
         @SerializedName("reminderId")
         @Expose
         private String reminderId;
+        @SerializedName("reminderDycryptedId")
+        @Expose
+        private Integer reminderDycryptedId;
         @SerializedName("assignDate")
         @Expose
         private String assignDate;
@@ -44,18 +84,9 @@ public class FollowUpNotificationModel extends BaseResponse {
         @SerializedName("followUpsType")
         @Expose
         private String followUpsType;
-
         @SerializedName("isSeen")
         @Expose
         private Boolean isSeen;
-
-        public Boolean getIsSeen() {
-            return isSeen;
-        }
-
-        public void setIsSeen(Boolean isSeen) {
-            this.isSeen = isSeen;
-        }
 
         public String getLeadID() {
             return leadID;
@@ -113,6 +144,14 @@ public class FollowUpNotificationModel extends BaseResponse {
             this.reminderId = reminderId;
         }
 
+        public Integer getReminderDycryptedId() {
+            return reminderDycryptedId;
+        }
+
+        public void setReminderDycryptedId(Integer reminderDycryptedId) {
+            this.reminderDycryptedId = reminderDycryptedId;
+        }
+
         public String getAssignDate() {
             return assignDate;
         }
@@ -125,6 +164,10 @@ public class FollowUpNotificationModel extends BaseResponse {
             return description;
         }
 
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
         public String getFollowUpsType() {
             return followUpsType;
         }
@@ -133,9 +176,14 @@ public class FollowUpNotificationModel extends BaseResponse {
             this.followUpsType = followUpsType;
         }
 
+        public Boolean getIsSeen() {
+            return isSeen;
+        }
+
+        public void setIsSeen(Boolean isSeen) {
+            this.isSeen = isSeen;
+        }
+
     }
 
-    public List<Data> getData() {
-        return data;
-    }
 }
