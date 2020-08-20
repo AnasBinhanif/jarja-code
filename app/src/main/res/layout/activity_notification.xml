@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/ep_toolbar"
@@ -85,36 +85,14 @@
                 android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvNotificationsAppointment"
+            android:id="@+id/rvNotifications"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_15sdp"
             android:nestedScrollingEnabled="false"
-            android:visibility="visible"
-                android:layout_below="@+id/linearLayout"
-                />
+            android:visibility="gone" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvNotificationsFollowups"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_15sdp"
-                android:nestedScrollingEnabled="false"
-                android:visibility="visible"
-                android:layout_below="@+id/linearLayout"
-                />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvNotificationsTask"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_15sdp"
-                android:nestedScrollingEnabled="false"
-                android:visibility="visible"
-                android:layout_below="@+id/linearLayout"
-                />
-
-        </RelativeLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 

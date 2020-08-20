@@ -53,7 +53,8 @@ public class GH {
         NOTIFICATIONID,
         FRAGMENTSTATUS,
         CALENDERUPDATELIST,
-        NAVIGATIONSTATUS
+        NAVIGATIONSTATUS,
+        ISNOTIFICATIONALLOW
 
     }
 
@@ -62,7 +63,7 @@ public class GH {
 
     }
     public String getNotificationType() {
-        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.NOTIFICATIONTYPE.name(), null);
+        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.NOTIFICATIONTYPE.name(), "false");
 
     }
     public int getCalenderListPos() {
@@ -76,6 +77,10 @@ public class GH {
     }
     public String getNotificationID() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.NOTIFICATIONID.name(), null);
+
+    }
+    public String getNotificationAllowStatus() {
+        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.ISNOTIFICATIONALLOW.name(), "false");
 
     }
     public void addNotificationType(String notificationType){

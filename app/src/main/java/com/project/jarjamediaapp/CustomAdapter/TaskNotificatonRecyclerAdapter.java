@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
 import com.project.jarjamediaapp.Activities.add_task.GetTaskDetail;
+import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
 import com.project.jarjamediaapp.Activities.notification.TaskNotificationModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -85,6 +86,7 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
 
                 }
                 getTaskDetail(notificationObj.getEncryptedTaskID());
+                GH.getInstance().ShowProgressDialog((NotificationActivity)context);
             }
         });
 
@@ -130,6 +132,7 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
 
                     if (getTaskDetail.getStatus().equalsIgnoreCase("Success")) {
 
+                        GH.getInstance().HideProgressDialog();
                         context.startActivity(new Intent(context, AddTaskActivity.class)
                                 .putExtra("from", "3")
                                 .putExtra("whichTasks", 1)

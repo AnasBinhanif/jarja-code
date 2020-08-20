@@ -39,7 +39,7 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
 
     @Override
     public void getAgentNames() {
-       // _view.showProgressBar();
+        _view.showProgressBar();
         _callGetAgentsModel = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetAgents(GH.getInstance().getAuthorization());
         _callGetAgentsModel.enqueue(new Callback<GetAgentsModel>() {
             @Override
@@ -54,13 +54,13 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
 
                     } else {
 
-                       // _view.hideProgressBar();
+                        _view.hideProgressBar();
                         _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
-                   // _view.hideProgressBar();
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -127,6 +127,7 @@ public class AddLeadPresenter extends BasePresenter<AddLeadContract.View> implem
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         _view.updateUI(getAppointmentsModel);
+                        _view.hideProgressBar();
 
                     } else {
 

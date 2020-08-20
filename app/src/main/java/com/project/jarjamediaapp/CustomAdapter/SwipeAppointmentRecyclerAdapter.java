@@ -100,6 +100,7 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
             String firstName = modelData.getVtCRMLeadCustom().firstName + "";
             String lastName = modelData.getVtCRMLeadCustom().lastName + "";
             String evenTitle = modelData.eventTitle + "";
+            String location = modelData.location + "";
 
             if (firstName.equals("null") || firstName.equals("")) {
                 firstName = "-";
@@ -111,8 +112,13 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
                 evenTitle = "-";
             }
 
+            if (location.equals("null") || evenTitle.equals("")){
+
+                location = "-";
+            }
+
             holder.tvName.setText(firstName + " " + lastName);
-            holder.tvAddress.setText(evenTitle);
+            holder.tvAddress.setText(evenTitle+", "+location);
 
             holder.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
 

@@ -307,7 +307,6 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
     private void initCallsData() {
 
-
         presenter.getAgentNames();
 
     }

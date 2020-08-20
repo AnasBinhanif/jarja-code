@@ -107,6 +107,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         //   myReceiver = new LocalReceiver();
 
+
+
         if (getIntent().getExtras() != null) {
 
             String typeOfNotification = getIntent().getStringExtra("notificationType");
@@ -463,8 +465,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             public void onClick(DialogInterface dialog, int which) {
                 // Write your code here to execute after dialog
                 // closed
+
+
                 fragment = null;
 
+
+
+                startActivity(new Intent(context,LoginActivity.class));
+                finish();
                 UnAuthenticateUser(FirebaseInstanceId.getInstance().getToken(), "FCM");
 
             }
@@ -484,6 +492,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         // Showing Alert Message
         alertDialog1.show();
     }
+
+
 
     public void ReplaceFragment(Fragment fragment, String title, boolean shouldAnimate, boolean addToStack) {
 
@@ -674,6 +684,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
 
                         easyPreference.clearAll().save();
+                        EasyPreference.Builder pref = new EasyPreference.Builder(context);
+                        pref.addString(GH.KEYS.ISNOTIFICATIONALLOW.name(),"true").save();
                         switchActivity(LoginActivity.class);
                         finish();
 

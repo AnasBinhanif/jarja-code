@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Fragments.DashboardFragments.appointments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,8 +57,6 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     int page = 1;
     int totalPages;
     boolean onResume;
-
-
 
     public FragmentAppointment() {
         // Required empty public constructor
@@ -244,11 +243,11 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
             case R.id.fbAddAppoint:
 
+
                 if (HomeActivity.onClick) {
                     Map<String, String> map = new HashMap<>();
                     map.put("from", "5");
-                    switchActivityWithIntentString(context, AddAppointmentActivity.class, (HashMap<String, String>) map);
-                    HomeActivity.onClick=false;
+                    switchActivityWithIntentString(context, AddAppointmentActivity.class, (HashMap<String, String>) map);HomeActivity.onClick=false;
                 }
                 break;
 
@@ -288,6 +287,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     if (userPermission.data.dashboard.get(6).value) {
                         presenter.getUpcomingAppointments(page);
                     } else {
+
                         ToastUtils.showToast(context, getString(R.string.dashboard_ViewEditAppoint));
                     }
 

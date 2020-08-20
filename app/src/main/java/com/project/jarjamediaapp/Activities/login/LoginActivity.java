@@ -1,6 +1,8 @@
 package com.project.jarjamediaapp.Activities.login;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,6 +49,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         bi = DataBindingUtil.setContentView(this, R.layout.activity_login);
         presenter = new LoginPresenter(this);
         presenter.initScreen();
+
+
+
+
+        if(GH.getInstance().getNotificationAllowStatus().equals("false")){
+
+                notificationPermission();
+
+
+        }
 
         // for testing
         // save o start acivity other wise application crash due to null values
@@ -208,6 +220,68 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void hideProgressBar() {
 
         GH.getInstance().HideProgressDialog();
+    }
+
+    public void notificationPermission() {
+
+        AlertDialog alertDialog1;
+        alertDialog1 = new AlertDialog.Builder(
+                LoginActivity.this).create();
+
+        // Setting Dialog Title
+        alertDialog1.setTitle("Alert");
+
+        // Setting Dialog Message
+        alertDialog1.setMessage("Jarja Media Would Like to Send You Notification?");
+        alertDialog1.setCanceledOnTouchOutside(false);
+
+        // Setting Icon to Dialog
+        // alertDialog1.setIcon(R.drawable.tick);
+
+        // Setting OK Button
+        alertDialog1.setButton("ALLOW", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+
+                EasyPreference.Builder pref = new EasyPreference.Builder(context);
+                pref.addString(GH.KEYS.ISNOTIFICATIONALLOW.name(),"true").save();
+
+                alertDialog1.dismiss();
+                openSettingForNotification();
+
+
+            }
+        });
+
+        alertDialog1.setButton2("DENY", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+
+                EasyPreference.Builder pref = new EasyPreference.Builder(context);
+                pref.addString(GH.KEYS.ISNOTIFICATIONALLOW.name(),"true").save();
+                alertDialog1.dismiss();
+                openSettingForNotification();
+
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog1.show();
+    }
+
+    public void openSettingForNotification(){
+
+        Intent intent = new Intent();
+        intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+
+//for Android 5-7
+        intent.putExtra("app_package", getApplication().getPackageName());
+        intent.putExtra("app_uid", getApplication().getApplicationInfo().uid);
+
+// for Android 8 and above
+        intent.putExtra("android.provider.extra.APP_PACKAGE", getApplication().getPackageName());
+
+        startActivity(intent);
     }
 
 }

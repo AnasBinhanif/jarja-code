@@ -34,12 +34,13 @@ public class NotificationPresenter extends BasePresenter<NotificationContract.Vi
             @Override
             public void onResponse(Call<TaskNotificationModel> call, Response<TaskNotificationModel> response) {
 
-                _view.hideProgressBar();
+
                 if (response.isSuccessful()) {
 
                     TaskNotificationModel taskNotificationModel = response.body();
                     if (taskNotificationModel.getStatus().equals("Success")) {
                         _view.updateUIListT(taskNotificationModel.getData().getTaskList(),taskNotificationModel.getData().getTaskCount());
+                        _view.hideProgressBar();
 
                     } else {
                         _view.updateUIonFalse(taskNotificationModel.getMessage());

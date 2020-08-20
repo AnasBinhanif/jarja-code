@@ -58,9 +58,11 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     AppointmentNotificationRecyclerAdapter appointmentRecyclerviewAdapter;
     TaskNotificatonRecyclerAdapter taskRecyclerviewAdapter;
     FollowUpsNotificationRecyclerAdapter folloupsRecyclerviewAdapter;
-    LinearLayoutManager layoutManagerAppointment,layoutManagerFollowups,layoutManagerTask;
+    LinearLayoutManager layoutManager;
     int page = 0;
     int totalPages;
+    private static final int PAGE_SIZE = 25;
+    boolean isLoading = false;
 
 
     @Override
@@ -96,17 +98,17 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
 
 
-            layoutManagerTask = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
-            bi.rvNotificationsTask.setLayoutManager(layoutManagerTask);
-            bi.rvNotificationsTask.setItemAnimator(new DefaultItemAnimator());
-            bi.rvNotificationsTask.addItemDecoration(new DividerItemDecoration(bi.rvNotificationsTask.getContext(), 1));
+        layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+            bi.rvNotifications.setLayoutManager(layoutManager);
+            bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
+            bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
 
             taskRecyclerviewAdapter = new TaskNotificatonRecyclerAdapter(context, (ArrayList<TaskNotificationModel.TaskList>) notificationListT);
 
 
-            bi.rvNotificationsTask.setAdapter(taskRecyclerviewAdapter);
+            bi.rvNotifications.setAdapter(taskRecyclerviewAdapter);
             taskRecyclerviewAdapter.notifyDataSetChanged();
-            bi.rvNotificationsTask.setVisibility(View.VISIBLE);
+            bi.rvNotifications.setVisibility(View.VISIBLE);
 
 
 
@@ -117,15 +119,15 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         try {
 
 
-            layoutManagerAppointment = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
-            bi.rvNotificationsAppointment.setLayoutManager(layoutManagerAppointment);
-            bi.rvNotificationsAppointment.setItemAnimator(new DefaultItemAnimator());
-            bi.rvNotificationsAppointment.addItemDecoration(new DividerItemDecoration(bi.rvNotificationsAppointment.getContext(), 1));
+            layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+            bi.rvNotifications.setLayoutManager(layoutManager);
+            bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
+            bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
             appointmentRecyclerviewAdapter = new AppointmentNotificationRecyclerAdapter(context, (ArrayList<AppointmentNotificationModel.FollowUpsList>) notificationListA);
 
-            bi.rvNotificationsAppointment.setAdapter(appointmentRecyclerviewAdapter);
+            bi.rvNotifications.setAdapter(appointmentRecyclerviewAdapter);
             appointmentRecyclerviewAdapter.notifyDataSetChanged();
-            bi.rvNotificationsAppointment.setVisibility(View.VISIBLE);
+            bi.rvNotifications.setVisibility(View.VISIBLE);
 
         }catch (Exception e){
 
@@ -140,15 +142,15 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         try {
 
 
-            layoutManagerFollowups = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
-            bi.rvNotificationsFollowups.setLayoutManager(layoutManagerFollowups);
-            bi.rvNotificationsFollowups.setItemAnimator(new DefaultItemAnimator());
-            bi.rvNotificationsFollowups.addItemDecoration(new DividerItemDecoration(bi.rvNotificationsFollowups.getContext(), 1));
+            layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+            bi.rvNotifications.setLayoutManager(layoutManager);
+            bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
+            bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
             folloupsRecyclerviewAdapter = new FollowUpsNotificationRecyclerAdapter(context, (ArrayList<FollowUpNotificationModel.FollowUpsList>) notificationListF);
 
-            bi.rvNotificationsFollowups.setAdapter(folloupsRecyclerviewAdapter);
+            bi.rvNotifications.setAdapter(folloupsRecyclerviewAdapter);
             folloupsRecyclerviewAdapter.notifyDataSetChanged();
-            bi.rvNotificationsFollowups.setVisibility(View.VISIBLE);
+            bi.rvNotifications.setVisibility(View.VISIBLE);
 
         }catch (Exception e){
 
@@ -165,12 +167,14 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
             case R.id.btnTasks:
 
 
-                notificationListA.clear();
+                isLoading = false;
+
+            /*    notificationListA.clear();
                 notificationListT.clear();
                 notificationListF.clear();
 
 
-                // for indexout exception
+               // for indexout exception
                 if (appointmentRecyclerviewAdapter != null){
 
                     appointmentRecyclerviewAdapter.notifyDataSetChanged();
@@ -183,7 +187,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
                     folloupsRecyclerviewAdapter.notifyDataSetChanged();
                 }
-
+*/
                 Paris.style(bi.btnTasks).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnAppointments).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnFollowUps).apply(R.style.TabButtonTranparentRight);
@@ -195,12 +199,14 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
             case R.id.btnAppointments:
 
-                notificationListA.clear();
+                isLoading = false;
+
+           /*     notificationListA.clear();
                 notificationListT.clear();
                 notificationListF.clear();
 
 
-                // for indexout exception
+               // for indexout exception
                 if (appointmentRecyclerviewAdapter != null){
 
                     appointmentRecyclerviewAdapter.notifyDataSetChanged();
@@ -213,8 +219,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
                     folloupsRecyclerviewAdapter.notifyDataSetChanged();
                 }
-
-
+*/
 
 
                 Paris.style(bi.btnTasks).apply(R.style.TabButtonTranparentLeft);
@@ -228,8 +233,8 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
             case R.id.btnFollowUps:
 
-
-                notificationListA.clear();
+                isLoading = false;
+              /*  notificationListA.clear();
                 notificationListT.clear();
                 notificationListF.clear();
 
@@ -246,7 +251,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                 }else if (folloupsRecyclerviewAdapter != null){
 
                     folloupsRecyclerviewAdapter.notifyDataSetChanged();
-                }
+                }*/
 
                 Paris.style(bi.btnTasks).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnAppointments).apply(R.style.TabButtonTranparentMiddle);
@@ -270,82 +275,8 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         bi.btnFollowUps.setOnClickListener(this);
         presenter.getNotificationByTasks(page);
 
-       bi.rvNotificationsAppointment.addOnScrollListener(new RecyclerView.OnScrollListener() {
-           @Override
-           public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-               super.onScrollStateChanged(recyclerView, newState);
 
-
-
-
-
-           }
-
-           @Override
-           public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-               super.onScrolled(recyclerView, dx, dy);
-
-               if (dy > 0) //check for scroll down
-               {
-                   Log.d("scroll", "scroll down");
-                   int visibleItemCount = layoutManagerAppointment.getChildCount();
-                   int totalItemCount = layoutManagerAppointment.getItemCount();
-                   int firstVisibleItemPosition = layoutManagerAppointment.findFirstVisibleItemPosition();
-
-                   // Load more if we have reach the end to the recyclerView
-                   if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
-                       Log.d("scroll", "last item");
-
-                    //   if (notificationListA.size() > 0){
-
-                           if (totalPages > notificationListA.size()) {
-                               page++;
-                               try {
-
-                             presenter.getNotificationByAppointments(page);
-                               } catch (NullPointerException e) {
-                                   e.printStackTrace();
-                               }
-                               Log.d("scroll", "More to come");
-                           }
-
-                      /* }else if(notificationListT.size() > 0){
-
-                           if (totalPages > notificationListT.size()) {
-                               page++;
-                               try {
-
-                                   presenter.getNotificationByTasks(page);
-                               } catch (NullPointerException e) {
-                                   e.printStackTrace();
-                               }
-                               Log.d("scroll", "More to come");
-                           }
-
-
-                       }else if(notificationListF.size() > 0){
-
-
-                           if (totalPages > notificationListF.size()) {
-                               page++;
-                               try {
-
-                                   presenter.getNotificationByFollowUps(page);
-                               } catch (NullPointerException e) {
-                                   e.printStackTrace();
-                               }
-                               Log.d("scroll", "More to come");
-                           }
-
-
-                       }*/
-
-
-                   }
-               }
-           }
-       });
-        bi.rvNotificationsFollowups.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        bi.rvNotifications.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -363,133 +294,78 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                 if (dy > 0) //check for scroll down
                 {
                     Log.d("scroll", "scroll down");
-                    int visibleItemCount = layoutManagerFollowups.getChildCount();
-                    int totalItemCount = layoutManagerFollowups.getItemCount();
-                    int firstVisibleItemPosition = layoutManagerFollowups.findFirstVisibleItemPosition();
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
                     // Load more if we have reach the end to the recyclerView
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
                         Log.d("scroll", "last item");
 
-                        //   if (notificationListA.size() > 0){
 
-                        if (totalPages > notificationListF.size()) {
-                            page++;
-                            try {
 
-                                presenter.getNotificationByFollowUps(page);
-                            } catch (NullPointerException e) {
-                                e.printStackTrace();
+                        if (notificationListA.size() > 0){
+
+
+                        if (!isLoading) {
+
+                            if (totalPages > notificationListT.size()) {
+
+                                Log.d("totalPages", "" + notificationListT.size());
+                                Log.d("page", "" + page);
+
+                                isLoading = true;
+                                page++;
+                                try {
+
+                                    presenter.getNotificationByTasks(page);
+                                } catch (NullPointerException e) {
+                                    e.printStackTrace();
+                                }
+                                Log.d("scroll", "More to come");
                             }
-                            Log.d("scroll", "More to come");
+
                         }
 
-                      /* }else if(notificationListT.size() > 0){
 
-                           if (totalPages > notificationListT.size()) {
-                               page++;
-                               try {
+                       }else if(notificationListT.size() > 0){
 
-                                   presenter.getNotificationByTasks(page);
-                               } catch (NullPointerException e) {
-                                   e.printStackTrace();
-                               }
-                               Log.d("scroll", "More to come");
-                           }
+                            if (!isLoading) {
+                                if (totalPages > notificationListT.size()) {
+                                    isLoading = true;
+                                    page++;
+                                    try {
+
+                                        presenter.getNotificationByTasks(page);
+                                    } catch (NullPointerException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Log.d("scroll", "More to come");
+                                }
+
+                            }
 
 
                        }else if(notificationListF.size() > 0){
 
+                            if (!isLoading) {
 
-                           if (totalPages > notificationListF.size()) {
-                               page++;
-                               try {
+                                if (totalPages > notificationListF.size()) {
+                                    isLoading = true;
+                                    page++;
+                                    try {
 
-                                   presenter.getNotificationByFollowUps(page);
-                               } catch (NullPointerException e) {
-                                   e.printStackTrace();
-                               }
-                               Log.d("scroll", "More to come");
-                           }
+                                        presenter.getNotificationByFollowUps(page);
+                                    } catch (NullPointerException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Log.d("scroll", "More to come");
+                                }
 
-
-                       }*/
-
-
-                    }
-                }
-            }
-        });
-        bi.rvNotificationsTask.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-
-
-
-
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                if (dy > 0) //check for scroll down
-                {
-                    Log.d("scroll", "scroll down");
-                    int visibleItemCount = layoutManagerTask.getChildCount();
-                    int totalItemCount = layoutManagerTask.getItemCount();
-                    int firstVisibleItemPosition = layoutManagerTask.findFirstVisibleItemPosition();
-
-                    // Load more if we have reach the end to the recyclerView
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
-                        Log.d("scroll", "last item");
-
-                        //   if (notificationListA.size() > 0){
-
-                        if (totalPages > notificationListT.size()) {
-                            page++;
-                            try {
-
-                                presenter.getNotificationByTasks(page);
-                            } catch (NullPointerException e) {
-                                e.printStackTrace();
                             }
-                            Log.d("scroll", "More to come");
-                        }
 
 
-                      /* }else if(notificationListT.size() > 0){
-
-                           if (totalPages > notificationListT.size()) {
-                               page++;
-                               try {
-
-                                   presenter.getNotificationByTasks(page);
-                               } catch (NullPointerException e) {
-                                   e.printStackTrace();
-                               }
-                               Log.d("scroll", "More to come");
-                           }
-
-
-                       }else if(notificationListF.size() > 0){
-
-
-                           if (totalPages > notificationListF.size()) {
-                               page++;
-                               try {
-
-                                   presenter.getNotificationByFollowUps(page);
-                               } catch (NullPointerException e) {
-                                   e.printStackTrace();
-                               }
-                               Log.d("scroll", "More to come");
-                           }
-
-
-                       }*/
+                       }
 
 
                     }
@@ -509,9 +385,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     @Override
     public void updateUIonFalse(String message) {
 
-        bi.rvNotificationsAppointment.setVisibility(View.GONE);
-        bi.rvNotificationsFollowups.setVisibility(View.GONE);
-        bi.rvNotificationsTask.setVisibility(View.GONE);
+        bi.rvNotifications.setVisibility(View.GONE);
         bi.tvMessage.setVisibility(View.VISIBLE);
 
     }
@@ -523,9 +397,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
         } else {*/
-        bi.rvNotificationsAppointment.setVisibility(View.GONE);
-        bi.rvNotificationsFollowups.setVisibility(View.GONE);
-        bi.rvNotificationsTask.setVisibility(View.GONE);
+        bi.rvNotifications.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
 
     }
@@ -533,9 +405,8 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     @Override
     public void updateUIonFailure() {
 
-        bi.rvNotificationsAppointment.setVisibility(View.GONE);
-        bi.rvNotificationsFollowups.setVisibility(View.GONE);
-        bi.rvNotificationsTask.setVisibility(View.GONE);
+
+        bi.rvNotifications.setVisibility(View.GONE);
         bi.tvMessage.setVisibility(View.VISIBLE);
 
     }
@@ -556,6 +427,8 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
        /* notificationListA.clear();
         notificationListF.clear();
         notificationListT.clear();*/
+
+       isLoading = false;
         if (response.size() > 0) {
 
             if (page > 0){
@@ -565,11 +438,15 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                 taskRecyclerviewAdapter.notifyDataSetChanged();
             }else {
 
+
+                notificationListA.clear();
+                notificationListT.clear();
+                notificationListF.clear();
                 notificationListT.addAll(response);
                 totalPages = taskNotificationCount != null ? taskNotificationCount : 0;
 
 
-                bi.rvNotificationsTask.setVisibility(View.VISIBLE);
+                bi.rvNotifications.setVisibility(View.VISIBLE);
                 bi.tvMessage.setVisibility(View.GONE);
                 populateListDataT();
             }
@@ -577,7 +454,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
 
         } else {
-            bi.rvNotificationsTask.setVisibility(View.GONE);
+            bi.rvNotifications.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
         }
 
@@ -590,6 +467,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
       /*  notificationListA.clear();
         notificationListF.clear();
         notificationListT.clear();*/
+        isLoading = false;
         if (response.size() > 0) {
 
             if (page > 0){
@@ -598,10 +476,14 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                 appointmentRecyclerviewAdapter.notifyDataSetChanged();
             }else {
 
+                notificationListA.clear();
+                notificationListT.clear();
+                notificationListF.clear();
+
                 notificationListA.addAll(response);
 
                 totalPages = appointmentNotificationCount != null ? appointmentNotificationCount : 0;
-                bi.rvNotificationsAppointment.setVisibility(View.VISIBLE);
+                bi.rvNotifications.setVisibility(View.VISIBLE);
                 bi.tvMessage.setVisibility(View.GONE);
                 populateListDataA();
             }
@@ -609,7 +491,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
 
         } else {
-            bi.rvNotificationsAppointment.setVisibility(View.GONE);
+            bi.rvNotifications.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
         }
     }
@@ -621,6 +503,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
        /* notificationListA.clear();
         notificationListF.clear();
         notificationListT.clear();*/
+        isLoading = false;
         if (response.size() > 0) {
             if (page > 0){
 
@@ -628,9 +511,14 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                 folloupsRecyclerviewAdapter.notifyDataSetChanged();
 
             }else {
+
+                notificationListA.clear();
+                notificationListT.clear();
+                notificationListF.clear();
+
                 notificationListF.addAll(response);
                 totalPages = followupsNotificationCount != null ? followupsNotificationCount : 0;
-                bi.rvNotificationsFollowups.setVisibility(View.VISIBLE);
+                bi.rvNotifications.setVisibility(View.VISIBLE);
                 bi.tvMessage.setVisibility(View.GONE);
                 populateListDataF();
             }
@@ -638,7 +526,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
 
         } else {
-            bi.rvNotificationsFollowups.setVisibility(View.GONE);
+            bi.rvNotifications.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
         }
     }

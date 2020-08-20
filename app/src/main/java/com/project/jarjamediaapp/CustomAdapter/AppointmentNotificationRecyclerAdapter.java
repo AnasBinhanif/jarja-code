@@ -15,10 +15,12 @@ import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivi
 import com.project.jarjamediaapp.Activities.add_appointment.Data;
 import com.project.jarjamediaapp.Activities.add_appointment.GetAppointmentByIDModel;
 import com.project.jarjamediaapp.Activities.notification.AppointmentNotificationModel;
+import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.databinding.ActivityTagsBindingImpl;
 
 import java.util.ArrayList;
 
@@ -95,6 +97,8 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
 
                 }
                 getAppointmentById(notificationObj.getLeadAppoinmentID());
+
+                GH.getInstance().ShowProgressDialog((NotificationActivity)context);
             }
         });
 
@@ -139,6 +143,7 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
 
                     if (getAppointmentsModel.getStatus().equals("Success")) {
 
+                        GH.getInstance().HideProgressDialog();
                         // from notifcation screen when tap on notification item
                         Data models = getAppointmentsModel.getData();
                         context.startActivity(new Intent(context, AddAppointmentActivity.class)

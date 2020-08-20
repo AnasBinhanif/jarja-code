@@ -45,19 +45,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
              notificationType = getIntent().getExtras().get("notification_type");
              NotificationID = getIntent().getExtras().get("NotificationID");
-            Log.d("TAG", "Key: " + "notificationType" + " Value: " + notificationType);
-            Log.d("TAG", "Key: " + "NotificationID" + " Value: " + NotificationID);
 
-           /* for (String key : getIntent().getExtras().keySet()) {
-                Object value = getIntent().getExtras().get(key);
-                Log.d("TAG", "Key: " + key + " Value: " + value);
-            }*/
+
         }
+
+
+
 
         // for testing
         // save o start acivity other wise application crash due to null values
         EasyPreference.Builder pref = new EasyPreference.Builder(context);
         pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"").save();
+        // for notification dialogue
+
+
+        //pref.addString(GH.KEYS.ISNOTIFICATIONALLOW.name(),"false").save();
 
     }
     public void splash(long baseTimeout) {

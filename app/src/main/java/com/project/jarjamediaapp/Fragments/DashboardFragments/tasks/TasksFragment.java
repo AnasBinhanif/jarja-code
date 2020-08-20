@@ -43,6 +43,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     int totalPages;
     String taskType = "due";
 
+
     List<GetTasksModel.Data.TaskList> tasksList;
 
     public TasksFragment() {

@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.jarjamediaapp.Activities.notification.FollowUpNotificationModel;
+import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -84,6 +85,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
                 }
 
                 getFolloUpDetailByID(notificationObj.getDripDetailID());
+                GH.getInstance().ShowProgressDialog((NotificationActivity)context);
 
             }
         });
@@ -137,6 +139,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
                         String senType = getDetails.data.viewDPCStep.sentType;
                         String dateTime = getDetails.data.viewDPCStep.sendDateTime;
 
+                        GH.getInstance().HideProgressDialog();
                         showViewFollowUpDialog(context, wait, title, dateTime, time, note, senType);
 
 
