@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.telephony.SignalStrength;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,7 +107,9 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
 
-                    viewDetail(mData.get(pos).dripDetailID, holder.swipeLayout);
+
+                    viewDetail(mData.get(position).dripDetailID, holder.swipeLayout,"");
+
                 }
             });
 
@@ -188,10 +192,10 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
         });
     }
 
-    private void viewDetail(String dripDetailId, SwipeRevealLayout swipeRevealLayout) {
+    private void viewDetail(String dripDetailId, SwipeRevealLayout swipeRevealLayout, String reminderId) {
         GH.getInstance().ShowProgressDialog(activity);
         Call<ViewFollowUpModel> _callToday;
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId);
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId,reminderId);
         _callToday.enqueue(new Callback<ViewFollowUpModel>() {
             @Override
             public void onResponse(Call<ViewFollowUpModel> call, Response<ViewFollowUpModel> response) {
@@ -310,11 +314,21 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            tvView.setOnClickListener(v -> {
-                pos = getAdapterPosition();
-                viewDetail(mData.get(pos).dripDetailID, swipeLayout);
-            });
+//            tvView.setOnClickListener(v -> {
+//                pos = getAdapterPosition();
+//                viewDetail(mData.get(pos).dripDetailID, swipeLayout,mData.get(pos).dripDetailID);
+//            });
         }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
 }

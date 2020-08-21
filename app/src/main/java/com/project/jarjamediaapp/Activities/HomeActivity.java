@@ -128,7 +128,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 case "3":
 
                     notificationType = "followups";
-                    getFolloUpDetailByID(notificationID);
+                    getFolloUpDetailByID(notificationID,"");
 
                     break;
 
@@ -466,13 +466,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 // Write your code here to execute after dialog
                 // closed
 
-
                 fragment = null;
 
-
-
-                startActivity(new Intent(context,LoginActivity.class));
-                finish();
                 UnAuthenticateUser(FirebaseInstanceId.getInstance().getToken(), "FCM");
 
             }
@@ -684,8 +679,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
 
                         easyPreference.clearAll().save();
+                        // for notification permission setting first time dialogue in login activity
                         EasyPreference.Builder pref = new EasyPreference.Builder(context);
                         pref.addString(GH.KEYS.ISNOTIFICATIONALLOW.name(),"true").save();
+
                         switchActivity(LoginActivity.class);
                         finish();
 
@@ -749,10 +746,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         });
     }
 
-    private void getFolloUpDetailByID(String dripDetailId) {
+    private void getFolloUpDetailByID(String dripDetailId,String reminderId) {
 
         Call<ViewFollowUpModel> _callToday;
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId);
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId,reminderId);
         _callToday.enqueue(new Callback<ViewFollowUpModel>() {
             @Override
             public void onResponse(Call<ViewFollowUpModel> call, Response<ViewFollowUpModel> response) {

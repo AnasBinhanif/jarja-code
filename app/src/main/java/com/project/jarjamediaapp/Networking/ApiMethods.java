@@ -161,7 +161,7 @@ public interface ApiMethods {
 
     @GET("FollowUp/GetFollowUpDetails_New")
     Call<ViewFollowUpModel> GetFollowUpDetails(@Header("Authorization") String authorization,
-                                               @Query("id") String leadID);
+                                               @Query("id") String dripDetailedId,@Query("reminderId") String reminderId);
 
     @FormUrlEncoded
     @POST("FollowUp/MarkComplete")

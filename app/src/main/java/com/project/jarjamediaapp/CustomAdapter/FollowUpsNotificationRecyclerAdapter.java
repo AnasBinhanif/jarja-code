@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.CustomAdapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +69,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
 
         holder.tvLeadName.setText(notificationObj.getLeadName() != null ? notificationObj.getLeadName() : "N/A");
 
-        holder.tvContact.setText(notificationObj.getAddress() != null ? notificationObj.getAddress() : "N/A");
+        holder.tvContact.setText(notificationObj.getSummary() != null ? notificationObj.getSummary() : "N/A");
 
         holder.tvEmail.setText(notificationObj.getDripType() != null ? notificationObj.getDripType() : "N/A");
 
@@ -84,7 +85,8 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
 
                 }
 
-                getFolloUpDetailByID(notificationObj.getDripDetailID());
+
+                getFolloUpDetailByID(notificationObj.getDripDetailID(),notificationObj.getReminderId());
                 GH.getInstance().ShowProgressDialog((NotificationActivity)context);
 
             }
@@ -118,10 +120,10 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
         }
     }
 
-    private void getFolloUpDetailByID(String dripDetailId) {
+    private void getFolloUpDetailByID(String dripDetailId,String reminderId) {
 
         Call<ViewFollowUpModel> _callToday;
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId);
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId,reminderId);
         _callToday.enqueue(new Callback<ViewFollowUpModel>() {
             @Override
             public void onResponse(Call<ViewFollowUpModel> call, Response<ViewFollowUpModel> response) {
