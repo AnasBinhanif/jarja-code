@@ -303,7 +303,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="Recieve Lead Notification by Text"
+                    android:text="Receive Lead Notification by Text"
                     android:textColor="@color/kprogresshud_default_color" />
 
                 <TextView

@@ -70,6 +70,8 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         pref.addInt(GH.KEYS.CALENDERUPDATELIST.name(),-1).save();
 
 
+
+
     }
 
     @Override
@@ -282,7 +284,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void updateUIList(CalendarModel response) {
 
-        dataList= new ArrayList<>();
+        dataList = new ArrayList<>();
         if (response.data.size() > 0) {
 
             currentDateList = new ArrayList<>();
@@ -307,8 +309,21 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                 }
 
             }
+        //    swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, CalendarActivity.this, currentDateList);
 
-            swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, CalendarActivity.this, currentDateList);
+
+
+            // for restric empty list on slected date when activity onResume state
+            if (dataArrayList != null && dataArrayList.size() > 0){
+
+                swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, CalendarActivity.this, dataArrayList);
+
+            }else {
+
+                swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, CalendarActivity.this, currentDateList);
+
+            }
+
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.rvEvents.getContext(), 1);
             bi.rvEvents.setLayoutManager(mLayoutManager);

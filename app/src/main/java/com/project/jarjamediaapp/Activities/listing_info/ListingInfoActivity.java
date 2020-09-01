@@ -63,9 +63,22 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
             TextView tvName = (TextView) integerMap.get(R.id.tvName);
             TextView tvDesc = (TextView) integerMap.get(R.id.tvDesc);
 
+
             tvName.setText(allLeadsList.getKey());
             tvDesc.setText(allLeadsList.getValue());
 
+/*  if (allLeadsList.getKey().equals("Listing Price:")){
+
+                String[] separated = allLeadsList.getValue().split("to");
+                tvName.setText(allLeadsList.getKey());
+                tvDesc.setText(separated[0]+" to "+separated[1]);
+
+            }else {
+
+                tvName.setText(allLeadsList.getKey());
+                tvDesc.setText(allLeadsList.getValue());
+            }
+*/
             // hide uploaded attachments field
 
 

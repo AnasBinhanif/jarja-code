@@ -3,6 +3,8 @@ package com.project.jarjamediaapp.Activities.all_leads;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -120,7 +122,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
         leadsList = new ArrayList<>();
         initPagination();
-        bi.edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+     /*   bi.edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
@@ -141,6 +143,33 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                     return true;
                 }
                 return false;
+            }
+        });*/
+
+        bi.edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                int length = bi.edtSearch.getText().length();
+                try {
+                    if (length > 0) {
+                        leadsList = new ArrayList<>();
+                        page = 0;
+                        isFilter = true;
+                        presenter.SearchLead(page, bi.edtSearch.getText().toString());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 

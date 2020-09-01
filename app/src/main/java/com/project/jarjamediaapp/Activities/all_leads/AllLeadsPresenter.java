@@ -68,7 +68,7 @@ public class AllLeadsPresenter extends BasePresenter<AllLeadsContract.View> impl
     public void SearchLead(int pageNo, String query) {
 
 
-        _view.showProgressBar();
+    //    _view.showProgressBar();
         _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).SearchLead(GH.getInstance().getAuthorization(),
                 pageNo,query);
         _call.enqueue(new Callback<GetAllLeads>() {
@@ -97,7 +97,7 @@ public class AllLeadsPresenter extends BasePresenter<AllLeadsContract.View> impl
 
             @Override
             public void onFailure(Call<GetAllLeads> call, Throwable t) {
-                _view.hideProgressBar();
+              //  _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
         });

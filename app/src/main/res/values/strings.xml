@@ -216,7 +216,7 @@
 
 
     <!-- Login Screen -->
-    <string name="footer_text">Jarja Media 2020 , All Rights Reserved.</string>
+    <string name="footer_text">Jarja Media 2020, All Rights Reserved.</string>
     <string name="header_text">Marketing at the speed of Today</string>
     <string name="email">Email</string>
     <string name="_email">Email *</string>
