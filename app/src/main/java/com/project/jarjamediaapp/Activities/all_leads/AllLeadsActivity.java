@@ -22,6 +22,10 @@ import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAllLeads;
 import com.project.jarjamediaapp.Models.GetPropertyLeads;
+import com.project.jarjamediaapp.Networking.ApiError;
+import com.project.jarjamediaapp.Networking.ApiMethods;
+import com.project.jarjamediaapp.Networking.ErrorUtils;
+import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
@@ -39,6 +43,8 @@ import java.util.Map;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.functions.Function4;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AllLeadsActivity extends BaseActivity implements View.OnClickListener, AllLeadsContract.View {
@@ -113,7 +119,8 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             leadsList = new ArrayList<>();
             page = 0;
             isFilter = true;
-            presenter.SearchLead(page, bi.edtSearch.getText().toString());
+         //   presenter.SearchLead(page, bi.edtSearch.getText().toString());
+            searchLead(page, bi.edtSearch.getText().toString());
         }
     }
 
@@ -161,10 +168,11 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                 int length = bi.edtSearch.getText().length();
                 try {
                     if (length > 0) {
-                        leadsList = new ArrayList<>();
+
                         page = 0;
                         isFilter = true;
-                        presenter.SearchLead(page, bi.edtSearch.getText().toString());
+                      //  presenter.SearchLead(page, bi.edtSearch.getText().toString());
+                        searchLead(page, bi.edtSearch.getText().toString());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -372,6 +380,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                 });
 
                 bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
+                recyclerAdapterUtil.notifyDataSetChanged();
                 isLoading = false;
             } else {
                 isLoading = false;
@@ -439,6 +448,61 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
     }
 
+    public void searchLead(int pageNo, String query) {
+
+
+    //    _view.showProgressBar();
+        Call<GetAllLeads> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).SearchLead(GH.getInstance().getAuthorization(),
+                pageNo,query);
+        _call.enqueue(new Callback<GetAllLeads>() {
+            @Override
+            public void onResponse(Call<GetAllLeads> call, Response<GetAllLeads> response) {
+
+              //  _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    GetAllLeads getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.status.equals("Success")) {
+
+                        if (getAppointmentsModel.status.equals("Success")) {
+
+                            leadsList.clear();
+                            leadsList = new ArrayList<>();
+                            leadsList.addAll(getAppointmentsModel.data.leadsList);
+                            if (leadsList.size() != 0) {
+
+                                populateListData(leadsList);
+
+                            } else {
+                                ToastUtils.showToast(context, "No Result Found");
+                            }
+                        } else {
+                            ToastUtils.showToast(context, getAppointmentsModel.message);
+                        }
+                      //  _view.updateUI(getAppointmentsModel);
+
+                    } else {
+
+                       // _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                   // _view.updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetAllLeads> call, Throwable t) {
+              //  _view.hideProgressBar();
+              //  _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+
     private ArrayList<GetAllLeads.LeadsList> filter(ArrayList<GetAllLeads.LeadsList> models, String query) {
         query = query.toLowerCase();
         final ArrayList<GetAllLeads.LeadsList> filteredModelList = new ArrayList<>();
@@ -462,6 +526,14 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void updateUI(GetAllLeads response) {
+
+        leadsList.clear();
+        if (recyclerAdapterUtil != null){
+            recyclerAdapterUtil.notifyDataSetChanged();
+
+        }
+
+        leadsList = new ArrayList<>();
 
         leadsList.addAll(response.data.leadsList);
 

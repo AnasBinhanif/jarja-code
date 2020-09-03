@@ -118,7 +118,15 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
             }
 
             holder.tvName.setText(firstName + " " + lastName);
-            holder.tvAddress.setText(evenTitle+", "+location);
+            if (!location.equals("")){
+                holder.tvAddress.setText(evenTitle+", "+location);
+
+            }else {
+
+                holder.tvAddress.setText(evenTitle);
+
+            }
+
 
             holder.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
 

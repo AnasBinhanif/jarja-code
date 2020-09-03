@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -28,6 +29,8 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityCalendarBinding;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
@@ -55,6 +58,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     ArrayList<Integer> markedDates;
     ArrayList<CalendarLabel> markedDatesFormatter;
     ArrayList<CalendarModel.Data> dataArrayList;
+    int currentYear,currentMonth,currentDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +109,15 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         //Set default values
         calendar = Calendar.getInstance();
         yearSelected = calendar.get(Calendar.YEAR);
+        currentYear = calendar.get(Calendar.YEAR);
         monthSelected = (calendar.get(Calendar.MONTH) + 1);
+        currentMonth = (calendar.get(Calendar.MONTH) + 1);
         daySelected = calendar.get(Calendar.DAY_OF_MONTH);
+        currentDay = calendar.get(Calendar.DAY_OF_MONTH);
         bi.calendarView.setSelectedDate(CalendarDay.from(yearSelected, (monthSelected - 1), daySelected));
+
+
+
 
         bi.calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
@@ -117,7 +127,18 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                 yearSelected = date.getYear();
                 String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
                 String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
+
+                currentDateList.clear();
+
+
+                if (dataArrayList != null){
+
+                    dataArrayList.clear();
+                }
+
+                swipeCalendarAppointmentRecyclerAdapter.notifyDataSetChanged();
                 presenter.getCalendarEvents(GH.getInstance().getCalendarAgentId(), month, year);
+
 
             }
         });
@@ -125,8 +146,6 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
-               /* String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
-                String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");*/
 
                 filterDateData(date.getDay(), date.getMonth(), date.getYear());
 
@@ -309,9 +328,6 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                 }
 
             }
-        //    swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, CalendarActivity.this, currentDateList);
-
-
 
             // for restric empty list on slected date when activity onResume state
             if (dataArrayList != null && dataArrayList.size() > 0){
@@ -384,7 +400,31 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
         bi.calendarView.invalidateDecorators();
         bi.calendarView.removeDecorators();
-        bi.calendarView.addDecorators(new EventDecorator(R.color.colorPrimary, list));
+        bi.calendarView.addDecorators(new EventDecorator(R.color.colorGreen, list));
+
+
+     //   bi.calendarView.setCurrentDate(calendar.getTime());
+       // bi.calendarView.setDateSelected(CalendarDay.today(), true);
+        //  bi.calendarView.setDateSelected(CalendarDay.today(), true);
+        // for highlighted the current date in calender
+        bi.calendarView.addDecorator(new DayViewDecorator() {
+            @Override
+            public boolean shouldDecorate(CalendarDay day) {
+                Calendar cal1 = day.getCalendar();
+                Calendar cal2 = Calendar.getInstance();
+
+                return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA)
+                        && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
+                        && cal1.get(Calendar.DAY_OF_YEAR) ==
+                        cal2.get(Calendar.DAY_OF_YEAR));
+            }
+
+            @Override
+            public void decorate(DayViewFacade view) {
+                view.setBackgroundDrawable(ContextCompat.getDrawable(CalendarActivity.this,R.drawable.calender_selector));
+            }
+        });
+
 
     }
 

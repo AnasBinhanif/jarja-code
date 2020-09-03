@@ -34,7 +34,7 @@ public interface AllLeadsContract {
 
         void GetPropertyLeads(String propertyID);
 
-        void SearchLead(int pageNo, String query);
+      //  void SearchLead(int pageNo, String query);
 
         void getAllLeads(String data);
 

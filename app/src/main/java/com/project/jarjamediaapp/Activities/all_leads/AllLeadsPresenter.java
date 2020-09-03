@@ -64,7 +64,7 @@ public class AllLeadsPresenter extends BasePresenter<AllLeadsContract.View> impl
 
     }
 
-    @Override
+  /*  @Override
     public void SearchLead(int pageNo, String query) {
 
 
@@ -102,7 +102,7 @@ public class AllLeadsPresenter extends BasePresenter<AllLeadsContract.View> impl
             }
         });
 
-    }
+    }*/
 
     @Override
     public void getAllLeads(String data) {
