@@ -235,7 +235,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     private void showAgentDialog() {
 
         MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
-                .title("Select Agents:  \n\n Note: Switching the primary agent will stop all current drip campaigns and any future campaigns will now come from new primary agent assigned. In addition, all birthday and/or anniversary notifications will be turned off for this lead and will need to be turned back on by the new primary agent.") //setting title for dialog
+                .title("Select Agents:  \n\nNote: Switching the primary agent will stop all current drip campaigns and any future campaigns will now come from new primary agent assigned. In addition, all birthday and/or anniversary notifications will be turned off for this lead and will need to be turned back on by the new primary agent.") //setting title for dialog
                 .titleSize(16)
                 .positiveText("Done")
                 .negativeText("Cancel")

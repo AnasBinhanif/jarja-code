@@ -58,7 +58,8 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     ArrayList<Integer> markedDates;
     ArrayList<CalendarLabel> markedDatesFormatter;
     ArrayList<CalendarModel.Data> dataArrayList;
-    int currentYear,currentMonth,currentDay;
+    int daySelectionWhenMonthChange = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,11 +110,8 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         //Set default values
         calendar = Calendar.getInstance();
         yearSelected = calendar.get(Calendar.YEAR);
-        currentYear = calendar.get(Calendar.YEAR);
         monthSelected = (calendar.get(Calendar.MONTH) + 1);
-        currentMonth = (calendar.get(Calendar.MONTH) + 1);
         daySelected = calendar.get(Calendar.DAY_OF_MONTH);
-        currentDay = calendar.get(Calendar.DAY_OF_MONTH);
         bi.calendarView.setSelectedDate(CalendarDay.from(yearSelected, (monthSelected - 1), daySelected));
 
 
@@ -147,6 +145,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
 
+                daySelectionWhenMonthChange = date.getDay();
                 filterDateData(date.getDay(), date.getMonth(), date.getYear());
 
 
@@ -319,18 +318,40 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                     calendar = Calendar.getInstance();
                     daySelected = calendar.get(Calendar.DAY_OF_MONTH);
 
-                    if (date.equals(String.valueOf(daySelected))) {
+
+                    if (daySelectionWhenMonthChange != 0){
+
+                        if (date.equals(String.valueOf(daySelectionWhenMonthChange))){
+
+                            currentDateList.add(response.getData().get(i));
+
+                        }
+                    }else {
+
+                        if(date.equals(String.valueOf(daySelected))) {
+
+                            currentDateList.add(response.getData().get(i));
+
+                        }
+                    }
+                 /*   if (date.equals(String.valueOf(daySelectionWhenMonthChange))){
 
                         currentDateList.add(response.getData().get(i));
 
+                    }else if(date.equals(String.valueOf(daySelected))) {
 
-                    }
+                        currentDateList.add(response.getData().get(i));
+
+                    }*/
                 }
 
             }
 
+            swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, CalendarActivity.this, currentDateList);
+
+
             // for restric empty list on slected date when activity onResume state
-            if (dataArrayList != null && dataArrayList.size() > 0){
+          /*  if (dataArrayList != null && dataArrayList.size() > 0){
 
                 swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, CalendarActivity.this, dataArrayList);
 
@@ -338,7 +359,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
                 swipeCalendarAppointmentRecyclerAdapter = new SwipeCalendarAppointmentRecyclerAdapter(context, CalendarActivity.this, currentDateList);
 
-            }
+            }*/
 
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.rvEvents.getContext(), 1);

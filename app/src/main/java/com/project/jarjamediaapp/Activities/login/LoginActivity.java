@@ -229,10 +229,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 LoginActivity.this).create();
 
         // Setting Dialog Title
-        alertDialog1.setTitle("Alert");
+        //alertDialog1.setTitle("Alert");
 
         // Setting Dialog Message
-        alertDialog1.setMessage("Jarja Media Would Like to Send You Notification?");
+        alertDialog1.setMessage(context.getResources().getString(R.string.notification_dialog));
         alertDialog1.setCanceledOnTouchOutside(false);
 
         // Setting Icon to Dialog

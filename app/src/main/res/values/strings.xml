@@ -229,6 +229,7 @@
 
     <!-- Forgot Password -->
     <string name="btn_submit">Forgot Password</string>
+    <string name="notification_dialog">\"Jarja Media\" Would Like to Send You Notifications\nNotifications may include alerts, sounds and icon badges.These can be configured in Settings.</string>
 
     <!-- Navigation Drawer Dashboard Screen -->
 
