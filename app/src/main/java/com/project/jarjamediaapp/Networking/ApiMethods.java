@@ -50,6 +50,7 @@ import com.project.jarjamediaapp.Models.GetTimeZoneList;
 import com.project.jarjamediaapp.Models.GetTwilioNumber;
 import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.Models.GetUserProfile;
+import com.project.jarjamediaapp.Models.GmailCalender;
 import com.project.jarjamediaapp.Models.UpgradeSocialProfile;
 import com.project.jarjamediaapp.Models.Upload_ProfileImage;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
@@ -581,6 +582,10 @@ public interface ApiMethods {
                                           @Query("CalendarId") String calendarId,
                                           @Query("month") String month,
                                           @Query("year") String year);
+
+    @POST("Calender/GetUpdateFrom_GmailCalender")
+    Call<GmailCalender> getGmailCalender(@Header("Authorization") String authorization);
+
 
     @GET("Calender/GetCalendartAppointmentPreview")
     Call<CalendarAppointmentDetailModel> getCalendarAppointmentDetail(@Header("Authorization") String authorization,

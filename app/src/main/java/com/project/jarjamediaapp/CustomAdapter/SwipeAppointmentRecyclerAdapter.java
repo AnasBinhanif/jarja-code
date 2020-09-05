@@ -103,18 +103,18 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
             String location = modelData.location + "";
 
             if (firstName.equals("null") || firstName.equals("")) {
-                firstName = "-";
+                firstName = "";
             }
             if (lastName.equals("null") || lastName.equals("")) {
-                lastName = "-";
+                lastName = "";
             }
             if (evenTitle.equals("null") || evenTitle.equals("")) {
-                evenTitle = "-";
+                evenTitle = "";
             }
 
             if (location.equals("null") || evenTitle.equals("")){
 
-                location = "-";
+                location = "";
             }
 
             holder.tvName.setText(firstName + " " + lastName);

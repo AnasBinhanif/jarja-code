@@ -760,8 +760,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 obj.put("lastName", lastName);
                 obj.put("spousname", spousname);
                 obj.put("company", company);
-                obj.put("cellPhone", cellPhone);
-                obj.put("primaryPhone", primaryPhone);
+                obj.put("primaryPhone", cellPhone);
+             //   obj.put("primaryPhone", primaryPhone);
                 obj.put("primaryEmail", primaryEmail);
                 obj.put("dateOfBirth", dateOfBirth);
                 obj.put("isBirthDayNotify", isBirthDayNotify);

@@ -22,6 +22,7 @@ import com.project.jarjamediaapp.Activities.add_calendar_task.AddCalendarTaskAct
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.CustomAdapter.SwipeCalendarAppointmentRecyclerAdapter;
+import com.project.jarjamediaapp.Models.GmailCalender;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.EventDecorator;
@@ -83,6 +84,15 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View view) {
 
         int id = view.getId();
+        switch (id){
+
+            case R.id.btnSync:
+
+                presenter.getGmailCalender();
+
+                break;
+        }
+
 
     }
 
@@ -107,12 +117,14 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void initViews() {
 
+        bi.btnSync.setOnClickListener(this);
         //Set default values
         calendar = Calendar.getInstance();
         yearSelected = calendar.get(Calendar.YEAR);
         monthSelected = (calendar.get(Calendar.MONTH) + 1);
         daySelected = calendar.get(Calendar.DAY_OF_MONTH);
         bi.calendarView.setSelectedDate(CalendarDay.from(yearSelected, (monthSelected - 1), daySelected));
+
 
 
 
@@ -378,6 +390,18 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
             bi.rvEvents.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
+
+        }
+
+    }
+
+    @Override
+    public void updateUIGmailCalender(GmailCalender gmailCalender) {
+
+        if (gmailCalender.getData()){
+
+            // call getCalender data for getting calender events
+            showMonthYearPicker();
 
         }
 

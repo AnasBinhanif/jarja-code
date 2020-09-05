@@ -431,7 +431,8 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
     }
 
-    private void oPenGallery() {
+    private void openGallery() {
+
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(context, perms)) {
             // Already have permission, do the thing
@@ -507,7 +508,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         switch (view.getId()) {
 
             case R.id.imgProfilePic:
-                oPenGallery();
+                openGallery();
                 break;
             case R.id.btnAdd:
                 presenter.getTwilioNumber();
@@ -551,6 +552,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
                 Image image = ImagePicker.getFirstImageOrNull(data);
                 Bitmap myBitmap = BitmapFactory.decodeFile(image.getPath());
+            //    Glide.with(context).load(image.getPath()).into(bi.imgProfilePic);
                 bi.imgProfilePic.setImageBitmap(myBitmap);
                 imagePath = image.getPath();
                 isImagePicked = true;
@@ -562,7 +564,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
 
-        oPenGallery();
+        openGallery();
     }
 
     @Override
