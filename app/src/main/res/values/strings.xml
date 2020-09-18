@@ -230,6 +230,7 @@
     <!-- Forgot Password -->
     <string name="btn_submit">Forgot Password</string>
     <string name="notification_dialog">\"Jarja Media\" Would Like to Send You Notifications\nNotifications may include alerts, sounds and icon badges.These can be configured in Settings.</string>
+    <string name="discard_dialog_text">Would you like to discard your changes?</string>
 
     <!-- Navigation Drawer Dashboard Screen -->
 
@@ -377,10 +378,17 @@
 
 
     <!-- Permissions -->
-    <string name="dashboard_ViewDashboard">You dont have access to view Dashboard</string>
+    <string name="dashboard_ViewDashboard">You dont have access to View Dashboard</string>
+    <string name="dashboard_ViewUserProfile">You dont have access to View Profile</string>
+    <string name="dashboard_EditUserProfile">You dont have access to Edit Profile</string>
     <string name="dashboard_ViewEditAppoint">You dont have access to View/Edit Appointments</string>
+    <string name="lead_ViewAppoint">You dont have access to View Appointments</string>
+    <string name="lead_EditAppoint">You dont have access to Edit Appointments</string>
     <string name="dashboard_EditTask">You dont have access to Edit Tasks</string>
     <string name="dashboard_EditFollowUps">You dont have access to Edit Follow Ups</string>
-    <string name="lead_ViewLeads">You dont have access to view Leads</string>
+    <string name="lead_ViewLeads">You dont have access to View Leads</string>
+    <string name="lead_EditLeads">You dont have access to Edit Leads</string>
+    <string name="calender_ViewCalender">You dont have access to View Calender</string>
+    <string name="calender_EditCalender">You dont have access to Edit Calender</string>
 
 </resources>

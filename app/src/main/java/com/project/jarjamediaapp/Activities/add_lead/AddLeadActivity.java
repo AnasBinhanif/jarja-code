@@ -15,6 +15,8 @@ import androidx.databinding.DataBindingUtil;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
@@ -40,6 +42,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import retrofit2.Response;
 
@@ -121,7 +124,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
         if (getIntent().getExtras() != null) {
 
-
+            isUpdate = getIntent().getBooleanExtra("isEdit", false);
             leadModel = (GetLead.LeadList) getIntent().getExtras().getSerializable("Lead");
             bi.btnSave.setText("Update");
             leadID = leadModel.leadStringID;
@@ -300,6 +303,20 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                         tagsIdsString = tagsIdsString + "," + name.encryptedTagID;
                     }
                 }
+            }
+
+        }else {
+
+            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+            TextView textView = child.findViewById(R.id.txtDynamic);
+            textView.setText(GH.getInstance().getAgentName());
+            bi.lnAgent.addView(child);
+
+            selectedIdsList.add(GH.getInstance().getAgentID());
+            if (agentIdsString.equals("")) {
+                agentIdsString = GH.getInstance().getCalendarAgentId();
+            } else {
+                agentIdsString = agentIdsString + "," + GH.getInstance().getCalendarAgentId();
             }
 
         }
@@ -594,7 +611,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
         JSONObject phoneObject = new JSONObject();
         try {
-            phoneObject.put("phone", cellPhone);
+            phoneObject.put("phone", "");
             phoneObject.put("isNotify", true);
             phoneObject.put("phoneType", "phoneType");
 
@@ -724,7 +741,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
         JSONObject phoneObject = new JSONObject();
         try {
-            phoneObject.put("phone", cellPhone);
+            phoneObject.put("phone", "");
             phoneObject.put("isNotify", true);
             phoneObject.put("phoneType", "phoneType");
 
@@ -760,8 +777,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 obj.put("lastName", lastName);
                 obj.put("spousname", spousname);
                 obj.put("company", company);
-                obj.put("primaryPhone", cellPhone);
-             //   obj.put("primaryPhone", primaryPhone);
+                obj.put("cellPhone", cellPhone);
+                obj.put("primaryPhone", primaryPhone);
                 obj.put("primaryEmail", primaryEmail);
                 obj.put("dateOfBirth", dateOfBirth);
                 obj.put("isBirthDayNotify", isBirthDayNotify);
@@ -1045,8 +1062,22 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 showDripDialog();
                 break;
             case R.id.btnSave:
+
                 if (isUpdate) {
+
+                    Gson gson = new Gson();
+                    //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                    String storedHashMapLeadsString = GH.getInstance().getUserPermissonLead();
+                    java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                    HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
+
+                    if (mapLeads.get("Edit Leads")) {
+
                     callUpdateLead();
+
+                    } else {
+                        ToastUtils.showToast(context, getString(R.string.lead_EditLeads));
+                    }
                 } else {
                     callAddNewLead();
                 }
@@ -1075,4 +1106,9 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        GH.getInstance().discardChangesDailog(context);
+    }
 }

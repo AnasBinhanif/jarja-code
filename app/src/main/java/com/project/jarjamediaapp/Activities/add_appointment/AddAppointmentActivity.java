@@ -1,5 +1,6 @@
 package com.project.jarjamediaapp.Activities.add_appointment;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -30,9 +31,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.project.jarjamediaapp.Activities.HomeActivity;
 import com.project.jarjamediaapp.Activities.calendarDetail.CalendarAppointmentDetailModel;
 import com.project.jarjamediaapp.Activities.search_activity.SearchResultsActivity;
+import com.project.jarjamediaapp.Activities.user_profile.GetPermissionModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -59,6 +63,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -244,14 +249,35 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         // 5 from Add Appointment
         // 6 for Update Calendar Appointment
         // 7 for push notification redirection when tap on notification and notification screen both same fro opening notification
+
+
+
         fromId = getIntent().getStringExtra("from");
         assert fromId != null;
         switch (fromId) {
+            // from lead detail appontmnets
             case "1": {
+
+                /* add slected agent show in agent filed*/
+                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                TextView textView = child.findViewById(R.id.txtDynamic);
+                textView.setText(GH.getInstance().getAgentName());
+                bi.lnAgent.addView(child);
+
+                selectedIdsList.add(GH.getInstance().getAgentID());
+                if (agentIdsString.equals("")) {
+                    agentIdsString = GH.getInstance().getCalendarAgentId();
+                } else {
+                    agentIdsString = agentIdsString + "," + GH.getInstance().getCalendarAgentId();
+                }
+                /* add slected agent show in agent filed */
+
+
                 leadId = getIntent().getStringExtra("leadID");
                 leadName = getIntent().getStringExtra("leadName");
                 bi.tvName.setText(leadName + "");
                 bi.tvName.setEnabled(false);
+
             }
             break;
             case "2": {
@@ -293,7 +319,44 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     ToastUtils.showToast(context, "No Data Found");
                 }
             }
+
             break;
+            // auto assign agent to appointments from dashboard
+            case "5": {
+                // add slected agent show in agent filed
+                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                TextView textView = child.findViewById(R.id.txtDynamic);
+                textView.setText(GH.getInstance().getAgentName());
+                bi.lnAgent.addView(child);
+
+                selectedIdsList.add(GH.getInstance().getAgentID());
+                if (agentIdsString.equals("")) {
+                    agentIdsString = GH.getInstance().getCalendarAgentId();
+                } else {
+                    agentIdsString = agentIdsString + "," + GH.getInstance().getCalendarAgentId();
+                }
+
+            }
+            break;
+
+            // auto assign agent to appointments from calender
+            case "3": {
+                // add slected agent show in agent filed
+                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                TextView textView = child.findViewById(R.id.txtDynamic);
+                textView.setText(GH.getInstance().getAgentName());
+                bi.lnAgent.addView(child);
+
+                selectedIdsList.add(GH.getInstance().getAgentID());
+                if (agentIdsString.equals("")) {
+                    agentIdsString = GH.getInstance().getCalendarAgentId();
+                } else {
+                    agentIdsString = agentIdsString + "," + GH.getInstance().getCalendarAgentId();
+                }
+
+            }
+            break;
+
         }
     }
 
@@ -531,6 +594,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     public void onClick(View view) {
         super.onClick(view);
 
+        Gson gson = new Gson();
+
         switch (view.getId()) {
             case R.id.tvName:
                 //clearFocus();
@@ -599,7 +664,48 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 via();
                 break;
             case R.id.btnSave:
-                callAddAppointment(fromId);
+
+                // from lead detail
+                if (fromId.equals("2")){
+
+
+                    //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                    String storedHashMapLeadsString = GH.getInstance().getUserPermissonLead();
+                    java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                    HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
+
+                    if (mapLeads.get("Edit Appointments")) {
+
+                        callAddAppointment(fromId);
+
+                    } else {
+
+                        ToastUtils.showToast(context, getString(R.string.lead_EditAppoint));
+
+                    }
+                    // from calender
+                }else if(fromId.equals("6")){
+
+                    //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                    String storedHashMapCalenderString = GH.getInstance().getUserPermissonCalender();
+                    java.lang.reflect.Type typeCalender = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                    HashMap<String, Boolean> mapCalender = gson.fromJson(storedHashMapCalenderString, typeCalender);
+
+                    if (mapCalender.get("Edit Calendar")) {
+
+                        callAddAppointment(fromId);
+
+                    } else {
+
+                        ToastUtils.showToast(context, getString(R.string.calender_EditCalender));
+                    }
+
+                }else {
+
+                    callAddAppointment(fromId);
+                }
+
+
                 break;
             case R.id.btnCancel:
                 finish();
@@ -724,6 +830,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
         });
 
+
+
         getUpdatedData();
     }
 
@@ -798,6 +906,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                         }
                         Log.e("DataString", dataString);
                     }
+
 
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
@@ -1405,7 +1514,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+     //   super.onBackPressed();
+        GH.getInstance().discardChangesDailog(context);
+
         HomeActivity.onClick = true;
     }
 }

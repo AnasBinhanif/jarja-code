@@ -20,6 +20,7 @@ import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
 import com.project.jarjamediaapp.Activities.open_houses.GetTimeFrameModel;
 import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Activities.transactions.TransactionModel;
+import com.project.jarjamediaapp.Activities.user_profile.GetPermissionModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetAllLeads;
@@ -129,7 +130,7 @@ public interface ApiMethods {
 
 
     @GET("User/GetUserPermission")
-    Call<GetUserPermission> GetUserPermission(@Header("Authorization") String authorization);
+    Call<GetPermissionModel> GetUserPermission(@Header("Authorization") String authorization);
 
     @GET("Appointment/GetTodayAppointment")
     Call<GetAppointmentsModel> GetTodayAppointment(@Header("Authorization") String authorization,

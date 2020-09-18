@@ -34,6 +34,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.ion.builder.Builders;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Activities.add_appointment.Data;
@@ -45,6 +46,7 @@ import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
 import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
 import com.project.jarjamediaapp.Activities.open_houses.OpenHousesActivity;
+import com.project.jarjamediaapp.Activities.user_profile.GetPermissionModel;
 import com.project.jarjamediaapp.Activities.user_profile.UserProfileActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
@@ -65,6 +67,8 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -380,14 +384,19 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         int itemId = item.getItemId();
         item.setChecked(true);
         mCurrentFragmentId = itemId;
-        GetUserPermission userPermission;
+        GetPermissionModel userPermission;
+        Gson gson = new Gson();
 
         switch (itemId) {
 
             case R.id.nav_dashboard:
 
-                userPermission = GH.getInstance().getUserPermissions();
-                if (userPermission.data.dashboard.get(0).value) {
+                //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                String storedHashMapDashboardString = GH.getInstance().getUserPermissonDashboard();
+                java.lang.reflect.Type typeDashboard = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                HashMap<String, Boolean> mapDashboard = gson.fromJson(storedHashMapDashboardString, typeDashboard);
+
+                if (mapDashboard.get("View Dashboard")) {
                     title = getResources().getString(R.string.dashboard);
                     fragment = TabsFragment.newInstance(title,R.id.nav_dashboard);
 
@@ -401,8 +410,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case R.id.nav_lead:
 
-                userPermission = GH.getInstance().getUserPermissions();
-                if (userPermission.data.lead.get(0).value) {
+                //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                String storedHashMapLeadsString = GH.getInstance().getUserPermissonLead();
+                java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
+
+                if (mapLeads.get("View Leads")) {
                     title = getResources().getString(R.string.leads);
                     fragment = FindLeadsFragment.newInstance(title, R.id.nav_lead);
                     addToStack = true;
@@ -416,9 +429,22 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                 break;
             case R.id.nav_calendar:
+
+                //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                String storedHashMapCalenderString = GH.getInstance().getUserPermissonCalender();
+                java.lang.reflect.Type typeCalender = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                HashMap<String, Boolean> mapCalender = gson.fromJson(storedHashMapCalenderString, typeCalender);
+
+                if (mapCalender.get("View Calendar")) {
+
                 fragment = null;
                 title = getResources().getString(R.string.calendar);
                 switchActivity(CalendarActivity.class);
+
+                } else {
+
+                    ToastUtils.showToast(context, getString(R.string.calender_ViewCalender));
+                }
 
                 break;
             case R.id.nav_open_house:
@@ -427,9 +453,24 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 switchActivity(OpenHousesActivity.class);
                 break;
             case R.id.nav_profile:
-                fragment = null;
-                title = "Profile";
-                switchActivity(UserProfileActivity.class);
+
+                //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                String storedHashMapSettingString = GH.getInstance().getUserPermissonProfile();
+                java.lang.reflect.Type typeSetting = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                HashMap<String, Boolean> mapSetting = gson.fromJson(storedHashMapSettingString, typeSetting);
+
+                if (mapSetting.get("View Profile")) {
+
+                    fragment = null;
+                    title = "Profile";
+                    switchActivity(UserProfileActivity.class);
+
+                } else {
+
+                    ToastUtils.showToast(context, getString(R.string.dashboard_ViewUserProfile));
+                }
+
+
                 break;
             case R.id.nav_logout:
                 logout();
@@ -545,24 +586,64 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void getUserPermissions() {
 
-        Call<GetUserPermission> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
+        Call<GetPermissionModel> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 GetUserPermission(GH.getInstance().getAuthorization());
-        _call.enqueue(new Callback<GetUserPermission>() {
+        _call.enqueue(new Callback<GetPermissionModel>() {
             @Override
-            public void onResponse(Call<GetUserPermission> call, Response<GetUserPermission> response) {
+            public void onResponse(Call<GetPermissionModel> call, Response<GetPermissionModel> response) {
 
                 // comment the code for repeating progressbar when a ctivity on resume state
                 //    hideProgressBar();
                 if (response.isSuccessful()) {
 
-                    GetUserPermission getUserProfile = response.body();
-                    if (getUserProfile.status.equals("Success")) {
+                    Log.i("JsonPermission",""+response.body());
 
-                        Gson gson = new Gson();
-                        String jsonText = gson.toJson(getUserProfile);
+                    Gson gson = new Gson();
+                    GetPermissionModel getPermissionModel = response.body();
+                    if (getPermissionModel.status.equals("Success")) {
+
+                        Map<String, Boolean> userSettingMap = new HashMap<String, Boolean>();
+                        Map<String, Boolean> dashboardMap = new HashMap<String, Boolean>();
+                        Map<String, Boolean> leadMap = new HashMap<String, Boolean>();
+                        Map<String, Boolean> calenderMap = new HashMap<String, Boolean>();
+
+                        for (int i=0; i<getPermissionModel.getData().getUserSettings().size(); i++){
+
+                            userSettingMap.put(getPermissionModel.getData().getUserSettings().get(i).getKey(),getPermissionModel.getData().getUserSettings().get(i).getValue());
+                        }
+                        for (int i=0; i<getPermissionModel.getData().getDashboard().size(); i++){
+
+                            dashboardMap.put(getPermissionModel.getData().getDashboard().get(i).getKey(),getPermissionModel.getData().getDashboard().get(i).getValue());
+                        }
+
+                        for (int i=0; i<getPermissionModel.getData().getLead().size(); i++){
+
+                            leadMap.put(getPermissionModel.getData().getLead().get(i).getKey(),getPermissionModel.getData().getLead().get(i).getValue());
+                        }
+
+                        for (int i=0; i<getPermissionModel.getData().getCalendar().size(); i++){
+
+                            calenderMap.put(getPermissionModel.getData().getCalendar().get(i).getKey(),getPermissionModel.getData().getCalendar().get(i).getValue());
+                        }
+
+
+
+                        String userSettingString = gson.toJson(userSettingMap);
+                        String dashboardString = gson.toJson(dashboardMap);
+                        String leadString = gson.toJson(leadMap);
+                        String calenderString = gson.toJson(calenderMap);
+
+
+                        String jsonText = gson.toJson(getPermissionModel);
                         easyPreference.addString(GH.KEYS.USER_PERMISSIONS.name(), jsonText).save();
+                        easyPreference.addString(GH.KEYS.USER_PERMISSIONS_SETTINGS.name(),userSettingString).save();
+                        easyPreference.addString(GH.KEYS.USER_PERMISSIONS_DASHBOARD.name(),dashboardString).save();
+                        easyPreference.addString(GH.KEYS.USER_PERMISSIONS_LEAD.name(),leadString).save();
+                        easyPreference.addString(GH.KEYS.USER_PERMISSIONS_CALENDER.name(),calenderString).save();
 
-                        if (getUserProfile.data.dashboard.get(0).value) {
+
+
+                        if (getPermissionModel.getData().getDashboard().get(0).getValue()) {
 
                             // for just showing first time navigation first item not repeating
                             if (GH.getInstance().getDashboardNavigationStatus()){
@@ -581,7 +662,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                     } else {
 
-                        Toast.makeText(context, getUserProfile.message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, getPermissionModel.message, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     // comment the code for repeating progressbar when a ctivity on resume state
@@ -597,7 +678,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             }
 
             @Override
-            public void onFailure(Call<GetUserPermission> call, Throwable t) { hideProgressBar();
+            public void onFailure(Call<GetPermissionModel> call, Throwable t) { hideProgressBar();
                 ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
             }
         });

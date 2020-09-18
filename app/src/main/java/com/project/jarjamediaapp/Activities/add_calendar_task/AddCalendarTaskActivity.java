@@ -10,7 +10,11 @@ import android.widget.TimePicker;
 
 import androidx.databinding.DataBindingUtil;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
 import com.project.jarjamediaapp.Activities.calendarDetail.CalendarTaskDetailModel;
+import com.project.jarjamediaapp.Activities.user_profile.GetPermissionModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.R;
@@ -26,6 +30,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import retrofit2.Response;
@@ -125,6 +130,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     @Override
     public void onClick(View view) {
 
+        Gson gson = new Gson();
         super.onClick(view);
 
         switch (view.getId()) {
@@ -152,8 +158,30 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 removeFocus();
                 break;
             case R.id.btnSave:
-                callAddCalendarTask();
+
+                if (isEdit){
+
+                    //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                    String storedHashMapCalenderString = GH.getInstance().getUserPermissonCalender();
+                    java.lang.reflect.Type typeCalender = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                    HashMap<String, Boolean> mapCalender = gson.fromJson(storedHashMapCalenderString, typeCalender);
+
+                    if (mapCalender.get("Edit Calendar")) {
+
+                        callAddCalendarTask();
+
+                    } else {
+
+                        ToastUtils.showToast(context, getString(R.string.calender_EditCalender));
+                    }
+                }else {
+
+                    callAddCalendarTask();
+                }
+
+
                 break;
+
             case R.id.btnCancel:
                 finish();
                 break;

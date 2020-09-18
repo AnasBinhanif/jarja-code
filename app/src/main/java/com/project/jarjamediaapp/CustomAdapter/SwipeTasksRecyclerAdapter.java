@@ -15,7 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
+import com.project.jarjamediaapp.Activities.user_profile.GetPermissionModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetTasksModel;
 import com.project.jarjamediaapp.Models.GetUserPermission;
@@ -27,6 +30,7 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -42,7 +46,7 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
     boolean isEditByLead, isFutureTask;
     Activity activity;
     List<GetTasksModel.Data.TaskList> mData;
-    GetUserPermission userPermission;
+    GetPermissionModel userPermission;
 
     public SwipeTasksRecyclerAdapter(Context context, Activity activity, List<GetTasksModel.Data.TaskList> data, boolean isEditByLead, boolean isFutureTask) {
 
@@ -194,6 +198,7 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
         private SwipeRevealLayout swipeLayout;
         TextView tvName, tvAddress, tvEdit, tvDone, tvInitial, tvTaskType;
         FrameLayout frameLayout;
+        Gson gson = new Gson();
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -223,15 +228,40 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
             tvEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                    String storedHashMapLeadsString = GH.getInstance().getUserPermissonLead();
+                    java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                    HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
+
+                    if (mapLeads.get("View Tasks From Leads")) {
+
                     pos = getAdapterPosition();
                     editTask(pos, swipeLayout);
+
+                    } else {
+
+                        ToastUtils.showToast(context, context.getString(R.string.lead_ViewLeads));
+                    }
+
                 }
             });
             frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    pos = getAdapterPosition();
-                    editTask(pos, swipeLayout);
+                    //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                    String storedHashMapLeadsString = GH.getInstance().getUserPermissonLead();
+                    java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                    HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
+
+                    if (mapLeads.get("View Tasks From Leads")) {
+
+                        pos = getAdapterPosition();
+                        editTask(pos, swipeLayout);
+
+                    } else {
+
+                        ToastUtils.showToast(context, context.getString(R.string.lead_ViewLeads));
+                    }
                 }
             });
 
@@ -239,8 +269,13 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     private void editTask(int pos, SwipeRevealLayout swipeLayout) {
-        userPermission = GH.getInstance().getUserPermissions();
-        if (userPermission.data.dashboard.get(2).value) {
+       /* Gson gson = new Gson();
+        //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+        String storedHashMapDashboardString = GH.getInstance().getUserPermissonDashboard();
+        java.lang.reflect.Type typeDashboard = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+        HashMap<String, Boolean> mapDashboard = gson.fromJson(storedHashMapDashboardString, typeDashboard);
+
+        if (mapDashboard.get("Edit Task")) {*/
 
             String leadID = mData.get(pos).leadID;
             String taskID = mData.get(pos).taskID;
@@ -306,10 +341,10 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
 
                 }
             }
-        } else {
+      /*  } else {
 
             ToastUtils.showToast(context, context.getString(R.string.dashboard_EditTask));
-        }
+        }*/
     }
 
 }

@@ -14,7 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
+import com.project.jarjamediaapp.Activities.user_profile.GetPermissionModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Models.GetUserPermission;
@@ -26,6 +29,7 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -42,7 +46,7 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
     boolean isEditByLead, isPreviousAppoint;
     List<GetAppointmentsModel.Data.Datum> mData;
 
-    GetUserPermission userPermission;
+    GetPermissionModel userPermission;
 
 
     public SwipeAppointmentRecyclerAdapter(Context context, Activity activity, List<GetAppointmentsModel.Data.Datum> data, boolean isEditByLead, boolean isPreviousAppoint) {
@@ -127,8 +131,24 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
 
             }
 
+            if (!firstName.equals("") && !lastName.equals("")){
 
-            holder.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
+                holder.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
+            }else {
+
+                if (firstName == null){
+
+                    firstName = "";
+                }else if(lastName == null){
+
+                    lastName = "";
+                }
+
+
+                holder.tvInitial.setText(firstName + lastName);
+            }
+
+
 
             holder.swipeLayout.setSwipeListener(new SwipeRevealLayout.SwipeListener() {
                 @Override
@@ -156,14 +176,19 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
 
                     if (!isPreviousAppoint) {
+                        Gson gson = new Gson();
+                        //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                        String storedHashMapLeadsString = GH.getInstance().getUserPermissonLead();
+                        java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                        HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
 
-                        userPermission = GH.getInstance().getUserPermissions();
-                        if (userPermission.data.dashboard.get(6).value) {
+                        if (mapLeads.get("View Appointments")) {
                             pos = position;
                             String leadID = mData.get(pos).leadAppoinmentID;
                             GetAppointmentsModel.Data.Datum modelData = mData.get(pos);
                             String gmailCalenderId = mData.get(pos).gmailCalenderId;
                             if (isEditByLead) {
+
                                 context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                         .putExtra("leadID", leadID)
                                         .putExtra("from", "2")
@@ -179,7 +204,7 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
                             }
 
                         } else {
-                            ToastUtils.showToast(context, context.getString(R.string.dashboard_ViewEditAppoint));
+                            ToastUtils.showToast(context, context.getString(R.string.lead_ViewAppoint));
                         }
 
                     }
@@ -243,8 +268,13 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
 
             tvEdit.setOnClickListener(v -> {
 
-                userPermission = GH.getInstance().getUserPermissions();
-                if (userPermission.data.dashboard.get(6).value) {
+                Gson gson = new Gson();
+                //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                String storedHashMapDashboardString = GH.getInstance().getUserPermissonDashboard();
+                java.lang.reflect.Type typeDashboard = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                HashMap<String, Boolean> mapDashboard = gson.fromJson(storedHashMapDashboardString, typeDashboard);
+
+                if (mapDashboard.get("View Or Edit Appointments")) {
                     pos = getAdapterPosition();
                     String leadID = mData.get(pos).leadAppoinmentID;
                     GetAppointmentsModel.Data.Datum modelData = mData.get(pos);

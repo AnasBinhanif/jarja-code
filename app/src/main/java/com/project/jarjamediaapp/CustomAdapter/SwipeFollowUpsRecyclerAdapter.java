@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.project.jarjamediaapp.Activities.user_profile.GetPermissionModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
 import com.project.jarjamediaapp.Models.GetUserPermission;
@@ -28,6 +31,7 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -45,7 +49,7 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
     String status = "";
     List<GetFollowUpsModel.Data.FollowUpsList> mData;
 
-    GetUserPermission userPermission;
+    GetPermissionModel userPermission;
 
     public SwipeFollowUpsRecyclerAdapter(Context context, Activity activity, List<GetFollowUpsModel.Data.FollowUpsList> data) {
 
@@ -305,8 +309,14 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
         public void bind() {
 
             tvDone.setOnClickListener(v -> {
-                userPermission = GH.getInstance().getUserPermissions();
-                if (userPermission.data.dashboard.get(3).value) {
+
+                Gson gson = new Gson();
+                //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                String storedHashMapDashboardString = GH.getInstance().getUserPermissonDashboard();
+                java.lang.reflect.Type typeDashboard = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                HashMap<String, Boolean> mapDashboard = gson.fromJson(storedHashMapDashboardString, typeDashboard);
+
+                if (mapDashboard.get("Edit FollowUps")) {
                     pos = getAdapterPosition();
                     markAsRead(mData.get(pos).reminderId);
                 } else {

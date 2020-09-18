@@ -29,6 +29,8 @@ import com.bumptech.glide.Glide;
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetCountries;
@@ -44,7 +46,9 @@ import com.project.jarjamediaapp.databinding.ActivityUserProfileBinding;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import id.zelory.compressor.Compressor;
 import okhttp3.MediaType;
@@ -533,11 +537,28 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
                 break;*/
             case R.id.btnUpdate:
 
-                if (isImagePicked) {
-                    new ImageCompression(UserProfileActivity.this).execute(imagePath);
+                Gson gson = new Gson();
+             //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                String storedHashMapString = GH.getInstance().getUserPermissonProfile();
+                java.lang.reflect.Type type = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                HashMap<String, Boolean> map = gson.fromJson(storedHashMapString, type);
+
+                if (map.get("Edit Profile")) {
+
+                    if (isImagePicked) {
+                        new ImageCompression(UserProfileActivity.this).execute(imagePath);
+                    } else {
+
+                        updateProfile();
+                    }
+
                 } else {
-                    updateProfile();
+
+                    ToastUtils.showToast(context, getString(R.string.dashboard_EditUserProfile));
                 }
+
+
+
 
                 break;
         }
@@ -660,8 +681,10 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
     @Override
     public void onBackPressed() {
-        finish();
-        super.onBackPressed();
+        /*finish();
+        super.onBackPressed();*/
+
+        GH.getInstance().discardChangesDailog(context);
 
     }
 

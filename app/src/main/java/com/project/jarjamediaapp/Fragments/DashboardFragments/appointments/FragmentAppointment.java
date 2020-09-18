@@ -16,9 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.paris.Paris;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.project.jarjamediaapp.Activities.HomeActivity;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
+import com.project.jarjamediaapp.Activities.user_profile.GetPermissionModel;
 import com.project.jarjamediaapp.Base.BaseFragment;
 import com.project.jarjamediaapp.CustomAdapter.SwipeAppointmentRecyclerAdapter;
 import com.project.jarjamediaapp.Fragments.FragmentLifeCycle;
@@ -52,7 +55,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     String leadID = "";
     List<GetAppointmentsModel.Data.Datum> appointmentList;
     List<GetAppointmentsModel.Data> leadAppointmentList;
-    GetUserPermission userPermission;
+    GetPermissionModel userPermission;
     String buttonType = "T";
     int page = 1;
     int totalPages;
@@ -260,10 +263,17 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                 if (isFromActivity) {
                     presenter.getLeadTodayAppointments(leadID, page);
                 } else {
-                    if (userPermission.data.dashboard.get(6).value) {
+                    Gson gson = new Gson();
+                    //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                    String storedHashMapDashboardString = GH.getInstance().getUserPermissonDashboard();
+                    java.lang.reflect.Type typeDashboard = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                    HashMap<String, Boolean> mapDashboard = gson.fromJson(storedHashMapDashboardString, typeDashboard);
+
+                    if (mapDashboard.get("View Or Edit Appointments")) {
 
                         onResume = false;
                         presenter.getTodayAppointments(page);
+
                     } else {
                         ToastUtils.showToast(context, getString(R.string.dashboard_ViewEditAppoint));
                     }
@@ -284,7 +294,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     presenter.getLeadUpcomingAppointments(leadID, page);
                 } else {
 
-                    if (userPermission.data.dashboard.get(6).value) {
+                    if (userPermission.getData().getDashboard().get(6).getValue()) {
                         presenter.getUpcomingAppointments(page);
                     } else {
 
@@ -311,7 +321,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
                 } else {
 
-                    if (userPermission.data.dashboard.get(6).value) {
+                    if (userPermission.getData().getDashboard().get(6).getValue()) {
                         presenter.getPreviousAppointments(page);
                     } else {
                         ToastUtils.showToast(context, getString(R.string.dashboard_ViewEditAppoint));
@@ -366,7 +376,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         } else {
             switch (buttonType) {
                 case "T": {
-                    if (userPermission.data.dashboard.get(6).value) {
+                    if (userPermission.getData().getDashboard().get(6).getValue()) {
 
                         presenter.getTodayAppointments(page);
                     } else {

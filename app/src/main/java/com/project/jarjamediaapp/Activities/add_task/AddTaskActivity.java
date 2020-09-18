@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentModel;
 import com.project.jarjamediaapp.Activities.search_activity.SearchResultsActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
@@ -209,6 +211,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 }
             }
             break;
+            // from dashboard task
             case "3": {
                 bi.tvName.setEnabled(false);
                 isEdit = true;
@@ -236,6 +239,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 isEdit = true;
             }
             break;
+
             case "5": {
                 bi.tvName.setEnabled(false);
                 isEdit = true;
@@ -1084,7 +1088,33 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 if (taskId.equals("")) {
                     callAddTask();
                 } else {
-                    callUpdateTask();
+
+                    // from lead detail
+                    if (from.equals("5")) {
+
+                        Gson gson = new Gson();
+                        //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                        String storedHashMapLeadsString = GH.getInstance().getUserPermissonLead();
+                        java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                        HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
+
+                        if (mapLeads.get("Edit Tasks From Leads")) {
+
+
+                            callUpdateTask();
+
+
+                        } else {
+
+                            ToastUtils.showToast(context, context.getString(R.string.dashboard_EditTask));
+
+                        }
+
+                    }else {
+
+                        callUpdateTask();
+                    }
+
                 }
                 break;
             case R.id.btnCancel:
@@ -1479,4 +1509,9 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+        GH.getInstance().discardChangesDailog(context);
+    }
 }

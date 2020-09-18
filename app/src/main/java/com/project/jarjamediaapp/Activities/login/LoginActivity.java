@@ -210,6 +210,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
     }
 
+
     @Override
     public void showProgressBar() {
 

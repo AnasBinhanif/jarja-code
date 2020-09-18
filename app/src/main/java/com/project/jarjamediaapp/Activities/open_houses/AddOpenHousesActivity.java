@@ -963,4 +963,11 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         bi.atvState.clearFocus();
 
     }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+
+        GH.getInstance().discardChangesDailog(context);
+    }
 }
