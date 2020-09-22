@@ -92,6 +92,23 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
             TextView textView = child.findViewById(R.id.txtDynamic);
             textView.setText(GH.getInstance().getUserName() != null ? GH.getInstance().getUserName() : "");
             bi.lnAgents.addView(child);
+
+
+        }else {
+
+            /* add slected agent show in agent filed*/
+            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+            TextView textView = child.findViewById(R.id.txtDynamic);
+            textView.setText(GH.getInstance().getAgentName());
+            bi.lnAgents.addView(child);
+
+            selectedIdsList.add(GH.getInstance().getAgentID());
+            if (agentIdsString.equals("")) {
+                agentIdsString = GH.getInstance().getCalendarAgentId();
+            } else {
+                agentIdsString = agentIdsString + "," + GH.getInstance().getCalendarAgentId();
+            }
+            /* add slected agent show in agent filed */
         }
 
     }
