@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.project.jarjamediaapp.Models.GetLeadNotes;
 import com.project.jarjamediaapp.Models.GetNoteDropDown;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
+import com.project.jarjamediaapp.Utilities.Methods;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddNotesBinding;
 
@@ -94,7 +96,7 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
             bi.lnAgents.addView(child);
 
 
-        }else {
+        } else {
 
             /* add slected agent show in agent filed*/
             View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
@@ -251,7 +253,7 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
         } else {*/
-            ToastUtils.showToastLong(context, error);
+        ToastUtils.showToastLong(context, error);
 
     }
 
@@ -294,6 +296,36 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
                 }
                 break;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isChangesDone()) {
+            GH.getInstance().discardChangesDialog(context);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private boolean isChangesDone() {
+        if (!Methods.isEmpty(bi.edtDescription))
+            return true;
+        if (!bi.spnNoteType.getText().toString().equals("General"))
+            return true;
+        if (bi.cbNoteSticky.isChecked())
+            return true;
+        return false;
     }
 
 }

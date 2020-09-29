@@ -1,17 +1,15 @@
 package com.project.jarjamediaapp.Utilities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Patterns;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.project.jarjamediaapp.R;
 
 import java.text.ParseException;
@@ -29,6 +27,10 @@ public class Methods {
     }
 
     public static boolean isEmpty(EditText editText) {
+        return editText.getText().toString().trim().length() == 0;
+    }
+
+    public static boolean isEmpty(MaterialSpinner editText) {
         return editText.getText().toString().trim().length() == 0;
     }
 
@@ -124,9 +126,6 @@ public class Methods {
             e.printStackTrace();
         }
     }
-
-
-
 
 
 }

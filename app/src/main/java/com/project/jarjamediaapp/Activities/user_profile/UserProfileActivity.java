@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.inputmethodservice.Keyboard;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -48,7 +46,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import id.zelory.compressor.Compressor;
 import okhttp3.MediaType;
@@ -684,7 +681,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         /*finish();
         super.onBackPressed();*/
 
-        GH.getInstance().discardChangesDailog(context);
+        GH.getInstance().discardChangesDialog(context);
 
     }
 

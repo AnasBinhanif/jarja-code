@@ -100,7 +100,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
         // stop redirection to dashboard screen when click back button
         EasyPreference.Builder pref = new EasyPreference.Builder(context);
-        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"leadsFragment").save();
+        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(), "leadsFragment").save();
 
     }
 
@@ -305,7 +305,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 }
             }
 
-        }else {
+        } else {
 
             View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
             TextView textView = child.findViewById(R.id.txtDynamic);
@@ -1011,7 +1011,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
         } else {*/
-            ToastUtils.showToastLong(context, error);
+        ToastUtils.showToastLong(context, error);
     }
 
     @Override
@@ -1068,12 +1068,13 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                     Gson gson = new Gson();
                     //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                     String storedHashMapLeadsString = GH.getInstance().getUserPermissonLead();
-                    java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                    java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>() {
+                    }.getType();
                     HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
 
                     if (mapLeads.get("Edit Leads")) {
 
-                    callUpdateLead();
+                        callUpdateLead();
 
                     } else {
                         ToastUtils.showToast(context, getString(R.string.lead_EditLeads));
@@ -1108,7 +1109,64 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
-        GH.getInstance().discardChangesDailog(context);
+        if (isChangesDone()) {
+            GH.getInstance().discardChangesDialog(context);
+        } else {
+            super.onBackPressed();
+        }
     }
+
+    private boolean isChangesDone() {
+
+        if (!Methods.isEmpty(bi.edtFName))
+            return true;
+        if (!Methods.isEmpty(bi.edtLName))
+            return true;
+        if (!Methods.isEmpty(bi.edtSName))
+            return true;
+        if (!Methods.isEmpty(bi.edtCompany))
+            return true;
+        if (!Methods.isEmpty(bi.edtPhone))
+            return true;
+        if (!Methods.isEmpty(bi.edtEmail))
+            return true;
+        if (!Methods.isEmpty(bi.edtBday))
+            return true;
+        if (!Methods.isEmpty(bi.edtSpouseBday))
+            return true;
+        if (!Methods.isEmpty(bi.edtAnniversary))
+            return true;
+        if (!Methods.isEmpty(bi.edtAddress1))
+            return true;
+        if (!Methods.isEmpty(bi.edtPostalCode1))
+            return true;
+        if (!Methods.isEmpty(bi.edtState1))
+            return true;
+        if (!Methods.isEmpty(bi.edtCity1))
+            return true;
+        if (!Methods.isEmpty(bi.edtAddress2))
+            return true;
+        if (!Methods.isEmpty(bi.edtCity2))
+            return true;
+        if (!Methods.isEmpty(bi.edtState2))
+            return true;
+        if (!Methods.isEmpty(bi.edtPostalCode2))
+            return true;
+        if (!Methods.isEmpty(bi.edtCountry))
+            return true;
+        if (!bi.spnSource.getText().toString().equals("") && !bi.spnSource.getText().toString().equals("Source"))
+            return true;
+        if (!bi.spnType.getText().toString().equals("") && !bi.spnType.getText().toString().equals("Type"))
+            return true;
+        if (!bi.spnTimeFrame.getText().toString().equals("") && !bi.spnTimeFrame.getText().toString().equals("Time Frame"))
+            return true;
+        if (!bi.spnPreApprove.getText().toString().equals("") && !bi.spnPreApprove.getText().toString().equals("Pre-Approved"))
+            return true;
+        if (!Methods.isEmpty(bi.edtNotes))
+            return true;
+        if (!tagsIdsString.equals(""))
+            return true;
+        return false;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Utilities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -13,12 +14,9 @@ import android.webkit.MimeTypeMap;
 
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
-import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Activities.user_profile.GetPermissionModel;
-import com.project.jarjamediaapp.Models.GetUserPermission;
 import com.project.jarjamediaapp.ProjectApplication;
 import com.project.jarjamediaapp.R;
-import com.project.jarjamediaapp.databinding.ActivityChangePasswordBinding;
 
 import java.io.File;
 import java.text.ParseException;
@@ -77,14 +75,17 @@ public class GH {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_PERMISSIONS_SETTINGS.name(), null);
 
     }
+
     public String getUserPermissonDashboard() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_PERMISSIONS_DASHBOARD.name(), null);
 
     }
+
     public String getUserPermissonLead() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_PERMISSIONS_LEAD.name(), null);
 
     }
+
     public String getUserPermissonCalender() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.USER_PERMISSIONS_CALENDER.name(), null);
 
@@ -94,6 +95,7 @@ public class GH {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.NOTIFICATIONTYPE.name(), "false");
 
     }
+
     public int getCalenderListPos() {
         return EasyPreference.with(ProjectApplication.getInstance()).getInt(KEYS.CALENDERUPDATELIST.name(), 0);
 
@@ -103,15 +105,18 @@ public class GH {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.FRAGMENTSTATUS.name(), null);
 
     }
+
     public String getNotificationID() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.NOTIFICATIONID.name(), null);
 
     }
+
     public String getNotificationAllowStatus() {
         return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.ISNOTIFICATIONALLOW.name(), "false");
 
     }
-    public void addNotificationType(String notificationType){
+
+    public void addNotificationType(String notificationType) {
 
         EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.NOTIFICATIONTYPE.name(), notificationType);
     }
@@ -209,7 +214,7 @@ public class GH {
         try {
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
-             //  Looper.myLooper().quit();
+                //  Looper.myLooper().quit();
             }
         } catch (final Exception e) {
             // Handle or log or ignore
@@ -340,45 +345,21 @@ public class GH {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
     }
-    public void discardChangesDailog(Context context) {
+
+    public void discardChangesDialog(Context context) {
 
         AlertDialog alertDialog1;
-        alertDialog1 = new AlertDialog.Builder(
-                context).create();
-
-        // Setting Dialog Title
+        alertDialog1 = new AlertDialog.Builder(context).create();
         alertDialog1.setTitle("You have made some changes.");
-
-        // Setting Dialog Message
         alertDialog1.setMessage(context.getResources().getString(R.string.discard_dialog_text));
         alertDialog1.setCanceledOnTouchOutside(false);
-
-        // Setting Icon to Dialog
-        // alertDialog1.setIcon(R.drawable.tick);
-
-        // Setting OK Button
-        alertDialog1.setButton("Discard", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int which) {
-
-                alertDialog1.dismiss();
-                ((Activity)context).finish();
-
-            }
+        alertDialog1.setButton(Dialog.BUTTON_POSITIVE, "Discard", (dialog, which) -> {
+            alertDialog1.dismiss();
+            ((Activity) context).finish();
         });
-
-        alertDialog1.setButton2("No", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int which) {
-
-                alertDialog1.dismiss();
-
-            }
-        });
-
-        // Showing Alert Message
+        alertDialog1.setButton(Dialog.BUTTON_NEGATIVE, "No", (DialogInterface.OnClickListener) (dialog, which) -> alertDialog1.dismiss());
         alertDialog1.show();
-    }
 
+    }
 
 }

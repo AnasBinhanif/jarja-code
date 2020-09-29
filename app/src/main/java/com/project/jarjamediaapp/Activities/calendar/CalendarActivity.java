@@ -70,13 +70,8 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         presenter = new CalendarPresenter(this);
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.calendar), true);
-
-
         EasyPreference.Builder pref = new EasyPreference.Builder(context);
         pref.addInt(GH.KEYS.CALENDERUPDATELIST.name(),-1).save();
-
-
-
 
     }
 
@@ -101,9 +96,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
         String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
         Log.i("calenderAgentId",GH.getInstance().getCalendarAgentId()+"month"+month+"year"+year);
-
         presenter.getCalendarEvents(GH.getInstance().getCalendarAgentId(), month, year);
-
 
     }
 
@@ -124,11 +117,6 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         monthSelected = (calendar.get(Calendar.MONTH) + 1);
         daySelected = calendar.get(Calendar.DAY_OF_MONTH);
         bi.calendarView.setSelectedDate(CalendarDay.from(yearSelected, (monthSelected - 1), daySelected));
-
-
-
-
-
         bi.calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
@@ -137,18 +125,12 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                 yearSelected = date.getYear();
                 String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
                 String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
-
                 currentDateList.clear();
-
-
                 if (dataArrayList != null){
-
                     dataArrayList.clear();
                 }
-
                 swipeCalendarAppointmentRecyclerAdapter.notifyDataSetChanged();
                 presenter.getCalendarEvents(GH.getInstance().getCalendarAgentId(), month, year);
-
 
             }
         });
@@ -156,10 +138,8 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
-
                 daySelectionWhenMonthChange = date.getDay();
                 filterDateData(date.getDay(), date.getMonth(), date.getYear());
-
 
             }
         });
@@ -173,7 +153,6 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         if(pos != -1){
 
              dataList.remove(pos);
-
             EasyPreference.Builder pref = new EasyPreference.Builder(context);
             pref.addInt(GH.KEYS.CALENDERUPDATELIST.name(),-1).save();
         }

@@ -1,6 +1,5 @@
 package com.project.jarjamediaapp.Activities.add_appointment;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -36,7 +35,6 @@ import com.google.gson.reflect.TypeToken;
 import com.project.jarjamediaapp.Activities.HomeActivity;
 import com.project.jarjamediaapp.Activities.calendarDetail.CalendarAppointmentDetailModel;
 import com.project.jarjamediaapp.Activities.search_activity.SearchResultsActivity;
-import com.project.jarjamediaapp.Activities.user_profile.GetPermissionModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
@@ -122,10 +120,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     public void initViews() {
 
 
-
         presenter.getAgentNames();
 
-        Log.i("MyToke",GH.getInstance().getFirebaseToken());
+        Log.i("MyToke", GH.getInstance().getFirebaseToken());
 
         setSupportActionBar(bi.epToolbar.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -249,7 +246,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         // 5 from Add Appointment
         // 6 for Update Calendar Appointment
         // 7 for push notification redirection when tap on notification and notification screen both same fro opening notification
-
 
 
         fromId = getIntent().getStringExtra("from");
@@ -377,7 +373,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.tvName.setText((modelData.getLeadName() != null ? modelData.getLeadName() : ""));
         if (fromId.equalsIgnoreCase("2") || fromId.equalsIgnoreCase("4") ||
                 fromId.equalsIgnoreCase("6")) {
-          //  bi.tvName.setEnabled(false);
+            //  bi.tvName.setEnabled(false);
             bi.tvName.setEnabled(true);
         } else {
             bi.tvName.setEnabled(true);
@@ -437,8 +433,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         }
     }
 
-    private void prePopulateData(GetAppointmentsModel.Data.Datum modelData)
-    {
+    private void prePopulateData(GetAppointmentsModel.Data.Datum modelData) {
 
 
         leadId = modelData.getLeadID();
@@ -446,7 +441,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.tvName.setText((modelData.getVtCRMLeadCustom().getFirstName() != null ? modelData.getVtCRMLeadCustom().getFirstName() : "") + " " + (modelData.getVtCRMLeadCustom().getLastName() != null ? modelData.getVtCRMLeadCustom().getLastName() : ""));
         if (fromId.equalsIgnoreCase("2") || fromId.equalsIgnoreCase("4") ||
                 fromId.equalsIgnoreCase("6")) {
-         //   bi.tvName.setEnabled(false);
+            //   bi.tvName.setEnabled(false);
             bi.tvName.setEnabled(true);
         } else {
             bi.tvName.setEnabled(true);
@@ -666,12 +661,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             case R.id.btnSave:
 
                 // from lead detail
-                if (fromId.equals("2")){
+                if (fromId.equals("2")) {
 
 
                     //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                     String storedHashMapLeadsString = GH.getInstance().getUserPermissonLead();
-                    java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                    java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>() {
+                    }.getType();
                     HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
 
                     if (mapLeads.get("Edit Appointments")) {
@@ -684,11 +680,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
                     }
                     // from calender
-                }else if(fromId.equals("6")){
+                } else if (fromId.equals("6")) {
 
                     //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                     String storedHashMapCalenderString = GH.getInstance().getUserPermissonCalender();
-                    java.lang.reflect.Type typeCalender = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                    java.lang.reflect.Type typeCalender = new TypeToken<HashMap<String, Boolean>>() {
+                    }.getType();
                     HashMap<String, Boolean> mapCalender = gson.fromJson(storedHashMapCalenderString, typeCalender);
 
                     if (mapCalender.get("Edit Calendar")) {
@@ -700,7 +697,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                         ToastUtils.showToast(context, getString(R.string.calender_EditCalender));
                     }
 
-                }else {
+                } else {
 
                     callAddAppointment(fromId);
                 }
@@ -710,7 +707,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             case R.id.btnCancel:
                 finish();
                 // this line of code added here for homeactiviy components click after finish activty
-                HomeActivity.onClick=true;
+                HomeActivity.onClick = true;
                 break;
             case R.id.cbAllDay:
                 allDay();
@@ -773,7 +770,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             }
             finish();
             // this line of code added here for homeactiviy components click after finish activty
-            HomeActivity.onClick=true;
+            HomeActivity.onClick = true;
         }
     }
 
@@ -829,7 +826,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 }
             }
         });
-
 
 
         getUpdatedData();
@@ -1050,8 +1046,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     obj.put("viaReminder", via);
                     obj.put("isSend", isSend);
                     obj.put("calendarType", "Event");
-                    obj.put("gmailCalenderId","");
-                   // Log.i("gmailCalenderId","0");
+                    obj.put("gmailCalenderId", "");
+                    // Log.i("gmailCalenderId","0");
                     obj.put("agentIDsString", agentIdsString);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -1080,14 +1076,14 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     obj.put("viaReminder", via);
                     obj.put("isSend", isSend);
                     obj.put("calendarType", "Event");
-                    obj.put("gmailCalenderId",calendarData.gmailCalenderId);
+                    obj.put("gmailCalenderId", calendarData.gmailCalenderId);
                     obj.put("agentIDsString", agentIdsString);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 // both for notification popup and screen appointment update
-            } else if(fromId.equals("7")){
+            } else if (fromId.equals("7")) {
                 try {
                     obj.put("location", location);
                     obj.put("isCompleted", isCompleted);
@@ -1114,7 +1110,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     e.printStackTrace();
                 }
                 // update appointmnet from dashboard
-            }else if(fromId.equals("4") || fromId.equals("2")){
+            } else if (fromId.equals("4") || fromId.equals("2")) {
                 try {
                     obj.put("location", location);
                     obj.put("isCompleted", isCompleted);
@@ -1142,7 +1138,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     e.printStackTrace();
                 }
 
-            }else {
+            } else {
 
                 // add appointment from dashboard
                 try {
@@ -1392,19 +1388,17 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     @Override
     public void updateUIonFalse(String message) {
 
-
         ToastUtils.showToastLong(context, message);
     }
 
     @Override
     public void updateUIonError(String error) {
 
-
         /*if (error.contains("Authorization has been denied for this request")) {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
         } else {*/
-            ToastUtils.showToastLong(context, error);
+        ToastUtils.showToastLong(context, error);
 
     }
 
@@ -1514,9 +1508,39 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     @Override
     public void onBackPressed() {
-     //   super.onBackPressed();
-        GH.getInstance().discardChangesDailog(context);
-
+        //   super.onBackPressed();
+        if (isChangesDone()) {
+            GH.getInstance().discardChangesDialog(context);
+        }else {
+            super.onBackPressed();
+        }
         HomeActivity.onClick = true;
+
     }
+
+    private boolean isChangesDone() {
+
+        if (!Methods.isEmpty(bi.tvName))
+            return true;
+        if (!Methods.isEmpty(bi.atvEventTitle))
+            return true;
+        if (!Methods.isEmpty(bi.atvDescription))
+            return true;
+        if (!Methods.isEmpty(bi.atvLocation))
+            return true;
+        if (!Methods.isEmpty(bi.tvStartDate))
+            return true;
+        if (!Methods.isEmpty(bi.tvEndDate))
+            return true;
+        if (!Methods.isEmpty(bi.tvStartTime))
+            return true;
+        if (!Methods.isEmpty(bi.tvEndTime))
+            return true;
+        if (!Methods.isEmpty(bi.atvReminder))
+            return true;
+        if (!Methods.isEmpty(bi.atvVia))
+            return true;
+        return false;
+    }
+
 }

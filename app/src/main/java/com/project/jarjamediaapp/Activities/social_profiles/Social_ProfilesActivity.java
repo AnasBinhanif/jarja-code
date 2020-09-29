@@ -227,8 +227,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
     public static boolean isPackageInstalled(String packageName, PackageManager packageManager) {
         try {
             return packageManager.getApplicationInfo(packageName, 0).enabled;
-        }
-        catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
     }
@@ -236,41 +235,28 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
     public void openWebPage(String url, String siteName) {
         Uri webpage = null;
         if (url.contains("/")) {
-            String urlSplit[]  = url.split("/");
+            String urlSplit[] = url.split("/");
             String userName = urlSplit[urlSplit.length - 1];
 
             switch (siteName) {
-
                 case "Facebook":
-
                     boolean isFbInstalled = isPackageInstalled("com.facebook.katana", context.getPackageManager());
-
-                    if(isFbInstalled){
-
-                        webpage = Uri.parse("fb://profile?app_scoped_user_id=" + userName);
+                    if (isFbInstalled) {
+                        webpage = Uri.parse("fb://facewebmodal/f?href=" + url);
                         openWebPageUrl(webpage);
-                    }else {
-
+                    } else {
                         openDialogueForWebUri(url);
-
                     }
-
                     // checking app is install or not in your phone
-
-
                     break;
                 case "Twitter":
                     boolean isTwitterInstalled = isPackageInstalled("com.twitter.android", context.getPackageManager());
-
-                    if(isTwitterInstalled){
-
+                    if (isTwitterInstalled) {
                         webpage = Uri.parse("twitter://user?screen_name=" + userName);
-
-                       openWebPageUrl(webpage);
-                    }else {
-
+                        openWebPageUrl(webpage);
+                    } else {
                         openDialogueForWebUri(url);
-                       // webpage = Uri.parse(url);//Uri.parse("twitter://user?screen_name=" + userName);
+                        // webpage = Uri.parse(url);//Uri.parse("twitter://user?screen_name=" + userName);
                     }
 
                     break;
@@ -278,11 +264,11 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
                     boolean isLindedInInstalled = isPackageInstalled("com.linkedin.android", context.getPackageManager());
 
-                    if(isLindedInInstalled){
+                    if (isLindedInInstalled) {
 
                         webpage = Uri.parse("linkedin://profile?id=" + userName);
                         openWebPageUrl(webpage);
-                    }else {
+                    } else {
 
                         openDialogueForWebUri(url);
 
@@ -290,7 +276,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
                     break;
                 case "Gravatar":
-                   // webpage = Uri.parse(url);
+                    // webpage = Uri.parse(url);
                     openDialogueForWebUri(url);
 
                     break;
@@ -298,11 +284,11 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
                     boolean isGooglePlusInstalled = isPackageInstalled("com.googleplus.android", context.getPackageManager());
 
-                    if(isGooglePlusInstalled){
+                    if (isGooglePlusInstalled) {
 
                         webpage = Uri.parse("gplus://plus.google.com/" + userName);
                         openWebPageUrl(webpage);
-                    }else {
+                    } else {
 
                         openDialogueForWebUri(url);
 
@@ -317,11 +303,11 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
                 case "Vimeo":
                     boolean isVimeoInstalled = isPackageInstalled("com.vimeo.android.videoapp", context.getPackageManager());
 
-                    if(isVimeoInstalled){
+                    if (isVimeoInstalled) {
 
                         webpage = Uri.parse("vimeo://profile?id=" + userName);
                         openWebPageUrl(webpage);
-                    }else {
+                    } else {
 
                         openDialogueForWebUri(url);
 
@@ -331,11 +317,11 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
                     boolean isInstagramInstalled = isPackageInstalled("com.instagram.android", context.getPackageManager());
 
-                    if(isInstagramInstalled){
+                    if (isInstagramInstalled) {
 
-                    //    webpage = Uri.parse("http://instagram.com/_u/USER");//Uri.parse("instagram://user?username=" + userName);
+                        //    webpage = Uri.parse("http://instagram.com/_u/USER");//Uri.parse("instagram://user?username=" + userName);
                         openWebPageUrl(Uri.parse(url));
-                    }else {
+                    } else {
 
                         openDialogueForWebUri(url);
 
@@ -347,11 +333,11 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
                     boolean isSnapchatInstalled = isPackageInstalled("com.snapchat.android", context.getPackageManager());
 
-                    if(isSnapchatInstalled){
+                    if (isSnapchatInstalled) {
 
                         webpage = Uri.parse("snapchat://add/" + userName);
                         openWebPageUrl(webpage);
-                    }else {
+                    } else {
 
                         openDialogueForWebUri(url);
 
@@ -362,13 +348,13 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
 
                     boolean isYoutubeInstalled = isPackageInstalled("com.google.android.youtube", context.getPackageManager());
 
-                    if(isYoutubeInstalled){
+                    if (isYoutubeInstalled) {
 
 
                         // removing profile url becasue youtube need profile id or chanel id
-                        webpage =  Uri.parse("vnd.youtube://");//Uri.parse("youtube://www.youtube.com/user/" + userName);
+                        webpage = Uri.parse("vnd.youtube://");//Uri.parse("youtube://www.youtube.com/user/" + userName);
                         openWebPageUrl(webpage);
-                    }else {
+                    } else {
 
                         openDialogueForWebUri(url);
 
@@ -382,7 +368,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
                     break;
             }
 
-        }else{
+        } else {
             webpage = Uri.parse(url);
         }
 
@@ -404,7 +390,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
         MaterialSpinner spnSIte = dialog.findViewById(R.id.spnSite);
         spnSIte.setBackground(getDrawable(R.drawable.bg_search));
 
-        if(getSocialProfileDropdownNames != null){
+        if (getSocialProfileDropdownNames != null) {
 
             spnSIte.setItems(getSocialProfileDropdownNames);
         }
@@ -537,24 +523,24 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
         GH.getInstance().HideProgressDialog();
     }
 
-    public  void openWebPageUrl(Uri webPageUri){
+    public void openWebPageUrl(Uri webPageUri) {
 
-        try{
+        try {
 
             Intent intent = new Intent(Intent.ACTION_VIEW, webPageUri);
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
-            ToastUtils.showToastLong(context,"Eception"+e.getMessage());
+            ToastUtils.showToastLong(context, "Eception" + e.getMessage());
 
         }
 
     }
 
-    public void openDialogueForWebUri(String uri){
+    public void openDialogueForWebUri(String uri) {
 
         AlertDialog alertDialog1;
         alertDialog1 = new AlertDialog.Builder(
@@ -576,10 +562,10 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
                 // Write your code here to execute after dialog
                 // closed
 
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
 
             }
         });

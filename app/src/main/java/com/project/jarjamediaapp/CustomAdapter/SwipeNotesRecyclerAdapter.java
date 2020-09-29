@@ -336,4 +336,6 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
         });
     }
 
+
+
 }

@@ -4,6 +4,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -12,9 +13,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.project.jarjamediaapp.Activities.calendar.CalendarActivity;
 import com.project.jarjamediaapp.Activities.calendarDetail.CalendarTaskDetailModel;
-import com.project.jarjamediaapp.Activities.user_profile.GetPermissionModel;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.R;
@@ -87,11 +86,11 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
             String[] startTimeArray = calendarDetailModel.getStartTime().split(" ");
 
             if (calendarDetailModel.isAllDay != null && !calendarDetailModel.isAllDay) {
-            //   bi.tvStartTime.setText(startTime);
+                //   bi.tvStartTime.setText(startTime);
 
-                bi.tvStartTime.setText(GH.getInstance().formatter(startTimeArray[1], "hh:mm", "HH:mm:ss")+" "+startTimeArray[2]);
+                bi.tvStartTime.setText(GH.getInstance().formatter(startTimeArray[1], "hh:mm", "HH:mm:ss") + " " + startTimeArray[2]);
 
-            }else{
+            } else {
 
                 bi.tvStartTime.setVisibility(View.GONE);
             }
@@ -159,11 +158,12 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 break;
             case R.id.btnSave:
 
-                if (isEdit){
+                if (isEdit) {
 
                     //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                     String storedHashMapCalenderString = GH.getInstance().getUserPermissonCalender();
-                    java.lang.reflect.Type typeCalender = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                    java.lang.reflect.Type typeCalender = new TypeToken<HashMap<String, Boolean>>() {
+                    }.getType();
                     HashMap<String, Boolean> mapCalender = gson.fromJson(storedHashMapCalenderString, typeCalender);
 
                     if (mapCalender.get("Edit Calendar")) {
@@ -174,7 +174,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
                         ToastUtils.showToast(context, getString(R.string.calender_EditCalender));
                     }
-                }else {
+                } else {
 
                     callAddCalendarTask();
                 }
@@ -297,9 +297,9 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 startTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
                 time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
 
-               // time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
+                // time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
                 textView.setText(time);
-              //  startTime = selectedHour + ":" + selectedMinute + ":" + "00.000Z";
+                //  startTime = selectedHour + ":" + selectedMinute + ":" + "00.000Z";
 
 
             }
@@ -319,9 +319,8 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         if (bi.cbAllDay.isChecked() || startTime.equalsIgnoreCase("")) {
 
             startTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-          //  startTime = new SimpleDateFormat("hh:mm:ss.SSS'Z'", Locale.getDefault()).format(new Date());
-          //  startDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
-
+            //  startTime = new SimpleDateFormat("hh:mm:ss.SSS'Z'", Locale.getDefault()).format(new Date());
+            //  startDate = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
 
 
         }/*else {
@@ -438,6 +437,42 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     @Override
     public void hideProgressBar() {
         GH.getInstance().HideProgressDialog();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isChangesDone()) {
+            GH.getInstance().discardChangesDialog(context);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private boolean isChangesDone() {
+        if (!Methods.isEmpty(bi.atvEventTitle))
+            return true;
+        if (!Methods.isEmpty(bi.atvDescription))
+            return true;
+        if (!Methods.isEmpty(bi.tvStartDate))
+            return true;
+        if (!Methods.isEmpty(bi.tvStartTime))
+            return true;
+        if (bi.cbAllDay.isChecked())
+            return true;
+        if (bi.cbMarkComplete.isChecked())
+            return true;
+        return false;
     }
 
 }

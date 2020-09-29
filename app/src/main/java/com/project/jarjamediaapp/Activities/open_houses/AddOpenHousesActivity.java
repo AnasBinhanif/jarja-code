@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -96,7 +97,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         if (getIntent().getExtras() != null) {
 
             GetAllOpenHousesModel.Data.OpenHouse openHouse = (GetAllOpenHousesModel.Data.OpenHouse) getIntent().getExtras().getSerializable("editLeadsObj");
-            if (openHouse != null){
+            if (openHouse != null) {
 
                 // for update payload
                 propertyId = openHouse.propertyId;
@@ -108,7 +109,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
     }
 
-    public void populateOpenHouseData(GetAllOpenHousesModel.Data.OpenHouse openHouse){
+    public void populateOpenHouseData(GetAllOpenHousesModel.Data.OpenHouse openHouse) {
 
         bi.atvCity.setText(openHouse.getCity());
         bi.atvAddress.setText(openHouse.getStreetName());
@@ -121,12 +122,12 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         openHouseStartDate = openHouse.getOpenHouseDate();
         openHouseEndDate = openHouse.getOpenHouseEndDate();
 
-        if (openHouse.getImgURL().equals("")){
+        if (openHouse.getImgURL().equals("")) {
 
             bi.tvRemovePictures.setVisibility(View.GONE);
             bi.tvSelectPictures.setVisibility(View.VISIBLE);
             image = openHouse.getImgURL();
-        }else {
+        } else {
 
             bi.tvRemovePictures.setVisibility(View.VISIBLE);
             bi.tvRemovePictures.setText("Image uploaded");
@@ -135,11 +136,10 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         }
 
 
-
         // changes in model UplaodImageModel to Upload_ProfileImage for api response
 
 
-      //  bi.atvZip.setText(openHouse.get);
+        //  bi.atvZip.setText(openHouse.get);
 
     }
 
@@ -150,7 +150,6 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         UserPermissions.isCameraStorageLocationPermissionGranted(AddOpenHousesActivity.this);
 
         initListeners();
-
 
 
     }
@@ -341,7 +340,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             public void onClick(View v) {
                 // dismiss dialogue on api integration
 
-                if (bi.btnSave.getText() == "Update"){
+                if (bi.btnSave.getText() == "Update") {
 
                     address = bi.atvAddress.getText().toString();
                     listPrice = bi.atvPrice.getText().toString();
@@ -349,43 +348,43 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                     state = bi.atvState.getText().toString();
                     zip = bi.atvZip.getText().toString();
 
-                //    if (isValidate()) {
+                    //    if (isValidate()) {
 
-                        JSONObject obj = new JSONObject();
-                        try {
-                            obj.put("listPrice", listPrice);
-                            obj.put("city", city);
-                            obj.put("propertyId", propertyId);
-                            obj.put("address", address);
-                            obj.put("state", state);
-                            obj.put("zip", zip);
-                            obj.put("image", image);
-                            obj.put("imageName", imageName);
-                            obj.put("openHouseDate", openHouseStartDate);
-                            obj.put("openHouseEndDate", openHouseEndDate);
-                           // obj.put("imageName", "d71f5603-8016-44ea-b9ca-2cc6747107f71597140814171.jpg");
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        String jsonObjectString = obj.toString();
-                        Log.d("json", jsonObjectString);
+                    JSONObject obj = new JSONObject();
+                    try {
+                        obj.put("listPrice", listPrice);
+                        obj.put("city", city);
+                        obj.put("propertyId", propertyId);
+                        obj.put("address", address);
+                        obj.put("state", state);
+                        obj.put("zip", zip);
+                        obj.put("image", image);
+                        obj.put("imageName", imageName);
+                        obj.put("openHouseDate", openHouseStartDate);
+                        obj.put("openHouseEndDate", openHouseEndDate);
+                        // obj.put("imageName", "d71f5603-8016-44ea-b9ca-2cc6747107f71597140814171.jpg");
 
 
-                        presenter.addOpenHouse(jsonObjectString);
-                 //   }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-                }else {
+                    String jsonObjectString = obj.toString();
+                    Log.d("json", jsonObjectString);
 
-                        address = bi.atvAddress.getText().toString();
-                        listPrice = bi.atvPrice.getText().toString();
-                        city = bi.atvCity.getText().toString();
-                        state = bi.atvState.getText().toString();
-                        zip = bi.atvZip.getText().toString();
 
-                           if (isValidate()) {
+                    presenter.addOpenHouse(jsonObjectString);
+                    //   }
+
+                } else {
+
+                    address = bi.atvAddress.getText().toString();
+                    listPrice = bi.atvPrice.getText().toString();
+                    city = bi.atvCity.getText().toString();
+                    state = bi.atvState.getText().toString();
+                    zip = bi.atvZip.getText().toString();
+
+                    if (isValidate()) {
 
                         JSONObject obj = new JSONObject();
                         try {
@@ -410,10 +409,9 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
 
                         presenter.addOpenHouse(jsonObjectString);
-                          }
+                    }
 
                 }
-
 
 
             }
@@ -501,11 +499,11 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     @Override
     public void updateUI(Response<BaseResponse> response) {
 
-        if (bi.btnSave.getText() == "Update"){
+        if (bi.btnSave.getText() == "Update") {
 
             ToastUtils.showToastLong(context, "Open House Updated Successfully");
             finish();
-        }else {
+        } else {
 
             ToastUtils.showToastLong(context, "Open House Added Successfully");
             finish();
@@ -965,9 +963,43 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
-        GH.getInstance().discardChangesDailog(context);
+    @Override
+    public void onBackPressed() {
+        if (isChangesDone()) {
+            GH.getInstance().discardChangesDialog(context);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private boolean isChangesDone() {
+        if (!Methods.isEmpty(bi.atvPrice))
+            return true;
+        if (!Methods.isEmpty(bi.atvAddress))
+            return true;
+        if (!Methods.isEmpty(bi.atvCity))
+            return true;
+        if (!Methods.isEmpty(bi.atvState))
+            return true;
+        if (!Methods.isEmpty(bi.atvZip))
+            return true;
+        if (!Methods.isEmpty(bi.atvOpenHouseStartDate))
+            return true;
+        if (!Methods.isEmpty(bi.atvOpenHouseEndDate))
+            return true;
+        if (bi.tvRemovePictures.getText().toString().equals("Image uploaded"))
+            return true;
+
+        return false;
     }
 }

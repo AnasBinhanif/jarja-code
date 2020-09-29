@@ -1512,6 +1512,36 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     @Override
     public void onBackPressed() {
 
-        GH.getInstance().discardChangesDailog(context);
+        if (isChangesDone()) {
+            GH.getInstance().discardChangesDialog(context);
+        }else {
+            super.onBackPressed();
+        }
     }
+
+    private boolean isChangesDone() {
+
+        if (!Methods.isEmpty(bi.tvName))
+            return true;
+        if (!Methods.isEmpty(bi.atvNameTask))
+            return true;
+        if (!Methods.isEmpty(bi.atvDescription))
+            return true;
+        if (!Methods.isEmpty(bi.atvRecur))
+            return true;
+        if (!Methods.isEmpty(bi.tvStartDate))
+            return true;
+        if (!Methods.isEmpty(bi.tvEndDate))
+            return true;
+        if (!Methods.isEmpty(bi.atvType))
+            return true;
+        if (!Methods.isEmpty(bi.atvAddProperty))
+            return true;
+        if (!Methods.isEmpty(bi.atvReminder))
+            return true;
+        if (!Methods.isEmpty(bi.atvVia))
+            return true;
+        return false;
+    }
+
 }

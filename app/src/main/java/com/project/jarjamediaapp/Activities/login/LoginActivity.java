@@ -50,9 +50,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         presenter = new LoginPresenter(this);
         presenter.initScreen();
 
-
-
-
         if(GH.getInstance().getNotificationAllowStatus().equals("false")){
 
                 notificationPermission();

@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import androidx.databinding.DataBindingUtil;
@@ -52,7 +50,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     ActivityAllleadsBinding bi;
     Context context = AllLeadsActivity.this;
     AllLeadsPresenter presenter;
-    ArrayList<GetAllLeads.LeadsList> leadsList;
+    ArrayList<GetAllLeads.LeadsList> _leadsList;
     ArrayList<GetPropertyLeads.LeadsList> propertyleadsList = new ArrayList<>();
     String mSearchQuery = "", propertyID = "";
     String resultSetType = "New Leads";
@@ -72,10 +70,11 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
         bi = DataBindingUtil.setContentView(this, R.layout.activity_allleads);
         presenter = new AllLeadsPresenter(this);
         presenter.initScreen();
+        _leadsList = new ArrayList<>();
 
         // stop redirection to dashboard screen when click back button
         EasyPreference.Builder pref = new EasyPreference.Builder(context);
-        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"leadsFragment").save();
+        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(), "leadsFragment").save();
 
     }
 
@@ -109,17 +108,17 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        if (leadsList != null && leadsList.size() != 0) {
-            leadsList.clear();
+        if (_leadsList != null && _leadsList.size() != 0) {
+            _leadsList.clear();
         }
         page = 0;
         if (bi.edtSearch.getText().toString().equals("")) {
             handleIntent();
         } else {
-            leadsList = new ArrayList<>();
+            _leadsList = new ArrayList<>();
             page = 0;
             isFilter = true;
-         //   presenter.SearchLead(page, bi.edtSearch.getText().toString());
+            //   presenter.SearchLead(page, bi.edtSearch.getText().toString());
             searchLead(page, bi.edtSearch.getText().toString());
         }
     }
@@ -127,7 +126,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void initViews() {
 
-        leadsList = new ArrayList<>();
+        _leadsList = new ArrayList<>();
         initPagination();
      /*   bi.edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -171,7 +170,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
                         page = 0;
                         isFilter = true;
-                      //  presenter.SearchLead(page, bi.edtSearch.getText().toString());
+                        //  presenter.SearchLead(page, bi.edtSearch.getText().toString());
                         searchLead(page, bi.edtSearch.getText().toString());
                     }
                 } catch (Exception e) {
@@ -203,7 +202,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                             totalPages = modelGetAllLeads.data.noOfPages;
                         }
 
-                        if (totalPages > leadsList.size()) {
+                        if (totalPages > _leadsList.size()) {
                             page++;
                             int pg = page * 25;
                             try {
@@ -355,37 +354,37 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     private void populateListData(ArrayList<GetAllLeads.LeadsList> leadsList) {
 
         if (leadsList != null && leadsList.size() != 0) {
-            if (page == 0) {
-                linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-                bi.recyclerViewAllLeads.setLayoutManager(linearLayoutManager);
-                bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
-                bi.recyclerViewAllLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewAllLeads.getContext(), 1));
-                recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
-                recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail, R.id.tvInitial);
+            //  if (page == 0) {
+            linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+            bi.recyclerViewAllLeads.setLayoutManager(linearLayoutManager);
+            bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
+            bi.recyclerViewAllLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewAllLeads.getContext(), 1));
+            recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
+            recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail, R.id.tvInitial);
 
-                recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetAllLeads.LeadsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
+            recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetAllLeads.LeadsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
 
-                    TextView tvName = (TextView) integerMap.get(R.id.tvName);
-                    TextView tvPhone = (TextView) integerMap.get(R.id.tvPhone);
-                    TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
-                    TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
+                TextView tvName = (TextView) integerMap.get(R.id.tvName);
+                TextView tvPhone = (TextView) integerMap.get(R.id.tvPhone);
+                TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
+                TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
 
-                    tvName.setText(allLeadsList.firstName + " " + allLeadsList.lastName);
-                    tvPhone.setText(allLeadsList.primaryPhone);
-                    tvEmail.setText(allLeadsList.primaryEmail);
+                tvName.setText(allLeadsList.firstName + " " + allLeadsList.lastName);
+                tvPhone.setText(allLeadsList.primaryPhone);
+                tvEmail.setText(allLeadsList.primaryEmail);
 
-                    tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1) + "");
+                tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1) + "");
 
-                    return Unit.INSTANCE;
-                });
+                return Unit.INSTANCE;
+            });
 
-                bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
-                recyclerAdapterUtil.notifyDataSetChanged();
+            bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
+            recyclerAdapterUtil.notifyDataSetChanged();
+            isLoading = false;
+           /* } else {
                 isLoading = false;
-            } else {
-                isLoading = false;
                 recyclerAdapterUtil.notifyDataSetChanged();
-            }
+            }*/
 
         }
 
@@ -451,14 +450,14 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     public void searchLead(int pageNo, String query) {
 
 
-    //    _view.showProgressBar();
+        //    _view.showProgressBar();
         Call<GetAllLeads> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).SearchLead(GH.getInstance().getAuthorization(),
-                pageNo,query);
+                pageNo, query);
         _call.enqueue(new Callback<GetAllLeads>() {
             @Override
             public void onResponse(Call<GetAllLeads> call, Response<GetAllLeads> response) {
 
-              //  _view.hideProgressBar();
+                //  _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetAllLeads getAppointmentsModel = response.body();
@@ -466,12 +465,12 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
                         if (getAppointmentsModel.status.equals("Success")) {
 
-                            leadsList.clear();
-                            leadsList = new ArrayList<>();
-                            leadsList.addAll(getAppointmentsModel.data.leadsList);
-                            if (leadsList.size() != 0) {
+                            _leadsList.clear();
+                            _leadsList = new ArrayList<>();
+                            _leadsList.addAll(getAppointmentsModel.data.leadsList);
+                            if (_leadsList.size() != 0) {
 
-                                populateListData(leadsList);
+                                populateListData(_leadsList);
 
                             } else {
                                 ToastUtils.showToast(context, "No Result Found");
@@ -479,24 +478,24 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                         } else {
                             ToastUtils.showToast(context, getAppointmentsModel.message);
                         }
-                      //  _view.updateUI(getAppointmentsModel);
+                        //  _view.updateUI(getAppointmentsModel);
 
                     } else {
 
-                       // _view.updateUIonFalse(getAppointmentsModel.message);
+                        // _view.updateUIonFalse(getAppointmentsModel.message);
 
                     }
                 } else {
 
                     ApiError error = ErrorUtils.parseError(response);
-                   // _view.updateUIonError(error.message());
+                    // _view.updateUIonError(error.message());
                 }
             }
 
             @Override
             public void onFailure(Call<GetAllLeads> call, Throwable t) {
-              //  _view.hideProgressBar();
-              //  _view.updateUIonFailure();
+                //  _view.hideProgressBar();
+                //  _view.updateUIonFailure();
             }
         });
 
@@ -527,23 +526,18 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void updateUI(GetAllLeads response) {
 
-        leadsList.clear();
-        if (recyclerAdapterUtil != null){
+        if (recyclerAdapterUtil != null) {
             recyclerAdapterUtil.notifyDataSetChanged();
 
         }
-
-        leadsList = new ArrayList<>();
-
-        leadsList.addAll(response.data.leadsList);
-
-        if (leadsList.size() == 0) {
+        _leadsList.addAll(response.data.leadsList);
+        if (_leadsList.size() == 0) {
             bi.lnAllLeads.setVisibility(View.GONE);
             bi.tvNoRecordFound.setVisibility(View.VISIBLE);
         } else {
             bi.lnAllLeads.setVisibility(View.VISIBLE);
             bi.tvNoRecordFound.setVisibility(View.GONE);
-            populateListData(leadsList);
+            populateListData(_leadsList);
             modelGetAllLeads = response;
         }
     }
