@@ -3,6 +3,8 @@ package com.project.jarjamediaapp.Activities.notes;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,6 +48,8 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
 
     String leadID;
     String agentIdsString = "";
+    boolean isEdit, isEdited = false;
+    TextWatcher textWatcher;
 
     GetLeadNotes.NotesList notesListModel;
 
@@ -80,6 +84,7 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
     private void initData() {
         if (SwipeNotesRecyclerAdapter.isEditable) {
             SwipeNotesRecyclerAdapter.isEditable = false;
+            isEdit = true;
             notesListModel = (GetLeadNotes.NotesList) getIntent().getExtras().getSerializable("Note");
             bi.edtDescription.setText(notesListModel.desc);
 
@@ -94,6 +99,24 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
             TextView textView = child.findViewById(R.id.txtDynamic);
             textView.setText(GH.getInstance().getUserName() != null ? GH.getInstance().getUserName() : "");
             bi.lnAgents.addView(child);
+
+            textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    isEdited = true;
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            };
+            bi.edtDescription.addTextChangedListener(textWatcher);
 
 
         } else {
@@ -319,13 +342,21 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
     }
 
     private boolean isChangesDone() {
-        if (!Methods.isEmpty(bi.edtDescription))
-            return true;
-        if (!bi.spnNoteType.getText().toString().equals("General"))
-            return true;
-        if (bi.cbNoteSticky.isChecked())
-            return true;
-        return false;
+
+        if (!isEdit) {
+            if (!Methods.isEmpty(bi.edtDescription))
+                return true;
+            if (!bi.spnNoteType.getText().toString().equals("General"))
+                return true;
+            if (bi.cbNoteSticky.isChecked())
+                return true;
+            return false;
+        } else {
+            if (isEdited) {
+                return true;
+            }
+            return false;
+        }
     }
 
 }

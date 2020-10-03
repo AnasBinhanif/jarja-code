@@ -12,6 +12,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -83,7 +85,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     int perm = 0;
     private int propertyId;
     GetAllOpenHousesModel.Data.OpenHouse openHouse;
-
+    boolean isEdit, isEdited = false;
+    TextWatcher textWatcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +106,35 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                 propertyId = openHouse.propertyId;
                 populateOpenHouseData(openHouse);
                 bi.btnSave.setText("Update");
+                isEdit = true;
+
+                if (isEdit) {
+
+                    textWatcher = new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            isEdited = true;
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    };
+                    bi.atvAddress.addTextChangedListener(textWatcher);
+                    bi.atvCity.addTextChangedListener(textWatcher);
+                    bi.atvPrice.addTextChangedListener(textWatcher);
+                    bi.atvState.addTextChangedListener(textWatcher);
+                    bi.atvZip.addTextChangedListener(textWatcher);
+                    bi.atvOpenHouseStartDate.addTextChangedListener(textWatcher);
+                    bi.atvOpenHouseEndDate.addTextChangedListener(textWatcher);
+
+                }
 
             }
         }
@@ -111,6 +143,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
     public void populateOpenHouseData(GetAllOpenHousesModel.Data.OpenHouse openHouse) {
 
+        this.openHouse = openHouse;
         bi.atvCity.setText(openHouse.getCity());
         bi.atvAddress.setText(openHouse.getStreetName());
         bi.atvPrice.setText(openHouse.getListPrice());
@@ -122,62 +155,47 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         openHouseStartDate = openHouse.getOpenHouseDate();
         openHouseEndDate = openHouse.getOpenHouseEndDate();
 
-        if (openHouse.getImgURL().equals("")) {
-
-            bi.tvRemovePictures.setVisibility(View.GONE);
-            bi.tvSelectPictures.setVisibility(View.VISIBLE);
-            image = openHouse.getImgURL();
-        } else {
-
+        if (openHouse.getImgURL() != null && !openHouse.equals("")) {
             bi.tvRemovePictures.setVisibility(View.VISIBLE);
             bi.tvRemovePictures.setText("Image uploaded");
             bi.tvSelectPictures.setVisibility(View.GONE);
             image = openHouse.getImgURL();
+        } else {
+            bi.tvRemovePictures.setVisibility(View.GONE);
+            bi.tvSelectPictures.setVisibility(View.VISIBLE);
+            image = "";
         }
 
-
-        // changes in model UplaodImageModel to Upload_ProfileImage for api response
-
-
-        //  bi.atvZip.setText(openHouse.get);
-
     }
-
 
     @Override
     public void initViews() {
 
         UserPermissions.isCameraStorageLocationPermissionGranted(AddOpenHousesActivity.this);
-
         initListeners();
-
 
     }
 
-    private String getFormatedAmount(int amount) {
+    private String getFormatedAmount(double amount) {
         return NumberFormat.getNumberInstance(Locale.US).format(amount);
     }
 
     private void initListeners() {
 
-        bi.atvPrice.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    if (bi.atvPrice.getText().toString().length() > 0) {
-                        bi.atvPrice.setText(getFormatedAmount(Integer.valueOf(bi.atvPrice.getText().toString())));
-                    }
 
+        bi.atvPrice.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                if (bi.atvPrice.getText().toString().length() > 0) {
+                    bi.atvPrice.setText(getFormatedAmount(Double.valueOf(bi.atvPrice.getText().toString())));
                 }
+
             }
         });
 
-        bi.atvAddress.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
+        bi.atvAddress.setOnTouchListener((view, event) -> {
 
-                viewId = view.getId();
-                return false;
-            }
+            viewId = view.getId();
+            return false;
         });
 
         bi.atvAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -940,7 +958,6 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     }
 
     public String formattedTime(String time) {
-
         try {
             final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault());
             final Date dateObj = sdf.parse(time);
@@ -983,23 +1000,31 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     }
 
     private boolean isChangesDone() {
-        if (!Methods.isEmpty(bi.atvPrice))
-            return true;
-        if (!Methods.isEmpty(bi.atvAddress))
-            return true;
-        if (!Methods.isEmpty(bi.atvCity))
-            return true;
-        if (!Methods.isEmpty(bi.atvState))
-            return true;
-        if (!Methods.isEmpty(bi.atvZip))
-            return true;
-        if (!Methods.isEmpty(bi.atvOpenHouseStartDate))
-            return true;
-        if (!Methods.isEmpty(bi.atvOpenHouseEndDate))
-            return true;
-        if (bi.tvRemovePictures.getText().toString().equals("Image uploaded"))
-            return true;
 
-        return false;
+        if (!isEdit) {
+            if (!Methods.isEmpty(bi.atvPrice))
+                return true;
+            if (!Methods.isEmpty(bi.atvAddress))
+                return true;
+            if (!Methods.isEmpty(bi.atvCity))
+                return true;
+            if (!Methods.isEmpty(bi.atvState))
+                return true;
+            if (!Methods.isEmpty(bi.atvZip))
+                return true;
+            if (!Methods.isEmpty(bi.atvOpenHouseStartDate))
+                return true;
+            if (!Methods.isEmpty(bi.atvOpenHouseEndDate))
+                return true;
+            if (bi.tvRemovePictures.getText().toString().equals("Image uploaded"))
+                return true;
+            return false;
+        } else {
+            if (isEdited) {
+                return true;
+            }
+            return false;
+        }
     }
+
 }

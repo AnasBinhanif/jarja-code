@@ -80,13 +80,14 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     String leadID = "", agentIdsString = "", tagsIdsString = "", dripIdsString = "";
 
     String bday = "", sBday = "", anniversary = "", spouseBday = "";
-    boolean isUpdate = false;
+    boolean isUpdate = false, isEdited = false;
     GetLead.LeadList leadModel;
 
     int source = 0;
     int timeFrame, leadType;
     boolean mFormatting; // this is a flag which prevents the  stack overflow.
     int mAfter;
+    TextWatcher textWatcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -305,7 +306,47 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                 }
             }
 
-        } else {
+
+            textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    isEdited = true;
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            };
+            bi.edtFName.addTextChangedListener(textWatcher);
+            bi.edtLName.addTextChangedListener(textWatcher);
+            bi.edtSName.addTextChangedListener(textWatcher);
+            bi.edtCompany.addTextChangedListener(textWatcher);
+            bi.edtPhone.addTextChangedListener(textWatcher);
+            bi.edtEmail.addTextChangedListener(textWatcher);
+            bi.edtBday.addTextChangedListener(textWatcher);
+            bi.edtSpouseBday.addTextChangedListener(textWatcher);
+            bi.edtAnniversary.addTextChangedListener(textWatcher);
+            bi.edtAddress1.addTextChangedListener(textWatcher);
+            bi.edtAddress2.addTextChangedListener(textWatcher);
+            bi.edtCity1.addTextChangedListener(textWatcher);
+            bi.edtCity2.addTextChangedListener(textWatcher);
+            bi.edtState1.addTextChangedListener(textWatcher);
+            bi.edtState2.addTextChangedListener(textWatcher);
+            bi.edtPostalCode1.addTextChangedListener(textWatcher);
+            bi.edtPostalCode2.addTextChangedListener(textWatcher);
+            bi.edtCountry.addTextChangedListener(textWatcher);
+            bi.edtNotes.addTextChangedListener(textWatcher);
+            bi.chkAnnivNotify.setOnClickListener(this);
+            bi.chkBdayNotify.setOnClickListener(this);
+
+        }
+        else {
 
             View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
             TextView textView = child.findViewById(R.id.txtDynamic);
@@ -320,6 +361,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             }
 
         }
+
     }
 
     private void initCallsData() {
@@ -820,7 +862,6 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         }
     }
 
-
     private void showSpinnerDateDialog(TextView textView, String whichBday) {
 
         final Calendar newCalendar = Calendar.getInstance();
@@ -978,12 +1019,10 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         }
 
         isUpdate = getIntent().getBooleanExtra("isEdit", false);
-        if (isUpdate) {
-            GH.getInstance().HideProgressDialog();
+        GH.getInstance().HideProgressDialog();
+        if (isUpdate)
             initData();
-        } else {
-            GH.getInstance().HideProgressDialog();
-        }
+
 
     }
 
@@ -1035,34 +1074,38 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         switch (view.getId()) {
 
             case R.id.edtAgent:
+                isEdited = true;
                 clearFocus();
                 showAgentDialog();
                 break;
             case R.id.edtTags:
+                isEdited = true;
                 clearFocus();
                 showTagsDialog();
                 break;
             case R.id.edtBday:
+                isEdited = true;
                 clearFocus();
-                //showDateDialog(bi.edtBday, "bday");
                 showSpinnerDateDialog(bi.edtBday, "bday");
                 break;
             case R.id.edtSpouseBday:
+                isEdited = true;
                 clearFocus();
                 //showDateDialog(bi.edtSpouseBday, "sBday");
                 showSpinnerDateDialog(bi.edtSpouseBday, "sBday");
                 break;
             case R.id.edtAnniversary:
+                isEdited = true;
                 clearFocus();
                 //showDateDialog(bi.edtAnniversary, "anniv");
                 showSpinnerDateDialog(bi.edtAnniversary, "anniv");
                 break;
             case R.id.edtDripCompaign:
+                isEdited = true;
                 clearFocus();
                 showDripDialog();
                 break;
             case R.id.btnSave:
-
                 if (isUpdate) {
 
                     Gson gson = new Gson();
@@ -1083,6 +1126,11 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                     callAddNewLead();
                 }
                 break;
+            case R.id.chkBdayNotify:
+            case R.id.chkAnnivNotify: {
+                isEdited = true;
+            }
+            break;
         }
     }
 
@@ -1118,55 +1166,61 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
     private boolean isChangesDone() {
 
-        if (!Methods.isEmpty(bi.edtFName))
-            return true;
-        if (!Methods.isEmpty(bi.edtLName))
-            return true;
-        if (!Methods.isEmpty(bi.edtSName))
-            return true;
-        if (!Methods.isEmpty(bi.edtCompany))
-            return true;
-        if (!Methods.isEmpty(bi.edtPhone))
-            return true;
-        if (!Methods.isEmpty(bi.edtEmail))
-            return true;
-        if (!Methods.isEmpty(bi.edtBday))
-            return true;
-        if (!Methods.isEmpty(bi.edtSpouseBday))
-            return true;
-        if (!Methods.isEmpty(bi.edtAnniversary))
-            return true;
-        if (!Methods.isEmpty(bi.edtAddress1))
-            return true;
-        if (!Methods.isEmpty(bi.edtPostalCode1))
-            return true;
-        if (!Methods.isEmpty(bi.edtState1))
-            return true;
-        if (!Methods.isEmpty(bi.edtCity1))
-            return true;
-        if (!Methods.isEmpty(bi.edtAddress2))
-            return true;
-        if (!Methods.isEmpty(bi.edtCity2))
-            return true;
-        if (!Methods.isEmpty(bi.edtState2))
-            return true;
-        if (!Methods.isEmpty(bi.edtPostalCode2))
-            return true;
-        if (!Methods.isEmpty(bi.edtCountry))
-            return true;
-        if (!bi.spnSource.getText().toString().equals("") && !bi.spnSource.getText().toString().equals("Source"))
-            return true;
-        if (!bi.spnType.getText().toString().equals("") && !bi.spnType.getText().toString().equals("Type"))
-            return true;
-        if (!bi.spnTimeFrame.getText().toString().equals("") && !bi.spnTimeFrame.getText().toString().equals("Time Frame"))
-            return true;
-        if (!bi.spnPreApprove.getText().toString().equals("") && !bi.spnPreApprove.getText().toString().equals("Pre-Approved"))
-            return true;
-        if (!Methods.isEmpty(bi.edtNotes))
-            return true;
-        if (!tagsIdsString.equals(""))
-            return true;
-        return false;
+        if (!isUpdate) {
+            if (!Methods.isEmpty(bi.edtFName))
+                return true;
+            if (!Methods.isEmpty(bi.edtLName))
+                return true;
+            if (!Methods.isEmpty(bi.edtSName))
+                return true;
+            if (!Methods.isEmpty(bi.edtCompany))
+                return true;
+            if (!Methods.isEmpty(bi.edtPhone))
+                return true;
+            if (!Methods.isEmpty(bi.edtEmail))
+                return true;
+            if (!Methods.isEmpty(bi.edtBday))
+                return true;
+            if (!Methods.isEmpty(bi.edtSpouseBday))
+                return true;
+            if (!Methods.isEmpty(bi.edtAnniversary))
+                return true;
+            if (!Methods.isEmpty(bi.edtAddress1))
+                return true;
+            if (!Methods.isEmpty(bi.edtPostalCode1))
+                return true;
+            if (!Methods.isEmpty(bi.edtState1))
+                return true;
+            if (!Methods.isEmpty(bi.edtCity1))
+                return true;
+            if (!Methods.isEmpty(bi.edtAddress2))
+                return true;
+            if (!Methods.isEmpty(bi.edtCity2))
+                return true;
+            if (!Methods.isEmpty(bi.edtState2))
+                return true;
+            if (!Methods.isEmpty(bi.edtPostalCode2))
+                return true;
+            if (!Methods.isEmpty(bi.edtCountry))
+                return true;
+            if (!bi.spnSource.getText().toString().equals("") && !bi.spnSource.getText().toString().equals("Source"))
+                return true;
+            if (!bi.spnType.getText().toString().equals("") && !bi.spnType.getText().toString().equals("Type"))
+                return true;
+            if (!bi.spnTimeFrame.getText().toString().equals("") && !bi.spnTimeFrame.getText().toString().equals("Time Frame"))
+                return true;
+            if (!bi.spnPreApprove.getText().toString().equals("") && !bi.spnPreApprove.getText().toString().equals("Pre-Approved"))
+                return true;
+            if (!Methods.isEmpty(bi.edtNotes))
+                return true;
+            if (!tagsIdsString.equals(""))
+                return true;
+            return false;
+        } else {
+            if (isEdited)
+                return true;
+            return false;
+        }
     }
 
 }

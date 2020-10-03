@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -71,6 +73,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     RecyclerView recyclerSearch;
 
     GetTaskDetail taskDetail;
+    TextWatcher textWatcher;
 
     ArrayList<String> arrayListViaText = new ArrayList<>();
     ArrayList<String> arrayListViaValue = new ArrayList<>();
@@ -88,7 +91,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     String agentIdsString = "", leadName = "", taskId = "", searchLeadIdsString = "", startTime = "", endTime = "";
     ;
     MultiSelectModel agentModel;
-    boolean isEdit;
+    boolean isEdit, isEdited = false;
     boolean isReminderClicked = false, isViaClicked = false, isTypeClicked = false, isRecurClicked = false;
     int month, year, day, mHour, mMinute;
     String from = "";
@@ -134,7 +137,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         loadTitle();
         // for testing
         // populate fast data
-      //  checkIntent();
+        //  checkIntent();
 
         bi.cbEndDate.setOnCheckedChangeListener((compoundButton, b) -> {
 
@@ -459,7 +462,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         });
         // for testing
         // this line remove because it replaces the api data
-      //  bi.atvType.setText(arrayListViaText.get(0), false);
+        //  bi.atvType.setText(arrayListViaText.get(0), false);
         type = arrayListViaValue.get(0);
     }
 
@@ -617,10 +620,30 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                     agentIdsString = agentIdsString + "," + name.agentIDEncrypted;
                 }
             }
-           // bi.tvStartDate.setEnabled(false);
+            // bi.tvStartDate.setEnabled(false);
         }
 
         hideProgressBar();
+        textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isEdited = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+        bi.atvNameTask.addTextChangedListener(textWatcher);
+        bi.atvDescription.addTextChangedListener(textWatcher);
+        bi.atvAddProperty.addTextChangedListener(textWatcher);
+
     }
 
     private void callAddTask() {
@@ -1051,6 +1074,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         super.onClick(view);
         switch (view.getId()) {
             case R.id.tvName:
+                isEdited = true;
                 clearFocus();
                 //showSearchDialog(context);
                 Intent i = new Intent(AddTaskActivity.this, SearchResultsActivity.class);
@@ -1059,6 +1083,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
                 break;
             case R.id.tvStartDate:
+                isEdited = true;
                 clearFocus();
                 if (bi.tvStartDate.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
@@ -1070,6 +1095,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
                 break;
             case R.id.tvEndDate:
+                isEdited = true;
                 clearFocus();
                 if (bi.tvEndDate.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
@@ -1081,6 +1107,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
                 break;
             case R.id.tvAssignTo:
+                isEdited = true;
                 clearFocus();
                 showAgentDialog();
                 break;
@@ -1095,7 +1122,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                         Gson gson = new Gson();
                         //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                         String storedHashMapLeadsString = GH.getInstance().getUserPermissonLead();
-                        java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                        java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>() {
+                        }.getType();
                         HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
 
                         if (mapLeads.get("Edit Tasks From Leads")) {
@@ -1110,7 +1138,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
                         }
 
-                    }else {
+                    } else {
 
                         callUpdateTask();
                     }
@@ -1121,21 +1149,25 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 finish();
                 break;
             case R.id.atvReminder:
+                isEdited = true;
                 clearFocus();
                 reminder();
 
                 hideSoftKeyboard(bi.atvReminder);
                 break;
             case R.id.atvVia:
+                isEdited = true;
                 clearFocus();
                 via();
                 break;
             case R.id.atvType:
+                isEdited = true;
                 clearFocus();
                 type();
                 hideSoftKeyboard(bi.atvType);
                 break;
             case R.id.atvRecur:
+                isEdited = true;
                 clearFocus();
                 recur();
                 hideSoftKeyboard(bi.atvRecur);
@@ -1514,34 +1546,40 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         if (isChangesDone()) {
             GH.getInstance().discardChangesDialog(context);
-        }else {
+        } else {
             super.onBackPressed();
         }
     }
 
     private boolean isChangesDone() {
 
-        if (!Methods.isEmpty(bi.tvName))
-            return true;
-        if (!Methods.isEmpty(bi.atvNameTask))
-            return true;
-        if (!Methods.isEmpty(bi.atvDescription))
-            return true;
-        if (!Methods.isEmpty(bi.atvRecur))
-            return true;
-        if (!Methods.isEmpty(bi.tvStartDate))
-            return true;
-        if (!Methods.isEmpty(bi.tvEndDate))
-            return true;
-        if (!Methods.isEmpty(bi.atvType))
-            return true;
-        if (!Methods.isEmpty(bi.atvAddProperty))
-            return true;
-        if (!Methods.isEmpty(bi.atvReminder))
-            return true;
-        if (!Methods.isEmpty(bi.atvVia))
-            return true;
-        return false;
+        if (!isEdit) {
+            if (!Methods.isEmpty(bi.tvName))
+                return true;
+            if (!Methods.isEmpty(bi.atvNameTask))
+                return true;
+            if (!Methods.isEmpty(bi.atvDescription))
+                return true;
+            if (!Methods.isEmpty(bi.atvRecur))
+                return true;
+            if (!Methods.isEmpty(bi.tvStartDate))
+                return true;
+            if (!Methods.isEmpty(bi.tvEndDate))
+                return true;
+            if (!Methods.isEmpty(bi.atvType))
+                return true;
+            if (!Methods.isEmpty(bi.atvAddProperty))
+                return true;
+            if (!Methods.isEmpty(bi.atvReminder))
+                return true;
+            if (!Methods.isEmpty(bi.atvVia))
+                return true;
+            return false;
+        } else {
+            if (isEdited)
+                return true;
+            return false;
+        }
     }
 
 }

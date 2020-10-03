@@ -14,6 +14,7 @@ import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -71,9 +72,11 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
     private final int RC_CAMERA_AND_STORAGE = 100;
 
-    boolean mFormatting,mFormattingF;
-    int mAfter,mAfterF;
+    boolean mFormatting, mFormattingF;
+    int mAfter, mAfterF;
     boolean isLeadDistributionMessageEnabled;
+    TextWatcher textWatcher;
+    boolean isEdited = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +103,6 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         bi.atvCountry.setOnClickListener(this);
         bi.atvTimeZone.setOnClickListener(this);
         bi.imgProfilePic.setOnClickListener(this);
-     //   bi.btnCancel.setOnClickListener(this);
 
         bi.cbRecieve.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -183,13 +185,9 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     @Override
     public void updateUI(GetUserProfile getUserProfile) {
 
-
         populateData(getUserProfile);
 
-
     }
-
-
 
     @Override
     public void updateUI(GetTwilioNumber getUserProfile) {
@@ -272,7 +270,6 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         updateProfile();
     }
 
-
     private void populateData(GetUserProfile getUserProfile) {
 
         GetUserProfile.UserProfile userProfileData = getUserProfile.data.userProfileData;
@@ -280,88 +277,87 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         bi.atvLastName.setText(userProfileData.lastName + "");
 
 
-
-        if (userProfileData.title == null){
+        if (userProfileData.title == null) {
             bi.atvTitle.setText("");
-        }else {
+        } else {
             bi.atvTitle.setText(userProfileData.title + "");
         }
-        if (userProfileData.license == null){
+        if (userProfileData.license == null) {
             bi.atvLicesnse.setText("");
-        }else {
+        } else {
             bi.atvLicesnse.setText(userProfileData.license + "");
         }
-        if (userProfileData.email == null){
+        if (userProfileData.email == null) {
             bi.atvEmail.setText("");
-        }else {
+        } else {
             bi.atvEmail.setText(userProfileData.email + "");
         }
 
-        if (userProfileData.phone == null){
+        if (userProfileData.phone == null) {
             bi.atvPhone.setText("");
-        }else {
+        } else {
             bi.atvPhone.setText(userProfileData.phone + "");
         }
 
-        if (userProfileData.twilioPhone == null){
+        if (userProfileData.twilioPhone == null) {
             bi.atvVirtual.setText("");
-        }else {
+        } else {
 
             bi.atvVirtual.setText(userProfileData.twilioPhone + "");
 
         }
 
 
-        if (userProfileData.forwardedNumber == null){
+        if (userProfileData.forwardedNumber == null) {
             bi.atvForwarder.setText("");
-        }else {
+        } else {
             bi.atvForwarder.setText(userProfileData.forwardedNumber + "");
         }
 
-        if (userProfileData.company == null){
+        if (userProfileData.company == null) {
             bi.atvCompany.setText("");
-        }else {
+        } else {
             bi.atvCompany.setText(userProfileData.company + "");
         }
-        if (userProfileData.streetAddress == null){
+        if (userProfileData.streetAddress == null) {
             bi.atvStreetAddress.setText("");
-        }else {
+        } else {
             bi.atvStreetAddress.setText(userProfileData.streetAddress + "");
         }
         bi.atvCountry.setText(arrayListCountryName.get(arrayListCountryID.indexOf(userProfileData.countryID)), false);
-        if (userProfileData.state == null){
+        if (userProfileData.state == null) {
             bi.atvState.setText("");
-        }else {
+        } else {
             bi.atvState.setText(userProfileData.state + "");
         }
-        if (userProfileData.city == null){
+        if (userProfileData.city == null) {
             bi.atvCity.setText("");
-        }else {
+        } else {
             bi.atvCity.setText(userProfileData.city + "");
         }
-        if (userProfileData.zipcode == null){
+        if (userProfileData.zipcode == null) {
             bi.atvZip.setText("");
-        }else {
+        } else {
             bi.atvZip.setText(userProfileData.zipcode + "");
         }
 
-        if (userProfileData.tmzone != null && !userProfileData.tmzone.equals("")){
+        if (userProfileData.tmzone != null && !userProfileData.tmzone.equals("")) {
 
             bi.atvTimeZone.setText(arrayListDisplayName.get(arrayListStandardName.indexOf(userProfileData.tmzone)), false);
 
-        }else {
+        } else {
 
             bi.atvTimeZone.setText("");
 
         }
-      //  bi.atvTimeZone.setText(arrayListDisplayName.get(arrayListStandardName.indexOf(userProfileData.tmzone)), false);
-        if (userProfileData.companyAddress == null){
+        //  bi.atvTimeZone.setText(arrayListDisplayName.get(arrayListStandardName.indexOf(userProfileData.tmzone)), false);
+        if (userProfileData.companyAddress == null) {
             bi.atvCompanyAddress.setText("");
-        }else {
+        } else {
             bi.atvCompanyAddress.setText(userProfileData.companyAddress + "");
         }
 
-        if (userProfileData.leadDistributionMessageEnabled){
+        if (userProfileData.leadDistributionMessageEnabled) {
             bi.cbRecieve.setChecked(true);
         }
 
@@ -376,7 +372,40 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
             Glide.with(this).load(userProfileData.picPath).into(bi.imgProfilePic);
         }
 
-       GH.getInstance().HideProgressDialog();
+        GH.getInstance().HideProgressDialog();
+
+        textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isEdited = true;
+            }
+        };
+        bi.atvFirstName.addTextChangedListener(textWatcher);
+        bi.atvLastName.addTextChangedListener(textWatcher);
+        bi.atvTitle.addTextChangedListener(textWatcher);
+        bi.atvLicesnse.addTextChangedListener(textWatcher);
+        bi.atvEmail.addTextChangedListener(textWatcher);
+        bi.atvPhone.addTextChangedListener(textWatcher);
+        bi.atvPassword.addTextChangedListener(textWatcher);
+        bi.atvForwarder.addTextChangedListener(textWatcher);
+        bi.atvCompany.addTextChangedListener(textWatcher);
+        bi.atvStreetAddress.addTextChangedListener(textWatcher);
+        bi.atvCountry.addTextChangedListener(textWatcher);
+        bi.atvCity.addTextChangedListener(textWatcher);
+        bi.atvState.addTextChangedListener(textWatcher);
+        bi.atvZip.addTextChangedListener(textWatcher);
+        bi.atvTimeZone.addTextChangedListener(textWatcher);
+        bi.atvCompanyAddress.addTextChangedListener(textWatcher);
 
     }
 
@@ -402,32 +431,30 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         int country = countryID;
 
 
-
-        if(fname.trim().equals("") || lname.trim().equals("")){
+        if (fname.trim().equals("") || lname.trim().equals("")) {
 
             ToastUtils.showToast(context, "first name and last name is required");
 
-        }else if(email.trim().equals("")){
+        } else if (email.trim().equals("")) {
 
             ToastUtils.showToast(context, "email is required");
 
-        }else if(bi.atvForwarder.length() < 14){
+        } else if (bi.atvForwarder.length() < 14) {
 
             ToastUtils.showToast(context, "provide valid forwarded number");
 
-        }else if(!email.matches(emailPattern)){
+        } else if (!email.matches(emailPattern)) {
 
             ToastUtils.showToast(context, "provide valid email address");
 
-         } else if(bi.atvPhone.length() < 14){
+        } else if (bi.atvPhone.length() < 14) {
 
             ToastUtils.showToast(context, "provide valid phone number");
-        }else {
+        } else {
 
             presenter.updateUserProfile(fname, state, license, picName, companyAddress, agentType, zip, street, title, countryID, fNumber,
-                    isLeadDistributionMessageEnabled, email, company, lname, timeZone, picGuid, phone, city,vNumber);
+                    isLeadDistributionMessageEnabled, email, company, lname, timeZone, picGuid, phone, city, vNumber);
         }
-
 
 
     }
@@ -459,6 +486,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
                     RC_CAMERA_AND_STORAGE, perms);
         }
     }
+
     private void clearFocus() {
 
         bi.atvFirstName.clearFocus();
@@ -527,7 +555,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
                 clearFocus();
                 country();
                 // click on drop down so softkeyboard hide
-               hideSoftKeyboard(bi.atvCountry);
+                hideSoftKeyboard(bi.atvCountry);
                 break;
             /*case R.id.btnCancel:
                 finish();
@@ -535,9 +563,10 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
             case R.id.btnUpdate:
 
                 Gson gson = new Gson();
-             //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
+                //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                 String storedHashMapString = GH.getInstance().getUserPermissonProfile();
-                java.lang.reflect.Type type = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                java.lang.reflect.Type type = new TypeToken<HashMap<String, Boolean>>() {
+                }.getType();
                 HashMap<String, Boolean> map = gson.fromJson(storedHashMapString, type);
 
                 if (map.get("Edit Profile")) {
@@ -555,8 +584,6 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
                 }
 
 
-
-
                 break;
         }
     }
@@ -570,7 +597,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
                 Image image = ImagePicker.getFirstImageOrNull(data);
                 Bitmap myBitmap = BitmapFactory.decodeFile(image.getPath());
-            //    Glide.with(context).load(image.getPath()).into(bi.imgProfilePic);
+                //    Glide.with(context).load(image.getPath()).into(bi.imgProfilePic);
                 bi.imgProfilePic.setImageBitmap(myBitmap);
                 imagePath = image.getPath();
                 isImagePicked = true;
@@ -677,13 +704,32 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     }
 
     @Override
-    public void onBackPressed() {
-        /*finish();
-        super.onBackPressed();*/
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
-        GH.getInstance().discardChangesDialog(context);
+    @Override
+    public void onBackPressed() {
+        //   super.onBackPressed();
+        if (isChangesDone()) {
+            GH.getInstance().discardChangesDialog(context);
+        } else {
+            super.onBackPressed();
+        }
 
     }
 
+    private boolean isChangesDone() {
+
+        if (isEdited)
+            return true;
+        return false;
+    }
 
 }

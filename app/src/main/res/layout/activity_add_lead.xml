@@ -56,12 +56,12 @@
                     <EditText
                         android:id="@+id/edtLName"
                         style="@style/AutoCompleteStyle"
-                        android:imeOptions="actionNext"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="@string/last_name"
+                        android:imeOptions="actionNext"
                         android:inputType="textCapSentences"
-                        android:singleLine="true"
-                        android:hint="@string/last_name" />
+                        android:singleLine="true" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -72,12 +72,12 @@
                     <EditText
                         android:id="@+id/edtSName"
                         style="@style/AutoCompleteStyle"
-                        android:imeOptions="actionNext"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/spouse_name"
+                        android:imeOptions="actionNext"
                         android:inputType="textCapSentences"
-                        android:singleLine="true"/>
+                        android:singleLine="true" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -89,10 +89,10 @@
                         android:id="@+id/edtCompany"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
-                        android:imeOptions="actionNext"
-                        android:inputType="textCapSentences"
                         android:layout_height="wrap_content"
-                        android:hint="@string/company" />
+                        android:hint="@string/company"
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapSentences" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -105,12 +105,12 @@
                         android:id="@+id/edtPhone"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
-                        android:imeOptions="actionNext"
-                        android:maxLength="14"
-                        android:digits="0123456789()- "
                         android:layout_height="wrap_content"
+                        android:digits="0123456789()- "
                         android:hint="@string/cell_phone"
-                        android:inputType="phone" />
+                        android:imeOptions="actionNext"
+                        android:inputType="phone"
+                        android:maxLength="14" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -123,10 +123,10 @@
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:imeOptions="actionNext"
                         android:hint="@string/email"
-                        android:singleLine="true"
-                        android:inputType="textEmailAddress" />
+                        android:imeOptions="actionNext"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -200,11 +200,11 @@
                         android:id="@+id/edtAddress1"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
-                        android:imeOptions="actionNext"
                         android:layout_height="wrap_content"
+                        android:hint="@string/street_address_1"
+                        android:imeOptions="actionNext"
                         android:inputType="textPostalAddress|textCapSentences"
-                        android:singleLine="true"
-                        android:hint="@string/street_address_1" />
+                        android:singleLine="true" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -217,10 +217,10 @@
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:singleLine="true"
-                        android:inputType="textCapSentences"
+                        android:hint="@string/city_1"
                         android:imeOptions="actionNext"
-                        android:hint="@string/city_1" />
+                        android:inputType="textCapSentences"
+                        android:singleLine="true" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -232,11 +232,11 @@
                         android:id="@+id/edtState1"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
-                        android:singleLine="true"
-                        android:inputType="textCapSentences"
                         android:layout_height="wrap_content"
+                        android:hint="@string/state_1"
                         android:imeOptions="actionNext"
-                        android:hint="@string/state_1" />
+                        android:inputType="textCapSentences"
+                        android:singleLine="true" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -248,13 +248,13 @@
                         android:id="@+id/edtPostalCode1"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
-                        android:imeOptions="actionNext"
-                        android:singleLine="true"
-                        android:inputType="number"
-                        android:digits="0123456789"
-                        android:maxLength="10"
                         android:layout_height="wrap_content"
-                        android:hint="@string/postal_code_1" />
+                        android:digits="0123456789"
+                        android:hint="@string/postal_code_1"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:singleLine="true" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -267,10 +267,10 @@
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="@string/street_address_2"
                         android:imeOptions="actionNext"
-                        android:singleLine="true"
                         android:inputType="textCapSentences"
-                        android:hint="@string/street_address_2" />
+                        android:singleLine="true" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -282,11 +282,11 @@
                         android:id="@+id/edtCity2"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
-                        android:imeOptions="actionNext"
-                        android:singleLine="true"
-                        android:inputType="textCapSentences"
                         android:layout_height="wrap_content"
-                        android:hint="@string/city_2" />
+                        android:hint="@string/city_2"
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapSentences"
+                        android:singleLine="true" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -300,10 +300,10 @@
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:inputType="textCapSentences"
+                        android:hint="@string/state_2"
                         android:imeOptions="actionNext"
-                        android:hint="@string/state_2" />
+                        android:inputType="textCapSentences"
+                        android:singleLine="true" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -315,13 +315,13 @@
                         android:id="@+id/edtPostalCode2"
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
-                        android:imeOptions="actionNext"
-                        android:singleLine="true"
-                        android:maxLength="10"
-                        android:digits="0123456789"
-                        android:inputType="number"
                         android:layout_height="wrap_content"
-                        android:hint="@string/postal_code_2" />
+                        android:digits="0123456789"
+                        android:hint="@string/postal_code_2"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:singleLine="true" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -332,12 +332,12 @@
                     <EditText
                         android:id="@+id/edtCountry"
                         style="@style/AutoCompleteStyle"
-                        android:imeOptions="actionNext"
-                        android:singleLine="true"
-                        android:inputType="textCapSentences"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/county" />
+                        android:hint="@string/county"
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapSentences"
+                        android:singleLine="true" />
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"
@@ -433,8 +433,8 @@
                         style="@style/AutoCompleteLabelStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:text="@string/drip_compaigns" />
+                        android:text="@string/drip_compaigns"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/edtDripCompaign"
@@ -442,15 +442,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left|center"
-                        android:visibility="gone"
                         android:hint="@string/drip_compaigns"
-                        android:lineSpacingExtra="2dp" />
+                        android:lineSpacingExtra="2dp"
+                        android:visibility="gone" />
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:fillViewport="true">
+                        android:fillViewport="true"
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:id="@+id/lnDrip"
@@ -510,8 +510,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top"
-                        android:imeOptions="actionDone"
                         android:hint="@string/add_notes"
+                        android:imeOptions="actionDone"
                         android:inputType="textMultiLine|textCapSentences"
                         android:lines="5" />
 

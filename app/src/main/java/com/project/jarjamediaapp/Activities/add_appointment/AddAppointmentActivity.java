@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -89,7 +91,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     String leadAppointmentId;
     boolean isReminderClicked = false, isViaClicked = false;
     String leadName = "";
-    boolean isEdit;
+    boolean isEdit, isEdited = false;
     String fromId = "";
     ArrayList<String> arrayListReminderValue, arrayListReminderText;
     CalendarAppointmentDetailModel.Data.CalendarData calendarData;
@@ -108,11 +110,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi = DataBindingUtil.setContentView(this, R.layout.activity_add_appointment);
         presenter = new AddAppointmentPresenter(this);
         presenter.initScreen();
-
-
-      /*  // for testing
-        EasyPreference.Builder pref = new EasyPreference.Builder(context);
-        pref.addString(GH.KEYS.NOTIFICATIONTYPE.name(),"").save();*/
 
     }
 
@@ -318,24 +315,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
             break;
             // auto assign agent to appointments from dashboard
-            case "5": {
-                // add slected agent show in agent filed
-                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
-                TextView textView = child.findViewById(R.id.txtDynamic);
-                textView.setText(GH.getInstance().getAgentName());
-                bi.lnAgent.addView(child);
+            case "5":
 
-                selectedIdsList.add(GH.getInstance().getAgentID());
-                if (agentIdsString.equals("")) {
-                    agentIdsString = GH.getInstance().getCalendarAgentId();
-                } else {
-                    agentIdsString = agentIdsString + "," + GH.getInstance().getCalendarAgentId();
-                }
-
-            }
-            break;
-
-            // auto assign agent to appointments from calender
+                // auto assign agent to appointments from calender
             case "3": {
                 // add slected agent show in agent filed
                 View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
@@ -352,6 +334,28 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
             }
             break;
+        }
+
+        if (isEdit) {
+
+            TextWatcher textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    isEdited = true;
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            };
+            bi.atvEventTitle.addTextChangedListener(textWatcher);
+            bi.atvDescription.addTextChangedListener(textWatcher);
 
         }
     }
@@ -595,6 +599,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             case R.id.tvName:
                 //clearFocus();
                 //showSearchDialog(context);
+                isEdited = true;
                 Intent i = new Intent(AddAppointmentActivity.this, SearchResultsActivity.class);
                 i.putExtra("fromAppoint", true);
                 startActivityForResult(i, 05);
@@ -608,10 +613,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
                 break;
             case R.id.tvAgent:
+                isEdited = true;
                 clearFocus();
                 showAgentDialog();
                 break;
             case R.id.tvStartDate:
+                isEdited = true;
                 clearFocus();
                 if (bi.tvStartDate.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
@@ -622,6 +629,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 showSpinnerDateDialog();
                 break;
             case R.id.tvEndDate:
+                isEdited = true;
                 clearFocus();
                 if (bi.tvEndDate.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
@@ -632,6 +640,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 showSpinnerDateDialog();
                 break;
             case R.id.tvStartTime:
+                isEdited = true;
                 clearFocus();
                 if (bi.tvStartTime.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
@@ -641,6 +650,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 showTimeDialog(bi.tvStartTime, true);
                 break;
             case R.id.tvEndTime:
+                isEdited = true;
                 clearFocus();
                 if (bi.tvEndTime.getText().toString().equalsIgnoreCase("")) {
                     calendarInstance();
@@ -650,20 +660,19 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 showTimeDialog(bi.tvEndTime, false);
                 break;
             case R.id.atvReminder:
+                isEdited = true;
                 clearFocus();
                 reminder();
                 hideSoftKeyboard(bi.atvReminder);
                 break;
             case R.id.atvVia:
+                isEdited = true;
                 clearFocus();
                 via();
                 break;
             case R.id.btnSave:
-
                 // from lead detail
                 if (fromId.equals("2")) {
-
-
                     //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                     String storedHashMapLeadsString = GH.getInstance().getUserPermissonLead();
                     java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>() {
@@ -1511,7 +1520,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         //   super.onBackPressed();
         if (isChangesDone()) {
             GH.getInstance().discardChangesDialog(context);
-        }else {
+        } else {
             super.onBackPressed();
         }
         HomeActivity.onClick = true;
@@ -1520,27 +1529,33 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
     private boolean isChangesDone() {
 
-        if (!Methods.isEmpty(bi.tvName))
-            return true;
-        if (!Methods.isEmpty(bi.atvEventTitle))
-            return true;
-        if (!Methods.isEmpty(bi.atvDescription))
-            return true;
-        if (!Methods.isEmpty(bi.atvLocation))
-            return true;
-        if (!Methods.isEmpty(bi.tvStartDate))
-            return true;
-        if (!Methods.isEmpty(bi.tvEndDate))
-            return true;
-        if (!Methods.isEmpty(bi.tvStartTime))
-            return true;
-        if (!Methods.isEmpty(bi.tvEndTime))
-            return true;
-        if (!Methods.isEmpty(bi.atvReminder))
-            return true;
-        if (!Methods.isEmpty(bi.atvVia))
-            return true;
-        return false;
+        if (!isEdit) {
+            if (!Methods.isEmpty(bi.tvName))
+                return true;
+            if (!Methods.isEmpty(bi.atvEventTitle))
+                return true;
+            if (!Methods.isEmpty(bi.atvDescription))
+                return true;
+            if (!Methods.isEmpty(bi.atvLocation))
+                return true;
+            if (!Methods.isEmpty(bi.tvStartDate))
+                return true;
+            if (!Methods.isEmpty(bi.tvEndDate))
+                return true;
+            if (!Methods.isEmpty(bi.tvStartTime))
+                return true;
+            if (!Methods.isEmpty(bi.tvEndTime))
+                return true;
+            if (!Methods.isEmpty(bi.atvReminder))
+                return true;
+            if (!Methods.isEmpty(bi.atvVia))
+                return true;
+            return false;
+        } else {
+            if (isEdited)
+                return true;
+            return false;
+        }
     }
 
 }

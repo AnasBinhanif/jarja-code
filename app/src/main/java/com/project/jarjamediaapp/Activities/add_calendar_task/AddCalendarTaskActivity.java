@@ -3,6 +3,8 @@ package com.project.jarjamediaapp.Activities.add_calendar_task;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,9 +46,10 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     boolean isEdit;
     String calendarId = "";
     CalendarTaskDetailModel.Data calendarDetailModel;
-
     int month, year, day, mHour, mMinute;
     Calendar newCalendar;
+    boolean isEdited = false;
+    TextWatcher textWatcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,28 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         isEdit = getIntent().getBooleanExtra("isEdit", false);
         if (isEdit) {
+
+            textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    isEdited = true;
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            };
+            bi.atvDescription.addTextChangedListener(textWatcher);
+            bi.atvEventTitle.addTextChangedListener(textWatcher);
+            bi.tvStartDate.addTextChangedListener(textWatcher);
+            bi.tvStartTime.addTextChangedListener(textWatcher);
+
             calendarId = getIntent().getStringExtra("calendarId");
             calendarDetailModel = getIntent().getParcelableExtra("modelData");
             bi.atvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
@@ -123,6 +148,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         bi.btnSave.setOnClickListener(this);
         bi.btnCancel.setOnClickListener(this);
         bi.cbAllDay.setOnClickListener(this);
+        bi.cbMarkComplete.setOnClickListener(this);
 
     }
 
@@ -188,6 +214,10 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
             case R.id.cbAllDay:
                 removeFocus();
                 allDay();
+                isEdited = true;
+                break;
+            case R.id.cbMarkComplete:
+                isEdited = true;
                 break;
         }
     }
@@ -460,19 +490,27 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
     }
 
     private boolean isChangesDone() {
-        if (!Methods.isEmpty(bi.atvEventTitle))
-            return true;
-        if (!Methods.isEmpty(bi.atvDescription))
-            return true;
-        if (!Methods.isEmpty(bi.tvStartDate))
-            return true;
-        if (!Methods.isEmpty(bi.tvStartTime))
-            return true;
-        if (bi.cbAllDay.isChecked())
-            return true;
-        if (bi.cbMarkComplete.isChecked())
-            return true;
-        return false;
+
+        if (isEdit) {
+            if (!Methods.isEmpty(bi.atvEventTitle))
+                return true;
+            if (!Methods.isEmpty(bi.atvDescription))
+                return true;
+            if (!Methods.isEmpty(bi.tvStartDate))
+                return true;
+            if (!Methods.isEmpty(bi.tvStartTime))
+                return true;
+            if (bi.cbAllDay.isChecked())
+                return true;
+            if (bi.cbMarkComplete.isChecked())
+                return true;
+            return false;
+        } else {
+            if (isEdited) {
+                return true;
+            }
+            return false;
+        }
     }
 
 }

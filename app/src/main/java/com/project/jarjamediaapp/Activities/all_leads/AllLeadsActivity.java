@@ -128,29 +128,6 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
         _leadsList = new ArrayList<>();
         initPagination();
-     /*   bi.edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-
-                    int length = bi.edtSearch.getText().length();
-                    try {
-                        if (length > 0) {
-                            leadsList = new ArrayList<>();
-                            page = 0;
-                            isFilter = true;
-                            presenter.SearchLead(page, bi.edtSearch.getText().toString());
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    return true;
-                }
-                return false;
-            }
-        });*/
 
         bi.edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -167,11 +144,15 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                 int length = bi.edtSearch.getText().length();
                 try {
                     if (length > 0) {
-
                         page = 0;
                         isFilter = true;
-                        //  presenter.SearchLead(page, bi.edtSearch.getText().toString());
                         searchLead(page, bi.edtSearch.getText().toString());
+                    } else {
+                        data = getIntent().getParcelableExtra("bundle");
+                        totalPages = getIntent().getIntExtra("totalPages", 0);
+                        _leadsList.clear();
+                        isFilter = false;
+                        callGetAllLeads(data, String.valueOf(page));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -353,6 +334,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
     private void populateListData(ArrayList<GetAllLeads.LeadsList> leadsList) {
 
+        GH.getInstance().hideKeyboard(context, AllLeadsActivity.this);
         if (leadsList != null && leadsList.size() != 0) {
             //  if (page == 0) {
             linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
@@ -381,10 +363,10 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
             recyclerAdapterUtil.notifyDataSetChanged();
             isLoading = false;
-           /* } else {
-                isLoading = false;
-                recyclerAdapterUtil.notifyDataSetChanged();
-            }*/
+
+            if (page > 0) {
+                bi.recyclerViewAllLeads.scrollToPosition(recyclerAdapterUtil.getItemCount() - 25);
+            }
 
         }
 
