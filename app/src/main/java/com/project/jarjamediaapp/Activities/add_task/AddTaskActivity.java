@@ -117,7 +117,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     @Override
     public void initViews() {
 
-
         presenter.getAgentNames();
 
         bi.atvVia.setOnClickListener(this);
@@ -200,6 +199,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 bi.atvRecur.setEnabled(false);
                 bi.atvRecur.setClickable(false);
                 bi.atvRecur.setFocusableInTouchMode(false);
+                bi.atvNameTask.setEnabled(true);
                 // hit api for task detail
 
                 int whichTasks = getIntent().getIntExtra("whichTasks", 1);
@@ -215,7 +215,9 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
             break;
             // from dashboard task
-            case "3": {
+            case "3":
+
+            case "5": {
                 bi.tvName.setEnabled(false);
                 isEdit = true;
                 leadId = "";
@@ -240,27 +242,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 bi.tvName.setEnabled(true);
                 leadId = "";
                 isEdit = true;
-            }
-            break;
-
-            case "5": {
-                bi.tvName.setEnabled(false);
-                isEdit = true;
-                leadId = "";
-                taskId = getIntent().getStringExtra("taskId");
-                setViewAndChildrenEnabled(bi.lnParent, false);
-                bi.atvRecur.setEnabled(false);
-                bi.atvRecur.setClickable(false);
-                bi.atvRecur.setFocusableInTouchMode(false);
-                int whichTasks = getIntent().getIntExtra("whichTasks", 1);
-                switch (whichTasks) {
-                    case 1:
-                        presenter.getTaskDetail(taskId);
-                        break;
-                    case 3:
-                        presenter.getFutureTaskDetail(taskId);
-                        break;
-                }
             }
             break;
         }
@@ -508,6 +489,26 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         // data bind
         GetTaskDetail ft = response;
         retrieveData(ft);
+        textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isEdited = true;
+
+            }
+        };
+        bi.atvNameTask.addTextChangedListener(textWatcher);
+        bi.atvDescription.addTextChangedListener(textWatcher);
+        bi.atvAddProperty.addTextChangedListener(textWatcher);
 
     }
 
@@ -624,25 +625,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         }
 
         hideProgressBar();
-        textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isEdited = true;
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        };
-        bi.atvNameTask.addTextChangedListener(textWatcher);
-        bi.atvDescription.addTextChangedListener(textWatcher);
-        bi.atvAddProperty.addTextChangedListener(textWatcher);
 
     }
 
@@ -1534,7 +1516,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (isChangesDone()) {
+                    GH.getInstance().discardChangesDialog(context);
+                } else {
+                    super.onBackPressed();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

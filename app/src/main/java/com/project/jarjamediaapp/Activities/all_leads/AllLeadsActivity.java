@@ -379,20 +379,26 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                 bi.recyclerViewAllLeads.scrollToPosition(recyclerAdapterUtil.getItemCount() - 25);
             }
 
+            bi.recyclerViewAllLeads.setVisibility(View.VISIBLE);
+
+            recyclerAdapterUtil.addOnClickListener((Function2<GetAllLeads.LeadsList, Integer, Unit>) (viewComplainList, integer) -> {
+
+                try {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("leadID", viewComplainList.id);
+                    switchActivityWithIntentString(LeadDetailActivity.class, (HashMap<String, String>) map);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return Unit.INSTANCE;
+            });
+
+        }else {
+            bi.recyclerViewAllLeads.setVisibility(View.GONE);
         }
 
-        recyclerAdapterUtil.addOnClickListener((Function2<GetAllLeads.LeadsList, Integer, Unit>) (viewComplainList, integer) -> {
 
-            try {
-                Map<String, String> map = new HashMap<>();
-                map.put("leadID", viewComplainList.id);
-                switchActivityWithIntentString(LeadDetailActivity.class, (HashMap<String, String>) map);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return Unit.INSTANCE;
-        });
         }catch (Exception e ){
             e.printStackTrace();
         }
@@ -469,9 +475,11 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                             _leadsList.addAll(getAppointmentsModel.data.leadsList);
                             if (_leadsList.size() != 0) {
 
+                                bi.recyclerViewAllLeads.setVisibility(View.VISIBLE);
                                 populateListData(_leadsList);
 
                             } else {
+                                bi.recyclerViewAllLeads.setVisibility(View.GONE);
                                 ToastUtils.showToast(context, "No Result Found");
                             }
                         } else {
