@@ -3,6 +3,7 @@ package com.project.jarjamediaapp.Activities.all_leads;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -62,6 +63,10 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     boolean isLoading = false, isFilter = false;
     GetAllLeads modelGetAllLeads;
     boolean registeredDateAsc;
+    long delay = 500; // 1 seconds after user stops typing
+    long last_text_edit = 0;
+    Handler handler = new Handler();
+    Runnable input_finish_checker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +113,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        if (_leadsList != null && _leadsList.size() != 0) {
-            _leadsList.clear();
-        }
+
         page = 0;
         if (bi.edtSearch.getText().toString().equals("")) {
             handleIntent();
@@ -118,7 +121,6 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             _leadsList = new ArrayList<>();
             page = 0;
             isFilter = true;
-            //   presenter.SearchLead(page, bi.edtSearch.getText().toString());
             searchLead(page, bi.edtSearch.getText().toString());
         }
     }
@@ -136,6 +138,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                handler.removeCallbacks(input_finish_checker);
             }
 
             @Override
@@ -144,9 +147,8 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                 int length = bi.edtSearch.getText().length();
                 try {
                     if (length > 0) {
-                        page = 0;
-                        isFilter = true;
-                        searchLead(page, bi.edtSearch.getText().toString());
+                        last_text_edit = System.currentTimeMillis();
+                        handler.postDelayed(input_finish_checker, delay);
                     } else {
                         data = getIntent().getParcelableExtra("bundle");
                         totalPages = getIntent().getIntExtra("totalPages", 0);
@@ -160,6 +162,14 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
             }
         });
+
+        input_finish_checker = () -> {
+            if (System.currentTimeMillis() > (last_text_edit + delay - 500)) {
+                page = 0;
+                isFilter = true;
+                searchLead(page, bi.edtSearch.getText().toString());
+            }
+        };
 
 
     }
@@ -334,6 +344,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
     private void populateListData(ArrayList<GetAllLeads.LeadsList> leadsList) {
 
+        try {
         GH.getInstance().hideKeyboard(context, AllLeadsActivity.this);
         if (leadsList != null && leadsList.size() != 0) {
             //  if (page == 0) {
@@ -372,13 +383,19 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetAllLeads.LeadsList, Integer, Unit>) (viewComplainList, integer) -> {
 
-            Map<String, String> map = new HashMap<>();
-            map.put("leadID", viewComplainList.id);
-            switchActivityWithIntentString(LeadDetailActivity.class, (HashMap<String, String>) map);
+            try {
+                Map<String, String> map = new HashMap<>();
+                map.put("leadID", viewComplainList.id);
+                switchActivityWithIntentString(LeadDetailActivity.class, (HashMap<String, String>) map);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             return Unit.INSTANCE;
         });
-
+        }catch (Exception e ){
+            e.printStackTrace();
+        }
 
     }
 
