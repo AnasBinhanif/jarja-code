@@ -2,7 +2,6 @@ package com.project.jarjamediaapp.CustomAdapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.jarjamediaapp.Activities.notification.FollowUpNotificationModel;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
+import com.project.jarjamediaapp.Activities.notification.TaskNotificationModel;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -24,6 +24,8 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,11 +42,10 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
     public FollowUpsNotificationRecyclerAdapter(Context context, ArrayList<FollowUpNotificationModel.FollowUpsList> data) {
         this.context = context;
         this.data = data;
+        sortData();
         inflater = LayoutInflater.from(context);
 
     }
-
-
 
 
     @Override
@@ -56,10 +57,10 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
     @Override
     public void onBindViewHolder(@NonNull final FollowUpsNotificationRecyclerAdapter.MyViewHolder holder, final int position) {
 
-        final FollowUpNotificationModel.FollowUpsList notificationObj  = data.get(position);
+        final FollowUpNotificationModel.FollowUpsList notificationObj = data.get(position);
 
 
-        if(notificationObj.getIsSeen() == null || !notificationObj.getIsSeen()){
+        if (notificationObj.getIsSeen() == null || !notificationObj.getIsSeen()) {
 
             holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorYellow));
 
@@ -78,16 +79,17 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
             public void onClick(View view) {
 
                 int backgroundColor = holder.CardviewNotification.getCardBackgroundColor().getDefaultColor();
-                if (backgroundColor == context.getResources().getColor(R.color.colorYellow)){
+                if (backgroundColor == context.getResources().getColor(R.color.colorYellow)) {
 
+                    data.get(position).setIsSeen(true);
                     holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorWhite));
 
 
                 }
 
 
-                getFolloUpDetailByID(notificationObj.getDripDetailID(),notificationObj.getReminderId());
-                GH.getInstance().ShowProgressDialog((NotificationActivity)context);
+                getFolloUpDetailByID(notificationObj.getDripDetailID(), notificationObj.getReminderId());
+                GH.getInstance().ShowProgressDialog((NotificationActivity) context);
 
             }
         });
@@ -100,10 +102,18 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
         return data.size();
     }
 
+    public void sortData() {
+        Collections.sort(this.data, new Comparator<FollowUpNotificationModel.FollowUpsList>() {
+            @Override
+            public int compare(FollowUpNotificationModel.FollowUpsList followUpsList, FollowUpNotificationModel.FollowUpsList t1) {
+                return Boolean.compare(followUpsList.getIsSeen(), t1.getIsSeen());
+            }
+        });
+    }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvName,tvLeadName,tvContact,tvEmail;
+        TextView tvName, tvLeadName, tvContact, tvEmail;
         CardView CardviewNotification;
 
 
@@ -120,10 +130,10 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
         }
     }
 
-    private void getFolloUpDetailByID(String dripDetailId,String reminderId) {
+    private void getFolloUpDetailByID(String dripDetailId, String reminderId) {
 
         Call<ViewFollowUpModel> _callToday;
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId,reminderId);
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId, reminderId);
         _callToday.enqueue(new Callback<ViewFollowUpModel>() {
             @Override
             public void onResponse(Call<ViewFollowUpModel> call, Response<ViewFollowUpModel> response) {
@@ -142,7 +152,50 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
                         String dateTime = getDetails.data.viewDPCStep.sendDateTime;
 
                         GH.getInstance().HideProgressDialog();
+                        //****added by akshay to sort list on basis of seen or unseen
+                        Collections.sort(data, new Comparator<FollowUpNotificationModel.FollowUpsList>() {
+                            @Override
+                            public int compare(FollowUpNotificationModel.FollowUpsList followUpsList, FollowUpNotificationModel.FollowUpsList t1) {
+                                return Boolean.compare(followUpsList.getIsSeen(), t1.getIsSeen());
+                            }
+                        });
+                        notifyDataSetChanged();
+                        //**********
                         showViewFollowUpDialog(context, wait, title, dateTime, time, note, senType);
+
+                        /*Call<FollowUpNotificationModel> _cCall;
+                        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getNotificationByFollowUps(GH.getInstance().getAuthorization(), 0);
+                        _cCall.enqueue(new Callback<FollowUpNotificationModel>() {
+                            @Override
+                            public void onResponse(Call<FollowUpNotificationModel> call, Response<FollowUpNotificationModel> response) {
+
+                                // _view.hideProgressBar();
+                                if (response.isSuccessful()) {
+
+                                    FollowUpNotificationModel notificationModel = response.body();
+                                    if (notificationModel.getStatus().equals("Success")) {
+                                        // _view.updateUIListF(notificationModel.getData().getFollowUpsList(),notificationModel.getData().getFollowCount());
+
+                                        GH.getInstance().HideProgressDialog();
+                                        data = (ArrayList) notificationModel.getData().getFollowUpsList();
+                                        notifyDataSetChanged();
+
+                                    } else {
+                                        //   _view.updateUIonFalse(notificationModel.getMessage());
+                                    }
+                                } else {
+
+                                    ApiError error = ErrorUtils.parseError(response);
+                                    // _view.updateUIonError(error.message());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<FollowUpNotificationModel> call, Throwable t) {
+                                //_view.hideProgressBar();
+                                // _view.updateUIonFailure();
+                            }
+                        });*/
 
 
                     } else {
@@ -167,6 +220,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
             }
         });
     }
+
     public void showViewFollowUpDialog(Context context, String wait, String title, String dateTime, String time, String note, String sentType) {
 
         TextView edtWait, edtTitle, edtTime, edtNote;
@@ -190,7 +244,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
             edtNote = (TextView) dialog.findViewById(R.id.edtNote);
             edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
             edtTime = (TextView) dialog.findViewById(R.id.edtTime);
-            edtTime.setText(GH.getInstance().formatter(dateTime,"MM-dd-yyyy hh:mm a","yyyy-MM-dd'T'HH:mm:ss"));
+            edtTime.setText(GH.getInstance().formatter(dateTime, "MM-dd-yyyy hh:mm a", "yyyy-MM-dd'T'HH:mm:ss"));
 
         }
 

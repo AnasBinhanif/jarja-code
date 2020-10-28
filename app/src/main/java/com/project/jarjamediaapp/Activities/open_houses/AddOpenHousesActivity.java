@@ -25,11 +25,16 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
+import com.abdeveloper.library.MultiSelectDialog;
+import com.abdeveloper.library.MultiSelectDialogForWebsites;
+import com.abdeveloper.library.MultiSelectModel;
+import com.abdeveloper.library.MultiSelectModelForWebsite;
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
@@ -59,6 +64,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
 import id.zelory.compressor.Compressor;
 import okhttp3.MediaType;
@@ -87,6 +93,9 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     GetAllOpenHousesModel.Data.OpenHouse openHouse;
     boolean isEdit, isEdited = false;
     TextWatcher textWatcher;
+    ArrayList<MultiSelectModelForWebsite> searchListItems = new ArrayList<>();
+    private ArrayList<String> selectedIdsList = new ArrayList<>();
+    private String websiteIdsString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +108,9 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
         if (getIntent().getExtras() != null) {
 
+            //disabling website click
+            bi.tvAgent.setEnabled(false);
+            
             GetAllOpenHousesModel.Data.OpenHouse openHouse = (GetAllOpenHousesModel.Data.OpenHouse) getIntent().getExtras().getSerializable("editLeadsObj");
             if (openHouse != null) {
 
@@ -137,6 +149,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                 }
 
             }
+        } else {
+            presenter.getUserWebsites();
         }
 
     }
@@ -164,6 +178,24 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             bi.tvRemovePictures.setVisibility(View.GONE);
             bi.tvSelectPictures.setVisibility(View.VISIBLE);
             image = "";
+        }
+        if (openHouse.getWebRequestNo() != null && openHouse.getWebRequestNo().size() > 0) {
+            for (UserWebsites.Data d : openHouse.getWebRequestNo()) {
+                selectedIdsList.add(d.getValue());
+                View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                TextView textView = child.findViewById(R.id.txtDynamic);
+                textView.setText(d.getText());
+                bi.lnAgent.addView(child);
+
+                if (websiteIdsString.equals("")) {
+                    websiteIdsString = d.getValue();
+                } else {
+                    websiteIdsString = websiteIdsString + "," + d.getValue();
+                }
+
+
+            }
+
         }
 
     }
@@ -381,6 +413,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                         obj.put("openHouseDate", openHouseStartDate);
                         obj.put("openHouseEndDate", openHouseEndDate);
                         // obj.put("imageName", "d71f5603-8016-44ea-b9ca-2cc6747107f71597140814171.jpg");
+                        obj.put("webRequestNo", websiteIdsString);
 
 
                     } catch (JSONException e) {
@@ -418,6 +451,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                             obj.put("openHouseDate", openHouseStartDate);
                             obj.put("openHouseEndDate", openHouseEndDate);
 
+                            obj.put("webRequestNo", websiteIdsString);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -438,14 +473,36 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         bi.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                // finish();
+                //adding below block of if and else to replace by line of code --- > akshay
+                if (isChangesDone()) {
+                    GH.getInstance().discardChangesDialog(context);
+                } else {
+                    finish();
+                }
+            }
+        });
+
+        bi.tvAgent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (searchListItems.size() > 0) {
+
+                    showAgentDialog();
+                }
+
             }
         });
 
     }
 
     private boolean isValidate() {
-
+        //below if block is added to validate that atleast one website is selected
+        if (websiteIdsString.equalsIgnoreCase("")) {
+            ToastUtils.showToast(context, "Please enter website");
+            bi.tvAgent.requestFocus();
+            return false;
+        }
         if (Methods.isEmpty(bi.atvAddress)) {
             ToastUtils.showToast(context, R.string.error_address);
             bi.atvAddress.requestFocus();
@@ -518,11 +575,9 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
     public void updateUI(Response<BaseResponse> response) {
 
         if (bi.btnSave.getText() == "Update") {
-
             ToastUtils.showToastLong(context, "Open House Updated Successfully");
             finish();
         } else {
-
             ToastUtils.showToastLong(context, "Open House Added Successfully");
             finish();
         }
@@ -656,6 +711,17 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
 
 
+    }
+
+    @Override
+    public void updateUIForWebsites(Response<UserWebsites> response) {
+        UserWebsites userWebsites = response.body();
+
+        if (userWebsites.getData().length > 0) {
+            for (UserWebsites.Data d : userWebsites.getData()) {
+                searchListItems.add(new MultiSelectModelForWebsite(d.getValue(), d.getText(), d.getValue()));
+            }
+        }
     }
 
     @Override
@@ -1026,5 +1092,72 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
             return false;
         }
     }
+
+
+    private void showAgentDialog() {
+
+        MultiSelectDialogForWebsites multiSelectDialog = new MultiSelectDialogForWebsites()
+                .title("Select Websites") //setting title for dialog
+                .titleSize(25)
+                .positiveText("Done")
+                .negativeText("Cancel")
+                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                .onSubmit(new MultiSelectDialogForWebsites.SubmitCallbackListener() {
+                    @Override
+                    public void onSelected(ArrayList<String> selectedIds, ArrayList<String> selectedNames, String commonSeperatedData) {
+                        //will return list of selected IDS
+                        selectedIdsList = new ArrayList<>();
+                        selectedIdsList = selectedIds;
+
+                        if (bi.lnAgent.getChildCount() > 0) {
+                            bi.lnAgent.removeAllViews();
+                        }
+
+                        for (String name : selectedNames) {
+
+                            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                            TextView textView = child.findViewById(R.id.txtDynamic);
+                            textView.setText(name);
+                            bi.lnAgent.addView(child);
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onSelected(ArrayList<String> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+                        websiteIdsString = "";
+                        if (selectedEncyrptedIds != null || selectedEncyrptedIds.size() != 0) {
+                            for (String i : selectedEncyrptedIds) {
+
+                                if (websiteIdsString.equals("")) {
+                                    websiteIdsString = i;
+                                } else {
+                                    websiteIdsString = websiteIdsString + "," + i;
+                                }
+                            }
+                        } else {
+                            ToastUtils.showToast(context, "No EncryptedID Found");
+                        }
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+
+
+        if (selectedIdsList.size() != 0) {
+            multiSelectDialog.preSelectIDsList(selectedIdsList);
+            multiSelectDialog.multiSelectList(searchListItems);
+        } else {
+            multiSelectDialog.multiSelectList(searchListItems);
+        }
+        multiSelectDialog.multiSelectList(searchListItems);
+
+        multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
+    }
+
 
 }

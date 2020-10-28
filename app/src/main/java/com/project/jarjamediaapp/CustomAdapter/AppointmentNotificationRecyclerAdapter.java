@@ -15,6 +15,7 @@ import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivi
 import com.project.jarjamediaapp.Activities.add_appointment.Data;
 import com.project.jarjamediaapp.Activities.add_appointment.GetAppointmentByIDModel;
 import com.project.jarjamediaapp.Activities.notification.AppointmentNotificationModel;
+import com.project.jarjamediaapp.Activities.notification.FollowUpNotificationModel;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.NetworkController;
@@ -23,6 +24,8 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.databinding.ActivityTagsBindingImpl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,6 +42,7 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
     public AppointmentNotificationRecyclerAdapter(Context context, ArrayList<AppointmentNotificationModel.FollowUpsList> data) {
         this.context = context;
         this.data = data;
+        sortData();
         inflater = LayoutInflater.from(context);
 
     }
@@ -55,10 +59,9 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 
-        final AppointmentNotificationModel.FollowUpsList notificationObj  = data.get(position);
+         AppointmentNotificationModel.FollowUpsList notificationObj  = data.get(position);
 
         if(!notificationObj.getIsSeen()){
-
 
             holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorYellow));
 
@@ -92,12 +95,13 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
                 int backgroundColor = holder.CardviewNotification.getCardBackgroundColor().getDefaultColor();
                 if (backgroundColor == context.getResources().getColor(R.color.colorYellow)){
 
+
+                    data.get(position).setIsSeen(true);
                     holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorWhite));
 
 
                 }
                 getAppointmentById(notificationObj.getLeadAppoinmentID());
-
                 GH.getInstance().ShowProgressDialog((NotificationActivity)context);
             }
         });
@@ -110,6 +114,14 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
         return data.size();
     }
 
+    public void sortData(){
+        Collections.sort(this.data, new Comparator<AppointmentNotificationModel.FollowUpsList>() {
+            @Override
+            public int compare(AppointmentNotificationModel.FollowUpsList followUpsList, AppointmentNotificationModel.FollowUpsList t1) {
+                return Boolean.compare(followUpsList.getIsSeen(), t1.getIsSeen());
+            }
+        });
+    }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -144,6 +156,17 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
                     if (getAppointmentsModel.getStatus().equals("Success")) {
 
                         GH.getInstance().HideProgressDialog();
+
+                        //****added by akshay to sort list on basis of seen or unseen
+                        Collections.sort(data, new Comparator<AppointmentNotificationModel.FollowUpsList>() {
+                            @Override
+                            public int compare(AppointmentNotificationModel.FollowUpsList followUpsList, AppointmentNotificationModel.FollowUpsList t1) {
+                                return Boolean.compare(followUpsList.getIsSeen(), t1.getIsSeen());
+                            }
+                        });
+                        notifyDataSetChanged();
+                        //**********
+
                         // from notifcation screen when tap on notification item
                         Data models = getAppointmentsModel.getData();
                         context.startActivity(new Intent(context, AddAppointmentActivity.class)

@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.CustomAdapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
 import com.project.jarjamediaapp.Activities.add_task.GetTaskDetail;
+import com.project.jarjamediaapp.Activities.notification.AppointmentNotificationModel;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
 import com.project.jarjamediaapp.Activities.notification.TaskNotificationModel;
+import com.project.jarjamediaapp.Activities.tasks.TasksActivity;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
@@ -24,6 +27,8 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,11 +45,10 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
     public TaskNotificatonRecyclerAdapter(Context context, ArrayList<TaskNotificationModel.TaskList> data) {
         this.context = context;
         this.data = data;
+        sortData();
         inflater = LayoutInflater.from(context);
 
     }
-
-
 
 
     @Override
@@ -56,9 +60,9 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
     @Override
     public void onBindViewHolder(@NonNull final TaskNotificatonRecyclerAdapter.MyViewHolder holder, final int position) {
 
-        final TaskNotificationModel.TaskList notificationObj  = data.get(position);
+        TaskNotificationModel.TaskList notificationObj = data.get(position);
 
-        if(!notificationObj.getIsSeen()){
+        if (!notificationObj.getIsSeen()) {
 
 
             holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorYellow));
@@ -79,14 +83,16 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
             public void onClick(View view) {
 
                 int backgroundColor = holder.CardviewNotification.getCardBackgroundColor().getDefaultColor();
-                if (backgroundColor == context.getResources().getColor(R.color.colorYellow)){
+                if (backgroundColor == context.getResources().getColor(R.color.colorYellow)) {
 
                     holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorWhite));
-
+                    data.get(position).setIsSeen(true);
 
                 }
                 getTaskDetail(notificationObj.getEncryptedTaskID());
-                GH.getInstance().ShowProgressDialog((NotificationActivity)context);
+                //  GH.getInstance().ShowProgressDialog((NotificationActivity)context);
+
+
             }
         });
 
@@ -98,10 +104,18 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
         return data.size();
     }
 
+    public void sortData() {
+        Collections.sort(this.data, new Comparator<TaskNotificationModel.TaskList>() {
+            @Override
+            public int compare(TaskNotificationModel.TaskList t1, TaskNotificationModel.TaskList t2) {
+                return Boolean.compare(t1.getIsSeen(), t1.getIsSeen());
+            }
+        });
+    }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvName,tvLeadName,tvContact,tvEmail;
+        TextView tvName, tvLeadName, tvContact, tvEmail;
         CardView CardviewNotification;
 
 
@@ -125,7 +139,7 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
         apiCall.enqueue(new Callback<GetTaskDetail>() {
             @Override
             public void onResponse(Call<GetTaskDetail> call, Response<GetTaskDetail> response) {
-
+                Log.d("onResponse: ", response.message());
                 if (response.isSuccessful()) {
 
                     GetTaskDetail getTaskDetail = response.body();
@@ -133,6 +147,16 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
                     if (getTaskDetail.getStatus().equalsIgnoreCase("Success")) {
 
                         GH.getInstance().HideProgressDialog();
+
+                        //****added by akshay to sort list on basis of seen or unseen
+                        Collections.sort(data, new Comparator<TaskNotificationModel.TaskList>() {
+                            @Override
+                            public int compare(TaskNotificationModel.TaskList t1, TaskNotificationModel.TaskList t2) {
+                                return Boolean.compare(t1.getIsSeen(), t1.getIsSeen());
+                            }
+                        });
+                        notifyDataSetChanged();
+                        //**********
                         context.startActivity(new Intent(context, AddTaskActivity.class)
                                 .putExtra("from", "3")
                                 .putExtra("whichTasks", 1)
@@ -140,9 +164,10 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
                                 .putExtra("taskId", taskId));
                         // _view.updateTaskDetail(getTaskDetail);
 
+
                     } else {
 
-                        ToastUtils.showToastLong(context,getTaskDetail.message);
+                        ToastUtils.showToastLong(context, getTaskDetail.message);
                        /* _view.hideProgressBar();
 
                         _view.updateUIonFalse(getTaskDetail.message);*/
@@ -152,14 +177,14 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
 
 
                     ApiError error = ErrorUtils.parseError(response);
-                    ToastUtils.showToastLong(context,error.Message());
+                    ToastUtils.showToastLong(context, error.Message());
 
                 }
             }
 
             @Override
             public void onFailure(Call<GetTaskDetail> call, Throwable t) {
-                ToastUtils.showToastLong(context,t.getMessage());
+                ToastUtils.showToastLong(context, t.getMessage());
             }
         });
 

@@ -85,7 +85,7 @@ public class FollowUpPresenter extends BasePresenter<FollowUpContract.View> impl
                     GetFollowUpsModel getFollowUpsModel = response.body();
                     if (getFollowUpsModel.status.equals("Success")) {
 
-                        _view.updateUI(getFollowUpsModel);
+                         _view.updateUI(getFollowUpsModel);
 
                     } else {
 

@@ -63,7 +63,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     boolean isLoading = false, isFilter = false;
     GetAllLeads modelGetAllLeads;
     boolean registeredDateAsc;
-    long delay = 500; // 1 seconds after user stops typing
+    long delay = 1000; // 1 seconds after user stops typing
     long last_text_edit = 0;
     Handler handler = new Handler();
     Runnable input_finish_checker;
@@ -113,7 +113,6 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-
         page = 0;
         if (bi.edtSearch.getText().toString().equals("")) {
             handleIntent();
@@ -190,7 +189,9 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                     Log.d("scroll", "last item");
                     if (!isLoading) {
                         if (isFilter) {
-                            totalPages = modelGetAllLeads.data.noOfPages;
+                            if (modelGetAllLeads != null) {
+                                totalPages = modelGetAllLeads.data.noOfPages;
+                            }
                         }
 
                         if (totalPages > _leadsList.size()) {
@@ -345,61 +346,61 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     private void populateListData(ArrayList<GetAllLeads.LeadsList> leadsList) {
 
         try {
-        GH.getInstance().hideKeyboard(context, AllLeadsActivity.this);
-        if (leadsList != null && leadsList.size() != 0) {
-            //  if (page == 0) {
-            linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-            bi.recyclerViewAllLeads.setLayoutManager(linearLayoutManager);
-            bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
-            bi.recyclerViewAllLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewAllLeads.getContext(), 1));
-            recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
-            recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail, R.id.tvInitial);
+            GH.getInstance().hideKeyboard(context, AllLeadsActivity.this);
+            if (leadsList != null && leadsList.size() != 0) {
+                //  if (page == 0) {
+                linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+                bi.recyclerViewAllLeads.setLayoutManager(linearLayoutManager);
+                bi.recyclerViewAllLeads.setItemAnimator(new DefaultItemAnimator());
+                bi.recyclerViewAllLeads.addItemDecoration(new DividerItemDecoration(bi.recyclerViewAllLeads.getContext(), 1));
+                recyclerAdapterUtil = new RecyclerAdapterUtil(context, leadsList, R.layout.custom_all_leads_layout);
+                recyclerAdapterUtil.addViewsList(R.id.tvName, R.id.tvPhone, R.id.tvEmail, R.id.tvInitial);
 
-            recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetAllLeads.LeadsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
+                recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetAllLeads.LeadsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
 
-                TextView tvName = (TextView) integerMap.get(R.id.tvName);
-                TextView tvPhone = (TextView) integerMap.get(R.id.tvPhone);
-                TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
-                TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
+                    TextView tvName = (TextView) integerMap.get(R.id.tvName);
+                    TextView tvPhone = (TextView) integerMap.get(R.id.tvPhone);
+                    TextView tvEmail = (TextView) integerMap.get(R.id.tvEmail);
+                    TextView tvInitial = (TextView) integerMap.get(R.id.tvInitial);
 
-                tvName.setText(allLeadsList.firstName + " " + allLeadsList.lastName);
-                tvPhone.setText(allLeadsList.primaryPhone);
-                tvEmail.setText(allLeadsList.primaryEmail);
+                    tvName.setText(allLeadsList.firstName + " " + allLeadsList.lastName);
+                    tvPhone.setText(allLeadsList.primaryPhone);
+                    tvEmail.setText(allLeadsList.primaryEmail);
 
-                tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1) + "");
+                    tvInitial.setText(allLeadsList.firstName.substring(0, 1) + allLeadsList.lastName.substring(0, 1) + "");
 
-                return Unit.INSTANCE;
-            });
+                    return Unit.INSTANCE;
+                });
 
-            bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
-            recyclerAdapterUtil.notifyDataSetChanged();
-            isLoading = false;
+                bi.recyclerViewAllLeads.setAdapter(recyclerAdapterUtil);
+                recyclerAdapterUtil.notifyDataSetChanged();
+                isLoading = false;
 
-            if (page > 0) {
-                bi.recyclerViewAllLeads.scrollToPosition(recyclerAdapterUtil.getItemCount() - 25);
-            }
-
-            bi.recyclerViewAllLeads.setVisibility(View.VISIBLE);
-
-            recyclerAdapterUtil.addOnClickListener((Function2<GetAllLeads.LeadsList, Integer, Unit>) (viewComplainList, integer) -> {
-
-                try {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("leadID", viewComplainList.id);
-                    switchActivityWithIntentString(LeadDetailActivity.class, (HashMap<String, String>) map);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (page > 0) {
+                    bi.recyclerViewAllLeads.scrollToPosition(recyclerAdapterUtil.getItemCount() - 25);
                 }
 
-                return Unit.INSTANCE;
-            });
+                bi.recyclerViewAllLeads.setVisibility(View.VISIBLE);
 
-        }else {
-            bi.recyclerViewAllLeads.setVisibility(View.GONE);
-        }
+                recyclerAdapterUtil.addOnClickListener((Function2<GetAllLeads.LeadsList, Integer, Unit>) (viewComplainList, integer) -> {
+
+                    try {
+                        Map<String, String> map = new HashMap<>();
+                        map.put("leadID", viewComplainList.id);
+                        switchActivityWithIntentString(LeadDetailActivity.class, (HashMap<String, String>) map);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return Unit.INSTANCE;
+                });
+
+            } else {
+                bi.recyclerViewAllLeads.setVisibility(View.GONE);
+            }
 
 
-        }catch (Exception e ){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -456,6 +457,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
 
         //    _view.showProgressBar();
+        showProgressBar();
         Call<GetAllLeads> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).SearchLead(GH.getInstance().getAuthorization(),
                 pageNo, query);
         _call.enqueue(new Callback<GetAllLeads>() {
@@ -463,6 +465,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             public void onResponse(Call<GetAllLeads> call, Response<GetAllLeads> response) {
 
                 //  _view.hideProgressBar();
+                hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetAllLeads getAppointmentsModel = response.body();
@@ -502,7 +505,9 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onFailure(Call<GetAllLeads> call, Throwable t) {
                 //  _view.hideProgressBar();
+                hideProgressBar();
                 //  _view.updateUIonFailure();
+
             }
         });
 

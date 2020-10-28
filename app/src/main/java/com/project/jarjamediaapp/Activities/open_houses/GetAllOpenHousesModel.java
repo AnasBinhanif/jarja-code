@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 import com.project.jarjamediaapp.Base.BaseResponse;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class GetAllOpenHousesModel extends BaseResponse implements Serializable {
@@ -117,6 +120,18 @@ public class GetAllOpenHousesModel extends BaseResponse implements Serializable 
             public String getOpenHouseEndDate() {
                 return openHouseEndDate;
             }
+
+            @SerializedName("webRequestNo")
+            @Expose
+            public List<UserWebsites.Data> webRequestNo;
+
+            public List<UserWebsites.Data> getWebRequestNo() {
+                return webRequestNo;
+            }
+
+            public void setWebRequestNo(List<UserWebsites.Data> webRequestNo) {
+                this.webRequestNo = webRequestNo;
+            }
         }
 
         public String getPast() {
@@ -132,6 +147,7 @@ public class GetAllOpenHousesModel extends BaseResponse implements Serializable 
         }
 
         public List<OpenHouse> getOpenHouse() {
+
             return openHouse;
         }
 
@@ -146,9 +162,12 @@ public class GetAllOpenHousesModel extends BaseResponse implements Serializable 
         public Object getUpActive() {
             return upActive;
         }
+
+
     }
 
     public Data getData() {
+
         return data;
     }
 

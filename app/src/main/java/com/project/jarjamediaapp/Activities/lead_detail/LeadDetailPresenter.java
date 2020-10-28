@@ -278,7 +278,7 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
                 if (response.isSuccessful()) {
 
                     UploadImageModel openHousesModel = response.body();
-                    if (response.body().getStatus()!=null && response.body().getStatus().equals("Success")) {
+                    if (response.body().getStatus() != null && response.body().getStatus().equals("Success")) {
                         _view.updateUIAfterFileUpload(response);
 
                     } else {

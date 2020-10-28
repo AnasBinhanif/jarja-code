@@ -60,6 +60,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -196,9 +197,11 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
 
             if (response.body().getData().openHouse.size() > 0) {
 
+
                 bi.rvOpenHouse.setLayoutManager(new CenterZoomLayoutManager(context, RecyclerView.HORIZONTAL, false));
                 bi.rvOpenHouse.setItemAnimator(new DefaultItemAnimator());
-                bi.rvOpenHouse.setAdapter(new HorizontalAdapter(context, response.body().getData().openHouse,openHouseType));
+
+                bi.rvOpenHouse.setAdapter(new HorizontalAdapter(context, response.body().data.getOpenHouse(),openHouseType));
              //   bi.rvOpenHouse.scrollToPosition(position);
                 bi.rvOpenHouse.setVisibility(View.VISIBLE);
                 bi.tvMessage.setVisibility(View.GONE);
@@ -332,6 +335,11 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
     public void _updateUIonFailure() {
 
         ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+    }
+
+    @Override
+    public void updateUIForWebsites(Response<UserWebsites> response) {
+
     }
 
     @Override

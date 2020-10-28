@@ -15,6 +15,15 @@ public class ViewFollowUpModel {
     @Expose
     public String message;
 
+    @Override
+    public String toString() {
+        return "ViewFollowUpModel{" +
+                "status='" + status + '\'' +
+                ", data=" + data +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
     public class Data {
 
 
@@ -27,6 +36,15 @@ public class ViewFollowUpModel {
         @SerializedName("status")
         @Expose
         public String status;
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "viewDPCStep=" + viewDPCStep +
+                    ", message='" + message + '\'' +
+                    ", status='" + status + '\'' +
+                    '}';
+        }
     }
 
     public class ViewDPCStep{
@@ -59,6 +77,20 @@ public class ViewFollowUpModel {
         @Expose
         public String sentType;
 
+        @Override
+        public String toString() {
+            return "ViewDPCStep{" +
+                    "dripDetailID='" + dripDetailID + '\'' +
+                    ", dripCompaignID='" + dripCompaignID + '\'' +
+                    ", dripTypeID='" + dripTypeID + '\'' +
+                    ", wait='" + wait + '\'' +
+                    ", subject='" + subject + '\'' +
+                    ", message='" + message + '\'' +
+                    ", sendTime='" + sendTime + '\'' +
+                    ", sendDateTime='" + sendDateTime + '\'' +
+                    ", sentType='" + sentType + '\'' +
+                    '}';
+        }
     }
 
 }

@@ -37,7 +37,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     Context context;
     TasksPresenter presenter;
     SwipeTasksRecyclerAdapter swipeTasksRecyclerAdapter;
-    boolean isFromActivity,isTabClick=true;
+    boolean isFromActivity, isTabClick = true;
     String leadID = "";
     int page = 0;
     int totalPages;
@@ -94,8 +94,8 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
         } else {
             bi.tvNoRecordFound.setVisibility(View.GONE);
             bi.rvTasks.setVisibility(View.VISIBLE);
-            if (isTabClick==true) {
-                switch (taskType){
+            if (isTabClick == true) {
+                switch (taskType) {
                     case "due":
                         swipeTasksRecyclerAdapter = new SwipeTasksRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
                         bi.rvTasks.setAdapter(swipeTasksRecyclerAdapter);
@@ -110,7 +110,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                         break;
                 }
             } else {
-                if (swipeTasksRecyclerAdapter !=null) {
+                if (swipeTasksRecyclerAdapter != null) {
                     swipeTasksRecyclerAdapter.notifyDataSetChanged();
                 }
             }
@@ -121,9 +121,10 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     private void initRecyclers() {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
-
+        swipeTasksRecyclerAdapter = new SwipeTasksRecyclerAdapter(context, getActivity(), tasksList, isFromActivity, false);
         bi.rvTasks.setLayoutManager(layoutManager);
         bi.rvTasks.setItemAnimator(new DefaultItemAnimator());
+        bi.rvTasks.setAdapter(swipeTasksRecyclerAdapter);
 
         bi.rvTasks.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -141,7 +142,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                         if (totalPages > tasksList.size()) {
                             page++;
                             try {
-                                isTabClick=false;
+                                isTabClick = false;
                                 hitApi();
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
@@ -167,7 +168,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
         } else {*/
-            ToastUtils.showToastLong(context, error);
+        ToastUtils.showToastLong(context, error);
 
     }
 
@@ -212,6 +213,12 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+
+    }
+
+    @Override
     public void onPauseFragment() {
 
     }
@@ -233,7 +240,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 if (isFromActivity) {
                     map.put("from", "1");
                     // from dash board task add
-                }else{
+                } else {
                     map.put("from", "4");
                 }
                 switchActivityWithIntentString(context, AddTaskActivity.class, (HashMap<String, String>) map);
@@ -300,6 +307,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
         page = 0;
         if (tasksList.size() != 0) {
             tasksList.clear();
+            swipeTasksRecyclerAdapter.notifyDataSetChanged();
         }
         isTabClick = true;
         hitApi();
@@ -314,7 +322,7 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
                 case "due":
                     presenter.getLeadDueTasks(leadID, page);
                     break;
-                case "oveDue":
+                case "overDue":
                     presenter.getLeadOverDueTasks(leadID, page);
                     break;
                 case "future":

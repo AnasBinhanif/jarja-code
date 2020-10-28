@@ -139,7 +139,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         //  checkIntent();
 
         bi.cbEndDate.setOnCheckedChangeListener((compoundButton, b) -> {
-
+            isEdited = true;
             if (b) {
                 bi.tvEndDate.setVisibility(View.GONE);
                 bi.lblEndDate.setVisibility(View.GONE);
@@ -1128,7 +1128,13 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 }
                 break;
             case R.id.btnCancel:
-                finish();
+//                finish();
+                //adding below block of if and else to replace by line of code --- > akshay
+                if (isChangesDone()) {
+                    GH.getInstance().discardChangesDialog(context);
+                } else {
+                  finish();
+                }
                 break;
             case R.id.atvReminder:
                 isEdited = true;

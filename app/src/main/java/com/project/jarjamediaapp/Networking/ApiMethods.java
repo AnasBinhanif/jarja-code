@@ -19,6 +19,7 @@ import com.project.jarjamediaapp.Activities.open_houses.AddressDetailModel;
 import com.project.jarjamediaapp.Activities.open_houses.GetAllOpenHousesModel;
 import com.project.jarjamediaapp.Activities.open_houses.GetTimeFrameModel;
 import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
+import com.project.jarjamediaapp.Activities.open_houses.UserWebsites;
 import com.project.jarjamediaapp.Activities.transactions.TransactionModel;
 import com.project.jarjamediaapp.Activities.user_profile.GetPermissionModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
@@ -58,6 +59,7 @@ import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 
 import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -483,6 +485,9 @@ public interface ApiMethods {
     @GET("Lead/GetAllOpenHouse")
     Call<GetAllOpenHousesModel> getAllOpenHouses(@Header("Authorization") String authorization,
                                                  @Query("type") String type);
+
+    @GET("Lead/GetUserWebSites")
+    Call<UserWebsites> getUserWebsites(@Header("Authorization") String header);
 
     @Multipart
     @POST("Lead/UploadImage")

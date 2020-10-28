@@ -24,6 +24,8 @@ public interface OpenHousesContract {
         void _updateUIonFailure();
 
 
+        void updateUIForWebsites(Response<UserWebsites> response);
+
     }
 
     /*
@@ -41,6 +43,8 @@ public interface OpenHousesContract {
         void addOpenHouse(String body);
 
         void uploadImage(MultipartBody.Part file);
+
+        void getUserWebsites();
     }
 
 }

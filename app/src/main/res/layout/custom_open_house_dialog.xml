@@ -94,6 +94,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
+                    android:text="@string/_website"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvAgent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/bg_search"
+                    android:hint="@string/nothing_selected"
+                    android:inputType="textCapSentences"
+                    android:padding="@dimen/_10sdp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/_11sdp" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fillViewport="true">
+
+                    <LinearLayout
+                        android:id="@+id/lnAgent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:text="@string/_address"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"

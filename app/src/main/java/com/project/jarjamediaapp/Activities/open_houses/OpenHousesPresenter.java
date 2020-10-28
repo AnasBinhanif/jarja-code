@@ -21,6 +21,7 @@ import retrofit2.Response;
 public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> implements OpenHousesContract.Actions {
 
     Call<GetAllOpenHousesModel> call;
+    private Call<UserWebsites> userWebsitesCall;
     Call<BaseResponse> _call;
     Call<Upload_ProfileImage> _cCall;
     Call<AddressDetailModel> callAddressDetail;
@@ -38,8 +39,8 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
     public void getAddressDetailByPrefix(String prefix, String type) {
 
         _view.showProgressBar();
-        callAddressDetail = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getAddressDetailByPrefix(GH.getInstance().getAuthorization(), prefix,type);
-     //   Log.d("param123",callAddressDetail.);
+        callAddressDetail = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getAddressDetailByPrefix(GH.getInstance().getAuthorization(), prefix, type);
+        //   Log.d("param123",callAddressDetail.);
         callAddressDetail.enqueue(new Callback<AddressDetailModel>() {
             @Override
             public void onResponse(Call<AddressDetailModel> call, Response<AddressDetailModel> response) {
@@ -99,7 +100,6 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
                 } else {
 
 
-
                     ApiError error = ErrorUtils.parseError(response);
                     _view._updateUIonError(error.message());
                 }
@@ -119,9 +119,9 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
 
         _view.showProgressBar();
 
-        Log.i("hello",GH.getInstance().getAuthorization());
+        Log.i("hello", GH.getInstance().getAuthorization());
         // changes in model UplaodImageModel to Upload_ProfileImage for api response
-        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).uploadFileToServer(GH.getInstance().getAuthorization(),file,"image");
+        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).uploadFileToServer(GH.getInstance().getAuthorization(), file, "image");
 
         _cCall.enqueue(new Callback<Upload_ProfileImage>() {
             @Override
@@ -150,7 +150,7 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
             @Override
             public void onFailure(Call<Upload_ProfileImage> call, Throwable t) {
 
-                Log.i("Hello",t.getMessage());
+                Log.i("Hello", t.getMessage());
                 _view.hideProgressBar();
                 _view._updateUIonFailure();
             }
@@ -159,10 +159,41 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
     }
 
     @Override
-    public void getAllOpenHouses(String openHouseType,int position) {
+    public void getUserWebsites() {
+        _view.showProgressBar();
+        userWebsitesCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getUserWebsites(GH.getInstance().getAuthorization());
+        userWebsitesCall.enqueue(new Callback<UserWebsites>() {
+            @Override
+            public void onResponse(Call<UserWebsites> call, Response<UserWebsites> response) {
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    if (response.body().getStatus().equals("Success")) {
+                        _view.updateUIForWebsites(response);
+
+                    } else {
+                        _view.updateUIonFalse(response.body().getMessage());
+                    }
+
+                } else {
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view._updateUIonError(error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserWebsites> call, Throwable t) {
+                _view.hideProgressBar();
+                _view._updateUIonFailure();
+            }
+        });
+    }
+
+    @Override
+    public void getAllOpenHouses(String openHouseType, int position) {
 
         _view.showProgressBar();
-        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getAllOpenHouses(GH.getInstance().getAuthorization(),openHouseType);
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getAllOpenHouses(GH.getInstance().getAuthorization(), openHouseType);
 
         call.enqueue(new Callback<GetAllOpenHousesModel>() {
             @Override
@@ -173,7 +204,7 @@ public class OpenHousesPresenter extends BasePresenter<OpenHousesContract.View> 
 
                     GetAllOpenHousesModel openHousesModel = response.body();
                     if (response.body().getStatus().equals("Success")) {
-                        _view.updateUIListForOpenHouses(response,position);
+                        _view.updateUIListForOpenHouses(response, position);
 
                     } else {
                         _view.updateUIonFalse(openHousesModel.getMessage());

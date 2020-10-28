@@ -95,7 +95,15 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
                     selectedTagIdsList.add(model.tagID);
                 }
             }
-            populateData();
+//            populateData();
+            //adding below block of code to replace above line of code -- akshay
+            if (assignedTagsList.size() > 0) {
+                bi.tvNoRecordFound.setVisibility(View.GONE);
+                populateData();
+            } else {
+                bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+            }
+
         }
     }
 
@@ -105,7 +113,6 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
             swipeTagsRecyclerAdapter = new SwipeTagsRecyclerAdapter(context, TagsActivity.this, assignedTagsList, leadID);
             bi.recyclerViewTags.setAdapter(swipeTagsRecyclerAdapter);
         } else {
-
             swipeTagsRecyclerAdapter = new SwipeTagsRecyclerAdapter(context, TagsActivity.this, assignedTagsList, leadID);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(bi.recyclerViewTags.getContext(), 1);
@@ -149,9 +156,9 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
                             ToastUtils.showToast(context, "No EncryptedID Found");
                         }
 
-                      //  if (!tagsIdsString.equals("")) {
-                            presenter.assignTags(leadID, tagsIdsString);
-                     //   }
+                        //  if (!tagsIdsString.equals("")) {
+                        presenter.assignTags(leadID, tagsIdsString);
+                        //   }
                     }
 
                     @Override
@@ -186,7 +193,7 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
         } else {*/
-            ToastUtils.showToastLong(context, error);
+        ToastUtils.showToastLong(context, error);
 
     }
 

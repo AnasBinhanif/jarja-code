@@ -76,8 +76,8 @@ public class SwipeTasksRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder h, final int position) {
         final ViewHolder holder = (ViewHolder) h;
-
-        pos = position;
+//        pos = position;
+        pos = h.getAdapterPosition();
         if (mData != null && 0 <= position && position < mData.size()) {
 
             GetTasksModel.Data.TaskList modelData = mData.get(position);

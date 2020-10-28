@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,7 +42,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -71,9 +71,9 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
     public HorizontalAdapter(Context context, List<GetAllOpenHousesModel.Data.OpenHouse> data, String openHouseType) {
 
         this.context = context;
-        this.data =  data;
+        this.data = data;
         // reverse arraylist
-        Collections.reverse(this.data);
+//        Collections.reverse(this.data);
         this.openHouseType = openHouseType;
 
     }
@@ -106,13 +106,18 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
             holder.tvEndDateTime.setText(GH.getInstance().formatter(endDateTime, "MM-dd-yyyy hh:mm a", "yyyy-MM-dd'T'HH:mm:ss"));
 
             holder.tvAddress.setText(data.get(position).getStreetName());
-            holder.tvCityPostal.setText(data.get(position).getCity()+" , "+data.get(position).getState());
+            holder.tvCityPostal.setText(data.get(position).getCity() + " , " + data.get(position).getState());
             holder.tvLeadsCount.setText(data.get(position).getLeadCount() != 0 ? "Leads " + data.get(position).getLeadCount() : "Leads 0");
             String image = data.get(position).getImgURL();
-            if (!image.equalsIgnoreCase("")) {
+           /* if (!image.equalsIgnoreCase("")) {
                 Glide.with(context).load(image).into(holder.ivHouse);
             } else {
                 holder.ivHouse.setImageResource(R.drawable.open_house);
+            }*/
+            if (TextUtils.isEmpty(image)) {
+                Glide.with(context).load(R.drawable.open_house).into(holder.ivHouse);
+            } else {
+                Glide.with(context).load(image).into(holder.ivHouse);
             }
 
         } catch (Exception e) {
@@ -159,8 +164,8 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                         GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
 
                         // passing open house object to edit screen.
-                        Intent i = new Intent(context,AddOpenHousesActivity.class);
-                        i.putExtra("editLeadsObj",openHouse);
+                        Intent i = new Intent(context, AddOpenHousesActivity.class);
+                        i.putExtra("editLeadsObj", openHouse);
 
                         context.startActivity(i);
                     } else if (openHouseType.equals("past")) {
@@ -168,8 +173,8 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                         GetAllOpenHousesModel.Data.OpenHouse openHouse = data.get(getAdapterPosition());
 
                         // passing open house object to edit screen.
-                        Intent i = new Intent(context,AddOpenHousesActivity.class);
-                        i.putExtra("editLeadsObj",openHouse);
+                        Intent i = new Intent(context, AddOpenHousesActivity.class);
+                        i.putExtra("editLeadsObj", openHouse);
 
                         context.startActivity(i);
                     }
@@ -544,7 +549,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         return true;
     }
 
-    private void clearData(){
+    private void clearData() {
 
         atvFirstName.setText("");
         atvLastName.setText("");

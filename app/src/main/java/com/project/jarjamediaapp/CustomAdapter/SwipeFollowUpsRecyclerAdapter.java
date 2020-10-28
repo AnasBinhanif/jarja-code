@@ -111,7 +111,6 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
 
-
                     viewDetail(mData.get(position).dripDetailID, holder.swipeLayout,"");
 
                 }
@@ -206,6 +205,7 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
                 GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
+                    Log.d( "onResponse: ",response.body().toString());
                     ViewFollowUpModel getDetails = response.body();
                     if (getDetails.status.equals("Success")) {
 
@@ -220,6 +220,7 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
 
                             swipeRevealLayout.close(true);
                         }
+
 
                         showViewFollowUpDialog(context, wait, title, dateTime, time, note, senType);
 
@@ -324,10 +325,10 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
                 }
             });
 
-//            tvView.setOnClickListener(v -> {
-//                pos = getAdapterPosition();
-//                viewDetail(mData.get(pos).dripDetailID, swipeLayout,mData.get(pos).dripDetailID);
-//            });
+            tvView.setOnClickListener(v -> {
+                pos = getAdapterPosition();
+                viewDetail(mData.get(pos).dripDetailID, swipeLayout,mData.get(pos).dripDetailID);
+            });
         }
     }
 

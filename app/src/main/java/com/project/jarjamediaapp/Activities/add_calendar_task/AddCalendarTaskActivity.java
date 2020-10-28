@@ -209,7 +209,13 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 break;
 
             case R.id.btnCancel:
-                finish();
+               // finish();
+                //adding below block of if and else to replace by line of code --- > akshay
+                if (isChangesDone()) {
+                    GH.getInstance().discardChangesDialog(context);
+                } else {
+                    finish();
+                }
                 break;
             case R.id.cbAllDay:
                 removeFocus();

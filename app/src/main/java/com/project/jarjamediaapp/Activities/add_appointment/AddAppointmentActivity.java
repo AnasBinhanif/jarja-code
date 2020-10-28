@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -374,7 +375,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         encryptedAppointmentId = modelData.getEncryptedLeadAppoinmentID();
 
         leadId = String.valueOf(modelData.getEncryptedLeadID());
+
         bi.tvName.setText((modelData.getLeadName() != null ? modelData.getLeadName() : ""));
+
         if (fromId.equalsIgnoreCase("2") || fromId.equalsIgnoreCase("4") ||
                 fromId.equalsIgnoreCase("6")) {
             //  bi.tvName.setEnabled(false);
@@ -442,6 +445,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         leadId = modelData.getLeadID();
         leadAppointmentId = modelData.getLeadAppoinmentID();
+
         bi.tvName.setText((modelData.getVtCRMLeadCustom().getFirstName() != null ? modelData.getVtCRMLeadCustom().getFirstName() : "") + " " + (modelData.getVtCRMLeadCustom().getLastName() != null ? modelData.getVtCRMLeadCustom().getLastName() : ""));
         if (fromId.equalsIgnoreCase("2") || fromId.equalsIgnoreCase("4") ||
                 fromId.equalsIgnoreCase("6")) {
@@ -450,6 +454,10 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         } else {
             bi.tvName.setEnabled(true);
             bi.tvName.setHint("Contact");
+        }
+        if (leadId != null) {
+            bi.tvName.setEnabled(false);
+            bi.tvName.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG);
         }
         bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
@@ -517,6 +525,9 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         } else {
             bi.tvName.setEnabled(true);
             bi.tvName.setHint("Contact");
+        }
+        if (leadId != null) {
+            bi.tvName.setEnabled(false);
         }
         bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
@@ -714,8 +725,17 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
                 break;
             case R.id.btnCancel:
-                finish();
+              /*  finish();
                 // this line of code added here for homeactiviy components click after finish activty
+                HomeActivity.onClick = true;*/
+
+                //added below block of code for replacement
+
+                if (isChangesDone()) {
+                    GH.getInstance().discardChangesDialog(context);
+                } else {
+                    finish();
+                }
                 HomeActivity.onClick = true;
                 break;
             case R.id.cbAllDay:
