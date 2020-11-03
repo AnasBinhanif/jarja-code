@@ -14,6 +14,7 @@ public interface NotificationContract {
 
         void updateUIListF(List<FollowUpNotificationModel.FollowUpsList> response,Integer foolowupsNotificationCount);
 
+        void updateAdapter(int type);
     }
 
     /*

@@ -42,6 +42,9 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
     // fro testing
     LinearLayoutManager layoutManager;
 
+    int selectedButton = 1; //1 = for due and 2 for overdue
+    int size = 0;
+
     public FollowUpFragment() {
         // Required empty public constructor
     }
@@ -82,64 +85,6 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
 
     }
 
-    @Override
-    public void updateUI(GetFollowUpsModel response) {
-
-        totalPages = response.getData().getFollowCount();
-        followUpsList.addAll(response.getData().getFollowUpsList());
-        if (followUpsList.size() == 0) {
-
-            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
-            bi.rvFollowUp.setVisibility(View.GONE);
-        } else {
-
-            bi.tvNoRecordFound.setVisibility(View.GONE);
-            bi.rvFollowUp.setVisibility(View.VISIBLE);
-            // fro testing
-         //   swipeFollowUpsRecyclerAdapter.notifyDataSetChanged();
-
-        }
-
-        // for testing
-        layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
-        swipeFollowUpsRecyclerAdapter = new SwipeFollowUpsRecyclerAdapter(context, getActivity(), followUpsList);
-        bi.rvFollowUp.setAdapter(swipeFollowUpsRecyclerAdapter);
-        bi.rvFollowUp.setLayoutManager(layoutManager);
-        bi.rvFollowUp.setItemAnimator(new DefaultItemAnimator());
-
-        // fro testing
-        swipeFollowUpsRecyclerAdapter.notifyDataSetChanged();
-
-    }
-
-    @Override
-    public void updateUIonFalse(String message) {
-        ToastUtils.showToastLong(context, message);
-    }
-
-    @Override
-    public void updateUIonError(String error) {
-       /* if (error.contains("Authorization has been denied for this request")) {
-            ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
-            logout();
-        } else {*/
-            ToastUtils.showToastLong(context, error);
-
-    }
-
-    @Override
-    public void updateUIonFailure() {
-        ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
-    }
-
-    private void hitApi() {
-        if (isFromActivity) {
-            presenter.getLeadFollowupsDue(leadID, page);
-        } else {
-            presenter.getDueFollowUps(page);
-        }
-    }
-
     private void initViews() {
         followUpsList = new ArrayList<>();
         isFromActivity = this.getArguments().getBoolean("isFromActivity");
@@ -149,7 +94,6 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
         }
         bi.btnFollowDue.setOnClickListener(this);
         bi.btnFollowOverDue.setOnClickListener(this);
-
 
         hitApi();
 
@@ -173,10 +117,11 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
                     // Load more if we have reach the end to the recyclerView
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
                         Log.d("scroll", "last item");
+                        Log.d("onScrolledTotalPages: ", totalPages + "");
+                        Log.d("onScrolledFSize", followUpsList.size() + "");
                         if (totalPages > followUpsList.size()) {
                             page++;
                             try {
-
                                 hitApi();
 
                             } catch (NullPointerException e) {
@@ -190,6 +135,90 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
         });
 
     }
+
+
+    @Override
+    public void updateUI(GetFollowUpsModel response) {
+
+        totalPages = response.getData().getFollowCount();
+        followUpsList.addAll(response.getData().getFollowUpsList());
+        //  followUpsList.get(0).description = "This is testing environment";
+        if (followUpsList.size() == 0) {
+
+            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+            bi.rvFollowUp.setVisibility(View.GONE);
+        } else {
+
+            bi.tvNoRecordFound.setVisibility(View.GONE);
+            bi.rvFollowUp.setVisibility(View.VISIBLE);
+            // fro testing
+            //   swipeFollowUpsRecyclerAdapter.notifyDataSetChanged();
+
+        }
+
+
+        /*layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        swipeFollowUpsRecyclerAdapter = new SwipeFollowUpsRecyclerAdapter(context, getActivity(), followUpsList);
+        bi.rvFollowUp.setAdapter(swipeFollowUpsRecyclerAdapter);
+        bi.rvFollowUp.setLayoutManager(layoutManager);
+        bi.rvFollowUp.setItemAnimator(new DefaultItemAnimator());
+
+        // fro testing
+        swipeFollowUpsRecyclerAdapter.notifyDataSetChanged();*/
+
+        if (swipeFollowUpsRecyclerAdapter == null) {
+            layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+            swipeFollowUpsRecyclerAdapter = new SwipeFollowUpsRecyclerAdapter(context, getActivity(), followUpsList);
+            bi.rvFollowUp.setAdapter(swipeFollowUpsRecyclerAdapter);
+            bi.rvFollowUp.setLayoutManager(layoutManager);
+            bi.rvFollowUp.setItemAnimator(new DefaultItemAnimator());
+
+        } else {
+           // swipeFollowUpsRecyclerAdapter.notifyItemInserted(followUpsList.size() - 1);
+            //swipeFollowUpsRecyclerAdapter.notifyItemRangeInserted(0, size);
+              swipeFollowUpsRecyclerAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+    @Override
+    public void updateUIonFalse(String message) {
+        ToastUtils.showToastLong(context, message);
+    }
+
+    @Override
+    public void updateUIonError(String error) {
+       /* if (error.contains("Authorization has been denied for this request")) {
+            ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
+            logout();
+        } else {*/
+        ToastUtils.showToastLong(context, error);
+
+    }
+
+    @Override
+    public void updateUIonFailure() {
+        ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
+    }
+
+    private void hitApi() {
+        if (isFromActivity) {
+            if (selectedButton == 1) {
+                presenter.getLeadFollowupsDue(leadID, page);
+            } else if (selectedButton == 2) {
+                presenter.getLeadFollowupsOverDue(leadID, page);
+            }
+        } else {
+            if (selectedButton == 1) {
+                presenter.getDueFollowUps(page);
+            } else if (selectedButton == 2) {
+                presenter.getOverDueFollowUps(page);
+            }
+        }
+
+
+    }
+
 
     @Override
     public void onPauseFragment() {
@@ -207,13 +236,17 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
         switch (view.getId()) {
 
             case R.id.btnFollowDue:
-
+                selectedButton = 1;
+                page = 1;
                 followUpsList.clear();
-                if (isFromActivity) {
+
+
+              /*  if (isFromActivity) {
                     presenter.getLeadFollowupsDue(leadID, page);
                 } else {
                     presenter.getDueFollowUps(page);
-                }
+                }*/
+                hitApi();
 
                 Paris.style(bi.btnFollowDue).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnFollowOverDue).apply(R.style.TabButtonTranparentRight);
@@ -221,13 +254,18 @@ public class FollowUpFragment extends BaseFragment implements FragmentLifeCycle,
                 break;
 
             case R.id.btnFollowOverDue:
-
+                selectedButton = 2;
+                page = 1;
                 followUpsList.clear();
-                if (isFromActivity) {
+             
+
+               /* if (isFromActivity) {
                     presenter.getLeadFollowupsOverDue(leadID, page);
                 } else {
                     presenter.getOverDueFollowUps(page);
-                }
+                }*/
+                hitApi();
+
 
                 Paris.style(bi.btnFollowOverDue).apply(R.style.TabButtonYellowRight);
                 Paris.style(bi.btnFollowDue).apply(R.style.TabButtonTranparentLeft);

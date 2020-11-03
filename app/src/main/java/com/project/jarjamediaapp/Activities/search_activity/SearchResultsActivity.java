@@ -3,8 +3,10 @@ package com.project.jarjamediaapp.Activities.search_activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -47,7 +49,12 @@ public class SearchResultsActivity extends BaseActivity implements SearchResults
     RecyclerAdapterUtil recyclerAdapterUtil;
     ArrayList<GetLeadTitlesModel.Data> nameList = new ArrayList<>();
 
-    boolean fromAppoint ;
+    boolean fromAppoint;
+
+    long delay = 600; // 1 seconds after user stops typing
+    long last_text_edit = 0;
+    Handler handler = new Handler();
+    Runnable input_finish_checker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +73,11 @@ public class SearchResultsActivity extends BaseActivity implements SearchResults
     @Override
     public void initViews() {
 
-        fromAppoint = getIntent().getBooleanExtra("fromAppoint",true);
+        fromAppoint = getIntent().getBooleanExtra("fromAppoint", true);
 
-        if (fromAppoint)
-        {
+        if (fromAppoint) {
             bi.btnSave.setVisibility(View.GONE);
-        }else{
+        } else {
             bi.btnSave.setVisibility(View.VISIBLE);
         }
 
@@ -80,9 +86,9 @@ public class SearchResultsActivity extends BaseActivity implements SearchResults
             public void onClick(View v) {
 
                 Intent intent = new Intent();
-                intent.putIntegerArrayListExtra("idList",SearchResultAdapter.selectedIDs);
-                intent.putStringArrayListExtra("nameList",SearchResultAdapter.selectedNames);
-                intent.putStringArrayListExtra("encryptedList",SearchResultAdapter.selectedEncryted);
+                intent.putIntegerArrayListExtra("idList", SearchResultAdapter.selectedIDs);
+                intent.putStringArrayListExtra("nameList", SearchResultAdapter.selectedNames);
+                intent.putStringArrayListExtra("encryptedList", SearchResultAdapter.selectedEncryted);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -95,25 +101,42 @@ public class SearchResultsActivity extends BaseActivity implements SearchResults
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                handler.removeCallbacks(input_finish_checker);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
-                int length = bi.edtQuery.getText().length();
+               /* int length = bi.edtQuery.getText().length();
                 try {
                     if (length > 0)
                         getLeadByText(bi.edtQuery.getText().toString());
                 } catch (Exception e) {
                     e.printStackTrace();
+                }*/
+
+                int length = bi.edtQuery.getText().length();
+                try {
+                    if (length > 0)
+                        //    last_text_edit = System.currentTimeMillis();
+                        handler.postDelayed(input_finish_checker, delay);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
             }
         });
+
+        input_finish_checker = () -> {
+            getLeadByText(bi.edtQuery.getText().toString());
+
+        };
 
     }
 
     private void getLeadByText(String query) {
-
+        Log.d("onResponsequery", query);
         Call<GetLeadTitlesModel> _callToday;
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetLeadTitlesModel(GH.getInstance().getAuthorization(), query);
         _callToday.enqueue(new Callback<GetLeadTitlesModel>() {
@@ -122,12 +145,15 @@ public class SearchResultsActivity extends BaseActivity implements SearchResults
 
                 GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
-
+                    Log.d("onResponse", response.body().toString());
                     GetLeadTitlesModel getAppointmentsModel = response.body();
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         nameList = new ArrayList<>();
                         nameList.addAll(getAppointmentsModel.data);
+
+                        Log.d("onResponseBody", response.body().data.size() + "");
+                        Log.d("onResponseSize", getAppointmentsModel.data.size() + "");
                         if (nameList.size() != 0) {
                             setRecyclerSearch();
                         } else {
@@ -155,7 +181,7 @@ public class SearchResultsActivity extends BaseActivity implements SearchResults
         bi.recyclerSearch.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.recyclerSearch.setItemAnimator(new DefaultItemAnimator());
         bi.recyclerSearch.addItemDecoration(new DividerItemDecoration(bi.recyclerSearch.getContext(), 1));
-        bi.recyclerSearch.setAdapter(new SearchResultAdapter(SearchResultsActivity.this,nameList,fromAppoint));
+        bi.recyclerSearch.setAdapter(new SearchResultAdapter(SearchResultsActivity.this, nameList, fromAppoint));
     }
 
     @Override

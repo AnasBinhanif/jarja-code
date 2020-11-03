@@ -32,7 +32,7 @@
 
     </style>
 
-    <style name="TabButtonYellowLeft">
+    <style name="TabButtonYellowLeft" >
         <!--  <item name="android:fontFamily">@font/poppins_light</item>-->
         <item name="android:background">@drawable/bg_leftstroke_yellow</item>
         <item name="android:layout_width">match_parent</item>
@@ -41,6 +41,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:textSize">16dp</item>
+
 
     </style>
 
@@ -53,6 +54,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:textSize">16dp</item>
+
 
     </style>
 

@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/custom_toolbar" />
-
     <FrameLayout
-        android:layout_marginTop="?android:attr/actionBarSize"
         android:id="@+id/fragment_replacer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="?android:attr/actionBarSize"
         android:visibility="visible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <include layout="@layout/custom_toolbar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -17,6 +17,7 @@ import com.project.jarjamediaapp.Activities.add_appointment.GetAppointmentByIDMo
 import com.project.jarjamediaapp.Activities.notification.AppointmentNotificationModel;
 import com.project.jarjamediaapp.Activities.notification.FollowUpNotificationModel;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
+import com.project.jarjamediaapp.Activities.notification.NotificationContract;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
@@ -36,7 +37,8 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
 
     final LayoutInflater inflater;
     Context context;
-    ArrayList<AppointmentNotificationModel.FollowUpsList> data;
+    public ArrayList<AppointmentNotificationModel.FollowUpsList> data;
+    NotificationContract.View _view;
 
 
     public AppointmentNotificationRecyclerAdapter(Context context, ArrayList<AppointmentNotificationModel.FollowUpsList> data) {
@@ -44,10 +46,10 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
         this.data = data;
         sortData();
         inflater = LayoutInflater.from(context);
+        _view = (NotificationContract.View) context;
+
 
     }
-
-
 
 
     @Override
@@ -59,12 +61,14 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 
-         AppointmentNotificationModel.FollowUpsList notificationObj  = data.get(position);
+        AppointmentNotificationModel.FollowUpsList notificationObj = data.get(position);
 
-        if(!notificationObj.getIsSeen()){
+        if (!notificationObj.getIsSeen()) {
 
             holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorYellow));
 
+        } else {
+            holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorWhite));
         }
 
         holder.tvName.setText(notificationObj.getEventTitle() != null ? notificationObj.getEventTitle() : "N/A");
@@ -93,16 +97,15 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
             public void onClick(View view) {
 
                 int backgroundColor = holder.CardviewNotification.getCardBackgroundColor().getDefaultColor();
-                if (backgroundColor == context.getResources().getColor(R.color.colorYellow)){
+                if (backgroundColor == context.getResources().getColor(R.color.colorYellow)) {
 
-
-                    data.get(position).setIsSeen(true);
+                     data.get(position).setIsSeen(true);
                     holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorWhite));
 
 
                 }
                 getAppointmentById(notificationObj.getLeadAppoinmentID());
-                GH.getInstance().ShowProgressDialog((NotificationActivity)context);
+                GH.getInstance().ShowProgressDialog((NotificationActivity) context);
             }
         });
 
@@ -114,7 +117,7 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
         return data.size();
     }
 
-    public void sortData(){
+    public void sortData() {
         Collections.sort(this.data, new Comparator<AppointmentNotificationModel.FollowUpsList>() {
             @Override
             public int compare(AppointmentNotificationModel.FollowUpsList followUpsList, AppointmentNotificationModel.FollowUpsList t1) {
@@ -125,7 +128,7 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvName,tvLeadName,tvContact,tvEmail;
+        TextView tvName, tvLeadName, tvContact, tvEmail;
         CardView CardviewNotification;
 
 
@@ -144,7 +147,7 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
 
     public void getAppointmentById(String appointmentID) {
 
-        Call<GetAppointmentByIDModel> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetAppointmentByID(GH.getInstance().getAuthorization(),appointmentID);
+        Call<GetAppointmentByIDModel> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetAppointmentByID(GH.getInstance().getAuthorization(), appointmentID);
         _call.enqueue(new Callback<GetAppointmentByIDModel>() {
             @Override
             public void onResponse(Call<GetAppointmentByIDModel> call, Response<GetAppointmentByIDModel> response) {
@@ -158,23 +161,25 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
                         GH.getInstance().HideProgressDialog();
 
                         //****added by akshay to sort list on basis of seen or unseen
-                        Collections.sort(data, new Comparator<AppointmentNotificationModel.FollowUpsList>() {
+                        /*Collections.sort(data, new Comparator<AppointmentNotificationModel.FollowUpsList>() {
                             @Override
                             public int compare(AppointmentNotificationModel.FollowUpsList followUpsList, AppointmentNotificationModel.FollowUpsList t1) {
                                 return Boolean.compare(followUpsList.getIsSeen(), t1.getIsSeen());
                             }
-                        });
-                        notifyDataSetChanged();
-                        //**********
+                        });*/
 
+                        // notifyDataSetChanged();
+                        //**********
+                        _view.updateAdapter(R.integer.Appointment);
                         // from notifcation screen when tap on notification item
                         Data models = getAppointmentsModel.getData();
                         context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                 .putExtra("leadID", models.getLeadID())
                                 .putExtra("from", "7")
-                                .putExtra("leadName",models.getEventTitle())
+                                .putExtra("leadName", models.getEventTitle())
                                 .putExtra("models", models));
                         //_view.updateUI(getAppointmentsModel);
+
 
                     } else {
 

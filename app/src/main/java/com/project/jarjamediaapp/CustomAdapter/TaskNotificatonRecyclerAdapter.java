@@ -16,6 +16,7 @@ import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
 import com.project.jarjamediaapp.Activities.add_task.GetTaskDetail;
 import com.project.jarjamediaapp.Activities.notification.AppointmentNotificationModel;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
+import com.project.jarjamediaapp.Activities.notification.NotificationContract;
 import com.project.jarjamediaapp.Activities.notification.TaskNotificationModel;
 import com.project.jarjamediaapp.Activities.tasks.TasksActivity;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -40,6 +41,7 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
     final LayoutInflater inflater;
     Context context;
     ArrayList<TaskNotificationModel.TaskList> data;
+    NotificationContract.View view;
 
 
     public TaskNotificatonRecyclerAdapter(Context context, ArrayList<TaskNotificationModel.TaskList> data) {
@@ -47,6 +49,7 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
         this.data = data;
         sortData();
         inflater = LayoutInflater.from(context);
+        view = (NotificationContract.View) context;
 
     }
 
@@ -64,9 +67,10 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
 
         if (!notificationObj.getIsSeen()) {
 
-
             holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorYellow));
 
+        } else {
+            holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorWhite));
         }
 
 
@@ -85,11 +89,12 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
                 int backgroundColor = holder.CardviewNotification.getCardBackgroundColor().getDefaultColor();
                 if (backgroundColor == context.getResources().getColor(R.color.colorYellow)) {
 
-                    holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorWhite));
                     data.get(position).setIsSeen(true);
+                    holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorWhite));
+
 
                 }
-                getTaskDetail(notificationObj.getEncryptedTaskID());
+                getTaskDetail(notificationObj.getEncryptedTaskID(), position);
                 //  GH.getInstance().ShowProgressDialog((NotificationActivity)context);
 
 
@@ -108,7 +113,7 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
         Collections.sort(this.data, new Comparator<TaskNotificationModel.TaskList>() {
             @Override
             public int compare(TaskNotificationModel.TaskList t1, TaskNotificationModel.TaskList t2) {
-                return Boolean.compare(t1.getIsSeen(), t1.getIsSeen());
+                return Boolean.compare(t1.getIsSeen(), t2.getIsSeen());
             }
         });
     }
@@ -132,7 +137,7 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
         }
     }
 
-    public void getTaskDetail(String taskId) {
+    public void getTaskDetail(String taskId, int pos) {
 
 
         Call<GetTaskDetail> apiCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getTaskDetail(GH.getInstance().getAuthorization(), taskId);
@@ -149,13 +154,15 @@ public class TaskNotificatonRecyclerAdapter extends RecyclerView.Adapter<TaskNot
                         GH.getInstance().HideProgressDialog();
 
                         //****added by akshay to sort list on basis of seen or unseen
-                        Collections.sort(data, new Comparator<TaskNotificationModel.TaskList>() {
+                       /* Collections.sort(data, new Comparator<TaskNotificationModel.TaskList>() {
                             @Override
                             public int compare(TaskNotificationModel.TaskList t1, TaskNotificationModel.TaskList t2) {
                                 return Boolean.compare(t1.getIsSeen(), t1.getIsSeen());
                             }
                         });
-                        notifyDataSetChanged();
+                        notifyDataSetChanged();*/
+                        view.updateAdapter(R.integer.Tasks);
+
                         //**********
                         context.startActivity(new Intent(context, AddTaskActivity.class)
                                 .putExtra("from", "3")

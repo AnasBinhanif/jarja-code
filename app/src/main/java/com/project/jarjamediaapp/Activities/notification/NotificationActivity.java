@@ -1,49 +1,30 @@
 package com.project.jarjamediaapp.Activities.notification;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.paris.Paris;
-import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
-import com.project.jarjamediaapp.Activities.add_appointment.Data;
-import com.project.jarjamediaapp.Activities.add_appointment.GetAppointmentByIDModel;
-import com.project.jarjamediaapp.Activities.add_task.AddTaskActivity;
-import com.project.jarjamediaapp.Activities.add_task.GetTaskDetail;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.CustomAdapter.AppointmentNotificationRecyclerAdapter;
 import com.project.jarjamediaapp.CustomAdapter.FollowUpsNotificationRecyclerAdapter;
 import com.project.jarjamediaapp.CustomAdapter.TaskNotificatonRecyclerAdapter;
-import com.project.jarjamediaapp.Models.ViewFollowUpModel;
-import com.project.jarjamediaapp.Networking.ApiError;
-import com.project.jarjamediaapp.Networking.ApiMethods;
-import com.project.jarjamediaapp.Networking.ErrorUtils;
-import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
-import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityNotificationBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NotificationActivity extends BaseActivity implements NotificationContract.View {
@@ -56,6 +37,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     List<FollowUpNotificationModel.FollowUpsList> notificationListF;
     RecyclerAdapterUtil recyclerAdapterUtilT, recyclerAdapterUtilA, recyclerAdapterUtilF;
     AppointmentNotificationRecyclerAdapter appointmentRecyclerviewAdapter;
+
     TaskNotificatonRecyclerAdapter taskRecyclerviewAdapter;
     FollowUpsNotificationRecyclerAdapter folloupsRecyclerviewAdapter;
     LinearLayoutManager layoutManager;
@@ -128,6 +110,8 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
             bi.rvNotifications.setAdapter(appointmentRecyclerviewAdapter);
             appointmentRecyclerviewAdapter.notifyDataSetChanged();
             bi.rvNotifications.setVisibility(View.VISIBLE);
+
+
 
         } catch (Exception e) {
 
@@ -475,6 +459,8 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
                 notificationListA.addAll(response);
 
+
+
                 totalPages = appointmentNotificationCount != null ? appointmentNotificationCount : 0;
                 bi.rvNotifications.setVisibility(View.VISIBLE);
                 bi.tvMessage.setVisibility(View.GONE);
@@ -520,6 +506,24 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         } else {
             bi.rvNotifications.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void updateAdapter(int type) {
+        if (type == R.integer.Tasks) {
+            taskRecyclerviewAdapter.sortData();
+            taskRecyclerviewAdapter.notifyDataSetChanged();
+
+        } else if (type == R.integer.Appointment) {
+           // notificationListA.get(pos).setIsSeen(true);
+            appointmentRecyclerviewAdapter.sortData();
+            appointmentRecyclerviewAdapter.notifyDataSetChanged();
+
+        } else if (type == R.integer.Folloups) {
+            folloupsRecyclerviewAdapter.sortData();
+            folloupsRecyclerviewAdapter.notifyDataSetChanged();
+
         }
     }
 

@@ -876,7 +876,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     public void showViewFollowUpDialog(Context context, String wait, String title, String dateTime, String time, String note, String sentType) {
 
-        TextView edtWait, edtTitle, edtTime, edtNote;
+        TextView edtWait, edtTitle, edtTime, edtNote,tvClose;
         final Dialog dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
 
@@ -888,6 +888,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
             edtTime = (TextView) dialog.findViewById(R.id.edtTime);
             edtWait = (TextView) dialog.findViewById(R.id.edtWait);
+            tvClose = dialog.findViewById(R.id.tvClose);
             edtWait.setText(wait);
             edtTime.setText(time);
 
@@ -897,12 +898,21 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             edtNote = (TextView) dialog.findViewById(R.id.edtNote);
             edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
             edtTime = (TextView) dialog.findViewById(R.id.edtTime);
+            tvClose = dialog.findViewById(R.id.tvClose);
             edtTime.setText(GH.getInstance().formatter(dateTime,"MM-dd-yyyy hh:mm a","yyyy-MM-dd'T'HH:mm:ss"));
 
         }
 
         edtNote.setText(note);
         edtTitle.setText(title);
+
+        tvClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
         dialog.show();
     }
 

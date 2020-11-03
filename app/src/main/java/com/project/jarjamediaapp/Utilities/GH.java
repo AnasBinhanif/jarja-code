@@ -7,6 +7,8 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -196,11 +198,17 @@ public class GH {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    progressDialog = new ProgressDialog(activity);
+                /*    progressDialog = new ProgressDialog(activity);
                     progressDialog.setMessage("Please Wait....");
                     progressDialog.setCancelable(false);
                     progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.show();*/
+                    progressDialog = new Loading(activity);
+                    progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    progressDialog.setCancelable(false);
+                    progressDialog.setCanceledOnTouchOutside(false);
                     progressDialog.show();
+
                 }
             });
 

@@ -17,6 +17,15 @@ public class GetLeadTitlesModel {
     @Expose
     public String message;
 
+    @Override
+    public String toString() {
+        return "GetLeadTitlesModel{" +
+                "status='" + status + '\'' +
+                ", data=" + data +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
     public class Data {
 
         @SerializedName("id")
@@ -32,5 +41,15 @@ public class GetLeadTitlesModel {
         @Expose
         public Integer decryptedLeadID;
 
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "id='" + id + '\'' +
+                    ", name='" + name + '\'' +
+                    ", leadID='" + leadID + '\'' +
+                    ", decryptedLeadID=" + decryptedLeadID +
+                    '}';
+        }
     }
 }

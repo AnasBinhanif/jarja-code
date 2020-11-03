@@ -382,7 +382,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvReminder.setOnItemClickListener((parent, view, position, id) -> {
 
             clearFocus();
-
             reminder = arrayListReminderValue.get(position);
             if (bi.atvReminder.getText().toString().contains("None")) {
                 bi.atvVia.setVisibility(View.GONE);

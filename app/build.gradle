@@ -92,4 +92,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
    // implementation 'com.google.firebase:firebase-messaging:20.2.3'
 
+
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
+    def lottieVersion = "3.4.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    implementation 'com.google.android.material:material:1.2.0'
 }

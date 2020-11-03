@@ -1,5 +1,7 @@
 package com.project.jarjamediaapp.Fragments.DashboardFragments.followups;
 
+import android.util.Log;
+
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Models.GetFollowUpsModel;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -78,6 +80,8 @@ public class FollowUpPresenter extends BasePresenter<FollowUpContract.View> impl
         _call.enqueue(new Callback<GetFollowUpsModel>() {
             @Override
             public void onResponse(Call<GetFollowUpsModel> call, Response<GetFollowUpsModel> response) {
+                Log.d("onResponseSendTime",response.raw().sentRequestAtMillis() + "");
+                Log.d("onResponseReceiveTime",response.raw().receivedResponseAtMillis() + "");
 
                 _view.hideProgressBar();
                 if (response.isSuccessful()) {

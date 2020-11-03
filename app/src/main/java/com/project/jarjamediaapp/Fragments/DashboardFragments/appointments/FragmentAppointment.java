@@ -82,9 +82,6 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         bi = DataBindingUtil.inflate(inflater, R.layout.fragment_appointment, container, false);
         presenter = new AppointmentPresenter(this);
         presenter.initScreen();
-
-
-
         return bi.getRoot();
     }
 

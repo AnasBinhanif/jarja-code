@@ -11,8 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.internal.service.Common;
 import com.project.jarjamediaapp.Activities.notification.FollowUpNotificationModel;
 import com.project.jarjamediaapp.Activities.notification.NotificationActivity;
+import com.project.jarjamediaapp.Activities.notification.NotificationContract;
 import com.project.jarjamediaapp.Activities.notification.TaskNotificationModel;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -38,12 +40,15 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
     Context context;
     ArrayList<FollowUpNotificationModel.FollowUpsList> data;
 
+    NotificationContract.View _view;
 
     public FollowUpsNotificationRecyclerAdapter(Context context, ArrayList<FollowUpNotificationModel.FollowUpsList> data) {
         this.context = context;
         this.data = data;
         sortData();
         inflater = LayoutInflater.from(context);
+        _view = (NotificationContract.View) context;
+
 
     }
 
@@ -64,6 +69,8 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
 
             holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorYellow));
 
+        }else {
+            holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorWhite));
         }
 
         holder.tvName.setText(notificationObj.getFollowUpsType() != null ? notificationObj.getFollowUpsType() : "N/A");
@@ -109,6 +116,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
                 return Boolean.compare(followUpsList.getIsSeen(), t1.getIsSeen());
             }
         });
+
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -153,13 +161,16 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
 
                         GH.getInstance().HideProgressDialog();
                         //****added by akshay to sort list on basis of seen or unseen
-                        Collections.sort(data, new Comparator<FollowUpNotificationModel.FollowUpsList>() {
+                       /* Collections.sort(data, new Comparator<FollowUpNotificationModel.FollowUpsList>() {
                             @Override
                             public int compare(FollowUpNotificationModel.FollowUpsList followUpsList, FollowUpNotificationModel.FollowUpsList t1) {
                                 return Boolean.compare(followUpsList.getIsSeen(), t1.getIsSeen());
                             }
                         });
-                        notifyDataSetChanged();
+
+
+                        //  notifyDataSetChanged();*/
+                         _view.updateAdapter(R.integer.Folloups);
                         //**********
                         showViewFollowUpDialog(context, wait, title, dateTime, time, note, senType);
 
@@ -223,7 +234,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
 
     public void showViewFollowUpDialog(Context context, String wait, String title, String dateTime, String time, String note, String sentType) {
 
-        TextView edtWait, edtTitle, edtTime, edtNote;
+        TextView edtWait, edtTitle, edtTime, edtNote,tvClose;
         final Dialog dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
 
@@ -235,6 +246,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
             edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
             edtTime = (TextView) dialog.findViewById(R.id.edtTime);
             edtWait = (TextView) dialog.findViewById(R.id.edtWait);
+            tvClose = dialog.findViewById(R.id.tvClose);
             edtWait.setText(wait);
             edtTime.setText(time);
 
@@ -244,12 +256,20 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
             edtNote = (TextView) dialog.findViewById(R.id.edtNote);
             edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
             edtTime = (TextView) dialog.findViewById(R.id.edtTime);
+            tvClose = dialog.findViewById(R.id.tvClose);
             edtTime.setText(GH.getInstance().formatter(dateTime, "MM-dd-yyyy hh:mm a", "yyyy-MM-dd'T'HH:mm:ss"));
 
         }
 
         edtNote.setText(note);
         edtTitle.setText(title);
+
+        tvClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
         dialog.show();
     }

@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.telephony.SignalStrength;
+import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,27 +93,29 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
             holder.tvAddress.setText(summary);
             try {
 
-                holder.tvName.setText(modelData.leadName + "");
-                String[] name = modelData.leadName.split(" ");
-                String firstName = name[0];
-                String lastName = name[1];
-                if (firstName.equals("null") || firstName.equals("")) {
-                    firstName = "-";
+
+                if (!TextUtils.isEmpty(modelData.leadName)) {
+                    holder.tvName.setText(modelData.leadName + "");
+                    String[] name = modelData.leadName.split(" ");
+                    String firstName = name[0];
+                    String lastName = name[1];
+                    if (firstName.equals("null") || firstName.equals("")) {
+                        firstName = "-";
+                    }
+                    if (lastName.equals("null") || lastName.equals("")) {
+                        lastName = "-";
+                    }
+                    holder.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
                 }
-                if (lastName.equals("null") || lastName.equals("")) {
-                    lastName = "-";
-                }
-                holder.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
 
             holder.frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    viewDetail(mData.get(position).dripDetailID, holder.swipeLayout,"");
+                    viewDetail(mData.get(position).dripDetailID, holder.swipeLayout, "");
 
                 }
             });
@@ -198,14 +202,14 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
     private void viewDetail(String dripDetailId, SwipeRevealLayout swipeRevealLayout, String reminderId) {
         GH.getInstance().ShowProgressDialog(activity);
         Call<ViewFollowUpModel> _callToday;
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId,reminderId);
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId, reminderId);
         _callToday.enqueue(new Callback<ViewFollowUpModel>() {
             @Override
             public void onResponse(Call<ViewFollowUpModel> call, Response<ViewFollowUpModel> response) {
                 GH.getInstance().HideProgressDialog();
                 if (response.isSuccessful()) {
 
-                    Log.d( "onResponse: ",response.body().toString());
+                    Log.d("onResponse: ", response.body().toString());
                     ViewFollowUpModel getDetails = response.body();
                     if (getDetails.status.equals("Success")) {
 
@@ -216,7 +220,7 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
                         String senType = getDetails.data.viewDPCStep.sentType;
                         String dateTime = getDetails.data.viewDPCStep.sendDateTime;
 
-                        if (swipeRevealLayout != null){
+                        if (swipeRevealLayout != null) {
 
                             swipeRevealLayout.close(true);
                         }
@@ -250,7 +254,7 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
 
     public void showViewFollowUpDialog(Context context, String wait, String title, String dateTime, String time, String note, String sentType) {
 
-        TextView edtWait, edtTitle, edtTime, edtNote;
+        TextView edtWait, edtTitle, edtTime, edtNote, tvClose;
         final Dialog dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
 
@@ -259,9 +263,11 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
             dialog.setContentView(R.layout.custom_view_followup_wait_dialog);
 
             edtNote = (TextView) dialog.findViewById(R.id.edtNote);
+            edtNote.setMovementMethod(new ScrollingMovementMethod());
             edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
             edtTime = (TextView) dialog.findViewById(R.id.edtTime);
             edtWait = (TextView) dialog.findViewById(R.id.edtWait);
+            tvClose = dialog.findViewById(R.id.tvClose);
             edtWait.setText(wait);
             edtTime.setText(time);
 
@@ -269,14 +275,23 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
 
             dialog.setContentView(R.layout.custom_view_followup_dialog);
             edtNote = (TextView) dialog.findViewById(R.id.edtNote);
+            edtNote.setMovementMethod(new ScrollingMovementMethod());
             edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
             edtTime = (TextView) dialog.findViewById(R.id.edtTime);
-            edtTime.setText(GH.getInstance().formatter(dateTime,"MM-dd-yyyy hh:mm a","yyyy-MM-dd'T'HH:mm:ss"));
+            tvClose = dialog.findViewById(R.id.tvClose);
+            edtTime.setText(GH.getInstance().formatter(dateTime, "MM-dd-yyyy hh:mm a", "yyyy-MM-dd'T'HH:mm:ss"));
 
         }
 
         edtNote.setText(note);
         edtTitle.setText(title);
+
+        tvClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
         dialog.show();
     }
@@ -314,7 +329,8 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
                 Gson gson = new Gson();
                 //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                 String storedHashMapDashboardString = GH.getInstance().getUserPermissonDashboard();
-                java.lang.reflect.Type typeDashboard = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                java.lang.reflect.Type typeDashboard = new TypeToken<HashMap<String, Boolean>>() {
+                }.getType();
                 HashMap<String, Boolean> mapDashboard = gson.fromJson(storedHashMapDashboardString, typeDashboard);
 
                 if (mapDashboard.get("Edit FollowUps")) {
@@ -327,7 +343,7 @@ public class SwipeFollowUpsRecyclerAdapter extends RecyclerView.Adapter {
 
             tvView.setOnClickListener(v -> {
                 pos = getAdapterPosition();
-                viewDetail(mData.get(pos).dripDetailID, swipeLayout,mData.get(pos).dripDetailID);
+                viewDetail(mData.get(pos).dripDetailID, swipeLayout, mData.get(pos).dripDetailID);
             });
         }
     }

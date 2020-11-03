@@ -90,7 +90,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                     @Override
                     public void onError(Throwable throwable) {
-                        //Log.d("Response", "onError: " + throwable.toString());
+                        Log.d("Response", "onError: " + throwable.toString());
                         GH.getInstance().HideProgressDialog();
                         ToastUtils.showToastLong(context, "Invalid Username or Password");
                     }

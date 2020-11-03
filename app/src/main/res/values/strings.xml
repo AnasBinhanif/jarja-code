@@ -230,7 +230,7 @@
 
     <!-- Forgot Password -->
     <string name="btn_submit">Forgot Password</string>
-    <string name="notification_dialog">Jarja Media would like to send you notifications. Notifications may include alerts, sounds and icon badges. These can be configured in settings</string>
+    <string name="notification_dialog">Jarja Media would like to send you notifications. Notifications may include alerts, sounds and icon badges. These can be configured in settings.</string>
     <string name="discard_dialog_text">Would you like to discard your changes?</string>
 
     <!-- Navigation Drawer Dashboard Screen -->
@@ -395,6 +395,10 @@
     <string name="taskType_due">due</string>
     <string name="taskType_overdue">overDue</string>
     <string name="taskType_future">future</string>
+
+    <integer name="Tasks">1</integer>
+    <integer name="Appointment">2</integer>
+    <integer name="Folloups">3</integer>
 
 
 </resources>
