@@ -275,6 +275,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 leadName = getIntent().getStringExtra("leadName");
                 bi.tvName.setText(leadName + "");
                 bi.tvName.setEnabled(false);
+                isEdit = true;
 
             }
             break;

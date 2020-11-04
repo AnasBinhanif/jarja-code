@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -99,6 +100,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     boolean fromUpdate = false;
     boolean isStart;
 
+    boolean shouldRun;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,7 +142,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         //  checkIntent();
 
         bi.cbEndDate.setOnCheckedChangeListener((compoundButton, b) -> {
-            isEdited = true;
+//            isEdited = true;
+            if (shouldRun) {
+                isEdited = true;
+            }
+            shouldRun = true;
             if (b) {
                 bi.tvEndDate.setVisibility(View.GONE);
                 bi.lblEndDate.setVisibility(View.GONE);
@@ -186,6 +193,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 leadName = getIntent().getStringExtra("leadName");
                 bi.tvName.setText(leadName);
                 bi.tvName.setEnabled(false);
+                isEdit = true;
             }
             break;
             case "2": {
@@ -517,6 +525,13 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         bi.atvNameTask.setText(taskDetail.data.name);
         bi.atvDescription.setText(taskDetail.data.description);
         bi.tvName.setText(taskDetail.data.firstName);
+        //----- added by akshay to enable click on contact textview in case of no lead assigned
+        if (TextUtils.isEmpty(taskDetail.data.firstName)) {
+            bi.tvName.setEnabled(true);
+        }
+        //----------------///
+
+
         bi.atvType.setText(taskDetail.data.type, false);
         bi.atvType.setClickable(true);
         bi.atvType.setEnabled(true);
@@ -1132,7 +1147,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 if (isChangesDone()) {
                     GH.getInstance().discardChangesDialog(context);
                 } else {
-                  finish();
+                    finish();
                 }
                 break;
             case R.id.atvReminder:
