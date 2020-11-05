@@ -205,9 +205,8 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_search"
                     android:hint="@string/zip_postal"
-                    android:digits="0123456789"
                     android:imeOptions="actionSearch"
-                    android:inputType="number"
+                    android:inputType="textPostalAddress"
                     android:padding="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textSize="@dimen/_11sdp" />

@@ -17,6 +17,15 @@ public class GetTagListByLeadID {
     @Expose
     public String message;
 
+    @Override
+    public String toString() {
+        return "GetTagListByLeadID{" +
+                "status='" + status + '\'' +
+                ", data=" + data +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
     public class Data {
 
         @SerializedName("tagID")
@@ -31,6 +40,16 @@ public class GetTagListByLeadID {
         @SerializedName("added")
         @Expose
         public Object added;
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "tagID=" + tagID +
+                    ", encryptedTagID='" + encryptedTagID + '\'' +
+                    ", label='" + label + '\'' +
+                    ", added=" + added +
+                    '}';
+        }
     }
     
 }

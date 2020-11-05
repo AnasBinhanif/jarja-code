@@ -257,7 +257,7 @@ public class AddNotesActivity extends BaseActivity implements NotesContract.View
     public void updateUI(Response<BaseResponse> response) {
 
         if (response.body().getStatus().equalsIgnoreCase("Success")) {
-            ToastUtils.showToast(context, "Added Successfully");
+            ToastUtils.showToast(context, "Added successfully");
             setResult(Activity.RESULT_OK);
             finish();
 
