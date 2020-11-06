@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.CustomAdapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +70,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
 
             holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorYellow));
 
-        }else {
+        } else {
             holder.CardviewNotification.setCardBackgroundColor(context.getResources().getColor(R.color.colorWhite));
         }
 
@@ -170,7 +171,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
 
 
                         //  notifyDataSetChanged();*/
-                         _view.updateAdapter(R.integer.Folloups);
+                        _view.updateAdapter(R.integer.Folloups);
                         //**********
                         showViewFollowUpDialog(context, wait, title, dateTime, time, note, senType);
 
@@ -234,7 +235,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
 
     public void showViewFollowUpDialog(Context context, String wait, String title, String dateTime, String time, String note, String sentType) {
 
-        TextView edtWait, edtTitle, edtTime, edtNote,tvClose;
+        TextView edtWait, edtTitle, edtTime, edtNote, tvClose;
         final Dialog dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
 
@@ -243,6 +244,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
             dialog.setContentView(R.layout.custom_view_followup_wait_dialog);
 
             edtNote = (TextView) dialog.findViewById(R.id.edtNote);
+            edtNote.setMovementMethod(new ScrollingMovementMethod());
             edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
             edtTime = (TextView) dialog.findViewById(R.id.edtTime);
             edtWait = (TextView) dialog.findViewById(R.id.edtWait);
@@ -254,6 +256,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
 
             dialog.setContentView(R.layout.custom_view_followup_dialog);
             edtNote = (TextView) dialog.findViewById(R.id.edtNote);
+            edtNote.setMovementMethod(new ScrollingMovementMethod());
             edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
             edtTime = (TextView) dialog.findViewById(R.id.edtTime);
             tvClose = dialog.findViewById(R.id.tvClose);
@@ -262,6 +265,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
         }
 
         edtNote.setText(note);
+        edtNote.setText("it is working on ios. When i update company address from ios and check postman for user profile I get updated value. However, when I update from android and then check postman for userprofile, i don't get updated value. May key is different than what is on android. it is working on ios. When i update company address from ios and check postman for user profile I get updated value. However, when I update from android and then check postman for userprofile, i don't get updated value. May key is different than what is on android.  ");
         edtTitle.setText(title);
 
         tvClose.setOnClickListener(new View.OnClickListener() {

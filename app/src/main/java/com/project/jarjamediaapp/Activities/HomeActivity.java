@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -885,6 +886,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             dialog.setContentView(R.layout.custom_view_followup_wait_dialog);
 
             edtNote = (TextView) dialog.findViewById(R.id.edtNote);
+            edtNote.setMovementMethod(new ScrollingMovementMethod());
             edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
             edtTime = (TextView) dialog.findViewById(R.id.edtTime);
             edtWait = (TextView) dialog.findViewById(R.id.edtWait);
@@ -896,6 +898,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
             dialog.setContentView(R.layout.custom_view_followup_dialog);
             edtNote = (TextView) dialog.findViewById(R.id.edtNote);
+            edtNote.setMovementMethod(new ScrollingMovementMethod());
             edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
             edtTime = (TextView) dialog.findViewById(R.id.edtTime);
             tvClose = dialog.findViewById(R.id.tvClose);

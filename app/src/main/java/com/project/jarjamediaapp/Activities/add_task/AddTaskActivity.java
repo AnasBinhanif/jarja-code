@@ -157,6 +157,27 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         });
 
+        textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isEdited = true;
+
+            }
+        };
+        bi.atvNameTask.addTextChangedListener(textWatcher);
+        bi.atvDescription.addTextChangedListener(textWatcher);
+        bi.atvAddProperty.addTextChangedListener(textWatcher);
+
     }
 
     private void loadTitle() {

@@ -140,6 +140,7 @@
             android:background="@drawable/bg_search"
             android:gravity="top"
             android:inputType="textMultiLine"
+
             android:paddingLeft="12dp"
             android:paddingTop="5dp"
             android:paddingRight="12dp"
