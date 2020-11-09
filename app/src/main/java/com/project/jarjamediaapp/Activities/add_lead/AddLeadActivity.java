@@ -251,7 +251,10 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                     textView.setText(String.valueOf(name.agentName));
                     bi.lnAgent.addView(child);
                     // selectedIdsList.add(Integer.valueOf(name.agentID));
-                    selectedIdsList.add(name.assignAgentsID);
+
+//                    selectedIdsList.add(name.assignAgentsID);
+                    //replacing above line with below line of code
+                    selectedIdsList.add(name.agentDryptedID);
                     if (agentIdsString.equals("")) {
                         agentIdsString = name.agentID;
                     } else {
@@ -543,6 +546,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         } else {
             multiSelectDialog.multiSelectList(searchListItems);
         }
+        multiSelectDialog.multiSelectList(searchListItems);
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
 

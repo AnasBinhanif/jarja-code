@@ -498,11 +498,13 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
 
     private boolean isValidate() {
         //below if block is added to validate that atleast one website is selected
-        if (websiteIdsString.equalsIgnoreCase("")) {
+
+        //commenting below block of code as it is no longer mandatory to select website
+       /* if (websiteIdsString.equalsIgnoreCase("")) {
             ToastUtils.showToast(context, "Please enter website");
             bi.tvAgent.requestFocus();
             return false;
-        }
+        }*/
         if (Methods.isEmpty(bi.atvAddress)) {
             ToastUtils.showToast(context, R.string.error_address);
             bi.atvAddress.requestFocus();
@@ -1101,7 +1103,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                 .titleSize(25)
                 .positiveText("Done")
                 .negativeText("Cancel")
-                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                .setMinSelectionLimit(0) //you can set minimum checkbox selection limit (Optional)
                 .onSubmit(new MultiSelectDialogForWebsites.SubmitCallbackListener() {
                     @Override
                     public void onSelected(ArrayList<String> selectedIds, ArrayList<String> selectedNames, String commonSeperatedData) {

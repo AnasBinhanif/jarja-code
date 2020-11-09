@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -579,6 +580,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
         recyclerAdapterUtil.addOnDataBindListener((Function4<View, GetLead.AgentsList, Integer, Map<Integer, ? extends View>, Unit>) (view, allLeadsList, integer, integerMap) -> {
 
+
             TextView tvName = (TextView) integerMap.get(R.id.tvAssignedToName);
             CircleImageView imageView = (CircleImageView) integerMap.get(R.id.imgAssignedTo);
             tvName.setText(String.valueOf(allLeadsList.agentName));
@@ -587,6 +589,8 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             if (allLeadsList.isPrimaryAgent) {
                 tvIsPrimary.setVisibility(View.VISIBLE);
                 primaryPhoneNumber = primaryPhone;
+
+
             } else {
                 tvIsPrimary.setVisibility(View.INVISIBLE);
             }

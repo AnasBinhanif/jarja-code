@@ -189,6 +189,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         day = newCalendar.get(Calendar.DAY_OF_MONTH);
         mHour = newCalendar.get(Calendar.HOUR_OF_DAY);
         mMinute = newCalendar.get(Calendar.MINUTE);
+
+
     }
 
     private void calendarEditInstance(int id) {
@@ -975,6 +977,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         Calendar cal = Calendar.getInstance();
         new SpinnerDatePickerDialogBuilder().context(AddAppointmentActivity.this)
                 .callback(AddAppointmentActivity.this)
+               // .spinnerTheme(R.style.NumberPickerStyle)
                 .showTitle(true)
                 .defaultDate(year, month, day)
                 .minDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))
@@ -996,12 +999,18 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 if (isStart) {
                     startTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
                     time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
-
+                    //adding this line to append time to date field
+                    bi.tvStartDate.append(" " +time);
                 } else {
                     endTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
                     time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
+
+                    //adding this line to append time to date field
+                    bi.tvEndDate.append(" " +time);
                 }
                 textView.setText(time);
+
+
             }
         }, mHour, mMinute, false);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
@@ -1517,9 +1526,17 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         if (isStart) {
             startDate = dateFormatter.format(newCalendar.getTime());
             bi.tvStartDate.setText(dateFormatter2.format(newCalendar.getTime()));
+
+            //adding below line to open time picker as user press ok on date picker
+            bi.tvStartTime.performClick();
+
         } else {
             endDate = dateFormatter.format(newCalendar.getTime());
             bi.tvEndDate.setText(dateFormatter2.format(newCalendar.getTime()));
+
+            //adding below line to open time picker as user press ok on date picker
+            bi.tvEndTime.performClick();
+
         }
     }
 

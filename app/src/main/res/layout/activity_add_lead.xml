@@ -249,10 +249,9 @@
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="0123456789"
                         android:hint="@string/postal_code_1"
                         android:imeOptions="actionNext"
-                        android:inputType="number"
+                        android:inputType="textPostalAddress"
                         android:maxLength="10"
                         android:singleLine="true" />
 
@@ -316,10 +315,10 @@
                         style="@style/AutoCompleteStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="0123456789"
+
                         android:hint="@string/postal_code_2"
                         android:imeOptions="actionNext"
-                        android:inputType="number"
+                        android:inputType="textPostalAddress"
                         android:maxLength="10"
                         android:singleLine="true" />
 

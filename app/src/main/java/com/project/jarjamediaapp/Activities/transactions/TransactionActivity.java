@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.internal.service.Common;
+import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
@@ -27,12 +29,19 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityTransactionsBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
+import com.tsongkha.spinnerdatepicker.CommonDateUtils;
+import com.tsongkha.spinnerdatepicker.DatePicker;
+import com.tsongkha.spinnerdatepicker.DatePickerDialog;
+import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +50,7 @@ import kotlin.jvm.functions.Function2;
 import kotlin.jvm.functions.Function4;
 import retrofit2.Response;
 
-public class TransactionActivity extends BaseActivity implements View.OnClickListener, TransactionContract.View {
+public class TransactionActivity extends BaseActivity implements View.OnClickListener, TransactionContract.View, DatePickerDialog.OnDateSetListener {
 
     ActivityTransactionsBinding bi;
     Context context = TransactionActivity.this;
@@ -59,6 +68,11 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     RecyclerView rvAgentCommission;
     List<TransactionModel.Data> dataList;
     int count = 0;
+    Calendar newCalendar;
+    int month, year, day, _month, _year, _day, mHour, mMinute;
+    TextView tvCommisionDate, tvCloseDate;
+    String commisionDate, closeDate;
+    int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +101,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
     private void populateListData() {
 
-        count=0;
+        count = 0;
         bi.recyclerViewTransaction.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.recyclerViewTransaction.setItemAnimator(new DefaultItemAnimator());
         bi.recyclerViewTransaction.addItemDecoration(new DividerItemDecoration(bi.recyclerViewTransaction.getContext(), 1));
@@ -125,7 +139,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                                 }
                             }
                         }
-                        count = count+1;
+                        count = count + 1;
                         tvName.setTextColor(getResources().getColor(R.color.colorMateGreen));
                         imgInitial.setVisibility(View.VISIBLE);
                         tvDate.setVisibility(View.VISIBLE);
@@ -186,14 +200,14 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
                         presenter.addPipelineMark(jsonObjectString);
 
-                    }else {
+                    } else {
                         // enable revert pipeline
                         jsonObjectString = "{\"presentationID\": \"" + presentationID + "\"," +
                                 " \"encrypted_LeadDetailID\": \"" + leadDetailId +
                                 "\", \"pipelineID\":\"" + pipelineID + "\"}";
                         Log.d("json", jsonObjectString);
                         presenter.addPipelineMark(jsonObjectString);
-                      //  showLongToastMessage("Sorry, you cannot revert pipeline.");
+                        //  showLongToastMessage("Sorry, you cannot revert pipeline.");
                     }
 
 
@@ -310,7 +324,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
             } else {
                 showAgentCommissionDialog();
             }
-        }else{
+        } else {
             hideProgressBar();
         }
 
@@ -327,7 +341,18 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         populateListData();
     }
 
+    private String dateFormater(Date date, String outPutFormat) {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat(outPutFormat);
+
+        return dateFormatter.format(date);
+
+    }
+
     private void showAgentCommissionDialog() {
+
+        //calling calendar instance
+        calendarInstance();
+
 
         presenter.getAgentCommission(leadID, leadDetailId);
 
@@ -338,6 +363,12 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         rvAgentCommission = dialog.findViewById(R.id.rvAgentCommission);
         btnSave = dialog.findViewById(R.id.btnSave);
         btnCancel = dialog.findViewById(R.id.btnCancel);
+
+        tvCommisionDate = dialog.findViewById(R.id.atvCommissionDate);
+        tvCommisionDate.setText(dateFormater(newCalendar.getTime(), "MMM dd,yyyy"));
+        tvCloseDate = dialog.findViewById(R.id.atvCloseDate);
+        tvCloseDate.setText(dateFormater(newCalendar.getTime(), "MMM dd,yyyy"));
+
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -374,6 +405,22 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
             }
         });
 
+        tvCommisionDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                type = 1;
+                showSpinnerDateDialog();
+            }
+        });
+
+        tvCloseDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                type = 2;
+                showSpinnerDateDialog();
+            }
+        });
+
     }
 
     @Override
@@ -407,4 +454,48 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         GH.getInstance().HideProgressDialog();
     }
 
+    private void calendarInstance() {
+
+        newCalendar = Calendar.getInstance();
+        year = newCalendar.get(Calendar.YEAR);
+        month = newCalendar.get(Calendar.MONTH);
+        day = newCalendar.get(Calendar.DAY_OF_MONTH);
+        mHour = newCalendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = newCalendar.get(Calendar.MINUTE);
+    }
+
+    private void showSpinnerDateDialog() {
+
+        // Calendar cal = Calendar.getInstance();
+        new SpinnerDatePickerDialogBuilder().context(TransactionActivity.this)
+                .callback(TransactionActivity.this)
+                // .spinnerTheme(R.style.NumberPickerStyle)
+                .showTitle(true)
+                .defaultDate(year, month, day)
+                .minDate(newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH))
+                .build()
+                .show();
+
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+        this.year = _year;
+        month = monthOfYear;
+        day = dayOfMonth;
+        newCalendar.set(year, month, day);
+
+        if (type == 1){
+            commisionDate = dateFormater(newCalendar.getTime(),"MM-dd-yyyy");
+            tvCommisionDate.setText(commisionDate);
+
+        }else if (type==2){
+            closeDate = dateFormater(newCalendar.getTime(),"MM-dd-yyyy");
+            tvCloseDate.setText(closeDate);
+        }
+
+
+
+    }
 }

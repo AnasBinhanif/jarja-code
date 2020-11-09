@@ -22,7 +22,7 @@
     <string name="edit">Edit</string>
     <string name="_name_of_contact">Contact *</string>
     <string name="_agent">Agent *</string>
-    <string name="_website">Website *</string>
+    <string name="_website">Website</string>
     <string name="_event_title">Event Title *</string>
     <string name="_description">Description *</string>
     <string name="_start_date">Start Date *</string>

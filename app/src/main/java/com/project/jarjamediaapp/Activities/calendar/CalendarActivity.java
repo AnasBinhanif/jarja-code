@@ -116,6 +116,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         yearSelected = calendar.get(Calendar.YEAR);
         monthSelected = (calendar.get(Calendar.MONTH) + 1);
         daySelected = calendar.get(Calendar.DAY_OF_MONTH);
+
         bi.calendarView.setSelectedDate(CalendarDay.from(yearSelected, (monthSelected - 1), daySelected));
         bi.calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
