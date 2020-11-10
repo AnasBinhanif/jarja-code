@@ -437,7 +437,8 @@
                     android:background="@drawable/bg_search"
                     android:hint="@string/zip_postal"
                     android:imeOptions="actionNext"
-                    android:inputType="textPostalAddress"
+                    android:maxLength="10"
+                    android:inputType="text"
                     android:padding="@dimen/_10sdp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_11sdp" />

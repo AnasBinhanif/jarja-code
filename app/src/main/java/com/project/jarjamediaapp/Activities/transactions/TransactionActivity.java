@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.DecimalDigitsInputFilter;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityTransactionsBinding;
@@ -279,6 +281,11 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         AutoCompleteTextView atvAgentCommission = (AutoCompleteTextView) integerMap.get(R.id.atvAgentCommission);
                         atvAgentCommission.setText(data.getCommission() + "");
 
+                        //creating input filter to limit the lenght and decimal point upto 2
+                        InputFilter[] filterArray = new InputFilter[]{new DecimalDigitsInputFilter(10, 2),new InputFilter.LengthFilter(10)};
+
+                        atvAgentCommission.setFilters(filterArray);
+
                         atvAgentCommission.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -292,7 +299,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                             @Override
                             public void afterTextChanged(Editable s) {
                                 if (s.length() > 0) {
-                                    data.setCommission(Integer.valueOf(atvAgentCommission.getText().toString()));
+                                    data.setCommission(Double.valueOf(atvAgentCommission.getText().toString()));
                                     dataList.set(position, data);
                                 }
                             }
@@ -302,6 +309,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                     });
 
             rvAgentCommission.setAdapter(raCommission);
+            dialog.setCancelable(false);
             dialog.show();
 
         } else {
@@ -486,15 +494,14 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         day = dayOfMonth;
         newCalendar.set(year, month, day);
 
-        if (type == 1){
-            commisionDate = dateFormater(newCalendar.getTime(),"MM-dd-yyyy");
+        if (type == 1) {
+            commisionDate = dateFormater(newCalendar.getTime(), "MM-dd-yyyy");
             tvCommisionDate.setText(commisionDate);
 
-        }else if (type==2){
-            closeDate = dateFormater(newCalendar.getTime(),"MM-dd-yyyy");
+        } else if (type == 2) {
+            closeDate = dateFormater(newCalendar.getTime(), "MM-dd-yyyy");
             tvCloseDate.setText(closeDate);
         }
-
 
 
     }

@@ -14,6 +14,9 @@ import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.Utilities.GH;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,13 +49,13 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
         _call.enqueue(new Callback<GetUserProfile>() {
             @Override
             public void onResponse(Call<GetUserProfile> call, Response<GetUserProfile> response) {
-             ///   _view.hideProgressBar();
+                ///   _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetUserProfile getUserProfile = response.body();
                     if (response.body().status.equals("Success")) {
 
-                       // _view.hideProgressBar();
+                        // _view.hideProgressBar();
                         _view.updateUI(getUserProfile);
 
                     } else {
@@ -91,11 +94,11 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
 
                     } else {
 
-                      //  _view.hideProgressBar();
+                        //  _view.hideProgressBar();
                         _view.updateUIonFalse(getUserProfile.message);
                     }
                 } else {
-                 //   _view.hideProgressBar();
+                    //   _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -103,7 +106,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
 
             @Override
             public void onFailure(Call<GetTimeZoneList> call, Throwable t) {
-               // _view.hideProgressBar();
+                // _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
         });
@@ -125,7 +128,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
                     GetCountries getCountries = response.body();
                     if (response.body().status.equals("Success")) {
 
-                     //   _view.hideProgressBar();
+                        //   _view.hideProgressBar();
                         _view.updateUI(getCountries);
 
 
@@ -134,7 +137,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
                         _view.updateUIonFalse(getCountries.message);
                     }
                 } else {
-                   _view.hideProgressBar();
+                    _view.hideProgressBar();
                     ApiError error = ErrorUtils.parseError(response);
                     _view.updateUIonError(error.message());
                 }
@@ -152,13 +155,13 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
     @Override
     public void getTwilioNumber() {
 
-     //   _view.showProgressBar();
+        //   _view.showProgressBar();
         _callGetTwilioNumber = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 getTwilioNumber(GH.getInstance().getAuthorization());
         _callGetTwilioNumber.enqueue(new Callback<GetTwilioNumber>() {
             @Override
             public void onResponse(Call<GetTwilioNumber> call, Response<GetTwilioNumber> response) {
-              //  _view.hideProgressBar();
+                //  _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     GetTwilioNumber getUserProfile = response.body();
@@ -178,7 +181,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
 
             @Override
             public void onFailure(Call<GetTwilioNumber> call, Throwable t) {
-              //  _view.hideProgressBar();
+                //  _view.hideProgressBar();
                 _view.updateUIonFailure();
             }
         });
@@ -188,7 +191,7 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
     public void uploadImage(MultipartBody.Part file) {
 
         _view.showProgressBar();
-        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Upload_ProfileImage(GH.getInstance().getAuthorization(),file,"image");
+        _cCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Upload_ProfileImage(GH.getInstance().getAuthorization(), file, "image");
 
         _cCall.enqueue(new Callback<Upload_ProfileImage>() {
             @Override
@@ -225,9 +228,40 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
     public void updateUserProfile(String firstName, String state, String licenseNo, String picName, String companyAddress, String agentType,
                                   String zipCode, String streetAddress, String title, int countryId, String forwardedNumber,
                                   boolean leadDistributionMessageEnabled, String emailAddress, String company, String lastName, String tmzone,
-                                  String picGuid, String phone, String city,String virtualNumber) {
+                                  String picGuid, String phone, String city, String virtualNumber) {
+
+        //creating json object from above parameters
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("agentType", agentType);
+            jsonObject.put("emailAddress", emailAddress);
+            jsonObject.put("streetAddress", streetAddress);
+            jsonObject.put("state", state);
+            jsonObject.put("picName", picName);
+            jsonObject.put("firstName", firstName);
+            jsonObject.put("licenseNo", licenseNo);
+            jsonObject.put("countryId", countryId);
+            jsonObject.put("title", title);
+            jsonObject.put("lastName", lastName);
+            jsonObject.put("city", city);
+            jsonObject.put("companyAddress", companyAddress);
+            jsonObject.put("picGuid", picGuid);
+            jsonObject.put("company", company);
+            jsonObject.put("tmzone", tmzone);
+            jsonObject.put("forwardedNumber", forwardedNumber);
+            jsonObject.put("zipCode", zipCode);
+            jsonObject.put("phone", phone);
+            jsonObject.put("virtualNumber", virtualNumber);
+            jsonObject.put("leadDistributionMessageEnabled", leadDistributionMessageEnabled);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
         _view.showProgressBar();
+       // _callUpdateUserProfile = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateProfileInfo(GH.getInstance().getAuthorization(), jsonObject.toString());
+
         _callUpdateUserProfile = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 UpdateProfileInfo(GH.getInstance().getAuthorization(), firstName, state, licenseNo, picName, companyAddress, agentType,
                         zipCode, streetAddress, title, countryId, forwardedNumber,

@@ -58,6 +58,8 @@ import com.project.jarjamediaapp.Models.Upload_ProfileImage;
 import com.project.jarjamediaapp.Models.ViewFollowUpModel;
 import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 
+import org.json.JSONObject;
+
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -129,6 +131,10 @@ public interface ApiMethods {
                                          @Field("phone") String phone,
                                          @Field("city") String city,
                                          @Field("virtualNumber") String virtualNumber);
+
+    @Headers("Content-Type: application/json")
+    @POST("Lead/UpdateProfileInfo")
+    Call<BaseResponse> UpdateProfileInfo(@Header("Authorization") String hdr, @Body String body);
 
 
     @GET("User/GetUserPermission")

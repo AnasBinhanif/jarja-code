@@ -141,6 +141,46 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
     }
 
+
+    @Override
+    public void initViews() {
+
+        leadID = getIntent().getStringExtra("leadID");
+        bi.scLeadDetail.setVisibility(View.GONE);
+        bi.tvNoRecordFound.setVisibility(View.GONE);
+
+        initListeners();
+        populateListData();
+       // presenter.getAgentNames();
+      //  presenter.getLead(leadID);
+      //  presenter.getTransaction(leadID);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        presenter.getAgentNames();
+        presenter.getLead(leadID);
+        presenter.getTransaction(leadID);
+    }
+
+
+    private void initListeners() {
+
+        bi.btnActions.setOnClickListener(this);
+        bi.btnDetails.setOnClickListener(this);
+        bi.rlTransaction1.setOnClickListener(this);
+        bi.rlTransaction2.setOnClickListener(this);
+        bi.btnTransaction1.setOnClickListener(this);
+        bi.btnTransaction2.setOnClickListener(this);
+        bi.fbAssignedTo.setOnClickListener(this);
+        bi.imgCall.setOnClickListener(this);
+        bi.imgEmail.setOnClickListener(this);
+        bi.imgMessage.setOnClickListener(this);
+    }
+
     private void populateListData() {
 
         List<GetLeadDetails> leadsList = new ArrayList<>();
@@ -533,43 +573,11 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         super.setupUI(view);
     }
 
-    @Override
-    public void initViews() {
 
-        leadID = getIntent().getStringExtra("leadID");
-        bi.scLeadDetail.setVisibility(View.GONE);
-        bi.tvNoRecordFound.setVisibility(View.GONE);
 
-        initListeners();
-        populateListData();
-        presenter.getAgentNames();
-        presenter.getLead(leadID);
-        presenter.getTransaction(leadID);
 
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-        presenter.getAgentNames();
-        presenter.getLead(leadID);
-        presenter.getTransaction(leadID);
-    }
-
-    private void initListeners() {
-
-        bi.btnActions.setOnClickListener(this);
-        bi.btnDetails.setOnClickListener(this);
-        bi.rlTransaction1.setOnClickListener(this);
-        bi.rlTransaction2.setOnClickListener(this);
-        bi.btnTransaction1.setOnClickListener(this);
-        bi.btnTransaction2.setOnClickListener(this);
-        bi.fbAssignedTo.setOnClickListener(this);
-        bi.imgCall.setOnClickListener(this);
-        bi.imgEmail.setOnClickListener(this);
-        bi.imgMessage.setOnClickListener(this);
-    }
 
     private void populateListData(ArrayList<GetLead.AgentsList> leadsList, String primaryPhone) {
 
@@ -652,6 +660,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         getLeadListData = response.data.leadList;
         getAssignedAgentList = response.data.leadList.agentsList;
 
+
         if (getLeadListData != null) {
 
             primaryPhoneNumber = getLeadListData.primaryPhone == null ? "" : getLeadListData.primaryPhone;
@@ -659,6 +668,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             primaryEmail = getLeadListData.primaryEmail == null ? "" : getLeadListData.primaryEmail;
 
             if (getAssignedAgentList.size() != 0) {
+                selectedIdsList.clear();
                 for (GetLead.AgentsList model : getAssignedAgentList) {
                     selectedIdsList.add(model.agentDryptedID);
 

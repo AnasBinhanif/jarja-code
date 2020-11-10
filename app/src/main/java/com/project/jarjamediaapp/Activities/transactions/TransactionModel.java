@@ -19,7 +19,7 @@ public class TransactionModel extends BaseResponse {
         public String agentID;
         @SerializedName("commission")
         @Expose
-        public Integer commission;
+        public Double commission;
         @SerializedName("agentName")
         @Expose
         public String agentName;
@@ -28,7 +28,7 @@ public class TransactionModel extends BaseResponse {
             return agentID;
         }
 
-        public Integer getCommission() {
+        public Double getCommission() {
             return commission;
         }
 
@@ -36,7 +36,7 @@ public class TransactionModel extends BaseResponse {
             return agentName;
         }
 
-        public void setCommission(Integer commission) {
+        public void setCommission(Double commission) {
             this.commission = commission;
         }
     }
