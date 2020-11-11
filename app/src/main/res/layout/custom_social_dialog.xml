@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/_20sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -82,8 +83,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
-            app:ms_dropdown_height="300dp"
-            app:ms_popup_padding_bottom="30dp"
+
+
             android:background="@drawable/bg_search"
             android:hint="@string/site"
             android:paddingLeft="12dp"

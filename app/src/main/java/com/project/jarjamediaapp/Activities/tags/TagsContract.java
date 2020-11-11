@@ -21,6 +21,7 @@ public interface TagsContract {
 
         void hideProgressBar();
 
+        void updateUIOnTagDelete();
     }
 
     /*

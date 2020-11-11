@@ -29,6 +29,7 @@ import com.project.jarjamediaapp.Utilities.EventDecorator;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityCalendarBinding;
+import com.project.jarjamediaapp.databinding.ActivityCalendarNewBinding;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -48,7 +49,7 @@ import retrofit2.Response;
 
 public class CalendarActivity extends BaseActivity implements View.OnClickListener, CalendarContract.View {
 
-    ActivityCalendarBinding bi;
+    ActivityCalendarNewBinding bi;
     Context context = CalendarActivity.this;
     CalendarPresenter presenter;
     Calendar calendar;
@@ -66,7 +67,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bi = DataBindingUtil.setContentView(this, R.layout.activity_calendar);
+        bi = DataBindingUtil.setContentView(this, R.layout.activity_calendar_new);
         presenter = new CalendarPresenter(this);
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.calendar), true);

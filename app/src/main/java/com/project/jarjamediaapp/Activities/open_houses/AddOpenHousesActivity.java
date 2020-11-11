@@ -163,8 +163,17 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         bi.atvPrice.setText(openHouse.getListPrice());
         bi.atvState.setText(openHouse.getState());
         bi.atvZip.setText(openHouse.getZipCode());
-        bi.atvOpenHouseStartDate.setText(openHouse.getOpenHouseDate());
-        bi.atvOpenHouseEndDate.setText(openHouse.getOpenHouseEndDate());
+
+        String sDate = GH.getInstance().formatter(openHouse.getOpenHouseDate(), "MM/dd/yyyy  hh:mm a", "yyyy-MM-dd'T'HH:mm:ss");
+        String eDate = GH.getInstance().formatter(openHouse.getOpenHouseEndDate(), "MM/dd/yyyy  hh:mm a", "yyyy-MM-dd'T'HH:mm:ss");
+
+
+//        bi.atvOpenHouseStartDate.setText(openHouse.getOpenHouseDate());
+//        bi.atvOpenHouseEndDate.setText(openHouse.getOpenHouseEndDate());
+        //commenting above two lines to replace with below lines
+        bi.atvOpenHouseStartDate.setText(sDate);
+        bi.atvOpenHouseEndDate.setText(eDate);
+
 
         openHouseStartDate = openHouse.getOpenHouseDate();
         openHouseEndDate = openHouse.getOpenHouseEndDate();
@@ -1029,7 +1038,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         try {
             final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault());
             final Date dateObj = sdf.parse(time);
-            return new SimpleDateFormat("MM-dd-yyyy  hh:mm a", Locale.getDefault()).format(dateObj);
+            return new SimpleDateFormat("MM/dd/yyyy  hh:mm a", Locale.getDefault()).format(dateObj);
 
         } catch (final ParseException e) {
             e.printStackTrace();

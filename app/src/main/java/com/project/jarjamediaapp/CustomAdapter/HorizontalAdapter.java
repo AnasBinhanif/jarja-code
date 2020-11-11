@@ -102,8 +102,8 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
             String startDateTime = data.get(position).getOpenHouseDate();
             String endDateTime = data.get(position).getOpenHouseEndDate();
 
-            holder.tvStartDateTime.setText(GH.getInstance().formatter(startDateTime, "MM-dd-yyyy hh:mm a", "yyyy-MM-dd'T'HH:mm:ss"));
-            holder.tvEndDateTime.setText(GH.getInstance().formatter(endDateTime, "MM-dd-yyyy hh:mm a", "yyyy-MM-dd'T'HH:mm:ss"));
+            holder.tvStartDateTime.setText(GH.getInstance().formatter(startDateTime, "MM/dd/yyyy hh:mm a", "yyyy-MM-dd'T'HH:mm:ss"));
+            holder.tvEndDateTime.setText(GH.getInstance().formatter(endDateTime, "MM/dd/yyyy hh:mm a", "yyyy-MM-dd'T'HH:mm:ss"));
 
             holder.tvAddress.setText(data.get(position).getStreetName());
             holder.tvCityPostal.setText(data.get(position).getCity() + " , " + data.get(position).getState());

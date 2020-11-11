@@ -115,7 +115,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         presenter.initScreen();
 
 
-
     }
 
     @Override
@@ -408,6 +407,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(modelData.getDatedFrom()) : "");
             bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(modelData.getDatedTo()) : "");
             bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(modelData.getDatedTo()) : "");
+
+            //adding these lines to append time with start and end date textview
+            bi.tvStartDate.append(" " + bi.tvStartTime.getText());
+            bi.tvEndDate.append(" " + bi.tvEndTime.getText());
+
+
         }
 
         if (arrayListReminderValue != null && arrayListReminderValue.size() > 0) {
@@ -480,6 +485,10 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(modelData.getDatedTo()) : "");
         bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(modelData.getDatedTo()) : "");
 
+        //adding these lines to append time with start and end date textview
+        bi.tvStartDate.append(" " + bi.tvStartTime.getText());
+        bi.tvEndDate.append(" " + bi.tvEndTime.getText());
+
         if (arrayListReminderValue != null && arrayListReminderValue.size() > 0) {
             reminder = String.valueOf(modelData.getInterval());
             via = modelData.getViaReminder();
@@ -549,6 +558,10 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.tvStartTime.setText(GH.getInstance().formatTime(modelData.getDatedFrom()) != null ? GH.getInstance().formatTime(modelData.getDatedFrom()) : "");
         bi.tvEndDate.setText(GH.getInstance().formatDate(modelData.getDatedTo()) != null ? GH.getInstance().formatDate(modelData.getDatedTo()) : "");
         bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(modelData.getDatedTo()) : "");
+
+        //adding these lines to append time with start and end date textview
+        bi.tvStartDate.append(" " + bi.tvStartTime.getText());
+        bi.tvEndDate.append(" " + bi.tvEndTime.getText());
 
         if (arrayListReminderValue != null && arrayListReminderValue.size() > 0) {
             reminder = String.valueOf(modelData.getInterval());
@@ -977,7 +990,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         Calendar cal = Calendar.getInstance();
         new SpinnerDatePickerDialogBuilder().context(AddAppointmentActivity.this)
                 .callback(AddAppointmentActivity.this)
-               // .spinnerTheme(R.style.NumberPickerStyle)
+                // .spinnerTheme(R.style.NumberPickerStyle)
                 .showTitle(true)
                 .defaultDate(year, month, day)
                 .minDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))
@@ -1000,13 +1013,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     startTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
                     time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
                     //adding this line to append time to date field
-                    bi.tvStartDate.append(" " +time);
+                    bi.tvStartDate.append(" " + time);
                 } else {
                     endTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
                     time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
 
                     //adding this line to append time to date field
-                    bi.tvEndDate.append(" " +time);
+                    bi.tvEndDate.append(" " + time);
                 }
                 textView.setText(time);
 
@@ -1515,8 +1528,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
     @Override
     public void onDateSet(com.tsongkha.spinnerdatepicker.DatePicker view, int _year, int monthOfYear, int dayOfMonth) {
 
-        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy/MM/dd");
 
         year = _year;
         month = monthOfYear;

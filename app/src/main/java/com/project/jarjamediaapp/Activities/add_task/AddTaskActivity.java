@@ -580,8 +580,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         startDate = GH.getInstance().formatter(taskDetail.data.startDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy hh:mm:ss a");
         endDate = GH.getInstance().formatter(taskDetail.data.endDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM/dd/yyyy hh:mm:ss a");
 
-        String sDate = GH.getInstance().formatter(taskDetail.data.startDate, "MM-dd-yyyy", "MM/dd/yyyy hh:mm:ss a");
-        String eDate = GH.getInstance().formatter(taskDetail.data.endDate, "MM-dd-yyyy", "MM/dd/yyyy hh:mm:ss a");
+        String sDate = GH.getInstance().formatter(taskDetail.data.startDate, "MM/dd/yyyy", "MM/dd/yyyy hh:mm:ss a");
+        String eDate = GH.getInstance().formatter(taskDetail.data.endDate, "MM/dd/yyyy", "MM/dd/yyyy hh:mm:ss a");
 
         startTime = GH.getInstance().formatter(taskDetail.data.startDate, "HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
         endTime = GH.getInstance().formatter(taskDetail.data.endDate, "HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
@@ -1201,7 +1201,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     private void showSpinnerDateDialog(TextView textView, boolean isStart) {
 
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM/dd/yyyy");
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         new SpinnerDatePickerDialogBuilder().context(context)
                 .callback(new com.tsongkha.spinnerdatepicker.DatePickerDialog.OnDateSetListener() {

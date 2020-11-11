@@ -330,8 +330,11 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                     tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm a", "HH:mm:ss") + " - " +
                             GH.getInstance().formatter(endTime[1], "hh:mm a", "HH:mm:ss"));
                 }
-                tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE, MMM dd, yyyy", "yyyy-MM-dd") + " - " +
-                        GH.getInstance().formatter(endTime[0], "EEE, MMM dd, yyyy", "yyyy-MM-dd"));
+                /*tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE, MMM dd, yyyy", "yyyy-MM-dd") + " - " +
+                        GH.getInstance().formatter(endTime[0], "EEE, MMM dd, yyyy", "yyyy-MM-dd"));*/
+                //commenting above line to replace with below line to change format of date
+                tvDate.setText(GH.getInstance().formatter(startTime[0], "MM/dd/yyyy", "yyyy-MM-dd") + " - " +
+                        GH.getInstance().formatter(endTime[0], "MM/dd/yyyy", "yyyy-MM-dd"));
             }
             tvEventTitle.setText(calendarDetailModelForTask.getEventTitle() != null ? calendarDetailModelForTask.getEventTitle() : "");
             tvLocation.setText(calendarDetailModelForTask.getLocation() != null ? calendarDetailModelForTask.getLocation() : "");
@@ -427,7 +430,9 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                         tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm", "HH:mm:ss")+" "+startTime[2]);
 
                     }
-                    tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE, MMM dd, yyyy", "MM/dd/yyyy"));
+//                    tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE, MMM dd, yyyy", "MM/dd/yyyy"));
+                    //commenting above line to replace with below line to change format of date
+                    tvDate.setText(startTime[0]);
                 }
                 tvEventTitle.setText(calendarDetailModel.getEventTitle() != null ? calendarDetailModel.getEventTitle() : "");
                 tvAttendeesCount.setText("0");

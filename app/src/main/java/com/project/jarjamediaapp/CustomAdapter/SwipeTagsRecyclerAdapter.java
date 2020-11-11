@@ -18,6 +18,7 @@ import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.project.jarjamediaapp.Activities.HomeActivity;
 import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Activities.tags.TagsActivity;
+import com.project.jarjamediaapp.Activities.tags.TagsContract;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.GetTagListByLeadID;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -45,6 +46,8 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
     String leadID = "";
     ArrayList<GetTagListByLeadID.Data> mData;
 
+    TagsContract.View view;
+
     public SwipeTagsRecyclerAdapter(Context context, Activity activity, ArrayList<GetTagListByLeadID.Data> data, String leadID) {
 
         mData = data;
@@ -53,6 +56,8 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
         this.activity = activity;
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
+
+        view = (TagsContract.View) context;
     }
 
     @Override
@@ -204,6 +209,10 @@ public class SwipeTagsRecyclerAdapter extends RecyclerView.Adapter {
                         TagsActivity.selectedTagIdsList.remove(mData.get(pos).tagID);
                         mData.remove(pos);
                         swipeRevealLayout.close(true);
+
+                        //added by akshay
+                        view.updateUIOnTagDelete();
+
                         notifyDataSetChanged();
 
                     } else {

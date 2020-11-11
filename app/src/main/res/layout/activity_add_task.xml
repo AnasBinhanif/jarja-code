@@ -199,7 +199,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/_start_date"
+                    android:text="@string/_start_date_time"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -231,7 +231,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:text="@string/_end_date"
+                        android:text="@string/_end_date_time"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/_12sdp"
                         android:textStyle="bold" />

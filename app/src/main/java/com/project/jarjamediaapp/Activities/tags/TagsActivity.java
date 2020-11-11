@@ -240,4 +240,14 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
         GH.getInstance().HideProgressDialog();
     }
 
+    @Override
+    public void updateUIOnTagDelete() {
+        if (selectedTagIdsList.size() > 0) {
+            bi.tvNoRecordFound.setVisibility(View.GONE);
+        } else {
+            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+        }
+
+    }
+
 }
