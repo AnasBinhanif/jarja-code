@@ -1053,8 +1053,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             timedTo = endTime;
         }
 
-        datedFrom = GH.getInstance().formatter(startDate + " " + timedFrom, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
-        datedTo = GH.getInstance().formatter(endDate + " " + timedTo, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+        datedFrom = GH.getInstance().formatter(startDate + " " + timedFrom, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy/MM/dd HH:mm:ss");
+        datedTo = GH.getInstance().formatter(endDate + " " + timedTo, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy/MM/dd HH:mm:ss");
 
         Integer interval = reminder != null && !reminder.equalsIgnoreCase("") && !reminder.equalsIgnoreCase("null") ? Integer.parseInt(reminder) : 0;
         Integer orderBy = 0;
@@ -1264,8 +1264,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         Date date1 = null, date2 = null, time1 = null, time2 = null, currentTime = null, currentDate = null;
 
-        String datedFrom = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
-        String datedTo = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd HH:mm:ss");
+        String datedFrom = GH.getInstance().formatter(startDate + " " + startTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy/MM/dd HH:mm:ss");
+        String datedTo = GH.getInstance().formatter(endDate + " " + endTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy/MM/dd HH:mm:ss");
 
         try {
             date1 = new SimpleDateFormat("yyyy-MM-dd").parse(datedFrom);
@@ -1297,6 +1297,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 bi.tvEndTime.requestFocus();
                 return false;
             }
+
 
             if (date2.compareTo(date1) == 0 && date1.compareTo(currentDate) == 0) {
 
