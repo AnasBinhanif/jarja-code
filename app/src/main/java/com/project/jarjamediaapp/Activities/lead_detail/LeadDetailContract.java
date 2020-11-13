@@ -70,6 +70,7 @@ public interface LeadDetailContract {
 
         void getCallerId(String leadId);
 
+        void setPrimaryAgent(String encryptedLeadId,String encryptedAgentId);
     }
 
 }

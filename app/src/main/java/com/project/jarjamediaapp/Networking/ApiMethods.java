@@ -274,6 +274,9 @@ public interface ApiMethods {
                                          @Field("leadStringID") String leadStringID,
                                          @Field("typeIndex") boolean typeIndex);
 
+    @POST("Lead/SetPrimaryAgent")
+    Call<BaseResponse> setPrimaryAgent(@Header("Authorization") String header,@Query("LeadStringID") String encryptedLeadId,@Query("AgentStringID") String encryptedAgentId);
+
     @Headers("Content-Type: application/json")
     @POST("Lead/AddPipeLineMark")
     Call<BaseResponse> AddPipeLineMark(@Header("Authorization") String authorization,

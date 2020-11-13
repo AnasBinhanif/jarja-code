@@ -72,32 +72,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         presenter.initScreen();
         setToolBarTitle(bi.epToolbar.toolbar, getString(R.string.calendar), true);
         EasyPreference.Builder pref = new EasyPreference.Builder(context);
-        pref.addInt(GH.KEYS.CALENDERUPDATELIST.name(),-1).save();
-
-    }
-
-    @Override
-    public void onClick(View view) {
-
-        int id = view.getId();
-        switch (id){
-
-            case R.id.btnSync:
-
-                presenter.getGmailCalender();
-
-                break;
-        }
-
-
-    }
-
-    private void showMonthYearPicker() {
-
-        String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
-        String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
-        Log.i("calenderAgentId",GH.getInstance().getCalendarAgentId()+"month"+month+"year"+year);
-        presenter.getCalendarEvents(GH.getInstance().getCalendarAgentId(), month, year);
+        pref.addInt(GH.KEYS.CALENDERUPDATELIST.name(), -1).save();
 
     }
 
@@ -128,7 +103,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                 String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
                 String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
                 currentDateList.clear();
-                if (dataArrayList != null){
+                if (dataArrayList != null) {
                     dataArrayList.clear();
                 }
                 swipeCalendarAppointmentRecyclerAdapter.notifyDataSetChanged();
@@ -148,19 +123,45 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
     }
 
+    @Override
+    public void onClick(View view) {
+
+        int id = view.getId();
+        switch (id) {
+
+            case R.id.btnSync:
+
+                presenter.getGmailCalender();
+
+                break;
+        }
+
+
+    }
+
+    private void showMonthYearPicker() {
+
+        String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
+        String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
+        Log.i("calenderAgentId", GH.getInstance().getCalendarAgentId() + "month" + month + "year" + year);
+         presenter.getCalendarEvents(GH.getInstance().getCalendarAgentId(), month, year);
+
+    }
+
+
     private void filterDateData(int day, int month, int year) {
 
         int pos = GH.getInstance().getCalenderListPos();
 
-        if(pos != -1){
+        if (pos != -1) {
 
-             dataList.remove(pos);
+            dataList.remove(pos);
             EasyPreference.Builder pref = new EasyPreference.Builder(context);
-            pref.addInt(GH.KEYS.CALENDERUPDATELIST.name(),-1).save();
+            pref.addInt(GH.KEYS.CALENDERUPDATELIST.name(), -1).save();
         }
 
         dataArrayList = new ArrayList<>();
-        if (dataList.size() > 0){
+        if (dataList != null && dataList.size() > 0) {
 
             for (int i = 0; i < dataList.size(); i++) {
                 int _day = markedDates.get(i);
@@ -189,7 +190,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         } else {
             bi.rvEvents.setVisibility(View.GONE);
             bi.tvMessage.setVisibility(View.VISIBLE);
-          // ToastUtils.showToastLong(context, "No data found");
+            // ToastUtils.showToastLong(context, "No data found");
         }
 
     }
@@ -305,23 +306,23 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                 if (response.getData().get(i).getStart() != null || response.getData().get(i).getStart().equalsIgnoreCase("Null")
                         || !response.getData().get(i).getStart().equals("")) {
                     // hide because of date "04" it change to "4"
-                  //  String date = GH.getInstance().formatter(response.getData().get(i).getStart(), "dd", "yyyy-MM-dd'T'HH:mm:ss");
+                    //  String date = GH.getInstance().formatter(response.getData().get(i).getStart(), "dd", "yyyy-MM-dd'T'HH:mm:ss");
                     String date = GH.getInstance().formatter(response.getData().get(i).getStart(), "d", "yyyy-MM-dd'T'HH:mm:ss");
 
                     calendar = Calendar.getInstance();
                     daySelected = calendar.get(Calendar.DAY_OF_MONTH);
 
 
-                    if (daySelectionWhenMonthChange != 0){
+                    if (daySelectionWhenMonthChange != 0) {
 
-                        if (date.equals(String.valueOf(daySelectionWhenMonthChange))){
+                        if (date.equals(String.valueOf(daySelectionWhenMonthChange))) {
 
                             currentDateList.add(response.getData().get(i));
 
                         }
-                    }else {
+                    } else {
 
-                        if(date.equals(String.valueOf(daySelected))) {
+                        if (date.equals(String.valueOf(daySelected))) {
 
                             currentDateList.add(response.getData().get(i));
 
@@ -379,7 +380,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void updateUIGmailCalender(GmailCalender gmailCalender) {
 
-        if (gmailCalender.getData()){
+        if (gmailCalender.getData()) {
 
             // call getCalender data for getting calender events
             showMonthYearPicker();
@@ -429,8 +430,8 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         bi.calendarView.addDecorators(new EventDecorator(R.color.colorGreen, list));
 
 
-     //   bi.calendarView.setCurrentDate(calendar.getTime());
-       // bi.calendarView.setDateSelected(CalendarDay.today(), true);
+        //   bi.calendarView.setCurrentDate(calendar.getTime());
+        // bi.calendarView.setDateSelected(CalendarDay.today(), true);
         //  bi.calendarView.setDateSelected(CalendarDay.today(), true);
         // for highlighted the current date in calender
         bi.calendarView.addDecorator(new DayViewDecorator() {
@@ -447,7 +448,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void decorate(DayViewFacade view) {
-                view.setBackgroundDrawable(ContextCompat.getDrawable(CalendarActivity.this,R.drawable.calender_selector));
+                view.setBackgroundDrawable(ContextCompat.getDrawable(CalendarActivity.this, R.drawable.calender_selector));
             }
         });
 

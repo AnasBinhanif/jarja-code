@@ -89,23 +89,24 @@ public class TagsActivity extends BaseActivity implements TagsContract.View {
 
         if (tagsList.size() != 0) {
             for (GetTagListByLeadID.Data model : tagsList) {
-              //  Log.d( "updateUI: ",model.label + " id " + model.tagID);
+                //  Log.d( "updateUI: ",model.label + " id " + model.tagID);
                 getLeadTagModelList.add(new MultiSelectModel(model.tagID, model.label, model.encryptedTagID));
                 if (model.added != null) {
                     assignedTagsList.add(model);
                     selectedTagIdsList.add(model.tagID);
                 }
             }
-//            populateData();
-            //adding below block of code to replace above line of code -- akshay
-            if (assignedTagsList.size() > 0) {
-                bi.tvNoRecordFound.setVisibility(View.GONE);
-                populateData();
-            } else {
-                bi.tvNoRecordFound.setVisibility(View.VISIBLE);
-            }
-
         }
+//            populateData();
+        //adding below block of code to replace above line of code -- akshay
+        if (assignedTagsList.size() > 0) {
+            bi.tvNoRecordFound.setVisibility(View.GONE);
+            populateData();
+        } else {
+            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+        }
+
+
     }
 
     private void populateData() {

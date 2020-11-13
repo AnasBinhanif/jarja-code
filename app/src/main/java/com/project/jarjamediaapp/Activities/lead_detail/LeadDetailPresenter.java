@@ -145,6 +145,44 @@ public class LeadDetailPresenter extends BasePresenter<LeadDetailContract.View> 
     }
 
     @Override
+    public void setPrimaryAgent(String encryptedLeadId, String encryptedAgentId) {
+        _view.showProgressBar();
+        call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).setPrimaryAgent(GH.getInstance().getAuthorization(),encryptedLeadId,encryptedAgentId);
+        call.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.getStatus().equals("Success")) {
+
+                        _view.updateUI(response);
+
+                    } else {
+
+                        _view.updateUIonFalse(getAppointmentsModel.message);
+
+                    }
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
+    }
+
+    @Override
     public void getTransaction(String leadID) {
 
         _view.showProgressBar();

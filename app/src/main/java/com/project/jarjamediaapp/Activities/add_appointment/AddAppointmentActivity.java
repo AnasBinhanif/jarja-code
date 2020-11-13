@@ -202,7 +202,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
             switch (id) {
                 case 1: {
-                    String[] formattedDate = startDate.split("-");
+                    String[] formattedDate = startDate.split("/");
                     year = Integer.parseInt(formattedDate[0]);
                     month = Integer.parseInt(formattedDate[1]);
                     day = Integer.parseInt(formattedDate[2]);
@@ -212,7 +212,7 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 }
                 break;
                 case 2: {
-                    String[] formattedDate = endDate.split("-");
+                    String[] formattedDate = endDate.split("/");
                     year = Integer.parseInt(formattedDate[0]);
                     month = Integer.parseInt(formattedDate[1]);
                     day = Integer.parseInt(formattedDate[2]);
@@ -398,8 +398,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
         if (modelData.getDatedFrom() != null && modelData.getDatedTo() != null) {
 
-            startDate = GH.getInstance().formatter(modelData.getDatedFrom(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-            endDate = GH.getInstance().formatter(modelData.getDatedTo(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+            startDate = GH.getInstance().formatter(modelData.getDatedFrom(), "yyyy/MM/dd", "yyyy-MM-dd'T'HH:mm:ss");
+            endDate = GH.getInstance().formatter(modelData.getDatedTo(), "yyyy/MM/dd", "yyyy-MM-dd'T'HH:mm:ss");
             startTime = GH.getInstance().formatter(modelData.getDatedFrom(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
             endTime = GH.getInstance().formatter(modelData.getDatedTo(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
 
@@ -475,8 +475,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
 
-        startDate = GH.getInstance().formatter(modelData.getDatedFrom(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-        endDate = GH.getInstance().formatter(modelData.getDatedTo(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+        startDate = GH.getInstance().formatter(modelData.getDatedFrom(), "yyyy/MM/dd", "yyyy-MM-dd'T'HH:mm:ss");
+        endDate = GH.getInstance().formatter(modelData.getDatedTo(), "yyyy/MM/dd", "yyyy-MM-dd'T'HH:mm:ss");
         startTime = GH.getInstance().formatter(modelData.getDatedFrom(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
         endTime = GH.getInstance().formatter(modelData.getDatedTo(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
 
@@ -549,8 +549,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");
 
-        startDate = GH.getInstance().formatter(modelData.getDatedFrom(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
-        endDate = GH.getInstance().formatter(modelData.getDatedTo(), "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss");
+        startDate = GH.getInstance().formatter(modelData.getDatedFrom(), "yyyy/MM/dd", "yyyy-MM-dd'T'HH:mm:ss");
+        endDate = GH.getInstance().formatter(modelData.getDatedTo(), "yyyy/MM/dd", "yyyy-MM-dd'T'HH:mm:ss");
         startTime = GH.getInstance().formatter(modelData.getDatedFrom(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
         endTime = GH.getInstance().formatter(modelData.getDatedTo(), "HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss");
 

@@ -151,9 +151,9 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
         initListeners();
         populateListData();
-       // presenter.getAgentNames();
-      //  presenter.getLead(leadID);
-      //  presenter.getTransaction(leadID);
+        // presenter.getAgentNames();
+        //  presenter.getLead(leadID);
+        //  presenter.getTransaction(leadID);
 
     }
 
@@ -574,11 +574,6 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
     }
 
 
-
-
-
-
-
     private void populateListData(ArrayList<GetLead.AgentsList> leadsList, String primaryPhone) {
 
         bi.recyclerLeadAgent.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
@@ -622,6 +617,12 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         bi.recyclerLeadAgent.setAdapter(recyclerAdapterUtil);
 
         recyclerAdapterUtil.addOnClickListener((Function2<GetLead.AgentsList, Integer, Unit>) (viewComplainList, integer) -> {
+
+            if (leadsList.get(integer).isPrimaryAgent) {
+                //  Toast.makeText(context, "Selected agent is already prim", Toast.LENGTH_SHORT).show();
+            } else {
+                presenter.setPrimaryAgent(leadID, leadsList.get(integer).agentID);
+            }
 
             return Unit.INSTANCE;
         });

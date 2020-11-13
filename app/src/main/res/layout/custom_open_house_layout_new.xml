@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:id="@+id/rl"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:padding="10dp"
+        android:elevation="3dp"
+        card_view:cardCornerRadius="5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorGreen"
+                android:text="Edit"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                card_view:layout_constraintBottom_toTopOf="@+id/ivHouse"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/tvLeadsCount" />
+
+            <ImageView
+                android:id="@+id/ivHouse"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/open_house"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="To"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                card_view:layout_constraintBottom_toTopOf="@+id/tvEndDateTime"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/tvStartDateTime" />
+
+            <TextView
+                android:id="@+id/tvEndDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                card_view:layout_constraintBottom_toTopOf="@+id/tvAddress"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/to" />
+
+
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                card_view:layout_constraintBottom_toTopOf="@+id/tvCityPostal"
+
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/tvEndDateTime" />
+
+            <TextView
+                android:id="@+id/tvCityPostal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                card_view:layout_constraintBottom_toTopOf="@+id/view"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/tvAddress" />
+
+            <TextView
+                android:id="@+id/tvLeadsCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                card_view:layout_constraintBottom_toTopOf="@+id/btnEdit"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/view" />
+
+            <TextView
+                android:id="@+id/tvStartDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="16dp"
+                android:textStyle="bold"
+
+                card_view:layout_constraintBottom_toTopOf="@+id/to"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@id/ivHouse" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="200dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorAccent"
+                card_view:layout_constraintBottom_toTopOf="@+id/tvLeadsCount"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/tvCityPostal" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>
