@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Activities.add_calendar_task.AddCalendarTaskActivity;
 import com.project.jarjamediaapp.Activities.calendar.CalendarModel;
@@ -33,6 +35,7 @@ import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -83,7 +86,6 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
             }
             holder.tvTitle.setText(modelData.getTitle() != null ? modelData.getTitle() : "");
             holder.tvCount.setText(date);
-
 
 
             holder.swipeLayout.setSwipeListener(new SwipeRevealLayout.SwipeListener() {
@@ -152,7 +154,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                             mData.remove(pos);
                             notifyDataSetChanged();
                             EasyPreference.Builder pref = new EasyPreference.Builder(context);
-                            pref.addInt(GH.KEYS.CALENDERUPDATELIST.name(),pos).save();
+                            pref.addInt(GH.KEYS.CALENDERUPDATELIST.name(), pos).save();
                             swipeRevealLayout.close(true);
 
                         }
@@ -275,8 +277,18 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
             tvDelete.setOnClickListener(v -> {
 
+                Gson gson = new Gson();
                 modelData = mData.get(getAdapterPosition());
-                deleteCalendarAppointmentOrTaskDetail(modelData.getCalendarId(), modelData.getCalendarType(), swipeLayout);
+                String storedHashMapLeadsString = GH.getInstance().getUserPermissonCalender();
+                java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>() {
+                }.getType();
+                HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
+
+                if (mapLeads.get("Edit Calendar")) {
+                    deleteCalendarAppointmentOrTaskDetail(modelData.getCalendarId(), modelData.getCalendarType(), swipeLayout);
+                } else {
+                    ToastUtils.showToast(context, "You don't have permission to delete calendar appointment");
+                }
 
 
             });
@@ -367,13 +379,23 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
                     dialog.dismiss();
 
+                    Gson gson = new Gson();
+                    String storedHashMapLeadsString = GH.getInstance().getUserPermissonCalender();
+                    java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>() {
+                    }.getType();
+                    HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
 
-                    Log.i("calenderId",modelData.getCalendarId());
-                    // data and calendar id will be passed in intent
-                    context.startActivity(new Intent(context, AddAppointmentActivity.class)
-                            .putExtra("from", "6")
-                            .putExtra("calendarId", modelData.getCalendarId())
-                            .putExtra("modelData", calendarDetailModelForTask));
+                    if (mapLeads.get("Edit Calendar")) {
+                        Log.i("calenderId", modelData.getCalendarId());
+                        // data and calendar id will be passed in intent
+                        context.startActivity(new Intent(context, AddAppointmentActivity.class)
+                                .putExtra("from", "6")
+                                .putExtra("calendarId", modelData.getCalendarId())
+                                .putExtra("modelData", calendarDetailModelForTask));
+                    } else {
+                        ToastUtils.showToast(context, "You don't have permission to edit calendar appointment");
+                    }
+
 
                 }
             });
@@ -427,7 +449,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                     if (calendarDetailModel.isAllDay != null && calendarDetailModel.isAllDay) {
                         tvTime.setText("All Day");
                     } else {
-                        tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm", "HH:mm:ss")+" "+startTime[2]);
+                        tvTime.setText(GH.getInstance().formatter(startTime[1], "hh:mm", "HH:mm:ss") + " " + startTime[2]);
 
                     }
 //                    tvDate.setText(GH.getInstance().formatter(startTime[0], "EEE, MMM dd, yyyy", "MM/dd/yyyy"));
@@ -449,10 +471,21 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                     dialog.dismiss();
                     if (calendarDetailModel != null) {
 
-                        context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
-                                .putExtra("isEdit", true)
-                                .putExtra("calendarId", calendarDetailModel.userCalenderID)
-                                .putExtra("modelData", calendarDetailModel));
+                        Gson gson = new Gson();
+                        String storedHashMapLeadsString = GH.getInstance().getUserPermissonCalender();
+                        java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>() {
+                        }.getType();
+                        HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
+
+                        if (mapLeads.get("Edit Calendar")) {
+                            context.startActivity(new Intent(context, AddCalendarTaskActivity.class)
+                                    .putExtra("isEdit", true)
+                                    .putExtra("calendarId", calendarDetailModel.userCalenderID)
+                                    .putExtra("modelData", calendarDetailModel));
+                        } else {
+                            ToastUtils.showToast(context, "You don't have permission to edit calendar appointment");
+                        }
+
 
                     }
                 }
