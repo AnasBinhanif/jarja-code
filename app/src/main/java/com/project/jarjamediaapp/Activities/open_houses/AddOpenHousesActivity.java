@@ -109,8 +109,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         if (getIntent().getExtras() != null) {
 
             //disabling website click
-            bi.tvAgent.setEnabled(false);
-            
+//            bi.tvAgent.setEnabled(false);
+
             GetAllOpenHousesModel.Data.OpenHouse openHouse = (GetAllOpenHousesModel.Data.OpenHouse) getIntent().getExtras().getSerializable("editLeadsObj");
             if (openHouse != null) {
 
@@ -149,9 +149,8 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                 }
 
             }
-        } else {
-            presenter.getUserWebsites();
         }
+        presenter.getUserWebsites();
 
     }
 
@@ -202,7 +201,10 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
                     websiteIdsString = websiteIdsString + "," + d.getValue();
                 }
 
-
+            }
+            //disabling website selection if user has already selected otherwise let user select it
+            if (selectedIdsList.size() > 0) {
+                bi.tvAgent.setEnabled(false);
             }
 
         }

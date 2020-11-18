@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
+
         android:orientation="vertical">
 
         <TextView
@@ -28,6 +28,27 @@
             android:maxLength="10"
             android:padding="@dimen/_10sdp"
             android:imeOptions="actionNext"
+            android:singleLine="true"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+            android:id="@+id/tvCommisionDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_marginTop="10dp"
+            android:text="Commision Date"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/atvCommissionDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_search"
+            android:drawableEnd="@drawable/ic_clock"
+            android:padding="@dimen/_10sdp"
             android:singleLine="true"
             android:textSize="@dimen/_12sdp" />
 

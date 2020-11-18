@@ -139,7 +139,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             if (leadModel.dateOfBirth == null || leadModel.dateOfBirth.equals("") || leadModel.dateOfBirth.equals("")) {
                 bi.edtBday.setText("");
             } else {
-                String _bday = GH.getInstance().formatter(leadModel.dateOfBirth, "MM-dd-yyyy", "yyyy-MM-dd'T'HH:mm:ss");
+                String _bday = GH.getInstance().formatter(leadModel.dateOfBirth, "MM/dd/yyyy", "yyyy-MM-dd'T'HH:mm:ss");
                 bi.edtBday.setText(_bday);
                 bday = leadModel.dateOfBirth;
 
@@ -147,14 +147,14 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             if (leadModel.dateOfMarriage == null || leadModel.dateOfMarriage.equals("") || leadModel.dateOfMarriage.equals("")) {
                 bi.edtAnniversary.setText("");
             } else {
-                String anniv = GH.getInstance().formatter(leadModel.dateOfMarriage, "MM-dd-yyyy", "yyyy-MM-dd'T'HH:mm:ss");
+                String anniv = GH.getInstance().formatter(leadModel.dateOfMarriage, "MM/dd/yyyy", "yyyy-MM-dd'T'HH:mm:ss");
                 bi.edtAnniversary.setText(anniv);
                 anniversary = leadModel.dateOfMarriage;
             }
             if (leadModel.spouseBirthday == null || leadModel.spouseBirthday.equals("") || leadModel.spouseBirthday.equals("")) {
                 bi.edtSpouseBday.setText("");
             } else {
-                String bday = GH.getInstance().formatter(leadModel.spouseBirthday, "MM-dd-yyyy", "yyyy-MM-dd'T'HH:mm:ss");
+                String bday = GH.getInstance().formatter(leadModel.spouseBirthday, "MM/dd/yyyy", "yyyy-MM-dd'T'HH:mm:ss");
                 bi.edtSpouseBday.setText(bday);
                 sBday = leadModel.spouseBirthday;
             }
@@ -870,7 +870,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
         final Calendar newCalendar = Calendar.getInstance();
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM/dd/yyyy");
         new SpinnerDatePickerDialogBuilder().context(context)
                 .callback(new com.tsongkha.spinnerdatepicker.DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -899,7 +899,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
         final Calendar newCalendar = Calendar.getInstance();
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MM/dd/yyyy");
         DatePickerDialog StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();

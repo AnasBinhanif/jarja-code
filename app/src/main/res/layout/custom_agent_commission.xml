@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -26,6 +26,43 @@
             android:layout_height="1dp"
             android:background="@color/colorGrey_light" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/_agent"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvAgent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_search"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:hint="@string/nothing_selected"
+            android:inputType="textCapSentences"
+            android:padding="@dimen/_10sdp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/_11sdp" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/lnAgent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvAgentCommission"
@@ -38,7 +75,7 @@
             tools:listitem="@layout/custom_adp_agent_commission"
             tools:orientation="vertical" />
 
-        <TextView
+       <!-- <TextView
             android:id="@+id/tvCommisionDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,7 +97,7 @@
             android:drawableEnd="@drawable/ic_clock"
             android:padding="@dimen/_10sdp"
             android:singleLine="true"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/_12sdp" />-->
 
         <TextView
             android:id="@+id/tvCloseDate"
@@ -121,5 +158,5 @@
 
     </LinearLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
 

@@ -3,9 +3,10 @@ package com.project.jarjamediaapp.Models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GetAgentsModel {
+public class GetAgentsModel implements Serializable {
 
     @SerializedName("status")
     @Expose
@@ -17,7 +18,7 @@ public class GetAgentsModel {
     @Expose
     public String message;
 
-    public class Data{
+    public class Data implements Serializable{
 
         @SerializedName("agentID")
         @Expose

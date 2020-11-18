@@ -24,6 +24,8 @@ public class TransactionModel extends BaseResponse {
         @Expose
         public String agentName;
 
+        private String commisionDate;
+
         public String getAgentID() {
             return agentID;
         }
@@ -38,6 +40,14 @@ public class TransactionModel extends BaseResponse {
 
         public void setCommission(Double commission) {
             this.commission = commission;
+        }
+
+        public String getCommisionDate() {
+            return commisionDate;
+        }
+
+        public void setCommisionDate(String commisionDate) {
+            this.commisionDate = commisionDate;
         }
     }
 

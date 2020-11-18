@@ -95,7 +95,6 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
         final ViewHolder holder = (ViewHolder) h;
 
 
-
         pos = position;
         if (mData != null && 0 <= position && position < mData.size()) {
 
@@ -116,23 +115,22 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
                 evenTitle = "";
             }
 
-            if (location.equals("null") || evenTitle.equals("")){
+            if (location.equals("null") || evenTitle.equals("")) {
 
                 location = "";
             }
 
             holder.tvName.setText(firstName + " " + lastName);
-            if (!location.equals("")){
-                holder.tvAddress.setText(evenTitle+", "+location);
+            if (!location.equals("")) {
+                holder.tvAddress.setText(evenTitle + ", " + location);
 
-            }else {
+            } else {
 
                 holder.tvAddress.setText(evenTitle);
 
             }
 
             if (!firstName.equals("") && !lastName.equals("")){
-
                 holder.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
             }else {
 
@@ -143,7 +141,6 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
 
                     lastName = "";
                 }
-
 
                 holder.tvInitial.setText(firstName + lastName);
             }
@@ -170,7 +167,6 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
             });
 
 
-
             holder.frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -179,7 +175,8 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
                         Gson gson = new Gson();
                         //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                         String storedHashMapLeadsString = GH.getInstance().getUserPermissonLead();
-                        java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                        java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>() {
+                        }.getType();
                         HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
 
                         if (mapLeads.get("View Appointments")) {
@@ -192,14 +189,14 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
                                 context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                         .putExtra("leadID", leadID)
                                         .putExtra("from", "2")
-                                        .putExtra("gmailCalenderId",gmailCalenderId)
+                                        .putExtra("gmailCalenderId", gmailCalenderId)
                                         .putExtra("models", modelData));
 
                             } else {
                                 context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                         .putExtra("leadID", leadID)
                                         .putExtra("from", "4")
-                                        .putExtra("gmailCalenderId",gmailCalenderId)
+                                        .putExtra("gmailCalenderId", gmailCalenderId)
                                         .putExtra("models", modelData));
                             }
 
@@ -271,7 +268,8 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
                 Gson gson = new Gson();
                 //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                 String storedHashMapDashboardString = GH.getInstance().getUserPermissonDashboard();
-                java.lang.reflect.Type typeDashboard = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                java.lang.reflect.Type typeDashboard = new TypeToken<HashMap<String, Boolean>>() {
+                }.getType();
                 HashMap<String, Boolean> mapDashboard = gson.fromJson(storedHashMapDashboardString, typeDashboard);
 
                 if (mapDashboard.get("View Or Edit Appointments")) {

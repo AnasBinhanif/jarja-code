@@ -390,6 +390,12 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             bi.tvName.setEnabled(true);
             bi.tvName.setHint("Contact");
         }
+        //disabling contact selection if already selected
+        if (!TextUtils.isEmpty(leadId)) {
+            bi.tvName.setEnabled(false);
+            bi.tvName.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG);
+        }
+
         bi.atvEventTitle.setText(modelData.getEventTitle() != null ? modelData.getEventTitle() : "");
         bi.atvLocation.setText(modelData.getLocation() != null ? modelData.getLocation() : "");
         bi.atvDescription.setText(modelData.getDesc() != null ? modelData.getDesc() : "");

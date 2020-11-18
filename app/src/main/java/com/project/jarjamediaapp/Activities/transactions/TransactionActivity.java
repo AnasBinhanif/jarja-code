@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.databinding.DataBindingUtil;
@@ -20,10 +21,15 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.abdeveloper.library.MultiSelectDialog;
+import com.abdeveloper.library.MultiSelectDialogForWebsites;
+import com.abdeveloper.library.MultiSelectModel;
+import com.abdeveloper.library.MultiSelectModelForWebsite;
 import com.google.android.gms.common.internal.service.Common;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.DecimalDigitsInputFilter;
@@ -44,6 +50,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,9 +79,17 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     int count = 0;
     Calendar newCalendar;
     int month, year, day, _month, _year, _day, mHour, mMinute;
-    TextView tvCommisionDate, tvCloseDate;
+    TextView tvCommisionDate, tvCloseDate, tvAgent;
     String commisionDate, closeDate;
     int type;
+    LinearLayout lnAgents;
+    private ArrayList<String> selectedIdsList = new ArrayList<>();
+    ArrayList<MultiSelectModelForWebsite> agentsListForDialog = new ArrayList<>();
+    HashMap<String, TransactionModel.Data> stringDataHashMap;
+    AutoCompleteTextView atvAgentCommission;
+    ArrayList<GetAgentsModel.Data> agentList;
+    private String agentIdsString;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,6 +242,13 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         currentPipeline = intent.getStringExtra("currentStage");
         transactionPipeline = (ArrayList<GetLeadTransactionStage.PipeLine>) intent.getExtras().getSerializable("Pipeline");
 
+        agentList = (ArrayList<GetAgentsModel.Data>) intent.getExtras().getSerializable("agents");
+
+        for (GetAgentsModel.Data object : agentList) {
+            agentsListForDialog.add(new MultiSelectModelForWebsite(object.encryptedAgentID, object.agentName, object.encryptedAgentID));
+        }
+
+
         Bundle args = intent.getBundleExtra("BUNDLE");
         transaction = intent.getIntExtra("tansaction", 1);
         if (transaction == 1) {
@@ -247,6 +269,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
     }
 
+
     @Override
     public void addAgentCommission(Response<BaseResponse> response) {
 
@@ -261,16 +284,26 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Override
-    public void getAgentCommission(Response<TransactionModel> response) {
+    public void updateUIToCallTransactionApiAgain(Response<BaseResponse> responseResponse) {
 
+        dialog.dismiss();
+        presenter.getAgentCommission(leadID, leadDetailId);
+
+
+    }
+
+    @Override
+    public void getAgentCommission(Response<TransactionModel> response) {
         dataList = new ArrayList<>();
+        //  stringDataHashMap = new HashMap<>();
         dataList.addAll(response.body().getData());
+
         if (response.body().getData().size() > 0) {
             rvAgentCommission.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
             rvAgentCommission.setItemAnimator(new DefaultItemAnimator());
             rvAgentCommission.addItemDecoration(new DividerItemDecoration(rvAgentCommission.getContext(), 1));
             raCommission = new RecyclerAdapterUtil(context, dataList, R.layout.custom_adp_agent_commission);
-            raCommission.addViewsList(R.id.tvAgentName, R.id.atvAgentCommission);
+            raCommission.addViewsList(R.id.tvAgentName, R.id.atvAgentCommission, R.id.tvCommisionDate, R.id.atvCommissionDate);
 
             raCommission.addOnDataBindListener((Function4<View, TransactionModel.Data, Integer, Map<Integer, ? extends View>, Unit>)
                     (view, data, position, integerMap) -> {
@@ -282,7 +315,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         atvAgentCommission.setText(data.getCommission() + "");
 
                         //creating input filter to limit the lenght and decimal point upto 2
-                        InputFilter[] filterArray = new InputFilter[]{new DecimalDigitsInputFilter(10, 2),new InputFilter.LengthFilter(10)};
+                        InputFilter[] filterArray = new InputFilter[]{new DecimalDigitsInputFilter(10, 2), new InputFilter.LengthFilter(10)};
 
                         atvAgentCommission.setFilters(filterArray);
 
@@ -305,10 +338,25 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                             }
                         });
 
+                        TextView tvCommisionDate = (TextView) integerMap.get(R.id.atvCommissionDate);
+                        tvCommisionDate.setText(dateFormater(newCalendar.getTime(), "MMM dd, yyyy"));
+
+                        tvCommisionDate.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                type = 1;
+                                showSpinnerDateDialog(position, tvCommisionDate);
+                            }
+                        });
+
                         return Unit.INSTANCE;
                     });
 
             rvAgentCommission.setAdapter(raCommission);
+
+
+            setAgentsForDialog();
+
             dialog.setCancelable(false);
             dialog.show();
 
@@ -316,6 +364,23 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
             ToastUtils.showToast(context, "No agents found");
         }
 
+    }
+
+
+    private void setAgentsForDialog() {
+        if (lnAgents.getChildCount() > 0) {
+            lnAgents.removeAllViews();
+        }
+
+        for (TransactionModel.Data d : dataList) {
+            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+            TextView textView = child.findViewById(R.id.txtDynamic);
+            textView.setText(d.agentName);
+            lnAgents.addView(child);
+            selectedIdsList.add(d.getAgentID());
+
+            //  stringDataHashMap.put(d.agentID, d);
+        }
     }
 
     @Override
@@ -372,10 +437,13 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         btnSave = dialog.findViewById(R.id.btnSave);
         btnCancel = dialog.findViewById(R.id.btnCancel);
 
-        tvCommisionDate = dialog.findViewById(R.id.atvCommissionDate);
-        tvCommisionDate.setText(dateFormater(newCalendar.getTime(), "MMM dd,yyyy"));
+        //  tvCommisionDate = dialog.findViewById(R.id.atvCommissionDate);
+        // tvCommisionDate.setText(dateFormater(newCalendar.getTime(), "MMM dd,yyyy"));
         tvCloseDate = dialog.findViewById(R.id.atvCloseDate);
         tvCloseDate.setText(dateFormater(newCalendar.getTime(), "MMM dd,yyyy"));
+
+        lnAgents = dialog.findViewById(R.id.lnAgent);
+        tvAgent = dialog.findViewById(R.id.tvAgent);
 
 
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -388,11 +456,14 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                     obj1 = new JSONObject();
                     obj1.put("encrypted_LeadID", leadID);
                     obj1.put("encryptedLeadDetailID", leadDetailId);
+                    obj1.put("closeDate", closeDate);
+
                     for (int i = 0; i < dataList.size(); i++) {
                         obj = new JSONObject();
                         obj.put("commission", dataList.get(i).getCommission());
                         obj.put("agentID", dataList.get(i).getAgentID());
                         obj.put("agentName", dataList.get(i).getAgentName() != null ? dataList.get(i).getAgentName() : "");
+                        obj.put("commisionDate", dataList.get(i).getCommisionDate() != null ? dataList.get(i).getCommisionDate() : "");
                         array.put(obj);
                     }
                     obj1.put("agentList", array);
@@ -413,19 +484,26 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
             }
         });
 
-        tvCommisionDate.setOnClickListener(new View.OnClickListener() {
+       /* tvCommisionDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 type = 1;
                 showSpinnerDateDialog();
             }
-        });
+        });*/
 
         tvCloseDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 type = 2;
-                showSpinnerDateDialog();
+                showSpinnerDateDialog(0, tvCloseDate);
+            }
+        });
+
+        tvAgent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAgentDialog();
             }
         });
 
@@ -472,15 +550,28 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         mMinute = newCalendar.get(Calendar.MINUTE);
     }
 
-    private void showSpinnerDateDialog() {
+    private void showSpinnerDateDialog(int pos, TextView view) {
 
         // Calendar cal = Calendar.getInstance();
         new SpinnerDatePickerDialogBuilder().context(TransactionActivity.this)
-                .callback(TransactionActivity.this)
+                .callback(new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePickerView, int year, int monthOfYear, int dayOfMonth) {
+                        newCalendar.set(year, monthOfYear, dayOfMonth);
+                        String date = dateFormater(newCalendar.getTime(), "MM/dd/yyyy");
+                        view.setText(date);
+                        if (view == tvCloseDate) {
+                            closeDate = date;
+                        } else {
+                            dataList.get(pos).setCommisionDate(date);
+                        }
+
+                    }
+                })
                 // .spinnerTheme(R.style.NumberPickerStyle)
                 .showTitle(true)
                 .defaultDate(year, month, day)
-                .minDate(newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH))
+                .minDate(year, month, day)
                 .build()
                 .show();
 
@@ -496,13 +587,88 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
         if (type == 1) {
             commisionDate = dateFormater(newCalendar.getTime(), "MM-dd-yyyy");
-            tvCommisionDate.setText(commisionDate);
+            //tvCommisionDate.setText(commisionDate);
 
         } else if (type == 2) {
             closeDate = dateFormater(newCalendar.getTime(), "MM-dd-yyyy");
             tvCloseDate.setText(closeDate);
         }
 
+    }
 
+    private void showAgentDialog() {
+
+        MultiSelectDialogForWebsites multiSelectDialog = new MultiSelectDialogForWebsites()
+                .title("Select Agents") //setting title for dialog
+                .titleSize(25)
+                .positiveText("Done")
+                .negativeText("Cancel")
+                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
+                .onSubmit(new MultiSelectDialogForWebsites.SubmitCallbackListener() {
+
+                    @Override
+                    public void onSelected(ArrayList<String> selectedIds, ArrayList<String> selectedNames, String commonSeperatedData) {
+                        //will return list of selected IDS
+                        selectedIdsList = new ArrayList<>();
+                        selectedIdsList = selectedIds;
+
+
+
+                       /* dataList.clear();
+                        raCommission.notifyDataSetChanged();
+
+                        for (String id : selectedIds) {
+                            dataList.add(stringDataHashMap.get(id));
+                        }
+
+                        raCommission.notifyItemRangeInserted(0,stringDataHashMap.size());*/
+
+                        if (lnAgents.getChildCount() > 0) {
+                            lnAgents.removeAllViews();
+                        }
+
+                        for (String name : selectedNames) {
+
+                            View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
+                            TextView textView = child.findViewById(R.id.txtDynamic);
+                            textView.setText(name);
+                            lnAgents.addView(child);
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onSelected(ArrayList<String> selectedIds, ArrayList<String> selectedNames, ArrayList<String> selectedEncyrptedIds, String commonSeperatedData) {
+                        agentIdsString = "";
+                        if (selectedEncyrptedIds != null || selectedEncyrptedIds.size() != 0) {
+                            for (String i : selectedEncyrptedIds) {
+
+                                if (agentIdsString.equals("")) {
+                                    agentIdsString = i;
+                                } else {
+                                    agentIdsString = agentIdsString + "," + i;
+                                }
+                            }
+                        } else {
+                            ToastUtils.showToast(context, "No EncryptedID Found");
+                        }
+
+                        presenter.assignAgents(agentIdsString, leadID, true);
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+                    }
+                });
+
+        if (selectedIdsList.size() != 0) {
+            multiSelectDialog.preSelectIDsList(selectedIdsList);
+            multiSelectDialog.multiSelectList(agentsListForDialog);
+        } else {
+            multiSelectDialog.multiSelectList(agentsListForDialog);
+        }
+        multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
 }

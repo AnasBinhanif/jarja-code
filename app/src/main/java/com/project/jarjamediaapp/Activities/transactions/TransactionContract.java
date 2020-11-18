@@ -18,6 +18,8 @@ public interface TransactionContract {
 
         void updateUI(Response<BaseResponse> response);
 
+        void updateUIToCallTransactionApiAgain(Response<BaseResponse> responseResponse);
+
         void addAgentCommission(Response<BaseResponse> response);
 
         void getAgentCommission(Response<TransactionModel> response);
@@ -51,6 +53,8 @@ public interface TransactionContract {
         void getAgentCommission(String leadId,String leadDetailId);
 
         void initScreen();
+
+        void assignAgents(String agentsIDs, String leadID, boolean typeIndex);
 
     }
 
