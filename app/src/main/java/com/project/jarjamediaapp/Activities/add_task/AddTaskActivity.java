@@ -100,7 +100,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     boolean fromUpdate = false;
     boolean isStart;
 
-    boolean shouldRun;
+    boolean shouldRun, shouldRunIsEdited;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,27 +157,30 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         });
 
-        textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+       /* if (isEdit) {
+            textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
+                }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-            }
+                }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                isEdited = true;
+                @Override
+                public void afterTextChanged(Editable s) {
 
-            }
-        };
-        bi.atvNameTask.addTextChangedListener(textWatcher);
-        bi.atvDescription.addTextChangedListener(textWatcher);
-        bi.atvAddProperty.addTextChangedListener(textWatcher);
+                    isEdited = true;
 
+
+                }
+            };
+            bi.atvNameTask.addTextChangedListener(textWatcher);
+            bi.atvDescription.addTextChangedListener(textWatcher);
+            bi.atvAddProperty.addTextChangedListener(textWatcher);
+        }*/
     }
 
     private void loadTitle() {
@@ -270,9 +273,11 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 hideProgressBar();
                 bi.tvName.setEnabled(true);
                 leadId = "";
-                isEdit = true;
+               // isEdit = true;
             }
             break;
+
+
         }
     }
 
@@ -1587,8 +1592,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 return true;
             if (!Methods.isEmpty(bi.atvDescription))
                 return true;
-            if (!Methods.isEmpty(bi.atvRecur))
-                return true;
+            /*if (!Methods.isEmpty(bi.atvRecur))
+                return true;*/
             if (!Methods.isEmpty(bi.tvStartDate))
                 return true;
             if (!Methods.isEmpty(bi.tvEndDate))

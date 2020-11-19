@@ -121,9 +121,13 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
             }
 
             // just get date not timw
-            String startDateFormat = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "yyyy-MM-dd", "MM/dd/yyyy HH:mm:ss aaa");
+//            String startDateFormat = GH.getInstance().formatter(calendarDetailModel.getStartTime(), "yyyy-MM-dd", "MM/dd/yyyy HH:mm:ss aaa");
+//            String dt = !startDate.equals("") ? GH.getInstance().formatter(startDateFormat, "MM/dd/yyyy", "yyyy-MM-dd") : "";
 
-            String dt = !startDate.equals("") ? GH.getInstance().formatter(startDateFormat, "MM/dd/yyyy", "yyyy-MM-dd") : "";
+            //commenting above two lines as these were unnecessary
+            String dt = !startDate.equals("") ? GH.getInstance().formatter(calendarDetailModel.getStartTime(),"MM/dd/yyyy","MM/dd/yyyy HH:mm:ss aaa") :"";
+
+
             bi.tvStartDate.setText(dt);
 
             bi.cbAllDay.setChecked(calendarDetailModel.isAllDay != null ? calendarDetailModel.isAllDay : false);
@@ -310,7 +314,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
                         int month = monthOfYear + 1;
                         startDate = year + "-" + month + "-" + dayOfMonth;
-                        textView.setText(month + "-" + dayOfMonth + "-" + year);
+                        textView.setText(month + "/" + dayOfMonth + "/" + year);
                     }
                 })
                 .showTitle(true)

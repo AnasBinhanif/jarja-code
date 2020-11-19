@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,12 +106,20 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
             String evenTitle = modelData.eventTitle + "";
             String location = modelData.location + "";
 
-            if (firstName.equals("null") || firstName.equals("")) {
+           /* if (firstName.equals("null") || firstName.equals("")) {
                 firstName = "";
             }
             if (lastName.equals("null") || lastName.equals("")) {
                 lastName = "";
+            }*/
+            //replace above block of code with below one.
+            if (firstName.equals("null") || firstName == null) {
+                firstName = "";
             }
+            if (lastName.equals("null") || lastName == null) {
+                lastName = "";
+            }
+
             if (evenTitle.equals("null") || evenTitle.equals("")) {
                 evenTitle = "";
             }
@@ -130,7 +139,7 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
 
             }
 
-            if (!firstName.equals("") && !lastName.equals("")){
+            /*if (!firstName.equals("") && !lastName.equals("")){
                 holder.tvInitial.setText(firstName.substring(0, 1) + lastName.substring(0, 1));
             }else {
 
@@ -143,9 +152,18 @@ public class SwipeAppointmentRecyclerAdapter extends RecyclerView.Adapter {
                 }
 
                 holder.tvInitial.setText(firstName + lastName);
+            }*/
+            //replacing above block of code with below one
+            String a = "", b = "";
+            if (!firstName.equals("")) {
+                a = firstName.charAt(0) + "";
+
             }
-
-
+            if (!lastName.equals("")) {
+                b = lastName.charAt(0) + "";
+            }
+            holder.tvInitial.setText(a + b);
+            //end
 
             holder.swipeLayout.setSwipeListener(new SwipeRevealLayout.SwipeListener() {
                 @Override

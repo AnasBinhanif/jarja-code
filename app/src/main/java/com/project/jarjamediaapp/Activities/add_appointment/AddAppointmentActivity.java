@@ -356,7 +356,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
                 }
             };
             bi.atvEventTitle.addTextChangedListener(textWatcher);
