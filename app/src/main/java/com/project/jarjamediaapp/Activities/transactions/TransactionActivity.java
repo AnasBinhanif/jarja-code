@@ -29,6 +29,8 @@ import com.google.android.gms.common.internal.service.Common;
 import com.project.jarjamediaapp.Activities.add_appointment.AddAppointmentActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.CustomAdapter.CloseCommissionRecyclerAdapter;
+import com.project.jarjamediaapp.Interfaces.CloseAdapterClickListener;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
 import com.project.jarjamediaapp.R;
@@ -59,7 +61,7 @@ import kotlin.jvm.functions.Function2;
 import kotlin.jvm.functions.Function4;
 import retrofit2.Response;
 
-public class TransactionActivity extends BaseActivity implements View.OnClickListener, TransactionContract.View, DatePickerDialog.OnDateSetListener {
+public class TransactionActivity extends BaseActivity implements View.OnClickListener, TransactionContract.View, DatePickerDialog.OnDateSetListener, CloseAdapterClickListener {
 
     ActivityTransactionsBinding bi;
     Context context = TransactionActivity.this;
@@ -75,7 +77,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     int transaction = 1;
     Button btnSave, btnCancel;
     RecyclerView rvAgentCommission;
-    List<TransactionModel.Data> dataList;
+    ArrayList<TransactionModel.Data> dataList;
     int count = 0;
     Calendar newCalendar;
     int month, year, day, _month, _year, _day, mHour, mMinute;
@@ -85,11 +87,14 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     LinearLayout lnAgents;
     private ArrayList<String> selectedIdsList = new ArrayList<>();
     ArrayList<MultiSelectModelForWebsite> agentsListForDialog = new ArrayList<>();
-    HashMap<String, TransactionModel.Data> stringDataHashMap;
+    HashMap<String, TransactionModel.Data> agentsHashMap;
     AutoCompleteTextView atvAgentCommission;
     ArrayList<GetAgentsModel.Data> agentList;
     private String agentIdsString;
+    Date closeDates;
+    CloseCommissionRecyclerAdapter adapter;
 
+    int pos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +118,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void initViews() {
+
         populateListData();
     }
 
@@ -234,6 +240,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void handleIntent(Intent intent) {
+        calendarInstance();
 
         title = intent.getStringExtra("title");
         leadID = intent.getStringExtra("leadID");
@@ -243,9 +250,15 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         transactionPipeline = (ArrayList<GetLeadTransactionStage.PipeLine>) intent.getExtras().getSerializable("Pipeline");
 
         agentList = (ArrayList<GetAgentsModel.Data>) intent.getExtras().getSerializable("agents");
-
+        agentsHashMap = new HashMap<>();
         for (GetAgentsModel.Data object : agentList) {
             agentsListForDialog.add(new MultiSelectModelForWebsite(object.encryptedAgentID, object.agentName, object.encryptedAgentID));
+
+            TransactionModel transactionModel = new TransactionModel();
+            String date = dateFormater(newCalendar.getTime(), "yyyy-MM-dd'T'HH:mm:ss");
+            TransactionModel.Data data = transactionModel.new Data(object.encryptedAgentID, 0.0, object.agentName, date, date);
+
+            agentsHashMap.put(object.encryptedAgentID, data);
         }
 
 
@@ -296,10 +309,19 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     public void getAgentCommission(Response<TransactionModel> response) {
         dataList = new ArrayList<>();
         //  stringDataHashMap = new HashMap<>();
+
         dataList.addAll(response.body().getData());
 
-        if (response.body().getData().size() > 0) {
-            rvAgentCommission.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+
+        for (TransactionModel.Data d : dataList) {
+//            dataList.add(d);
+            agentsHashMap.put(d.getAgentID(), d);
+        }
+
+        if (response.body().getData() != null) {
+//        if (response.body().getData().size() > 0) {
+
+          /*  rvAgentCommission.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
             rvAgentCommission.setItemAnimator(new DefaultItemAnimator());
             rvAgentCommission.addItemDecoration(new DividerItemDecoration(rvAgentCommission.getContext(), 1));
             raCommission = new RecyclerAdapterUtil(context, dataList, R.layout.custom_adp_agent_commission);
@@ -307,9 +329,11 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
             raCommission.addOnDataBindListener((Function4<View, TransactionModel.Data, Integer, Map<Integer, ? extends View>, Unit>)
                     (view, data, position, integerMap) -> {
+//                        pos = position;
+                        TransactionModel.Data d = dataList.get(position);
 
                         TextView tvAgentName = (TextView) integerMap.get(R.id.tvAgentName);
-                        tvAgentName.setText(data.getAgentName() != null ? data.getAgentName() : "");
+                        tvAgentName.setText(data.getAgentName() != null ? data.getAgentName() + "'s Commission" : "");
 
                         AutoCompleteTextView atvAgentCommission = (AutoCompleteTextView) integerMap.get(R.id.atvAgentCommission);
                         atvAgentCommission.setText(data.getCommission() + "");
@@ -338,8 +362,12 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                             }
                         });
 
+
                         TextView tvCommisionDate = (TextView) integerMap.get(R.id.atvCommissionDate);
-                        tvCommisionDate.setText(dateFormater(newCalendar.getTime(), "MMM dd, yyyy"));
+//                        tvCommisionDate.setText(dateFormater(newCalendar.getTime(), "MM/dd/yyyy"));
+                        tvCommisionDate.setText(GH.getInstance().formatter(data.getCommisionDate(), "MM/dd/yyyy", "yyyy-MM-dd'T'HH:mm:ss"));
+//                        data.setCommisionDate(dateFormater(newCalendar.getTime(),  "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+//                        data.setCloseDate(dateFormater(newCalendar.getTime(),  "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
 
                         tvCommisionDate.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -352,9 +380,18 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         return Unit.INSTANCE;
                     });
 
-            rvAgentCommission.setAdapter(raCommission);
+            rvAgentCommission.setAdapter(raCommission);*/
 
+            rvAgentCommission.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+            rvAgentCommission.setItemAnimator(new DefaultItemAnimator());
+            rvAgentCommission.addItemDecoration(new DividerItemDecoration(rvAgentCommission.getContext(), 1));
+            adapter = new CloseCommissionRecyclerAdapter(context, dataList);
+            rvAgentCommission.setAdapter(adapter);
 
+            if (dataList != null && dataList.size() > 0) {
+                closeDate = dataList.get(0).getCloseDate();
+                tvCloseDate.setText(GH.getInstance().formatter(dataList.get(0).getCloseDate(), "MM/dd/yyyy", "yyyy-MM-dd'T'HH:mm:ss"));
+            }
             setAgentsForDialog();
 
             dialog.setCancelable(false);
@@ -372,6 +409,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
             lnAgents.removeAllViews();
         }
 
+        selectedIdsList.clear();
         for (TransactionModel.Data d : dataList) {
             View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
             TextView textView = child.findViewById(R.id.txtDynamic);
@@ -440,7 +478,8 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         //  tvCommisionDate = dialog.findViewById(R.id.atvCommissionDate);
         // tvCommisionDate.setText(dateFormater(newCalendar.getTime(), "MMM dd,yyyy"));
         tvCloseDate = dialog.findViewById(R.id.atvCloseDate);
-        tvCloseDate.setText(dateFormater(newCalendar.getTime(), "MMM dd,yyyy"));
+        tvCloseDate.setText(dateFormater(newCalendar.getTime(), "MM/dd/yyyy"));
+        closeDate = dateFormater(newCalendar.getTime(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
         lnAgents = dialog.findViewById(R.id.lnAgent);
         tvAgent = dialog.findViewById(R.id.tvAgent);
@@ -456,15 +495,17 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                     obj1 = new JSONObject();
                     obj1.put("encrypted_LeadID", leadID);
                     obj1.put("encryptedLeadDetailID", leadDetailId);
-                    obj1.put("closeDate", closeDate);
+                    // obj1.put("closeDate", closeDate);
 
                     for (int i = 0; i < dataList.size(); i++) {
                         obj = new JSONObject();
                         obj.put("commission", dataList.get(i).getCommission());
                         obj.put("agentID", dataList.get(i).getAgentID());
                         obj.put("agentName", dataList.get(i).getAgentName() != null ? dataList.get(i).getAgentName() : "");
-                        obj.put("commisionDate", dataList.get(i).getCommisionDate() != null ? dataList.get(i).getCommisionDate() : "");
+                        obj.put("commissionDate", dataList.get(i).getCommisionDate() != null ? dataList.get(i).getCommisionDate() : "");
+                        obj.put("closeDate", closeDate);
                         array.put(obj);
+
                     }
                     obj1.put("agentList", array);
                     agentStringId = obj1.toString();
@@ -558,12 +599,18 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onDateSet(DatePicker datePickerView, int year, int monthOfYear, int dayOfMonth) {
                         newCalendar.set(year, monthOfYear, dayOfMonth);
-                        String date = dateFormater(newCalendar.getTime(), "MM/dd/yyyy");
-                        view.setText(date);
+
+                        String date1 = dateFormater(newCalendar.getTime(), "MM/dd/yyyy");
+                        String date = dateFormater(newCalendar.getTime(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
                         if (view == tvCloseDate) {
                             closeDate = date;
+                            view.setText(date1);
+
                         } else {
                             dataList.get(pos).setCommisionDate(date);
+                            adapter.notifyItemChanged(pos);
+
                         }
 
                     }
@@ -612,6 +659,19 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         selectedIdsList = new ArrayList<>();
                         selectedIdsList = selectedIds;
 
+                        dataList.clear();
+//                        raCommission.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
+
+                        for (String s : selectedIdsList) {
+                            dataList.add(agentsHashMap.get(s));
+                        }
+//                        raCommission.notifyDataSetChanged();
+                        adapter = new CloseCommissionRecyclerAdapter(context, dataList);
+                        rvAgentCommission.setAdapter(adapter);
+//                        adapter.notifyDataSetChanged();
+//                        adapter.setDataList(dataList);
+                        //  populateListForCommissionDialog(dataList);
 
 
                        /* dataList.clear();
@@ -654,7 +714,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                             ToastUtils.showToast(context, "No EncryptedID Found");
                         }
 
-                        presenter.assignAgents(agentIdsString, leadID, true);
+                        //presenter.assignAgents(agentIdsString, leadID, true);
 
                     }
 
@@ -670,5 +730,11 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
             multiSelectDialog.multiSelectList(agentsListForDialog);
         }
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
+    }
+
+    @Override
+    public void clickOnDate(int pos, TextView view) {
+        type = 1;
+        showSpinnerDateDialog(pos, view);
     }
 }

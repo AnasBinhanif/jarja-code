@@ -4,9 +4,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.project.jarjamediaapp.Base.BaseResponse;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class TransactionModel extends BaseResponse {
+public class TransactionModel extends BaseResponse implements Serializable {
 
     @SerializedName("data")
     @Expose
@@ -24,7 +25,17 @@ public class TransactionModel extends BaseResponse {
         @Expose
         public String agentName;
 
-        private String commisionDate;
+        private String commissionDate;
+
+        private String closeDate;
+
+        public Data(String agentID, Double commission, String agentName, String commissionDate, String closeDate) {
+            this.agentID = agentID;
+            this.commission = commission;
+            this.agentName = agentName;
+            this.commissionDate = commissionDate;
+            this.closeDate = closeDate;
+        }
 
         public String getAgentID() {
             return agentID;
@@ -43,11 +54,19 @@ public class TransactionModel extends BaseResponse {
         }
 
         public String getCommisionDate() {
-            return commisionDate;
+            return commissionDate;
         }
 
         public void setCommisionDate(String commisionDate) {
-            this.commisionDate = commisionDate;
+            this.commissionDate = commisionDate;
+        }
+
+        public String getCloseDate() {
+            return closeDate;
+        }
+
+        public void setCloseDate(String closeDate) {
+            this.closeDate = closeDate;
         }
     }
 

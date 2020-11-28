@@ -285,7 +285,11 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
                 HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
 
                 if (mapLeads.get("Edit Calendar")) {
-                    deleteCalendarAppointmentOrTaskDetail(modelData.getCalendarId(), modelData.getCalendarType(), swipeLayout);
+                    if (modelData.getColor().equals("#d2d2d2")) {
+                        ToastUtils.showToast(context, "You cannot create this event");
+                    } else {
+                        deleteCalendarAppointmentOrTaskDetail(modelData.getCalendarId(), modelData.getCalendarType(), swipeLayout);
+                    }
                 } else {
                     ToastUtils.showToast(context, "You don't have permission to delete calendar appointment");
                 }

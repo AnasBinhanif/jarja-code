@@ -496,6 +496,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     Bundle args = new Bundle();
                     args.putSerializable("ARRAYLIST", (Serializable) transactionTwoListModel);
                     intentT2.putExtra("BUNDLE", args);
+                    intentT2.putExtra("agents",agentList);
                     startActivity(intentT2);
                 }
 

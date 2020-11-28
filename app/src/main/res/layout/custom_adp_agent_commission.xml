@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorBlack"
             android:layout_marginTop="10dp"
-            android:text="Commision Date"
+            android:text="Commission Date"
             android:textSize="@dimen/_12sdp"
             android:textStyle="bold" />
 

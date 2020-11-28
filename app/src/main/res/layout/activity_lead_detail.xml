@@ -463,7 +463,7 @@
                                         android:layout_height="wrap_content"
                                         android:text="@string/current"
                                         android:textColor="@color/colorPrimaryDark"
-                                        android:textSize="14dp"
+                                        android:textSize="14sp"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -473,7 +473,7 @@
                                         android:layout_marginTop="2dp"
                                         android:text="@string/potential_prospect"
                                         android:textColor="@color/colorMateGreen"
-                                        android:textSize="16dp" />
+                                        android:textSize="16sp" />
 
                                     <TextView
                                         android:id="@+id/tvDate2"
@@ -482,7 +482,7 @@
                                         android:layout_marginTop="1dp"
                                         android:text="12/31/2019"
                                         android:textColor="@color/colorGreyTextDark"
-                                        android:textSize="14dp" />
+                                        android:textSize="14sp" />
 
 
                                 </LinearLayout>
