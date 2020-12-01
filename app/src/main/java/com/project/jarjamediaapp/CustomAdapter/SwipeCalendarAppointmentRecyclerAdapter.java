@@ -286,7 +286,7 @@ public class SwipeCalendarAppointmentRecyclerAdapter extends RecyclerView.Adapte
 
                 if (mapLeads.get("Edit Calendar")) {
                     if (modelData.getColor().equals("#d2d2d2")) {
-                        ToastUtils.showToast(context, "You cannot create this event");
+                        ToastUtils.showToast(context, "This event cannot be deleted");
                     } else {
                         deleteCalendarAppointmentOrTaskDetail(modelData.getCalendarId(), modelData.getCalendarType(), swipeLayout);
                     }
