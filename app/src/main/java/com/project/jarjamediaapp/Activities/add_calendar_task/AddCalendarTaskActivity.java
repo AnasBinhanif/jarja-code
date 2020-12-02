@@ -438,11 +438,13 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
             return false;
         }
         if (!bi.cbAllDay.isChecked()) {
-            if (Methods.isEmpty(bi.tvStartTime)) {
+            //commenting below if condition as star time is no longer required
+            /*if (Methods.isEmpty(bi.tvStartTime)) {
                 ToastUtils.showToast(context, R.string.error_start_time);
                 bi.tvStartTime.requestFocus();
                 return false;
-            }
+            }*/
+
         }
 
         return true;

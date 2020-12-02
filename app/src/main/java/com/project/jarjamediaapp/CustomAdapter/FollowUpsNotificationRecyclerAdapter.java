@@ -56,7 +56,7 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
 
     @Override
     public FollowUpsNotificationRecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.custom_notifications_layout, parent, false);
+        View view = inflater.inflate(R.layout.custom_notifications_layout_new, parent, false);
         return new FollowUpsNotificationRecyclerAdapter.MyViewHolder(view);
     }
 

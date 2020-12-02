@@ -48,6 +48,15 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
         presenter.initScreen();
     }
 
+    @Override
+    public void initViews() {
+
+        handleIntent(getIntent());
+        bi.btnTransaction1.setOnClickListener(this);
+        bi.btnTransaction2.setOnClickListener(this);
+        populateListData();
+    }
+
     private void populateListData() {
 
         leadsList = new ArrayList<ListingInfoModel.Data.ListingInfo>();
@@ -144,14 +153,7 @@ public class ListingInfoActivity extends BaseActivity implements ListingInfoCont
         super.setupUI(view);
     }
 
-    @Override
-    public void initViews() {
 
-        handleIntent(getIntent());
-        bi.btnTransaction1.setOnClickListener(this);
-        bi.btnTransaction2.setOnClickListener(this);
-        populateListData();
-    }
 
     @Override
     public void updateUI(Response<BaseResponse> response) {

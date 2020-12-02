@@ -596,9 +596,9 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
             if (data != null) {
 
                 Image image = ImagePicker.getFirstImageOrNull(data);
-                Bitmap myBitmap = BitmapFactory.decodeFile(image.getPath());
-                //    Glide.with(context).load(image.getPath()).into(bi.imgProfilePic);
-                bi.imgProfilePic.setImageBitmap(myBitmap);
+//                Bitmap myBitmap = BitmapFactory.decodeFile(image.getPath());
+                Glide.with(context).load(image.getPath()).into(bi.imgProfilePic);
+//                bi.imgProfilePic.setImageBitmap(myBitmap);
                 imagePath = image.getPath();
                 isImagePicked = true;
 
