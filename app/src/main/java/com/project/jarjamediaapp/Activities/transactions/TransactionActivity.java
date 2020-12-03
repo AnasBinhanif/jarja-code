@@ -729,6 +729,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         } else {
             multiSelectDialog.multiSelectList(agentsListForDialog);
         }
+        multiSelectDialog.setMinSelectionLimit(0);
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
 

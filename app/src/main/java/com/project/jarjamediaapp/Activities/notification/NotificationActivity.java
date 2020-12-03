@@ -46,6 +46,8 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     private static final int PAGE_SIZE = 25;
     boolean isLoading = false;
 
+    int buttonType = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,176 +78,15 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
     }
 
-    private void populateListDataT() {
-
-
-        layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
-        bi.rvNotifications.setLayoutManager(layoutManager);
-        // hide for view line
-        //     bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
-        //    bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
-
-        taskRecyclerviewAdapter = new TaskNotificatonRecyclerAdapter(context, (ArrayList<TaskNotificationModel.TaskList>) notificationListT);
-
-
-        bi.rvNotifications.setAdapter(taskRecyclerviewAdapter);
-        taskRecyclerviewAdapter.notifyDataSetChanged();
-        bi.rvNotifications.setVisibility(View.VISIBLE);
-
-
-    }
-
-    private void populateListDataA() {
-
-        try {
-
-
-            layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
-            bi.rvNotifications.setLayoutManager(layoutManager);
-            // hide for view line
-            //       bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
-            //          bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
-            appointmentRecyclerviewAdapter = new AppointmentNotificationRecyclerAdapter(context, (ArrayList<AppointmentNotificationModel.FollowUpsList>) notificationListA);
-
-            bi.rvNotifications.setAdapter(appointmentRecyclerviewAdapter);
-            appointmentRecyclerviewAdapter.notifyDataSetChanged();
-            bi.rvNotifications.setVisibility(View.VISIBLE);
-
-
-
-        } catch (Exception e) {
-
-            showLongToastMessage("crashed");
-        }
-
-    }
-
-    private void populateListDataF() {
-
-
-        try {
-
-
-            layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
-            bi.rvNotifications.setLayoutManager(layoutManager);
-            // hide for view line
-            //   bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
-            //   bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
-            folloupsRecyclerviewAdapter = new FollowUpsNotificationRecyclerAdapter(context, (ArrayList<FollowUpNotificationModel.FollowUpsList>) notificationListF);
-
-            bi.rvNotifications.setAdapter(folloupsRecyclerviewAdapter);
-            folloupsRecyclerviewAdapter.notifyDataSetChanged();
-            bi.rvNotifications.setVisibility(View.VISIBLE);
-
-        } catch (Exception e) {
-
-            showLongToastMessage("crashed");
-        }
-
-    }
-
     @Override
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-
-            case R.id.btnTasks:
-
-
-                isLoading = false;
-
-            /*    notificationListA.clear();
-                notificationListT.clear();
-                notificationListF.clear();
-
-
-               // for indexout exception
-                if (appointmentRecyclerviewAdapter != null){
-
-                    appointmentRecyclerviewAdapter.notifyDataSetChanged();
-
-                }else if (taskRecyclerviewAdapter != null){
-
-                    taskRecyclerviewAdapter.notifyDataSetChanged();
-
-                }else if (folloupsRecyclerviewAdapter != null){
-
-                    folloupsRecyclerviewAdapter.notifyDataSetChanged();
-                }
-*/
-                Paris.style(bi.btnTasks).apply(R.style.TabButtonYellowLeft);
-                Paris.style(bi.btnAppointments).apply(R.style.TabButtonTranparentMiddle);
-                Paris.style(bi.btnFollowUps).apply(R.style.TabButtonTranparentRight);
-                page = 0;
-                presenter.getNotificationByTasks(page);
-
-
-                break;
-
-            case R.id.btnAppointments:
-
-                isLoading = false;
-
-           /*     notificationListA.clear();
-                notificationListT.clear();
-                notificationListF.clear();
-
-
-               // for indexout exception
-                if (appointmentRecyclerviewAdapter != null){
-
-                    appointmentRecyclerviewAdapter.notifyDataSetChanged();
-
-                }else if (taskRecyclerviewAdapter != null){
-
-                    taskRecyclerviewAdapter.notifyDataSetChanged();
-
-                }else if (folloupsRecyclerviewAdapter != null){
-
-                    folloupsRecyclerviewAdapter.notifyDataSetChanged();
-                }
-*/
-
-
-                Paris.style(bi.btnTasks).apply(R.style.TabButtonTranparentLeft);
-                Paris.style(bi.btnAppointments).apply(R.style.TabButtonYellowMiddle);
-                Paris.style(bi.btnFollowUps).apply(R.style.TabButtonTranparentRight);
-                page = 0;
-                presenter.getNotificationByAppointments(page);
-
-
-                break;
-
-            case R.id.btnFollowUps:
-
-                isLoading = false;
-              /*  notificationListA.clear();
-                notificationListT.clear();
-                notificationListF.clear();
-
-
-                // for indexout exception
-                if (appointmentRecyclerviewAdapter != null){
-
-                    appointmentRecyclerviewAdapter.notifyDataSetChanged();
-
-                }else if (taskRecyclerviewAdapter != null){
-
-                    taskRecyclerviewAdapter.notifyDataSetChanged();
-
-                }else if (folloupsRecyclerviewAdapter != null){
-
-                    folloupsRecyclerviewAdapter.notifyDataSetChanged();
-                }*/
-
-                Paris.style(bi.btnTasks).apply(R.style.TabButtonTranparentLeft);
-                Paris.style(bi.btnAppointments).apply(R.style.TabButtonTranparentMiddle);
-                Paris.style(bi.btnFollowUps).apply(R.style.TabButtonYellowRight);
-                page = 0;
-                presenter.getNotificationByFollowUps(page);
-
-
-                break;
+    protected void onResume() {
+        super.onResume();
+        if (taskRecyclerviewAdapter != null && buttonType == 1) {
+            presenter.getNotificationByTasks(page);
+        } else if (appointmentRecyclerviewAdapter != null && buttonType == 2) {
+            presenter.getNotificationByAppointments(page);
+        } else if (folloupsRecyclerviewAdapter != null && buttonType == 3) {
+            presenter.getNotificationByFollowUps(page);
         }
     }
 
@@ -354,6 +195,184 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
 
     }
 
+    private void populateListDataT() {
+
+
+        layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+        bi.rvNotifications.setLayoutManager(layoutManager);
+        // hide for view line
+        //     bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
+        //    bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
+
+        taskRecyclerviewAdapter = new TaskNotificatonRecyclerAdapter(context, (ArrayList<TaskNotificationModel.TaskList>) notificationListT);
+
+
+        bi.rvNotifications.setAdapter(taskRecyclerviewAdapter);
+        taskRecyclerviewAdapter.notifyDataSetChanged();
+        bi.rvNotifications.setVisibility(View.VISIBLE);
+
+
+    }
+
+    private void populateListDataA() {
+
+        try {
+
+
+            layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+            bi.rvNotifications.setLayoutManager(layoutManager);
+            // hide for view line
+            //       bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
+            //          bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
+            appointmentRecyclerviewAdapter = new AppointmentNotificationRecyclerAdapter(context, (ArrayList<AppointmentNotificationModel.FollowUpsList>) notificationListA);
+
+            bi.rvNotifications.setAdapter(appointmentRecyclerviewAdapter);
+            appointmentRecyclerviewAdapter.notifyDataSetChanged();
+            bi.rvNotifications.setVisibility(View.VISIBLE);
+
+
+        } catch (Exception e) {
+
+            showLongToastMessage("crashed");
+        }
+
+    }
+
+    private void populateListDataF() {
+
+
+        try {
+
+
+            layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+            bi.rvNotifications.setLayoutManager(layoutManager);
+            // hide for view line
+            //   bi.rvNotifications.setItemAnimator(new DefaultItemAnimator());
+            //   bi.rvNotifications.addItemDecoration(new DividerItemDecoration(bi.rvNotifications.getContext(), 1));
+            folloupsRecyclerviewAdapter = new FollowUpsNotificationRecyclerAdapter(context, (ArrayList<FollowUpNotificationModel.FollowUpsList>) notificationListF);
+
+            bi.rvNotifications.setAdapter(folloupsRecyclerviewAdapter);
+            folloupsRecyclerviewAdapter.notifyDataSetChanged();
+            bi.rvNotifications.setVisibility(View.VISIBLE);
+
+        } catch (Exception e) {
+
+            showLongToastMessage("crashed");
+        }
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+
+            case R.id.btnTasks:
+
+                buttonType = 1;
+
+                isLoading = false;
+
+            /*    notificationListA.clear();
+                notificationListT.clear();
+                notificationListF.clear();
+
+
+               // for indexout exception
+                if (appointmentRecyclerviewAdapter != null){
+
+                    appointmentRecyclerviewAdapter.notifyDataSetChanged();
+
+                }else if (taskRecyclerviewAdapter != null){
+
+                    taskRecyclerviewAdapter.notifyDataSetChanged();
+
+                }else if (folloupsRecyclerviewAdapter != null){
+
+                    folloupsRecyclerviewAdapter.notifyDataSetChanged();
+                }
+*/
+                Paris.style(bi.btnTasks).apply(R.style.TabButtonYellowLeft);
+                Paris.style(bi.btnAppointments).apply(R.style.TabButtonTranparentMiddle);
+                Paris.style(bi.btnFollowUps).apply(R.style.TabButtonTranparentRight);
+                page = 0;
+                presenter.getNotificationByTasks(page);
+
+
+                break;
+
+            case R.id.btnAppointments:
+
+                buttonType = 2;
+
+                isLoading = false;
+
+           /*     notificationListA.clear();
+                notificationListT.clear();
+                notificationListF.clear();
+
+
+               // for indexout exception
+                if (appointmentRecyclerviewAdapter != null){
+
+                    appointmentRecyclerviewAdapter.notifyDataSetChanged();
+
+                }else if (taskRecyclerviewAdapter != null){
+
+                    taskRecyclerviewAdapter.notifyDataSetChanged();
+
+                }else if (folloupsRecyclerviewAdapter != null){
+
+                    folloupsRecyclerviewAdapter.notifyDataSetChanged();
+                }
+*/
+
+
+                Paris.style(bi.btnTasks).apply(R.style.TabButtonTranparentLeft);
+                Paris.style(bi.btnAppointments).apply(R.style.TabButtonYellowMiddle);
+                Paris.style(bi.btnFollowUps).apply(R.style.TabButtonTranparentRight);
+                page = 0;
+                presenter.getNotificationByAppointments(page);
+
+
+                break;
+
+            case R.id.btnFollowUps:
+
+                buttonType = 3;
+
+                isLoading = false;
+              /*  notificationListA.clear();
+                notificationListT.clear();
+                notificationListF.clear();
+
+
+                // for indexout exception
+                if (appointmentRecyclerviewAdapter != null){
+
+                    appointmentRecyclerviewAdapter.notifyDataSetChanged();
+
+                }else if (taskRecyclerviewAdapter != null){
+
+                    taskRecyclerviewAdapter.notifyDataSetChanged();
+
+                }else if (folloupsRecyclerviewAdapter != null){
+
+                    folloupsRecyclerviewAdapter.notifyDataSetChanged();
+                }*/
+
+                Paris.style(bi.btnTasks).apply(R.style.TabButtonTranparentLeft);
+                Paris.style(bi.btnAppointments).apply(R.style.TabButtonTranparentMiddle);
+                Paris.style(bi.btnFollowUps).apply(R.style.TabButtonYellowRight);
+                page = 0;
+                presenter.getNotificationByFollowUps(page);
+
+
+                break;
+        }
+    }
+
+
     @Override
     public void updateUI(Response<BaseResponse> response) {
 
@@ -460,7 +479,6 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                 notificationListA.addAll(response);
 
 
-
                 totalPages = appointmentNotificationCount != null ? appointmentNotificationCount : 0;
                 bi.rvNotifications.setVisibility(View.VISIBLE);
                 bi.tvMessage.setVisibility(View.GONE);
@@ -516,7 +534,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
             taskRecyclerviewAdapter.notifyDataSetChanged();
 
         } else if (type == R.integer.Appointment) {
-           // notificationListA.get(pos).setIsSeen(true);
+            // notificationListA.get(pos).setIsSeen(true);
             appointmentRecyclerviewAdapter.sortData();
             appointmentRecyclerviewAdapter.notifyDataSetChanged();
 
