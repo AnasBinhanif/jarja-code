@@ -77,7 +77,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     int transaction = 1;
     Button btnSave, btnCancel;
     RecyclerView rvAgentCommission;
-    ArrayList<TransactionModel.Data> dataList;
+    ArrayList<TransactionModel.Data.Agent> dataList;
     int count = 0;
     Calendar newCalendar;
     int month, year, day, _month, _year, _day, mHour, mMinute;
@@ -87,7 +87,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
     LinearLayout lnAgents;
     private ArrayList<String> selectedIdsList = new ArrayList<>();
     ArrayList<MultiSelectModelForWebsite> agentsListForDialog = new ArrayList<>();
-    HashMap<String, TransactionModel.Data> agentsHashMap;
+    HashMap<String, TransactionModel.Data.Agent> agentsHashMap;
     AutoCompleteTextView atvAgentCommission;
     ArrayList<GetAgentsModel.Data> agentList;
     private String agentIdsString;
@@ -256,7 +256,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
             TransactionModel transactionModel = new TransactionModel();
             String date = dateFormater(newCalendar.getTime(), "yyyy-MM-dd'T'HH:mm:ss");
-            TransactionModel.Data data = transactionModel.new Data(object.encryptedAgentID, 0.0, object.agentName, date, date);
+            TransactionModel.Data.Agent data = transactionModel.new Data().new Agent(object.encryptedAgentID, 0.0, object.agentName, date, date);
 
             agentsHashMap.put(object.encryptedAgentID, data);
         }
@@ -310,15 +310,16 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         dataList = new ArrayList<>();
         //  stringDataHashMap = new HashMap<>();
 
-        dataList.addAll(response.body().getData());
+        TransactionModel.Data data = response.body().getData();
+//        dataList.addAll(response.body().getData().getAgentList());
+        dataList.addAll(data.getAgentList());
 
-
-        for (TransactionModel.Data d : dataList) {
+        for (TransactionModel.Data.Agent d : dataList) {
 //            dataList.add(d);
             agentsHashMap.put(d.getAgentID(), d);
         }
 
-        if (response.body().getData() != null) {
+        if (response.body().getData().getAgentList() != null) {
 //        if (response.body().getData().size() > 0) {
 
           /*  rvAgentCommission.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
@@ -389,8 +390,9 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
             rvAgentCommission.setAdapter(adapter);
 
             if (dataList != null && dataList.size() > 0) {
-                closeDate = dataList.get(0).getCloseDate();
-                tvCloseDate.setText(GH.getInstance().formatter(dataList.get(0).getCloseDate(), "MM/dd/yyyy", "yyyy-MM-dd'T'HH:mm:ss"));
+//                closeDate = dataList.get(0).getCloseDate();
+                closeDate = data.getCloseDate() != null ? data.getCloseDate() : "";
+                tvCloseDate.setText(GH.getInstance().formatter(closeDate, "MM/dd/yyyy", "yyyy-MM-dd'T'HH:mm:ss"));
             }
             setAgentsForDialog();
 
@@ -410,7 +412,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         }
 
         selectedIdsList.clear();
-        for (TransactionModel.Data d : dataList) {
+        for (TransactionModel.Data.Agent d : dataList) {
             View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
             TextView textView = child.findViewById(R.id.txtDynamic);
             textView.setText(d.agentName);
@@ -495,7 +497,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                     obj1 = new JSONObject();
                     obj1.put("encrypted_LeadID", leadID);
                     obj1.put("encryptedLeadDetailID", leadDetailId);
-                    // obj1.put("closeDate", closeDate);
+                    obj1.put("closeDate", closeDate);
 
                     for (int i = 0; i < dataList.size(); i++) {
                         obj = new JSONObject();

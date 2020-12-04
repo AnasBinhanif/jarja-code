@@ -27,12 +27,12 @@ import androidx.recyclerview.widget.RecyclerView;
 public class CloseCommissionRecyclerAdapter extends RecyclerView.Adapter<CloseCommissionRecyclerAdapter.ViewHolder> {
     private LayoutInflater mInflater;
     private Context context;
-    private List<TransactionModel.Data> dataList;
+    private List<TransactionModel.Data.Agent> dataList;
     private CloseAdapterClickListener closeAdapterClickListener;
     int position = 0;
     TextWatcher textWatcher;
 
-    public CloseCommissionRecyclerAdapter(Context context, List<TransactionModel.Data> dataList) {
+    public CloseCommissionRecyclerAdapter(Context context, List<TransactionModel.Data.Agent> dataList) {
         this.context = context;
         this.dataList = dataList;
         mInflater = LayoutInflater.from(this.context);
@@ -50,7 +50,7 @@ public class CloseCommissionRecyclerAdapter extends RecyclerView.Adapter<CloseCo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         this.position = position;
-        TransactionModel.Data data = dataList.get(position);
+        TransactionModel.Data.Agent data = dataList.get(position);
 
         holder.tvAgentName.setText(data.getAgentName() != null ? data.getAgentName() + "'s Commission" : "");
 
@@ -112,7 +112,7 @@ public class CloseCommissionRecyclerAdapter extends RecyclerView.Adapter<CloseCo
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.length() > 0) {
-                    TransactionModel.Data data = dataList.get(position);
+                    TransactionModel.Data.Agent data = dataList.get(position);
                     data.setCommission(Double.valueOf(autoCompleteTextView.getText().toString()));
                     dataList.set(position, data);
                 }
@@ -122,7 +122,7 @@ public class CloseCommissionRecyclerAdapter extends RecyclerView.Adapter<CloseCo
     }
 
 
-    public void setDataList(List<TransactionModel.Data> dataList) {
+    public void setDataList(List<TransactionModel.Data.Agent> dataList) {
         this.dataList = dataList;
         notifyDataSetChanged();
     }
