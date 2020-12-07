@@ -46,6 +46,13 @@ public class TaskNotificationModel extends BaseResponse {
             this.taskCount = taskCount;
         }
 
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "taskList=" + taskList +
+                    ", taskCount=" + taskCount +
+                    '}';
+        }
     }
     public class TaskList {
 
@@ -226,8 +233,33 @@ public class TaskNotificationModel extends BaseResponse {
             this.vtCRMSchedule = vtCRMSchedule;
         }
 
+        @Override
+        public String toString() {
+            return "TaskList{" +
+                    "taskID=" + taskID +
+                    ", encryptedTaskID='" + encryptedTaskID + '\'' +
+                    ", taskName='" + taskName + '\'' +
+                    ", scheduleID=" + scheduleID +
+                    ", taskType='" + taskType + '\'' +
+                    ", description='" + description + '\'' +
+                    ", assignTime='" + assignTime + '\'' +
+                    ", createdDate='" + createdDate + '\'' +
+                    ", isDone=" + isDone +
+                    ", doneDate=" + doneDate +
+                    ", isSeen=" + isSeen +
+                    ", isPostPonned=" + isPostPonned +
+                    ", postPonnedMinutes=" + postPonnedMinutes +
+                    ", dumiDate=" + dumiDate +
+                    ", crmid=" + crmid +
+                    ", vtCRMSchedule=" + vtCRMSchedule +
+                    '}';
+        }
     }
 
-
-
+    @Override
+    public String toString() {
+        return "TaskNotificationModel{" +
+                "data=" + data +
+                '}';
+    }
 }
