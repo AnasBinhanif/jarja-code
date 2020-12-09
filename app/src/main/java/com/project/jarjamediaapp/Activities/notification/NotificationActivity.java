@@ -41,7 +41,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
     TaskNotificatonRecyclerAdapter taskRecyclerviewAdapter;
     FollowUpsNotificationRecyclerAdapter folloupsRecyclerviewAdapter;
     LinearLayoutManager layoutManager;
-    int page = 1;
+    int page = 0;
     int totalPages;
     private static final int PAGE_SIZE = 25;
     boolean isLoading = false;
@@ -295,7 +295,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                 Paris.style(bi.btnTasks).apply(R.style.TabButtonYellowLeft);
                 Paris.style(bi.btnAppointments).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnFollowUps).apply(R.style.TabButtonTranparentRight);
-                page = 1;
+                page = 0;
                 presenter.getNotificationByTasks(page);
 
 
@@ -331,7 +331,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                 Paris.style(bi.btnTasks).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnAppointments).apply(R.style.TabButtonYellowMiddle);
                 Paris.style(bi.btnFollowUps).apply(R.style.TabButtonTranparentRight);
-                page = 1;
+                page = 0;
                 presenter.getNotificationByAppointments(page);
 
 
@@ -364,7 +364,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
                 Paris.style(bi.btnTasks).apply(R.style.TabButtonTranparentLeft);
                 Paris.style(bi.btnAppointments).apply(R.style.TabButtonTranparentMiddle);
                 Paris.style(bi.btnFollowUps).apply(R.style.TabButtonYellowRight);
-                page = 1;
+                page = 0;
                 presenter.getNotificationByFollowUps(page);
 
 
@@ -428,7 +428,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         isLoading = false;
         if (response.size() > 0) {
 
-            if (page > 1) {
+            if (page > 0) {
 
                 notificationListT.addAll(response);
                 taskRecyclerviewAdapter.sortData();
@@ -466,7 +466,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         isLoading = false;
         if (response.size() > 0) {
 
-            if (page > 1) {
+            if (page > 0) {
                 notificationListA.addAll(response);
                 appointmentRecyclerviewAdapter.sortData();
                 appointmentRecyclerviewAdapter.notifyDataSetChanged();
@@ -501,7 +501,7 @@ public class NotificationActivity extends BaseActivity implements NotificationCo
         notificationListT.clear();*/
         isLoading = false;
         if (response.size() > 0) {
-            if (page > 1) {
+            if (page > 0) {
 
                 notificationListF.addAll(response);
                 folloupsRecyclerviewAdapter.sortData();

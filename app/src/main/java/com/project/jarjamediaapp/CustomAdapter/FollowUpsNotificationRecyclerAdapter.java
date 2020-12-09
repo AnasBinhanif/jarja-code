@@ -265,7 +265,6 @@ public class FollowUpsNotificationRecyclerAdapter extends RecyclerView.Adapter<F
         }
 
         edtNote.setText(note);
-        edtNote.setText("it is working on ios. When i update company address from ios and check postman for user profile I get updated value. However, when I update from android and then check postman for userprofile, i don't get updated value. May key is different than what is on android. it is working on ios. When i update company address from ios and check postman for user profile I get updated value. However, when I update from android and then check postman for userprofile, i don't get updated value. May key is different than what is on android.  ");
         edtTitle.setText(title);
 
         tvClose.setOnClickListener(new View.OnClickListener() {

@@ -215,7 +215,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                     }
                     int c = count - 1;
 
-                    if (integer + 1 > c) {
+                    /*if (integer + 1 > c) {
                         jsonObjectString = "{\"presentationID\": \"" + presentationID + "\"," +
                                 " \"encrypted_LeadDetailID\": \"" + leadDetailId +
                                 "\", \"pipelineID\":\"" + pipelineID + "\"}";
@@ -231,7 +231,10 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         Log.d("json", jsonObjectString);
                         presenter.addPipelineMark(jsonObjectString);
                         //  showLongToastMessage("Sorry, you cannot revert pipeline.");
-                    }
+                    }*/
+                    //commenting above block of code and replacing it with below function
+                  //  addPipelineMark(integer,c);
+                  showAgentCommissionDialog();
 
 
                     return Unit.INSTANCE;
@@ -269,6 +272,28 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         } else {
             transactionTwoListModel = (ArrayList<GetLeadTransactionStage.LeadTransactionTwo>) args.getSerializable("ARRAYLIST");
         }
+    }
+
+    private void addPipelineMark(Integer integer, int c){
+        String jsonObjectString = "";
+        if (integer + 1 > c) {
+            jsonObjectString = "{\"presentationID\": \"" + presentationID + "\"," +
+                    " \"encrypted_LeadDetailID\": \"" + leadDetailId +
+                    "\", \"pipelineID\":\"" + pipelineID + "\"}";
+            Log.d("json", jsonObjectString);
+
+            presenter.addPipelineMark(jsonObjectString);
+
+        } else {
+            // enable revert pipeline
+            jsonObjectString = "{\"presentationID\": \"" + presentationID + "\"," +
+                    " \"encrypted_LeadDetailID\": \"" + leadDetailId +
+                    "\", \"pipelineID\":\"" + pipelineID + "\"}";
+            Log.d("json", jsonObjectString);
+            presenter.addPipelineMark(jsonObjectString);
+            //  showLongToastMessage("Sorry, you cannot revert pipeline.");
+        }
+
     }
 
     @Override
@@ -391,7 +416,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
             if (dataList != null && dataList.size() > 0) {
 //                closeDate = dataList.get(0).getCloseDate();
-                closeDate = data.getCloseDate() != null ? data.getCloseDate() : "";
+                closeDate = data.getCloseDate() != null ? data.getCloseDate() : dateFormater(newCalendar.getTime(),"yyyy-MM-dd'T'HH:mm:ss");
                 tvCloseDate.setText(GH.getInstance().formatter(closeDate, "MM/dd/yyyy", "yyyy-MM-dd'T'HH:mm:ss"));
             }
             setAgentsForDialog();
