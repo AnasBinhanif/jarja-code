@@ -233,8 +233,13 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         //  showLongToastMessage("Sorry, you cannot revert pipeline.");
                     }*/
                     //commenting above block of code and replacing it with below function
-                  //  addPipelineMark(integer,c);
-                  showAgentCommissionDialog();
+                    if (pipelineID.equals("11") && markedPipeline.equals("Closed")){
+                        showAgentCommissionDialog();
+                    }else{
+                          addPipelineMark(integer,c);
+                    }
+
+
 
 
                     return Unit.INSTANCE;
@@ -274,7 +279,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void addPipelineMark(Integer integer, int c){
+    private void addPipelineMark(Integer integer, int c) {
         String jsonObjectString = "";
         if (integer + 1 > c) {
             jsonObjectString = "{\"presentationID\": \"" + presentationID + "\"," +
@@ -416,7 +421,7 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
             if (dataList != null && dataList.size() > 0) {
 //                closeDate = dataList.get(0).getCloseDate();
-                closeDate = data.getCloseDate() != null ? data.getCloseDate() : dateFormater(newCalendar.getTime(),"yyyy-MM-dd'T'HH:mm:ss");
+                closeDate = data.getCloseDate() != null ? data.getCloseDate() : dateFormater(newCalendar.getTime(), "yyyy-MM-dd'T'HH:mm:ss");
                 tvCloseDate.setText(GH.getInstance().formatter(closeDate, "MM/dd/yyyy", "yyyy-MM-dd'T'HH:mm:ss"));
             }
             setAgentsForDialog();

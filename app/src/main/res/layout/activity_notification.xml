@@ -90,6 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_15sdp"
             android:nestedScrollingEnabled="false"
+                android:scrollbars="vertical"
             android:visibility="gone" />
 
         </LinearLayout>
