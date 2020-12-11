@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -233,13 +234,11 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
                         //  showLongToastMessage("Sorry, you cannot revert pipeline.");
                     }*/
                     //commenting above block of code and replacing it with below function
-                    if (pipelineID.equals("11") && markedPipeline.equals("Closed")){
+                    if (pipelineID.equals("11") && markedPipeline.equals("Closed")) {
                         showAgentCommissionDialog();
-                    }else{
-                          addPipelineMark(integer,c);
+                    } else {
+                        addPipelineMark(integer, c);
                     }
-
-
 
 
                     return Unit.INSTANCE;
@@ -421,8 +420,14 @@ public class TransactionActivity extends BaseActivity implements View.OnClickLis
 
             if (dataList != null && dataList.size() > 0) {
 //                closeDate = dataList.get(0).getCloseDate();
-                closeDate = data.getCloseDate() != null ? data.getCloseDate() : dateFormater(newCalendar.getTime(), "yyyy-MM-dd'T'HH:mm:ss");
-                tvCloseDate.setText(GH.getInstance().formatter(closeDate, "MM/dd/yyyy", "yyyy-MM-dd'T'HH:mm:ss"));
+//                closeDate = data.getCloseDate() != null ? data.getCloseDate() : dateFormater(newCalendar.getTime(), "yyyy-MM-dd'T'HH:mm:ss");
+                if (!TextUtils.isEmpty(data.getCloseDate())) {
+                    closeDate = GH.getInstance().formatter(data.getCloseDate(), "yyyy-MM-dd'T'HH:mm:ss", "MM/dd/yyyy hh:mm:ss a");
+                    tvCloseDate.setText(GH.getInstance().formatter(closeDate, "MM/dd/yyyy", "yyyy-MM-dd'T'HH:mm:ss"));
+
+                }
+//                tvCloseDate.setText(GH.getInstance().formatter(closeDate, "MM/dd/yyyy", "MM/dd/yyyy hh:mm:ss a"));
+
             }
             setAgentsForDialog();
 
