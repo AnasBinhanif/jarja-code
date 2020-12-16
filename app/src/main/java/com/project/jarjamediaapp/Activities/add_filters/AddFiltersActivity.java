@@ -61,7 +61,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     ArrayList<Integer> selectedSourceNameIdsList = new ArrayList<>();
 
     ArrayList<GetLeadTagList.Data> getLeadTagList;
-    ArrayList<MultiSelectModel> getLeadTagModelList;
+    ArrayList<MultiSelectModel> getLeadTagModelList = new ArrayList<>();
     ArrayList<MultiSelectModel> getLeadTagModelListselected = new ArrayList<>();
     ArrayList<Integer> selectedTagIdsList = new ArrayList<>();
 
@@ -83,8 +83,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     ArrayList<GetLeadScore.Data> getGetLeadScoreList;
     ArrayList<String> getGetLeadScoreNames;
 
-    ArrayList<GetLastTouch.Data> getGetLastTouchList;
-    ArrayList<String> getGetLastTouchNames;
+    ArrayList<GetLastTouch.Data> getGetLastTouchList = new ArrayList<>();
+    ArrayList<String> getGetLastTouchNames = new ArrayList();
 
     ArrayList<GetLastLogin.Data> getGetLastLoginList;
     ArrayList<String> getGetLastLoginNames;
@@ -179,7 +179,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                             textView.setText(name);
                             bi.lnTags.addView(child);
                         }
-                        tagModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
+//                        tagModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
                     }
 
@@ -196,7 +196,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                                 if (tagsIdsString.equals("")) {
                                     tagsIdsString = selectedIds.get(i).toString();
                                 } else {
-                                   // tagsIdsString = tagsIdsString + "," + selectedEncyrptedIds.get(i);
+                                    // tagsIdsString = tagsIdsString + "," + selectedEncyrptedIds.get(i);
                                     tagsIdsString = tagsIdsString + "," + selectedIds.get(i);
                                 }
                             }
@@ -303,7 +303,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                             bi.lnAgents.addView(child);
                         }
 
-                        agentModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
+//                        agentModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
                     }
 
@@ -332,12 +332,12 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
             multiSelectDialog.preSelectIDsList(selectedIdsList);
 
             // for checking empty list to prevent crahses
-            if (searchListItems != null){
+            if (searchListItems != null) {
 
                 multiSelectDialog.multiSelectList(searchListItems);
             }
 
-        } else if(searchListItems != null){
+        } else if (searchListItems != null) {
             // for checking empty list to prevent crahses
             multiSelectDialog.multiSelectList(searchListItems);
         }
@@ -380,7 +380,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                             textView.setText(selectedNames.get(i));
                             bi.lnDrip.addView(child);
                         }
-                        dripModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
+//                        dripModel = new MultiSelectModel(selectedIds.get(0), selectedNames.get(0));
                         Log.e("DataString", dataString);
                     }
 
@@ -395,11 +395,16 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
                     }
                 });
 
+
         if (selectedDripIdsList.size() != 0) {
             multiSelectDialog.preSelectIDsList(selectedDripIdsList);
-            multiSelectDialog.multiSelectList(getLeadDripCampaignModelList);
+            if (getLeadDripCampaignModelList != null) {
+                multiSelectDialog.multiSelectList(getLeadDripCampaignModelList);
+            }
         } else {
-            multiSelectDialog.multiSelectList(getLeadDripCampaignModelList);
+            if (getLeadDripCampaignModelList != null) {
+                multiSelectDialog.multiSelectList(getLeadDripCampaignModelList);
+            }
         }
         multiSelectDialog.show(getSupportFragmentManager(), "multiSelectDialog");
     }
@@ -455,14 +460,14 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         if (selectedSourceNameIdsList.size() != 0) {
 
             multiSelectDialog.preSelectIDsList(selectedSourceNameIdsList);
-            if(getLeadSourceNameList != null){
+            if (getLeadSourceNameList != null) {
 
 
                 multiSelectDialog.multiSelectList(getLeadSourceNameList);
             }
 
         } else {
-            if(getLeadSourceNameList != null){
+            if (getLeadSourceNameList != null) {
                 multiSelectDialog.multiSelectList(getLeadSourceNameList);
             }
 
@@ -522,14 +527,14 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
         if (selectedSourceNameIdsList.size() != 0) {
 
-            if (getSelectedTypeIdsList != null){
+            if (getSelectedTypeIdsList != null) {
                 multiSelectDialog.preSelectIDsList(getSelectedTypeIdsList);
                 multiSelectDialog.multiSelectList(getLeadTypeModelList);
             }
 
         } else {
 
-            if(getLeadTypeModelList != null){
+            if (getLeadTypeModelList != null) {
                 multiSelectDialog.multiSelectList(getLeadTypeModelList);
             }
 
@@ -634,7 +639,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
         // stop redirection to dashboard screen when click back button
         EasyPreference.Builder pref = new EasyPreference.Builder(context);
-        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"leadsFragment").save();
+        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(), "leadsFragment").save();
 
         // for search bundle otherwise it is calling null
         easyPreference.addString("search", "searchResult").save();
@@ -645,8 +650,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
     }
 
     private void saveAndSearchFilters() {
-
-
 
         easyPreference.addObject("agentIDs", searchListItemsselected).save();
         easyPreference.addObject("typeIDs", getLeadTypeModelListselected).save();
@@ -670,7 +673,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         easyPreference.addString("saveAndSearch", "saveData").save();
 
 
-
         easyPreference.addString("agentID", agentIdsString + "").save();
         easyPreference.addString("leadTypeID", typeIdsString + "").save();
         easyPreference.addString("leadScoreMax", getGetLeadScoreList.get(bi.spnLeadScore.getSelectedIndex()).value + "").save();
@@ -684,7 +686,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         easyPreference.addString("sourceID", sourceIdsString + "").save();
         easyPreference.addString("fromDate", startDate).save();
         easyPreference.addString("toDate", endDate).save();
-
 
 
         String st = startDate;
@@ -888,11 +889,12 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         dateFrom = dateFroms;
 
         startDate = dateFrom.equals("") ? "" : GH.getInstance().formatter(dateFrom, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM-dd-yyyy");
-        endDate = dateTo.equals("") ? "" :GH.getInstance().formatter(dateTo, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM-dd-yyyy");
+        endDate = dateTo.equals("") ? "" : GH.getInstance().formatter(dateTo, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "MM-dd-yyyy");
 
 
         hideProgressBar();
     }
+
     public void showPriceRangeDialog(Context context) {
 
         Dialog dialog = new Dialog(context, R.style.Dialog);
@@ -924,6 +926,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         dialog.show();
 
     }
+
     public void showDateRangeDialog(Context context) {
 
         Dialog dialog = new Dialog(context, R.style.Dialog);
@@ -936,13 +939,13 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         tvDateTO.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSpinnerDateDialog(tvDateTO,false);
+                showSpinnerDateDialog(tvDateTO, false);
             }
         });
         tvDateFrom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSpinnerDateDialog(tvDateFrom,true);
+                showSpinnerDateDialog(tvDateFrom, true);
             }
         });
 
@@ -953,7 +956,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
             dateFrom = tvDateFrom.getText().toString().equals("") ? "min" : tvDateFrom.getText().toString();
             //dateFrom = dateFrom.equals("min") ? "min" : dateFrom;
 
-            String date =  dateFrom + " to " + dateTo;
+            String date = dateFrom + " to " + dateTo;
             //date = date + dateTo;
 
             bi.edtDateRange.setText(date);
@@ -1131,7 +1134,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
         } else {*/
-            ToastUtils.showToastLong(context, error);
+        ToastUtils.showToastLong(context, error);
 
     }
 
@@ -1228,6 +1231,6 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         // for testing
         // saving status of fragment other wise leads redirect to dash board
         EasyPreference.Builder pref = new EasyPreference.Builder(context);
-        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"leadsFragment").save();
+        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(), "leadsFragment").save();
     }
 }

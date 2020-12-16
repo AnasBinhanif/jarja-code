@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -288,11 +289,20 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                 }
             }
         });
+      /*  atvPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
+        });*/
 
         atvPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GH.getInstance().hideKeyboard(context, (Activity) context);
+                GH.getInstance().hideKeyboard(context, v);
                 atvPlan.setAdapter(arrayAdapterPlanName);
                 atvPlan.showDropDown();
             }
@@ -300,7 +310,8 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         atvPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GH.getInstance().hideKeyboard(context, (Activity) context);
+                GH.getInstance().hideKeyboard(context, v);
+
                 atvPay.setAdapter(arrayAdapterPayName);
                 atvPay.showDropDown();
             }
@@ -308,7 +319,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         atvSell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GH.getInstance().hideKeyboard(context, (Activity) context);
+                GH.getInstance().hideKeyboard(context, v);
                 atvSell.setAdapter(arrayAdapter);
                 atvSell.showDropDown();
             }
@@ -316,7 +327,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         atvApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GH.getInstance().hideKeyboard(context, (Activity) context);
+                GH.getInstance().hideKeyboard(context, v);
                 atvApprove.setAdapter(arrayAdapter);
                 atvApprove.showDropDown();
             }
@@ -324,7 +335,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         atvDeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GH.getInstance().hideKeyboard(context, (Activity) context);
+                GH.getInstance().hideKeyboard(context, v);
                 atvDeal.setAdapter(arrayAdapter);
                 atvDeal.showDropDown();
             }
@@ -547,6 +558,11 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         }*/
 
         return true;
+    }
+
+    private void hideSoftKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void clearData() {

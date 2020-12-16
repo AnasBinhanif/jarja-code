@@ -354,6 +354,22 @@ public class GH {
 
     }
 
+    public void hideKeyboard(Context context,View view) {
+
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+    }
+
+    public void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
     public void discardChangesDialog(Context context) {
 
         AlertDialog alertDialog1;

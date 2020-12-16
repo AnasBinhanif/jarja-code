@@ -177,7 +177,7 @@ public class AddOpenHousesActivity extends BaseActivity implements View.OnClickL
         openHouseStartDate = openHouse.getOpenHouseDate();
         openHouseEndDate = openHouse.getOpenHouseEndDate();
 
-        if (openHouse.getImgURL() != null && !openHouse.equals("")) {
+        if (openHouse.getImgURL() != null && !openHouse.getImgURL().equals("")) {
             bi.tvRemovePictures.setVisibility(View.VISIBLE);
             bi.tvRemovePictures.setText("Image uploaded");
             bi.tvSelectPictures.setVisibility(View.GONE);

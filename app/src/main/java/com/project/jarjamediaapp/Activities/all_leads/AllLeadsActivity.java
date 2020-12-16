@@ -346,7 +346,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     private void populateListData(ArrayList<GetAllLeads.LeadsList> leadsList) {
 
         try {
-            GH.getInstance().hideKeyboard(context, AllLeadsActivity.this);
+        //    GH.getInstance().hideKeyboard(context, AllLeadsActivity.this);
             if (leadsList != null && leadsList.size() != 0) {
                 //  if (page == 0) {
                 linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);

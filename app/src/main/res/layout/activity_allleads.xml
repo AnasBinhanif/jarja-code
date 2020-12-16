@@ -23,7 +23,7 @@
             android:drawablePadding="10dp"
             android:gravity="center|left"
             android:hint="@string/search"
-            android:imeOptions="actionSearch"
+            android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="textNoSuggestions|textVisiblePassword"
             android:paddingStart="12dp" />

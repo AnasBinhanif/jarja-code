@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/ep_toolbar"
-            app:mcv_selectionColor="@android:color/holo_purple"
+            app:mcv_selectionColor="@android:color/darker_gray"
             app:mcv_showOtherDates="all">
 
         </com.prolificinteractive.materialcalendarview.MaterialCalendarView>

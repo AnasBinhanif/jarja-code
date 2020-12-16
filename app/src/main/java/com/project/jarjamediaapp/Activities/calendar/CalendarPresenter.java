@@ -75,14 +75,14 @@ public class CalendarPresenter extends BasePresenter<CalendarContract.View> impl
     public void getGmailCalender() {
 
 
-      //  _view.showProgressBar();
+        _view.showProgressBar();
         _gmailCalenderCall = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getGmailCalender(GH.getInstance().getAuthorization());
         _gmailCalenderCall.enqueue(new Callback<GmailCalender>() {
             @Override
             public void onResponse(Call<GmailCalender> call, Response<GmailCalender> response) {
 
 
-             //   _view.hideProgressBar();
+                _view.hideProgressBar();
                 if (response.isSuccessful()) {
 
                     if (response.body().getStatus().equals("Success")){

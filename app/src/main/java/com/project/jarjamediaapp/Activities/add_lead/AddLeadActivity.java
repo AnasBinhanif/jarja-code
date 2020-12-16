@@ -3,14 +3,17 @@ package com.project.jarjamediaapp.Activities.add_lead;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
 import com.abdeveloper.library.MultiSelectDialog;
@@ -31,6 +34,7 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.Methods;
+import com.project.jarjamediaapp.Utilities.TextWatcherCustom;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivityAddLeadBinding;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
@@ -88,6 +92,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     boolean mFormatting; // this is a flag which prevents the  stack overflow.
     int mAfter;
     TextWatcher textWatcher;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -318,7 +323,10 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+
                     isEdited = true;
+
+
                 }
 
                 @Override
@@ -348,8 +356,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             bi.chkAnnivNotify.setOnClickListener(this);
             bi.chkBdayNotify.setOnClickListener(this);
 
-        }
-        else {
+
+        } else {
 
             View child = getLayoutInflater().inflate(R.layout.custom_textview, null);
             TextView textView = child.findViewById(R.id.txtDynamic);
@@ -372,6 +380,7 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         presenter.getAgentNames();
 
     }
+
 
     private void initListeners() {
 
@@ -428,6 +437,28 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         preAprrovedList.add("No");
 
         bi.spnPreApprove.setItems(preAprrovedList);
+    }
+
+    private void removeTextWatchers(TextWatcher textWatcher) {
+        bi.edtFName.removeTextChangedListener(textWatcher);
+        bi.edtLName.removeTextChangedListener(textWatcher);
+        bi.edtSName.removeTextChangedListener(textWatcher);
+        bi.edtCompany.removeTextChangedListener(textWatcher);
+        bi.edtPhone.removeTextChangedListener(textWatcher);
+        bi.edtEmail.removeTextChangedListener(textWatcher);
+        bi.edtBday.removeTextChangedListener(textWatcher);
+        bi.edtSpouseBday.removeTextChangedListener(textWatcher);
+        bi.edtAnniversary.removeTextChangedListener(textWatcher);
+        bi.edtAddress1.removeTextChangedListener(textWatcher);
+        bi.edtAddress2.removeTextChangedListener(textWatcher);
+        bi.edtCity1.removeTextChangedListener(textWatcher);
+        bi.edtCity2.removeTextChangedListener(textWatcher);
+        bi.edtState1.removeTextChangedListener(textWatcher);
+        bi.edtState2.removeTextChangedListener(textWatcher);
+        bi.edtPostalCode1.removeTextChangedListener(textWatcher);
+        bi.edtPostalCode2.removeTextChangedListener(textWatcher);
+        bi.edtCountry.removeTextChangedListener(textWatcher);
+        bi.edtNotes.removeTextChangedListener(textWatcher);
     }
 
     private void showTagsDialog() {
@@ -1024,8 +1055,10 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
         isUpdate = getIntent().getBooleanExtra("isEdit", false);
         GH.getInstance().HideProgressDialog();
-        if (isUpdate)
+        if (isUpdate) {
+            removeTextWatchers(textWatcher);
             initData();
+        }
 
 
     }
@@ -1226,5 +1259,6 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             return false;
         }
     }
+
 
 }

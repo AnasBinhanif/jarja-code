@@ -76,18 +76,18 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
     public void onResume() {
         super.onResume();
 
-        if (easyPreference.getString("saveAndSearch", "").equals("saveData")){
+        if (easyPreference.getString("saveAndSearch", "").equals("saveData")) {
 
-                getSaveLeadsData();
-            }else if(bundle == null){
-                callGetLeadCounts(bundle);
-            }else if(easyPreference.getString("search", "").equals("searchResult")){
+            getSaveLeadsData();
+        } else if (bundle == null) {
+            callGetLeadCounts(bundle);
+        } else if (easyPreference.getString("search", "").equals("searchResult")) {
 
-                callGetLeadCounts(bundle);
-            }else {
+            callGetLeadCounts(bundle);
+        } else {
 
-                bundle = null;
-                callGetLeadCounts(bundle);
+            bundle = null;
+            callGetLeadCounts(bundle);
         }
 
     }
@@ -97,15 +97,15 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
         initViews();
 
-        if (easyPreference.getString("saveAndSearch", "").equals("saveData")){
+        if (easyPreference.getString("saveAndSearch", "").equals("saveData")) {
 
             getSaveLeadsData();
-        }else if(bundle == null){
+        } else if (bundle == null) {
             callGetLeadCounts(bundle);
-        }else if(easyPreference.getString("search", "").equals("searchResult")){
+        } else if (easyPreference.getString("search", "").equals("searchResult")) {
 
             callGetLeadCounts(bundle);
-        }else {
+        } else {
 
             bundle = null;
             callGetLeadCounts(bundle);
@@ -334,17 +334,16 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         }
     }
 
-    public void getSaveLeadsData(){
+    public void getSaveLeadsData() {
 
 
-
-        String leadID =  easyPreference.getString("leadID", "");
-        String agentID =  easyPreference.getString("agentID", "");
-        String leadTypeID =   easyPreference.getString("leadTypeID", "");
+        String leadID = easyPreference.getString("leadID", "");
+        String agentID = easyPreference.getString("agentID", "");
+        String leadTypeID = easyPreference.getString("leadTypeID", "");
         String leadScoreMax = easyPreference.getString("leadScoreMax", "");
         String tagsID = easyPreference.getString("tagsID", "");
-        String priceMin =  easyPreference.getString("priceMin", "");
-        String priceMax =  easyPreference.getString("priceMax", "");
+        String priceMin = easyPreference.getString("priceMin", "");
+        String priceMax = easyPreference.getString("priceMax", "");
         String notes = easyPreference.getString("notes", "");
         String dripCompaignID = easyPreference.getString("dripCompaignID", "");
         String lastTouch = easyPreference.getString("lastTouch", "");
@@ -352,7 +351,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         String pipelineID = easyPreference.getString("pipelineID1", "");
         String sourceID = easyPreference.getString("sourceID", "");
         String fromDate = easyPreference.getString("fromDate", "");
-        String toDate =  easyPreference.getString("toDate", "");
+        String toDate = easyPreference.getString("toDate", "");
 
 
         Intent intent = new Intent();

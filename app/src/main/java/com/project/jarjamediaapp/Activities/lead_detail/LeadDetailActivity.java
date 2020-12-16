@@ -186,14 +186,15 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         List<GetLeadDetails> leadsList = new ArrayList<>();
 
         leadsList.add(new GetLeadDetails("Edit Lead"));
-        leadsList.add(new GetLeadDetails("Follow Ups"));
+        leadsList.add(new GetLeadDetails("Tags"));
         leadsList.add(new GetLeadDetails("Social Profiles"));
         leadsList.add(new GetLeadDetails("Listing Info"));
         leadsList.add(new GetLeadDetails("Buying Info"));
-        leadsList.add(new GetLeadDetails("Tags"));
         leadsList.add(new GetLeadDetails("Appointments"));
-        leadsList.add(new GetLeadDetails("Notes"));
+        leadsList.add(new GetLeadDetails("Follow Ups"));
         leadsList.add(new GetLeadDetails("Tasks"));
+        leadsList.add(new GetLeadDetails("Notes"));
+
 
         bi.recyclerLeadDetails.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         bi.recyclerLeadDetails.setItemAnimator(new DefaultItemAnimator());
@@ -222,10 +223,11 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     context.startActivity(intent);
                     break;
                 case 1:
-                    Map<String, String> followMap = new HashMap<>();
-                    followMap.put("leadID", leadID);
-                    switchActivityWithIntentString(FollowupsActivity.class, (HashMap<String, String>) followMap);
+                    Map<String, String> tagMap = new HashMap<>();
+                    tagMap.put("leadID", leadID);
+                    switchActivityWithIntentString(TagsActivity.class, (HashMap<String, String>) tagMap);
                     break;
+
                 case 2:
                     Map<String, String> socialMap = new HashMap<>();
                     socialMap.put("leadID", leadID);
@@ -244,26 +246,30 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     switchActivityWithIntentString(ListingInfoActivity.class, (HashMap<String, String>) map1);
                     break;
                 case 5:
-                    Map<String, String> tagMap = new HashMap<>();
-                    tagMap.put("leadID", leadID);
-                    switchActivityWithIntentString(TagsActivity.class, (HashMap<String, String>) tagMap);
-                    break;
-                case 6:
                     Map<String, String> appointMap = new HashMap<>();
                     appointMap.put("leadID", leadID);
                     appointMap.put("leadName", getLeadListData.firstName + " " + getLeadListData.lastName);
                     switchActivityWithIntentString(AppointmentActivity.class, (HashMap<String, String>) appointMap);
                     break;
-                case 7:
-                    Map<String, String> noteMap = new HashMap<>();
-                    noteMap.put("leadID", leadID);
-                    switchActivityWithIntentString(NotesActivity.class, (HashMap) noteMap);
+                case 6:
+
+                    Map<String, String> followMap = new HashMap<>();
+                    followMap.put("leadID", leadID);
+                    switchActivityWithIntentString(FollowupsActivity.class, (HashMap<String, String>) followMap);
                     break;
-                case 8:
+
+                case 7:
                     Map<String, String> taskMap = new HashMap<>();
                     taskMap.put("leadID", leadID);
                     taskMap.put("leadName", getLeadListData.firstName + " " + getLeadListData.lastName);
                     switchActivityWithIntentString(TasksActivity.class, (HashMap<String, String>) taskMap);
+                    break;
+
+
+                case 8:
+                    Map<String, String> noteMap = new HashMap<>();
+                    noteMap.put("leadID", leadID);
+                    switchActivityWithIntentString(NotesActivity.class, (HashMap) noteMap);
                     break;
 
             }
@@ -475,7 +481,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     Bundle args = new Bundle();
                     args.putSerializable("ARRAYLIST", (Serializable) transactionOneListModel);
                     intentT1.putExtra("BUNDLE", args);
-                    intentT1.putExtra("agents",agentList);
+                    intentT1.putExtra("agents", agentList);
 
 
                     startActivity(intentT1);
@@ -496,7 +502,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     Bundle args = new Bundle();
                     args.putSerializable("ARRAYLIST", (Serializable) transactionTwoListModel);
                     intentT2.putExtra("BUNDLE", args);
-                    intentT2.putExtra("agents",agentList);
+                    intentT2.putExtra("agents", agentList);
                     startActivity(intentT2);
                 }
 

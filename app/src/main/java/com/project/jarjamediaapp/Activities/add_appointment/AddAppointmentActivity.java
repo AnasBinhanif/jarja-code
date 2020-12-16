@@ -412,8 +412,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(modelData.getDatedTo()) : "");
 
             //adding these lines to append time with start and end date textview
-            bi.tvStartDate.append(" " + bi.tvStartTime.getText());
-            bi.tvEndDate.append(" " + bi.tvEndTime.getText());
+           /* bi.tvStartDate.append(" " + bi.tvStartTime.getText());
+            bi.tvEndDate.append(" " + bi.tvEndTime.getText());*/
 
 
         }
@@ -489,8 +489,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(modelData.getDatedTo()) : "");
 
         //adding these lines to append time with start and end date textview
-        bi.tvStartDate.append(" " + bi.tvStartTime.getText());
-        bi.tvEndDate.append(" " + bi.tvEndTime.getText());
+       /* bi.tvStartDate.append(" " + bi.tvStartTime.getText());
+        bi.tvEndDate.append(" " + bi.tvEndTime.getText());*/
 
         if (arrayListReminderValue != null && arrayListReminderValue.size() > 0) {
             reminder = String.valueOf(modelData.getInterval());
@@ -563,8 +563,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
         bi.tvEndTime.setText(GH.getInstance().formatTime(modelData.getDatedTo()) != null ? GH.getInstance().formatTime(modelData.getDatedTo()) : "");
 
         //adding these lines to append time with start and end date textview
-        bi.tvStartDate.append(" " + bi.tvStartTime.getText());
-        bi.tvEndDate.append(" " + bi.tvEndTime.getText());
+        /*bi.tvStartDate.append(" " + bi.tvStartTime.getText());
+        bi.tvEndDate.append(" " + bi.tvEndTime.getText());*/
 
         if (arrayListReminderValue != null && arrayListReminderValue.size() > 0) {
             reminder = String.valueOf(modelData.getInterval());
@@ -1016,13 +1016,13 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                     startTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
                     time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
                     //adding this line to append time to date field
-                    bi.tvStartDate.append(" " + time);
+//                    bi.tvStartDate.append(" " + time);
                 } else {
                     endTime = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "HH:mm:ss", "HH:mm:ss");
                     time = GH.getInstance().formatter(selectedHour + ":" + selectedMinute + ":00", "hh:mm a", "HH:mm:ss");
 
                     //adding this line to append time to date field
-                    bi.tvEndDate.append(" " + time);
+//                    bi.tvEndDate.append(" " + time);
                 }
                 textView.setText(time);
 
@@ -1281,10 +1281,19 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 
             if (date2.compareTo(date1) < 0) {
-                ToastUtils.showToast(context, "Start date cannot be less than end date");
+//                ToastUtils.showToast(context, "Start date cannot be less than end date");
+                ToastUtils.showToast(context, "End date cannot be less than start date");
                 bi.tvEndDate.requestFocus();
                 return false;
             }
+//            if(date1.after(date2)){
+//                ToastUtils.showToast(context, "En date cannot be less than end date");
+//                bi.tvEndDate.requestFocus();
+//                return false;
+//            }
+
+
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -1545,14 +1554,14 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             bi.tvStartDate.setText(dateFormatter2.format(newCalendar.getTime()));
 
             //adding below line to open time picker as user press ok on date picker
-            bi.tvStartTime.performClick();
+//            bi.tvStartTime.performClick();
 
         } else {
             endDate = dateFormatter.format(newCalendar.getTime());
             bi.tvEndDate.setText(dateFormatter2.format(newCalendar.getTime()));
 
             //adding below line to open time picker as user press ok on date picker
-            bi.tvEndTime.performClick();
+//            bi.tvEndTime.performClick();
 
         }
     }
