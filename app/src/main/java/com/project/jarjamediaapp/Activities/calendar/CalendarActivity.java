@@ -101,7 +101,9 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                 monthSelected = (date.getMonth() + 1);
                 yearSelected = date.getYear();
                 String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
-                String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
+//                String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
+                String year = GH.getInstance().formatter(String.valueOf(yearSelected), "yyyy", "yyyy");
+
                 currentDateList.clear();
                 if (dataArrayList != null) {
                     dataArrayList.clear();

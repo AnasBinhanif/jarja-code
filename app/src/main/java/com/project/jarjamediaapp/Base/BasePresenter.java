@@ -23,6 +23,7 @@ public abstract class BasePresenter<V> {
     @CallSuper
     private void attachView(@NonNull V view) {
         _view = view;
+
     }
 
     /**

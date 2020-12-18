@@ -152,13 +152,15 @@ public class AppointmentNotificationRecyclerAdapter extends RecyclerView.Adapter
             @Override
             public void onResponse(Call<GetAppointmentByIDModel> call, Response<GetAppointmentByIDModel> response) {
 
+                GH.getInstance().HideProgressDialog();
+
                 if (response.isSuccessful()) {
 
                     GetAppointmentByIDModel getAppointmentsModel = response.body();
 
                     if (getAppointmentsModel.getStatus().equals("Success")) {
 
-                        GH.getInstance().HideProgressDialog();
+//                        GH.getInstance().HideProgressDialog();
 
                         //****added by akshay to sort list on basis of seen or unseen
                         /*Collections.sort(data, new Comparator<AppointmentNotificationModel.FollowUpsList>() {
