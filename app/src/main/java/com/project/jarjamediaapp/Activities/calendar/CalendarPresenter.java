@@ -28,7 +28,7 @@ public class CalendarPresenter extends BasePresenter<CalendarContract.View> impl
 
     @Override
     public void getCalendarEvents(String agentIdFromLogin, String month, String year) {
-
+        Log.i("calenderAgentId", agentIdFromLogin + "month" + month + "year" + year);
         _view.showProgressBar();
         _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getCalendarEvents(GH.getInstance().getAuthorization(), agentIdFromLogin, "NULL", month, year);
         _call.enqueue(new Callback<CalendarModel>() {

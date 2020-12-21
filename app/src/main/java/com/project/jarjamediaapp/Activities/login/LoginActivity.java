@@ -10,7 +10,10 @@ import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
 
+import com.bumptech.glide.load.HttpException;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.project.jarjamediaapp.Activities.HomeActivity;
 import com.project.jarjamediaapp.Activities.forgot_password.ForgotPasswordActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
@@ -19,6 +22,7 @@ import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.CallbackInterface;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
+import com.project.jarjamediaapp.Networking.FailureException;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
 import com.project.jarjamediaapp.Networking.RetrofitCallback;
@@ -31,6 +35,12 @@ import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.Utilities.Validator;
 import com.project.jarjamediaapp.databinding.ActivityLoginBinding;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,9 +60,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         presenter = new LoginPresenter(this);
         presenter.initScreen();
 
-        if(GH.getInstance().getNotificationAllowStatus().equals("false")){
+        if (GH.getInstance().getNotificationAllowStatus().equals("false")) {
 
-                notificationPermission();
+            notificationPermission();
 
 
         }
@@ -60,7 +70,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         // for testing
         // save o start acivity other wise application crash due to null values
         EasyPreference.Builder pref = new EasyPreference.Builder(context);
-        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"").save();
+        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(), "").save();
 
     }
 
@@ -85,55 +95,67 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         Log.d("token", response.accessToken + "");
 
                         easyPreference.addString(GH.KEYS.AUTHORIZATION.name(), "bearer" + " " + response.accessToken).save();
-                        userAuthenticate(FirebaseInstanceId.getInstance().getToken(),"FCM","bearer" + " " + response.accessToken);
+                        userAuthenticate(FirebaseInstanceId.getInstance().getToken(), "FCM", "bearer" + " " + response.accessToken);
                     }
 
                     @Override
                     public void onError(Throwable throwable) {
                         Log.d("Response", "onError: " + throwable.toString());
                         GH.getInstance().HideProgressDialog();
-                        ToastUtils.showToastLong(context, "Invalid Username or Password");
+//                        ToastUtils.showToastLong(context, "Invalid Username or Password");
+                        try {
+                            FailureException failureException = ((FailureException) throwable);
+                            ResponseBody message = failureException.getmResponseBody().errorBody();
+                            String data = message.string();
+                            JSONObject jObjError = new JSONObject(data);
+                            ToastUtils.showToastLong(context, jObjError.getString("error_description"));
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                     }
+
                 }));
     }
 
-    private void userAuthenticate(String deviceToken, String network,String token) {
+    private void userAuthenticate(String deviceToken, String network, String token) {
 
-        Call<BaseResponse> _call=NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Authanticate_UserDevice(token,deviceToken,network);
-                _call.enqueue(new Callback<BaseResponse>() {
-                    @Override
-                    public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+        Call<BaseResponse> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Authanticate_UserDevice(token, deviceToken, network);
+        _call.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
 
-                       hideProgressBar();
-                        if (response.isSuccessful()) {
+                hideProgressBar();
+                if (response.isSuccessful()) {
 
-                            BaseResponse getAppointmentsModel = response.body();
-                            if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
+                    BaseResponse getAppointmentsModel = response.body();
+                    if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
 
-                                // when successfully authenticate then store access token
-                                easyPreference.addString(GH.KEYS.AUTHORIZATION.name(),token).save();
-                                easyPreference.addBoolean(GH.KEYS.NAVIGATIONSTATUS.name(),true).save();
-                                switchActivity(HomeActivity.class);
-                                finish();
+                        // when successfully authenticate then store access token
+                        easyPreference.addString(GH.KEYS.AUTHORIZATION.name(), token).save();
+                        easyPreference.addBoolean(GH.KEYS.NAVIGATIONSTATUS.name(), true).save();
+                        switchActivity(HomeActivity.class);
+                        finish();
 
-                            } else {
+                    } else {
 
-                                updateUIonFalse(getAppointmentsModel.message);
+                        updateUIonFalse(getAppointmentsModel.message);
 
-                            }
-                        } else {
-
-                            ApiError error = ErrorUtils.parseError(response);
-                            updateUIonError(error);
-                        }
                     }
+                } else {
 
-                    @Override
-                    public void onFailure(Call<BaseResponse> call, Throwable t) {
-                       hideProgressBar();
-                       updateUIonFailure();
-                    }
-                });
+                    ApiError error = ErrorUtils.parseError(response);
+                    updateUIonError(error);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                hideProgressBar();
+                updateUIonFailure();
+            }
+        });
     }
 
     @Override
@@ -242,7 +264,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             public void onClick(DialogInterface dialog, int which) {
 
                 EasyPreference.Builder pref = new EasyPreference.Builder(context);
-                pref.addString(GH.KEYS.ISNOTIFICATIONALLOW.name(),"true").save();
+                pref.addString(GH.KEYS.ISNOTIFICATIONALLOW.name(), "true").save();
 
                 alertDialog1.dismiss();
                 openSettingForNotification();
@@ -256,7 +278,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             public void onClick(DialogInterface dialog, int which) {
 
                 EasyPreference.Builder pref = new EasyPreference.Builder(context);
-                pref.addString(GH.KEYS.ISNOTIFICATIONALLOW.name(),"true").save();
+                pref.addString(GH.KEYS.ISNOTIFICATIONALLOW.name(), "true").save();
                 alertDialog1.dismiss();
                 openSettingForNotification();
 
@@ -267,7 +289,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         alertDialog1.show();
     }
 
-    public void openSettingForNotification(){
+    public void openSettingForNotification() {
 
         Intent intent = new Intent();
         intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");

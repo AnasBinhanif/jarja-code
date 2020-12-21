@@ -18,8 +18,7 @@ public class RetrofitCallback<T> implements Callback<T> {
     public void onResponse(Call<T> call, Response<T> response) {
         if (response.code() >= 400 && response.code() < 599) {
             callbackInterface.onError(new FailureException(response.code(), response.message(), response));
-        }
-        else {
+        } else {
             callbackInterface.onSuccess(response.body());
         }
     }

@@ -21,11 +21,11 @@ public class FailureException extends Exception {
     }
 
     public Response getmResponseBody() {
-        return mResponseBody;
+        return mResponse;
     }
 
     public void setmResponseBody(Response mResponseBody) {
-        this.mResponseBody = mResponseBody;
+        this.mResponse = mResponseBody;
     }
 
     public String getmMessage() {
@@ -37,7 +37,8 @@ public class FailureException extends Exception {
     }
 
     private int mCode;
-    private Response mResponseBody;
+//    private Response mResponseBody;
+    private Response mResponse;
     private String mMessage;
 
 
@@ -45,22 +46,22 @@ public class FailureException extends Exception {
         super(message);
         mCode = code;
         mMessage = message;
-        mResponseBody = responseBody;
+        mResponse = responseBody;
     }
 
     public <T> T getErrorBodyAs(Class<T> type) throws IOException {
-        if (mResponseBody == null || mResponseBody.errorBody() == null) {
+        if (mResponse == null || mResponse.errorBody() == null) {
             return null;
         }
         Converter<ResponseBody, T> converter = NetworkController.getInstance().getRetrofit().responseBodyConverter(type, new Annotation[0]);
-        return converter.convert(mResponseBody.errorBody());
+        return converter.convert(mResponse.errorBody());
     }
 
     public BaseResponse getError() {
         Converter<ResponseBody, BaseResponse> converter = NetworkController.getInstance().getRetrofit().responseBodyConverter(BaseResponse.class, new Annotation[0]);
         BaseResponse error = null;
         try {
-            error = converter.convert(mResponseBody.errorBody());
+            error = converter.convert(mResponse.errorBody());
             return error;
         } catch (IOException e) {
             e.printStackTrace();

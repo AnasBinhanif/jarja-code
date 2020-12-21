@@ -144,9 +144,10 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     private void showMonthYearPicker() {
 
         String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
-        String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
-        Log.i("calenderAgentId", GH.getInstance().getCalendarAgentId() + "month" + month + "year" + year);
-         presenter.getCalendarEvents(GH.getInstance().getCalendarAgentId(), month, year);
+//        String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
+        String year = GH.getInstance().formatter(String.valueOf(yearSelected), "yyyy", "yyyy");
+//        Log.i("calenderAgentId", GH.getInstance().getCalendarAgentId() + "month" + month + "year" + year);
+        presenter.getCalendarEvents(GH.getInstance().getCalendarAgentId(), month, year);
 
     }
 
@@ -330,6 +331,8 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
                         }
                     }
+
+
                  /*   if (date.equals(String.valueOf(daySelectionWhenMonthChange))){
 
                         currentDateList.add(response.getData().get(i));
