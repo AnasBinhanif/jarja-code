@@ -3,7 +3,6 @@ package com.project.jarjamediaapp.Activities.calendar;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,8 +26,6 @@ import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.EventDecorator;
 import com.project.jarjamediaapp.Utilities.GH;
-import com.project.jarjamediaapp.Utilities.ToastUtils;
-import com.project.jarjamediaapp.databinding.ActivityCalendarBinding;
 import com.project.jarjamediaapp.databinding.ActivityCalendarNewBinding;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -53,14 +50,15 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     Context context = CalendarActivity.this;
     CalendarPresenter presenter;
     Calendar calendar;
-    int yearSelected, monthSelected, daySelected;
+    int yearSelected, MonthVisible, currentDate;
     SwipeCalendarAppointmentRecyclerAdapter swipeCalendarAppointmentRecyclerAdapter;
     List<CalendarModel.Data> dataList;
     List<CalendarModel.Data> currentDateList;
     ArrayList<Integer> markedDates;
     ArrayList<CalendarLabel> markedDatesFormatter;
     ArrayList<CalendarModel.Data> dataArrayList;
-    int daySelectionWhenMonthChange = 0;
+    int selectedDate = 0;
+    int monthOfSelectedDate = 0;
 
 
     @Override
@@ -90,17 +88,21 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         //Set default values
         calendar = Calendar.getInstance();
         yearSelected = calendar.get(Calendar.YEAR);
-        monthSelected = (calendar.get(Calendar.MONTH) + 1);
-        daySelected = calendar.get(Calendar.DAY_OF_MONTH);
+        MonthVisible = (calendar.get(Calendar.MONTH) + 1);
+        currentDate = calendar.get(Calendar.DAY_OF_MONTH);
 
-        bi.calendarView.setSelectedDate(CalendarDay.from(yearSelected, (monthSelected - 1), daySelected));
+        bi.calendarView.setSelectedDate(CalendarDay.from(yearSelected, (MonthVisible - 1), currentDate));
         bi.calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
 
-                monthSelected = (date.getMonth() + 1);
+                //bi.calendarView.clearSelection();
+                //adding this line to clear selection when user changes month -- Akshay
+
+
+                MonthVisible = (date.getMonth() + 1);
                 yearSelected = date.getYear();
-                String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
+                String month = GH.getInstance().formatter(String.valueOf(MonthVisible), "m", "mm");
 //                String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
                 String year = GH.getInstance().formatter(String.valueOf(yearSelected), "yyyy", "yyyy");
 
@@ -117,7 +119,8 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
-                daySelectionWhenMonthChange = date.getDay();
+                selectedDate = date.getDay();
+                monthOfSelectedDate = date.getMonth() + 1;
                 filterDateData(date.getDay(), date.getMonth(), date.getYear());
 
             }
@@ -143,7 +146,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
     private void showMonthYearPicker() {
 
-        String month = GH.getInstance().formatter(String.valueOf(monthSelected), "m", "mm");
+        String month = GH.getInstance().formatter(String.valueOf(MonthVisible), "m", "mm");
 //        String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
         String year = GH.getInstance().formatter(String.valueOf(yearSelected), "yyyy", "yyyy");
 //        Log.i("calenderAgentId", GH.getInstance().getCalendarAgentId() + "month" + month + "year" + year);
@@ -299,6 +302,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void updateUIList(CalendarModel response) {
 
+
         dataList = new ArrayList<>();
         if (response.data.size() > 0) {
 
@@ -313,10 +317,11 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                     String date = GH.getInstance().formatter(response.getData().get(i).getStart(), "d", "yyyy-MM-dd'T'HH:mm:ss");
 
                     calendar = Calendar.getInstance();
-                    daySelected = calendar.get(Calendar.DAY_OF_MONTH);
+                    currentDate = calendar.get(Calendar.DAY_OF_MONTH);
+                    int currentMonth = calendar.get((Calendar.MONTH)) + 1;
+                    String month = GH.getInstance().formatter(response.getData().get(i).getStart(), "M", "yyyy-MM-dd'T'HH:mm:ss");
 
-
-                    if (daySelectionWhenMonthChange != 0) {
+                  /*  if (daySelectionWhenMonthChange != 0) {
 
                         if (date.equals(String.valueOf(daySelectionWhenMonthChange))) {
 
@@ -330,8 +335,35 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                             currentDateList.add(response.getData().get(i));
 
                         }
+                    }*/
+                   /* if (date.equals(String.valueOf(daySelected)) && month.equals(String.valueOf(currentMonth))) {
+                        currentDateList.add(response.getData().get(i));
+
+                    }*/
+
+
+                    if (selectedDate != 0 && monthOfSelectedDate != 0) {
+                        if (date.equals(String.valueOf(selectedDate)) && month.equals(String.valueOf(monthOfSelectedDate))) {
+
+                            currentDateList.add(response.getData().get(i));
+
+                        } else if (MonthVisible == currentMonth && MonthVisible != monthOfSelectedDate) {
+                            if (date.equals(String.valueOf(currentDate)) && month.equals(String.valueOf(currentMonth))) {
+
+                                currentDateList.add(response.getData().get(i));
+
+                            }
+                        }
+                    } else {
+
+                        if (date.equals(String.valueOf(currentDate)) && month.equals(String.valueOf(currentMonth))) {
+
+                            currentDateList.add(response.getData().get(i));
+
+                        }
                     }
 
+///
 
                  /*   if (date.equals(String.valueOf(daySelectionWhenMonthChange))){
 
@@ -425,7 +457,7 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
         Calendar calendar = Calendar.getInstance();
         for (int i = 0; i < markedDatesFormatter.size(); i++) {
 
-            calendar.set(yearSelected, (monthSelected - 1), markedDatesFormatter.get(i).getDateFormat());
+            calendar.set(yearSelected, (MonthVisible - 1), markedDatesFormatter.get(i).getDateFormat());
             CalendarDay calendarDay = CalendarDay.from(calendar);
             list.add(calendarDay);
         }
