@@ -105,12 +105,16 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
                 String month = GH.getInstance().formatter(String.valueOf(MonthVisible), "m", "mm");
 //                String year = GH.getInstance().formatter(String.valueOf(yearSelected), "YYYY", "yyyy");
                 String year = GH.getInstance().formatter(String.valueOf(yearSelected), "yyyy", "yyyy");
-
-                currentDateList.clear();
+                if (currentDateList != null){
+                    currentDateList.clear();
+                    swipeCalendarAppointmentRecyclerAdapter.notifyDataSetChanged();
+                }
+//                currentDateList.clear();
                 if (dataArrayList != null) {
                     dataArrayList.clear();
+                    swipeCalendarAppointmentRecyclerAdapter.notifyDataSetChanged();
                 }
-                swipeCalendarAppointmentRecyclerAdapter.notifyDataSetChanged();
+//                swipeCalendarAppointmentRecyclerAdapter.notifyDataSetChanged();
                 presenter.getCalendarEvents(GH.getInstance().getCalendarAgentId(), month, year);
 
             }
@@ -301,7 +305,6 @@ public class CalendarActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void updateUIList(CalendarModel response) {
-
 
         dataList = new ArrayList<>();
         if (response.data.size() > 0) {

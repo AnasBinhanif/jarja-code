@@ -30,6 +30,7 @@ import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
 import com.airbnb.paris.Paris;
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
 import com.project.jarjamediaapp.Activities.appointments.AppointmentActivity;
 import com.project.jarjamediaapp.Activities.followups.FollowupsActivity;
@@ -448,19 +449,26 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
 
             case R.id.imgEmail:
                 if (primaryEmail.equals("") || primaryEmail.equals("null") || primaryEmail == null) {
-                    ToastUtils.showToast(context, "No Primary Email Found");
+//                    ToastUtils.showToast(context, "No Primary Email Found");
+                    Snackbar.make(bi.getRoot(), "No Primary Email Found", 1000).show();
                 } else {
                     presenter.getLeadRecipient(leadID);
                 }
                 break;
 
             case R.id.imgMessage:
-                openMessageComposer(primaryPhoneNumber);
+                if (primaryPhoneNumber == null || primaryPhoneNumber.equals("") || primaryPhoneNumber.equals("null") || primaryPhoneNumber.equals("(000) 000-0000")) {
+                    Snackbar.make(bi.getRoot(), "Phone number does not exist", 1000).show();
+                } else {
+                    openMessageComposer(primaryPhoneNumber);
+                }
                 break;
 
             case R.id.imgCall:
-                if (primaryPhoneNumber == null || primaryPhoneNumber.equals("") || primaryPhoneNumber.equals("null")) {
-                    ToastUtils.showToast(context, "No Primary Phone Found");
+                if (primaryPhoneNumber == null || primaryPhoneNumber.equals("") || primaryPhoneNumber.equals("null") || primaryPhoneNumber.equals("(000) 000-0000")) {
+//                    ToastUtils.showToast(context, "No Primary Phone Found");
+//                    ToastUtils.showToast(context, "Phone number does not exist");
+                    Snackbar.make(bi.getRoot(), "Phone number does not exist", 1000).show();
                 } else {
                     presenter.getCallerId(leadID);
                 }
