@@ -2,14 +2,21 @@ package com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Models.GetLeadCounts;
+import com.project.jarjamediaapp.Models.GetLeadSearchFiltersModel;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.Utilities.GH;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -18,6 +25,7 @@ import retrofit2.Response;
 public class FindLeadsPresenter extends BasePresenter<FindLeadsContract.View> implements FindLeadsContract.Actions {
 
     Call<GetLeadCounts> _call;
+    Call<ResponseBody> _callResponseBody;
 
     public FindLeadsPresenter(FindLeadsContract.View view) {
         super(view);
@@ -66,9 +74,9 @@ public class FindLeadsPresenter extends BasePresenter<FindLeadsContract.View> im
 
                     GetLeadCounts getLeadCountsModel = response.body();
 
-                    Log.i("GetLeadCounts",""+ response.body().data);
-                    Log.i("countstatus",""+ response.body().status);
-                    Log.i("countmessage",""+ response.body().message);
+                    Log.i("GetLeadCounts", "" + response.body().data);
+                    Log.i("countstatus", "" + response.body().status);
+                    Log.i("countmessage", "" + response.body().message);
                     if (getLeadCountsModel.status.equals("Success")) {
 
                         _view.updateUI(getLeadCountsModel);
@@ -91,6 +99,43 @@ public class FindLeadsPresenter extends BasePresenter<FindLeadsContract.View> im
                 _view.updateUIonFailure();
             }
         });
+
+    }
+
+    @Override
+    public void getLeadSearchFilters() {
+        _callResponseBody = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).getLeadSearchFilters(GH.getInstance().getAuthorization());
+        _view.showProgressBar();
+        _callResponseBody.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                _view.hideProgressBar();
+                if (response.isSuccessful()) {
+                    Gson gson = new Gson();
+                    GetLeadSearchFiltersModel getLeadSearchFiltersModel = null;
+                    try {
+                        getLeadSearchFiltersModel = gson.fromJson(response.body().string(), GetLeadSearchFiltersModel.class);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("onResponse: ", getLeadSearchFiltersModel.toString());
+                    _view.updateUIWithSearchFiltersResponse(getLeadSearchFiltersModel);
+                } else {
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
+
 
     }
 }

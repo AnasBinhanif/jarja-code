@@ -14,8 +14,10 @@ import com.project.jarjamediaapp.Models.GetLeadTypeList;
 import com.project.jarjamediaapp.Models.GetPipeline;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
+import com.project.jarjamediaapp.Networking.CallbackInterface;
 import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
+import com.project.jarjamediaapp.Networking.RetrofitCallback;
 import com.project.jarjamediaapp.Utilities.GH;
 
 import retrofit2.Call;

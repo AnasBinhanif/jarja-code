@@ -11,6 +11,7 @@ import android.view.View;
 import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.load.HttpException;
+import com.google.android.gms.common.api.Api;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -52,6 +53,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     LoginPresenter presenter;
     String email = "", password = "";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +73,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         // save o start acivity other wise application crash due to null values
         EasyPreference.Builder pref = new EasyPreference.Builder(context);
         pref.addString(GH.KEYS.FRAGMENTSTATUS.name(), "").save();
+
+        //to reset the count
+        ErrorUtils.count = 0;
 
     }
 
@@ -100,6 +105,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                     @Override
                     public void onError(Throwable throwable) {
+
                         Log.d("Response", "onError: " + throwable.toString());
                         GH.getInstance().HideProgressDialog();
 //                        ToastUtils.showToastLong(context, "Invalid Username or Password");

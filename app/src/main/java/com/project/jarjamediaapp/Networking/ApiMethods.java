@@ -102,12 +102,13 @@ public interface ApiMethods {
     @GET("User/Authanticate_UserDevice")
     Call<BaseResponse> Authanticate_UserDevice(@Header("Authorization") String authorization,
                                                @Query("DeviceToken") String deviceToken,
-                                                 @Query("network_protocol") String network_protocol);
+                                               @Query("network_protocol") String network_protocol);
 
     @GET("User/UnAuthanticate_UserDevice")
     Call<BaseResponse> UnAuthanticate_UserDevice(@Header("Authorization") String authorization,
-                                               @Query("DeviceToken") String deviceToken,
-                                               @Query("network_protocol") String network_protocol);
+                                                 @Query("DeviceToken") String deviceToken,
+                                                 @Query("network_protocol") String network_protocol);
+
     @FormUrlEncoded
     @POST("Lead/UpdateProfileInfo")
     Call<BaseResponse> UpdateProfileInfo(@Header("Authorization") String authorization,
@@ -143,6 +144,7 @@ public interface ApiMethods {
     @GET("Appointment/GetTodayAppointment")
     Call<GetAppointmentsModel> GetTodayAppointment(@Header("Authorization") String authorization,
                                                    @Query("pageNumber") int page);
+
     @GET("Appointment/GetAppointmentByID")
     Call<GetAppointmentByIDModel> GetAppointmentByID(@Header("Authorization") String authorization,
                                                      @Query("EncryptedAppointmentID") String appointmentID);
@@ -171,7 +173,7 @@ public interface ApiMethods {
 
     @GET("FollowUp/GetFollowUpDetails_New")
     Call<ViewFollowUpModel> GetFollowUpDetails(@Header("Authorization") String authorization,
-                                               @Query("id") String dripDetailedId,@Query("reminderId") String reminderId);
+                                               @Query("id") String dripDetailedId, @Query("reminderId") String reminderId);
 
     @FormUrlEncoded
     @POST("FollowUp/MarkComplete")
@@ -275,7 +277,7 @@ public interface ApiMethods {
                                          @Field("typeIndex") boolean typeIndex);
 
     @POST("Lead/SetPrimaryAgent")
-    Call<BaseResponse> setPrimaryAgent(@Header("Authorization") String header,@Query("LeadStringID") String encryptedLeadId,@Query("AgentStringID") String encryptedAgentId);
+    Call<BaseResponse> setPrimaryAgent(@Header("Authorization") String header, @Query("LeadStringID") String encryptedLeadId, @Query("AgentStringID") String encryptedAgentId);
 
     @Headers("Content-Type: application/json")
     @POST("Lead/AddPipeLineMark")
@@ -357,8 +359,8 @@ public interface ApiMethods {
 
     @POST("Lead/UpdateUser_Password")
     Call<BaseResponse> UpdatePassword(@Header("Authorization") String authorization,
-                                     @Query("userid") String userID,
-                                     @Query("OldPassword") String oldPassword,
+                                      @Query("userid") String userID,
+                                      @Query("OldPassword") String oldPassword,
                                       @Query("Password") String password);
 
     @FormUrlEncoded
@@ -485,7 +487,7 @@ public interface ApiMethods {
     @Headers("Content-Type: application/json")
     @POST("Lead/GetAllLead")
     Call<GetAllLeads> GetAllLead(@Header("Authorization") String authorization,
-                                 @Body String body );
+                                 @Body String body);
 
     @GET("Lead/GetPropertyLeads")
     Call<GetPropertyLeads> GetPropertyLeads(@Header("Authorization") String authorization,
@@ -501,8 +503,8 @@ public interface ApiMethods {
     @Multipart
     @POST("Lead/UploadImage")
     Call<Upload_ProfileImage> uploadFileToServer(@Header("Authorization") String authorization,
-                                              @Part MultipartBody.Part file,
-                                              @Query("image") String image);
+                                                 @Part MultipartBody.Part file,
+                                                 @Query("image") String image);
 
     @Multipart
     @POST("Lead/Upload_ProfileImage")
@@ -529,7 +531,7 @@ public interface ApiMethods {
     Call<AppointmentNotificationModel> getNotificationByAppointments(@Header("Authorization") String authorization, @Query("pageNumber") int page);
 
     @GET("Notification/GetTaskNotification")
-    Call<TaskNotificationModel> getNotificationByTasks(@Header("Authorization") String authorization,@Query("Pageno") int page);
+    Call<TaskNotificationModel> getNotificationByTasks(@Header("Authorization") String authorization, @Query("Pageno") int page);
 
     @GET("Notification/Get_FollowUp_Notification")
     Call<FollowUpNotificationModel> getNotificationByFollowUps(@Header("Authorization") String authorization, @Query("Pageno") int page);
@@ -666,4 +668,6 @@ public interface ApiMethods {
                                            @Field("preQual") boolean preQual,
                                            @Field("priceRange") String priceRange);
 
+    @GET("Lead/Get_LeadSaveSearch")
+    Call<ResponseBody> getLeadSearchFilters(@Header("Authorization") String hdr);
 }

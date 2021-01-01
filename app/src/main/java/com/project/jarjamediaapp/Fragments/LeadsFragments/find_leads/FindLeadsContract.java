@@ -3,6 +3,10 @@ package com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads;
 
 
 import com.project.jarjamediaapp.Models.GetLeadCounts;
+import com.project.jarjamediaapp.Models.GetLeadSearchFiltersModel;
+
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public interface FindLeadsContract {
 
@@ -23,6 +27,8 @@ public interface FindLeadsContract {
         void showProgressBar();
 
         void hideProgressBar();
+
+        void updateUIWithSearchFiltersResponse(GetLeadSearchFiltersModel getLeadSearchFiltersModel);
     }
 
     /*
@@ -40,6 +46,8 @@ public interface FindLeadsContract {
                            String conversationMsgAsc, String priceAsc, String cityAsc, String timeFrameAsc, String activitiesSavedSearchAsc,
                            String activitiesViewAsc, String activitiesFavoriteAsc, String isSaveSearch, String isFilterClear, String resultSetType,
                            String pageNo, String pageSize);
+
+        void getLeadSearchFilters();
     }
 
 }

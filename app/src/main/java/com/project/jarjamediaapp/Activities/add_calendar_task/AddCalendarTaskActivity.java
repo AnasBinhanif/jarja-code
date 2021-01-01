@@ -151,6 +151,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         bi.tvStartTime.setOnClickListener(this);
         bi.btnSave.setOnClickListener(this);
         bi.btnCancel.setOnClickListener(this);
+        bi.cbAllDay.setChecked(true);
         bi.cbAllDay.setOnClickListener(this);
         bi.cbMarkComplete.setOnClickListener(this);
 
