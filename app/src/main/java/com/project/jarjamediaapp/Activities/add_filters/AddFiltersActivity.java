@@ -106,6 +106,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
     boolean isSaveSearch;
 
+    String dateFroms, dateTos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -848,6 +850,13 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         TextView tvDateTO = dialog.findViewById(R.id.tvDateTO);
         TextView tvDateFrom = dialog.findViewById(R.id.tvDateFrom);
 
+        if (!dateFroms.equalsIgnoreCase("min")) {
+            tvDateFrom.setText(dateFrom);
+        }
+        if (!dateTos.equalsIgnoreCase("max")) {
+            tvDateTO.setText(dateTo);
+        }
+
         tvDateTO.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1384,8 +1393,8 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
         String leadID = easyPreference.getString("leadID", "");
         String priceTos = easyPreference.getString("priceTo", "");
         String priceFroms = easyPreference.getString("priceFrom", "");
-        String dateTos = easyPreference.getString("dateTo", "");
-        String dateFroms = easyPreference.getString("dateFrom", "");
+        dateTos = easyPreference.getString("dateTo", "");
+        dateFroms = easyPreference.getString("dateFrom", "");
 
 
         /*bi.spnLeadScore.setSelectedIndex(leadScoreID);
@@ -1423,6 +1432,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
 
         hideProgressBar();
     }
+
 
     @Override
     public void updateUI(Response<BaseResponse> response) {

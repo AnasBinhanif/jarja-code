@@ -68,7 +68,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
         isEdit = getIntent().getBooleanExtra("isEdit", false);
         if (isEdit) {
 
-            textWatcher = new TextWatcher() {
+          /*  textWatcher = new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -87,7 +87,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
             bi.atvDescription.addTextChangedListener(textWatcher);
             bi.atvEventTitle.addTextChangedListener(textWatcher);
             bi.tvStartDate.addTextChangedListener(textWatcher);
-            bi.tvStartTime.addTextChangedListener(textWatcher);
+            bi.tvStartTime.addTextChangedListener(textWatcher);*/
 
             calendarId = getIntent().getStringExtra("calendarId");
             calendarDetailModel = getIntent().getParcelableExtra("modelData");
@@ -145,16 +145,38 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
         } else {
             calendarId = "";
+            bi.cbAllDay.setChecked(true);
         }
         // receive data here from intent
         bi.tvStartDate.setOnClickListener(this);
         bi.tvStartTime.setOnClickListener(this);
         bi.btnSave.setOnClickListener(this);
         bi.btnCancel.setOnClickListener(this);
-        bi.cbAllDay.setChecked(true);
+        //bi.cbAllDay.setChecked(true);
         bi.cbAllDay.setOnClickListener(this);
         bi.cbMarkComplete.setOnClickListener(this);
 
+        //added by akshay
+        textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isEdited = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+        bi.atvDescription.addTextChangedListener(textWatcher);
+        bi.atvEventTitle.addTextChangedListener(textWatcher);
+        bi.tvStartDate.addTextChangedListener(textWatcher);
+        bi.tvStartTime.addTextChangedListener(textWatcher);
     }
 
     @Override
@@ -504,7 +526,12 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
 
     private boolean isChangesDone() {
 
-        if (isEdit) {
+        if (isEdited) {
+            return true;
+        }
+        return false;
+        //commented by akshay. replaced with above block of code
+        /*if (isEdit) {
             if (!Methods.isEmpty(bi.atvEventTitle))
                 return true;
             if (!Methods.isEmpty(bi.atvDescription))
@@ -523,7 +550,7 @@ public class AddCalendarTaskActivity extends BaseActivity implements AddCalendar
                 return true;
             }
             return false;
-        }
+        }*/
     }
 
 }

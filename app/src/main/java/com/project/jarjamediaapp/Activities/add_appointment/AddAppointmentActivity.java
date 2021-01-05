@@ -1274,7 +1274,8 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
             date1 = new SimpleDateFormat("yyyy-MM-dd").parse(datedFrom);
             date2 = new SimpleDateFormat("yyyy-MM-dd").parse(datedTo);
             String time = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
-            currentTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(time);
+//            currentTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(time);
+            currentTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(time);
             time1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(datedFrom);
             time2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(datedTo);
             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());

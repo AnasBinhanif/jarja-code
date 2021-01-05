@@ -18,6 +18,7 @@
             android:layout_width="80dp"
             android:layout_height="match_parent"
             android:background="@color/colorRed"
+
             android:drawableTop="@drawable/ic_delete"
             android:drawablePadding="-20dp"
             android:gravity="center"
