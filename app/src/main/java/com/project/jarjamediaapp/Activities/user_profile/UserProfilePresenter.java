@@ -1,5 +1,7 @@
 package com.project.jarjamediaapp.Activities.user_profile;
 
+import android.util.Log;
+
 import com.project.jarjamediaapp.Activities.open_houses.UploadImageModel;
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Base.BaseResponse;
@@ -58,6 +60,18 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
                         // _view.hideProgressBar();
                         _view.updateUI(getUserProfile);
 
+
+                        // time when the request was made to server, which you get from ```sentRequestAtMillis```
+                        long requestTime = response.raw().sentRequestAtMillis();
+
+                        // time when the response was received, which you get from ```receivedResponseAtMillis```
+                        long responseTime = response.raw().receivedResponseAtMillis();
+
+                        //time taken to receive the response after the request was sent
+                        long apiTime = responseTime - requestTime;
+
+                        Log.d("onResponse: ", apiTime + "");
+
                     } else {
 
                         _view.updateUIonFalse(getUserProfile.message);
@@ -91,6 +105,17 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
                     if (response.body().status.equals("Success")) {
 
                         _view.updateUI(getUserProfile);
+
+                        // time when the request was made to server, which you get from ```sentRequestAtMillis```
+                        long requestTime = response.raw().sentRequestAtMillis();
+
+                        // time when the response was received, which you get from ```receivedResponseAtMillis```
+                        long responseTime = response.raw().receivedResponseAtMillis();
+
+                        //time taken to receive the response after the request was sent
+                        long apiTime = responseTime - requestTime;
+
+                        Log.d("onResponse: ", apiTime + "");
 
                     } else {
 
@@ -130,6 +155,17 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
 
                         //   _view.hideProgressBar();
                         _view.updateUI(getCountries);
+
+                        // time when the request was made to server, which you get from ```sentRequestAtMillis```
+                        long requestTime = response.raw().sentRequestAtMillis();
+
+                        // time when the response was received, which you get from ```receivedResponseAtMillis```
+                        long responseTime = response.raw().receivedResponseAtMillis();
+
+                        //time taken to receive the response after the request was sent
+                        long apiTime = responseTime - requestTime;
+
+                        Log.d("onResponse: ", apiTime + "");
 
 
                     } else {
@@ -260,13 +296,13 @@ public class UserProfilePresenter extends BasePresenter<UserProfileContract.View
 
 
         _view.showProgressBar();
-       // _callUpdateUserProfile = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateProfileInfo(GH.getInstance().getAuthorization(), jsonObject.toString());
+        // _callUpdateUserProfile = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).UpdateProfileInfo(GH.getInstance().getAuthorization(), jsonObject.toString());
 
         _callUpdateUserProfile = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 UpdateProfileInfo(GH.getInstance().getAuthorization(), firstName, state, licenseNo, picName, companyAddress, agentType,
                         zipCode, streetAddress, title, countryId, forwardedNumber,
                         leadDistributionMessageEnabled, emailAddress, company, lastName, tmzone,
-                        picGuid, phone, city,virtualNumber);
+                        picGuid, phone, city, virtualNumber);
 
         _callUpdateUserProfile.enqueue(new Callback<BaseResponse>() {
             @Override

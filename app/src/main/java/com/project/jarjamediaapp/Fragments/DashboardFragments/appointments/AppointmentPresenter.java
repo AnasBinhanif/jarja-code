@@ -1,5 +1,7 @@
 package com.project.jarjamediaapp.Fragments.DashboardFragments.appointments;
 
+import android.util.Log;
+
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -49,6 +51,18 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
                     if (getAppointmentsModel.status.equals("Success")) {
 
                         _view.updateAppointmentUI(getAppointmentsModel);
+
+                        // time when the request was made to server, which you get from ```sentRequestAtMillis```
+                        long requestTime = response.raw().sentRequestAtMillis();
+
+                        // time when the response was received, which you get from ```receivedResponseAtMillis```
+                        long responseTime = response.raw().receivedResponseAtMillis();
+
+                        //time taken to receive the response after the request was sent
+                        long apiTime = responseTime - requestTime;
+
+                        Log.d("onResponse: ", apiTime + "");
+
 
                     } else {
 
