@@ -47,6 +47,11 @@
             android:orientation="vertical"
             android:visibility="visible">
 
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:layout_width="match_parent"
+                android:id="@+id/swipe_layout"
+                android:layout_height="match_parent">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewAllLeads"
                 android:layout_width="match_parent"
@@ -55,6 +60,8 @@
                 android:background="@drawable/bg_search"
                 android:nestedScrollingEnabled="false"
                 android:visibility="visible" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
         </LinearLayout>

@@ -1,24 +1,27 @@
 <resources>
 
-    <string name="app_name">Jarja Media</string>
-    <string name="retrofit_failure">Unable to connect</string>
+    <integer name="Tasks">1</integer>
+    <integer name="Appointment">2</integer>
 
     <!--- Dashboard -->
     <!--- Appointment Fragment -->
+    <integer name="Folloups">3</integer>
+    <string name="app_name">Jarja Media</string>
+    <string name="retrofit_failure">Unable to connect</string>
     <string name="appointment">Appointments</string>
     <string name="follow_up">Follow Ups</string>
     <string name="tasks">Tasks</string>
     <string name="today">Today</string>
     <string name="Today_Agenda">TODAY\'S AGENDA</string>
+
+    <!--- Add Appointment Activity -->
     <string name="upcoming">Upcoming</string>
     <string name="previous">Previous</string>
     <string name="search">Search</string>
 
-    <!--- Add Appointment Activity -->
     <string name="add_appointment">Add Appointment</string>
     <string name="my_profile">My Profile</string>
     <string name="edit_appointment">Edit Appointment</string>
-
     <string name="edit">Edit</string>
     <string name="_name_of_contact">Contact *</string>
     <string name="_agent">Agent *</string>
@@ -55,12 +58,12 @@
     <string name="error_title">Please enter Event title</string>
     <string name="error_description">Please enter Description</string>
     <string name="error_start_date">Please select Start date</string>
-    <string name="error_end_date">Please select End date</string>
-    <string name="error_reminder">Please select Reminder</string>
-    <string name="error_via">Please select Via</string>
 
 
     <!--- Add Task Activity -->
+    <string name="error_end_date">Please select End date</string>
+    <string name="error_reminder">Please select Reminder</string>
+    <string name="error_via">Please select Via</string>
     <string name="add_task">Add Task</string>
     <string name="update_task">Edit Task</string>
     <string name="name_of_task">Task</string>
@@ -70,23 +73,23 @@
     <string name="assign_to">Assign To</string>
     <string name="_assign_to">Assign To *</string>
     <string name="recur">Reoccur</string>
-    <string name="_recur">Reoccur *</string>
-    <string name="call">Call</string>
-    <string name="one_time">One Time</string>
 
     <!--- Followup Fragment -->
-    <string name="due">Due</string>
-    <string name="Overdue">Overdue</string>
+    <string name="_recur">Reoccur *</string>
+    <string name="call">Call</string>
 
     <!--- Tasks Fragment -->
-    <string name="future_tasks">Future Tasks</string>
+    <string name="one_time">One Time</string>
 
 
     <!--- Leads -->
     <!--- Find Leads Fragment -->
-    <string name="filters">FILTERS</string>
+    <string name="due">Due</string>
 
     <!--- Add Leads Activity -->
+    <string name="Overdue">Overdue</string>
+    <string name="future_tasks">Future Tasks</string>
+    <string name="filters">FILTERS</string>
     <string name="add_lead">Add Lead</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
@@ -113,12 +116,12 @@
     <string name="city_2">City 2</string>
     <string name="state_1">State 1</string>
     <string name="state_2">State 2</string>
-    <string name="postal_code_1">Postal Code 1</string>
-    <string name="postal_code_2">Postal Code 2</string>
-    <string name="agent_comm">Complete your commission and keep track of your goal</string>
 
 
     <!--- Add Filters Activity -->
+    <string name="postal_code_1">Postal Code 1</string>
+    <string name="postal_code_2">Postal Code 2</string>
+    <string name="agent_comm">Complete your commission and keep track of your goal</string>
     <string name="add_filters">Add Filters</string>
     <string name="tags">Tags</string>
     <string name="price_range">Price Range</string>
@@ -129,11 +132,11 @@
     <string name="last_touchWithoutColon">Last Touch</string>
     <string name="Pipeline">Pipeline</string>
     <string name="drip_compaigns">Drip Campaigns</string>
+
+    <!--- Lead Detail Activity -->
     <string name="save_and_search">Save &amp; Search</string>
     <string name="lead_score_without_colon">Lead Score</string>
     <string name="clear">Clear</string>
-
-    <!--- Lead Detail Activity -->
     <string name="lead_details">Lead Info</string>
     <string name="actions">Actions</string>
     <string name="details">Details</string>
@@ -146,35 +149,35 @@
     <string name="assigned_to">Assigned To</string>
     <string name="primary">Primary</string>
     <string name="transaction1">Transaction 1</string>
+
+    <!--- Transaction Activity -->
     <string name="transaction2">Transaction 2</string>
+
+    <!--- ListingInfo Activity -->
     <string name="current">Current Stage</string>
     <string name="potential_prospect">Potential Prospect</string>
 
-    <!--- Transaction Activity -->
+    <!--- SocailProfile Activity -->
     <string name="transaction">Transaction</string>
-
-    <!--- ListingInfo Activity -->
     <string name="listing_info">Listing Info</string>
     <string name="buying_info">Buying Info</string>
-
-    <!--- SocailProfile Activity -->
     <string name="social_profiles">Social Profiles</string>
     <string name="add">Add</string>
     <string name="upgrade_social_profile">Upgrade Social Profile</string>
     <string name="view_profile">View Profile</string>
     <string name="add_profile">Add Profile</string>
     <string name="name">Name *</string>
+
+    <!--- Notes Activity -->
     <string name="profile_link">Profile Link *</string>
     <string name="site">Site *</string>
     <string name="http">https://</string>
-
-    <!--- Notes Activity -->
     <string name="documents">Documents</string>
+
+    <!--- Open Houses Activity -->
     <string name="add_file">Add File</string>
     <string name="add_documents">Add Documents</string>
     <string name="add_notes">Add Notes</string>
-
-    <!--- Open Houses Activity -->
     <string name="open_houses">Open Houses</string>
     <string name="add_open_house">Add Open House</string>
     <string name="select_picture">Select Picture</string>
@@ -194,57 +197,57 @@
     <string name="open_house_steps">Open House Sign In</string>
     <string name="month">Within how many months do you plan to buy a home?</string>
     <string name="approved">Have you been pre-approved?</string>
+    <!--- Navigation -->
     <string name="pay">How much do you want to pay for a house?</string>
     <string name="sell">Do you have a house to sell?</string>
     <string name="deals">Do you have anyone sending you good deals?</string>
-    <!--- Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!--- Side Menu Items -->
     <string name="nav_header_title">John Smith</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-
-    <!--- Side Menu Items -->
     <string name="dashboard">Dashboard</string>
     <string name="leads">Leads</string>
     <string name="lead">Lead</string>
     <string name="agents">Agent(s)</string>
     <string name="calendar">Calendar</string>
     <string name="openHouses">Open Houses</string>
-    <string name="addopenHouses">Add Open House</string>
-    <string name="task">Task</string>
-    <string name="logout">Logout</string>
 
 
     <!-- Login Screen -->
+    <string name="addopenHouses">Add Open House</string>
+    <string name="task">Task</string>
+    <string name="logout">Logout</string>
     <string name="footer_text">Jarja Media 2020, All Rights Reserved.</string>
     <string name="header_text">Marketing at the speed of Today</string>
     <string name="email">Email</string>
     <string name="_email">Email *</string>
+
     <string name="password">Password</string>
     <string name="change_password">Change Password</string>
-    <string name="_change_password">Change Password *</string>
-
-    <string name="login">LOGIN</string>
-    <string name="forgot_password">FORGOT YOUR PASSWORD?</string>
 
     <!-- Forgot Password -->
-    <string name="btn_submit">Forgot Password</string>
-    <string name="notification_dialog">Jarja Media would like to send you notifications. Notifications may include alerts, sounds and icon badges. These can be configured in settings.</string>
-    <string name="discard_dialog_text">Would you like to discard your changes?</string>
+    <string name="_change_password">Change Password *</string>
+    <string name="login">LOGIN</string>
+    <string name="forgot_password">FORGOT YOUR PASSWORD?</string>
 
     <!-- Navigation Drawer Dashboard Screen -->
 
 
     <!-- Search Result -->
-    <string name="search_hint">Search Leads</string>
+    <string name="btn_submit">Forgot Password</string>
 
     <!-- Generic Strings -->
-    <string name="no_img">No Image Found</string>
+    <string name="notification_dialog">Jarja Media would like to send you notifications. Notifications may include alerts, sounds and icon badges. These can be configured in settings.</string>
 
     <!-- Calendar -->
-    <string name="upcoming_appointments">Upcoming Appointments</string>
+    <string name="discard_dialog_text">Would you like to discard your changes?</string>
 
+    <string name="search_hint">Search Leads</string>
+    <string name="no_img">No Image Found</string>
+    <string name="upcoming_appointments">Upcoming Appointments</string>
     <string name="january">January</string>
     <string name="february">February</string>
     <string name="march">March</string>
@@ -254,21 +257,97 @@
     <string name="july">July</string>
     <string name="august">August</string>
     <string name="september">September</string>
+
     <string name="october">October</string>
     <string name="november">November</string>
     <string name="december">December</string>
-
     <string name="sunday">Sunday</string>
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
     <string name="wednesday">Wednesday</string>
+
+
     <string name="thursday">Thursday</string>
     <string name="friday">Friday</string>
+
     <string name="saturday">Saturday</string>
 
-
     <string name="errSinglePiece">Single piece of information is required.</string>
+
     <string name="errSelectAgent">Agent is required.</string>
+
+    <string name="view">View</string>
+
+    <string name="no_records">No record(s) found</string>
+
+    <string name="upcoming_open_house">Upcoming</string>
+
+    <!-- Open House -->
+    <string name="past_open_house">Past</string>
+    <string name="pref_key_transition_time" translatable="false">pref_key_transition_time</string>
+    <string name="dialog_seekbar_transition_time">Item transition time in millis</string>
+    <string name="gallery">Gallery</string>
+
+    <string name="close">Close</string>
+    <string name="camera">Camera</string>
+
+    <string name="permission_message">Please provide required permission</string>
+    <string name="error_address">Please enter address</string>
+    <string name="error_city">Please enter city</string>
+    <string name="error_state">Please enter state/province</string>
+    <string name="error_zip">Please enter zip/postal code</string>
+    <string name="error_start_time">Please enter start time</string>
+    <string name="error_end_time">Please enter end time</string>
+    <string name="compose">Compose Email</string>
+    <string name="text">Compose Message</string>
+    <string name="from">From:</string>
+
+    <!-- Compose Email -->
+    <string name="to">To:</string>
+    <string name="cc">CC:</string>
+    <string name="bcc">BCC:</string>
+    <string name="subject">Subject:</string>
+    <string name="body">Body:</string>
+    <string name="choose">Choose File</string>
+    <string name="send">Send</string>
+    <string name="body_text">Call the lead and dont leave a message if they dont pick up</string>
+    <string name="error_from">Please select your email</string>
+    <string name="error_to">Please select Recipient</string>
+    <string name="error_subject">Please enter subject</string>
+    <string name="error_message">Please enter message</string>
+    <string name="recipient">Select Recipient</string>
+    <string name="delete">Delete</string>
+    <string name="remove">Remove</string>
+    <string name="total">Total Attendees</string>
+
+    <string name="view_e_detail">View Event Details</string>
+    <string name="turn_speaker_on">Speaker ON</string>
+    <string name="callee">client identity or phone number</string>
+    <string name="answer">Answer</string>
+
+    <string name="decline">Decline</string>
+    <string name="callHint">Dial a client name or phone number. Leaving the field empty results in an automated response.</string>
+    <string name="cannot_add_file">You cannot add more than 10 files</string>
+    <string name="alert">Alert !</string>
+    <string name="delete_file">Are you sure you want to delete this file ?</string>
+    <string name="dashboard_ViewDashboard">You dont have access to View Dashboard</string>
+    <string name="dashboard_ViewUserProfile">You dont have access to View Profile</string>
+    <string name="dashboard_EditUserProfile">You dont have access to Edit Profile</string>
+
+
+    <!-- Permissions -->
+    <string name="dashboard_ViewEditAppoint">You dont have access to View/Edit Appointments</string>
+    <string name="lead_ViewAppoint">You dont have access to View Appointments</string>
+    <string name="lead_EditAppoint">You dont have access to Edit Appointments</string>
+    <string name="dashboard_EditTask">You dont have access to Edit Tasks</string>
+    <string name="dashboard_EditFollowUps">You dont have access to Edit Follow Ups</string>
+    <string name="lead_ViewLeads">You dont have access to View Leads</string>
+    <string name="lead_EditLeads">You dont have access to Edit Leads</string>
+    <string name="calender_ViewCalender">You dont have access to View Calender</string>
+    <string name="calender_EditCalender">You dont have access to Edit Calender</string>
+    <string name="taskType_due">due</string>
+    <string name="taskType_overdue">overDue</string>
+    <string name="taskType_future">future</string>
 
     <string-array name="days_sunday_array">
         <item>S</item>
@@ -279,7 +358,6 @@
         <item>F</item>
         <item>S</item>
     </string-array>
-
     <string-array name="months_array">
         <item>Jan</item>
         <item>Feb</item>
@@ -294,7 +372,6 @@
         <item>Nov</item>
         <item>Dec</item>
     </string-array>
-
     <string-array name="years_array">
         <item>2020</item>
         <item>2021</item>
@@ -311,7 +388,6 @@
         <item>Text</item>
         <item>Follow Up</item>
     </string-array>
-
     <string-array name="arrTaskRecur">
         <item>One Time</item>
         <item>Daily</item>
@@ -319,86 +395,14 @@
         <item>Monthly</item>
         <item>Bi Weekly</item>
     </string-array>
-
     <string-array name="arrVia">
         <item>Text Message</item>
         <item>E-mail</item>
     </string-array>
 
-    <!-- Open House -->
-    <string name="view">View</string>
-    <string name="no_records">No record(s) found</string>
-    <string name="upcoming_open_house">Upcoming</string>
-    <string name="past_open_house">Past</string>
 
-    <string name="pref_key_transition_time" translatable="false">pref_key_transition_time</string>
-    <string name="dialog_seekbar_transition_time">Item transition time in millis</string>
-
-    <string name="gallery">Gallery</string>
-    <string name="close">Close</string>
-    <string name="camera">Camera</string>
-    <string name="permission_message">Please provide required permission</string>
-    <string name="error_address">Please enter address</string>
-    <string name="error_city">Please enter city</string>
-    <string name="error_state">Please enter state/province</string>
-    <string name="error_zip">Please enter zip/postal code</string>
-    <string name="error_start_time">Please enter start time</string>
-    <string name="error_end_time">Please enter end time</string>
-
-    <!-- Compose Email -->
-    <string name="compose">Compose Email</string>
-    <string name="text">Compose Message</string>
-    <string name="from">From:</string>
-    <string name="to">To:</string>
-    <string name="cc">CC:</string>
-    <string name="bcc">BCC:</string>
-    <string name="subject">Subject:</string>
-    <string name="body">Body:</string>
-    <string name="choose">Choose File</string>
-    <string name="send">Send</string>
-    <string name="body_text">Call the lead and dont leave a message if they dont pick up</string>
-    <string name="error_from">Please select your email</string>
-    <string name="error_to">Please select Recipient</string>
-    <string name="error_subject">Please enter subject</string>
-    <string name="error_message">Please enter message</string>
-    <string name="recipient">Select Recipient</string>
-
-    <string name="delete">Delete</string>
-    <string name="remove">Remove</string>
-    <string name="total">Total Attendees</string>
-    <string name="view_e_detail">View Event Details</string>
-
-    <string name="turn_speaker_on">Speaker ON</string>
-    <string name="callee">client identity or phone number</string>
-    <string name="answer">Answer</string>
-    <string name="decline">Decline</string>
-    <string name="callHint">Dial a client name or phone number. Leaving the field empty results in an automated response.</string>
-    <string name="cannot_add_file">You cannot add more than 10 files</string>
-    <string name="alert">Alert !</string>
-    <string name="delete_file">Are you sure you want to delete this file ?</string>
-
-
-    <!-- Permissions -->
-    <string name="dashboard_ViewDashboard">You dont have access to View Dashboard</string>
-    <string name="dashboard_ViewUserProfile">You dont have access to View Profile</string>
-    <string name="dashboard_EditUserProfile">You dont have access to Edit Profile</string>
-    <string name="dashboard_ViewEditAppoint">You dont have access to View/Edit Appointments</string>
-    <string name="lead_ViewAppoint">You dont have access to View Appointments</string>
-    <string name="lead_EditAppoint">You dont have access to Edit Appointments</string>
-    <string name="dashboard_EditTask">You dont have access to Edit Tasks</string>
-    <string name="dashboard_EditFollowUps">You dont have access to Edit Follow Ups</string>
-    <string name="lead_ViewLeads">You dont have access to View Leads</string>
-    <string name="lead_EditLeads">You dont have access to Edit Leads</string>
-    <string name="calender_ViewCalender">You dont have access to View Calender</string>
-    <string name="calender_EditCalender">You dont have access to Edit Calender</string>
-
-    <string name="taskType_due">due</string>
-    <string name="taskType_overdue">overDue</string>
-    <string name="taskType_future">future</string>
-
-    <integer name="Tasks">1</integer>
-    <integer name="Appointment">2</integer>
-    <integer name="Folloups">3</integer>
+    <string name="refresh_appointment">refreshAppointment</string>
+    <string name="refresh_task">refreshTask</string>
 
 
 </resources>

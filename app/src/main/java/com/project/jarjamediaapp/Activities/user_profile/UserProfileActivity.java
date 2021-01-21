@@ -93,6 +93,9 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
         initListeners();
         presenter.getCountries();
+
+        //calling it here, by commenting on line 210
+        presenter.getTimeZoneList();
     }
 
     private void initListeners() {
@@ -182,12 +185,6 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
 
     }
 
-    @Override
-    public void updateUI(GetUserProfile getUserProfile) {
-
-        populateData(getUserProfile);
-
-    }
 
     @Override
     public void updateUI(GetTwilioNumber getUserProfile) {
@@ -207,9 +204,39 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     }
 
     @Override
+    public void updateUI(GetCountries response) {
+
+        //commenting below line to call it async outside -- akshay
+//        presenter.getTimeZoneList();
+
+        arrayListCountryID = new ArrayList<>();
+        arrayListCountryName = new ArrayList<>();
+
+        for (int i = 0; i < response.data.size(); i++) {
+
+            arrayListCountryID.add(response.data.get(i).id);
+            arrayListCountryName.add(response.data.get(i).countryName);
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListCountryName);
+        bi.atvCountry.setAdapter(arrayAdapter);
+
+        bi.atvCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                isCountries = false;
+                countryID = arrayListCountryID.get(position);
+            }
+        });
+
+    }
+
+    @Override
     public void updateUI(GetTimeZoneList response) {
 
-        presenter.getUserProfile();
+//        presenter.getUserProfile();
+        //commenting above line as we are getting user profile in intent from home activiyy
+
 
         arrayListStandardName = new ArrayList<>();
         arrayListDisplayName = new ArrayList<>();
@@ -231,33 +258,20 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
             }
         });
 
+        //replacement of above commented line
+        GetUserProfile getUserProfile = (GetUserProfile) getIntent().getSerializableExtra("userprofile");
+        if (getUserProfile == null) {
+            presenter.getUserProfile();
+        } else {
+            populateData(getUserProfile);
+        }
 
     }
 
     @Override
-    public void updateUI(GetCountries response) {
+    public void updateUI(GetUserProfile getUserProfile) {
 
-        presenter.getTimeZoneList();
-
-        arrayListCountryID = new ArrayList<>();
-        arrayListCountryName = new ArrayList<>();
-
-        for (int i = 0; i < response.data.size(); i++) {
-
-            arrayListCountryID.add(response.data.get(i).id);
-            arrayListCountryName.add(response.data.get(i).countryName);
-        }
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListCountryName);
-        bi.atvCountry.setAdapter(arrayAdapter);
-
-        bi.atvCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                isCountries = false;
-                countryID = arrayListCountryID.get(position);
-            }
-        });
+        populateData(getUserProfile);
 
     }
 

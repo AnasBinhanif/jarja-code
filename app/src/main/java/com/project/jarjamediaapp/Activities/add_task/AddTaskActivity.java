@@ -1134,6 +1134,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 showAgentDialog();
                 break;
             case R.id.btnSave:
+
+                //adding this line as indication to dashboard to hit api when user click back button
+                easyPreference.addBoolean(getResources().getString(R.string.refresh_task), true).save();
+
                 if (taskId.equals("")) {
                     callAddTask();
                 } else {

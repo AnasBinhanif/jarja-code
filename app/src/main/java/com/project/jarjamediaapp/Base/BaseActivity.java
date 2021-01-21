@@ -64,15 +64,15 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected void setToolBarTitle(Toolbar toolbar, String title, boolean forActivity) {
         //getSupportActionBar().setTitle(title);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(title);
-
+//        toolbar.setTitle(title);
+        getSupportActionBar().setTitle(title);
 
         if (forActivity) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(false);
             getSupportActionBar().setDisplayUseLogoEnabled(false);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
-            toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+          //  toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

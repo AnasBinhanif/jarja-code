@@ -705,6 +705,10 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
                 via();
                 break;
             case R.id.btnSave:
+
+                //adding this line as indication to dashboard to hit api when user click back button
+                easyPreference.addBoolean(getResources().getString(R.string.refresh_appointment), true).save();
+
                 // from lead detail
                 if (fromId.equals("2")) {
                     //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
@@ -1292,7 +1296,6 @@ public class AddAppointmentActivity extends BaseActivity implements AddAppointme
 //                bi.tvEndDate.requestFocus();
 //                return false;
 //            }
-
 
 
         } catch (ParseException e) {

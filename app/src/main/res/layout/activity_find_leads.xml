@@ -11,6 +11,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <include
+                android:id="@+id/ep_toolbar"
+                layout="@layout/base_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <EditText
                 android:id="@+id/edtSearch"
                 android:layout_width="match_parent"
@@ -42,14 +48,14 @@
                 android:layout_height="match_parent"
                 android:id="@+id/swipe_layout">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewFindLeads"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_search"
-                android:layout_marginTop="2dp"
-                android:nestedScrollingEnabled="false"
-                android:visibility="visible" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewFindLeads"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_search"
+                    android:layout_marginTop="2dp"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="visible" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

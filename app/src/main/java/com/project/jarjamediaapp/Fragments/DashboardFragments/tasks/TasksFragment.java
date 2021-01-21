@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -67,9 +69,35 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
         presenter = new TasksPresenter(this);
         presenter.initScreen();
 
+        page = 0;
+        if (tasksList.size() != 0) {
+            tasksList.clear();
+            swipeTasksRecyclerAdapter.notifyDataSetChanged();
+        }
+        isTabClick = true;
+        hitApi();
+
         return bi.getRoot();
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (easyPreference.getBoolean(getResources().getString(R.string.refresh_task), false)) {
+            page = 0;
+            if (tasksList.size() != 0) {
+                tasksList.clear();
+                swipeTasksRecyclerAdapter.notifyDataSetChanged();
+            }
+            isTabClick = true;
+            hitApi();
+            easyPreference.addBoolean(getResources().getString(R.string.refresh_task), false).save();
+        }
+
+    }
+
 
     @Override
     public void setupViews() {
@@ -300,19 +328,6 @@ public class TasksFragment extends BaseFragment implements FragmentLifeCycle, Ta
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        page = 0;
-        if (tasksList.size() != 0) {
-            tasksList.clear();
-            swipeTasksRecyclerAdapter.notifyDataSetChanged();
-        }
-        isTabClick = true;
-        hitApi();
-
-    }
 
     private void hitApi() {
 

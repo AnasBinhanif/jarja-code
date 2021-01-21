@@ -52,6 +52,8 @@ import com.project.jarjamediaapp.Activities.user_profile.UserProfileActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Fragments.DashboardFragments.TabsFragment;
+import com.project.jarjamediaapp.Fragments.DashboardFragments.TabsFragment2;
+import com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads.FindLeadsActivity;
 import com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads.FindLeadsFragment;
 import com.project.jarjamediaapp.Interfaces.UpdateTitle;
 import com.project.jarjamediaapp.Models.GetUserPermission;
@@ -100,7 +102,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private String notificationType;
     //  LocalReceiver myReceiver;
 
-
+    GetUserProfile getUserProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +113,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         initViews();
 
         //   myReceiver = new LocalReceiver();
-
 
 
         if (getIntent().getExtras() != null) {
@@ -133,7 +134,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 case "3":
 
                     notificationType = "followups";
-                    getFolloUpDetailByID(notificationID,"");
+                    getFolloUpDetailByID(notificationID, "");
 
                     break;
 
@@ -166,9 +167,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         title = getString(R.string.app_name);
         toolbar = findViewById(R.id.toolbar);
         setToolBarTitle(toolbar, getString(R.string.dashboard), false);
+
         drawer = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+
         toggle.syncState();
 
         navigationView = findViewById(R.id.nav_view);
@@ -180,7 +183,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         tvInitial = (TextView) headerView.findViewById(R.id.tvInitial);
         navHeaderImageView = (CircleImageView) headerView.findViewById(R.id.imageView);
 
-        getUserProfileData();
+        //getUserProfileData();
 
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -192,7 +195,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         }
                         // Get the Instance ID token//
                         String token = task.getResult().getToken();
-                        Log.d("FCM TOKEN",token);
+                        Log.d("FCM TOKEN", token);
                         // userAuthenticate(FirebaseInstanceId.getInstance().getToken(),"FCM");
                     }
                 });
@@ -202,7 +205,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void userAuthenticate(String deviceToken, String network) {
 
-        Call<BaseResponse> _call=NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Authanticate_UserDevice(GH.getInstance().getAuthorization(),deviceToken,network);
+        Call<BaseResponse> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Authanticate_UserDevice(GH.getInstance().getAuthorization(), deviceToken, network);
         _call.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
@@ -240,12 +243,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         Call<GetUserProfile> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 getUserProfileData(GH.getInstance().getAuthorization());
         _call.enqueue(new Callback<GetUserProfile>() {
+
             @Override
             public void onResponse(Call<GetUserProfile> call, Response<GetUserProfile> response) {
 
                 if (response.isSuccessful()) {
 
-                    GetUserProfile getUserProfile = response.body();
+                    getUserProfile = response.body();
                     if (response.body().status.equals("Success")) {
 
                         easyPreference.addInt(GH.KEYS.AGENT_ID_INT.name(), getUserProfile.data.getAgentData().getAgentID()).save();
@@ -279,7 +283,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                             navHeaderImageView.setVisibility(View.GONE);
                             tvInitial.setVisibility(View.VISIBLE);
                         }
-                        getUserPermissions();
+//                        getUserPermissions();
 
                     } else {
                         //    hideProgressBar();
@@ -330,21 +334,21 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
 
         // checking condition when we coming from leads activity
-        if(GH.getInstance().getFragmentStatus() != null){
-            if (GH.getInstance().getFragmentStatus().equals("leadsFragment")){
+        if (GH.getInstance().getFragmentStatus() != null) {
+            if (GH.getInstance().getFragmentStatus().equals("leadsFragment")) {
 
                 // for testing
                 EasyPreference.Builder pref = new EasyPreference.Builder(context);
-                pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"").save();
+                pref.addString(GH.KEYS.FRAGMENTSTATUS.name(), "").save();
 
-            }else {
+            } else {
 
                 navigationView.getMenu().getItem(1).setChecked(true);
                 getUserProfileData();
+                getUserPermissions();
             }
 
         }
-
 
 
 //        IntentFilter filter = new IntentFilter("NOTIFICATION_LOCAL_BROADCAST");
@@ -368,7 +372,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -388,23 +391,28 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         GetPermissionModel userPermission;
         Gson gson = new Gson();
 
+        //added by akshay
+//        fragment = null;
+
         switch (itemId) {
 
             case R.id.nav_dashboard:
 
                 //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                 String storedHashMapDashboardString = GH.getInstance().getUserPermissonDashboard();
-                java.lang.reflect.Type typeDashboard = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                java.lang.reflect.Type typeDashboard = new TypeToken<HashMap<String, Boolean>>() {
+                }.getType();
                 HashMap<String, Boolean> mapDashboard = gson.fromJson(storedHashMapDashboardString, typeDashboard);
 
                 if (mapDashboard.get("View Dashboard")) {
                     title = getResources().getString(R.string.dashboard);
-                    fragment = TabsFragment.newInstance(title,R.id.nav_dashboard);
+                    fragment = TabsFragment2.newInstance(title, R.id.nav_dashboard);
 
                     addToStack = false;
                     shouldAnimate = true;
 
                 } else {
+
                     ToastUtils.showToast(context, getString(R.string.dashboard_ViewDashboard));
                 }
 
@@ -413,15 +421,28 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                 //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                 String storedHashMapLeadsString = GH.getInstance().getUserPermissonLead();
-                java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                java.lang.reflect.Type typeLeads = new TypeToken<HashMap<String, Boolean>>() {
+                }.getType();
                 HashMap<String, Boolean> mapLeads = gson.fromJson(storedHashMapLeadsString, typeLeads);
 
-                if (mapLeads.get("View Leads")) {
+                /*if (mapLeads.get("View Leads")) {
                     title = getResources().getString(R.string.leads);
                     fragment = FindLeadsFragment.newInstance(title, R.id.nav_lead);
                     addToStack = true;
                     shouldAnimate = true;
                     _menu.findItem(R.id.action_search).setVisible(false);
+
+
+                } else {
+
+                    ToastUtils.showToast(context, getString(R.string.lead_ViewLeads));
+                }*/
+                if (mapLeads.get("View Leads")) {
+
+                    title = getResources().getString(R.string.leads);
+                    fragment = null;
+                    switchActivity(FindLeadsActivity.class);
+
 
                 } else {
 
@@ -433,14 +454,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                 //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                 String storedHashMapCalenderString = GH.getInstance().getUserPermissonCalender();
-                java.lang.reflect.Type typeCalender = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                java.lang.reflect.Type typeCalender = new TypeToken<HashMap<String, Boolean>>() {
+                }.getType();
                 HashMap<String, Boolean> mapCalender = gson.fromJson(storedHashMapCalenderString, typeCalender);
 
                 if (mapCalender.get("View Calendar")) {
 
-                fragment = null;
-                title = getResources().getString(R.string.calendar);
-                switchActivity(CalendarActivity.class);
+                    fragment = null;
+                    title = getResources().getString(R.string.calendar);
+                    switchActivity(CalendarActivity.class);
 
                 } else {
 
@@ -457,14 +479,20 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                 //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                 String storedHashMapSettingString = GH.getInstance().getUserPermissonProfile();
-                java.lang.reflect.Type typeSetting = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                java.lang.reflect.Type typeSetting = new TypeToken<HashMap<String, Boolean>>() {
+                }.getType();
                 HashMap<String, Boolean> mapSetting = gson.fromJson(storedHashMapSettingString, typeSetting);
 
                 if (mapSetting.get("View Profile")) {
 
                     fragment = null;
                     title = "Profile";
-                    switchActivity(UserProfileActivity.class);
+//                    switchActivity(UserProfileActivity.class);
+                    Intent intent = new Intent(this, UserProfileActivity.class);
+                    if (getUserProfile != null) {
+                        intent.putExtra("userprofile", getUserProfile);
+                    }
+                    startActivity(intent);
 
                 } else {
 
@@ -482,6 +510,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         }
         if (fragment != null) {
             ReplaceFragment(fragment, title, shouldAnimate, addToStack);
+//            adddFragment(fragment, title, shouldAnimate, addToStack);
         }
     }
 
@@ -531,30 +560,36 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
 
-
     public void ReplaceFragment(Fragment fragment, String title, boolean shouldAnimate, boolean addToStack) {
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction ft = manager.beginTransaction();
         current_fragment_title = title;
-        if (shouldAnimate) {
-            ft.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out, android.R.anim.fade_in,
-                    android.R.anim.fade_out);
-        }
-        ft.replace(R.id.fragment_replacer, fragment, title);
-        if (addToStack) {
-            ft.addToBackStack(title);
 
+        if (manager.findFragmentByTag(title) == null) {
+
+            if (shouldAnimate) {
+                ft.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out, android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+            }
+            ft.replace(R.id.fragment_replacer, fragment, title);
+            if (addToStack) {
+                ft.addToBackStack(title);
+
+            }
+            fragments_added.add(title);
+            ft.commitAllowingStateLoss();
         }
-        fragments_added.add(title);
-        ft.commitAllowingStateLoss();
     }
-   /* public void adddFragment(Fragment fragment, String title, boolean shouldAnimate, boolean addToStack) {
+
+    public void adddFragment(Fragment fragment, String title, boolean shouldAnimate, boolean addToStack) {
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction ft = manager.beginTransaction();
         current_fragment_title = title;
+        Fragment fragment1 = manager.findFragmentByTag(title);
+
         if (shouldAnimate) {
             ft.setCustomAnimations(android.R.anim.fade_in,
                     android.R.anim.fade_out, android.R.anim.fade_in,
@@ -567,13 +602,22 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         }
         fragments_added.add(title);
         ft.commitAllowingStateLoss();
-    }*/
+    }
 
 
     @Override
     public void updateToolBarTitle(String title) {
         toolbar.setTitle(title);
+
+
     }
+
+    @Override
+    public void changeDrawerToBackButton(String title, boolean enable) {
+
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -597,7 +641,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 //    hideProgressBar();
                 if (response.isSuccessful()) {
 
-                    Log.i("JsonPermission",""+response.body());
+                    Log.i("JsonPermission", "" + response.body());
 
                     Gson gson = new Gson();
                     GetPermissionModel getPermissionModel = response.body();
@@ -608,25 +652,24 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         Map<String, Boolean> leadMap = new HashMap<String, Boolean>();
                         Map<String, Boolean> calenderMap = new HashMap<String, Boolean>();
 
-                        for (int i=0; i<getPermissionModel.getData().getUserSettings().size(); i++){
+                        for (int i = 0; i < getPermissionModel.getData().getUserSettings().size(); i++) {
 
-                            userSettingMap.put(getPermissionModel.getData().getUserSettings().get(i).getKey(),getPermissionModel.getData().getUserSettings().get(i).getValue());
+                            userSettingMap.put(getPermissionModel.getData().getUserSettings().get(i).getKey(), getPermissionModel.getData().getUserSettings().get(i).getValue());
                         }
-                        for (int i=0; i<getPermissionModel.getData().getDashboard().size(); i++){
+                        for (int i = 0; i < getPermissionModel.getData().getDashboard().size(); i++) {
 
-                            dashboardMap.put(getPermissionModel.getData().getDashboard().get(i).getKey(),getPermissionModel.getData().getDashboard().get(i).getValue());
-                        }
-
-                        for (int i=0; i<getPermissionModel.getData().getLead().size(); i++){
-
-                            leadMap.put(getPermissionModel.getData().getLead().get(i).getKey(),getPermissionModel.getData().getLead().get(i).getValue());
+                            dashboardMap.put(getPermissionModel.getData().getDashboard().get(i).getKey(), getPermissionModel.getData().getDashboard().get(i).getValue());
                         }
 
-                        for (int i=0; i<getPermissionModel.getData().getCalendar().size(); i++){
+                        for (int i = 0; i < getPermissionModel.getData().getLead().size(); i++) {
 
-                            calenderMap.put(getPermissionModel.getData().getCalendar().get(i).getKey(),getPermissionModel.getData().getCalendar().get(i).getValue());
+                            leadMap.put(getPermissionModel.getData().getLead().get(i).getKey(), getPermissionModel.getData().getLead().get(i).getValue());
                         }
 
+                        for (int i = 0; i < getPermissionModel.getData().getCalendar().size(); i++) {
+
+                            calenderMap.put(getPermissionModel.getData().getCalendar().get(i).getKey(), getPermissionModel.getData().getCalendar().get(i).getValue());
+                        }
 
 
                         String userSettingString = gson.toJson(userSettingMap);
@@ -637,28 +680,25 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                         String jsonText = gson.toJson(getPermissionModel);
                         easyPreference.addString(GH.KEYS.USER_PERMISSIONS.name(), jsonText).save();
-                        easyPreference.addString(GH.KEYS.USER_PERMISSIONS_SETTINGS.name(),userSettingString).save();
-                        easyPreference.addString(GH.KEYS.USER_PERMISSIONS_DASHBOARD.name(),dashboardString).save();
-                        easyPreference.addString(GH.KEYS.USER_PERMISSIONS_LEAD.name(),leadString).save();
-                        easyPreference.addString(GH.KEYS.USER_PERMISSIONS_CALENDER.name(),calenderString).save();
-
+                        easyPreference.addString(GH.KEYS.USER_PERMISSIONS_SETTINGS.name(), userSettingString).save();
+                        easyPreference.addString(GH.KEYS.USER_PERMISSIONS_DASHBOARD.name(), dashboardString).save();
+                        easyPreference.addString(GH.KEYS.USER_PERMISSIONS_LEAD.name(), leadString).save();
+                        easyPreference.addString(GH.KEYS.USER_PERMISSIONS_CALENDER.name(), calenderString).save();
 
 
                         if (getPermissionModel.getData().getDashboard().get(0).getValue()) {
 
                             // for just showing first time navigation first item not repeating
-                            if (GH.getInstance().getDashboardNavigationStatus()){
+                            if (GH.getInstance().getDashboardNavigationStatus()) {
 
                                 onNavigationItemSelected(navigationView.getMenu().getItem(1));
-                                easyPreference.addBoolean(GH.KEYS.NAVIGATIONSTATUS.name(),false);
+                                easyPreference.addBoolean(GH.KEYS.NAVIGATIONSTATUS.name(), false);
                             }
-
-
 
 
                         } else {
 
-                            ToastUtils.showToast(context,getString(R.string.dashboard_ViewDashboard));
+                            ToastUtils.showToast(context, getString(R.string.dashboard_ViewDashboard));
                         }
 
                     } else {
@@ -679,7 +719,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             }
 
             @Override
-            public void onFailure(Call<GetPermissionModel> call, Throwable t) { hideProgressBar();
+            public void onFailure(Call<GetPermissionModel> call, Throwable t) {
+                hideProgressBar();
                 ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
             }
         });
@@ -763,7 +804,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         easyPreference.clearAll().save();
                         // for notification permission setting first time dialogue in login activity
                         EasyPreference.Builder pref = new EasyPreference.Builder(context);
-                        pref.addString(GH.KEYS.ISNOTIFICATIONALLOW.name(),"true").save();
+                        pref.addString(GH.KEYS.ISNOTIFICATIONALLOW.name(), "true").save();
 
                         switchActivity(LoginActivity.class);
                         finish();
@@ -787,7 +828,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     public void getAppointmentById(String appointmentID) {
 
-        Call<GetAppointmentByIDModel> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetAppointmentByID(GH.getInstance().getAuthorization(),appointmentID);
+        Call<GetAppointmentByIDModel> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetAppointmentByID(GH.getInstance().getAuthorization(), appointmentID);
         _call.enqueue(new Callback<GetAppointmentByIDModel>() {
             @Override
             public void onResponse(Call<GetAppointmentByIDModel> call, Response<GetAppointmentByIDModel> response) {
@@ -802,7 +843,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         context.startActivity(new Intent(context, AddAppointmentActivity.class)
                                 .putExtra("leadID", models.getLeadID())
                                 .putExtra("from", "7")
-                                .putExtra("leadName",models.getEventTitle())
+                                .putExtra("leadName", models.getEventTitle())
                                 .putExtra("models", models));
                         //_view.updateUI(getAppointmentsModel);
 
@@ -828,10 +869,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         });
     }
 
-    private void getFolloUpDetailByID(String dripDetailId,String reminderId) {
+    private void getFolloUpDetailByID(String dripDetailId, String reminderId) {
 
         Call<ViewFollowUpModel> _callToday;
-        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId,reminderId);
+        _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetFollowUpDetails(GH.getInstance().getAuthorization(), dripDetailId, reminderId);
         _callToday.enqueue(new Callback<ViewFollowUpModel>() {
             @Override
             public void onResponse(Call<ViewFollowUpModel> call, Response<ViewFollowUpModel> response) {
@@ -877,7 +918,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     public void showViewFollowUpDialog(Context context, String wait, String title, String dateTime, String time, String note, String sentType) {
 
-        TextView edtWait, edtTitle, edtTime, edtNote,tvClose;
+        TextView edtWait, edtTitle, edtTime, edtNote, tvClose;
         final Dialog dialog = new Dialog(context, R.style.Dialog);
         dialog.setCancelable(true);
 
@@ -902,7 +943,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             edtTitle = (TextView) dialog.findViewById(R.id.edtTitle);
             edtTime = (TextView) dialog.findViewById(R.id.edtTime);
             tvClose = dialog.findViewById(R.id.tvClose);
-            edtTime.setText(GH.getInstance().formatter(dateTime,"MM-dd-yyyy hh:mm a","yyyy-MM-dd'T'HH:mm:ss"));
+            edtTime.setText(GH.getInstance().formatter(dateTime, "MM-dd-yyyy hh:mm a", "yyyy-MM-dd'T'HH:mm:ss"));
 
         }
 
@@ -942,7 +983,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                     } else {
 
-                        ToastUtils.showToastLong(getApplicationContext(),getTaskDetail.message);
+                        ToastUtils.showToastLong(getApplicationContext(), getTaskDetail.message);
                        /* _view.hideProgressBar();
 
                         _view.updateUIonFalse(getTaskDetail.message);*/
@@ -952,18 +993,19 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
 
                     ApiError error = ErrorUtils.parseError(response);
-                    ToastUtils.showToastLong(getApplicationContext(),error.Message());
+                    ToastUtils.showToastLong(getApplicationContext(), error.Message());
 
                 }
             }
 
             @Override
             public void onFailure(Call<GetTaskDetail> call, Throwable t) {
-                ToastUtils.showToastLong(getApplicationContext(),t.getMessage());
+                ToastUtils.showToastLong(getApplicationContext(), t.getMessage());
             }
         });
 
     }
+
     public void getFutureTaskDetail(String scheduleID) {
 
 

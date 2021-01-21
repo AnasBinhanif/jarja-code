@@ -1,30 +1,29 @@
 package com.project.jarjamediaapp.Fragments.LeadsFragments.find_leads;
 
-
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function2;
+import kotlin.jvm.functions.Function4;
 
-import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
-import com.project.jarjamediaapp.Activities.HomeActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
 import com.project.jarjamediaapp.Activities.add_filters.AddFiltersActivity;
+import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
 import com.project.jarjamediaapp.Activities.all_leads.AllLeadsActivity;
-import com.project.jarjamediaapp.Base.BaseFragment;
-import com.project.jarjamediaapp.Interfaces.UpdateTitle;
+import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Models.GetFindLeads;
 import com.project.jarjamediaapp.Models.GetLeadCounts;
 import com.project.jarjamediaapp.Models.GetLeadSearchFiltersModel;
@@ -32,126 +31,74 @@ import com.project.jarjamediaapp.Models.KeyValueModel;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
-import com.project.jarjamediaapp.databinding.FragmentFindleadsBinding;
+import com.project.jarjamediaapp.databinding.ActivityFindLeadsBinding;
 import com.thetechnocafe.gurleensethi.liteutils.RecyclerAdapterUtil;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function2;
-import kotlin.jvm.functions.Function4;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
+public class FindLeadsActivity extends BaseActivity implements FindLeadsContract.View, View.OnClickListener {
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-
-public class FindLeadsFragment extends BaseFragment implements FindLeadsContract.View, View.OnClickListener {
-
-    FragmentFindleadsBinding bi;
-    Context context;
+    ActivityFindLeadsBinding bi;
     FindLeadsPresenter presenter;
+    Context context;
     ArrayList<GetLeadCounts.LeadsCount> getLeadCountList;
     Intent bundle = null;
     int totalPages = 0;
-
     SwipeRefreshLayout swipeRefreshLayout;
 
-    public FindLeadsFragment() {
-        // Required empty public constructor
-    }
-
-    public static FindLeadsFragment newInstance(String fragment_title, int position) {
-        FindLeadsFragment findLeadsFragment = new FindLeadsFragment();
-        Bundle args = new Bundle();
-        args.putString("title", fragment_title);
-        args.putInt("position", position);
-        findLeadsFragment.setArguments(args);
-        return findLeadsFragment;
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        bi = DataBindingUtil.inflate(inflater, R.layout.fragment_findleads, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        bi = DataBindingUtil.setContentView(this, R.layout.activity_find_leads);
+        context = this;
         presenter = new FindLeadsPresenter(this);
         presenter.initScreen();
-
-
-        return bi.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        swipeRefreshLayout = view.findViewById(R.id.swipe_layout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getLeadSearchFilters();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-
-       /* if (easyPreference.getString("saveAndSearch", "").equals("saveData")) {
-            getSaveLeadsData();
-        } else if (bundle == null) {
-            callGetLeadCounts(bundle);
-
-        } else if (easyPreference.getString("search", "").equals("searchResult")) {
-            callGetLeadCounts(bundle);
-        } else {
-            bundle = null;
-            bundle = null;
-            callGetLeadCounts(bundle);
-        }*/
-
+        setToolBarTitle(bi.epToolbar.toolbar, "Leads", true);
+        getLeadSearchFilters();
 
     }
 
     @Override
     public void setupViews() {
 
-        initViews();
-
-   /*     if (easyPreference.getString("saveAndSearch", "").equals("saveData")) {
-            getSaveLeadsData();
-        } else if (bundle == null) {
-//            callGetLeadCounts(bundle);
-            getLeadSearchFilters();
-        } else if (easyPreference.getString("search", "").equals("searchResult")) {
-
-            callGetLeadCounts(bundle);
-        } else {
-
-            bundle = null;
-            callGetLeadCounts(bundle);
-        }*/
-
-        getLeadSearchFilters();
-    }
-
-    private void initViews() {
-
         bi.tvFilter.setOnClickListener(this);
+
+        swipeRefreshLayout = findViewById(R.id.swipe_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getLeadSearchFilters();
+            }
+        });
+
     }
 
     private void getLeadSearchFilters() {
         presenter.getLeadSearchFilters();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.home, menu);
+        menu.findItem(R.id.action_notify).setVisible(false);
+        MenuItem item = menu.findItem(R.id.action_add);
+        item.setVisible(true);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_add) {
+            switchActivity(AddLeadActivity.class);
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void callGetLeadCounts(Intent bundle) {
@@ -318,7 +265,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
     @Override
     public void showProgressBar() {
-        GH.getInstance().ShowProgressDialog(getActivity());
+        GH.getInstance().ShowProgressDialog(this);
     }
 
     @Override
@@ -349,6 +296,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
+
         Intent intent = new Intent();
 
         clearOldPreferences();
@@ -469,14 +417,8 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.context = context;
-        setHasOptionsMenu(true);
-    }
 
-    @Override
+ /*   @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
@@ -485,7 +427,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         menu.findItem(R.id.action_notify).setVisible(false);
         menu.findItem(R.id.action_clear).setVisible(false);
         menu.findItem(R.id.action_add).setVisible(true);
-    }
+    }*/
 
     @Override
     public void onClick(View view) {
@@ -494,7 +436,7 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
 
             case R.id.tvFilter:
 
-                Intent i = new Intent(getActivity(), AddFiltersActivity.class);
+                Intent i = new Intent(this, AddFiltersActivity.class);
                 startActivityForResult(i, 05);
                 //switchActivity(getActivity(), AddFiltersActivity.class);
                 break;
@@ -576,9 +518,5 @@ public class FindLeadsFragment extends BaseFragment implements FindLeadsContract
         }
     }*/
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
 
-    }
 }

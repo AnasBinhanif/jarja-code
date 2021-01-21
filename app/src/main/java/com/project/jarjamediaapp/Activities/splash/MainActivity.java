@@ -28,7 +28,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     ActivitySplashBinding bi;
     Context context = MainActivity.this;
     MainPresenter presenter;
-    long BASE_TIME_OUT = 3;
+    long BASE_TIME_OUT = 1;
     Object notificationType;
     Object NotificationID;
 

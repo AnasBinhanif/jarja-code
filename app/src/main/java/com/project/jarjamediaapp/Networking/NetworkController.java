@@ -68,8 +68,8 @@ public class NetworkController {
                 .connectTimeout(1, TimeUnit.MINUTES)
                 .readTimeout(1, TimeUnit.MINUTES)
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                .addNetworkInterceptor(networkInterceptor()) // only used when network is on
-                .cache(mCache)
+                //.addNetworkInterceptor(networkInterceptor()) // only used when network is on
+               // .cache(mCache)
                 .build();
     }
 

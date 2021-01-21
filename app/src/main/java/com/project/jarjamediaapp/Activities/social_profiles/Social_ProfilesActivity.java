@@ -100,7 +100,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
         getAllSocialProfiles = response.data;
 
         if (getAllSocialProfiles.size() == 0) {
-            bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+          //  bi.tvNoRecordFound.setVisibility(View.VISIBLE);
             bi.recyclerViewSocialProfiles.setVisibility(View.GONE);
         } else {
             bi.tvNoRecordFound.setVisibility(View.GONE);
@@ -131,7 +131,7 @@ public class Social_ProfilesActivity extends BaseActivity implements View.OnClic
             getUpgradedSocialProfile = response.data.leadSocialProfileList;
 
             if (getUpgradedSocialProfile.size() == 0) {
-                bi.tvNoRecordFound.setVisibility(View.VISIBLE);
+//                bi.tvNoRecordFound.setVisibility(View.VISIBLE);
                 bi.recyclerViewSocialProfiles.setVisibility(View.GONE);
             } else {
                 bi.tvNoRecordFound.setVisibility(View.GONE);

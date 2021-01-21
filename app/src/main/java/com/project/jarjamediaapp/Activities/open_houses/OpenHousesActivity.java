@@ -164,7 +164,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         GH.getInstance().HideProgressDialog();
     }
 
-    @Override
+   /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.home, menu);
@@ -188,7 +188,7 @@ public class OpenHousesActivity extends BaseActivity implements View.OnClickList
         }
         return super.onOptionsItemSelected(item);
 
-    }
+    }*/
 
     @Override
     public void updateUIListForOpenHouses(Response<GetAllOpenHousesModel> response,int position) {

@@ -60,6 +60,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     int page = 1;
     int totalPages;
     boolean onResume;
+    View view;
 
     public FragmentAppointment() {
         // Required empty public constructor
@@ -79,11 +80,21 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
+
         bi = DataBindingUtil.inflate(inflater, R.layout.fragment_appointment, container, false);
         presenter = new AppointmentPresenter(this);
         presenter.initScreen();
+
+        onResume = true;
+        page = 1;
+        isTabClick = true;
+        if (appointmentList.size() != 0) {
+            appointmentList.clear();
+        }
+        hitApi();
         return bi.getRoot();
     }
+
 
     public FragmentAppointment getInstance() {
         return this;
@@ -93,6 +104,77 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
     public void setupViews() {
 
         initViews();
+
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void initViews() {
+
+        appointmentList = new ArrayList<>();
+        isFromActivity = this.getArguments().getBoolean("isFromActivity");
+        if (isFromActivity) {
+            leadID = this.getArguments().getString("leadID");
+            bi.tvTitle.setVisibility(View.GONE);
+            bi.fbAddAppoint.setVisibility(View.GONE);
+        }
+
+        bi.btnToday.setOnClickListener(this);
+        bi.btnUpcoming.setOnClickListener(this);
+        bi.btnPrevious.setOnClickListener(this);
+        bi.fbAddAppoint.setOnClickListener(this);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        bi.rvAppointments.setLayoutManager(layoutManager);
+        bi.rvAppointments.setItemAnimator(new DefaultItemAnimator());
+
+
+        userPermission = GH.getInstance().getUserPermissions();
+
+        bi.rvAppointments.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) //check for scroll down
+                {
+                    Log.d("scroll", "scroll down");
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                    // Load more if we have reach the end to the recyclerView
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
+                        Log.d("scroll", "last item");
+                        if (totalPages > appointmentList.size()) {
+                            page++;
+                            try {
+                                isTabClick = false;
+                                hitApi();
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
+                            Log.d("scroll", "More to come");
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (easyPreference.getBoolean(getResources().getString(R.string.refresh_appointment), false)) {
+            onResume = true;
+            page = 1;
+            isTabClick = true;
+            if (appointmentList.size() != 0) {
+                appointmentList.clear();
+            }
+            hitApi();
+            easyPreference.addBoolean(getResources().getString(R.string.refresh_appointment), false).save();
+
+        }
 
     }
 
@@ -156,7 +238,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
             ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
             logout();
         } else {*/
-            ToastUtils.showToastLong(context, error);
+        ToastUtils.showToastLong(context, error);
 
     }
 
@@ -165,8 +247,8 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
 
         try {
             ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
-        }catch (Exception e){
-            Log.i("Exception","Exception in Context");
+        } catch (Exception e) {
+            Log.i("Exception", "Exception in Context");
         }
 
 
@@ -182,59 +264,6 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         GH.getInstance().HideProgressDialog();
     }
 
-    @SuppressLint("RestrictedApi")
-    private void initViews() {
-
-
-        appointmentList = new ArrayList<>();
-        isFromActivity = this.getArguments().getBoolean("isFromActivity");
-        if (isFromActivity) {
-            leadID = this.getArguments().getString("leadID");
-            bi.tvTitle.setVisibility(View.GONE);
-            bi.fbAddAppoint.setVisibility(View.GONE);
-        }
-
-        bi.btnToday.setOnClickListener(this);
-        bi.btnUpcoming.setOnClickListener(this);
-        bi.btnPrevious.setOnClickListener(this);
-        bi.fbAddAppoint.setOnClickListener(this);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
-        bi.rvAppointments.setLayoutManager(layoutManager);
-        bi.rvAppointments.setItemAnimator(new DefaultItemAnimator());
-
-
-        userPermission = GH.getInstance().getUserPermissions();
-
-        bi.rvAppointments.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0) //check for scroll down
-                {
-                    Log.d("scroll", "scroll down");
-                    int visibleItemCount = layoutManager.getChildCount();
-                    int totalItemCount = layoutManager.getItemCount();
-                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-
-                    // Load more if we have reach the end to the recyclerView
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
-                        Log.d("scroll", "last item");
-                        if (totalPages > appointmentList.size()) {
-                            page++;
-                            try {
-                                isTabClick = false;
-                                hitApi();
-                            } catch (NullPointerException e) {
-                                e.printStackTrace();
-                            }
-                            Log.d("scroll", "More to come");
-                        }
-                    }
-                }
-            }
-        });
-
-    }
 
     @Override
     public void onClick(View view) {
@@ -247,7 +276,8 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                 if (HomeActivity.onClick) {
                     Map<String, String> map = new HashMap<>();
                     map.put("from", "5");
-                    switchActivityWithIntentString(context, AddAppointmentActivity.class, (HashMap<String, String>) map);HomeActivity.onClick=false;
+                    switchActivityWithIntentString(context, AddAppointmentActivity.class, (HashMap<String, String>) map);
+                    HomeActivity.onClick = false;
                 }
                 break;
 
@@ -263,7 +293,8 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                     Gson gson = new Gson();
                     //   GetPermissionModel  userPermission = GH.getInstance().getUserPermissions();
                     String storedHashMapDashboardString = GH.getInstance().getUserPermissonDashboard();
-                    java.lang.reflect.Type typeDashboard = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+                    java.lang.reflect.Type typeDashboard = new TypeToken<HashMap<String, Boolean>>() {
+                    }.getType();
                     HashMap<String, Boolean> mapDashboard = gson.fromJson(storedHashMapDashboardString, typeDashboard);
 
                     if (mapDashboard.get("View Or Edit Appointments")) {
@@ -396,18 +427,6 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        onResume = true;
-        page = 1;
-        isTabClick = true;
-        if (appointmentList.size() != 0) {
-            appointmentList.clear();
-        }
-        hitApi();
-    }
 
     private void getNotificationCount() {
 
@@ -437,7 +456,7 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
                         ToastUtils.showErrorToast(context, "Session Expired", "Please Login Again");
                         logout();
                     } else {*/
-                        ToastUtils.showToastLong(context, error.message());
+                    ToastUtils.showToastLong(context, error.message());
 
                 }
             }

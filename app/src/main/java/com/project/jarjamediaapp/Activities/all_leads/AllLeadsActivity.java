@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.functions.Function4;
@@ -67,6 +68,8 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     long last_text_edit = 0;
     Handler handler = new Handler();
     Runnable input_finish_checker;
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +116,19 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
+      /*  page = 0;
+        if (bi.edtSearch.getText().toString().equals("")) {
+            handleIntent();
+        } else {
+            _leadsList = new ArrayList<>();
+            page = 0;
+            isFilter = true;
+            searchLead(page, bi.edtSearch.getText().toString());
+        }*/
+        //   hitApiForLeads();
+    }
+
+    public void hitApiForLeads() {
         page = 0;
         if (bi.edtSearch.getText().toString().equals("")) {
             handleIntent();
@@ -169,6 +185,18 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
                 searchLead(page, bi.edtSearch.getText().toString());
             }
         };
+
+        hitApiForLeads();
+
+        swipeRefreshLayout = findViewById(R.id.swipe_layout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                hitApiForLeads();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
 
     }
@@ -346,7 +374,7 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
     private void populateListData(ArrayList<GetAllLeads.LeadsList> leadsList) {
 
         try {
-        //    GH.getInstance().hideKeyboard(context, AllLeadsActivity.this);
+            //    GH.getInstance().hideKeyboard(context, AllLeadsActivity.this);
             if (leadsList != null && leadsList.size() != 0) {
                 //  if (page == 0) {
                 linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
@@ -455,6 +483,9 @@ public class AllLeadsActivity extends BaseActivity implements View.OnClickListen
 
     public void searchLead(int pageNo, String query) {
 
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
 
         //    _view.showProgressBar();
         showProgressBar();
