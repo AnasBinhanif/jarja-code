@@ -24,6 +24,8 @@
         app:civ_border_color="@color/colorPrimary"
         app:civ_border_width="@dimen/_1sdp" />
 
+
+
     <TextView
         android:id="@+id/tvInitial"
         android:layout_width="@dimen/_75sdp"

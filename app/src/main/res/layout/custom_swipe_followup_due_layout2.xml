@@ -93,7 +93,7 @@
                     android:textColor="@color/colorGreyText"
                     android:text="Address Address Address Address"
                     android:layout_marginTop="5dp"
-
+                    android:maxLines="1"
                     android:textSize="14dp"
                     android:textStyle="bold" />
 
