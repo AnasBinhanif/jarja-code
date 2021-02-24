@@ -457,10 +457,14 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                 break;
 
             case R.id.imgMessage:
-                if (primaryPhoneNumber == null || primaryPhoneNumber.equals("") || primaryPhoneNumber.equals("null") || primaryPhoneNumber.equals("(000) 000-0000")) {
-                    Snackbar.make(bi.getRoot(), "Phone number does not exist", 1000).show();
-                } else {
-                    openMessageComposer(primaryPhoneNumber);
+                if (getAssignedAgentList != null && getAssignedAgentList.size() > 0) {
+                    if (primaryPhoneNumber == null || primaryPhoneNumber.equals("") || primaryPhoneNumber.equals("null") || primaryPhoneNumber.equals("(000) 000-0000")) {
+                        Snackbar.make(bi.getRoot(), "Phone number does not exist", 1000).show();
+                    } else {
+                        openMessageComposer(primaryPhoneNumber);
+                    }
+                }else {
+                    Snackbar.make(bi.getRoot(), "Agent is not assigned", 1000).show();
                 }
                 break;
 
@@ -741,6 +745,9 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
             }
 
             bi.tvScore.setText(getLeadListData.leadScore);
+            if (!TextUtils.isEmpty(getLeadListData.source)) {
+                bi.tvSource.setText(getLeadListData.source);
+            }
         } else {
             bi.scLeadDetail.setVisibility(View.GONE);
             bi.tvNoRecordFound.setVisibility(View.VISIBLE);

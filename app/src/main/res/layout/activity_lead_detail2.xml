@@ -78,6 +78,7 @@
 
                         </LinearLayout>
 
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -104,7 +105,6 @@
                                 android:layout_height="50dp"
                                 android:background="@drawable/round_initials_lead"
                                 android:gravity="center"
-
                                 android:textAllCaps="true"
                                 android:textColor="@color/colorAccent"
                                 android:textSize="20dp"
@@ -140,56 +140,65 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_weight="2">
+                                android:layout_weight="2"
+                                android:orientation="vertical">
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:text="@string/lead_score"
-                                    android:textColor="@color/colorGreyTextDark"
-                                    android:textSize="13dp"
-                                    android:textStyle="bold" />
-
-
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/tvSource"
-                                    android:textColor="@color/colorGreyTextDark"
-                                    android:textSize="13dp"
-                                    android:textStyle="bold" />
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="2"
+                                        android:text="@string/lead_score"
+                                        android:textColor="@color/colorGreyTextDark"
+                                        android:textSize="13dp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvScore"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="2"
+                                        android:textColor="@color/colorPrimaryDark"
+                                        android:textSize="18dp"
+                                        android:textStyle="bold" />
+
+
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="2"
+                                        android:text="Source"
+                                        android:textColor="@color/colorGreyTextDark"
+                                        android:textSize="13dp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvScore2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="2"
+                                        android:textColor="@color/colorPrimaryDark"
+                                        android:visibility="invisible"
+                                        android:textSize="18dp"
+                                        android:textStyle="bold" />
+
+
+                                </LinearLayout>
 
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_weight="2">
-
-                                <TextView
-                                    android:id="@+id/tvScore"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-
-                                    android:textColor="@color/colorPrimaryDark"
-                                    android:textSize="18dp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/tvScore2"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-
-                                    android:textColor="@color/colorPrimaryDark"
-                                    android:visibility="invisible"
-                                    android:textSize="18dp"
-                                    android:textStyle="bold" />
-
-
-
-                            </LinearLayout>
 
                         </LinearLayout>
 

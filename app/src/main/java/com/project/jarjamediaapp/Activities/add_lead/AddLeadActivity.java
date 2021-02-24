@@ -2,6 +2,7 @@ package com.project.jarjamediaapp.Activities.add_lead;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.telephony.PhoneNumberUtils;
@@ -23,6 +24,7 @@ import com.google.gson.reflect.TypeToken;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.CustomAdapter.SpinnerAdapter;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadDripCampaignList;
@@ -92,6 +94,8 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
     boolean mFormatting; // this is a flag which prevents the  stack overflow.
     int mAfter;
     TextWatcher textWatcher;
+
+    SpinnerAdapter spinnerSourceAdapter, typeSpinnerAdapter, timeFrameSpinnerAdapter, preApprovedSpinnerAdapter;
 
 
     @Override
@@ -193,17 +197,23 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             if (leadModel.source != null) {
                 int pos = getLeadSourceNameList.indexOf(leadModel.source);
                 if (pos >= 0) {
-
                     source = getLeadSourceList.get(pos).sourceID;
                     bi.spnSource.setText(leadModel.source);
+                    if (spinnerSourceAdapter != null){
+                        spinnerSourceAdapter.setselectedposition(pos);
+                    }
                 }
 
             }
 
+
             if (leadModel.preApproved) {
                 bi.spnPreApprove.setText("Yes");
+                preApprovedSpinnerAdapter.setselectedposition(0);
             } else {
                 bi.spnPreApprove.setText("No");
+
+                preApprovedSpinnerAdapter.setselectedposition(1);
             }
 
             if (leadModel.leadTypeID != null) {
@@ -215,6 +225,9 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
                         if (id.equals(leadModel.leadTypeID)) {
                             leadType = id;
                             bi.spnType.setText(typemodel.leadType);
+                            if (typeSpinnerAdapter != null){
+                                typeSpinnerAdapter.setselectedposition(i);
+                            }
                         }
                     }
                 } else {
@@ -234,6 +247,9 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
 
                             timeFrame = typemodel.timeFrameId;
                             bi.spnTimeFrame.setText(typemodel.timeFrame);
+                            if(timeFrameSpinnerAdapter!=null){
+                                timeFrameSpinnerAdapter.setselectedposition(i);
+                            }
                         }
                     }
                 } else {
@@ -436,7 +452,22 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
         preAprrovedList.add("Yes");
         preAprrovedList.add("No");
 
-        bi.spnPreApprove.setItems(preAprrovedList);
+//        bi.spnPreApprove.setItems(preAprrovedList);
+        preApprovedSpinnerAdapter = new SpinnerAdapter(this,preAprrovedList);
+        bi.spnPreApprove.setAdapter(preApprovedSpinnerAdapter);
+
+        bi.spnPreApprove.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+
+                preApprovedSpinnerAdapter.setselectedposition(position);
+
+
+            }
+        });
+
+
+
     }
 
     private void removeTextWatchers(TextWatcher textWatcher) {
@@ -974,12 +1005,29 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             getLeadSourceNameList.add(model.sourceName);
         }
 
-        bi.spnSource.setItems(getLeadSourceNameList);
+//        bi.spnSource.setItems(getLeadSourceNameList);
+        spinnerSourceAdapter = new SpinnerAdapter(this,getLeadSourceNameList);
+        bi.spnSource.setAdapter(spinnerSourceAdapter);
+
+        /*if (leadModel.source != null) {
+            int pos = getLeadSourceNameList.indexOf(leadModel.source);
+            if (pos >= 0) {
+                source = getLeadSourceList.get(pos).sourceID;
+                bi.spnSource.setText(leadModel.source);
+                spinnerSourceAdapter.setselectedposition(pos);
+
+            }
+        }*/
+
+
         bi.spnSource.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
 
                 source = getLeadSourceList.get(position).sourceID;
+                spinnerSourceAdapter.setselectedposition(position);
+
+
             }
         });
         presenter.GetLeadTagList();
@@ -1010,13 +1058,40 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             getLeadTypeNameList.add(model.leadType);
         }
 
-        bi.spnType.setItems(getLeadTypeNameList);
+//        bi.spnType.setItems(getLeadTypeNameList);
+        typeSpinnerAdapter = new SpinnerAdapter(this,getLeadTypeNameList);
+        bi.spnType.setAdapter(typeSpinnerAdapter);
+
         bi.spnType.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 leadType = getLeadTypeList.get(position).id;
+                typeSpinnerAdapter.setselectedposition(position);
             }
         });
+
+       /* if (leadModel.leadTypeID != null) {
+            if (getLeadTypeList != null && getLeadTypeList.size() > 0) {
+                for (int i = 0; i < getLeadTypeList.size(); i++) {
+                    GetLeadTypeList.Data typemodel = getLeadTypeList.get(i);
+                    Integer id = typemodel.id;
+                    if (id.equals(leadModel.leadTypeID)) {
+                        leadType = id;
+                        bi.spnType.setText(typemodel.leadType);
+                        typeSpinnerAdapter.setselectedposition(i);
+                    }
+                }
+            } else {
+                bi.spnType.setSelectedIndex(0);
+            }
+
+        }*/
+
+
+
+
+
+
         presenter.GetLeadTimeFrame();
 
     }
@@ -1032,14 +1107,39 @@ public class AddLeadActivity extends BaseActivity implements AddLeadContract.Vie
             getLeadTimeFrameNames.add(model.timeFrame);
         }
 
-        bi.spnTimeFrame.setItems(getLeadTimeFrameNames);
+//        bi.spnTimeFrame.setItems(getLeadTimeFrameNames);
+
+        timeFrameSpinnerAdapter = new SpinnerAdapter(this,getLeadTimeFrameNames);
+        bi.spnTimeFrame.setAdapter(timeFrameSpinnerAdapter);
 
         bi.spnTimeFrame.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 timeFrame = getLeadTimeFrameList.get(position).timeFrameId;
+                timeFrameSpinnerAdapter.setselectedposition(position);
             }
         });
+
+       /* if (leadModel.timeFrameId != null) {
+
+            if (getLeadTimeFrameList != null && getLeadTimeFrameList.size() > 0) {
+                for (int i = 0; i < getLeadTimeFrameList.size(); i++) {
+                    GetLeadTimeFrame.Data typemodel = getLeadTimeFrameList.get(i);
+                    Integer id = typemodel.timeFrameId;
+                    if (id.equals(leadModel.timeFrameId)) {
+
+                        timeFrame = typemodel.timeFrameId;
+                        bi.spnTimeFrame.setText(typemodel.timeFrame);
+                        timeFrameSpinnerAdapter.setselectedposition(i);
+                    }
+                }
+            } else {
+                bi.spnTimeFrame.setSelectedIndex(0);
+            }
+        }
+*/
+
+
         presenter.GetLeadDripCampaignList();
     }
 

@@ -354,7 +354,9 @@
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="14dp"
                         app:ms_hint="@string/source"
+
                         app:ms_hint_color="@color/colorGreyTextDark" />
+
 
                     <TextView
                         style="@style/AutoCompleteLabelStyle"

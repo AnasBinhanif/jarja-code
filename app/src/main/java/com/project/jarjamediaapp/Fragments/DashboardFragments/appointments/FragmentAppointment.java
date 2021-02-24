@@ -405,7 +405,6 @@ public class FragmentAppointment extends BaseFragment implements FragmentLifeCyc
             switch (buttonType) {
                 case "T": {
                     if (userPermission.getData().getDashboard().get(6).getValue()) {
-
                         presenter.getTodayAppointments(page);
                     } else {
                         ToastUtils.showToast(context, getString(R.string.dashboard_ViewEditAppoint));

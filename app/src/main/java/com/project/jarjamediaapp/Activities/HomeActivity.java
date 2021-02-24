@@ -216,7 +216,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     BaseResponse getAppointmentsModel = response.body();
                     if (getAppointmentsModel.getStatus().equalsIgnoreCase("Success")) {
 
-
                     } else {
 
                         Toast.makeText(context, getAppointmentsModel.message, Toast.LENGTH_SHORT).show();
