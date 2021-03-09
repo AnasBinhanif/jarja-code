@@ -23,6 +23,7 @@ import com.project.jarjamediaapp.Activities.open_houses.UserWebsites;
 import com.project.jarjamediaapp.Activities.transactions.TransactionModel;
 import com.project.jarjamediaapp.Activities.user_profile.GetPermissionModel;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.CommunicationModel;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetAllLeads;
 import com.project.jarjamediaapp.Models.GetAppointmentsModel;
@@ -670,4 +671,8 @@ public interface ApiMethods {
 
     @GET("Lead/Get_LeadSaveSearch")
     Call<ResponseBody> getLeadSearchFilters(@Header("Authorization") String hdr);
+
+
+    @GET("Lead/GetLead_Communication")
+    Call<CommunicationModel> getLeadCommunications(@Header("Authorization") String auth, @Query("Encrypted_LeadID") String encryptedLeadId);
 }

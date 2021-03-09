@@ -39,7 +39,7 @@ public class AppointmentPresenter extends BasePresenter<AppointmentContract.View
 
     @Override
     public void getTodayAppointments(int page) {
-        _view.showProgressBar();
+//        _view.showProgressBar();
         _callToday = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetTodayAppointment(GH.getInstance().getAuthorization(), page);
         _callToday.enqueue(new Callback<GetAppointmentsModel>() {
             @Override

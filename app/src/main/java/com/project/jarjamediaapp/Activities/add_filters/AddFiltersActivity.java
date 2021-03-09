@@ -948,6 +948,7 @@ public class AddFiltersActivity extends BaseActivity implements AddFiltersContra
             if (agentIdsList != null && agentIdsList.size() > 0) {
                 for (String s : agentIdsList) {
                     if (s.equalsIgnoreCase(model.encryptedAgentID)) {
+
                         searchListItemsselected.add(new MultiSelectModel(model.agentID, model.agentName, model.encryptedAgentID));
 
                         selectedIdsList.add(Integer.valueOf(model.agentID).intValue());

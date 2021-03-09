@@ -127,6 +127,7 @@
     <string name="price_range">Price Range</string>
     <string name="date_range">Date Range</string>
     <string name="notes">Notes</string>
+    <string name="communication">Communication</string>
     <string name="lead_id">Lead ID</string>
     <string name="last_login">Last Login</string>
     <string name="last_touchWithoutColon">Last Touch</string>

@@ -238,13 +238,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void getUserProfileData() {
 
-        //  showProgressBar();
+          showProgressBar();
         Call<GetUserProfile> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).
                 getUserProfileData(GH.getInstance().getAuthorization());
         _call.enqueue(new Callback<GetUserProfile>() {
 
             @Override
             public void onResponse(Call<GetUserProfile> call, Response<GetUserProfile> response) {
+
+                hideProgressBar();
 
                 if (response.isSuccessful()) {
 
@@ -303,7 +305,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
             @Override
             public void onFailure(Call<GetUserProfile> call, Throwable t) {
-                //  hideProgressBar();
+                  hideProgressBar();
                 ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
             }
         });

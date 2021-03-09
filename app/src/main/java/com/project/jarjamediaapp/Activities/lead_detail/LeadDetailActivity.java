@@ -33,6 +33,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.project.jarjamediaapp.Activities.add_lead.AddLeadActivity;
 import com.project.jarjamediaapp.Activities.appointments.AppointmentActivity;
+import com.project.jarjamediaapp.Activities.communications.CommunicationsActivity;
 import com.project.jarjamediaapp.Activities.followups.FollowupsActivity;
 import com.project.jarjamediaapp.Activities.listing_info.ListingInfoActivity;
 import com.project.jarjamediaapp.Activities.notes.NotesActivity;
@@ -195,6 +196,7 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
         leadsList.add(new GetLeadDetails("Follow Ups"));
         leadsList.add(new GetLeadDetails("Tasks"));
         leadsList.add(new GetLeadDetails("Notes"));
+        leadsList.add(new GetLeadDetails("Communication"));
 
 
         bi.recyclerLeadDetails.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
@@ -271,6 +273,12 @@ public class LeadDetailActivity extends BaseActivity implements LeadDetailContra
                     Map<String, String> noteMap = new HashMap<>();
                     noteMap.put("leadID", leadID);
                     switchActivityWithIntentString(NotesActivity.class, (HashMap) noteMap);
+                    break;
+
+                case 9:
+                    Map<String, String> communicationMap = new HashMap<>();
+                    communicationMap.put("leadID", leadID);
+                    switchActivityWithIntentString(CommunicationsActivity.class, (HashMap<String, String>) communicationMap);
                     break;
 
             }

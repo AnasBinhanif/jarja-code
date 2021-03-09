@@ -4,6 +4,20 @@
     package="com.project.jarjamediaapp"
     tools:ignore="LockedOrientationActivity">
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission
+        android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
     <application
         android:name=".ProjectApplication"
         android:allowBackup="false"
@@ -17,7 +31,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-        <activity android:name=".Fragments.LeadsFragments.find_leads.FindLeadsActivity"></activity>
+        <activity android:name=".Activities.communications.CommunicationsActivity"></activity>
+        <activity android:name=".Fragments.LeadsFragments.find_leads.FindLeadsActivity" />
         <activity android:name=".Activities.user_profile.ChangePassword" />
         <activity
             android:name=".Activities.splash.MainActivity"
@@ -137,19 +152,5 @@
             </intent-filter>
         </service>
     </application>
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission
-        android:name="android.permission.READ_LOGS"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
 </manifest>

@@ -394,6 +394,8 @@ public class VoiceActivity extends AppCompatActivity {
         params.put("From", fromNumber);
         params.put("callerid", callerId);
         params.put("To", toNumber);
+//        params.put("To","(202) 286-2112");
+//        params.put("To","(123) 458-8888");
         params.put("Direction", "outbound-dial");
         params.put("Type", "Phone");
 
