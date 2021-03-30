@@ -44,9 +44,9 @@ public class CommunicationModel {
 
     public class Data {
 
-        private String date, type, msg, callDuration, subject, sentAt, noteType, html, agents;
+        private String date, type, msg, callDuration, subject, sentAt, noteType, html, agents, id,emailSendFrom,emailSendTo,emailSubject,emailBody;
 
-        private int id, leadID, notedId;
+        private int  leadID, notedId;
 
         private boolean isSticky, isDetected;
 
@@ -123,11 +123,11 @@ public class CommunicationModel {
             this.agents = agents;
         }
 
-        public int getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(String id) {
             this.id = id;
         }
 
@@ -162,6 +162,38 @@ public class CommunicationModel {
 
         public void setNotedId(int notedId) {
             this.notedId = notedId;
+        }
+
+        public String getEmailSendFrom() {
+            return emailSendFrom;
+        }
+
+        public void setEmailSendFrom(String emailSendFrom) {
+            this.emailSendFrom = emailSendFrom;
+        }
+
+        public String getEmailSendTo() {
+            return emailSendTo;
+        }
+
+        public void setEmailSendTo(String emailSendTo) {
+            this.emailSendTo = emailSendTo;
+        }
+
+        public String getEmailSubject() {
+            return emailSubject;
+        }
+
+        public void setEmailSubject(String emailSubject) {
+            this.emailSubject = emailSubject;
+        }
+
+        public String getEmailBody() {
+            return emailBody;
+        }
+
+        public void setEmailBody(String emailBody) {
+            this.emailBody = emailBody;
         }
     }
 

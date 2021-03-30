@@ -10,17 +10,26 @@ import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.project.jarjamediaapp.Activities.HomeActivity;
 import com.project.jarjamediaapp.Activities.login.LoginActivity;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Networking.ApiError;
+import com.project.jarjamediaapp.Networking.CallbackInterface;
+import com.project.jarjamediaapp.Networking.FailureException;
+import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.Networking.ResponseModel.AccessCode;
+import com.project.jarjamediaapp.Networking.RetrofitCallback;
 import com.project.jarjamediaapp.R;
+import com.project.jarjamediaapp.Utilities.AppConstants;
 import com.project.jarjamediaapp.Utilities.EasyPreference;
 import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 import com.project.jarjamediaapp.databinding.ActivitySplashBinding;
 
+import org.json.JSONObject;
+
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, MainContract.View {
@@ -43,25 +52,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         if (getIntent().getExtras() != null) {
 
-             notificationType = getIntent().getExtras().get("notification_type");
-             NotificationID = getIntent().getExtras().get("NotificationID");
+            notificationType = getIntent().getExtras().get("notification_type");
+            NotificationID = getIntent().getExtras().get("NotificationID");
 
 
         }
 
 
-
-
         // for testing
         // save o start acivity other wise application crash due to null values
         EasyPreference.Builder pref = new EasyPreference.Builder(context);
-        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(),"").save();
+        pref.addString(GH.KEYS.FRAGMENTSTATUS.name(), "").save();
         // for notification dialogue
 
 
         //pref.addString(GH.KEYS.ISNOTIFICATIONALLOW.name(),"false").save();
 
     }
+
     public void splash(long baseTimeout) {
 
         BASE_TIME_OUT = baseTimeout * 1000;
@@ -71,18 +79,58 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public void run() {
 
                 if (GH.getInstance().getAuthorization() != null && !GH.getInstance().getAuthorization().equals("")) {
+                    String email = GH.getInstance().getEmail();
+                    String password = GH.getInstance().getPassword();
+//                    String email = "";
+//                    String password = "";
+                    NetworkController.getInstance().NetworkCall(NetworkController.getInstance().getApiMethods().getToken(email, password, AppConstants.HTTP.GRANT_TYPE),
+                            new RetrofitCallback<>(new CallbackInterface<AccessCode>() {
+                                @Override
+                                public void onSuccess(AccessCode response) {
+                                    //MyLog.d("Response", "onSuccess: " + response.toString());
+                                    Log.d("token", response.accessToken + "");
 
-                    easyPreference.addBoolean(GH.KEYS.NAVIGATIONSTATUS.name(),true).save();
-                    Intent intent =  new Intent(getApplicationContext(),HomeActivity.class);
-                    intent.putExtra("notificationType",String.valueOf(notificationType));
-                    intent.putExtra("notificationID",String.valueOf(NotificationID));
+                                    easyPreference.addString(GH.KEYS.AUTHORIZATION.name(), "bearer" + " " + response.accessToken).save();
+
+                                    easyPreference.addBoolean(GH.KEYS.NAVIGATIONSTATUS.name(), true).save();
+                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                    intent.putExtra("notificationType", String.valueOf(notificationType));
+                                    intent.putExtra("notificationID", String.valueOf(NotificationID));
+                                    startActivity(intent);
+                                    // switchActivity(HomeActivity.class);
+                                    finish();
+
+
+                                }
+
+                                @Override
+                                public void onError(Throwable throwable) {
+
+                                    Log.d("Response", "onError: " + throwable.toString());
+
+//                                    ToastUtils.showToastLong(context, "Invalid Username or Password");
+                                    switchActivity(LoginActivity.class);
+                                    finish();
+
+                                }
+
+                            }));
+
+
+                   /* easyPreference.addBoolean(GH.KEYS.NAVIGATIONSTATUS.name(), true).save();
+                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                    intent.putExtra("notificationType", String.valueOf(notificationType));
+                    intent.putExtra("notificationID", String.valueOf(NotificationID));
                     startActivity(intent);
-                   // switchActivity(HomeActivity.class);
+                    // switchActivity(HomeActivity.class);
+                    finish();*/
+
                 } else {
                     switchActivity(LoginActivity.class);
+                    finish();
                 }
 
-                finish();
+//                finish();
             }
         };
         handler.postDelayed(runnable, BASE_TIME_OUT);
@@ -96,8 +144,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void setupViews() {
 
-        splash(3);
-
+//        splash(3);
+        splash(1);
 
     }
 

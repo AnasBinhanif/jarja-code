@@ -100,6 +100,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         Log.d("token", response.accessToken + "");
 
                         easyPreference.addString(GH.KEYS.AUTHORIZATION.name(), "bearer" + " " + response.accessToken).save();
+
+                        //saving email and password to call gettoken api on splash screen
+                        easyPreference.addString(GH.KEYS.EMAIL.name(), userName).save();
+                        easyPreference.addString(GH.KEYS.PASSWORD.name(), password).save();
+
                         userAuthenticate(FirebaseInstanceId.getInstance().getToken(), "FCM", "bearer" + " " + response.accessToken);
                     }
 

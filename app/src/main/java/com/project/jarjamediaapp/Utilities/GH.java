@@ -64,8 +64,18 @@ public class GH {
         USER_PERMISSIONS_SETTINGS,
         USER_PERMISSIONS_DASHBOARD,
         USER_PERMISSIONS_LEAD,
-        USER_PERMISSIONS_CALENDER
+        USER_PERMISSIONS_CALENDER,
+        EMAIL,
+        PASSWORD
 
+    }
+
+    public String getEmail(){
+        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.EMAIL.name(), "");
+    }
+
+    public String getPassword(){
+        return EasyPreference.with(ProjectApplication.getInstance()).getString(KEYS.PASSWORD.name(), "");
     }
 
     public String getAuthorization() {

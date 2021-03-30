@@ -14,7 +14,9 @@ import com.project.jarjamediaapp.Models.CommunicationModel;
 import com.project.jarjamediaapp.Models.GetAgentsModel;
 import com.project.jarjamediaapp.Models.GetLead;
 import com.project.jarjamediaapp.Models.GetLeadTransactionStage;
+import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
+import com.project.jarjamediaapp.Networking.ErrorUtils;
 import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.Utilities.GH;
 
@@ -39,29 +41,38 @@ public class CommunicationPresenter extends BasePresenter<CommunicationlContract
 
     @Override
     public void getCommunications(String encryptedID) {
+        _view.showProgressBar();
 
+        Log.d( "encyrptedLeadd: ",encryptedID);
         call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class)
                 .getLeadCommunications(GH.getInstance().getAuthorization(),
                         encryptedID);
-       call.enqueue(new Callback<CommunicationModel>() {
-           @Override
-           public void onResponse(Call<CommunicationModel> call, Response<CommunicationModel> response) {
+        call.enqueue(new Callback<CommunicationModel>() {
+            @Override
+            public void onResponse(Call<CommunicationModel> call, Response<CommunicationModel> response) {
+                _view.hideProgressBar();
 
-               if (response.isSuccessful()){
+                if (response.isSuccessful()) {
 
-                   CommunicationModel communicationModel = response.body();
-                   Log.d("onResponse: ",communicationModel.toString());
-                   _view.updateUI(communicationModel);
-               }
+                    CommunicationModel communicationModel = response.body();
+                    Log.d("onResponse: ", communicationModel.toString());
+                    _view.updateUI(communicationModel);
+
+                } else {
+
+                    ApiError error = ErrorUtils.parseError(response);
+                    _view.updateUIonError(error.message());
+                }
 
 
-           }
+            }
 
-           @Override
-           public void onFailure(Call<CommunicationModel> call, Throwable t) {
-
-           }
-       });
+            @Override
+            public void onFailure(Call<CommunicationModel> call, Throwable t) {
+                _view.hideProgressBar();
+                _view.updateUIonFailure();
+            }
+        });
 
 
     }

@@ -21,6 +21,7 @@
         android:id="@+id/rvCommunication"
         app:layout_constraintTop_toBottomOf="@id/ep_toolbar"
         android:layout_height="0dp"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent">
 
     </androidx.recyclerview.widget.RecyclerView>

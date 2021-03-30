@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:padding="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tvAssignedTo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Email details"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/ivClose"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/ivClose"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_close_black_24dp"
+                app:layout_constraintBottom_toTopOf="@id/tvAssignedTo"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAssignedTo">
+
+            </ImageView>
+
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorGrey_light"
+                app:layout_constraintEnd_toEndOf="@id/ivClose"
+                app:layout_constraintStart_toStartOf="@id/tvAssignedTo"
+                app:layout_constraintTop_toBottomOf="@id/tvAssignedTo" />
+
+            <TextView
+                android:id="@+id/tvFromt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/from"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/view" />
+
+            <AutoCompleteTextView
+                android:id="@+id/atvFrom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_search"
+                android:focusable="false"
+                android:hint="@string/email"
+                android:padding="@dimen/_10sdp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_11sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvFromt" />
+
+
+            <TextView
+                android:id="@+id/tvTo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/to"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/atvFrom" />
+
+            <TextView
+                android:id="@+id/tvToAgent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_search"
+                android:hint="@string/recipient"
+                android:padding="@dimen/_10sdp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_11sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvTo" />
+
+
+            <HorizontalScrollView
+                android:id="@+id/horizontolScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                app:layout_constraintTop_toBottomOf="@id/tvToAgent">
+
+                <LinearLayout
+                    android:id="@+id/lnAgent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/tvCC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/cc"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/horizontolScrollView" />
+
+            <AutoCompleteTextView
+                android:id="@+id/atvCC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_search"
+                android:enabled="false"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:padding="@dimen/_10sdp"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_11sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvCC" />
+
+            <TextView
+                android:id="@+id/tvBCC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/bcc"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+
+                app:layout_constraintTop_toBottomOf="@id/atvCC" />
+
+            <AutoCompleteTextView
+                android:id="@+id/atvBCC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_search"
+                android:enabled="false"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:padding="@dimen/_10sdp"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_11sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvBCC" />
+
+            <TextView
+                android:id="@+id/tvSub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/subject"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/atvBCC" />
+
+            <AutoCompleteTextView
+                android:id="@+id/atvSubject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_search"
+                android:enabled="false"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailSubject"
+                android:padding="@dimen/_10sdp"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_11sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvSub" />
+
+
+            <TextView
+                android:id="@+id/tvBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/body"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/atvSubject" />
+
+            <MultiAutoCompleteTextView
+                android:id="@+id/atvBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_search"
+                android:enabled="false"
+                android:gravity="start|top"
+                android:imeOptions="actionDone"
+                android:inputType="textMultiLine"
+                android:minLines="9"
+                android:paddingLeft="@dimen/_10sdp"
+                android:paddingTop="@dimen/_10sdp"
+                android:paddingRight="@dimen/_10sdp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_11sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/tvBody" />
+
+            <WebView
+                android:id="@+id/webview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_search"
+                app:layout_constraintTop_toBottomOf="@id/atvBody">
+            </WebView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
+

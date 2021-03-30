@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,6 +23,7 @@ import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.project.jarjamediaapp.Activities.notes.AddNotesActivity;
 import com.project.jarjamediaapp.Activities.notes.NotesActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
+import com.project.jarjamediaapp.Models.CommunicationModel;
 import com.project.jarjamediaapp.Models.GetLeadNotes;
 import com.project.jarjamediaapp.Networking.ApiError;
 import com.project.jarjamediaapp.Networking.ApiMethods;
@@ -31,13 +34,14 @@ import com.project.jarjamediaapp.Utilities.GH;
 import com.project.jarjamediaapp.Utilities.ToastUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
+public class SwipeCommunicationRecyclerAdapter extends RecyclerView.Adapter {
 
     private LayoutInflater mInflater;
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
@@ -45,24 +49,24 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
     Activity activity;
     int pos;
     String status = "";
-    ArrayList<GetLeadNotes.NotesList> mData;
+    List<CommunicationModel.Data> modelList;
 
     public static boolean isEditable = false;
     String agentString = "";
 
 
-    public SwipeNotesRecyclerAdapter(Context context, Activity activity, ArrayList<GetLeadNotes.NotesList> getLeadNotes) {
+    public SwipeCommunicationRecyclerAdapter(Context context, Activity activity, List<CommunicationModel.Data> modelList) {
 
         this.context = context;
         this.activity = activity;
-        mData = getLeadNotes;
+        this.modelList = modelList;
         mInflater = LayoutInflater.from(context);
         binderHelper.setOpenOnlyOne(true);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.custom_swipe_notes_layout, parent, false);
+        View view = mInflater.inflate(R.layout.layout_communication_rv2, parent, false);
         return new ViewHolder(view);
     }
 
@@ -71,41 +75,61 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
         final ViewHolder holder = (ViewHolder) h;
 
         pos = position;
-        if (mData != null && 0 <= position && position < mData.size()) {
+        if (modelList != null && 0 <= position && position < modelList.size()) {
 
-            GetLeadNotes.NotesList modelData = mData.get(position);
+            CommunicationModel.Data communicationModel = modelList.get(position);
 
-            holder.tvNoteType.setText(modelData.noteType + "");
-            holder.tvDesc.setText(modelData.desc);
+            String date = GH.getInstance().formatter(modelList.get(position).getDate(), "dd/MM/yyyy", "yyyy-MM-dd'T'hh:mm:ss");
+            holder.tvDate.setText(date);
+            String time = GH.getInstance().formatter(modelList.get(position).getDate(), "hh:mm a", "yyyy-MM-dd'T'hh:mm:ss");
+            holder.tvTime.setText(time);
 
-            if (!modelData.createdDate.equals("") || !modelData.createdDate.equals("null")) {
-                String dateTime[] = modelData.createdDate.split("T");
-                String createdDate = dateTime[0] + " " + dateTime[1].substring(0, 5);
-                String createdTime = dateTime[1].substring(0, 5);
 
-                holder.tvDateTime.setText(GH.getInstance().formatter(createdDate, "MM/dd/yyyy", "yyyy-MM-dd HH:mm") + "");
-                holder.tvTime.setText(GH.getInstance().formatter(createdTime,"hh:mm a","HH:mm")+"");
-            } else {
-                holder.tvDateTime.setText("");
-                holder.tvTime.setText("");
-            }
 
-            if (modelData.isSticky) {
-                holder.cbNoteSticky.setChecked(true);
-            } else {
-                holder.cbNoteSticky.setChecked(false);
-            }
-            agentString = "";
-            for (GetLeadNotes.AgentList agents : modelData.agentList) {
+            if (communicationModel.getType().equalsIgnoreCase("Sent")) {
 
-                if (agentString.equals("")) {
-                    agentString = agents.agentName;
+                holder.ivIcon.setImageResource(R.drawable.ic_envelope_solid);
+                holder.tvMessage.setText(communicationModel.getHtml());
+                holder.tvDuration.setText(communicationModel.getSubject());
+
+
+            } else if (communicationModel.getType().equalsIgnoreCase("Text")) {
+                holder.ivIcon.setImageResource(R.drawable.ic_mobile_solid);
+                holder.tvMessage.setText(communicationModel.getHtml());
+                holder.tvDuration.setText(communicationModel.getMsg());
+
+            } else if (communicationModel.getType().equalsIgnoreCase("Call")) {
+
+                holder.ivIcon.setImageResource(R.drawable.ic_phone_square_alt_solid);
+                holder.tvMessage.setText("Call to " + communicationModel.getSentAt());
+
+                if (!TextUtils.isEmpty(communicationModel.getCallDuration())) {
+                    holder.tvDuration.setText("Call duration: " + communicationModel.getCallDuration() + " minute(s)");
                 } else {
-                    agentString = agentString + "," + agents.agentName;
+                    holder.tvDuration.setText(communicationModel.getMsg());
                 }
+
+            } else if (communicationModel.getType().equalsIgnoreCase("SocialMedia")) {
+
+                holder.ivIcon.setImageResource(R.drawable.ic_comment_dots_solid);
+                holder.tvMessage.setText("Social Media");
+                holder.tvDuration.setText(communicationModel.getMsg());
+
+            } else if (communicationModel.getType().equalsIgnoreCase("Inperson")) {
+                holder.ivIcon.setImageResource(R.drawable.ic_users_solid);
+                holder.tvMessage.setText("In-person");
+                holder.tvDuration.setText(communicationModel.getMsg());
+            } else if (communicationModel.getType().equalsIgnoreCase("Others")) {
+                holder.ivIcon.setImageResource(R.drawable.ic_lightbulb_regular);
+                holder.tvMessage.setText("Other");
+                holder.tvDuration.setText(communicationModel.getMsg());
+            }else if (communicationModel.getType().equalsIgnoreCase("notes")){
+                holder.tvMessage.setText("notes");
+                holder.ivIcon.setImageResource(R.drawable.ic_calendar);
+                holder.tvDuration.setText("");
             }
 
-            holder.tvAgentNames.setText("Note For : " + agentString);
+
 
             holder.frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -113,39 +137,6 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            holder.cbNoteSticky.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-                    alertDialog.setTitle("Confirmation");
-                    alertDialog.setMessage("Are you sure you want to edit this Note ?");
-                    alertDialog.setPositiveButton(android.R.string.yes, (dialog, which) -> {
-
-                        if (holder.cbNoteSticky.isChecked()) {
-                            callStickyNote(modelData.encryptedNoteID, modelData.encrypted_LeadID, holder.cbNoteSticky.isChecked());
-                        } else {
-                            callStickyNote(modelData.encryptedNoteID, modelData.encrypted_LeadID, holder.cbNoteSticky.isChecked());
-                        }
-                        dialog.dismiss();
-
-                    });
-                    alertDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                            if (holder.cbNoteSticky.isChecked()) {
-                                holder.cbNoteSticky.setChecked(false);
-                            } else {
-                                holder.cbNoteSticky.setChecked(true);
-                            }
-                        }
-                    });
-
-                    alertDialog.create().show();
-
-                }
-            });
 
             holder.swipeLayout.setSwipeListener(new SwipeRevealLayout.SwipeListener() {
                 @Override
@@ -169,9 +160,9 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
             // Use ViewBindHelper to restore and save the open/close state of the SwipeRevealView
             // put an unique string id as value, can be any string which uniquely define the data
 
-            binderHelper.bind(holder.swipeLayout, String.valueOf(pos));
+//            binderHelper.bind(holder.swipeLayout, String.valueOf(pos));
             // Bind your data here
-            holder.bind();
+//            holder.bind();
         }
 
         binderHelper.bind(holder.swipeLayout, String.valueOf(pos));
@@ -180,11 +171,16 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        if (mData == null) {
+        if (modelList == null) {
             return 0;
         } else {
-            return mData.size();
+            return modelList.size();
         }
+    }
+
+    public void setData(List<CommunicationModel.Data> dataList) {
+        this.modelList = dataList;
+        notifyDataSetChanged();
     }
 
     public void saveStates(Bundle outState) {
@@ -197,9 +193,8 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
 
     private class ViewHolder extends RecyclerView.ViewHolder {
         private SwipeRevealLayout swipeLayout;
-        TextView tvDateTime, tvTime, tvNoteType, tvDesc, tvAgentNames;
-        LinearLayout lnEdit, lnDelete;
-        CheckBox cbNoteSticky;
+        TextView tvDate, tvMessage, tvTime, tvDuration;
+        ImageView ivIcon;
         FrameLayout frameLayout;
 
         public ViewHolder(View itemView) {
@@ -209,18 +204,18 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
             swipeLayout.setLockDrag(true);
             frameLayout = itemView.findViewById(R.id.frameLayout);
 
-            lnEdit = itemView.findViewById(R.id.lnEdit);
-            tvDesc = itemView.findViewById(R.id.tvDesc);
+
             tvTime = itemView.findViewById(R.id.tvTime);
-            tvAgentNames = itemView.findViewById(R.id.tvAgentNames);
-            tvNoteType = itemView.findViewById(R.id.tvNoteType);
-            tvDateTime = itemView.findViewById(R.id.tvDateTime);
-            lnDelete = itemView.findViewById(R.id.lnDelete);
-            cbNoteSticky = itemView.findViewById(R.id.cbNoteSticky);
+            tvDate = itemView.findViewById(R.id.tvDate);
+            tvMessage = itemView.findViewById(R.id.tvMessage);
+            tvTime = itemView.findViewById(R.id.tvTime);
+            ivIcon = itemView.findViewById(R.id.ivIcon);
+            tvDuration = itemView.findViewById(R.id.tvDuration);
         }
 
         public void bind() {
 
+/*
             lnEdit.setOnClickListener(v -> {
 
                 isEditable = true;
@@ -228,7 +223,6 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
                 Intent intent = new Intent(context, AddNotesActivity.class);
                 intent.putExtra("Note", mData.get(pos));
                 context.startActivity(intent);
-
 
             });
 
@@ -253,12 +247,12 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
                 });
 
                 alertDialog.show();
-            });
+            });*/
 
 
         }
     }
-
+/*
     private void callDeleteNote(String encryptedNoteID, SwipeRevealLayout swipeLayout) {
 
         GH.getInstance().ShowProgressDialog(activity);
@@ -334,7 +328,7 @@ public class SwipeNotesRecyclerAdapter extends RecyclerView.Adapter {
                 ToastUtils.showToastLong(context, context.getString(R.string.retrofit_failure));
             }
         });
-    }
+    }*/
 
 
 

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.project.jarjamediaapp.Base.BaseActivity;
 import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.CustomAdapter.CommunicationAdapter;
+import com.project.jarjamediaapp.CustomAdapter.SwipeCommunicationRecyclerAdapter;
 import com.project.jarjamediaapp.Models.CommunicationModel;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
@@ -24,6 +25,9 @@ public class CommunicationsActivity extends BaseActivity implements Communicatio
     CommunicationPresenter communicationPresenter;
     String leadId;
 
+    SwipeCommunicationRecyclerAdapter swipeCommunicationRecyclerAdapter;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +36,7 @@ public class CommunicationsActivity extends BaseActivity implements Communicatio
         activityCommunicationsBinding = DataBindingUtil.setContentView(this, R.layout.activity_communications);
         communicationPresenter = new CommunicationPresenter(this);
         setToolBarTitle(activityCommunicationsBinding.epToolbar.toolbar, getString(R.string.communication), true);
-        communicationAdapter = new CommunicationAdapter(this,null);
+        swipeCommunicationRecyclerAdapter = new SwipeCommunicationRecyclerAdapter(this, this, null);
         leadId = getIntent().getStringExtra("leadID");
         communicationPresenter.initScreen();
 
@@ -46,7 +50,8 @@ public class CommunicationsActivity extends BaseActivity implements Communicatio
 
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         activityCommunicationsBinding.rvCommunication.setLayoutManager(linearLayoutManager);
-        activityCommunicationsBinding.rvCommunication.setAdapter(communicationAdapter);
+//        activityCommunicationsBinding.rvCommunication.setAdapter(communicationAdapter);
+//        activityCommunicationsBinding.rvCommunication.setAdapter(swipeCommunicationRecyclerAdapter);
 
 
     }
@@ -66,9 +71,11 @@ public class CommunicationsActivity extends BaseActivity implements Communicatio
 
     @Override
     public void updateUI(CommunicationModel communicationModel) {
+        communicationAdapter = new CommunicationAdapter(this, communicationModel.data);
+        activityCommunicationsBinding.rvCommunication.setAdapter(communicationAdapter);
 
-        communicationAdapter.setData(communicationModel.data);
-
+//        communicationAdapter.setData(communicationModel.data);
+//        swipeCommunicationRecyclerAdapter.setData(communicationModel.data);
 
     }
 
@@ -90,11 +97,12 @@ public class CommunicationsActivity extends BaseActivity implements Communicatio
 
     @Override
     public void showProgressBar() {
-
+        GH.getInstance().ShowProgressDialog(CommunicationsActivity.this);
     }
 
     @Override
     public void hideProgressBar() {
+        GH.getInstance().HideProgressDialog();
 
     }
 }

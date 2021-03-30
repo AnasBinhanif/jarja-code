@@ -74,7 +74,6 @@ public class ErrorUtils {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
 
-
                 if (response.isSuccessful()) {
 
                     BaseResponse baseResponse = response.body();
@@ -102,5 +101,6 @@ public class ErrorUtils {
         });
 
     }
+
 
 }
