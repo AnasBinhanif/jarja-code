@@ -61,7 +61,7 @@ public class CommunicationAdapter extends RecyclerView.Adapter<CommunicationAdap
         CommunicationModel.Data communicationModel = modelList.get(post);
 
         if (!TextUtils.isEmpty(communicationModel.getDate())) {
-            String date = GH.getInstance().formatter(modelList.get(post).getDate(), "dd/MM/yyyy", "yyyy-MM-dd'T'hh:mm:ss");
+            String date = GH.getInstance().formatter(modelList.get(post).getDate(), "MM/dd/yyyy", "yyyy-MM-dd'T'hh:mm:ss");
             holder.tvDate.setText(date);
 //            holder.tvDate.setText(String.valueOf(post));
             String time = GH.getInstance().formatter(modelList.get(post).getDate(), "hh:mm a", "yyyy-MM-dd'T'hh:mm:ss");

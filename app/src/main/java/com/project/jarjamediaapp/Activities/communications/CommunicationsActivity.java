@@ -87,6 +87,7 @@ public class CommunicationsActivity extends BaseActivity implements Communicatio
 
     @Override
     public void updateUIonError(String error) {
+        showToastMessage(error);
 
     }
 

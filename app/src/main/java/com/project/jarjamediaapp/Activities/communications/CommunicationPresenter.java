@@ -52,7 +52,13 @@ public class CommunicationPresenter extends BasePresenter<CommunicationlContract
             public void onResponse(Call<CommunicationModel> call, Response<CommunicationModel> response) {
                 _view.hideProgressBar();
 
-                if (response.isSuccessful()) {
+                try {
+
+                }catch (Exception e){
+
+                }
+
+                if (response.isSuccessful() && response.body().status.equalsIgnoreCase("Success")) {
 
                     CommunicationModel communicationModel = response.body();
                     Log.d("onResponse: ", communicationModel.toString());

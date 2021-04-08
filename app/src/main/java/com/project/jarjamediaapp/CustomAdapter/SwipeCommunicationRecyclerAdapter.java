@@ -2,43 +2,24 @@ package com.project.jarjamediaapp.CustomAdapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
-import com.project.jarjamediaapp.Activities.notes.AddNotesActivity;
-import com.project.jarjamediaapp.Activities.notes.NotesActivity;
-import com.project.jarjamediaapp.Base.BaseResponse;
 import com.project.jarjamediaapp.Models.CommunicationModel;
-import com.project.jarjamediaapp.Models.GetLeadNotes;
-import com.project.jarjamediaapp.Networking.ApiError;
-import com.project.jarjamediaapp.Networking.ApiMethods;
-import com.project.jarjamediaapp.Networking.ErrorUtils;
-import com.project.jarjamediaapp.Networking.NetworkController;
 import com.project.jarjamediaapp.R;
 import com.project.jarjamediaapp.Utilities.GH;
-import com.project.jarjamediaapp.Utilities.ToastUtils;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class SwipeCommunicationRecyclerAdapter extends RecyclerView.Adapter {
@@ -84,49 +65,46 @@ public class SwipeCommunicationRecyclerAdapter extends RecyclerView.Adapter {
             String time = GH.getInstance().formatter(modelList.get(position).getDate(), "hh:mm a", "yyyy-MM-dd'T'hh:mm:ss");
             holder.tvTime.setText(time);
 
-
-
             if (communicationModel.getType().equalsIgnoreCase("Sent")) {
 
                 holder.ivIcon.setImageResource(R.drawable.ic_envelope_solid);
-                holder.tvMessage.setText(communicationModel.getHtml());
-                holder.tvDuration.setText(communicationModel.getSubject());
-
+                holder.tvHeading.setText(communicationModel.getHtml());
+                holder.tvSubHeading.setText(communicationModel.getSubject());
 
             } else if (communicationModel.getType().equalsIgnoreCase("Text")) {
                 holder.ivIcon.setImageResource(R.drawable.ic_mobile_solid);
-                holder.tvMessage.setText(communicationModel.getHtml());
-                holder.tvDuration.setText(communicationModel.getMsg());
+                holder.tvHeading.setText(communicationModel.getHtml());
+                holder.tvSubHeading.setText(communicationModel.getMsg());
 
             } else if (communicationModel.getType().equalsIgnoreCase("Call")) {
 
                 holder.ivIcon.setImageResource(R.drawable.ic_phone_square_alt_solid);
-                holder.tvMessage.setText("Call to " + communicationModel.getSentAt());
+                holder.tvHeading.setText("Call to " + communicationModel.getSentAt());
 
                 if (!TextUtils.isEmpty(communicationModel.getCallDuration())) {
-                    holder.tvDuration.setText("Call duration: " + communicationModel.getCallDuration() + " minute(s)");
+                    holder.tvSubHeading.setText("Call duration: " + communicationModel.getCallDuration() + " minute(s)");
                 } else {
-                    holder.tvDuration.setText(communicationModel.getMsg());
+                    holder.tvSubHeading.setText(communicationModel.getMsg());
                 }
 
             } else if (communicationModel.getType().equalsIgnoreCase("SocialMedia")) {
 
                 holder.ivIcon.setImageResource(R.drawable.ic_comment_dots_solid);
-                holder.tvMessage.setText("Social Media");
-                holder.tvDuration.setText(communicationModel.getMsg());
+                holder.tvHeading.setText("Social Media");
+                holder.tvSubHeading.setText(communicationModel.getMsg());
 
             } else if (communicationModel.getType().equalsIgnoreCase("Inperson")) {
                 holder.ivIcon.setImageResource(R.drawable.ic_users_solid);
-                holder.tvMessage.setText("In-person");
-                holder.tvDuration.setText(communicationModel.getMsg());
+                holder.tvHeading.setText("In-person");
+                holder.tvSubHeading.setText(communicationModel.getMsg());
             } else if (communicationModel.getType().equalsIgnoreCase("Others")) {
                 holder.ivIcon.setImageResource(R.drawable.ic_lightbulb_regular);
-                holder.tvMessage.setText("Other");
-                holder.tvDuration.setText(communicationModel.getMsg());
+                holder.tvHeading.setText("Other");
+                holder.tvSubHeading.setText(communicationModel.getMsg());
             }else if (communicationModel.getType().equalsIgnoreCase("notes")){
-                holder.tvMessage.setText("notes");
+                holder.tvHeading.setText("notes");
                 holder.ivIcon.setImageResource(R.drawable.ic_calendar);
-                holder.tvDuration.setText("");
+                holder.tvSubHeading.setText("");
             }
 
 
@@ -193,7 +171,7 @@ public class SwipeCommunicationRecyclerAdapter extends RecyclerView.Adapter {
 
     private class ViewHolder extends RecyclerView.ViewHolder {
         private SwipeRevealLayout swipeLayout;
-        TextView tvDate, tvMessage, tvTime, tvDuration;
+        TextView tvDate, tvHeading, tvTime, tvSubHeading;
         ImageView ivIcon;
         FrameLayout frameLayout;
 
@@ -207,10 +185,10 @@ public class SwipeCommunicationRecyclerAdapter extends RecyclerView.Adapter {
 
             tvTime = itemView.findViewById(R.id.tvTime);
             tvDate = itemView.findViewById(R.id.tvDate);
-            tvMessage = itemView.findViewById(R.id.tvMessage);
+            tvHeading = itemView.findViewById(R.id.tvMessage);
             tvTime = itemView.findViewById(R.id.tvTime);
             ivIcon = itemView.findViewById(R.id.ivIcon);
-            tvDuration = itemView.findViewById(R.id.tvDuration);
+            tvSubHeading = itemView.findViewById(R.id.tvDuration);
         }
 
         public void bind() {
