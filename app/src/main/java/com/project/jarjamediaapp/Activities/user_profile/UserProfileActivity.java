@@ -95,7 +95,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         presenter.getCountries();
 
         //calling it here, by commenting on line 210
-        presenter.getTimeZoneList();
+//        presenter.getTimeZoneList();
     }
 
     private void initListeners() {
@@ -207,7 +207,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     public void updateUI(GetCountries response) {
 
         //commenting below line to call it async outside -- akshay
-//        presenter.getTimeZoneList();
+        presenter.getTimeZoneList();
 
         arrayListCountryID = new ArrayList<>();
         arrayListCountryName = new ArrayList<>();
@@ -234,7 +234,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
     @Override
     public void updateUI(GetTimeZoneList response) {
 
-//        presenter.getUserProfile();
+        presenter.getUserProfile();
         //commenting above line as we are getting user profile in intent from home activiyy
 
 
@@ -429,7 +429,7 @@ public class UserProfileActivity extends BaseActivity implements UserProfileCont
         String lname = bi.atvLastName.getText().toString();
         String title = bi.atvTitle.getText().toString();
         String license = bi.atvLicesnse.getText().toString();
-        String email = bi.atvEmail.getText().toString();
+        String email = bi.atvEmail.getText().toString().toLowerCase();
         String phone = bi.atvPhone.getText().toString();
         String vNumber = bi.atvVirtual.getText().toString();
         String fNumber = bi.atvForwarder.getText().toString();
