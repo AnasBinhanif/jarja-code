@@ -103,7 +103,9 @@ public interface ApiMethods {
     @GET("User/Authanticate_UserDevice")
     Call<BaseResponse> Authanticate_UserDevice(@Header("Authorization") String authorization,
                                                @Query("DeviceToken") String deviceToken,
-                                               @Query("network_protocol") String network_protocol);
+                                               @Query("network_protocol") String network_protocol,
+                                               @Query("email") String email,
+                                               @Query("UserToken") String accesToken);
 
     @GET("User/UnAuthanticate_UserDevice")
     Call<BaseResponse> UnAuthanticate_UserDevice(@Header("Authorization") String authorization,

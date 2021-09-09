@@ -105,7 +105,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         easyPreference.addString(GH.KEYS.EMAIL.name(), userName).save();
                         easyPreference.addString(GH.KEYS.PASSWORD.name(), password).save();
 
-                        userAuthenticate(FirebaseInstanceId.getInstance().getToken(), "FCM", "bearer" + " " + response.accessToken);
+                        userAuthenticate(FirebaseInstanceId.getInstance().getToken(), "FCM", "bearer" + " " + response.accessToken,userName);
                     }
 
                     @Override
@@ -130,9 +130,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 }));
     }
 
-    private void userAuthenticate(String deviceToken, String network, String token) {
+    private void userAuthenticate(String deviceToken, String network, String token,String email) {
 
-        Call<BaseResponse> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Authanticate_UserDevice(token, deviceToken, network);
+        Call<BaseResponse> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Authanticate_UserDevice(token, deviceToken, network,email,token);
         _call.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {

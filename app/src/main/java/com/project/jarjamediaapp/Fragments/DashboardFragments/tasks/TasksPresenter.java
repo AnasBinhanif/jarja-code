@@ -1,5 +1,7 @@
 package com.project.jarjamediaapp.Fragments.DashboardFragments.tasks;
 
+import android.util.Log;
+
 import com.project.jarjamediaapp.Base.BasePresenter;
 import com.project.jarjamediaapp.Models.GetTasksModel;
 import com.project.jarjamediaapp.Networking.ApiError;
@@ -37,6 +39,7 @@ public class TasksPresenter extends BasePresenter<TasksContract.View> implements
 
     @Override
     public void getDueTasks(int page) {
+        Log.d("pageno", page+"");
         _view.showProgressBar();
         _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).GetDueTasks(GH.getInstance().getAuthorization(), page);
         _call.enqueue(new Callback<GetTasksModel>() {

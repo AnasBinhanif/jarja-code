@@ -70,6 +70,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
+    @Override
+    public void setupViews() {
+
+//        splash(3);
+        splash(1);
+
+    }
+
     public void splash(long baseTimeout) {
 
         BASE_TIME_OUT = baseTimeout * 1000;
@@ -78,6 +86,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void run() {
 
+                //check if user is logged in or not
                 if (GH.getInstance().getAuthorization() != null && !GH.getInstance().getAuthorization().equals("")) {
                     String email = GH.getInstance().getEmail();
                     String password = GH.getInstance().getPassword();
@@ -141,13 +150,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
-    @Override
-    public void setupViews() {
 
-//        splash(3);
-        splash(1);
-
-    }
 
     @Override
     public void updateUI(Response<AccessCode> response) {

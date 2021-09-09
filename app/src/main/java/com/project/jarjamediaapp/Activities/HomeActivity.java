@@ -203,7 +203,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
-    private void userAuthenticate(String deviceToken, String network) {
+  /*  private void userAuthenticate(String deviceToken, String network) {
 
         Call<BaseResponse> _call = NetworkController.getInstance().getRetrofit().create(ApiMethods.class).Authanticate_UserDevice(GH.getInstance().getAuthorization(), deviceToken, network);
         _call.enqueue(new Callback<BaseResponse>() {
@@ -234,7 +234,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 ToastUtils.showToastLong(context, getString(R.string.retrofit_failure));
             }
         });
-    }
+    }*/
 
     private void getUserProfileData() {
 
